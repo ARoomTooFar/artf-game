@@ -14,12 +14,12 @@ public class TestChar_RigidBody : MonoBehaviour {
 	}
 	
 	void FixedUpdate() {
-		moveCommands ();
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		moveCommands ();
 	}
 	
 	/* Seperate these functions into an interface/superclass later */
@@ -30,7 +30,7 @@ public class TestChar_RigidBody : MonoBehaviour {
 			float moveHorizontal = Input.GetAxis ("Horizontal");
 			float moveVertical = Input.GetAxis ("Vertical");
 			
-			Vector3 movement = new Vector3 (moveHorizontal, rigidbody.velocity.y, moveVertical);
+			Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 			rigidbody.velocity = movement.normalized * speed;
 		}
 	}
