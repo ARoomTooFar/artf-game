@@ -37,9 +37,11 @@ public class TestChar_RigidBody : MonoBehaviour {
 			float moveHorizontal = Input.GetAxis ("Horizontal");
 			float moveVertical = Input.GetAxis ("Vertical");
 			
-			Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
+			facing = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 			
-			rigidbody.velocity = movement.normalized * speed;
+			// Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
+			
+			rigidbody.velocity = facing.normalized * speed;
 		} else {
 			// fake gravity
 			// Animation make it so rigidbody gravity works oddly due to some gravity weight
@@ -49,11 +51,11 @@ public class TestChar_RigidBody : MonoBehaviour {
 	}
 	
 	private void animationUpdate() {
-		Vector3 temp = rigidbody.velocity;
+		Vector3 temp = facing;
 		temp.y = 0.0f;
 		if (temp != Vector3.zero) {
 			animator.SetBool("Moving", true);
-			facing = rigidbody.velocity.normalized;
+			// facing = rigidbody.velocity.normalized;
 			transform.rotation = Quaternion.LookRotation(facing);
 		} else {
 			animator.SetBool("Moving", false);
