@@ -29,7 +29,6 @@ public class TestChar_RigidBody : MonoBehaviour {
 		animationUpdate();
 	}
 	
-	/* Seperate these functions into an interface/superclass later */
 	
 	private void moveCommands() {
 		// Commands that only work on the ground go here
@@ -50,6 +49,7 @@ public class TestChar_RigidBody : MonoBehaviour {
 		}
 	}
 	
+	// Constant animation updates (Mainlor characters movement/actions)
 	private void animationUpdate() {
 		Vector3 temp = facing;
 		temp.y = 0.0f;
@@ -68,6 +68,4 @@ public class TestChar_RigidBody : MonoBehaviour {
 	public bool isGrounded () {
 		return Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 	}
-	
-	/****************************************************************/
 }
