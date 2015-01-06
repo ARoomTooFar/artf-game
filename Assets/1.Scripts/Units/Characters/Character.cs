@@ -5,7 +5,24 @@ using System.Collections;
 
 [System.Serializable]
 public class Controls {
-	public string up, down, left, right;
+	//First 7 are Keys, last 2 are joystick axis
+	public string up, down, left, right, attack, secItem, cycItem, hori, vert;
+	//0 for Joystick off, 1 for Joystick on and no keys
+	public int joyUsed;
+}
+public class Stats{
+	//Base Stats
+	public int health, armor, strength, coordination, speed, luck;
+	/*
+	*Health: Health is the amount of damage a player can take before dying.
+	*Armor: Effects the amount of health that is lost when a player is hit with an attack, the higher the armor the less health is lost.
+	*Strength: The measure of how effective a player is with melee weapons. May also affect carrying speed of large objects involved in puzzles.
+	*Coordination: The measure of how effective a player is with ranged weapons. May also affect other relevant puzzle elements, like rewiring or lock picking. Influences reload time(reload has a cap).
+	*Speed: Affects the player's movement speed and recovery times after attacks. (this should have a cap)
+	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
+	*/
+	//Name of item
+	public string weapon, helmet, bodyArmor;
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -41,29 +58,32 @@ public class Character : MonoBehaviour, IMoveable {
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 		if (isGrounded()) {
-			// Up is pressed
+			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
 			}
-			
+			//"Down" key assign pressed
 			if (Input.GetKey(controls.down)) {
 				newMoveDir += Vector3.back;
 			}
-			
+			//"Left" key assign pressed
 			if (Input.GetKey(controls.left)) {
 				newMoveDir += Vector3.left;
 			}
-			
+			//"Right" key assign pressed
 			if (Input.GetKey(controls.right)) {
 				newMoveDir += Vector3.right;
 			}
-			
+			//Joystick form
+			if(controls.joyUsed == 1){
+				newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
+			}
 			facing = newMoveDir;
 			
 			// Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 			
 			rigidbody.velocity = facing.normalized * speed;
-		} else {
+		}else {
 			// fake gravity
 			// Animation make it so rigidbody gravity works oddly due to some gravity weight
 			// Seems like Unity Pro is needed to change that, so unless we get it, this will suffice 
