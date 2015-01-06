@@ -55,7 +55,6 @@ public class TestChar_RigidBodyRotated : MonoBehaviour {
 		temp.y = 0.0f;
 		if (temp != Vector3.zero) {
 			animator.SetBool("Moving", true);
-			// facing = rigidbody.velocity.normalized;
 			transform.localRotation = Quaternion.LookRotation(facing);
 		} else {
 			animator.SetBool("Moving", false);

@@ -3,6 +3,11 @@
 using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
+public class Controls {
+	public string up, down, left, right;
+}
+
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour, IMoveable {
 
@@ -12,6 +17,8 @@ public class Character : MonoBehaviour, IMoveable {
 	public Vector3 facing; // Direction unit is facing
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
+	
+	public Controls controls;
 	
 	protected Animator animator;
 
@@ -32,6 +39,39 @@ public class Character : MonoBehaviour, IMoveable {
 	
 	// Might separate commands into a protected function and just have a movement function
 	public virtual void moveCommands() {
+		Vector3 newMoveDir = Vector3.zero;
+		if (isGrounded()) {
+			// Up is pressed
+			if (Input.GetKey(controls.up)) {
+				newMoveDir += Vector3.forward;
+			}
+			
+			if (Input.GetKey(controls.down)) {
+				newMoveDir += Vector3.back;
+			}
+			
+			if (Input.GetKey(controls.left)) {
+				newMoveDir += Vector3.left;
+			}
+			
+			if (Input.GetKey(controls.right)) {
+				newMoveDir += Vector3.right;
+			}
+			
+			facing = newMoveDir;
+			
+			// Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
+			
+			rigidbody.velocity = facing.normalized * speed;
+		} else {
+			// fake gravity
+			// Animation make it so rigidbody gravity works oddly due to some gravity weight
+			// Seems like Unity Pro is needed to change that, so unless we get it, this will suffice 
+			rigidbody.velocity = new Vector3 (0.0f, -gravity, 0.0f);
+		}
+	
+		// Old movement Code
+		/*
 		// Commands that only work on the ground go here
 		if (isGrounded()) {
 			float moveHorizontal = Input.GetAxis ("Horizontal");
@@ -48,6 +88,7 @@ public class Character : MonoBehaviour, IMoveable {
 			// Seems like Unity Pro is needed to change that, so unless we get it, this will suffice 
 			rigidbody.velocity = new Vector3 (0.0f, -gravity, 0.0f);
 		}
+		*/
 	}
 	
 	// Constant animation updates (Mainlor characters movement/actions)
@@ -56,8 +97,7 @@ public class Character : MonoBehaviour, IMoveable {
 		temp.y = 0.0f;
 		if (temp != Vector3.zero) {
 			animator.SetBool("Moving", true);
-			// facing = rigidbody.velocity.normalized;
-			transform.rotation = Quaternion.LookRotation(facing);
+			transform.localRotation = Quaternion.LookRotation(facing);
 		} else {
 			animator.SetBool("Moving", false);
 		}
