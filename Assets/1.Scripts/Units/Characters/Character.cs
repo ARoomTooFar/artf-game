@@ -16,8 +16,8 @@ public class Stats{
 	//Base Stats
 	public int health, armor, strength, coordination, speed, luck;
 
-	[Range(0, 100)]
-	public int atkSpeed;
+	[Range(0.5f, 2.0f)]
+	public float atkSpeed;
 	/*
 	*Health: Health is the amount of damage a player can take before dying.
 	*Armor: Effects the amount of health that is lost when a player is hit with an attack, the higher the armor the less health is lost.
@@ -64,14 +64,7 @@ public class Character : MonoBehaviour, IMoveable, IAttackable, IDamageable<int>
 	public virtual void actionCommands() {
 		if (isGrounded ()) {
 			if(Input.GetKeyDown(controls.attack)) {
-				animator.speed = stats.atkSpeed;
 				animator.SetTrigger("Attack");
-			} else if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
-				if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < .33 || animator.GetCurrentAnimatorStateInfo(0).normalizedTime > .75) {
-					stats.weapon.GetComponent<Collider>().enabled = false;
-				} else {
-					stats.weapon.GetComponent<Collider>().enabled = true;
-				}
 			}
 		}
 	}
@@ -138,13 +131,22 @@ public class Character : MonoBehaviour, IMoveable, IAttackable, IDamageable<int>
 	public virtual void animationUpdate() {
 		Vector3 temp = facing;
 		temp.y = 0.0f;
-		if (temp != Vector3.zero) {
-			animator.SetBool("Moving", true);
-			transform.localRotation = Quaternion.LookRotation(facing);
+		if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
+			animator.speed = stats.atkSpeed; // Change animation speed based on given value for attacks
+			if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < .33 || animator.GetCurrentAnimatorStateInfo(0).normalizedTime > .75) {
+				stats.weapon.GetComponent<Collider>().enabled = false;
+			} else {
+				stats.weapon.GetComponent<Collider>().enabled = true;
+			}
 		} else {
-			animator.SetBool("Moving", false);
+			animator.speed = 1; // Change animation speed back for other animations
+			if (temp != Vector3.zero) {
+				animator.SetBool("Moving", true);
+				transform.localRotation = Quaternion.LookRotation(facing);
+			} else {
+				animator.SetBool("Moving", false);
+			}
 		}
-		
 	}
 
 	public virtual void damage(int dmgTaken) {
