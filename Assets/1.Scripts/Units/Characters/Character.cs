@@ -11,9 +11,13 @@ public class Controls {
 	public int joyUsed;
 }
 
+[System.Serializable]
 public class Stats{
 	//Base Stats
 	public int health, armor, strength, coordination, speed, luck;
+
+	[Range(0, 100)]
+	public int atkSpeed;
 	/*
 	*Health: Health is the amount of damage a player can take before dying.
 	*Armor: Effects the amount of health that is lost when a player is hit with an attack, the higher the armor the less health is lost.
@@ -36,9 +40,8 @@ public class Character : MonoBehaviour, IMoveable, IAttackable, IDamageable<int>
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
 
-	public Collider weapon;
-
 	public Controls controls;
+	public Stats stats;
 	
 	protected Animator animator;
 
@@ -61,12 +64,13 @@ public class Character : MonoBehaviour, IMoveable, IAttackable, IDamageable<int>
 	public virtual void actionCommands() {
 		if (isGrounded ()) {
 			if(Input.GetKeyDown(controls.attack)) {
+				animator.speed = stats.atkSpeed;
 				animator.SetTrigger("Attack");
 			} else if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
-				if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < .33 || animator.GetCurrentAnimatorStateInfo(0).normalizedTime > .95) {
-					weapon.enabled = false;
+				if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < .33 || animator.GetCurrentAnimatorStateInfo(0).normalizedTime > .75) {
+					stats.weapon.GetComponent<Collider>().enabled = false;
 				} else {
-					weapon.enabled = true;
+					stats.weapon.GetComponent<Collider>().enabled = true;
 				}
 			}
 		}
