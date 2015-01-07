@@ -10,6 +10,7 @@ public class Controls {
 	//0 for Joystick off, 1 for Joystick on and no keys
 	public int joyUsed;
 }
+
 public class Stats{
 	//Base Stats
 	public int health, armor, strength, coordination, speed, luck;
@@ -22,11 +23,11 @@ public class Stats{
 	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
 	*/
 	//Name of item
-	public string weapon, helmet, bodyArmor;
+	public GameObject weapon, helmet, bodyArmor;
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IMoveable {
+public class Character : MonoBehaviour, IMoveable, IAttackable, IDamageable<int> {
 
 	public float speed = 5.0f;
 	public float gravity = 50.0f;
@@ -34,7 +35,9 @@ public class Character : MonoBehaviour, IMoveable {
 	public Vector3 facing; // Direction unit is facing
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
-	
+
+	public Collider weapon;
+
 	public Controls controls;
 	
 	protected Animator animator;
@@ -46,6 +49,7 @@ public class Character : MonoBehaviour, IMoveable {
 	}
 	
 	protected virtual void FixedUpdate() {
+		actionCommands ();
 		moveCommands ();
 	}
 	
@@ -53,11 +57,26 @@ public class Character : MonoBehaviour, IMoveable {
 	protected virtual void Update () {
 		animationUpdate ();
 	}
-	
+
+	public virtual void actionCommands() {
+		if (isGrounded ()) {
+			if(Input.GetKeyDown(controls.attack)) {
+				animator.SetTrigger("Attack");
+			} else if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
+				if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < .33 || animator.GetCurrentAnimatorStateInfo(0).normalizedTime > .95) {
+					weapon.enabled = false;
+				} else {
+					weapon.enabled = true;
+				}
+			}
+		}
+	}
+
 	// Might separate commands into a protected function and just have a movement function
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
-		if (isGrounded()) {
+
+		if (isGrounded() && !animator.GetCurrentAnimatorStateInfo(0).IsName("attack")) { // Replace animator with something less specific as we get more animatons/actions in
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -123,7 +142,11 @@ public class Character : MonoBehaviour, IMoveable {
 		}
 		
 	}
-	
+
+	public virtual void damage(int dmgTaken) {
+		print ("OWW, WTF DUDE");
+	}
+
 	// Checks if user is grounded by sending a raycast to the ground
 	// If called multiple times per update, consider making a bool variable and only call once per update
 	public virtual bool isGrounded () {
