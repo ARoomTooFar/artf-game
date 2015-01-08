@@ -5,5 +5,5 @@ using UnityEngine;
 using System.Collections;
 
 public interface IAttackable {
-	void actionCommands();
+	void attacks();
 }

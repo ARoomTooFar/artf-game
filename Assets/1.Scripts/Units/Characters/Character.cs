@@ -15,7 +15,7 @@ public class Controls {
 public class Stats{
 	//Base Stats
 	public int health, armor, strength, coordination, speed, luck;
-
+	
 	[Range(0.5f, 2.0f)]
 	public float atkSpeed;
 	/*
@@ -31,20 +31,21 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IMoveable, IAttackable, IDamageable<int> {
-
+public class Character : MonoBehaviour, IActionable, IMoveable, IAttackable, IDamageable<int> {
+	
 	public float speed = 5.0f;
 	public float gravity = 50.0f;
+	public bool isGrounded = false;
 	
 	public Vector3 facing; // Direction unit is facing
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
-
+	
 	public Controls controls;
 	public Stats stats;
 	
 	protected Animator animator;
-
+	
 	// Use this for initialization
 	protected virtual void Start () {
 		animator = this.GetComponent<Animator>();
@@ -52,28 +53,63 @@ public class Character : MonoBehaviour, IMoveable, IAttackable, IDamageable<int>
 	}
 	
 	protected virtual void FixedUpdate() {
-		actionCommands ();
-		moveCommands ();
+
 	}
 	
 	// Update is called once per frame
 	protected virtual void Update () {
+		isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
+		actionCommands ();
+		moveCommands ();
 		animationUpdate ();
 	}
 
+	//---------------------------------//
+	// Action interface implementation //
+	//---------------------------------//
+
 	public virtual void actionCommands() {
-		if (isGrounded ()) {
+		if (isGrounded) {
 			if(Input.GetKeyDown(controls.attack)) {
 				animator.SetTrigger("Attack");
 			}
 		}
 	}
 
+	// Constant animation updates (Main loop for characters movement/actions)
+	public virtual void animationUpdate() {
+		Vector3 temp = facing;
+		temp.y = 0.0f;
+		if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
+			animator.speed = stats.atkSpeed; // Change animation speed based on given value for attacks
+			if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < .33 || animator.GetCurrentAnimatorStateInfo(0).normalizedTime > .75) {
+				stats.weapon.GetComponent<Collider>().enabled = false;
+			} else {
+				stats.weapon.GetComponent<Collider>().enabled = true;
+			}
+		} else {
+			animator.speed = 1; // Change animation speed back for other animations
+			if (temp != Vector3.zero) {
+				animator.SetBool("Moving", true);
+				transform.localRotation = Quaternion.LookRotation(facing);
+			} else {
+				animator.SetBool("Moving", false);
+			}
+		}
+	}
+
+	//-------------------------------------------//
+
+
+	//-----------------------------------//
+	// Movement interface implementation //
+	//-----------------------------------//
+	
 	// Might separate commands into a protected function and just have a movement function
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
-
-		if (isGrounded() && !animator.GetCurrentAnimatorStateInfo(0).IsName("attack")) { // Replace animator with something less specific as we get more animatons/actions in
+		
+		if (isGrounded && !animator.GetCurrentAnimatorStateInfo(0).IsName("attack")) { // Replace animator with something less specific as we get more animatons/actions in
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -105,57 +141,29 @@ public class Character : MonoBehaviour, IMoveable, IAttackable, IDamageable<int>
 			// Seems like Unity Pro is needed to change that, so unless we get it, this will suffice 
 			rigidbody.velocity = new Vector3 (0.0f, -gravity, 0.0f);
 		}
-	
-		// Old movement Code
-		/*
-		// Commands that only work on the ground go here
-		if (isGrounded()) {
-			float moveHorizontal = Input.GetAxis ("Horizontal");
-			float moveVertical = Input.GetAxis ("Vertical");
-			
-			facing = new Vector3 (moveHorizontal, 0.0f, moveVertical);
-			
-			// Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
-			
-			rigidbody.velocity = facing.normalized * speed;
-		} else {
-			// fake gravity
-			// Animation make it so rigidbody gravity works oddly due to some gravity weight
-			// Seems like Unity Pro is needed to change that, so unless we get it, this will suffice 
-			rigidbody.velocity = new Vector3 (0.0f, -gravity, 0.0f);
-		}
-		*/
-	}
-	
-	// Constant animation updates (Mainlor characters movement/actions)
-	public virtual void animationUpdate() {
-		Vector3 temp = facing;
-		temp.y = 0.0f;
-		if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
-			animator.speed = stats.atkSpeed; // Change animation speed based on given value for attacks
-			if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < .33 || animator.GetCurrentAnimatorStateInfo(0).normalizedTime > .75) {
-				stats.weapon.GetComponent<Collider>().enabled = false;
-			} else {
-				stats.weapon.GetComponent<Collider>().enabled = true;
-			}
-		} else {
-			animator.speed = 1; // Change animation speed back for other animations
-			if (temp != Vector3.zero) {
-				animator.SetBool("Moving", true);
-				transform.localRotation = Quaternion.LookRotation(facing);
-			} else {
-				animator.SetBool("Moving", false);
-			}
-		}
 	}
 
+	//-------------------------------------//
+
+
+	//---------------------------------//
+	// Attack Interface Implementation //
+	//---------------------------------//
+	
+	// Checks commands for attack
+	public virtual void attacks() {
+	}
+	
+	//---------------------------------//
+
+
+	//---------------------------------//
+	// Damage Interface Implementation //
+	//---------------------------------//
+	
 	public virtual void damage(int dmgTaken) {
 		print ("OWW, WTF DUDE");
 	}
 
-	// Checks if user is grounded by sending a raycast to the ground
-	// If called multiple times per update, consider making a bool variable and only call once per update
-	public virtual bool isGrounded () {
-		return Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
-	}
+	//----------------------------------//
 }
