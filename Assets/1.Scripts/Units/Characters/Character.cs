@@ -31,7 +31,7 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable, IMoveable, IAttackable, IDamageable<int> {
+public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAttackable, IDamageable<int> {
 	
 	public float speed = 5.0f;
 	public float gravity = 50.0f;
@@ -72,8 +72,13 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IAttackable, IDa
 
 		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-		actionCommands ();
-		moveCommands ();
+		if (isGrounded) {
+			actionCommands ();
+			moveCommands ();
+		} else {
+			falling();
+		}
+
 		animationUpdate ();
 	}
 
@@ -82,11 +87,9 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IAttackable, IDa
 	//---------------------------------//
 
 	public virtual void actionCommands() {
-		if (isGrounded) {
-			if (animSteInfo.nameHash != atkHash) {
-				if(Input.GetKeyDown(controls.attack)) {
-					animator.SetTrigger("Attack");
-				}
+		if (animSteInfo.nameHash != atkHash) {
+			if(Input.GetKeyDown(controls.attack)) {
+				animator.SetTrigger("Attack");
 			}
 		}
 	}
@@ -124,9 +127,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IAttackable, IDa
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 
-
-
-		if (isGrounded && animSteInfo.nameHash != atkHash) { // Replace animator with something less specific as we get more animatons/actions in
+		if (animSteInfo.nameHash != atkHash) { // Replace animator with something less specific as we get more animatons/actions in
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -152,15 +153,24 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IAttackable, IDa
 			// Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 			
 			rigidbody.velocity = facing.normalized * speed;
-		}else {
-			// fake gravity
-			// Animation make it so rigidbody gravity works oddly due to some gravity weight
-			// Seems like Unity Pro is needed to change that, so unless we get it, this will suffice 
-			rigidbody.velocity = new Vector3 (0.0f, -gravity, 0.0f);
 		}
 	}
 
 	//-------------------------------------//
+
+
+	//----------------------------------//
+	// Falling Interface Implementation //
+	//----------------------------------//
+
+	public virtual void falling() {
+		// fake gravity
+		// Animation make it so rigidbody gravity works oddly due to some gravity weight
+		// Seems like Unity Pro is needed to change that, so unless we get it, this will suffice 
+		rigidbody.velocity = new Vector3 (0.0f, -gravity, 0.0f);
+	}
+
+	//----------------------------------//
 
 
 	//---------------------------------//
