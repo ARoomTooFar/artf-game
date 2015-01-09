@@ -43,13 +43,23 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IAttackable, IDa
 	
 	public Controls controls;
 	public Stats stats;
-	
+	public float freeAnim;
+
+	// Animation variables
 	protected Animator animator;
+	protected AnimatorStateInfo animSteInfo;
+	protected int atkHash;
 	
 	// Use this for initialization
 	protected virtual void Start () {
-		animator = this.GetComponent<Animator>();
+		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
+		setAnimHash();
+	}
+
+	// Gets hash code for animations (Faster than using string name when running)
+	protected virtual void setAnimHash() {
+		atkHash = Animator.StringToHash ("Base Layer.attack");
 	}
 	
 	protected virtual void FixedUpdate() {
@@ -59,6 +69,9 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IAttackable, IDa
 	// Update is called once per frame
 	protected virtual void Update () {
 		isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
+
+		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+
 		actionCommands ();
 		moveCommands ();
 		animationUpdate ();
@@ -70,8 +83,10 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IAttackable, IDa
 
 	public virtual void actionCommands() {
 		if (isGrounded) {
-			if(Input.GetKeyDown(controls.attack)) {
-				animator.SetTrigger("Attack");
+			if (animSteInfo.nameHash != atkHash) {
+				if(Input.GetKeyDown(controls.attack)) {
+					animator.SetTrigger("Attack");
+				}
 			}
 		}
 	}
@@ -80,7 +95,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IAttackable, IDa
 	public virtual void animationUpdate() {
 		Vector3 temp = facing;
 		temp.y = 0.0f;
-		if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
+		if (animSteInfo.nameHash == atkHash) {
 			animator.speed = stats.atkSpeed; // Change animation speed based on given value for attacks
 			if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < .33 || animator.GetCurrentAnimatorStateInfo(0).normalizedTime > .75) {
 				stats.weapon.GetComponent<Collider>().enabled = false;
@@ -108,8 +123,10 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IAttackable, IDa
 	// Might separate commands into a protected function and just have a movement function
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
-		
-		if (isGrounded && !animator.GetCurrentAnimatorStateInfo(0).IsName("attack")) { // Replace animator with something less specific as we get more animatons/actions in
+
+
+
+		if (isGrounded && animSteInfo.nameHash != atkHash) { // Replace animator with something less specific as we get more animatons/actions in
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
