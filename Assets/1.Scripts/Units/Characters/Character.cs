@@ -36,6 +36,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public float speed = 5.0f;
 	public float gravity = 50.0f;
 	public bool isGrounded = false;
+	public bool actable = true; // Boolean to show if a unity can act or is stuck in an animation
 	
 	public Vector3 facing; // Direction unit is facing
 	
@@ -45,10 +46,14 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public Stats stats;
 	public float freeAnim;
 
+	// Atk action variables
+	protected float chgAtkTime = -1;
+	protected float chgDuration = 0;
+
 	// Animation variables
 	protected Animator animator;
 	protected AnimatorStateInfo animSteInfo;
-	protected int atkHash;
+	protected int idleHash, runHash, atkHash;
 	
 	// Use this for initialization
 	protected virtual void Start () {
@@ -59,6 +64,8 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	// Gets hash code for animations (Faster than using string name when running)
 	protected virtual void setAnimHash() {
+		idleHash = Animator.StringToHash ("Base Layer.idle");
+		runHash = Animator.StringToHash ("Base Layer.run");
 		atkHash = Animator.StringToHash ("Base Layer.attack");
 	}
 	
@@ -71,6 +78,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
 		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+		actable = animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash;
 
 		if (isGrounded) {
 			actionCommands ();
@@ -87,9 +95,16 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	//---------------------------------//
 
 	public virtual void actionCommands() {
-		if (animSteInfo.nameHash != atkHash) {
+		// Invokes an action/animation
+		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
+				chgAtkTime = 0;
 				animator.SetTrigger("Attack");
+			}
+		// Continues with what is happening
+		} else {
+			if (animSteInfo.nameHash == atkHash) {
+				attacks();
 			}
 		}
 	}
@@ -99,8 +114,18 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		Vector3 temp = facing;
 		temp.y = 0.0f;
 		if (animSteInfo.nameHash == atkHash) {
-			animator.speed = stats.atkSpeed; // Change animation speed based on given value for attacks
-			if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < .33 || animator.GetCurrentAnimatorStateInfo(0).normalizedTime > .75) {
+			//animator.speed = charging ? 0 : stats.atkSpeed;
+			// animator.speed = stats.atkSpeed;
+
+			if (chgAtkTime > 0) {
+				if(animSteInfo.normalizedTime < .33) animator.speed = stats.atkSpeed;
+				else animator.speed = 0;
+			} else if (chgAtkTime == -1) {
+				animator.speed = stats.atkSpeed;
+			}
+
+			// Weapon Collider information (Put it into the weapons themselves in the future I guess
+			if(animSteInfo.normalizedTime < .33 || animSteInfo.normalizedTime > .7) {
 				stats.weapon.GetComponent<Collider>().enabled = false;
 			} else {
 				stats.weapon.GetComponent<Collider>().enabled = true;
@@ -127,7 +152,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 
-		if (animSteInfo.nameHash != atkHash) { // Replace animator with something less specific as we get more animatons/actions in
+		if (actable) { // Replace animator with something less specific as we get more animatons/actions in
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -150,9 +175,11 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 			}
 			facing = newMoveDir;
 			
-			// Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
-			
 			rigidbody.velocity = facing.normalized * speed;
+		} else {
+			// Right now this stops momentum when performing an action
+			// If we trash the rigidbody later, we won't need this
+			rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
 		}
 	}
 
@@ -161,7 +188,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	//----------------------------------//
 	// Falling Interface Implementation //
-	//----------------------------------//
+	//----------------------------------//w
 
 	public virtual void falling() {
 		// fake gravity
@@ -176,9 +203,51 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	//---------------------------------//
 	// Attack Interface Implementation //
 	//---------------------------------//
-	
-	// Checks commands for attack
+
+
+	// Particle emission 5-100eeee
+	// If using a basic attack, this will do checks (such as charging an attack)
 	public virtual void attacks() {
+		if (!Input.GetKey(controls.attack) && chgAtkTime != -1) {
+			chgAtkTime = -1;
+			print("Charge Attack power level:" + (int)(chgDuration/0.5f));
+		} else if (chgAtkTime == 0 && animSteInfo.normalizedTime > .32) {
+			chgAtkTime = Time.time;
+			stats.weapon.GetComponent<Weapons>().particles.emit = true;
+		} else if (chgAtkTime != -1 && animSteInfo.normalizedTime > .32) {
+			chgDuration = Time.time - chgAtkTime;
+			if (chgDuration > 2.0f) chgDuration = 2.0f;
+			int chgStr = (int)(chgDuration/0.5f);
+			stats.weapon.GetComponent<Weapons>().particles.maxEmission = chgStr * 25 + 5;
+
+			Color[] newColors = stats.weapon.GetComponent<Weapons>().partAnimator.colorAnimation;
+			Color newPartColor = Color.white;
+			switch(chgStr) {
+				case 1:
+					newPartColor = Color.grey;
+					break;
+				case 2:
+					newPartColor = Color.yellow;
+					break;
+				case 3:
+					newPartColor = Color.magenta;
+					break;
+				case 4:
+					newPartColor = Color.red;
+					break;
+				default:
+					newPartColor = Color.white;
+					break;
+			}
+			for (int i = 0; i < newColors.Length; i++) {
+				newColors[i] = newPartColor;
+			}
+			stats.weapon.GetComponent<Weapons>().partAnimator.colorAnimation = newColors;
+		}
+
+		if (animSteInfo.normalizedTime > .7) {
+			stats.weapon.GetComponent<Weapons>().particles.emit = false;
+		}
 	}
 	
 	//---------------------------------//
