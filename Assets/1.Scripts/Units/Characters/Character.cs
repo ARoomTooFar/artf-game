@@ -49,6 +49,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	// Atk action variables
 	protected float chgAtkTime = -1;
 	protected float chgDuration = 0;
+	protected float maxChgTime = 2.0f; // Put into weapon later
 
 	// Animation variables
 	protected Animator animator;
@@ -98,7 +99,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		// Invokes an action/animation
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
-				chgAtkTime = 0;
+				chgAtkTime = chgDuration = 0;
 				animator.SetTrigger("Attack");
 			}
 		// Continues with what is happening
@@ -114,34 +115,41 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		Vector3 temp = facing;
 		temp.y = 0.0f;
 		if (animSteInfo.nameHash == atkHash) {
-			//animator.speed = charging ? 0 : stats.atkSpeed;
-			// animator.speed = stats.atkSpeed;
-
-			if (chgAtkTime > 0) {
-				if(animSteInfo.normalizedTime < .33) animator.speed = stats.atkSpeed;
-				else animator.speed = 0;
-			} else if (chgAtkTime == -1) {
-				animator.speed = stats.atkSpeed;
-			}
-
-			// Weapon Collider information (Put it into the weapons themselves in the future I guess
-			if(animSteInfo.normalizedTime < .33 || animSteInfo.normalizedTime > .7) {
-				stats.weapon.GetComponent<Collider>().enabled = false;
-			} else {
-				stats.weapon.GetComponent<Collider>().enabled = true;
-			}
+			attackAnimation(temp);
 		} else {
-			animator.speed = 1; // Change animation speed back for other animations
-			if (temp != Vector3.zero) {
-				animator.SetBool("Moving", true);
-				transform.localRotation = Quaternion.LookRotation(facing);
-			} else {
-				animator.SetBool("Moving", false);
-			}
+			movementAnimation(temp);
 		}
 	}
 
 	//-------------------------------------------//
+
+	// Animation helper functions
+	protected virtual void attackAnimation(Vector3 tFacing) {
+		if (chgAtkTime > 0) {
+			if(animSteInfo.normalizedTime < .33) animator.speed = stats.atkSpeed;
+			else animator.speed = 0;
+			if (tFacing != Vector3.zero) transform.localRotation = Quaternion.LookRotation(facing);
+		} else if (chgAtkTime == -1) {
+			animator.speed = stats.atkSpeed;
+		}
+		
+		// Weapon Collider information (Put it into the weapons themselves in the future)
+		if(animSteInfo.normalizedTime < .33 || animSteInfo.normalizedTime > .7) {
+			stats.weapon.GetComponent<Collider>().enabled = false;
+		} else {
+			stats.weapon.GetComponent<Collider>().enabled = true;
+		}
+	}
+
+	protected virtual void movementAnimation(Vector3 tFacing) {
+		animator.speed = 1; // Change animation speed back for other animations
+		if (tFacing != Vector3.zero) {
+			animator.SetBool("Moving", true);
+			transform.localRotation = Quaternion.LookRotation(facing);
+		} else {
+			animator.SetBool("Moving", false);
+		}
+	}
 
 
 	//-----------------------------------//
@@ -152,7 +160,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 
-		if (actable) { // Replace animator with something less specific as we get more animatons/actions in
+		if (actable || chgAtkTime > 0) { // Replace animator with something less specific as we get more animatons/actions in
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -179,7 +187,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		} else {
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this
-			rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
+			rigidbody.velocity = Vector3.zero;
 		}
 	}
 
@@ -204,49 +212,22 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	// Attack Interface Implementation //
 	//---------------------------------//
 
-
-	// Particle emission 5-100eeee
 	// If using a basic attack, this will do checks (such as charging an attack)
 	public virtual void attacks() {
 		if (!Input.GetKey(controls.attack) && chgAtkTime != -1) {
 			chgAtkTime = -1;
-			print("Charge Attack power level:" + (int)(chgDuration/0.5f));
+			print("Charge Attack power level:" + (int)(chgDuration/0.4f));
 		} else if (chgAtkTime == 0 && animSteInfo.normalizedTime > .32) {
 			chgAtkTime = Time.time;
-			stats.weapon.GetComponent<Weapons>().particles.emit = true;
+			stats.weapon.GetComponent<Weapons>().particles.startSpeed = 0;
+			stats.weapon.GetComponent<Weapons>().particles.Play();
 		} else if (chgAtkTime != -1 && animSteInfo.normalizedTime > .32) {
-			chgDuration = Time.time - chgAtkTime;
-			if (chgDuration > 2.0f) chgDuration = 2.0f;
-			int chgStr = (int)(chgDuration/0.5f);
-			stats.weapon.GetComponent<Weapons>().particles.maxEmission = chgStr * 25 + 5;
-
-			Color[] newColors = stats.weapon.GetComponent<Weapons>().partAnimator.colorAnimation;
-			Color newPartColor = Color.white;
-			switch(chgStr) {
-				case 1:
-					newPartColor = Color.grey;
-					break;
-				case 2:
-					newPartColor = Color.yellow;
-					break;
-				case 3:
-					newPartColor = Color.magenta;
-					break;
-				case 4:
-					newPartColor = Color.red;
-					break;
-				default:
-					newPartColor = Color.white;
-					break;
-			}
-			for (int i = 0; i < newColors.Length; i++) {
-				newColors[i] = newPartColor;
-			}
-			stats.weapon.GetComponent<Weapons>().partAnimator.colorAnimation = newColors;
+			chgDuration = Mathf.Clamp(Time.time - chgAtkTime, 0.0f, maxChgTime);
+			stats.weapon.GetComponent<Weapons>().particles.startSpeed = (int)(chgDuration/0.4f);
 		}
 
 		if (animSteInfo.normalizedTime > .7) {
-			stats.weapon.GetComponent<Weapons>().particles.emit = false;
+			stats.weapon.GetComponent<Weapons>().particles.Stop();
 		}
 	}
 	
