@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class Controls {
@@ -30,21 +31,39 @@ public class Stats{
 	public GameObject weapon, helmet, bodyArmor;
 }
 
+[System.Serializable]
+public class CharItems {
+	public int selected;
+	public List<Item> items = new List<Item>();
+
+	public void equipItems(Character curPlayer) {
+		for (int i = 0; i < items.Count; i++)
+			items[i].player = curPlayer;
+	}
+
+	public void cycItems() {
+		if (++selected >= items.Count) selected = 0;
+	}
+}
+
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAttackable, IDamageable<int> {
 	
 	public float speed = 5.0f;
 	public float gravity = 50.0f;
 	public bool isGrounded = false;
-	public bool actable = true; // Boolean to show if a unity can act or is stuck in an animation
+	public bool actable = true; // Boolean to show if a unit can act or is stuck in an animation
 	
 	public Vector3 facing; // Direction unit is facing
+	public Vector3 curFacing; // A better facing var, will change and combine in future
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
 	
 	public Controls controls;
 	public Stats stats;
-	public float freeAnim;
+	public CharItems charItems;
+
+	public bool freeAnim;
 
 	// Atk action variables
 	protected float chgAtkTime = -1;
@@ -52,14 +71,16 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	protected float maxChgTime = 2.0f; // Put into weapon later
 
 	// Animation variables
-	protected Animator animator;
+	public Animator animator;
 	protected AnimatorStateInfo animSteInfo;
 	protected int idleHash, runHash, atkHash;
 	
 	// Use this for initialization
 	protected virtual void Start () {
 		animator = GetComponent<Animator>();
-		facing = Vector3.forward;
+		facing = curFacing = Vector3.forward;
+		freeAnim = true;
+		charItems.equipItems(this);
 		setAnimHash();
 	}
 
@@ -79,7 +100,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
 		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-		actable = animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash;
+		actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
 
 		if (isGrounded) {
 			actionCommands ();
@@ -100,12 +121,32 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
 				chgAtkTime = chgDuration = 0;
+				rigidbody.velocity = Vector3.zero;
 				animator.SetTrigger("Attack");
+			} else if(Input.GetKeyDown (controls.secItem)) {
+				if (charItems.items.Count > 0 && charItems.items[charItems.selected].curCoolDown <= 0) {
+					charItems.items[charItems.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
+				} else {
+					// Play sound for trying to use item on cooldown or items
+					print("Item on Cooldown");
+				}
+			} else if(Input.GetKeyDown (controls.cycItem)) {
+				charItems.cycItems();
 			}
 		// Continues with what is happening
 		} else {
 			if (animSteInfo.nameHash == atkHash) {
 				attacks();
+			} 
+			/*else if (animSteInfo.nameHash == rollHash) { for later
+			}
+			*/
+		}
+
+
+		if (Input.GetKeyUp (controls.secItem))  {
+			if (charItems.items.Count > 0) {
+				charItems.items[charItems.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
 			}
 		}
 	}
@@ -181,10 +222,13 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 			if(controls.joyUsed == 1){
 				newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
 			}
+
 			facing = newMoveDir;
+			if (facing != Vector3.zero)
+				curFacing = facing;
 			
 			rigidbody.velocity = facing.normalized * speed;
-		} else {
+		} else if (freeAnim){
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this
 			rigidbody.velocity = Vector3.zero;
@@ -232,6 +276,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	}
 	
 	//---------------------------------//
+
 
 
 	//---------------------------------//
