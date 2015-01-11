@@ -1,20 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
-public class WeaponStats {
-	public int damage, atkSpeed;
-}
-
 public class Equipment : MonoBehaviour {
-	
-	public WeaponStats stats;
+
+	public Character player;
 
 	public ParticleSystem particles;
 
 	// Use this for initialization
 	protected virtual void Start () {
+		setInitValues();
+	}
 
+	// Used for setting stats for each equipment piece
+	protected virtual void setInitValues() {
 	}
 	
 	// Update is called once per frame

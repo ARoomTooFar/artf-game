@@ -28,7 +28,11 @@ public class Stats{
 	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
 	*/
 	//Name of item
-	public GameObject weapon, helmet, bodyArmor;
+	public Equipment weapon, helmet, bodyArmor;
+
+	public void equipItems(Character curPlayer) {
+		if (weapon) weapon.player = curPlayer;
+	}
 }
 
 [System.Serializable]
@@ -80,6 +84,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		animator = GetComponent<Animator>();
 		facing = curFacing = Vector3.forward;
 		freeAnim = true;
+		stats.equipItems(this);
 		charItems.equipItems(this);
 		setAnimHash();
 	}
@@ -121,7 +126,6 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
 				chgAtkTime = chgDuration = 0;
-				rigidbody.velocity = Vector3.zero;
 				animator.SetTrigger("Attack");
 			} else if(Input.GetKeyDown (controls.secItem)) {
 				if (charItems.items.Count > 0 && charItems.items[charItems.selected].curCoolDown <= 0) {
