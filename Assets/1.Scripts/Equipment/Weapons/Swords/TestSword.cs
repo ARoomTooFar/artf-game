@@ -20,8 +20,12 @@ public class TestSword : Sword {
 		base.Update();
 	}
 
+	public override void initAttack() {
+		base.initAttack();
+	}
+
 	// Test sword attack functions
-	protected override void attack() {
+	public override void attack() {
 		base.attack ();
 	}
 }

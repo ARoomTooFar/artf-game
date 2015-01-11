@@ -28,7 +28,8 @@ public class Stats{
 	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
 	*/
 	//Name of item
-	public Equipment weapon, helmet, bodyArmor;
+	public Weapons weapon;
+	public Equipment helmet, bodyArmor;
 
 	public void equipItems(Character curPlayer) {
 		if (weapon) weapon.player = curPlayer;
@@ -69,14 +70,9 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	public bool freeAnim;
 
-	// Atk action variables
-	protected float chgAtkTime = -1;
-	protected float chgDuration = 0;
-	protected float maxChgTime = 2.0f; // Put into weapon later
-
 	// Animation variables
 	public Animator animator;
-	protected AnimatorStateInfo animSteInfo;
+	public AnimatorStateInfo animSteInfo;
 	protected int idleHash, runHash, atkHash;
 	
 	// Use this for initialization
@@ -125,8 +121,9 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		// Invokes an action/animation
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
-				chgAtkTime = chgDuration = 0;
-				animator.SetTrigger("Attack");
+				stats.weapon.initAttack();
+				// chgAtkTime = chgDuration = 0;
+				// animator.SetTrigger("Attack");
 			} else if(Input.GetKeyDown (controls.secItem)) {
 				if (charItems.items.Count > 0 && charItems.items[charItems.selected].curCoolDown <= 0) {
 					charItems.items[charItems.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
@@ -170,19 +167,12 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	// Animation helper functions
 	protected virtual void attackAnimation(Vector3 tFacing) {
-		if (chgAtkTime > 0) {
-			if(animSteInfo.normalizedTime < .33) animator.speed = stats.atkSpeed;
+		if (stats.weapon.stats.curChgAtkTime > 0) {
+			if(animSteInfo.normalizedTime < stats.weapon.stats.colStart) animator.speed = stats.atkSpeed;
 			else animator.speed = 0;
 			if (tFacing != Vector3.zero) transform.localRotation = Quaternion.LookRotation(facing);
-		} else if (chgAtkTime == -1) {
-			animator.speed = stats.atkSpeed;
-		}
-		
-		// Weapon Collider information (Put it into the weapons themselves in the future)
-		if(animSteInfo.normalizedTime < .33 || animSteInfo.normalizedTime > .7) {
-			stats.weapon.GetComponent<Collider>().enabled = false;
-		} else {
-			stats.weapon.GetComponent<Collider>().enabled = true;
+		} else if (stats.weapon.stats.curChgAtkTime == -1) {
+			animator.speed = stats.weapon.stats.atkSpeed;
 		}
 	}
 
@@ -205,7 +195,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 
-		if (actable || chgAtkTime > 0) { // Replace animator with something less specific as we get more animatons/actions in
+		if (actable || stats.weapon.stats.curChgAtkTime > 0) { // Replace animator with something less specific as we get more animatons/actions in
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -262,21 +252,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	// If using a basic attack, this will do checks (such as charging an attack)
 	public virtual void attacks() {
-		if (!Input.GetKey(controls.attack) && chgAtkTime != -1) {
-			chgAtkTime = -1;
-			print("Charge Attack power level:" + (int)(chgDuration/0.4f));
-		} else if (chgAtkTime == 0 && animSteInfo.normalizedTime > .32) {
-			chgAtkTime = Time.time;
-			stats.weapon.GetComponent<Weapons>().particles.startSpeed = 0;
-			stats.weapon.GetComponent<Weapons>().particles.Play();
-		} else if (chgAtkTime != -1 && animSteInfo.normalizedTime > .32) {
-			chgDuration = Mathf.Clamp(Time.time - chgAtkTime, 0.0f, maxChgTime);
-			stats.weapon.GetComponent<Weapons>().particles.startSpeed = (int)(chgDuration/0.4f);
-		}
-
-		if (animSteInfo.normalizedTime > .7) {
-			stats.weapon.GetComponent<Weapons>().particles.Stop();
-		}
+		stats.weapon.attack ();
 	}
 	
 	//---------------------------------//

@@ -24,8 +24,12 @@ public class Sword : Weapons {
 		base.Update();
 	}
 
+	public override void initAttack() {
+		base.initAttack();
+	}
+
 	// Sword attack functions
-	protected override void attack() {
+	public override void attack() {
 		base.attack ();
 	}
 }

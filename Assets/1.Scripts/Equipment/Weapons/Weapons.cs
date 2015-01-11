@@ -44,7 +44,37 @@ public class Weapons : Equipment {
 		base.Update();
 	}
 
+	public virtual void initAttack() {
+		stats.curChgAtkTime = stats.curChgDuration = 0;
+		player.animator.SetTrigger("Attack"); // Swap over to weapon specific animation if we get some
+	}
+
 	// Weapon attack functions
-	protected virtual void attack() {
+	public virtual void attack() {
+		if (!Input.GetKey(player.controls.attack) && stats.curChgAtkTime != -1) {
+			stats.curChgAtkTime = -1;
+			this.GetComponent<Collider>().enabled = true;
+			print("Charge Attack power level:" + (int)(stats.curChgDuration/0.4f));
+		} else if (stats.curChgAtkTime == 0 && player.animSteInfo.normalizedTime > stats.colStart) {
+			stats.curChgAtkTime = Time.time;
+			particles.startSpeed = 0;
+			particles.Play();
+		} else if (stats.curChgAtkTime != -1 && player.animSteInfo.normalizedTime > stats.colStart) {
+			stats.curChgDuration = Mathf.Clamp(Time.time - stats.curChgAtkTime, 0.0f, stats.maxChgTime);
+			particles.startSpeed = (int)(stats.curChgDuration/0.4f);
+		}
+		
+		if (player.animSteInfo.normalizedTime > stats.colEnd) {
+			particles.Stop();
+			this.GetComponent<Collider>().enabled = false;
+		}
+	}
+
+	void OnTriggerEnter(Collider other) {
+		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
+		Enemy enemy = other.GetComponent<Enemy>();
+		if( component != null && enemy != null) {
+			enemy.damage(stats.damage);
+		}
 	}
 }
