@@ -31,6 +31,22 @@ public class Sword : Weapons {
 
 	// Sword attack functions
 	public override void attack() {
-		base.attack ();
+		if (!Input.GetKey(player.controls.attack) && stats.curChgAtkTime != -1) {
+			stats.curChgAtkTime = -1;
+			this.GetComponent<Collider>().enabled = true;
+			print("Charge Attack power level:" + (int)(stats.curChgDuration/0.4f));
+		} else if (stats.curChgAtkTime == 0 && player.animSteInfo.normalizedTime > stats.colStart) {
+			stats.curChgAtkTime = Time.time;
+			particles.startSpeed = 0;
+			particles.Play();
+		} else if (stats.curChgAtkTime != -1 && player.animSteInfo.normalizedTime > stats.colStart) {
+			stats.curChgDuration = Mathf.Clamp(Time.time - stats.curChgAtkTime, 0.0f, stats.maxChgTime);
+			particles.startSpeed = (int)(stats.curChgDuration/0.4f);
+		}
+		
+		if (player.animSteInfo.normalizedTime > stats.colEnd) {
+			particles.Stop();
+			this.GetComponent<Collider>().enabled = false;
+		}
 	}
 }

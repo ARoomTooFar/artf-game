@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Bullet : Equipment {
+public class Bullet : Gun {
 	public bool hasHit;
 	public Transform target;
 	public Equipment gun;
@@ -13,6 +13,7 @@ public class Bullet : Equipment {
 		//particles.startSpeed = user.GetComponent<Character>().equip.weapon.GetComponent<Weapons>().particles.startSpeed;
 	}
 	protected override void setInitValues() {
+		stats.damage = 1;
 		particles.startSpeed = gun.particles.startSpeed;
 		particles.Play();
 	}
@@ -30,8 +31,16 @@ public class Bullet : Equipment {
 			if (Physics.Raycast (ray, out hit)) {
 				//.85f
 				if (hit.distance < .35f) {
-					if (hit.collider.tag == "Wall" || hit.collider.tag == "Enemy") {
+					if (hit.collider.tag == "Enemy") {
+							IDamageable<int> component = (IDamageable<int>) hit.collider.GetComponent( typeof(IDamageable<int>) );
+							Enemy enemy = hit.collider.GetComponent<Enemy>();
+							if( component != null && enemy != null) {
+								enemy.damage(stats.damage);
+							}
 							hasHit = true;
+					}
+					if(hit.collider.tag == "Wall"){
+						hasHit = true;
 					}
 				}
 			}
