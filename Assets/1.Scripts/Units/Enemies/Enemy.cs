@@ -16,10 +16,11 @@ public class Enemy : MonoBehaviour, IDamageable<int> {
 	}
 
 	public virtual void damage(int dmgTaken) {
-		print ("Fuck");
+		print ("Fuck: " + dmgTaken + " Damage taken");
 	}
 
+	/* Use for other shit maybe
 	public virtual void OnTriggerEnter(Collider other) {
 		damage (1);
-	}
+	}*/
 }

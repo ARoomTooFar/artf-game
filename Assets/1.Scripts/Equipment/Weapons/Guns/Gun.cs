@@ -3,16 +3,32 @@ using System.Collections;
 
 public class Gun : Weapons {
 	public string bullPattern;
-	public GameObject bullet;
+	
 	
 	// Use this for initialization
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
 	}
+	protected override void setInitValues() {
+		base.setInitValues();
+		stats.atkSpeed = 2.0f;
+		stats.damage = 1;
+		
+		stats.maxChgTime = 2.0f;
+		stats.weapType = 1;
+	}
 	
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
+	}
+	
+	public override void initAttack() {
+		base.initAttack();
+	}
+
+	public override void attack() {
+		base.attack ();
 	}
 }

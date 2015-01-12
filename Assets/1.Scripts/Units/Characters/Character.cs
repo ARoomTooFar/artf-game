@@ -2,11 +2,12 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class Controls {
-	//First 7 are Keys, last 2 are joystick axis, attackJoystick
-	public string up, down, left, right, attack, attkJoy, secItem, cycItem, hori, vert;
+	//First 7 are Keys, last 2 are joystick axis
+	public string up, down, left, right, attack, secItem, cycItem, hori, vert;
 	//0 for Joystick off, 1 for Joystick on and no keys
 	public int joyUsed;
 }
@@ -26,15 +27,28 @@ public class Stats{
 	*Speed: Affects the player's movement speed and recovery times after attacks. (this should have a cap)
 	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
 	*/
+	//Name of item
+	public Weapons weapon;
+	public Equipment helmet, bodyArmor;
 
+	public void equipItems(Character curPlayer) {
+		if (weapon) weapon.player = curPlayer;
+	}
 }
 
 [System.Serializable]
-public class Equip{
-	//Name of item (first item, second item, third item)
-	public GameObject weapon, helmet, bodyArmor;
-	//1 = Sword, 2 = Gun, 3 = Flamethrower
-	public int weapType;
+public class CharItems {
+	public int selected;
+	public List<Item> items = new List<Item>();
+
+	public void equipItems(Character curPlayer) {
+		for (int i = 0; i < items.Count; i++)
+			items[i].player = curPlayer;
+	}
+
+	public void cycItems() {
+		if (++selected >= items.Count) selected = 0;
+	}
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -43,31 +57,31 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public float speed = 5.0f;
 	public float gravity = 50.0f;
 	public bool isGrounded = false;
-	public bool actable = true; // Boolean to show if a unity can act or is stuck in an animation
+	public bool actable = true; // Boolean to show if a unit can act or is stuck in an animation
 	
 	public Vector3 facing; // Direction unit is facing
+	public Vector3 curFacing; // A better facing var, will change and combine in future
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
 	
 	public Controls controls;
 	public Stats stats;
-	public Equip equip;
-	public float freeAnim;
+	public CharItems charItems;
 
-	// Atk action variables
-	protected float chgAtkTime = -1;
-	protected float chgDuration = 0;
-	protected float maxChgTime = 2.0f; // Put into weapon later
+	public bool freeAnim;
 
 	// Animation variables
-	protected Animator animator;
-	protected AnimatorStateInfo animSteInfo;
+	public Animator animator;
+	public AnimatorStateInfo animSteInfo;
 	protected int idleHash, runHash, atkHash;
 	
 	// Use this for initialization
 	protected virtual void Start () {
 		animator = GetComponent<Animator>();
-		facing = Vector3.forward;
+		facing = curFacing = Vector3.forward;
+		freeAnim = true;
+		stats.equipItems(this);
+		charItems.equipItems(this);
 		setAnimHash();
 	}
 
@@ -87,7 +101,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
 		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-		actable = animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash;
+		actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
 
 		if (isGrounded) {
 			actionCommands ();
@@ -107,13 +121,33 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		// Invokes an action/animation
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
-				chgAtkTime = chgDuration = 0;
-				animator.SetTrigger("Attack");
+				stats.weapon.initAttack();
+				// chgAtkTime = chgDuration = 0;
+				// animator.SetTrigger("Attack");
+			} else if(Input.GetKeyDown (controls.secItem)) {
+				if (charItems.items.Count > 0 && charItems.items[charItems.selected].curCoolDown <= 0) {
+					charItems.items[charItems.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
+				} else {
+					// Play sound for trying to use item on cooldown or items
+					print("Item on Cooldown");
+				}
+			} else if(Input.GetKeyDown (controls.cycItem)) {
+				charItems.cycItems();
 			}
 		// Continues with what is happening
 		} else {
 			if (animSteInfo.nameHash == atkHash) {
 				attacks();
+			} 
+			/*else if (animSteInfo.nameHash == rollHash) { for later
+			}
+			*/
+		}
+
+
+		if (Input.GetKeyUp (controls.secItem))  {
+			if (charItems.items.Count > 0) {
+				charItems.items[charItems.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
 			}
 		}
 	}
@@ -133,22 +167,14 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	// Animation helper functions
 	protected virtual void attackAnimation(Vector3 tFacing) {
-		if (chgAtkTime > 0) {
-			if(animSteInfo.normalizedTime < .33) animator.speed = stats.atkSpeed;
+		// Should this also be in the weapons
+
+		if (stats.weapon.stats.curChgAtkTime > 0) {
+			if(animSteInfo.normalizedTime < stats.weapon.stats.colStart) animator.speed = stats.atkSpeed;
 			else animator.speed = 0;
 			if (tFacing != Vector3.zero) transform.localRotation = Quaternion.LookRotation(facing);
-		} else if (chgAtkTime == -1) {
-			animator.speed = stats.atkSpeed;
-		}
-		
-		// Weapon Collider information (Put it into the weapons themselves in the future)
-		if(equip.weapType == 1){
-		if(animSteInfo.normalizedTime < .33 || animSteInfo.normalizedTime > .7) {
-			
-			equip.weapon.GetComponent<Collider>().enabled = false;
-		} else {
-			equip.weapon.GetComponent<Collider>().enabled = true;
-		}
+		} else if (stats.weapon.stats.curChgAtkTime == -1) {
+			animator.speed = stats.weapon.stats.atkSpeed;
 		}
 	}
 
@@ -171,7 +197,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 
-		if (actable || chgAtkTime > 0) { // Replace animator with something less specific as we get more animatons/actions in
+		if (actable || stats.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -192,10 +218,13 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 			if(controls.joyUsed == 1){
 				newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
 			}
+
 			facing = newMoveDir;
+			if (facing != Vector3.zero)
+				curFacing = facing;
 			
 			rigidbody.velocity = facing.normalized * speed;
-		} else {
+		} else if (freeAnim){
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this
 			rigidbody.velocity = Vector3.zero;
@@ -225,33 +254,11 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	// If using a basic attack, this will do checks (such as charging an attack)
 	public virtual void attacks() {
-		if (!Input.GetKey(controls.attack) && chgAtkTime != -1) {
-			chgAtkTime = -1;
-			if(equip.weapType == 2){
-				equip.weapon.GetComponent<Gun>().bullet.transform.rotation = transform.rotation;
-				equip.weapon.GetComponent<Weapons>().particles.startSpeed = (int)(chgDuration/0.4f);
-				Instantiate(equip.weapon.GetComponent<Gun>().bullet, transform.position, equip.weapon.GetComponent<Gun>().bullet.transform.rotation);
-			}
-			print("Charge Attack power level:" + (int)(chgDuration/0.4f));
-		} else if (chgAtkTime == 0 && animSteInfo.normalizedTime > .32) {
-			chgAtkTime = Time.time;
-			equip.weapon.GetComponent<Weapons>().particles.startSpeed = 0;
-			if(equip.weapType == 2){
-				equip.weapon.GetComponent<Gun>().bullet.transform.rotation = transform.rotation;
-				equip.weapon.GetComponent<Weapons>().particles.startSpeed = (int)(chgDuration/0.4f);
-			}
-			equip.weapon.GetComponent<Weapons>().particles.Play();
-		} else if (chgAtkTime != -1 && animSteInfo.normalizedTime > .32) {
-			chgDuration = Mathf.Clamp(Time.time - chgAtkTime, 0.0f, maxChgTime);
-			equip.weapon.GetComponent<Weapons>().particles.startSpeed = (int)(chgDuration/0.4f);
-		}
-
-		if (animSteInfo.normalizedTime > .7) {
-			equip.weapon.GetComponent<Weapons>().particles.Stop();
-		}
+		stats.weapon.attack ();
 	}
 	
 	//---------------------------------//
+
 
 
 	//---------------------------------//
