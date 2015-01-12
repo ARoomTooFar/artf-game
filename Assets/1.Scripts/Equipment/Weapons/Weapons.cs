@@ -6,11 +6,16 @@ public class WeaponStats {
 	[Range(0.5f, 2.0f)]
 	public float atkSpeed;
 	public int damage;
+	//counts number of hits so far in the multiple hit string
+	public int multHit;
 	//0 -Melee, 1 -Gun, 2 -Flamethrower
 	public int weapType;
 	// When it actually deals damage in the animation
 	public float colStart, colEnd;
 	public GameObject projectile;
+	//This will be used to implement abilities in the spread sheet since different weapons have different effects when charged up. 
+	//For now~ Using 1 as shoot a powerful singular shot, using 2 for a line of three shots (For gun, but base case 1 is same animation more powerful damage)
+	public int chgType;
 	//public GameObject user;
 	// Charge atk variables
 	public float maxChgTime, curChgAtkTime, curChgDuration;
@@ -32,7 +37,7 @@ public class Weapons : Equipment {
 		// default weapon stats
 		stats.atkSpeed = 1.0f;
 		stats.damage = 5;
-
+		stats.multHit = 0;
 		stats.colStart = 0.33f;
 		stats.colEnd = 0.7f;
 
@@ -59,11 +64,14 @@ public class Weapons : Equipment {
 				this.GetComponent<Collider>().enabled = true;
 			}
 			if(stats.weapType == 1){
-				
-				GameObject bullet = (GameObject) Instantiate(stats.projectile, player.transform.position, player.transform.rotation);
+				if(stats.chgType == 1){
+					GameObject bullet = (GameObject) Instantiate(stats.projectile, player.transform.position, player.transform.rotation);
+				}
 				//Having issues passing particle.startSpeed to the bullet object..=(
 				//bullet.GetComponent<Equipment>().particles.startSpeed = particles.startSpeed;
-				 
+				if(stats.chgType == 2){
+					StartCoroutine(multShoot((int)(stats.curChgDuration/0.4f),stats.atkSpeed *3));
+				}
 			}
 			print("Charge Attack power level:" + (int)(stats.curChgDuration/0.4f));
 		} else if (stats.curChgAtkTime == 0 && player.animSteInfo.normalizedTime > stats.colStart) {
@@ -89,6 +97,21 @@ public class Weapons : Equipment {
 		if( component != null && enemy != null) {
 			enemy.damage(stats.damage);
 		}
+	}
+	private IEnumerator multShoot(int count, float frequency)
+    {
+		if(count == 0){
+			count = 1;
+		}
+        for (int i = 0; i < count; i++)
+        {
+			yield return StartCoroutine(Wait(.08f));
+			GameObject bullet = (GameObject) Instantiate(stats.projectile, player.transform.position, player.transform.rotation);
+        }
+    }
+	private IEnumerator Wait(float duration){
+		for (float timer = 0; timer < duration; timer += Time.deltaTime)
+			yield return 0;
 	}
 	
 }

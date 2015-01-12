@@ -14,7 +14,8 @@ public class Gun : Weapons {
 		base.setInitValues();
 		stats.atkSpeed = 2.0f;
 		stats.damage = 1;
-		
+		stats.multHit = 3;
+		stats.chgType = 2;
 		stats.maxChgTime = 2.0f;
 		stats.weapType = 1;
 	}
