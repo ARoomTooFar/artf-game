@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Gun : Weapons {
-	public string bullPattern;
+	public char bullPattern;
 	
 	
 	// Use this for initialization
@@ -14,10 +14,12 @@ public class Gun : Weapons {
 		base.setInitValues();
 		stats.atkSpeed = 2.0f;
 		stats.damage = 1;
-		stats.multHit = 3;
+		//stats.multHit = 3;
 		stats.chgType = 2;
 		stats.maxChgTime = 2.0f;
 		stats.weapType = 1;
+		bullPattern = 'L';
+		bullPattern = 'S';
 	}
 	
 	// Update is called once per frame

@@ -60,12 +60,4 @@ public class Weapons : Equipment {
 	public virtual void attack() {
 		;
 	}
-
-	void OnTriggerEnter(Collider other) {
-		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
-		Enemy enemy = other.GetComponent<Enemy>();
-		if( component != null && enemy != null) {
-			enemy.damage(stats.damage);
-		}
-	}
 }

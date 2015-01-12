@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour, IDamageable<int> {
 		print ("Fuck: " + dmgTaken + " Damage taken");
 	}
 
-	/* Use for other shit maybe
+	/*//Use for other shit maybe
 	public virtual void OnTriggerEnter(Collider other) {
 		damage (1);
 	}*/

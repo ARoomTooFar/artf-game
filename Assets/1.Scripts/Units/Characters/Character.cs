@@ -15,7 +15,9 @@ public class Controls {
 [System.Serializable]
 public class Stats{
 	//Base Stats
-	public int health, armor, strength, coordination, speed, luck;
+	public int health, armor;
+	[Range(0,10)]
+	public int strength, coordination, speed, luck;
 	
 	[Range(0.5f, 2.0f)]
 	public float atkSpeed;
@@ -83,6 +85,8 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		stats.equipItems(this);
 		charItems.equipItems(this);
 		setAnimHash();
+	}
+	protected virtual void setInitValues() {
 	}
 
 	// Gets hash code for animations (Faster than using string name when running)
