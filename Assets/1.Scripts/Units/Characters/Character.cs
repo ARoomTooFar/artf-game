@@ -5,8 +5,8 @@ using System.Collections;
 
 [System.Serializable]
 public class Controls {
-	//First 7 are Keys, last 2 are joystick axis
-	public string up, down, left, right, attack, secItem, cycItem, hori, vert;
+	//First 7 are Keys, last 2 are joystick axis, attackJoystick
+	public string up, down, left, right, attack, attkJoy, secItem, cycItem, hori, vert;
 	//0 for Joystick off, 1 for Joystick on and no keys
 	public int joyUsed;
 }
@@ -26,8 +26,15 @@ public class Stats{
 	*Speed: Affects the player's movement speed and recovery times after attacks. (this should have a cap)
 	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
 	*/
-	//Name of item
+
+}
+
+[System.Serializable]
+public class Equip{
+	//Name of item (first item, second item, third item)
 	public GameObject weapon, helmet, bodyArmor;
+	//1 = Sword, 2 = Gun, 3 = Flamethrower
+	public int weapType;
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -44,6 +51,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	
 	public Controls controls;
 	public Stats stats;
+	public Equip equip;
 	public float freeAnim;
 
 	// Atk action variables
@@ -134,10 +142,13 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		}
 		
 		// Weapon Collider information (Put it into the weapons themselves in the future)
+		if(equip.weapType == 1){
 		if(animSteInfo.normalizedTime < .33 || animSteInfo.normalizedTime > .7) {
-			stats.weapon.GetComponent<Collider>().enabled = false;
+			
+			equip.weapon.GetComponent<Collider>().enabled = false;
 		} else {
-			stats.weapon.GetComponent<Collider>().enabled = true;
+			equip.weapon.GetComponent<Collider>().enabled = true;
+		}
 		}
 	}
 
@@ -216,18 +227,27 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public virtual void attacks() {
 		if (!Input.GetKey(controls.attack) && chgAtkTime != -1) {
 			chgAtkTime = -1;
+			if(equip.weapType == 2){
+				equip.weapon.GetComponent<Gun>().bullet.transform.rotation = transform.rotation;
+				equip.weapon.GetComponent<Weapons>().particles.startSpeed = (int)(chgDuration/0.4f);
+				Instantiate(equip.weapon.GetComponent<Gun>().bullet, transform.position, equip.weapon.GetComponent<Gun>().bullet.transform.rotation);
+			}
 			print("Charge Attack power level:" + (int)(chgDuration/0.4f));
 		} else if (chgAtkTime == 0 && animSteInfo.normalizedTime > .32) {
 			chgAtkTime = Time.time;
-			stats.weapon.GetComponent<Weapons>().particles.startSpeed = 0;
-			stats.weapon.GetComponent<Weapons>().particles.Play();
+			equip.weapon.GetComponent<Weapons>().particles.startSpeed = 0;
+			if(equip.weapType == 2){
+				equip.weapon.GetComponent<Gun>().bullet.transform.rotation = transform.rotation;
+				equip.weapon.GetComponent<Weapons>().particles.startSpeed = (int)(chgDuration/0.4f);
+			}
+			equip.weapon.GetComponent<Weapons>().particles.Play();
 		} else if (chgAtkTime != -1 && animSteInfo.normalizedTime > .32) {
 			chgDuration = Mathf.Clamp(Time.time - chgAtkTime, 0.0f, maxChgTime);
-			stats.weapon.GetComponent<Weapons>().particles.startSpeed = (int)(chgDuration/0.4f);
+			equip.weapon.GetComponent<Weapons>().particles.startSpeed = (int)(chgDuration/0.4f);
 		}
 
 		if (animSteInfo.normalizedTime > .7) {
-			stats.weapon.GetComponent<Weapons>().particles.Stop();
+			equip.weapon.GetComponent<Weapons>().particles.Stop();
 		}
 	}
 	

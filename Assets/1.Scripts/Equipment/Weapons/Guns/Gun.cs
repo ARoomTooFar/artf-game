@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Weapons : Equipment {
-	public AudioClip sound;
+public class Gun : Weapons {
+	public string bullPattern;
+	public GameObject bullet;
+	
+	// Use this for initialization
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
