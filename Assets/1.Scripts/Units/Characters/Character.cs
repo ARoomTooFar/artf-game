@@ -167,6 +167,8 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	// Animation helper functions
 	protected virtual void attackAnimation(Vector3 tFacing) {
+		// Should this also be in the weapons
+
 		if (stats.weapon.stats.curChgAtkTime > 0) {
 			if(animSteInfo.normalizedTime < stats.weapon.stats.colStart) animator.speed = stats.atkSpeed;
 			else animator.speed = 0;
@@ -195,7 +197,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 
-		if (actable || stats.weapon.stats.curChgAtkTime > 0) { // Replace animator with something less specific as we get more animatons/actions in
+		if (actable || stats.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
