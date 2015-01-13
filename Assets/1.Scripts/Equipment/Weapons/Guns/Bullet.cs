@@ -23,12 +23,12 @@ public class Bullet : Gun {
 		//target.position = transform.forward *10;
 		if(!hasHit){
 			Vector3 tarDir = target.position - transform.position;
-			Ray ray = new Ray(transform.position, tarDir);
-			RaycastHit hit;
+			//Ray ray = new Ray(transform.position, tarDir);
+			//RaycastHit hit;
 			//Debug.DrawRay(transform.position, targetDir,Color.green);
 			//move fist towards the target location .35f
 			transform.position = Vector3.MoveTowards (transform.position, target.position, .35f);
-			if (Physics.Raycast (ray, out hit)) {
+			/*if (Physics.Raycast (ray, out hit)) {
 				//.85f
 				if (hit.distance < .35f) {
 					if (hit.collider.tag == "Enemy") {
@@ -43,7 +43,7 @@ public class Bullet : Gun {
 						hasHit = true;
 					}
 				}
-			}
+			}*/
 		}else{
 			///*if(gameObject.tag != "Shotgun1" && gameObject.tag != "CShotgun1")
 				//AudioSource.PlayClipAtPoint (sound, transform.position);
@@ -51,4 +51,10 @@ public class Bullet : Gun {
 			Destroy(this.transform.parent.gameObject);
 		}
 	}
+	void OnCollisionEnter(Collision collision) {
+        GameObject contact = collision.gameObject;
+        if(contact.tag == "Wall" || contact.tag == "Enemy"){
+			hasHit = true;
+		}
+    }
 }
