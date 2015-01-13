@@ -73,7 +73,8 @@ public class Gun : Weapons {
 			for (int i = 0; i < count; i++)
 			{
 				yield return StartCoroutine(Wait(.08f));
-				GameObject bullet = (GameObject) Instantiate(stats.projectile, player.transform.position, player.transform.rotation);
+				spray.rotation = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-2f+player.transform.eulerAngles.y,2f+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
+				GameObject bullet = (GameObject) Instantiate(stats.projectile, player.transform.position, spray.rotation);
 			}
 		}
 		if(bullPattern=='S'){
