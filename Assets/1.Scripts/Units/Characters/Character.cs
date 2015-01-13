@@ -45,6 +45,7 @@ public class CharItems {
 	public void equipItems(Character curPlayer) {
 		for (int i = 0; i < items.Count; i++)
 			items[i].player = curPlayer;
+		selected = 0;
 	}
 
 	public void cycItems() {
