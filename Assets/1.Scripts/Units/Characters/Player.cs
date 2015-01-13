@@ -19,7 +19,6 @@ public class Player : Character {
 		stats.coordination=0;
 		stats.speed=10;
 		stats.luck=0;
-		print("why");
 	}
 	
 	// Update is called once per frame
