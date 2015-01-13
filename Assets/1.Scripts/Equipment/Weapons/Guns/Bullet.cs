@@ -30,6 +30,8 @@ public class Bullet : Gun {
 		Enemy enemy = other.GetComponent<Enemy>();
 		if( component != null && enemy != null) {
 			enemy.damage(stats.damage);
+			particles.Stop();
+			Destroy(this.transform.parent.gameObject);
 		}
 	}
 }

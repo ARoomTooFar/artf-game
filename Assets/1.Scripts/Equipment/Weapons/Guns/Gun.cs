@@ -43,7 +43,6 @@ public class Gun : Weapons {
 				if(stats.chgType == 1){
 				spray.rotation = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-2f+player.transform.eulerAngles.y,2f+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
 					GameObject bullet = (GameObject) Instantiate(stats.projectile, player.transform.position, player.transform.rotation);
-					bullet.GetComponent<ParticleSystem>().startSpeed = particles.startSpeed;
 				}
 				//Having issues passing particle.startSpeed to the bullet object..=(
 				//bullet.GetComponent<Equipment>().particles.startSpeed = particles.startSpeed;
