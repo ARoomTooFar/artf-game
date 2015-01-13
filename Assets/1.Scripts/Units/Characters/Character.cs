@@ -16,7 +16,6 @@ public class Controls {
 public class Stats{
 	//Base Stats
 	public int health, armor;
-	[Range(0,10)]
 	public int strength, coordination, speed, luck;
 	
 	[Range(0.5f, 2.0f)]
@@ -34,7 +33,7 @@ public class Stats{
 	public Equipment helmet, bodyArmor;
 
 	public void equipItems(Character curPlayer) {
-		if (weapon) weapon.player = curPlayer;
+		if (weapon) weapon.equip(curPlayer);// weapon.player = curPlayer;
 	}
 }
 
@@ -85,6 +84,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		stats.equipItems(this);
 		charItems.equipItems(this);
 		setAnimHash();
+		setInitValues();
 	}
 	protected virtual void setInitValues() {
 	}

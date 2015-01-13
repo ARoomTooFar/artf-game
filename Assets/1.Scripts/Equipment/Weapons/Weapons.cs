@@ -18,6 +18,7 @@ public class WeaponStats {
 	public int chgType;
 	//public GameObject user;
 	// Charge atk variables
+	public int chgDamage;
 	public float maxChgTime, curChgAtkTime, curChgDuration;
 }
 
@@ -44,6 +45,7 @@ public class Weapons : Equipment {
 		stats.maxChgTime = 3.0f;
 		stats.curChgAtkTime = -1.0f;
 		stats.curChgDuration = 0.0f;
+		stats.chgDamage = 0;
 	}
 	
 	// Update is called once per frame
@@ -52,12 +54,12 @@ public class Weapons : Equipment {
 	}
 
 	public virtual void initAttack() {
-		stats.curChgAtkTime = stats.curChgDuration = 0;
+		stats.curChgAtkTime = stats.curChgDuration = 0.0f;
+		stats.chgDamage = 0;
 		player.animator.SetTrigger("Attack"); // Swap over to weapon specific animation if we get some
 	}
 
 	// Weapon attack functions
 	public virtual void attack() {
-		;
 	}
 }

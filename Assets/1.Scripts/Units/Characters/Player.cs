@@ -12,12 +12,14 @@ public class Player : Character {
 		base.Start ();
 	}
 	protected override void setInitValues() {
+		base.setInitValues();
 		stats.health = 10;
 		stats.armor = 0;
-		stats.strength = 0;
+		stats.strength = 2;
 		stats.coordination=0;
 		stats.speed=10;
 		stats.luck=0;
+		print("why");
 	}
 	
 	// Update is called once per frame
