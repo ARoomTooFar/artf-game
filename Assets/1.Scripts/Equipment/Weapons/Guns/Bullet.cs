@@ -22,13 +22,14 @@ public class Bullet : Gun {
 		//target.rotation = new Quaternion(90,0,0,0);
 		//target.position = transform.forward *10;
 		if(!hasHit){
-			Vector3 tarDir = target.position - transform.position;
-			//Ray ray = new Ray(transform.position, tarDir);
-			//RaycastHit hit;
-			//Debug.DrawRay(transform.position, targetDir,Color.green);
+			Vector3 tarDir = transform.position - target.position;
+			Ray ray = new Ray(transform.position, -tarDir);
+			RaycastHit hit;
+			//Debug.DrawRay(ray);
+			Debug.DrawRay(transform.position, -tarDir,Color.green);
 			//move fist towards the target location .35f
-			transform.position = Vector3.MoveTowards (transform.position, target.position, .35f);
-			/*if (Physics.Raycast (ray, out hit)) {
+			transform.position = Vector3.MoveTowards (transform.position, target.position, .55f);
+			if (Physics.Raycast (ray, out hit)) {
 				//.85f
 				if (hit.distance < .35f) {
 					if (hit.collider.tag == "Enemy") {
@@ -43,7 +44,7 @@ public class Bullet : Gun {
 						hasHit = true;
 					}
 				}
-			}*/
+			}
 		}else{
 			///*if(gameObject.tag != "Shotgun1" && gameObject.tag != "CShotgun1")
 				//AudioSource.PlayClipAtPoint (sound, transform.position);
@@ -51,10 +52,13 @@ public class Bullet : Gun {
 			Destroy(this.transform.parent.gameObject);
 		}
 	}
-	void OnCollisionEnter(Collision collision) {
-        GameObject contact = collision.gameObject;
-        if(contact.tag == "Wall" || contact.tag == "Enemy"){
+	/*void OnCollisionEnter(Collision other){
+		for(int count = 0; count < collision.contact.list
+		ContactPoint contact = collision.contact[0];
+		print("Booty");
+		if(other.gameObject.tag == "Wall"){
+			print("Butt");
 			hasHit = true;
 		}
-    }
+	}*/
 }

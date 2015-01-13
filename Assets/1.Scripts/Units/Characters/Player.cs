@@ -16,10 +16,10 @@ public class Player : Character {
 		stats.health = 10;
 		stats.armor = 0;
 		stats.strength = 2;
-		stats.coordination=0;
+		stats.coordination=2;
 		stats.speed=10;
 		stats.luck=0;
-		print("why");
+		//print("why");
 	}
 	
 	// Update is called once per frame
