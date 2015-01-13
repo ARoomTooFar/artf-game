@@ -273,10 +273,8 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	//---------------------------------//
 	
 	public virtual void damage(int dmgTaken) {
-		if (invincible) {
-			print ("Suck it bitch");
-		} else {
-			print ("OWW, WTF DUDE");
+		if (!invincible) {
+			stats.health -= dmgTaken;
 		}
 	}
 

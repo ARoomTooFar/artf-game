@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Gun : Weapons {
+	//L = line, S = Shotty/Sprayheavy
 	public char bullPattern;
 	//for spray of shotgun
 	public Transform spray;
