@@ -9,6 +9,11 @@ public class Equipment : MonoBehaviour {
 
 	// Use this for initialization
 	protected virtual void Start () {
+
+	}
+
+	public void equip(Character play) {
+		player = play;
 		setInitValues();
 	}
 
