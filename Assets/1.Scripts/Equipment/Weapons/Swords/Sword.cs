@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Sword : Weapons {
 	// Use this for initialization
 	protected override void Start () {
