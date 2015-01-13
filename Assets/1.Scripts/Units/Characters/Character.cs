@@ -48,7 +48,7 @@ public class CharItems {
 	}
 
 	public void cycItems() {
-		if (++selected >= items.Count) selected = 0;
+		selected = (selected + 1)%items.Count;
 	}
 }
 
@@ -71,6 +71,8 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	public bool freeAnim;
 
+	public bool invincible = false;
+
 	// Animation variables
 	public Animator animator;
 	public AnimatorStateInfo animSteInfo;
@@ -81,10 +83,10 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		animator = GetComponent<Animator>();
 		facing = curFacing = Vector3.forward;
 		freeAnim = true;
+		setInitValues();
 		stats.equipItems(this);
 		charItems.equipItems(this);
 		setAnimHash();
-		setInitValues();
 	}
 	protected virtual void setInitValues() {
 	}
@@ -270,7 +272,11 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	//---------------------------------//
 	
 	public virtual void damage(int dmgTaken) {
-		print ("OWW, WTF DUDE");
+		if (invincible) {
+			print ("Suck it bitch");
+		} else {
+			print ("OWW, WTF DUDE");
+		}
 	}
 
 	//----------------------------------//
