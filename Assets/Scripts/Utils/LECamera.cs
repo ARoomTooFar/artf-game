@@ -1,15 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+enum cam_views {play, top}; // rot90, rot180, rot270};
+
 public class LECamera : MonoBehaviour {
 
-	// Use this for initialization
+	public Transform target;
+	public float smoothing = 5f;
+	public GameObject tilemap;
+	Transform topdown;
+
+	Vector3 offset;
+	
 	void Start () {
-	
+		Camera.main.orthographic = true;
+		target = tilemap.transform;
+		topview ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	void topview(){
+		transform.rotation = Quaternion.Euler (90, 0, 0);
+		transform.LookAt (target);
+		transform.Translate(new Vector3(12, 12, -20));
+	}
+
+
+	void FixedUpdate () {
+
 	}
 }
