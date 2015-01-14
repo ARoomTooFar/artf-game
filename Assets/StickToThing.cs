@@ -10,21 +10,20 @@ public class StickToThing : MonoBehaviour {
 	public RectTransform rects;
 
 	void Start () {
-	
+		
 	}
 
 	void Update () {
 		Vector3 p = new Vector3();
 		p = thing.transform.position;
-		float f = p.x;
+		//float f = p.x;
 
-		
-		
 		//rects.transform.position = p;
 		transform.position = p;
 
-
-
+		p = cam.transform.rotation.eulerAngles;
+		transform.rotation = Quaternion.Euler(p);
+		
 
 	}
 }

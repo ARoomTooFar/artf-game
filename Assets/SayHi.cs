@@ -34,9 +34,9 @@ public class SayHi : MonoBehaviour {
 	{
 		testnum = 1;
 		FileName = "textfile";
-		readbutton.onClick.AddListener(() => { getText(); });
-		writebutton.onClick.AddListener(() => { writeText();});
-		sliderguy.onValueChanged.AddListener(this.sliderstuff);
+//		readbutton.onClick.AddListener(() => { getText(); });
+//		writebutton.onClick.AddListener(() => { writeText();});
+//		sliderguy.onValueChanged.AddListener(this.sliderstuff);
 
 
 	}
