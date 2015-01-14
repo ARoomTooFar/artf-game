@@ -2,10 +2,10 @@
 using System.Collections;
 
 public class CameraAdjuster : MonoBehaviour {
-	public GameObject p1;
-	public GameObject p2;
-	public GameObject p3;
-	public GameObject p4;
+	public GameObject p1; //
+	public GameObject p2;//
+	public GameObject p3;//
+	public GameObject p4;//
 	//Average X, Z (Pulled from Player Locations)
 	//Base X,Y,Z (To be adjusted by the multiplier Value)
     //Value of Adjustment
@@ -13,6 +13,7 @@ public class CameraAdjuster : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		transform.rotation = Quaternion.Euler(45,-45,0);
+		//transform.rotation = Quaternion.Euler(90,0,0);
 		//arbitrarily decided point
 		adjVal = 2.5f;
 		//base height
@@ -23,8 +24,8 @@ public class CameraAdjuster : MonoBehaviour {
 		baseX = baseY/2 + adjVal;
 		baseZ = -(baseY/2 + adjVal);
 		//Average the x's and z's for the target location of the camera's focus
-		avgX = (p1.transform.position.x + p2.transform.position.x + p3.transform.position.x + p4.transform.position.x)/4 + baseX;
-		avgZ = (p1.transform.position.z + p2.transform.position.z + p3.transform.position.z + p4.transform.position.z)/4 + baseZ;
+		avgX = (p1.transform.position.x + p2.transform.position.x + p3.transform.position.x + p4.transform.position.x)/4 + baseX; // 
+		avgZ = (p1.transform.position.z + p2.transform.position.z + p3.transform.position.z + p4.transform.position.z)/4 + baseZ; //
 	}
 	
 	// Update is called once per frame
