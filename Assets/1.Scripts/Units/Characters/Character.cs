@@ -16,7 +16,6 @@ public class Controls {
 public class Stats{
 	//Base Stats
 	public int health, armor;
-	[Range(0,10)]
 	public int strength, coordination, speed, luck;
 	
 	[Range(0.5f, 2.0f)]
@@ -34,7 +33,7 @@ public class Stats{
 	public Equipment helmet, bodyArmor;
 
 	public void equipItems(Character curPlayer) {
-		if (weapon) weapon.player = curPlayer;
+		if (weapon) weapon.equip(curPlayer);// weapon.player = curPlayer;
 	}
 }
 
@@ -49,7 +48,7 @@ public class CharItems {
 	}
 
 	public void cycItems() {
-		if (++selected >= items.Count) selected = 0;
+		selected = (selected + 1)%items.Count;
 	}
 }
 
@@ -72,6 +71,8 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	public bool freeAnim;
 
+	public bool invincible = false;
+
 	// Animation variables
 	public Animator animator;
 	public AnimatorStateInfo animSteInfo;
@@ -82,6 +83,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		animator = GetComponent<Animator>();
 		facing = curFacing = Vector3.forward;
 		freeAnim = true;
+		setInitValues();
 		stats.equipItems(this);
 		charItems.equipItems(this);
 		setAnimHash();
@@ -270,7 +272,11 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	//---------------------------------//
 	
 	public virtual void damage(int dmgTaken) {
-		print ("OWW, WTF DUDE");
+		if (invincible) {
+			print ("Suck it bitch");
+		} else {
+			print ("OWW, WTF DUDE");
+		}
 	}
 
 	//----------------------------------//

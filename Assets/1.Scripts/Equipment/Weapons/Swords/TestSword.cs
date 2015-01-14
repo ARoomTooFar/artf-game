@@ -10,9 +10,10 @@ public class TestSword : Sword {
 
 	// Used for setting sword stats for each equipment piece
 	protected override void setInitValues() {
-		base.setInitValues();
+		//base.setInitValues();
 
-		stats.damage = 4;
+		//stats.damage = 4;
+		base.setInitValues();
 		stats.weapType = 0;
 	}
 

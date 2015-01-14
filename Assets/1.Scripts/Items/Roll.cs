@@ -13,6 +13,8 @@ public class Roll : Item {
 	public int rollInt;
 	[Range(1, 4)]
 	public int rollSpeed;
+	[Range(0.1f, 1.0f)]
+	public float iFrameTime;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -40,6 +42,7 @@ public class Roll : Item {
 	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
 	private IEnumerator rollFunc(float rollTime) {
 		yield return StartCoroutine(rollTimeFunc(rollTime));
+		yield return StartCoroutine(rollLagTime());
 		player.freeAnim = true;
 	}
 
@@ -47,6 +50,15 @@ public class Roll : Item {
 	private IEnumerator rollTimeFunc(float rollTime) {
 		for (float timer = 0; timer < rollTime; timer += Time.deltaTime) {
 			player.rigidbody.velocity = player.curFacing.normalized * player.speed * 1.5f * rollSpeed;
+			if (timer < rollTime * iFrameTime) player.invincible = true;
+			else player.invincible = false;
+			yield return 0;
+		}
+	}
+
+	private IEnumerator rollLagTime() {
+		for (float timer = 0; timer < iFrameTime/2; timer += Time.deltaTime) {
+			player.rigidbody.velocity = Vector3.zero;
 			yield return 0;
 		}
 	}
