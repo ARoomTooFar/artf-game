@@ -45,6 +45,7 @@ public class CharItems {
 	public void equipItems(Character curPlayer) {
 		for (int i = 0; i < items.Count; i++)
 			items[i].player = curPlayer;
+		selected = 0;
 	}
 
 	public void cycItems() {
@@ -272,10 +273,8 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	//---------------------------------//
 	
 	public virtual void damage(int dmgTaken) {
-		if (invincible) {
-			print ("Suck it bitch");
-		} else {
-			print ("OWW, WTF DUDE");
+		if (!invincible) {
+			stats.health -= dmgTaken;
 		}
 	}
 

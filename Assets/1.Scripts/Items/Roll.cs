@@ -13,7 +13,7 @@ public class Roll : Item {
 	public int rollInt;
 	[Range(1, 4)]
 	public int rollSpeed;
-	[Range(0.1f, 1.0f)]
+	[Range(0.1f, 0.85f)]
 	public float iFrameTime;
 
 	// Use this for initialization
@@ -48,7 +48,7 @@ public class Roll : Item {
 
 	// Timer and velocity changing thing
 	private IEnumerator rollTimeFunc(float rollTime) {
-		for (float timer = 0; timer < rollTime; timer += Time.deltaTime) {
+		for (float timer = 0; timer <= rollTime; timer += Time.deltaTime) {
 			player.rigidbody.velocity = player.curFacing.normalized * player.speed * 1.5f * rollSpeed;
 			if (timer < rollTime * iFrameTime) player.invincible = true;
 			else player.invincible = false;

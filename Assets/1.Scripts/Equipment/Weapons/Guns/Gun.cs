@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Gun : Weapons {
+	//L = line, S = Shotty/Sprayheavy
 	public char bullPattern;
 	//for spray of shotgun
 	public Transform spray;
@@ -38,12 +39,13 @@ public class Gun : Weapons {
 		if (!Input.GetKey(player.controls.attack) && stats.curChgAtkTime != -1) {
 			stats.curChgAtkTime = -1;
 			if(stats.weapType == 1){
-					spray.rotation = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-2f+player.transform.eulerAngles.y,2f+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
-					GameObject bullet = (GameObject) Instantiate(stats.projectile, player.transform.position, player.transform.rotation);
+				spray.rotation = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-2f+player.transform.eulerAngles.y,2f+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
+				GameObject bullet = (GameObject) Instantiate(stats.projectile, player.transform.position, player.transform.rotation);
+
 				//Having issues passing particle.startSpeed to the bullet object..=(
 				//bullet.GetComponent<Equipment>().particles.startSpeed = particles.startSpeed;
 				//if(stats.chgType == 2){
-					StartCoroutine(multShoot((int)(stats.curChgDuration/0.4f)));
+				StartCoroutine(multShoot((int)(stats.curChgDuration/0.4f)));
 				//}
 			}
 			print("Charge Attack power level:" + (int)(stats.curChgDuration/0.4f));
