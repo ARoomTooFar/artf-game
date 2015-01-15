@@ -84,10 +84,16 @@ public class CameraAdjuster : MonoBehaviour {
 				//Mark current location with respect to original dragged location
 				Vector3 pos = Camera.main.ScreenToViewportPoint (Input.mousePosition) - mouseLocation;
 
-				//Update base variables based on that position
-				baseX = (oldPos + -pos * dragSpeed).x;
-				baseY = (oldPos + -pos * dragSpeed).y;
-				baseZ = (oldPos + -pos * dragSpeed).z;
+				//Update base variables based on that position and camera angle
+				if(isTopDown) {
+					baseX = (oldPos + -pos * dragSpeed).x;
+					baseY = (oldPos + -pos * dragSpeed).y;
+				}
+				else {
+					baseX = (oldPos + -pos * dragSpeed).x;
+					baseY = (oldPos + -pos * dragSpeed).y;
+					baseZ = (oldPos + -pos * dragSpeed).x;
+				}
 
 				//Bounds checking
 				if(baseY > maxY) {
