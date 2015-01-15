@@ -18,8 +18,8 @@ public class Gun : Weapons {
 		stats.damage = 1;
 		stats.maxChgTime = 2.0f;
 		stats.weapType = 1;
-		//bullPattern = 'L';
-		bullPattern = 'S';
+		bullPattern = 'L';
+		//bullPattern = 'S';
 		//if(bullPattern == 'S'){
 			spray = player.transform.rotation;
 			spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(12f-player.stats.coordination)+player.transform.eulerAngles.y,(12f-player.stats.coordination)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
