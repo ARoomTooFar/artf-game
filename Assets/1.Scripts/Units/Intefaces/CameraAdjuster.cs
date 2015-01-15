@@ -31,30 +31,12 @@ public class CameraAdjuster : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Check if they are far enough to need to stretch the distancing
-		/*
-		if((Mathf.Abs(p1.transform.position.x - p2.transform.position.x) > baseY) || (Mathf.Abs(p2.transform.position.x - p3.transform.position.x) > baseY) || (Mathf.Abs(p1.transform.position.x - p3.transform.position.x) > baseY) || (Mathf.Abs(p3.transform.position.x - p1.transform.position.x) > baseY) ||
-		   (Mathf.Abs(p1.transform.position.x - p4.transform.position.x) > baseY) || (Mathf.Abs(p4.transform.position.x - p1.transform.position.x) > baseY) || (Mathf.Abs(p2.transform.position.x - p3.transform.position.x) > baseY) || (Mathf.Abs(p3.transform.position.x - p2.transform.position.x) > baseY) ||
-		   (Mathf.Abs(p2.transform.position.x - p4.transform.position.x) > baseY) || (Mathf.Abs(p4.transform.position.x - p2.transform.position.x) > baseY) || (Mathf.Abs(p1.transform.position.x - p2.transform.position.x) > baseY) || (Mathf.Abs(p3.transform.position.x - p4.transform.position.x) > baseY)){
-			baseY += .1f;
-		}
-		//Check if they are too close to need to shrink the distancing
-		if((Mathf.Abs(p1.transform.position.x + p2.transform.position.x) < baseY/2) && (Mathf.Abs(p2.transform.position.x + p3.transform.position.x) < baseY/2) && (Mathf.Abs(p1.transform.position.x + p3.transform.position.x) < baseY/2) && (Mathf.Abs(p3.transform.position.x + p1.transform.position.x) < baseY/2) &&
-		    (Mathf.Abs(p1.transform.position.x + p4.transform.position.x) < baseY/2) && (Mathf.Abs(p4.transform.position.x + p1.transform.position.x) < baseY/2) && (Mathf.Abs(p2.transform.position.x + p3.transform.position.x) < baseY/2) && (Mathf.Abs(p3.transform.position.x + p2.transform.position.x) < baseY/2) &&
-		    (Mathf.Abs(p2.transform.position.x + p4.transform.position.x) < baseY/2) && (Mathf.Abs(p4.transform.position.x + p2.transform.position.x) < baseY/2) && (Mathf.Abs(p1.transform.position.x + p2.transform.position.x) < baseY/2) && (Mathf.Abs(p3.transform.position.x + p4.transform.position.x) < baseY/2)){
-			baseY -= .1f;
-			//So it won't go too low
-			if(baseY < supBaseY){
-				baseY = supBaseY;
-			}
-		}*/
 		scrollCheck();
 		//Same adjustment values for X and Z as start
 		baseX = baseY/2 + adjVal;
 		baseZ = -(baseY/2 + adjVal);
 		//Average the x's and z's for the target location of the camera's focus
 		avgMake();
-		/*avgX = (p1.transform.position.x + p2.transform.position.x + p3.transform.position.x + p4.transform.position.x)/4 + baseX;
-		avgZ = (p1.transform.position.z + p2.transform.position.z + p3.transform.position.z + p4.transform.position.z)/4 + baseZ;*/
 		//Translate the camera after everything is done
 		transform.position = new Vector3(avgX,baseY,avgZ);
 	}
@@ -89,11 +71,6 @@ public class CameraAdjuster : MonoBehaviour {
 			avgX = avgX/avgNum + baseX;
 			avgZ = avgZ/avgNum + baseZ;
 		}
-		//avgX += baseX;
-		//avgZ += baseZ;
-		//avgX += avgX;
-		//avgZ += avgZ;
-		//avgX = (p1.transform.position.x + p2.transform.position.x + p3.transform.position.x + p4.transform.position.x)/4 + baseX;
 	}
 	void scrollCheck(){
 		
@@ -157,18 +134,5 @@ public class CameraAdjuster : MonoBehaviour {
 				baseY = supBaseY;
 			}
 		}
-		/*
-		print("x"+avgX);
-		print("z"+-avgZ);
-		print("y"+baseY);
-		if(Mathf.Abs(avgZ) - Mathf.Abs(avgX) >= 5 || Mathf.Abs(avgX) - Mathf.Abs(avgZ) >= 5){
-			baseY -= .1f;
-			//So it won't go too low
-			if(baseY < supBaseY){
-				baseY = supBaseY;
-			}
-		}else{
-			baseY += .1f;
-		}*/
 	}
 }
