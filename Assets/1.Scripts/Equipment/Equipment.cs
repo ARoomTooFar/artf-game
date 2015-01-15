@@ -20,7 +20,10 @@ public class Equipment : MonoBehaviour {
 	// Used for setting stats for each equipment piece
 	protected virtual void setInitValues() {
 	}
-	
+
+	protected virtual void FixedUpdate() {
+	}
+
 	// Update is called once per frame
 	protected virtual void Update () {
 	}

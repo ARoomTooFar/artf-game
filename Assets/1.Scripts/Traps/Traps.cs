@@ -18,7 +18,10 @@ public class Traps : MonoBehaviour {
 	protected virtual void setInitValues() {
 		stats.damage = 1;
 	}
-	
+
+	protected virtual void FixedUpdate() {
+	}
+
 	// Update is called once per frame
 	protected virtual void Update () {
 	

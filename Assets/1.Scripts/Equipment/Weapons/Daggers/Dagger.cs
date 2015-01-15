@@ -18,11 +18,12 @@ public class Dagger : Weapons {
 		stats.atkSpeed = 2.0f;
 		stats.damage = (int)(2 + 1f * player.stats.strength);
 		
-		stats.maxChgTime = 1.6f;
+		stats.maxChgTime = 1.0f;
 		stats.weapType = 0;
 		
 		stats.colStart = 0.4f;
 		stats.colEnd = 0.6f;
+		stats.chgLevels = 0.2f;
 	}
 	
 	// Update is called once per frame
@@ -46,7 +47,7 @@ public class Dagger : Weapons {
 			particles.Play();
 		} else if (stats.curChgAtkTime != -1 && player.animSteInfo.normalizedTime > stats.colStart) {
 			stats.curChgDuration = Mathf.Clamp(Time.time - stats.curChgAtkTime, 0.0f, stats.maxChgTime);
-			stats.chgDamage = (int) (stats.curChgDuration/0.4f);
+			stats.chgDamage = (int) (stats.curChgDuration/stats.chgLevels);
 			particles.startSpeed = stats.chgDamage;
 		}
 		

@@ -40,15 +40,15 @@ public class Gun : Weapons {
 			stats.curChgAtkTime = -1;
 			//spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(12f-player.stats.coordination)+player.transform.eulerAngles.y,(12f-player.stats.coordination)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
 			//GameObject bullet = (GameObject) Instantiate(stats.projectile, player.transform.position, spray);
-			StartCoroutine(multShoot((int)(stats.curChgDuration/0.4f)));
-			print("Charge Attack power level:" + (int)(stats.curChgDuration/0.4f));
+			StartCoroutine(multShoot((int)(stats.curChgDuration/stats.chgLevels)));
+			print("Charge Attack power level:" + (int)(stats.curChgDuration/stats.chgLevels));
 		} else if (stats.curChgAtkTime == 0 && player.animSteInfo.normalizedTime > stats.colStart) {
 			stats.curChgAtkTime = Time.time;
 			particles.startSpeed = 0;
 			particles.Play();
 		} else if (stats.curChgAtkTime != -1 && player.animSteInfo.normalizedTime > stats.colStart) {
 			stats.curChgDuration = Mathf.Clamp(Time.time - stats.curChgAtkTime, 0.0f, stats.maxChgTime);
-			particles.startSpeed = (int)(stats.curChgDuration/0.4f);
+			particles.startSpeed = (int)(stats.curChgDuration/stats.chgLevels);
 			//StartCoroutine(multShoot((int)(stats.curChgDuration/0.4f)));
 		}
 		

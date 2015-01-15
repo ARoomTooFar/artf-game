@@ -19,6 +19,10 @@ public class Enemy : MonoBehaviour, IDamageable<int> {
 		print ("Fuck: " + dmgTaken + " Damage taken");
 	}
 
+	public virtual void stun(float duration) {
+		print ("Stunned for " + duration + " seconds");
+	}
+
 	/*//Use for other shit maybe
 	public virtual void OnTriggerEnter(Collider other) {
 		damage (1);
