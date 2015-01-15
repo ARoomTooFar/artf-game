@@ -28,15 +28,15 @@ public enum DIRECTION : int {
  * 
  */
 public class TerrainBlock {
-	private Dictionary<DIRECTION, TerrainBlock> neighbors = new Dictionary<DIRECTION, TerrainBlock> ();
+	private Dictionary<DIRECTION, TerrainBlock> neighbors = new Dictionary<DIRECTION, TerrainBlock>();
 
 	public Dictionary<DIRECTION, TerrainBlock> Neighbors {
 		get {
 			return neighbors;
 		}
 	}
-
-	private Vector3 position = new Vector3 ();
+	
+	private Vector3 position = new Vector3();
 
 	public Vector3 Position {
 		get {
@@ -44,14 +44,11 @@ public class TerrainBlock {
 		}
 	}
 
-	private Vector3 rotation = new Vector3 ();
+	private DIRECTION orientation;
 
-	public Vector3 Rotation {
-		set {
-			rotation = value.Round ();
-		}
+	public DIRECTION Orientation {
 		get {
-			return rotation;
+			return orientation;
 		}
 	}
 
@@ -61,17 +58,17 @@ public class TerrainBlock {
 		get{ return blockInfo; }
 	}
 
-	public string SaveString{
-		get{ return position.toCSV () + "," + rotation.toCSV ();}
+	public string SaveString {
+		get{ return position.toCSV() + "," + orientation.ToString();}
 	}
 
 	/*
 	 * Constructor
 	 */
-	public TerrainBlock (string blockID, Vector3 position, Vector3 rotation) {
-		this.blockInfo = TerrainBlockInfo.get (blockID);
-		this.position = position.Round ();
-		this.Rotation = rotation;
+	public TerrainBlock(string blockID, Vector3 position, DIRECTION orientation) {
+		this.blockInfo = TerrainBlockInfo.get(blockID);
+		this.position = position.Round();
+		this.orientation = orientation;
 	}
 
 	/*
@@ -85,13 +82,13 @@ public class TerrainBlock {
 	 * Throws exception if dir is NotDirection.
 	 * 
 	 */
-	public bool addNeighbor (TerrainBlock that, DIRECTION dir) {
-		if(dir.Equals(DIRECTION.NotNeighbor)){
+	public bool addNeighbor(TerrainBlock that, DIRECTION dir) {
+		if(dir.Equals(DIRECTION.NotNeighbor)) {
 			throw new Exception("Invalid DIRECTION");
 		}
 		try {
-			neighbors.Add (dir, that);
-		} catch (ArgumentException) {
+			neighbors.Add(dir, that);
+		} catch(ArgumentException) {
 			return false;
 		}
 		return true;
@@ -106,8 +103,8 @@ public class TerrainBlock {
 	 * returns false if no neighbor was present.
 	 * 
 	 */
-	public bool removeNeighbor (DIRECTION dir) {
-		return neighbors.Remove (dir);
+	public bool removeNeighbor(DIRECTION dir) {
+		return neighbors.Remove(dir);
 	}
 
 
@@ -117,9 +114,9 @@ public class TerrainBlock {
 	 * Removes all neighbors from TerrainBlock
 	 * 
 	 */
-	public void clearNeighbors () {
-		foreach (DIRECTION dir in Enum.GetValues(typeof(DIRECTION))) {
-			neighbors.Remove (dir);
+	public void clearNeighbors() {
+		foreach(DIRECTION dir in Enum.GetValues(typeof(DIRECTION))) {
+			neighbors.Remove(dir);
 		}
 	}
 
@@ -129,10 +126,10 @@ public class TerrainBlock {
 	 * Returns the neighboring TerrainBlock in direction dir.
 	 * Returns null if there is no block in that direction
 	 */
-	public TerrainBlock getNeighbor (DIRECTION dir) {
+	public TerrainBlock getNeighbor(DIRECTION dir) {
 		try {
-			return neighbors [dir];
-		} catch (Exception) {
+			return neighbors[dir];
+		} catch(Exception) {
 			return null;
 		}
 	}
@@ -143,33 +140,33 @@ public class TerrainBlock {
 	 * Returns the DIRECTION in which other lies in relation to this.
 	 * Returns DIRECTION.NotNeighbor if other is not adjacent.
 	 */
-	public DIRECTION isNeighbor (TerrainBlock other) {
+	public DIRECTION isNeighbor(TerrainBlock other) {
 		float xDif = other.Position.x - this.Position.x;
 		float zDif = other.Position.z - this.Position.z;
 
-		if (xDif == 0 && zDif == 1) {
+		if(xDif == 0 && zDif == 1) {
 			return DIRECTION.North;
 		}
-		if (xDif == 0 && zDif == -1) {
+		if(xDif == 0 && zDif == -1) {
 			return DIRECTION.South;
 		}
-		if (xDif == 1 && zDif == 0) {
+		if(xDif == 1 && zDif == 0) {
 			return DIRECTION.East;
 		}
-		if (xDif == -1 && zDif == 0) {
+		if(xDif == -1 && zDif == 0) {
 			return DIRECTION.West;
 		}
 
-		if (xDif == 1 && zDif == 1) {
+		if(xDif == 1 && zDif == 1) {
 			return DIRECTION.NorthEast;
 		}
-		if (xDif == 1 && zDif == -1) {
+		if(xDif == 1 && zDif == -1) {
 			return DIRECTION.SouthEast;
 		}
-		if (xDif == -1 && zDif == 1) {
+		if(xDif == -1 && zDif == 1) {
 			return DIRECTION.NorthWest;
 		}
-		if (xDif == -1 && zDif == -1) {
+		if(xDif == -1 && zDif == -1) {
 			return DIRECTION.SouthWest;
 		}
 		return DIRECTION.NotNeighbor;

@@ -22,20 +22,18 @@ public class TestScript : MonoBehaviour {
 	}
 
 	void TerrainBlockTests(){
-		//Test if setting a new rotation rounds to nearest integers
-		TerrainBlock testBlock = new TerrainBlock ("block1", new Vector3 (), new Vector3 ());
-		testBlock.Rotation = new Vector3 (.2f, .2f, .2f);
-		Assert (testBlock.Rotation.Equals(new Vector3()), "TerrainBlock rotation rounding");
-		
+
+		TerrainBlock testBlock = new TerrainBlock ("block1", new Vector3 (), DIRECTION.North);
+
 		//Blocks in each cardinal and ordinal direction to testBlock
-		TerrainBlock testBlockNorth = new TerrainBlock ("block1", new Vector3 (.0f, .0f, 1.0f), new Vector3 ());
-		TerrainBlock testBlockSouth = new TerrainBlock ("block1", new Vector3 (0f, .0f, -1.0f), new Vector3 ());
-		TerrainBlock testBlockEast = new TerrainBlock ("block1", new Vector3 (1f, .0f, .0f), new Vector3 ());
-		TerrainBlock testBlockWest = new TerrainBlock ("block1", new Vector3 (-1f, .0f, .0f), new Vector3 ());
-		TerrainBlock testBlockNorthEast = new TerrainBlock ("block1", new Vector3 (1f, .0f, 1.0f), new Vector3 ());
-		TerrainBlock testBlockSouthEast = new TerrainBlock ("block1", new Vector3 (1f, .0f, -1.0f), new Vector3 ());
-		TerrainBlock testBlockNorthWest = new TerrainBlock ("block1", new Vector3 (-1f, .0f, 1.0f), new Vector3 ());
-		TerrainBlock testBlockSouthWest = new TerrainBlock ("block1", new Vector3 (-1f, .0f, -1.0f), new Vector3 ());
+		TerrainBlock testBlockNorth = new TerrainBlock ("block1", new Vector3 (.0f, .0f, 1.0f), DIRECTION.North);
+		TerrainBlock testBlockSouth = new TerrainBlock ("block1", new Vector3 (0f, .0f, -1.0f), DIRECTION.North);
+		TerrainBlock testBlockEast = new TerrainBlock ("block1", new Vector3 (1f, .0f, .0f), DIRECTION.North);
+		TerrainBlock testBlockWest = new TerrainBlock ("block1", new Vector3 (-1f, .0f, .0f), DIRECTION.North);
+		TerrainBlock testBlockNorthEast = new TerrainBlock ("block1", new Vector3 (1f, .0f, 1.0f), DIRECTION.North);
+		TerrainBlock testBlockSouthEast = new TerrainBlock ("block1", new Vector3 (1f, .0f, -1.0f), DIRECTION.North);
+		TerrainBlock testBlockNorthWest = new TerrainBlock ("block1", new Vector3 (-1f, .0f, 1.0f), DIRECTION.North);
+		TerrainBlock testBlockSouthWest = new TerrainBlock ("block1", new Vector3 (-1f, .0f, -1.0f), DIRECTION.North);
 		
 		//Check adding a block.
 		testBlock.addNeighbor (testBlockNorth, DIRECTION.North);
@@ -85,8 +83,9 @@ public class TestScript : MonoBehaviour {
 		Assert (DIRECTION.NorthWest == DIRECTION.SouthEast.Opposite (), "error with DIRECTION.NWSE");
 		Assert (DIRECTION.SouthEast == DIRECTION.NorthWest.Opposite (), "error with DIRECTION.NWSE");
 
-		testBlock = new TerrainBlock("block1", new Vector3(0,1,2), new Vector3(0,90,180));
-		Assert (testBlock.SaveString.Equals("0,1,2,0,90,180"), "save string error");
+		testBlock = new TerrainBlock("block1", new Vector3(0,1,2), DIRECTION.North);
+		print (testBlock.SaveString);
+		Assert (testBlock.SaveString.Equals("0,1,2,North"), "save string error");
 
 
 		print ("TerrainBlockTests: Tests Done");
