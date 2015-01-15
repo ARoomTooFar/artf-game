@@ -20,9 +20,9 @@ public class Player : Character {
 		stats.maxHealth = 40;
 		stats.health = stats.maxHealth;
 		stats.armor = 0;
-		stats.strength = 0;
+		stats.strength = 10;
 		stats.coordination=0;
-		stats.speed=0;
+		stats.speed=5;
 		stats.luck=0;
 		inGrey = false;
 		greyDamage = 0;
