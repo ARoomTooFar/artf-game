@@ -2,35 +2,33 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SceneryDictionary : Dictionary<string, List<SceneryBlock>>
-{
-	public SceneryDictionary ()
-	{
+public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
+	public SceneryDictionary() {
 	}
 
 	/*
-	 * public bool addBlock (TerrainBlock block)
+	 * public bool addBlock (SceneryBlock block)
 	 * 
-	 * Adds a TerrainBlock to the appropriate list.
+	 * Adds a SceneryBlock to the appropriate list.
 	 * Returns true if successful.
 	 * Returns false if a block already seems to exist in its position.
 	 */
-	public bool addBlock (TerrainBlock block) {
+	public bool addBlock(SceneryBlock block) {
 		//attempt to link the input to its neighbors
-		if (!linkNeighbors (block)) {
+		if(!linkTerrain(block)) {
 			//if something goes wrong, 
-			unlinkNeighbors (block);
+			unlinkTerrain(block);
 			return false;
 		}
 		//get the list for the block type
-		List<TerrainBlock> lst = this [block.BlockInfo.BlockID];
+		List<SceneryBlock> lst = this[block.BlockInfo.BlockID];
 		//create one if needed
-		if (lst == null) {
-			lst = new List<TerrainBlock>();
+		if(lst == null) {
+			lst = new List<SceneryBlock>();
 			this.Add(block.BlockInfo.BlockID, lst);
 		}
 		//add the block to the list
-		lst.Add (block);
+		lst.Add(block);
 
 		return true;
 	}
@@ -44,25 +42,9 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>>
 	 * Returns true if successful.
 	 * Returns false if a block already has a neighbor in that position.
 	 */
-	private bool linkNeighbors (TerrainBlock block) {
-		//Go through every set of blocks
-		foreach(KeyValuePair<string, List<TerrainBlock>> pair in this){
-			//for each extant block
-			foreach(TerrainBlock blk in pair.Value){
-				//determine if the block is a neighbor of the input
-				DIRECTION dir = block.isNeighbor(blk);
-				//if not, move on to the next one
-				if(dir == DIRECTION.NotNeighbor){
-					continue;
-				}
-				//set the found block as a neighbor of the input
-				block.addNeighbor(blk, dir);
-				//try to set the input as a neighbor of the found block.
-				//if something goes wrong, stop the whole function.
-				if(!blk.addNeighbor(block, dir.Opposite())){
-					return false;
-				}
-			}
+	private bool linkTerrain(SceneryBlock block) {
+		foreach(Vector3 coordinate in block.Coordinates) {
+
 		}
 		return true;
 	}
@@ -73,14 +55,8 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>>
 	 * Breaks all neighbor links between block and its list of neighbors.
 	 * 
 	 */
-	private void unlinkNeighbors(TerrainBlock block){
-		//for each TerrainBlock in block's list of neighbors
-		foreach (KeyValuePair<DIRECTION, TerrainBlock> blk in block.Neighbors) {
-			//remove block from the neighbors list of neighbors
-			blk.Value.removeNeighbor(blk.Key.Opposite());
-		}
-		//remove all neighbors from block;
-		block.clearNeighbors ();
+	private void unlinkTerrain(SceneryBlock block) {
+
 	}
 
 	/*
@@ -91,19 +67,19 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>>
 	 * returns true if the block wasn't or is no longer part of the data
 	 * returns false if something bad happens
 	 */
-	public bool removeBlock (Vector3 position) {
+	public bool removeBlock(Vector3 position) {
 		//round position
-		Vector3 intPosition = position.Round ();
+		Vector3 intPosition = position.Round();
 		//find block at position
-		TerrainBlock tgtBlock = findBlock (intPosition);
-		if (tgtBlock == null){
+		SceneryBlock tgtBlock = findBlock(intPosition);
+		if(tgtBlock == null) {
 			//if block doesn't exist, return true
 			return true;
 		}
 		//unlink neighbors
-		unlinkNeighbors (tgtBlock);
+
 		//remove from list
-		return this [tgtBlock.BlockInfo.BlockID].Remove (tgtBlock);
+		return this[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
 	}
 
 	/*
@@ -112,15 +88,15 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>>
 	 * Returns the block at position
 	 * Returns null if there is no block in that position.
 	 */
-	public TerrainBlock findBlock (Vector3 position) {
+	public SceneryBlock findBlock(Vector3 position) {
 		//round position
-		Vector3 intPosition = position.Round ();
+		Vector3 intPosition = position.Round();
 		//for each type of block
-		foreach (KeyValuePair<string, List<TerrainBlock>> kvPair in this) {
+		foreach(KeyValuePair<string, List<SceneryBlock>> kvPair in this) {
 			//check each block
-			foreach(TerrainBlock blk in kvPair.Value){
+			foreach(SceneryBlock blk in kvPair.Value) {
 				//return block if position matches
-				if(blk.Position.Equals (intPosition)){
+				if(blk.Position.Equals(intPosition)) {
 					return blk;
 				}//otherwise continue to next
 			}
@@ -129,14 +105,14 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>>
 		return null;
 	}
 
-	public string TerrainSaveString{
-		get{
+	public string ScenerySaveString {
+		get {
 			string retVal = "";
 			string tempVal;
-			foreach (KeyValuePair<string, List<TerrainBlock>> kvPair in this) {
+			foreach(KeyValuePair<string, List<SceneryBlock>> kvPair in this) {
 				tempVal = "";
 				tempVal += kvPair.Key + ": ";
-				foreach (TerrainBlock blk in kvPair.Value) {
+				foreach(SceneryBlock blk in kvPair.Value) {
 					tempVal += blk.SaveString + " ";
 				}
 				retVal += tempVal + "\n";
