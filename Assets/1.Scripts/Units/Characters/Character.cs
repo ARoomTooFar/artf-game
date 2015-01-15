@@ -55,8 +55,7 @@ public class CharItems {
 
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAttackable, IDamageable<int> {
-	
-	public float speed = 5.0f;
+
 	public float gravity = 50.0f;
 	public bool isDead = false;
 	public bool isGrounded = false;
@@ -88,7 +87,6 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		freeAnim = true;
 		setInitValues();
 		stats.equipItems(this);
-		speed = (5.0f + 2.5f * (stats.speed*.2f));
 		charItems.equipItems(this);
 		setAnimHash();
 	}
@@ -113,21 +111,24 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		}else{
 			isDead = false;
 		}
-	    if(!isDead){
-		speed = (5.0f + 2.5f * (stats.speed*.2f));
-		isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
+	    if(!isDead) {
 
-		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-		actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+			// Causes sprint to fail (What is this for?)
+			// speed = (5.0f + 2.5f * (stats.speed*.2f));
 
-		if (isGrounded) {
-			actionCommands ();
-			moveCommands ();
-		} else {
-			falling();
-		}
+			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
-		animationUpdate ();
+			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+			actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+
+			if (isGrounded) {
+				actionCommands ();
+				moveCommands ();
+			} else {
+				falling();
+			}
+
+			animationUpdate ();
 		}
 	}
 
@@ -241,7 +242,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 			if (facing != Vector3.zero)
 				curFacing = facing;
 			
-			rigidbody.velocity = facing.normalized * speed;
+			rigidbody.velocity = facing.normalized * (5.0f + 2.5f * (stats.speed*.2f));
 		} else if (freeAnim){
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this

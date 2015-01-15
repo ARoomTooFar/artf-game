@@ -11,7 +11,7 @@ public class Sprint : Item {
 	[Range(2, 4)]
 	public int sprintSpeed;
 
-	private float baseSpeed;
+	private int baseSpeed;
 	private bool isActive;
 
 	// Use this for initialization
@@ -39,8 +39,8 @@ public class Sprint : Item {
 		// base.useItem();
 
 		isActive = true;
-		baseSpeed = player.speed;
-		player.speed *= sprintSpeed;
+		baseSpeed = player.stats.speed;
+		player.stats.speed *= sprintSpeed;
 		curDuration = maxDuration;
 
 		// player.animator.SetTrigger("Sprint"); Set speed var in animator once we have the animation
@@ -51,7 +51,7 @@ public class Sprint : Item {
 
 		if (isActive) {
 			isActive = false;
-			player.speed = baseSpeed;
+			player.stats.speed = baseSpeed;
 			curCoolDown = cooldown - curDuration/2;
 			curDuration = 0;
 		}
