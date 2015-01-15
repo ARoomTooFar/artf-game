@@ -14,7 +14,6 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 	void Start ()
 	{
 		numberOfFolders = folderObject.gameObject.transform.GetChildCount ();
-		Debug.Log (numberOfFolders);
 		folders = new GameObject[numberOfFolders];
 		
 		for (int i = 0; i < numberOfFolders; i++) {
