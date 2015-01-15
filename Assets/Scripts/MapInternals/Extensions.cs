@@ -34,6 +34,27 @@ public static class Extensions
 	public static string toCSV(this Vector3 vec){
 		return string.Format ("{0},{1},{2}", vec.x, vec.y, vec.z);
 	}
+
+	public static Vector3 RotateTo(this Vector3 vec, DIRECTION dir){
+		switch (dir) {
+		case DIRECTION.North:
+			return Quaternion.Euler(0, 0, 0) * vec;
+		case DIRECTION.East:
+			return Quaternion.Euler(0, 90, 0) * vec;
+		case DIRECTION.South:
+			return Quaternion.Euler(0, 180, 0) * vec;
+		case DIRECTION.West:
+			return Quaternion.Euler(0, 270, 0) * vec;
+		}
+		return vec;
+	}
+
+	public static void Add(this Vector3 vec, Vector3 otherVec){
+		vec.x += otherVec.x;
+		vec.y += otherVec.y;
+		vec.z += otherVec.z;
+	}
+
 }
 
 
