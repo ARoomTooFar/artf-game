@@ -5,21 +5,19 @@ using UnityEngine.EventSystems;
 using System;
 using System.IO;
 
-//This class listens to UI elements that are on the canvas attached to objects,
-//which are "object UIs"
+//This class listens to UI elements that are on canvases attached to objects
+//in the world space
 public class Listener_ObjectUI : MonoBehaviour
 {
+	//all the dang buttons
 	public Slider slider = null;
 	public InputField inputField = null;
-
 	public Text attackText = null;
 	public Button Button_UpArrow_Attack = null;
 	public Button Button_DownArrow_Attack = null;
-
 	public Text healthText = null;
 	public Button Button_UpArrow_Health = null;
 	public Button Button_DownArrow_Health = null;
-
 	public Text armorText = null;
 	public Button Button_UpArrow_Armor = null;
 	public Button Button_DownArrow_Armor = null;
@@ -33,7 +31,9 @@ public class Listener_ObjectUI : MonoBehaviour
 	{
 		updateMonsterStatText ();
 
-		slider.onValueChanged.AddListener (this.sliderAction); //when the slider is moved, call sliderAction()
+		//Slider listener
+		//when the slider is moved, call sliderAction()
+		slider.onValueChanged.AddListener (this.sliderAction); 
 
 		//Attack upgrade/downgrade listeners
 		Button_UpArrow_Attack.onClick.AddListener (() => {
@@ -54,15 +54,12 @@ public class Listener_ObjectUI : MonoBehaviour
 			decreaseArmor (); });
 	}
 
-	void Update ()
-	{
-		//String s = inputField.text; //s now has whatever text is in the input field
-	}
-
+	//Pre: slider was moved
+	//Post: slider's change in value has affected some object
 	public void sliderAction (float sliderValue)
 	{
 		//slider value is between 0 and 1
-
+		//do some stuff with that value
 	}
 
 
@@ -123,7 +120,7 @@ public class Listener_ObjectUI : MonoBehaviour
 	}
 
 
-
+	//Update the monster stat text with the newly changed value
 	void updateMonsterStatText ()
 	{
 		attackText.text = "Attack: " + attack.ToString ();
