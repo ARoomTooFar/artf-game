@@ -42,9 +42,6 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 		for (int i = 0; i < numberOfbuttons; i++) {
 			buttons [i] = buttonObject.gameObject.transform.GetChild (i).gameObject;
 		}
-
-
-		
 	}
 
 	//Pre: User clicked the button this script is attached to
@@ -54,7 +51,7 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 	public void OnPointerClick (PointerEventData data)
 	{
 		buttonIsSelected = !buttonIsSelected; //boolean for changing button color
-		setButtonStates();
+		//setButtonStates ();
 		setFolderStates (this.name);
 	}
 	
@@ -74,13 +71,12 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 		//inactive
 		for (int i = 0; i < numberOfFolders; i++) {
 			//this string gets the type of folder
-			string typeOfButton = folders[i].name.Substring (folders[i].name.IndexOf ('_') + 1, 
-			                                                 (folders[i].name.Length - folders[i].name.IndexOf ('_') - 1));
-
+			string typeOfButton = folders [i].name.Substring (folders [i].name.IndexOf ('_') + 1, 
+			                                                 (folders [i].name.Length - folders [i].name.IndexOf ('_') - 1));
 			//compare the button and folder and do the appropriate action
-			if (String.Equals (typeOfButton, typeOfFolder)){
+			if (String.Equals (typeOfButton, typeOfFolder)) {
 				folders [i].SetActive (!folders [i].activeSelf);
-			}else{
+			} else {
 				folders [i].SetActive (false);
 			}
 		}
@@ -89,20 +85,20 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 	//This function is for setting the state of the folder buttons.
 	//Currently it only changes their color according to which is
 	//selected.
-	void setButtonStates()
+	void setButtonStates ()
 	{
 		//loop through all buttons. if the button is the one we've just selected,
 		//change its color. otherwise, set it to black 
 		for (int i = 0; i < numberOfbuttons; i++) {
-			if(String.Equals(this.name, buttons[i].name)){
-				Image img = this.GetComponent<Image>();
-				if(buttonIsSelected == true){
+			if (String.Equals (this.name, buttons [i].name)) {
+				Image img = this.GetComponent<Image> ();
+				if (buttonIsSelected == true) {
 					img.color = Color.grey;
-				}else{
+				} else {
 					img.color = Color.black;
 				}
-			}else{
-				Image img = buttons[i].GetComponent<Image>();
+			} else {
+				Image img = buttons [i].GetComponent<Image> ();
 				img.color = Color.black;
 
 			}
