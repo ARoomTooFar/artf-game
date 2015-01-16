@@ -4,25 +4,31 @@ using System.Collections.Generic;
 
 public class MapData {
 
-	private MapData(){}
-
-	private static MapData instance;
-	public static MapData getInstance(){
-		if(instance == null) {
-			instance = new MapData();
-		}
-		return instance;
+	private MapData() {
 	}
 
-	private TerrainDictionary terrainBlocks = new TerrainDictionary ();
-	public TerrainDictionary TerrainBlocks{
-		get{
+	private static MapData instance;
+
+	public static MapData Instance {
+		get {
+			if(instance == null) {
+				instance = new MapData();
+			}
+			return instance;
+		}
+	}
+
+	private TerrainDictionary terrainBlocks = new TerrainDictionary();
+
+	public TerrainDictionary TerrainBlocks {
+		get {
 			return terrainBlocks;
 		}
 	}
+
 	private SceneryDictionary sceneryBlocks = new SceneryDictionary();
 
-	public string getSaveString(){
+	public string getSaveString() {
 		return "";
 	}
 }

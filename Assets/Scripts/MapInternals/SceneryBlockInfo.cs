@@ -63,11 +63,11 @@ public class SceneryBlockInfo {
 		get{ return pathable; }
 	}
 
-	private List<Vector3> coordinates;
+	private List<Vector3> localCoordinates;
 
-	public List<Vector3> Coordinates(DIRECTION dir) {
+	public List<Vector3> LocalCoordinates(DIRECTION dir) {
 		List<Vector3> retVal = new List<Vector3>();
-		foreach(Vector3 vec in coordinates) {
+		foreach(Vector3 vec in localCoordinates) {
 			retVal.Add(vec.RotateTo(dir));
 		}
 		return retVal;

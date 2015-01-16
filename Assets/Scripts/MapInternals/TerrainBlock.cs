@@ -35,6 +35,11 @@ public class TerrainBlock {
 			return neighbors;
 		}
 	}
+
+	private SceneryBlock scenery;
+	public SceneryBlock Scenery{
+		get{ return scenery;}
+	}
 	
 	private Vector3 position = new Vector3();
 
@@ -170,6 +175,23 @@ public class TerrainBlock {
 			return DIRECTION.SouthWest;
 		}
 		return DIRECTION.NotNeighbor;
+	}
+
+	public bool addScenery(SceneryBlock scenery){
+		if(this.scenery != null) {
+			return false;
+		}
+
+		/*if(!scenery.BlockInfo.Pathable && this.monster != null) {
+			return false;
+		}*/
+
+		this.scenery = scenery;
+		return true;
+	}
+
+	public void removeScenery(){
+		this.scenery = null;
 	}
 
 

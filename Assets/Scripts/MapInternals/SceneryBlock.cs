@@ -40,7 +40,7 @@ public class SceneryBlock {
 
 	public List<Vector3> Coordinates{
 		get{
-			List<Vector3> retVal = blockInfo.Coordinates(Orientation);
+			List<Vector3> retVal = blockInfo.LocalCoordinates(Orientation);
 			foreach(Vector3 vec in retVal){
 				vec.Add(position);
 			}

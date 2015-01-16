@@ -34,7 +34,7 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 	}
 
 	/*
-	 * private bool linkNeighbors (TerrainBlock block)
+	 * private bool linkTerrain (SceneryBlock block)
 	 * 
 	 * Gets the adjacent blocks and adds them as neighbors to block.
 	 * Also links block as a neighbor to any adjacent blocks.
@@ -43,8 +43,15 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 	 * Returns false if a block already has a neighbor in that position.
 	 */
 	private bool linkTerrain(SceneryBlock block) {
+		TerrainBlock blk;
 		foreach(Vector3 coordinate in block.Coordinates) {
-
+			blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
+			if(blk == null){
+				return false;
+			}
+			if(!blk.addScenery(block)){
+				return false;
+			}
 		}
 		return true;
 	}
@@ -56,7 +63,16 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 	 * 
 	 */
 	private void unlinkTerrain(SceneryBlock block) {
-
+		TerrainBlock blk;
+		foreach(Vector3 coordinate in block.Coordinates) {
+			blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
+			if(blk == null){
+				continue;
+			}
+			if(blk.Scenery.Equals(block)){
+				blk.removeScenery();
+			}
+		}
 	}
 
 	/*
@@ -77,7 +93,7 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 			return true;
 		}
 		//unlink neighbors
-
+		unlinkTerrain(tgtBlock);
 		//remove from list
 		return this[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
 	}
