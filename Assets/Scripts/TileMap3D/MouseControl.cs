@@ -24,15 +24,18 @@ public class MouseControl : MonoBehaviour {
 		Ray ray = Camera.mainCamera.ScreenPointToRay (Input.mousePosition);
 		//Debug.Log (Input.mousePosition);
 		RaycastHit hitInfo;
-		Debug.DrawRay(Camera.mainCamera.transform.position, Input.mousePosition);
+		//Debug.DrawRay(Camera.mainCamera.transform.position, Input.mousePosition);
+
+		//float halftile = tilemap.tileSize / 2f;
 
 		if (collider.Raycast (ray, out hitInfo, Mathf.Infinity)) {
 
-			int x = Mathf.FloorToInt( hitInfo.point.x / tilemap.tileSize );
-			int z = Mathf.FloorToInt( hitInfo.point.z / tilemap.tileSize );
+			float x = Mathf.RoundToInt( hitInfo.point.x / tilemap.tileSize );
+			float z = Mathf.RoundToInt( hitInfo.point.z / tilemap.tileSize );
 
 			currTile.x = x;
 			currTile.z = z;
+
 			if(notselected) selectionCube.transform.position = currTile;
 			//Debug.DrawRay(Camera.mainCamera.transform.position, hitInfo.point);
 			//Debug.Log (hitInfo.point);
