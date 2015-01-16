@@ -66,51 +66,6 @@ public class CameraAdjuster : MonoBehaviour {
 				transform.rotation = Quaternion.Euler(90,0,0);
 			}
 		}
-//
-//		//on left mouse button down
-//		if(Input.GetMouseButtonDown(0)){
-//			//Find the mouse location, mark current location
-//			mouseLocation = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-//			oldPos = transform.position;
-//
-//			//start dragging
-//			isDragging = true;
-//		}
-//
-//		//if we're dragging
-//		if (isDragging) {
-//			//and the left mouse button is clicked 
-//			if (Input.GetMouseButton (0)) {
-//
-//				//Mark current location with respect to original dragged location
-//				Vector3 pos = Camera.main.ScreenToViewportPoint (Input.mousePosition) - mouseLocation;
-//
-//				//Update base variables based on that position and camera angle
-//				if(isTopDown) {
-//					baseX = (oldPos + -pos * dragSpeed).x;
-//					baseY = (oldPos + -pos * dragSpeed).y;
-//				}
-//				else {
-//					baseX = (oldPos + -pos * dragSpeed).x;
-//					baseY = (oldPos + -pos * dragSpeed).y;
-//					baseZ = (oldPos + -pos * dragSpeed).x;
-//				}
-//
-//				//Bounds checking
-//				if(baseY > maxY) {
-//					baseY = maxY;
-//				}
-//				if(baseY < minY) {
-//					baseY = minY;
-//
-//				}
-//			}
-//
-//			//on release, stop dragging
-//			if (Input.GetMouseButtonUp (0)) {
-//				isDragging = false;
-//			}
-//		}
 
 		if (Input.GetMouseButton (0)) {
 			dx = Input.GetAxis("Mouse X") * dragSpeed.x;
@@ -119,6 +74,14 @@ public class CameraAdjuster : MonoBehaviour {
 			baseX = transform.position.x;
 			baseY = transform.position.y;
 			baseZ = transform.position.z;
+
+			if (baseY < minY) {
+				baseY = minY;
+			}
+
+			if (baseY > maxY) {
+				baseY = maxY;
+			}
 		}
 
 		//Move the camera based on current perspective
