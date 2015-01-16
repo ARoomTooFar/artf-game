@@ -39,20 +39,38 @@ public class TileMap : MonoBehaviour {
 		int vert_total = vx * vz;
 
 		// Initialization
-		Vector3[] vertices = new Vector3[vert_total];
-		int[] triangles = new int[tri_total * 3];
-		Vector3[] normals = new Vector3[vert_total];
+		Vector3[] vertices = new Vector3[4];
+		int[] triangles = new int[2 * 3];
+		Vector3[] normals = new Vector3[4];
 
+		vertices [0] = new Vector3 (0, 0, 0);
+		vertices [1] = new Vector3 (tileSize * vx, 0, 0);
+		vertices [2] = new Vector3 (0, 0, tileSize * vz);
+		vertices [3] = new Vector3 (tileSize * vx, 0, tileSize * vz);
+
+		triangles[0] = 0;
+		triangles[2] = 1;
+		triangles[1] = 2;
+		
+		triangles[3] = 1;
+		triangles[4] = 2;
+		triangles[5] = 3;
+
+		for (int i = 0; i < 4; ++i) {
+			normals[i] = Vector3.up;
+		}
+
+		/*
 		// Store all possible vertices
 		for(int z = 0; z < vz; z++){
 			for(int x = 0; x < vx; x++){
 				vertices[z * vx + x] = new Vector3(x * tileSize, 0, z * tileSize);
 				normals[z * vx + x] = Vector3.up;
 			}
-		}
+		}*/
 		// Debug.Log ("Vertices logged");
 
-
+		/*
 		// Index all the vertices in [triangles] array, draw triangles.
 		for(int z = 0; z < grid_z; z++){
 			for(int x = 0; x < grid_x; x++){
@@ -67,7 +85,7 @@ public class TileMap : MonoBehaviour {
 				triangles[offset + 5] = z * vx + x +	  1;
 				triangles[offset + 4] = z * vx + x + vx + 1;
 			}
-		}
+		}*/
 
 		// Debug.Log ("Triangles logged");
 
