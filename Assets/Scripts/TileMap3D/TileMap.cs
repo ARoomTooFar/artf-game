@@ -7,10 +7,10 @@ using System.Collections;
 
 public class TileMap : MonoBehaviour {
 
-	int grid_x;
-	int grid_z;
+	public int grid_x;
+	public int grid_z;
 
-	float tileSize = 1.0f;
+	public float tileSize = 1.0f;
 	
 	// booleans for housekeeping
 
@@ -23,7 +23,7 @@ public class TileMap : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
 	// 
@@ -83,8 +83,15 @@ public class TileMap : MonoBehaviour {
 		MeshCollider mesh_collider = GetComponent<MeshCollider>();
 
 		mesh_filter.mesh = mesh;
+		mesh_collider.sharedMesh = mesh;
 		// Debug.Log ("mesh built");
 	}
 
+	void drawSquare(Vector3 A, Vector3 B, Vector3 C, Vector3 D){
+		Gizmos.DrawLine (A, B);
+		Gizmos.DrawLine (B, C);
+		Gizmos.DrawLine (C, D);
+		Gizmos.DrawLine (D, A);
+	}
 
 }

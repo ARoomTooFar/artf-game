@@ -2,20 +2,54 @@
 using System.Collections;
 
 public class MouseControl : MonoBehaviour {
-	
-	void Start () {
-		GetComponent<MeshCollider> ().sharedMesh = null;
-		GetComponent<MeshCollider> ().sharedMesh = GetComponent<MeshFilter> ().mesh;
-	}
 
+	TileMap tilemap;
+
+	// current tile
+	Vector3 currTile;
+
+	// select when mouse over
+	public Transform selectionCube;
+
+	bool notselected;
+
+	void Start () {
+		tilemap = GetComponent<TileMap> ();
+		notselected = true;
+	}
+	
 	void Update () {
-		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+
+		// get world coordinates with respect to mouse position by raycast
+		Ray ray = Camera.mainCamera.ScreenPointToRay (Input.mousePosition);
+		//Debug.Log (Input.mousePosition);
 		RaycastHit hitInfo;
+		Debug.DrawRay(Camera.mainCamera.transform.position, Input.mousePosition);
 
 		if (collider.Raycast (ray, out hitInfo, Mathf.Infinity)) {
-			renderer.material.color = Color.red;
+
+			int x = Mathf.FloorToInt( hitInfo.point.x / tilemap.tileSize );
+			int z = Mathf.FloorToInt( hitInfo.point.z / tilemap.tileSize );
+
+			currTile.x = x;
+			currTile.z = z;
+			if(notselected) selectionCube.transform.position = currTile;
+			//Debug.DrawRay(Camera.mainCamera.transform.position, hitInfo.point);
+			//Debug.Log (hitInfo.point);
 		} else {
-			renderer.material.color = Color.green;
+			//renderer.material.color = Color.red;
+
 		}
+
+
+		if (Input.GetMouseButtonDown (0)) {
+			selectTile ();
+			notselected = false;
+		}
+	}
+
+	void selectTile(){
+		selectionCube.transform.position = currTile;
+		selectionCube.GetComponent<MeshRenderer> ().material.color = Color.blue;
 	}
 }

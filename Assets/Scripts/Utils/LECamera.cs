@@ -13,7 +13,8 @@ public class LECamera : MonoBehaviour {
 	Vector3 offset;
 	
 	void Start () {
-		Camera.main.orthographic = true;
+//		Camera.main.orthographic = true;
+//		camera.orthographicSize = 30;
 		target = tilemap.transform;
 		topview ();
 	}
