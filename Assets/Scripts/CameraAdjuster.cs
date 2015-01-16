@@ -12,11 +12,12 @@ public class CameraAdjuster : MonoBehaviour {
 	//camera movement, drag speed, and mouse location
 	//initialization maxX and maxY tbd based on needs 
 	//of level editor, left blank here
-	public float baseY,baseX,baseZ,minY, maxY, maxX, maxZ, dragSpeed;
+	public float baseY, baseX, baseZ, minY, maxY, maxX, maxZ, dx, dy;
 	public float debug;
 	public bool isTopDown;
 	public bool isDragging;
 	public Vector3 oldPos;
+	public Vector2 dragSpeed;
 	private Vector3 mouseLocation;
 	void Start () {
 		transform.rotation = Quaternion.Euler(45,-45,0);
@@ -28,10 +29,10 @@ public class CameraAdjuster : MonoBehaviour {
 		minY = baseY;
 		//Camera angle controller
 		isTopDown = false;
-		//Camera dragging speed
-		dragSpeed = 5;
 		//Are we dragging camera?
 		isDragging = false;
+		dragSpeed.x = 5;
+		dragSpeed.y = 5;
 
 	}
 	
@@ -110,6 +111,15 @@ public class CameraAdjuster : MonoBehaviour {
 //				isDragging = false;
 //			}
 //		}
+
+		if (Input.GetMouseButton (0)) {
+			dx = Input.GetAxis("Mouse X") * dragSpeed.x;
+			dy = Input.GetAxis("Mouse Y") * dragSpeed.y;
+			transform.position -= transform.right * dx + transform.up * dy;
+			baseX = transform.position.x;
+			baseY = transform.position.y;
+			baseZ = transform.position.z;
+		}
 
 		//Move the camera based on current perspective
 		//Move forward
