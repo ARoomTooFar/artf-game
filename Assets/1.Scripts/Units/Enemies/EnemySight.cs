@@ -59,7 +59,7 @@ public class EnemySight : MonoBehaviour {
 	void attackPlayer (GameObject player)
 	{
 		Vector3 distanceToTarget = transform.position - targetPosition;
-		if (distanceToTarget.sqrMagnitude > 6) 
+		if (distanceToTarget.sqrMagnitude > 8) 
 		{
 			nav.destination = targetPosition;
 			ani.SetBool ("Moving", true);
