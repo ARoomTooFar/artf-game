@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 
 [RequireComponent(typeof(Rigidbody))]
-public class Enemy : MonoBehaviour, IFallable, IDamageable<int> {
+public class Enemy : Character {
 	
 	public float speed = 5.0f;
 	public float gravity = 50.0f;
