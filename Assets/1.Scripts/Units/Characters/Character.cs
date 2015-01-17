@@ -15,9 +15,9 @@ public class Controls {
 [System.Serializable]
 public class Stats{
 	//Base Stats
-	public int health, armor;
+	public int health, armor,maxHealth;
 	public int strength, coordination, speed, luck;
-	
+	public bool isDead;
 	[Range(0.5f, 2.0f)]
 	public float atkSpeed;
 	/*
@@ -55,9 +55,9 @@ public class CharItems {
 
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAttackable, IDamageable<int> {
-	
-	public float speed = 5.0f;
+
 	public float gravity = 50.0f;
+	public bool isDead = false;
 	public bool isGrounded = false;
 	public bool actable = true; // Boolean to show if a unit can act or is stuck in an animation
 	
@@ -69,7 +69,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public Controls controls;
 	public Stats stats;
 	public CharItems charItems;
-
+	//speed = (5.0f + 2.5f * (stats.speed*.2f));
 	public bool freeAnim;
 
 	public bool invincible = false;
@@ -83,6 +83,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	protected virtual void Start () {
 		animator = GetComponent<Animator>();
 		facing = curFacing = Vector3.forward;
+		isDead = false;
 		freeAnim = true;
 		setInitValues();
 		stats.equipItems(this);
@@ -105,19 +106,30 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	
 	// Update is called once per frame
 	protected virtual void Update () {
-		isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
-
-		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-		actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
-
-		if (isGrounded) {
-			actionCommands ();
-			moveCommands ();
-		} else {
-			falling();
+		if(stats.health <= 0){
+			isDead = true;
+		}else{
+			isDead = false;
 		}
+	    if(!isDead) {
 
-		animationUpdate ();
+			// Causes sprint to fail (What is this for?)
+			// speed = (5.0f + 2.5f * (stats.speed*.2f));
+
+			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
+
+			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+			actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+
+			if (isGrounded) {
+				actionCommands ();
+				moveCommands ();
+			} else {
+				falling();
+			}
+
+			animationUpdate ();
+		}
 	}
 
 	//---------------------------------//
@@ -230,7 +242,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 			if (facing != Vector3.zero)
 				curFacing = facing;
 			
-			rigidbody.velocity = facing.normalized * speed;
+			rigidbody.velocity = facing.normalized * (5.0f + 2.5f * (stats.speed*.2f));
 		} else if (freeAnim){
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this
