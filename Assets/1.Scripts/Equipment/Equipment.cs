@@ -17,7 +17,7 @@ public class Equipment : MonoBehaviour {
 		setInitValues();
 	}
 
-	// Used for setting stats for each equipment piece
+	// Used for setting stats Sfor each equipment piece
 	protected virtual void setInitValues() {
 	}
 
