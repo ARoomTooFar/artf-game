@@ -17,10 +17,19 @@ public class Gun : Weapons {
 		stats.damage = 1;
 		stats.maxChgTime = 2.0f;
 		stats.weapType = 1;
+<<<<<<< HEAD
 		//bullPattern = 'L';
 		bullPattern = 'S';
 		spray = player.transform.rotation;
 		spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(12f-player.stats.coordination)+player.transform.eulerAngles.y,(12f-player.stats.coordination)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
+=======
+		bullPattern = 'L';
+		//bullPattern = 'S';
+		//if(bullPattern == 'S'){
+			spray = player.transform.rotation;
+			spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(12f-player.stats.coordination)+player.transform.eulerAngles.y,(12f-player.stats.coordination)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
+		//}
+>>>>>>> 60fb7713053874e51452ff6f4d582040dc55ab63
 	}
 	
 	// Update is called once per frame
