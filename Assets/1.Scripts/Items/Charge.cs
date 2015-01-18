@@ -54,12 +54,6 @@ public class Charge : Item {
 		if (curChgTime >= 0.0f) {
 			curChgTime = Mathf.Clamp(curChgTime + Time.deltaTime, 0.0f, maxChgTime);
 		}
-
-		//if (enemies.Count > 0) {
-			foreach(Enemy ene in enemies) {
-				ene.transform.position = transform.position;
-			}
-		// }
 	}
 	
 	// Called when character with an this item selected uses their item key
@@ -105,6 +99,10 @@ public class Charge : Item {
 				player.rigidbody.velocity = Vector3.zero;
 				yield break;
 			}
+			
+			foreach(Enemy ene in enemies) {
+				ene.transform.position = transform.position;
+			}
 
 			player.rigidbody.velocity = player.curFacing.normalized * player.stats.speed * 1.5f * chargeSpeed;
 			yield return 0;
@@ -119,7 +117,8 @@ public class Charge : Item {
 	}
 
 	void OnTriggerEnter (Collider other) {
-		if (other.tag == "Wall") {
+		RiotShield rShield = other.GetComponent<RiotShield>();
+		if (other.tag == "Wall" || rShield && rShield.player.curFacing.normalized + player.curFacing.normalized == Vector3.zero) {
 			hitWall = true;
 		}
 
