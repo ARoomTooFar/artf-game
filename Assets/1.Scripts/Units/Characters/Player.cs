@@ -4,6 +4,14 @@
 using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
+public class Controls {
+	//First 7 are Keys, last 2 are joystick axis
+	public string up, down, left, right, attack, secItem, cycItem, hori, vert;
+	//0 for Joystick off, 1 for Joystick on and no keys
+	public int joyUsed;
+}
+
 [RequireComponent(typeof(Rigidbody))]
 public class Player : Character {
 	public bool inGrey;

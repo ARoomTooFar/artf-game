@@ -5,21 +5,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class Controls {
-	//First 7 are Keys, last 2 are joystick axis
-	public string up, down, left, right, attack, secItem, cycItem, hori, vert;
-	//0 for Joystick off, 1 for Joystick on and no keys
-	public int joyUsed;
-}
-
-[System.Serializable]
 public class Stats{
 	//Base Stats
 	public int health, armor,maxHealth;
 	public int strength, coordination, speed, luck;
 	public bool isDead;
-	[Range(0.5f, 2.0f)]
-	public float atkSpeed;
 	/*
 	*Health: Health is the amount of damage a player can take before dying.
 	*Armor: Effects the amount of health that is lost when a player is hit with an attack, the higher the armor the less health is lost.
@@ -29,16 +19,20 @@ public class Stats{
 	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
 	*/
 	//Name of item
+}
+
+[System.Serializable]
+public class Gear {
 	public Weapons weapon;
 	public Equipment helmet, bodyArmor;
 
 	public void equipItems(Character curPlayer) {
-		if (weapon) weapon.equip(curPlayer);// weapon.player = curPlayer;
+		if (weapon) weapon.equip(curPlayer);
 	}
 }
 
 [System.Serializable]
-public class CharItems {
+public class Inventory {
 	public int selected;
 	public List<Item> items = new List<Item>();
 
@@ -68,7 +62,8 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	
 	public Controls controls;
 	public Stats stats;
-	public CharItems charItems;
+	public Gear gear;
+	public Inventory inventory;
 	//speed = (5.0f + 2.5f * (stats.speed*.2f));
 	public bool freeAnim;
 
@@ -86,8 +81,8 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		isDead = false;
 		freeAnim = true;
 		setInitValues();
-		stats.equipItems(this);
-		charItems.equipItems(this);
+		gear.equipItems(this);
+		inventory.equipItems(this);
 		setAnimHash();
 	}
 	protected virtual void setInitValues() {
@@ -108,14 +103,10 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	protected virtual void Update () {
 		if(stats.health <= 0){
 			isDead = true;
-		}else{
+		} else {
 			isDead = false;
 		}
 	    if(!isDead) {
-
-			// Causes sprint to fail (What is this for?)
-			// speed = (5.0f + 2.5f * (stats.speed*.2f));
-
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -140,18 +131,18 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		// Invokes an action/animation
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
-				stats.weapon.initAttack();
+				gear.weapon.initAttack();
 				// chgAtkTime = chgDuration = 0;
 				// animator.SetTrigger("Attack");
 			} else if(Input.GetKeyDown (controls.secItem)) {
-				if (charItems.items.Count > 0 && charItems.items[charItems.selected].curCoolDown <= 0) {
-					charItems.items[charItems.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
+				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
+					inventory.items[inventory.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
 				} else {
 					// Play sound for trying to use item on cooldown or items
 					print("Item on Cooldown");
 				}
 			} else if(Input.GetKeyDown (controls.cycItem)) {
-				charItems.cycItems();
+				inventory.cycItems();
 			}
 		// Continues with what is happening
 		} else {
@@ -165,8 +156,8 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 
 		if (Input.GetKeyUp (controls.secItem))  {
-			if (charItems.items.Count > 0) {
-				charItems.items[charItems.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
+			if (inventory.items.Count > 0) {
+				inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
 			}
 		}
 	}
@@ -188,13 +179,13 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	protected virtual void attackAnimation(Vector3 tFacing) {
 		// Should this also be in the weapons?
 
-		if (stats.weapon.stats.curChgAtkTime > 0) {
+		if (gear.weapon.stats.curChgAtkTime > 0) {
 			// Change once we get animations
-			if(animSteInfo.normalizedTime < stats.weapon.stats.colStart) animator.speed = stats.atkSpeed;
+			if(animSteInfo.normalizedTime < gear.weapon.stats.colStart) animator.speed = gear.weapon.stats.atkSpeed;
 			else animator.speed = 0;
 			if (tFacing != Vector3.zero) transform.localRotation = Quaternion.LookRotation(facing);
-		} else if (stats.weapon.stats.curChgAtkTime == -1) {
-			animator.speed = stats.weapon.stats.atkSpeed;
+		} else if (gear.weapon.stats.curChgAtkTime == -1) {
+			animator.speed = gear.weapon.stats.atkSpeed;
 		}
 	}
 
@@ -217,7 +208,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 
-		if (actable || stats.weapon.stats.curChgAtkTime > 0) { // Better Check here
+		if (actable || gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -274,7 +265,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	// If using a basic attack, this will do checks (such as charging an attack)
 	public virtual void attacks() {
-		stats.weapon.attack ();
+		gear.weapon.attack ();
 	}
 	
 	//---------------------------------//
