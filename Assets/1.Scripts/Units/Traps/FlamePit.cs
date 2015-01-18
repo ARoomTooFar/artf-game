@@ -18,16 +18,21 @@ public class FlamePit : Traps {
 		stats.damage = 1;
 	}
 
-	// Update is called once per framea
-	protected override void Update () {
-		base.Update ();
+	protected override void FixedUpdate() {
+		base.FixedUpdate();
 
+		// Placed here for consistent damage
 		if (Time.time - lastDmgTime >= 0.1f) {
 			dealDamage = true;
 			lastDmgTime = Time.time;
 		} else {
 			dealDamage = false;
 		}
+	}
+
+	// Update is called once per framea
+	protected override void Update () {
+		base.Update ();
 	}
 
 	void OnTriggerStay(Collider other) {

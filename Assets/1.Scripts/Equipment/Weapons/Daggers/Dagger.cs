@@ -1,10 +1,10 @@
-// Spear class, put into the head for now
+﻿// Dagger class, put into the head for now
 
 using UnityEngine;
 using System.Collections;
 
-public class Spear : Weapons {
-
+public class Dagger : Weapons {
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -15,15 +15,15 @@ public class Spear : Weapons {
 		base.setInitValues();
 		
 		// Default sword stats
-		stats.atkSpeed = 1.0f;
-		stats.damage = (int)(2 + 1.5f * player.stats.strength);
+		stats.atkSpeed = 2.0f;
+		stats.damage = (int)(2 + 1f * player.stats.strength);
 		
-		stats.maxChgTime = 2.0f;
+		stats.maxChgTime = 1.0f;
 		stats.weapType = 0;
-
+		
 		stats.colStart = 0.4f;
 		stats.colEnd = 0.6f;
-		stats.chgLevels = 0.5f;
+		stats.chgLevels = 0.2f;
 	}
 	
 	// Update is called once per frame
@@ -60,6 +60,7 @@ public class Spear : Weapons {
 		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
 		Enemy enemy = other.GetComponent<Enemy>();
 		if( component != null && enemy != null) {
+			
 			enemy.damage(stats.damage + stats.chgDamage);
 		}
 	}
