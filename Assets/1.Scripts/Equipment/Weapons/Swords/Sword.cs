@@ -18,6 +18,8 @@ public class Sword : Weapons {
 		
 		stats.maxChgTime = 2.0f;
 		stats.weapType = 0;
+
+		stats.chgLevels = 0.4f;
 	}
 
 	// Update is called once per frame
@@ -41,7 +43,7 @@ public class Sword : Weapons {
 			particles.Play();
 		} else if (stats.curChgAtkTime != -1 && player.animSteInfo.normalizedTime > stats.colStart) {
 			stats.curChgDuration = Mathf.Clamp(Time.time - stats.curChgAtkTime, 0.0f, stats.maxChgTime);
-			stats.chgDamage = (int) (stats.curChgDuration/0.4f);
+			stats.chgDamage = (int) (stats.curChgDuration/stats.chgLevels);
 			particles.startSpeed = stats.chgDamage;
 		}
 		

@@ -5,6 +5,8 @@ using System.Collections;
 public class WeaponStats {
 	[Range(0.5f, 2.0f)]
 	public float atkSpeed;
+	[Range(1,11)]
+	public int upgrade;
 	public int damage;
 	//counts number of hits so far in the multiple hit string
 	public int multHit;
@@ -19,7 +21,7 @@ public class WeaponStats {
 	//public GameObject user;
 	// Charge atk variables
 	public int chgDamage;
-	public float maxChgTime, curChgAtkTime, curChgDuration;
+	public float maxChgTime, chgLevels, curChgAtkTime, curChgDuration;
 }
 
 public class Weapons : Equipment {
@@ -45,9 +47,14 @@ public class Weapons : Equipment {
 		stats.maxChgTime = 3.0f;
 		stats.curChgAtkTime = -1.0f;
 		stats.curChgDuration = 0.0f;
+		stats.chgLevels = 0.4f;
 		stats.chgDamage = 0;
 	}
-	
+
+	protected override void FixedUpdate() {
+		base.FixedUpdate();
+	}
+
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();

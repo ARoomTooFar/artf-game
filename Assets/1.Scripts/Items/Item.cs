@@ -18,7 +18,10 @@ public class Item : MonoBehaviour {
 	protected virtual void setInitValues() {
 		cooldown = 10.0f;
 	}
-	
+
+	protected virtual void FixedUpdate() {
+	}
+
 	// Update is called once per frame
 	protected virtual void Update () {
 		if (curCoolDown > 0) {

@@ -3,20 +3,25 @@
 using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour, IDamageable<int> {
+public class Enemy : Character{
 	
 	// Use this for initialization
-	protected virtual void Start () {
-		
+	protected override void Start () {
+		base.Start();
 	}
 	
 	// Update is called once per frame
-	protected virtual void Update () {
-		
+	protected override void Update () {
+		base.Update();
 	}
 
-	public virtual void damage(int dmgTaken) {
+	public override void damage(int dmgTaken) {
+		base.damage(dmgTaken);
 		print ("Fuck: " + dmgTaken + " Damage taken");
+	}
+
+	public override void stun(float duration) {
+		print ("Stunned for " + duration + " seconds");
 	}
 
 	/*//Use for other shit maybe

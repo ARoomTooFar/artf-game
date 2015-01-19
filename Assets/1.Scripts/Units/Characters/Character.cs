@@ -104,6 +104,10 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	}
 	
+	public virtual void stun(float duration) {
+		print ("Stunned for " + duration + " seconds");
+	}
+	
 	// Update is called once per frame
 	protected virtual void Update () {
 		if(stats.health <= 0){
@@ -186,9 +190,10 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	// Animation helper functions
 	protected virtual void attackAnimation(Vector3 tFacing) {
-		// Should this also be in the weapons
+		// Should this also be in the weapons?
 
 		if (stats.weapon.stats.curChgAtkTime > 0) {
+			// Change once we get animations
 			if(animSteInfo.normalizedTime < stats.weapon.stats.colStart) animator.speed = stats.atkSpeed;
 			else animator.speed = 0;
 			if (tFacing != Vector3.zero) transform.localRotation = Quaternion.LookRotation(facing);
