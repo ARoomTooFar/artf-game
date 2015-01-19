@@ -104,6 +104,10 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	}
 	
+	public virtual void stun(float duration) {
+		print ("Stunned for " + duration + " seconds");
+	}
+	
 	// Update is called once per frame
 	protected virtual void Update () {
 		if(stats.health <= 0){

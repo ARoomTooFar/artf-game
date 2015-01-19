@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemySight : MonoBehaviour {
+public class EnemySight : Character {
 
 	//Public variables to tweak in inspector
 	public float fov = 110f;
