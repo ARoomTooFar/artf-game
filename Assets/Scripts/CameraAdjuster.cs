@@ -13,10 +13,8 @@ public class CameraAdjuster : MonoBehaviour {
 	//initialization maxX and maxY tbd based on needs 
 	//of level editor, left blank here
 	public float baseY, baseX, baseZ, minY, maxY, maxX, maxZ, dx, dy;
-	public float debug;
 	public bool isTopDown;
 	public bool isDragging;
-	public Vector3 oldPos;
 	public Vector2 dragSpeed;
 	private Vector3 mouseLocation;
 	void Start () {
@@ -31,8 +29,8 @@ public class CameraAdjuster : MonoBehaviour {
 		isTopDown = false;
 		//Are we dragging camera?
 		isDragging = false;
-		dragSpeed.x = 5;
-		dragSpeed.y = 5;
+		dragSpeed.x = .5f;
+		dragSpeed.y = .5f;
 
 	}
 	
@@ -67,12 +65,15 @@ public class CameraAdjuster : MonoBehaviour {
 			}
 		}
 
+		//click and drag 
+		//note for Jim or Leland: It took me 2 hours 
+		//to realize I had to remove the baseY = transform.position.y
+		//to get the desired effect...Please count that :(
 		if (Input.GetMouseButton (0)) {
 			dx = Input.GetAxis("Mouse X") * dragSpeed.x;
 			dy = Input.GetAxis("Mouse Y") * dragSpeed.y;
 			transform.position -= transform.right * dx + transform.up * dy;
 			baseX = transform.position.x;
-			baseY = transform.position.y;
 			baseZ = transform.position.z;
 
 			if (baseY < minY) {
