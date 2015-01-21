@@ -64,7 +64,6 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public Stats stats;
 	public Gear gear;
 	public Inventory inventory;
-	//speed = (5.0f + 2.5f * (stats.speed*.2f));
 	public bool freeAnim;
 
 	public bool invincible = false;
@@ -164,34 +163,34 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	// Constant animation updates (Main loop for characters movement/actions)
 	public virtual void animationUpdate() {
-		Vector3 temp = facing;
-		temp.y = 0.0f;
+		// Vector3 temp = facing;
+		// temp.y = 0.0f;
 		if (animSteInfo.nameHash == atkHash) {
-			attackAnimation(temp);
+			attackAnimation();
 		} else {
-			movementAnimation(temp);
+			movementAnimation();
 		}
 	}
 
 	//-------------------------------------------//
 
 	// Animation helper functions
-	protected virtual void attackAnimation(Vector3 tFacing) {
+	protected virtual void attackAnimation() {
 		// Should this also be in the weapons?
 
 		if (gear.weapon.stats.curChgAtkTime > 0) {
 			// Change once we get animations
 			if(animSteInfo.normalizedTime < gear.weapon.stats.colStart) animator.speed = gear.weapon.stats.atkSpeed;
 			else animator.speed = 0;
-			if (tFacing != Vector3.zero) transform.localRotation = Quaternion.LookRotation(facing);
+			if (rigidbody.velocity != Vector3.zero) transform.localRotation = Quaternion.LookRotation(facing);
 		} else if (gear.weapon.stats.curChgAtkTime == -1) {
 			animator.speed = gear.weapon.stats.atkSpeed;
 		}
 	}
 
-	protected virtual void movementAnimation(Vector3 tFacing) {
+	protected virtual void movementAnimation() {
 		animator.speed = 1; // Change animation speed back for other animations
-		if (tFacing != Vector3.zero) {
+		if (rigidbody.velocity != Vector3.zero) {
 			animator.SetBool("Moving", true);
 			transform.localRotation = Quaternion.LookRotation(facing);
 		} else {
@@ -230,11 +229,14 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 				newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
 			}
 
-			facing = newMoveDir;
-			if (facing != Vector3.zero)
-				curFacing = facing;
+			// facing = newMoveDir;
+			if (newMoveDir != Vector3.zero) {
+				newMoveDir.y = 0.0f;
+				curFacing = facing = newMoveDir;
+			}
+				
 			
-			rigidbody.velocity = facing.normalized * (5.0f + 2.5f * (stats.speed*.2f));
+			rigidbody.velocity = newMoveDir.normalized * (5.0f + 2.5f * (stats.speed*.2f));
 		} else if (freeAnim){
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this
