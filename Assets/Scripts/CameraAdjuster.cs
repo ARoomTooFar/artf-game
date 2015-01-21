@@ -13,10 +13,8 @@ public class CameraAdjuster : MonoBehaviour {
 	//initialization maxX and maxY tbd based on needs 
 	//of level editor, left blank here
 	public float baseY, baseX, baseZ, minY, maxY, maxX, maxZ, dx, dy;
-	public float debug;
 	public bool isTopDown;
 	public bool isDragging;
-	public Vector3 oldPos;
 	public Vector2 dragSpeed;
 	private Vector3 mouseLocation;
 	void Start () {
@@ -31,8 +29,8 @@ public class CameraAdjuster : MonoBehaviour {
 		isTopDown = false;
 		//Are we dragging camera?
 		isDragging = false;
-		dragSpeed.x = 5;
-		dragSpeed.y = 5;
+		dragSpeed.x = .5f;
+		dragSpeed.y = .5f;
 
 	}
 	
@@ -66,59 +64,25 @@ public class CameraAdjuster : MonoBehaviour {
 				transform.rotation = Quaternion.Euler(90,0,0);
 			}
 		}
-//
-//		//on left mouse button down
-//		if(Input.GetMouseButtonDown(0)){
-//			//Find the mouse location, mark current location
-//			mouseLocation = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-//			oldPos = transform.position;
-//
-//			//start dragging
-//			isDragging = true;
-//		}
-//
-//		//if we're dragging
-//		if (isDragging) {
-//			//and the left mouse button is clicked 
-//			if (Input.GetMouseButton (0)) {
-//
-//				//Mark current location with respect to original dragged location
-//				Vector3 pos = Camera.main.ScreenToViewportPoint (Input.mousePosition) - mouseLocation;
-//
-//				//Update base variables based on that position and camera angle
-//				if(isTopDown) {
-//					baseX = (oldPos + -pos * dragSpeed).x;
-//					baseY = (oldPos + -pos * dragSpeed).y;
-//				}
-//				else {
-//					baseX = (oldPos + -pos * dragSpeed).x;
-//					baseY = (oldPos + -pos * dragSpeed).y;
-//					baseZ = (oldPos + -pos * dragSpeed).x;
-//				}
-//
-//				//Bounds checking
-//				if(baseY > maxY) {
-//					baseY = maxY;
-//				}
-//				if(baseY < minY) {
-//					baseY = minY;
-//
-//				}
-//			}
-//
-//			//on release, stop dragging
-//			if (Input.GetMouseButtonUp (0)) {
-//				isDragging = false;
-//			}
-//		}
 
+		//click and drag 
+		//note for Jim or Leland: It took me 2 hours 
+		//to realize I had to remove the baseY = transform.position.y
+		//to get the desired effect...Please count that :(
 		if (Input.GetMouseButton (0)) {
 			dx = Input.GetAxis("Mouse X") * dragSpeed.x;
 			dy = Input.GetAxis("Mouse Y") * dragSpeed.y;
 			transform.position -= transform.right * dx + transform.up * dy;
 			baseX = transform.position.x;
-			baseY = transform.position.y;
 			baseZ = transform.position.z;
+
+			if (baseY < minY) {
+				baseY = minY;
+			}
+
+			if (baseY > maxY) {
+				baseY = maxY;
+			}
 		}
 
 		//Move the camera based on current perspective
