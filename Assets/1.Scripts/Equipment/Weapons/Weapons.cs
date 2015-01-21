@@ -5,6 +5,8 @@ using System.Collections;
 public class WeaponStats {
 	[Range(0.5f, 2.0f)]
 	public float atkSpeed;
+	[Range(1,11)]
+	public int upgrade;
 	public int damage;
 	//counts number of hits so far in the multiple hit string
 	public int multHit;

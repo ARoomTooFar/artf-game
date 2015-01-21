@@ -5,8 +5,7 @@ using System.Collections.Generic;
 public class HookShot : Item {
 
 	public int hookDist;
-	[Range(1, 4)]
-	public int hookSpeed;
+	public float hookSpeed;
 
 	[Range(0.0f, 2.0f)]
 	public float chgLag;
@@ -16,11 +15,11 @@ public class HookShot : Item {
 
 	public float curhookTime;
 	private float maxhookTime;
-	public Transform target;
-	public Transform start;
-	public Enemy foe;
-	private bool hasHit;
-	private bool hitWall;
+	public GameObject target;
+	public GameObject start;
+	public Character foe;
+	public bool hasHit;
+	public bool hitEnd;
 	
 
 	private Collider collider;
@@ -34,26 +33,29 @@ public class HookShot : Item {
 	}
 	
 	protected override void setInitValues() {
-		cooldown = 5.0f;
+		cooldown = 1.0f;
 		hookDist = 10;
 		curhookTime = -1.0f;
-		maxhookTime = 3.0f;
-
-		hitWall = false;
+		maxhookTime = 2.0f;
+		hookSpeed = .2f;
+		hitEnd = false;
 	}
 	
 	// Update is called once per frame
 	protected override void Update() {
 		base.Update();
-
+		if(hitEnd && hasHit){
+			start.GetComponent<Collider>().enabled = false;
+			renderer.enabled = false;
+		}
 		if (curhookTime >= 0.0f) {
 			curhookTime = Mathf.Clamp(curhookTime + Time.deltaTime, 0.0f, maxhookTime);
 		}
-		if(!hasHit && collider.enabled){
-			transform.position = Vector3.MoveTowards (transform.position, target.position, .35f);
-		}else{
-			transform.position = Vector3.MoveTowards (transform.position, start.position, .35f);
-			if(foe != null) {
+		if(!hasHit && !start.GetComponent<Collider>().enabled){
+			transform.position = Vector3.MoveTowards (transform.position, target.transform.position, hookSpeed);
+		}else if(hasHit && start.GetComponent<Collider>().enabled){
+			transform.position = Vector3.MoveTowards (transform.position, start.transform.position, hookSpeed);
+			if(foe != null && !hitEnd) {
 				foe.transform.position = transform.position;
 			}
 		}
@@ -68,27 +70,28 @@ public class HookShot : Item {
 	public override void deactivateItem() {
 		if (curhookTime >= 0.0f) {
 			base.deactivateItem();
-			// player.animator.SetTrigger("Charge Forward");
-
+			renderer.enabled = true;
 			collider.enabled = true;
-			//player.freeAnim = false;
-			StartCoroutine(hookFunc((hookDist + curhookTime) * 0.1f));
+			hitEnd = false;
+			hasHit = false;
+			start.GetComponent<Collider>().enabled = false;
+			StartCoroutine("hookFunc",((hookDist + curhookTime) * 0.1f));
 		}
 	}
 	private IEnumerator hookFunc(float hookTime) {
-		yield return StartCoroutine(hookTimeFunc(hookTime));
-		//yield return StartCoroutine(chgLagTime());
+		player.freeAnim = false;
+		yield return StartCoroutine(hookTimeFunc((hookDist + curhookTime) * 0.1f));
 
 		float tempStun = stunDuration;
 		if(foe != null) {
 			foe.stun(tempStun);
 		}
 		curCoolDown = cooldown + (curhookTime * 3);
-		player.freeAnim = true;
+		//player.freeAnim = true;
 		curhookTime = -1.0f;
-		collider.enabled = false;
-		hitWall = false;
-		hasHit = false;
+		start.GetComponent<Collider>().enabled = true;
+		hitEnd = false;
+		hasHit = true;
 		foe = null;
 	}
 	
@@ -96,14 +99,17 @@ public class HookShot : Item {
 	private IEnumerator hookTimeFunc(float hookTime) {
 		for (float timer = 0; timer <= hookTime; timer += Time.deltaTime) {
 
-			if (hitWall) {
+			if (hitEnd) {
 				hasHit = true;
 				yield break;
 			}
-			if(!hasHit){
-				transform.position = Vector3.MoveTowards (transform.position, target.position, .35f);
+			if(!hasHit && !start.GetComponent<Collider>().enabled){
+				transform.position = Vector3.MoveTowards (transform.position, target.transform.position, hookSpeed);
 			}else{
-				transform.position = Vector3.MoveTowards (transform.position, start.position, .35f);
+				transform.position = Vector3.MoveTowards (transform.position, start.transform.position, hookSpeed);
+				if(foe != null && !hitEnd) {
+					foe.transform.position = transform.position;
+				}
 			}
 			yield return 0;
 		}
@@ -112,17 +118,21 @@ public class HookShot : Item {
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Wall") {
 			hasHit = true;
-			//particles.Stop();
-			//Destroy(this.transform.parent.gameObject);
+			curhookTime = -1.0f;
 		}
-		hasHit = true;
+		//hasHit = true;
 		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
-		Enemy enemy = other.GetComponent<Enemy>();
+		Character enemy = other.GetComponent<Character>();
 		if( component != null && enemy != null) {
+			start.GetComponent<Collider>().enabled = true;
 			hasHit = true;
 			foe = enemy;
-			//particles.Stop();
-			//Destroy(this.transform.parent.gameObject);
+			curhookTime = -1.0f;
+		}
+		if(other.tag == "HStart"){
+			foe = null;
+			hitEnd = true;
+			player.freeAnim = true;
 		}
 	}
 }
