@@ -2,6 +2,8 @@
 // Issues with current implementation
 //     - Checking for walls to stop uses current collider
 //     - If monster is too big for collder to catch it may bug out
+//     - Affects all character, will need someway to differentiate depending on user
+//           * Making another charge specifically for enemies is advised against
 
 
 using UnityEngine;
@@ -73,8 +75,8 @@ public class BullCharge : ChargeItem {
 		yield return StartCoroutine(chgLagTime());
 
 		float tempStun = stunDuration * (hitWall ? 2 : 1);
-		foreach(Enemy ene in enemies) {
-			ene.stun(tempStun);
+		foreach(Character ene in enemies) {
+			((IStunable<float>)ene.GetComponent(typeof(IStunable<float>))).stun(tempStun);
 		}
 		curCoolDown = cooldown + (curChgTime * 3);
 		player.freeAnim = true;

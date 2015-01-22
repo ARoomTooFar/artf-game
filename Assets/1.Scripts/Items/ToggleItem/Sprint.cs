@@ -3,16 +3,11 @@
 using UnityEngine;
 using System.Collections;
 
-public class Sprint : Item {
-	
-	private int maxDuration = 10;
-	public float curDuration;
+public class Sprint : ToggleItem {
 
 	[Range(2, 4)]
 	public int sprintSpeed;
-
 	private int baseSpeed;
-	private bool isActive;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -20,7 +15,10 @@ public class Sprint : Item {
 	}
 
 	protected override void setInitValues() {
+		base.setInitValues();
+
 		cooldown = 15.0f;
+		maxDuration = 10;
 	}
 
 	// Update is called once per frame
@@ -36,24 +34,23 @@ public class Sprint : Item {
 	
 	// Called when character with an this item selected uses their item key
 	public override void useItem() {
-		// base.useItem();
+		base.useItem();
 
-		isActive = true;
+
 		baseSpeed = player.stats.speed;
 		player.stats.speed *= sprintSpeed;
-		curDuration = maxDuration;
+
 
 		// player.animator.SetTrigger("Sprint"); Set speed var in animator once we have the animation
 	}
 
 	public override void deactivateItem() {
 		base.deactivateItem();
+	}
 
-		if (isActive) {
-			isActive = false;
-			player.stats.speed = baseSpeed;
-			curCoolDown = cooldown - curDuration/2;
-			curDuration = 0;
-		}
+	protected override void atvDeactivation() {
+		player.stats.speed = baseSpeed;
+
+		base.atvDeactivation();
 	}
 }
