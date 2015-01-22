@@ -84,7 +84,7 @@ public class HookShot : Item {
 
 		float tempStun = stunDuration;
 		if(foe != null) {
-			foe.stun(tempStun);
+			((IForcible<float>)foe.GetComponent(typeof(IForcible<float>))).pull(tempStun);
 		}
 		curCoolDown = cooldown + (curhookTime * 3);
 		//player.freeAnim = true;
@@ -121,7 +121,7 @@ public class HookShot : Item {
 			curhookTime = -1.0f;
 		}
 		//hasHit = true;
-		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
+		IForcible<float> component = (IForcible<float>) other.GetComponent( typeof(IForcible<float>) );
 		Character enemy = other.GetComponent<Character>();
 		if( component != null && enemy != null) {
 			start.GetComponent<Collider>().enabled = true;

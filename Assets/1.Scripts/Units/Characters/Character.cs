@@ -18,7 +18,6 @@ public class Stats{
 	*Speed: Affects the player's movement speed and recovery times after attacks. (this should have a cap)
 	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
 	*/
-	//Name of item
 }
 
 [System.Serializable]
@@ -48,7 +47,7 @@ public class Inventory {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAttackable, IDamageable<int> {
+public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int> {
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -98,17 +97,8 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	}
 	
-	public virtual void stun(float duration) {
-		print ("Stunned for " + duration + " seconds");
-	}
-	
 	// Update is called once per frame
 	protected virtual void Update () {
-		if(stats.health <= 0){
-			isDead = true;
-		} else {
-			isDead = false;
-		}
 	    if(!isDead) {
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
@@ -117,7 +107,6 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 			if (isGrounded) {
 				actionCommands ();
-				moveCommands ();
 			} else {
 				falling();
 			}
@@ -203,57 +192,9 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	}
 
 
-	//-----------------------------------//
-	// Movement interface implementation //
-	//-----------------------------------//
-	
-	// Might separate commands into a protected function and just have a movement function
-	public virtual void moveCommands() {
-		Vector3 newMoveDir = Vector3.zero;
-
-		if (actable || gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
-			//"Up" key assign pressed
-			if (Input.GetKey(controls.up)) {
-				newMoveDir += Vector3.forward;
-			}
-			//"Down" key assign pressed
-			if (Input.GetKey(controls.down)) {
-				newMoveDir += Vector3.back;
-			}
-			//"Left" key assign pressed
-			if (Input.GetKey(controls.left)) {
-				newMoveDir += Vector3.left;
-			}
-			//"Right" key assign pressed
-			if (Input.GetKey(controls.right)) {
-				newMoveDir += Vector3.right;
-			}
-			//Joystick form
-			if(controls.joyUsed == 1){
-				newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
-			}
-
-			// facing = newMoveDir;
-			if (newMoveDir != Vector3.zero) {
-				newMoveDir.y = 0.0f;
-				curFacing = facing = newMoveDir;
-			}
-				
-			
-			rigidbody.velocity = newMoveDir.normalized * (5.0f + 2.5f * (stats.speed*.2f));
-		} else if (freeAnim){
-			// Right now this stops momentum when performing an action
-			// If we trash the rigidbody later, we won't need this
-			rigidbody.velocity = Vector3.zero;
-		}
-	}
-
-	//-------------------------------------//
-
-
 	//----------------------------------//
 	// Falling Interface Implementation //
-	//----------------------------------//w
+	//----------------------------------//
 
 	public virtual void falling() {
 		// fake gravity
@@ -285,7 +226,17 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public virtual void damage(int dmgTaken) {
 		if (!invincible) {
 			stats.health -= dmgTaken;
+
+			if (stats.health <= 0) {
+				die();
+			}
 		}
+	}
+
+	// Add logic to this in the future
+	//     ie: Removing actions, player from camera etc
+	public virtual void die() {
+		stats.isDead = true;
 	}
 
 	//----------------------------------//

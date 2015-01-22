@@ -3,7 +3,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Enemy : Character{
+public class Enemy : Character, IStunable<float>, IForcible<float> {
 	
 	// Use this for initialization
 	protected override void Start () {
@@ -20,9 +20,20 @@ public class Enemy : Character{
 		print ("Fuck: " + dmgTaken + " Damage taken");
 	}
 
-	public override void stun(float duration) {
-		print ("Stunned for " + duration + " seconds");
+	// Change this for other units in the future, ie. Unit that can be stunned and those that can't
+	public virtual void stun(float stunDuration) {
+		print ("Stunned for " + stunDuration + " seconds");
 	}
+
+	// The duration are essentially stun, expand on these later
+	public virtual void pull(float pullDuration) {
+		stun(pullDuration);
+	}
+	
+	public virtual void push(float pushDuration) {
+		stun(pushDuration);
+	}
+
 
 	/*//Use for other shit maybe
 	public virtual void OnTriggerEnter(Collider other) {

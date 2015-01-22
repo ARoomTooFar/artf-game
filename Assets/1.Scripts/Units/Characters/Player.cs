@@ -13,15 +13,17 @@ public class Controls {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : Character {
+public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 	public bool inGrey;
 	public int testDmg;
 	public int greyDamage;
 	public bool testable;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
 	}
+
 	protected override void setInitValues() {
 		base.setInitValues();
 		//Testing with base 0-10 on stats with 10 being 100/cap%
@@ -40,21 +42,122 @@ public class Player : Character {
 	
 	// Update is called once per frame
 	protected override void Update () {
-		base.Update ();
-		if(Input.GetKeyDown("space")&&testable) {
-				testable = false;
-				damage(testDmg);
-				StartCoroutine(Wait(.5f));
+		if(stats.health <= 0){
+			isDead = true;
+		} else {
+			isDead = false;
+		}
+		if(!isDead) {
+			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
+			
+			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+			actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+			
+			if (isGrounded) {
+				actionCommands ();
+				moveCommands ();
+			} else {
+				falling();
+			}
+			
+			animationUpdate ();
+		}
+	}
+
+	//-----------------------------------//
+	// Movement interface implementation //
+	//-----------------------------------//
+	
+	// Might separate commands into a protected function and just have a movement function
+	public virtual void moveCommands() {
+		Vector3 newMoveDir = Vector3.zero;
+		
+		if (actable || gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
+			//"Up" key assign pressed
+			if (Input.GetKey(controls.up)) {
+				newMoveDir += Vector3.forward;
+			}
+			//"Down" key assign pressed
+			if (Input.GetKey(controls.down)) {
+				newMoveDir += Vector3.back;
+			}
+			//"Left" key assign pressed
+			if (Input.GetKey(controls.left)) {
+				newMoveDir += Vector3.left;
+			}
+			//"Right" key assign pressed
+			if (Input.GetKey(controls.right)) {
+				newMoveDir += Vector3.right;
+			}
+			//Joystick form
+			if(controls.joyUsed == 1){
+				newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
+			}
+			
+			// facing = newMoveDir;
+			if (newMoveDir != Vector3.zero) {
+				newMoveDir.y = 0.0f;
+				curFacing = facing = newMoveDir;
+			}
+			
+			
+			rigidbody.velocity = newMoveDir.normalized * (5.0f + 2.5f * (stats.speed*.2f));
+		} else if (freeAnim){
+			// Right now this stops momentum when performing an action
+			// If we trash the rigidbody later, we won't need this
+			rigidbody.velocity = Vector3.zero;
 		}
 	}
 	
+	//-------------------------------------//
+
+	//-------------------------------//
+	// Stun Interface Implementation //
+	//-------------------------------//
+	 
+	public virtual void stun(float stunDuration) {
+		print ("Stunned for " + stunDuration + " seconds");
+	}
+
+	//-------------------------------//
+
+	//--------------------------------//
+	// Force Interface Implementation //
+	//--------------------------------//
+
+	// The duration are essentially stun, expand on these later
+	public virtual void pull(float pullDuration) {
+		stun(pullDuration);
+	}
+
+	public virtual void push(float pushDuration) {
+		stun(pushDuration);
+	}
+
+	//--------------------------------//
+
+	//---------------------------------//
+	// Damage Interface Implementation //
+	//---------------------------------//
+
 	public override void damage(int dmgTaken) {
 		if (!invincible) {
 			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
-			
+
+			if (stats.health <= 0) {
+				die();
+			}
 		}
 	}
+
+	public override void die() {
+		base.die();
+	}
+
+	//----------------------------------//
+
+	// Grey Health functions
 	public virtual int greyTest(int damage){
 		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){
 			stats.health = 0;
@@ -120,4 +223,6 @@ public class Player : Character {
 		}
 		yield return 0;
 	}
+
+	//----------------------------------//
 }
