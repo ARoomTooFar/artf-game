@@ -11,6 +11,8 @@ public class TestDummy : Enemy {
 	
 	// Update is called once per frame
 	protected override void Update () {
-		// base.Update ();
+		// Cause we have no animations for them atm
+		if (animator)
+			base.Update ();
 	}
 }
