@@ -4,7 +4,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Roll : Item {
+public class Roll : QuickItem {
 
 	// private int rollInt; Once settled
 	// private float rollSpeed; Once settled

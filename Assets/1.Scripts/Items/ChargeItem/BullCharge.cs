@@ -8,7 +8,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Charge : Item {
+public class BullCharge : ChargeItem {
 	
 	public int chgDist;
 	[Range(1, 4)]
@@ -20,10 +20,7 @@ public class Charge : Item {
 	[Range(0.5f, 3.0f)]
 	public float stunDuration;
 
-	public float curChgTime;
-	private float maxChgTime;
-
-	public List<Enemy> enemies;
+	public List<Character> enemies;
 	
 	private bool hitWall;
 	
@@ -39,39 +36,35 @@ public class Charge : Item {
 	}
 	
 	protected override void setInitValues() {
+		base.setInitValues();
+
 		cooldown = 5.0f;
 		chgDist = 1;
-		curChgTime = -1.0f;
 		maxChgTime = 3.0f;
-
 		hitWall = false;
 	}
 	
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
-
-		if (curChgTime >= 0.0f) {
-			curChgTime = Mathf.Clamp(curChgTime + Time.deltaTime, 0.0f, maxChgTime);
-		}
 	}
 	
 	// Called when character with an this item selected uses their item key
 	public override void useItem() {
+		base.useItem ();
 		// player.animator.SetTrigger("Charging Charge"); Once we have the animation for it
-		
-		curChgTime = 0.0f;
 	}
 
 	public override void deactivateItem() {
-		if (curChgTime >= 0.0f) {
-			base.deactivateItem();
-			// player.animator.SetTrigger("Charge Forward");
+		base.deactivateItem();
+	}
 
-			collider.enabled = true;
-			player.freeAnim = false;
-			StartCoroutine(chargeFunc((chgDist + curChgTime) * 0.1f));
-		}
+	protected override void chgDone() {
+		// player.animator.SetTrigger("Charge Forward");
+		
+		collider.enabled = true;
+		player.freeAnim = false;
+		StartCoroutine(chargeFunc((chgDist + curChgTime) * 0.1f));
 	}
 	
 	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
@@ -100,8 +93,9 @@ public class Charge : Item {
 				yield break;
 			}
 			
-			foreach(Enemy ene in enemies) {
+			foreach(Character ene in enemies) {
 				ene.transform.position = transform.position;
+				((IForcible<float>)ene.GetComponent(typeof(IForcible<float>))).push(0.1f);
 			}
 
 			player.rigidbody.velocity = player.curFacing.normalized * player.stats.speed * 1.5f * chargeSpeed;
@@ -122,8 +116,11 @@ public class Charge : Item {
 			hitWall = true;
 		}
 
-		Enemy enemy = other.GetComponent<Enemy>();
-		if(enemy != null) {
+		// Will need a differentiation in the future(Or not if we want this)
+		//     I suggest having the players know what is there enemy and settign ti that way somehow
+		Character enemy = other.GetComponent<Character>();
+		IForcible<float> component = (IForcible<float>) other.GetComponent( typeof(IForcible<float>));
+		if(component != null && enemy != null) {
 			enemies.Add (enemy);
 		}
 	}
