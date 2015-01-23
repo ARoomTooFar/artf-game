@@ -7,9 +7,9 @@ public class MonsterDictionary : Dictionary<string, List<MonsterBlock>> {
 	}
 
 	/*
-	 * public bool addBlock (SceneryBlock block)
+	 * public bool addBlock (MonsterBlock block)
 	 * 
-	 * Adds a SceneryBlock to the appropriate list.
+	 * Adds a MonsterBlock to the appropriate list.
 	 * Returns true if successful.
 	 * Returns false if a block already seems to exist in its position.
 	 */
@@ -47,7 +47,7 @@ public class MonsterDictionary : Dictionary<string, List<MonsterBlock>> {
 		if(blk == null) {
 			return false;
 		}
-		if(!blk.addScenery(block)) {
+		if(!blk.addMonster(block)) {
 			return false;
 		}
 
@@ -60,16 +60,10 @@ public class MonsterDictionary : Dictionary<string, List<MonsterBlock>> {
 	 * Breaks all neighbor links between block and its list of neighbors.
 	 * 
 	 */
-	private void unlinkTerrain(SceneryBlock block) {
-		TerrainBlock blk;
-		foreach(Vector3 coordinate in block.Coordinates) {
-			blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
-			if(blk == null) {
-				continue;
-			}
-			if(blk.Scenery.Equals(block)) {
-				blk.removeScenery();
-			}
+	private void unlinkTerrain(MonsterBlock block) {
+		TerrainBlock blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
+		if(blk.Monster.Equals(this)){
+			blk.removeMonster();
 		}
 	}
 
@@ -102,7 +96,7 @@ public class MonsterDictionary : Dictionary<string, List<MonsterBlock>> {
 	 * Returns the block at position
 	 * Returns null if there is no block in that position.
 	 */
-	public SceneryBlock findBlock(Vector3 position) {
+	public MonsterBlock findBlock(Vector3 position) {
 		//round position
 		Vector3 intPosition = position.Round();
 		//for each type of block
@@ -126,7 +120,7 @@ public class MonsterDictionary : Dictionary<string, List<MonsterBlock>> {
 			foreach(KeyValuePair<string, List<MonsterBlock>> kvPair in this) {
 				tempVal = "";
 				tempVal += kvPair.Key + ": ";
-				foreach(SceneryBlock blk in kvPair.Value) {
+				foreach(MonsterBlock blk in kvPair.Value) {
 					tempVal += blk.SaveString + " ";
 				}
 				retVal += tempVal + "\n";

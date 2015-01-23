@@ -25,11 +25,11 @@ public class MonsterBlock {
 	}
 
 	public DIRECTION Orientation{
-		get{return Orientation;}
+		get{ return orientation; }
 	}
 
 	public string SaveString{
-		get{ return position.toCSV () + "," + Orientation.ToString();}
+		get{ return position.toCSV () + "," + Orientation.ToString(); }
 	}
 	#endregion Properties
 

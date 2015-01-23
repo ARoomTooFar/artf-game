@@ -28,6 +28,10 @@ public class MapData {
 
 	private SceneryDictionary sceneryBlocks = new SceneryDictionary();
 
+	public SceneryDictionary SceneryBlocks {
+		get{ return sceneryBlocks; }
+	}
+
 	public string getSaveString() {
 		return "";
 	}

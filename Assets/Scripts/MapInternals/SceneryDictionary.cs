@@ -46,7 +46,7 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 		//for each coordinate this block occupies
 		foreach(Vector3 coordinate in block.Coordinates) {
 			//get the terrain block in that position
-			blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
+			blk = MapData.Instance.TerrainBlocks.findBlock(coordinate);
 			//if there's no block there, this block is not placeable
 			if(blk == null){
 				return false;
@@ -70,7 +70,7 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 		//for each coordinate this block occupies
 		foreach(Vector3 coordinate in block.Coordinates) {
 			//get the terrain block in that position
-			blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
+			blk = MapData.Instance.TerrainBlocks.findBlock(coordinate);
 			//if there's no block then... what? continue anyways
 			if(blk == null){
 				continue;
