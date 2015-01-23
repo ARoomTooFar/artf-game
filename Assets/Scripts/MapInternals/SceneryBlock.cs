@@ -3,31 +3,55 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+/*
+ * Object to represent a piece of scenery on the map
+ * 
+ */
 public class SceneryBlock {
-	public SceneryBlock () {
-	}
 
+	#region PrivateVariables
 	private SceneryBlockInfo blockInfo;
+	private Vector3 position = new Vector3 ();
+	private DIRECTION orientation;
+	#endregion PrivateVariables
+
+	#region Properties
 	public SceneryBlockInfo BlockInfo {
 		get{ return blockInfo; }
 	}
 
-	private Vector3 position = new Vector3 ();
-	
 	public Vector3 Position {
-		get {
-			return position;
-		}
+		get { return position; }
 	}
 
-	private DIRECTION orientation;
 	public DIRECTION Orientation{
 		get{return Orientation;}
 	}
 
 	public string SaveString{
-		get{ return position.toCSV () + "," + Orientation.ToString();}
+		get{ return position.toCSV () + "," + Orientation.ToString(); }
 	}
+
+	/*
+	 * public List<Vector3> Coordinates
+	 * 
+	 * A list of global coordinates this piece of scenery occupies.
+	 * Read-Only
+	 */
+	public List<Vector3> Coordinates{
+		get{
+			//get the local coordinates this piece of scenery occupies in a given rotation
+			List<Vector3> retVal = blockInfo.LocalCoordinates(Orientation);
+			//for each coordinate
+			foreach(Vector3 vec in retVal){
+				//shift it to the global coordinate
+				vec.Add(position);
+			}
+			//return the list
+			return retVal;
+		}
+	}
+	#endregion Properties
 
 	/*
 	 * Constructor
@@ -36,16 +60,6 @@ public class SceneryBlock {
 		this.blockInfo = SceneryBlockInfo.get (blockID);
 		this.position = position.Round ();
 		this.orientation = orientation;
-	}
-
-	public List<Vector3> Coordinates{
-		get{
-			List<Vector3> retVal = blockInfo.LocalCoordinates(Orientation);
-			foreach(Vector3 vec in retVal){
-				vec.Add(position);
-			}
-			return retVal;
-		}
 	}
 }
 
