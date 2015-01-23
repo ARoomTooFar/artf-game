@@ -3,6 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+/*
+ * Class to hold information about scenery
+ * 
+ */
 public class SceneryBlockInfo {
 
 	/*

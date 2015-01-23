@@ -14,7 +14,7 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 	 * Returns false if a block already seems to exist in its position.
 	 */
 	public bool addBlock(SceneryBlock block) {
-		//attempt to link the input to its neighbors
+		//attempt to link the scenery to the appropriate terrain
 		if(!linkTerrain(block)) {
 			//if something goes wrong, 
 			unlinkTerrain(block);
@@ -37,18 +37,21 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 	 * private bool linkTerrain (SceneryBlock block)
 	 * 
 	 * Gets the adjacent blocks and adds them as neighbors to block.
-	 * Also links block as a neighbor to any adjacent blocks.
 	 * 
 	 * Returns true if successful.
-	 * Returns false if a block already has a neighbor in that position.
+	 * Returns false if a piece of terrain is already linked to scenery
 	 */
 	private bool linkTerrain(SceneryBlock block) {
 		TerrainBlock blk;
+		//for each coordinate this block occupies
 		foreach(Vector3 coordinate in block.Coordinates) {
+			//get the terrain block in that position
 			blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
+			//if there's no block there, this block is not placeable
 			if(blk == null){
 				return false;
 			}
+			//try to link the scenery, return false if problem
 			if(!blk.addScenery(block)){
 				return false;
 			}
@@ -57,18 +60,22 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 	}
 
 	/*
-	 * private void unlinkNeighbors(TerrainBlock block)
+	 * private void unlinkTerrain(SceneryBlock block)
 	 * 
-	 * Breaks all neighbor links between block and its list of neighbors.
+	 * Break the link to this SceneryBlock from associated terrain blocks
 	 * 
 	 */
 	private void unlinkTerrain(SceneryBlock block) {
 		TerrainBlock blk;
+		//for each coordinate this block occupies
 		foreach(Vector3 coordinate in block.Coordinates) {
+			//get the terrain block in that position
 			blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
+			//if there's no block then... what? continue anyways
 			if(blk == null){
 				continue;
 			}
+			//if the block is linked to this piece of scenery, then unlink it
 			if(blk.Scenery.Equals(block)){
 				blk.removeScenery();
 			}
@@ -78,9 +85,9 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 	/*
 	 * public bool removeBlock (Vector3 position)
 	 * 
-	 * Remove a block from the map data.
+	 * Remove a piece of scenery from the map data.
 	 * 
-	 * returns true if the block wasn't or is no longer part of the data
+	 * returns true if the scenery wasn't or is no longer part of the data
 	 * returns false if something bad happens
 	 */
 	public bool removeBlock(Vector3 position) {
@@ -92,16 +99,16 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 			//if block doesn't exist, return true
 			return true;
 		}
-		//unlink neighbors
+		//unlink terrain
 		unlinkTerrain(tgtBlock);
 		//remove from list
 		return this[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
 	}
 
 	/*
-	 * public TerrainBlock findBlock (Vector3 position)
+	 * public SceneryBlock findBlock (Vector3 position)
 	 * 
-	 * Returns the block at position
+	 * Returns the scenery at position
 	 * Returns null if there is no block in that position.
 	 */
 	public SceneryBlock findBlock(Vector3 position) {

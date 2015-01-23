@@ -3,6 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+/*
+ * Class to hold information about monsters
+ * 
+ */
 public class MonsterBlockInfo {
 
 	/*
@@ -21,7 +25,7 @@ public class MonsterBlockInfo {
      * loads information about blocks from whatever file
      */
 	private static void loadBlockInfo() {
-		infoDictionary = new Dictionary<string, SceneryBlockInfo>();
+		infoDictionary = new Dictionary<string, MonsterBlockInfo>();
 		//load data
 		infoDictionary.Add("scenery1", new MonsterBlockInfo("monster1"));
 		//return true;

@@ -53,10 +53,24 @@ public static class Extensions
 		return retVal;
 	}
 
+	/*
+	 * public static string toCSV(this Vector3 vec)
+	 * 
+	 * Extension method for Vector3
+	 * 
+	 * returns a comma seperated list of a Vector3's values as a string
+	 */
 	public static string toCSV(this Vector3 vec){
 		return string.Format ("{0},{1},{2}", vec.x, vec.y, vec.z);
 	}
 
+	/*
+	 * public static Vector3 RotateTo(this Vector3 vec, DIRECTION dir)
+	 * 
+	 * Extension method for Vector3
+	 * 
+	 * Returns a new vector rotated around 0,0,0 to face in DIRECTION dir
+	 */
 	public static Vector3 RotateTo(this Vector3 vec, DIRECTION dir){
 		switch (dir) {
 		case DIRECTION.North:
@@ -71,6 +85,13 @@ public static class Extensions
 		return vec;
 	}
 
+	/*
+	 * public static void Add(this Vector3 vec, Vector3 otherVec)
+	 * 
+	 * Extension method for Vector3
+	 * 
+	 * Adds the corrosponding x, y, and z values of otherVec into vec.
+	 */
 	public static void Add(this Vector3 vec, Vector3 otherVec){
 		vec.x += otherVec.x;
 		vec.y += otherVec.y;

@@ -3,24 +3,27 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+/*
+ * Object to represent a monster on the map
+ * 
+ */
 public class MonsterBlock {
-	public MonsterBlock () {
-	}
 
+	#region PrivateVariables
 	private MonsterBlockInfo blockInfo;
+	private Vector3 position = new Vector3 ();
+	private DIRECTION orientation;
+	#endregion PrivateVariables
+
+	#region Properties
 	public MonsterBlockInfo BlockInfo {
 		get{ return blockInfo; }
 	}
-
-	private Vector3 position = new Vector3 ();
 	
 	public Vector3 Position {
-		get {
-			return position;
-		}
+		get { return position; }
 	}
 
-	private DIRECTION orientation;
 	public DIRECTION Orientation{
 		get{return Orientation;}
 	}
@@ -28,6 +31,7 @@ public class MonsterBlock {
 	public string SaveString{
 		get{ return position.toCSV () + "," + Orientation.ToString();}
 	}
+	#endregion Properties
 
 	/*
 	 * Constructor
