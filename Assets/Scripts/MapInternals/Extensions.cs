@@ -85,6 +85,22 @@ public static class Extensions
 		return vec;
 	}
 
+	public static Vector3 getMinVals(this Vector3 vec, Vector3 other){
+		Vector3 retVal = new Vector3();
+		retVal.x = Mathf.Min(vec.x, other.x);
+		retVal.y = Mathf.Min(vec.y, other.y);
+		retVal.z = Mathf.Min(vec.z, other.z);
+		return retVal;
+	}
+
+	public static Vector3 getMaxVals(this Vector3 vec, Vector3 other){
+		Vector3 retVal = new Vector3();
+		retVal.x = Mathf.Max(vec.x, other.x);
+		retVal.y = Mathf.Max(vec.y, other.y);
+		retVal.z = Mathf.Max(vec.z, other.z);
+		return retVal;
+	}
+
 	/*
 	 * public static void Add(this Vector3 vec, Vector3 otherVec)
 	 * 
@@ -92,10 +108,20 @@ public static class Extensions
 	 * 
 	 * Adds the corrosponding x, y, and z values of otherVec into vec.
 	 */
-	public static void Add(this Vector3 vec, Vector3 otherVec){
-		vec.x += otherVec.x;
-		vec.y += otherVec.y;
-		vec.z += otherVec.z;
+	public static Vector3 Add(this Vector3 vec, Vector3 otherVec){
+		Vector3 retVal = new Vector3();
+		retVal.x = vec.x + otherVec.x;
+		retVal.y = vec.y + otherVec.y;
+		retVal.z = vec.z + otherVec.z;
+		return retVal;
+	}
+
+	public static Vector3 Subtract(this Vector3 vec, Vector3 otherVec){
+		Vector3 retVal = new Vector3();
+		retVal.x = vec.x - otherVec.x;
+		retVal.y = vec.y - otherVec.y;
+		retVal.z = vec.z - otherVec.z;
+		return retVal;
 	}
 
 }
