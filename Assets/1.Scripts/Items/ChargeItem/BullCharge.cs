@@ -2,13 +2,15 @@
 // Issues with current implementation
 //     - Checking for walls to stop uses current collider
 //     - If monster is too big for collder to catch it may bug out
+//     - Affects all character, will need someway to differentiate depending on user
+//           * Making another charge specifically for enemies is advised against
 
 
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Charge : Item {
+public class BullCharge : ChargeItem {
 	
 	public int chgDist;
 	[Range(1, 4)]
@@ -20,10 +22,7 @@ public class Charge : Item {
 	[Range(0.5f, 3.0f)]
 	public float stunDuration;
 
-	public float curChgTime;
-	private float maxChgTime;
-
-	public List<Enemy> enemies;
+	public List<Character> enemies;
 	
 	private bool hitWall;
 	
@@ -39,57 +38,59 @@ public class Charge : Item {
 	}
 	
 	protected override void setInitValues() {
+		base.setInitValues();
+
 		cooldown = 5.0f;
 		chgDist = 1;
-		curChgTime = -1.0f;
 		maxChgTime = 3.0f;
-
 		hitWall = false;
 	}
 	
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
-
-		if (curChgTime >= 0.0f) {
-			curChgTime = Mathf.Clamp(curChgTime + Time.deltaTime, 0.0f, maxChgTime);
-		}
 	}
 	
 	// Called when character with an this item selected uses their item key
 	public override void useItem() {
+		base.useItem ();
 		// player.animator.SetTrigger("Charging Charge"); Once we have the animation for it
-		
-		curChgTime = 0.0f;
 	}
 
 	public override void deactivateItem() {
-		if (curChgTime >= 0.0f) {
-			base.deactivateItem();
-			// player.animator.SetTrigger("Charge Forward");
+		base.deactivateItem();
+	}
 
-			collider.enabled = true;
-			player.freeAnim = false;
-			StartCoroutine(chargeFunc((chgDist + curChgTime) * 0.1f));
-		}
+	protected override void chgDone() {
+		// player.animator.SetTrigger("Charge Forward");
+		
+		collider.enabled = true;
+		player.freeAnim = false;
+		StartCoroutine(chargeFunc((chgDist + curChgTime) * 0.1f));
+	}
+
+	protected override void animDone() {
+		player.freeAnim = true;
+		collider.enabled = false;
+		hitWall = false;
+		enemies.Clear();
+
+		base.animDone ();
 	}
 	
 	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
 	private IEnumerator chargeFunc(float chgTime) {
 		yield return StartCoroutine(chgTimeFunc(chgTime));
+		float tempStun = stunDuration * (hitWall ? 2 : 1);
+		foreach(Character ene in enemies) {
+			((IStunable<float>)ene.GetComponent(typeof(IStunable<float>))).stun(tempStun);
+		}
 		yield return StartCoroutine(chgLagTime());
 
-		float tempStun = stunDuration * (hitWall ? 2 : 1);
-		foreach(Enemy ene in enemies) {
-			ene.stun(tempStun);
-		}
-		curCoolDown = cooldown + (curChgTime * 3);
-		player.freeAnim = true;
-		curChgTime = -1.0f;
-		collider.enabled = false;
-		hitWall = false;
-		enemies.Clear();
+		animDone();
 	}
+
+
 	
 	// Timer and velocity changing thing
 	private IEnumerator chgTimeFunc(float chgTime) {
@@ -100,11 +101,12 @@ public class Charge : Item {
 				yield break;
 			}
 			
-			foreach(Enemy ene in enemies) {
+			foreach(Character ene in enemies) {
 				ene.transform.position = transform.position;
+				((IForcible<float>)ene.GetComponent(typeof(IForcible<float>))).push(0.1f);
 			}
 
-			player.rigidbody.velocity = player.curFacing.normalized * player.stats.speed * 1.5f * chargeSpeed;
+			player.rigidbody.velocity = player.facing.normalized * player.stats.speed * 1.5f * chargeSpeed;
 			yield return 0;
 		}
 	}
@@ -118,12 +120,15 @@ public class Charge : Item {
 
 	void OnTriggerEnter (Collider other) {
 		RiotShield rShield = other.GetComponent<RiotShield>();
-		if (other.tag == "Wall" || rShield && rShield.player.curFacing.normalized + player.curFacing.normalized == Vector3.zero) {
+		if (other.tag == "Wall" || rShield && rShield.player.facing.normalized + player.facing.normalized == Vector3.zero) {
 			hitWall = true;
 		}
 
-		Enemy enemy = other.GetComponent<Enemy>();
-		if(enemy != null) {
+		// Will need a differentiation in the future(Or not if we want this)
+		//     I suggest having the players know what is there enemy and settign ti that way somehow
+		Character enemy = other.GetComponent<Character>();
+		IForcible<float> component = (IForcible<float>) other.GetComponent( typeof(IForcible<float>));
+		if(component != null && enemy != null) {
 			enemies.Add (enemy);
 		}
 	}

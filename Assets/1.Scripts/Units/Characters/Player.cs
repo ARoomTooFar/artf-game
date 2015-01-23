@@ -97,7 +97,7 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 			// facing = newMoveDir;
 			if (newMoveDir != Vector3.zero) {
 				newMoveDir.y = 0.0f;
-				curFacing = facing = newMoveDir;
+				facing = newMoveDir;
 			}
 			
 			
