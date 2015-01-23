@@ -38,6 +38,7 @@ public class ToggleItem : Item {
 	}
 	
 	// Called when character with an this item selected uses their item key
+	// Atm, the child classes don't really use this, remove ovveride from future as needed
 	public override void useItem() {
 		if (isActive) {
 			deactivateItem();
