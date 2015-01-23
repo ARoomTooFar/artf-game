@@ -1,6 +1,7 @@
 ﻿// Script for ToggleItems
 //     Items that can be turned on to have an effect (Either indefinitly, for a duration, or when turned off)
 //     Items with a duration turn off automatically and will have a cooldown based on how long it was active
+// I Lied
 
 using UnityEngine;
 using System.Collections;
