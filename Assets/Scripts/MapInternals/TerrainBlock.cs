@@ -8,7 +8,8 @@ using System.Collections.Generic;
  * 
  * Directions opposite each other on a compass
  * are set to be negative values of each other to
- * make finding the opposite direction easier
+ * make finding the opposite direction easier.
+ * 
  */
 public enum DIRECTION : int {
 	NotNeighbor = 0,
@@ -25,39 +26,44 @@ public enum DIRECTION : int {
 /*
  * Object to represent one tile/block/terrainspace/thing in the map
  * 
+ * Contains links to neighboring blocks as well as the scenery and/or monster on the tile
  * 
  */
 public class TerrainBlock {
+	#region PrivateVariables
 	private Dictionary<DIRECTION, TerrainBlock> neighbors = new Dictionary<DIRECTION, TerrainBlock>();
-
-	public Dictionary<DIRECTION, TerrainBlock> Neighbors {
-		get {
-			return neighbors;
-		}
-	}
-
 	private SceneryBlock scenery;
-	public SceneryBlock Scenery{
-		get{ return scenery;}
-	}
-	
+	private MonsterBlock monster;
+	private List<ARTFRoom> rooms;
 	private Vector3 position = new Vector3();
+	private DIRECTION orientation;
+	private TerrainBlockInfo blockInfo;
+	#endregion PrivateVariables
+
+	#region Properties
+	public Dictionary<DIRECTION, TerrainBlock> Neighbors {
+		get { return neighbors; }
+	}
+
+	public SceneryBlock Scenery {
+		get{ return scenery; }
+	}
+
+	public MonsterBlock Monster {
+		get{ return monster; }
+	}
+
+	public List<ARTFRoom> Rooms {
+		get{ return rooms; } 
+	}
 
 	public Vector3 Position {
-		get {
-			return position;
-		}
+		get { return position; }
 	}
-
-	private DIRECTION orientation;
 
 	public DIRECTION Orientation {
-		get {
-			return orientation;
-		}
+		get { return orientation; }
 	}
-
-	private TerrainBlockInfo blockInfo;
 
 	public TerrainBlockInfo BlockInfo {
 		get{ return blockInfo; }
@@ -66,6 +72,7 @@ public class TerrainBlock {
 	public string SaveString {
 		get{ return position.toCSV() + "," + orientation.ToString();}
 	}
+	#endregion Properties
 
 	/*
 	 * Constructor
@@ -112,7 +119,6 @@ public class TerrainBlock {
 		return neighbors.Remove(dir);
 	}
 
-
 	/*
 	 * public void clearNeighbors()
 	 * 
@@ -146,9 +152,11 @@ public class TerrainBlock {
 	 * Returns DIRECTION.NotNeighbor if other is not adjacent.
 	 */
 	public DIRECTION isNeighbor(TerrainBlock other) {
+		//get difference in position
 		float xDif = other.Position.x - this.Position.x;
 		float zDif = other.Position.z - this.Position.z;
 
+		//cardinal directions
 		if(xDif == 0 && zDif == 1) {
 			return DIRECTION.North;
 		}
@@ -162,6 +170,7 @@ public class TerrainBlock {
 			return DIRECTION.West;
 		}
 
+		//ordinal directions
 		if(xDif == 1 && zDif == 1) {
 			return DIRECTION.NorthEast;
 		}
@@ -174,27 +183,74 @@ public class TerrainBlock {
 		if(xDif == -1 && zDif == -1) {
 			return DIRECTION.SouthWest;
 		}
+
+		//default value of NotNeighbor
 		return DIRECTION.NotNeighbor;
 	}
 
-	public bool addScenery(SceneryBlock scenery){
+	/*
+	 * public bool addScenery(SceneryBlock scenery)
+	 * 
+	 * Links this block to a piece of scenery
+	 * 
+	 * Returns true if successfully linked
+	 * Returns false if not.
+	 */
+	public bool addScenery(SceneryBlock scenery) {
+		//return false if there is already scenery
 		if(this.scenery != null) {
 			return false;
 		}
 
-		/*if(!scenery.BlockInfo.Pathable && this.monster != null) {
+		//if the scenery blocks movement and there is a monster, return false
+		if(!scenery.BlockInfo.Pathable && this.monster != null) {
 			return false;
-		}*/
-
+		}
+		
 		this.scenery = scenery;
 		return true;
 	}
 
-	public void removeScenery(){
+	/*
+	 * public void removeScenery()
+	 * 
+	 * Unlinks the piece of scenery linked to this block
+	 */
+	public void removeScenery() {
 		this.scenery = null;
 	}
 
+	/*
+	 * public bool addMonster(MonsterBlock monster)
+	 * 
+	 * Links this block to a monster
+	 * 
+	 * Returns true if successfully linked
+	 * Returns false if not.
+	 */
+	public bool addMonster(MonsterBlock monster) {
+		//return false if there is already a monster linked
+		if(this.monster != null) {
+			return false;
+		}
 
+		//return false if there is a piece of scenery that blocks pathing
+		if(this.scenery != null && !this.scenery.BlockInfo.Pathable) {
+			return false;
+		}
+		
+		this.monster = monster;
+		return true;
+	}
+
+	/*
+	 * public void removeMonster()
+	 * 
+	 * Unlinks the monster linked to this block
+	 */
+	public void removeMonster() {
+		this.monster = null;
+	}
 }
 
 
