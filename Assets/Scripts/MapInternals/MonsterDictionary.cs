@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
-	public SceneryDictionary() {
+public class MonsterDictionary : Dictionary<string, List<MonsterBlock>> {
+	public MonsterDictionary() {
 	}
 
 	/*
@@ -13,7 +13,7 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 	 * Returns true if successful.
 	 * Returns false if a block already seems to exist in its position.
 	 */
-	public bool addBlock(SceneryBlock block) {
+	public bool addBlock(MonsterBlock block) {
 		//attempt to link the input to its neighbors
 		if(!linkTerrain(block)) {
 			//if something goes wrong, 
@@ -21,10 +21,10 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 			return false;
 		}
 		//get the list for the block type
-		List<SceneryBlock> lst = this[block.BlockInfo.BlockID];
+		List<MonsterBlock> lst = this[block.BlockInfo.BlockID];
 		//create one if needed
 		if(lst == null) {
-			lst = new List<SceneryBlock>();
+			lst = new List<MonsterBlock>();
 			this.Add(block.BlockInfo.BlockID, lst);
 		}
 		//add the block to the list
@@ -42,17 +42,15 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 	 * Returns true if successful.
 	 * Returns false if a block already has a neighbor in that position.
 	 */
-	private bool linkTerrain(SceneryBlock block) {
-		TerrainBlock blk;
-		foreach(Vector3 coordinate in block.Coordinates) {
-			blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
-			if(blk == null){
-				return false;
-			}
-			if(!blk.addScenery(block)){
-				return false;
-			}
+	private bool linkTerrain(MonsterBlock block) {
+		TerrainBlock blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
+		if(blk == null) {
+			return false;
 		}
+		if(!blk.addScenery(block)) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -66,10 +64,10 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 		TerrainBlock blk;
 		foreach(Vector3 coordinate in block.Coordinates) {
 			blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
-			if(blk == null){
+			if(blk == null) {
 				continue;
 			}
-			if(blk.Scenery.Equals(block)){
+			if(blk.Scenery.Equals(block)) {
 				blk.removeScenery();
 			}
 		}
@@ -87,7 +85,7 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 		//round position
 		Vector3 intPosition = position.Round();
 		//find block at position
-		SceneryBlock tgtBlock = findBlock(intPosition);
+		MonsterBlock tgtBlock = findBlock(intPosition);
 		if(tgtBlock == null) {
 			//if block doesn't exist, return true
 			return true;
@@ -108,9 +106,9 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 		//round position
 		Vector3 intPosition = position.Round();
 		//for each type of block
-		foreach(KeyValuePair<string, List<SceneryBlock>> kvPair in this) {
+		foreach(KeyValuePair<string, List<MonsterBlock>> kvPair in this) {
 			//check each block
-			foreach(SceneryBlock blk in kvPair.Value) {
+			foreach(MonsterBlock blk in kvPair.Value) {
 				//return block if position matches
 				if(blk.Position.Equals(intPosition)) {
 					return blk;
@@ -121,11 +119,11 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 		return null;
 	}
 
-	public string ScenerySaveString {
+	public string MonsterSaveString {
 		get {
 			string retVal = "";
 			string tempVal;
-			foreach(KeyValuePair<string, List<SceneryBlock>> kvPair in this) {
+			foreach(KeyValuePair<string, List<MonsterBlock>> kvPair in this) {
 				tempVal = "";
 				tempVal += kvPair.Key + ": ";
 				foreach(SceneryBlock blk in kvPair.Value) {
