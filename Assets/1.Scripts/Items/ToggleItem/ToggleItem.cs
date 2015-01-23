@@ -13,7 +13,7 @@ public class ToggleItem : Item {
 	protected int maxDuration;
 	public float curDuration;
 
-	protected bool isActive;
+	public bool isActive;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -35,28 +35,34 @@ public class ToggleItem : Item {
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update ();
-
-		// Same as the duration variables
-		if (curDuration > 0) {
-			curDuration -= Time.deltaTime;
-			if (curDuration <= 0) {
-				deactivateItem();
-			}
-		}
 	}
 	
 	// Called when character with an this item selected uses their item key
 	public override void useItem() {
+		if (isActive) {
+			deactivateItem();
+		} else {
+			StartCoroutine(bgnEffect());
+		}
+	}
+
+	protected virtual IEnumerator bgnEffect() {
 		isActive = true;
 		curDuration = maxDuration;
+		while (curDuration > 0) {
+			curDuration -= Time.deltaTime;
+			if (curDuration > 0) {
+				yield return null;
+			}
+		}
+		deactivateItem();
 	}
 	
 	public override void deactivateItem() {
-		base.deactivateItem();
-
 		if (isActive) {
 			atvDeactivation();
 		}
+		base.deactivateItem();
 	}
 
 	// If item is active when deactivated, these are called depending on the item
@@ -64,5 +70,11 @@ public class ToggleItem : Item {
 		isActive = false;
 		curCoolDown = cooldown - curDuration/2; // Adjust in someway based on ability in the future if needed
 		curDuration = 0;
+
+		animDone();
+	}
+
+	protected override void animDone() {
+		base.animDone ();
 	}
 }

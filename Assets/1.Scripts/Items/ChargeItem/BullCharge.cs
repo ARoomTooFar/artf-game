@@ -68,23 +68,29 @@ public class BullCharge : ChargeItem {
 		player.freeAnim = false;
 		StartCoroutine(chargeFunc((chgDist + curChgTime) * 0.1f));
 	}
+
+	protected override void animDone() {
+		player.freeAnim = true;
+		collider.enabled = false;
+		hitWall = false;
+		enemies.Clear();
+
+		base.animDone ();
+	}
 	
 	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
 	private IEnumerator chargeFunc(float chgTime) {
 		yield return StartCoroutine(chgTimeFunc(chgTime));
-		yield return StartCoroutine(chgLagTime());
-
 		float tempStun = stunDuration * (hitWall ? 2 : 1);
 		foreach(Character ene in enemies) {
 			((IStunable<float>)ene.GetComponent(typeof(IStunable<float>))).stun(tempStun);
 		}
-		curCoolDown = cooldown + (curChgTime * 3);
-		player.freeAnim = true;
-		curChgTime = -1.0f;
-		collider.enabled = false;
-		hitWall = false;
-		enemies.Clear();
+		yield return StartCoroutine(chgLagTime());
+
+		animDone();
 	}
+
+
 	
 	// Timer and velocity changing thing
 	private IEnumerator chgTimeFunc(float chgTime) {
@@ -100,7 +106,7 @@ public class BullCharge : ChargeItem {
 				((IForcible<float>)ene.GetComponent(typeof(IForcible<float>))).push(0.1f);
 			}
 
-			player.rigidbody.velocity = player.curFacing.normalized * player.stats.speed * 1.5f * chargeSpeed;
+			player.rigidbody.velocity = player.facing.normalized * player.stats.speed * 1.5f * chargeSpeed;
 			yield return 0;
 		}
 	}
@@ -114,7 +120,7 @@ public class BullCharge : ChargeItem {
 
 	void OnTriggerEnter (Collider other) {
 		RiotShield rShield = other.GetComponent<RiotShield>();
-		if (other.tag == "Wall" || rShield && rShield.player.curFacing.normalized + player.curFacing.normalized == Vector3.zero) {
+		if (other.tag == "Wall" || rShield && rShield.player.facing.normalized + player.facing.normalized == Vector3.zero) {
 			hitWall = true;
 		}
 

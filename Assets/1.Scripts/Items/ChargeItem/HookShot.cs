@@ -75,21 +75,25 @@ public class HookShot : ChargeItem {
 		StartCoroutine("hookFunc",((hookDist + curChgTime) * 0.1f));
 	}
 
-	private IEnumerator hookFunc(float hookTime) {
-		player.freeAnim = false;
-		yield return StartCoroutine(hookTimeFunc((hookDist + curChgTime) * 0.1f));
-
+	protected override void animDone() {
 		float tempStun = stunDuration;
 		if(foe != null) {
 			((IForcible<float>)foe.GetComponent(typeof(IForcible<float>))).pull(tempStun);
 		}
-		curCoolDown = cooldown + (curChgTime * 3);
 		//player.freeAnim = true;
-		curChgTime = -1.0f;
 		start.GetComponent<Collider>().enabled = true;
 		hitEnd = false;
 		hasHit = true;
 		foe = null;
+
+		base.animDone ();
+	}
+
+	private IEnumerator hookFunc(float hookTime) {
+		player.freeAnim = false;
+		yield return StartCoroutine(hookTimeFunc((hookDist + curChgTime) * 0.1f));
+		
+		animDone();
 	}
 	
 	// Timer and velocity changing thing

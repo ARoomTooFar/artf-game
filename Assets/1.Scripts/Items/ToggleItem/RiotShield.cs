@@ -29,11 +29,14 @@ public class RiotShield : ToggleItem {
 	// Called when character with an this item selected uses their item key
 	public override void useItem() {
 		base.useItem();
-		
+
+		// player.animator.SetTrigger("Sprint"); Set speed var in animator once we have the animation
+	}
+
+	protected override IEnumerator bgnEffect() {
 		collider.enabled = true;
 		meshRenderer.enabled = true;
-		
-		// player.animator.SetTrigger("Sprint"); Set speed var in animator once we have the animation
+		return base.bgnEffect();
 	}
 	
 	public override void deactivateItem() {
@@ -46,5 +49,9 @@ public class RiotShield : ToggleItem {
 
 
 		base.atvDeactivation();
+	}
+
+	protected override void animDone() {
+		base.animDone ();
 	}
 }

@@ -29,8 +29,13 @@ public class QuickItem : Item {
 	public override void useItem() {
 		base.useItem();
 	}
-	
+
+	// Generally not used for quick items due to their nature
 	public override void deactivateItem() {
 		base.deactivateItem();
+	}
+
+	protected override void animDone() {
+		base.animDone();
 	}
 }

@@ -24,9 +24,6 @@ public class Item : MonoBehaviour {
 
 	// Update is called once per frame
 	protected virtual void Update () {
-		if (curCoolDown > 0) {
-			curCoolDown -= Time.deltaTime;
-		}
 	}
 
 	// Called when character with an this item selected uses their item key
@@ -35,6 +32,19 @@ public class Item : MonoBehaviour {
 	}
 
 	public virtual void deactivateItem() {
+
 	}
-	
+
+	// Called when the skill is completely done (animation wise mostly)
+	//     Mainly used to start the cooldown period
+	protected virtual void animDone() {
+		StartCoroutine(bgnCooldown());
+	}
+
+	// Change to virtual if it seems there are items that do things while it cools down
+	protected IEnumerator bgnCooldown() {
+		for(int i = 0; i <= curCoolDown; curCoolDown -= Time.deltaTime) {
+			yield return null;
+		}
+	}
 }

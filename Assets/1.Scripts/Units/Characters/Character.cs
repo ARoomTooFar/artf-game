@@ -30,18 +30,25 @@ public class Gear {
 	}
 }
 
+// might move to player depending on enemy stuff or have each class also have an inventory class inheriting this inventory
 [System.Serializable]
 public class Inventory {
 	public int selected;
+	public bool keepItemActive;
 	public List<Item> items = new List<Item>();
 
 	public void equipItems(Character curPlayer) {
 		for (int i = 0; i < items.Count; i++)
 			items[i].player = curPlayer;
 		selected = 0;
+		keepItemActive = false;
 	}
 
 	public void cycItems() {
+		ToggleItem isToggle = items[selected].GetComponent<ToggleItem>();
+		if (isToggle) {
+			isToggle.deactivateItem();
+		}
 		selected = (selected + 1)%items.Count;
 	}
 }
@@ -55,7 +62,6 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public bool actable = true; // Boolean to show if a unit can act or is stuck in an animation
 	
 	public Vector3 facing; // Direction unit is facing
-	public Vector3 curFacing; // A better facing var, will change and combine in future
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
 	
@@ -75,7 +81,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	// Use this for initialization
 	protected virtual void Start () {
 		animator = GetComponent<Animator>();
-		facing = curFacing = Vector3.forward;
+		facing = Vector3.forward;
 		isDead = false;
 		freeAnim = true;
 		setInitValues();
@@ -124,10 +130,9 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
 				gear.weapon.initAttack();
-				// chgAtkTime = chgDuration = 0;
-				// animator.SetTrigger("Attack");
 			} else if(Input.GetKeyDown (controls.secItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
+					inventory.keepItemActive = true;
 					inventory.items[inventory.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
 				} else {
 					// Play sound for trying to use item on cooldown or items
@@ -149,15 +154,14 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 
 		if (Input.GetKeyUp (controls.secItem))  {
 			if (inventory.items.Count > 0) {
-				inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
+				inventory.keepItemActive = false;
+				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
 			}
 		}
 	}
 
 	// Constant animation updates (Main loop for characters movement/actions)
 	public virtual void animationUpdate() {
-		// Vector3 temp = facing;
-		// temp.y = 0.0f;
 		if (animSteInfo.nameHash == atkHash) {
 			attackAnimation();
 		} else {
