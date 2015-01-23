@@ -8,6 +8,7 @@ public class ARTFRoom {
 	private Vector3 LLposition = new Vector3 ();
 	private Vector3 URposition = new Vector3 ();
 	private List<TerrainBlock> blocks = new List<TerrainBlock>();
+	private string defaultBlockID = "defaultBlockID";
 	
 	public Vector3 LLPosition {
 		get { return LLposition; }
@@ -47,9 +48,18 @@ public class ARTFRoom {
 
 	public void linkTerrain(){
 		blocks.Clear();
+		TerrainBlock blk;
+		Vector3 pos = new Vector3();
 		for(int i = 0; i <= Length; ++i){
 			for(int j = 0; j <= Height; ++j){
-				blocks.Add(MapData.Instance.TerrainBlocks.findBlock(new Vector3(i+Length, 0, j+Height)));
+				pos.Set(i+Length, 0, j+Height);
+				blk = MapData.Instance.TerrainBlocks.findBlock(pos);
+				if(blk == null){
+					blk = new TerrainBlock(defaultBlockID, pos, DIRECTION.North);
+					MapData.Instance.TerrainBlocks.addBlock(blk);
+				}
+				blocks.Add(blk);
+				blk.Rooms.Add(this);
 			}
 		}
 	}
@@ -69,6 +79,9 @@ public class ARTFRoom {
 	}
 
 	public bool Resize(Vector3 oldCorner, Vector3 newCorner){
+		if(!isCorner(oldCorner)) {
+			return false;
+		}
 		Vector3 offset = newCorner.Subtract(oldCorner);
 		if(oldCorner.x == LLposition.x) {
 			LLposition.x += offset.x;
@@ -82,8 +95,17 @@ public class ARTFRoom {
 			URposition.z += offset.z;
 		}
 		//remove blocks no longer in room
+		foreach(TerrainBlock blk in blocks) {
+			if(!inRoom(blk.Position)){
+				blk.Rooms.Remove(this);
+				if(blk.Rooms.Count == 0){
+					MapData.Instance.TerrainBlocks.removeBlock(blk.Position);
+				}
+			}
+		}
 		//add blocks that are now in room
-		return false;
+		linkTerrain();
+		return true;
 	}
 
 	public bool Rotate(DIRECTION dir){
@@ -112,7 +134,7 @@ public class ARTFRoom {
 		return false;
 	}
 
-	public bool isInRoom(Vector3 pos){
+	public bool inRoom(Vector3 pos){
 		return pos.z >= LLposition.z && pos.z <= URposition.z && pos.z >= LLposition.z && pos.z <= URposition.z;
 	}
 }

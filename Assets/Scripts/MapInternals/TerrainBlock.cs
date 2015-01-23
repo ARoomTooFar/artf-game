@@ -34,7 +34,7 @@ public class TerrainBlock {
 	private Dictionary<DIRECTION, TerrainBlock> neighbors = new Dictionary<DIRECTION, TerrainBlock>();
 	private SceneryBlock scenery;
 	private MonsterBlock monster;
-	private List<ARTFRoom> rooms;
+	private HashSet<ARTFRoom> rooms = new HashSet<ARTFRoom>();
 	private Vector3 position = new Vector3();
 	private DIRECTION orientation;
 	private TerrainBlockInfo blockInfo;
@@ -53,12 +53,13 @@ public class TerrainBlock {
 		get{ return monster; }
 	}
 
-	public List<ARTFRoom> Rooms {
+	public HashSet<ARTFRoom> Rooms {
 		get{ return rooms; } 
 	}
 
 	public Vector3 Position {
 		get { return position; }
+		set { position = value.Round(); }
 	}
 
 	public DIRECTION Orientation {
@@ -81,6 +82,16 @@ public class TerrainBlock {
 		this.blockInfo = TerrainBlockInfo.get(blockID);
 		this.position = position.Round();
 		this.orientation = orientation;
+	}
+
+	public TerrainBlock(TerrainBlock original){
+		this.neighbors = new Dictionary<DIRECTION, TerrainBlock>(original.neighbors);
+		this.scenery = original.scenery;
+		this.monster = original.monster;
+		this.rooms = new HashSet<ARTFRoom>(original.rooms);
+		this.position = new Vector3().Set(original.position.x, original.position.y, original.position.z);
+		this.orientation = original.orientation;
+		this.blockInfo = original.blockInfo;
 	}
 
 	/*
@@ -250,6 +261,17 @@ public class TerrainBlock {
 	 */
 	public void removeMonster() {
 		this.monster = null;
+	}
+
+	public void Move(Vector3 offset){
+		if(this.scenery != null && this.scenery.Position.Equals(this.position)) {
+			this.scenery.Position.Add(offset);
+		}
+		this.position.Add(offset);
+		if(this.monster != null) {
+			this.monster.Position = this.position;
+		}
+
 	}
 }
 
