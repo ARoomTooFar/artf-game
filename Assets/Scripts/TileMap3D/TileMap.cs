@@ -4,6 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshCollider))]
 [RequireComponent(typeof(MeshRenderer))]
+[ExecuteInEditMode]
 
 public class TileMap : MonoBehaviour {
 
