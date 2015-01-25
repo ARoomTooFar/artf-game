@@ -57,10 +57,10 @@ public class Spear : Weapons {
 		}
 	}
 	void OnTriggerEnter(Collider other) {
-		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
+		IDamageable<int, Vector3> component = (IDamageable<int, Vector3>) other.GetComponent( typeof(IDamageable<int, Vector3>) );
 		Enemy enemy = other.GetComponent<Enemy>();
 		if( component != null && enemy != null) {
-			enemy.damage(stats.damage + stats.chgDamage);
+			enemy.damage(stats.damage + stats.chgDamage, player.transform.position);
 		}
 	}
 }

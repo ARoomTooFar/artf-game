@@ -96,10 +96,10 @@ public class Chainsaw : Weapons {
 	}*/
 
 	void OnTriggerStay(Collider other) {
-		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
+		IDamageable<int, Vector3> component = (IDamageable<int, Vector3>) other.GetComponent( typeof(IDamageable<int, Vector3>) );
 		Enemy enemy = other.GetComponent<Enemy>();
 		if(dealDamage && component != null && enemy != null) {
-			enemy.damage(stats.damage);
+			enemy.damage(stats.damage, player.transform.position);
 		}
 	}
 }

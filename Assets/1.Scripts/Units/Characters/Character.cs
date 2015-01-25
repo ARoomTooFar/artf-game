@@ -18,6 +18,7 @@ public class Stats{
 	*Speed: Affects the player's movement speed and recovery times after attacks. (this should have a cap)
 	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
 	*/
+	public DamageManipulation dmgManip;
 }
 
 [System.Serializable]
@@ -54,7 +55,7 @@ public class Inventory {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int> {
+public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int, Vector3> {
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -89,7 +90,9 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		inventory.equipItems(this);
 		setAnimHash();
 	}
+	
 	protected virtual void setInitValues() {
+		stats.dmgManip = new DamageManipulation();
 	}
 
 	// Gets hash code for animations (Faster than using string name when running)
@@ -226,6 +229,18 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	//---------------------------------//
 	// Damage Interface Implementation //
 	//---------------------------------//
+	
+	public virtual void damage(int dmgTaken, Vector3 pos) {
+		if (!invincible) {
+			stats.dmgManip.getDmgValue(facing, transform, pos);
+		
+			stats.health -= dmgTaken;
+			
+			if (stats.health <= 0) {
+				die();
+			}
+		}
+	}
 	
 	public virtual void damage(int dmgTaken) {
 		if (!invincible) {

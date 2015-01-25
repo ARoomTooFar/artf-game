@@ -15,6 +15,11 @@ public class Enemy : Character, IStunable<float>, IForcible<float> {
 		base.Update();
 	}
 
+	public override void damage(int dmgTaken, Vector3 pos) {
+		base.damage(dmgTaken, pos);
+		print ("Fuck: " + dmgTaken + " Damage taken");
+	}
+
 	public override void damage(int dmgTaken) {
 		base.damage(dmgTaken);
 		print ("Fuck: " + dmgTaken + " Damage taken");

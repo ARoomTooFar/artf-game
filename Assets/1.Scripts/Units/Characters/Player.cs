@@ -139,7 +139,18 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 	//---------------------------------//
 	// Damage Interface Implementation //
 	//---------------------------------//
-
+	
+	public override void damage(int dmgTaken, Vector3 pos) {
+		if (!invincible) {
+			print("UGH!" + dmgTaken);
+			stats.health -= greyTest(dmgTaken);
+			
+			if (stats.health <= 0) {
+				die();
+			}
+		}
+	}
+	
 	public override void damage(int dmgTaken) {
 		if (!invincible) {
 			print("UGH!" + dmgTaken);

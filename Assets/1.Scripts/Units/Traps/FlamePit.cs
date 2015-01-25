@@ -36,7 +36,7 @@ public class FlamePit : Traps {
 	}
 
 	void OnTriggerStay(Collider other) {
-		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
+		IDamageable<int, Vector3> component = (IDamageable<int, Vector3>) other.GetComponent( typeof(IDamageable<int, Vector3>) );
 		if (dealDamage && component != null) {
 			component.damage (stats.damage);
 		}
