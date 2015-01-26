@@ -6,4 +6,5 @@ using System.Collections;
 
 public interface IDamageable<D> {
 	void damage(D dmgTaken); // Damage function, when damage is taken
+	void die(); // Called when killed
 }

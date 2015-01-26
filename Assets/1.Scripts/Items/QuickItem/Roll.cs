@@ -4,7 +4,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Roll : Item {
+public class Roll : QuickItem {
 
 	// private int rollInt; Once settled
 	// private float rollSpeed; Once settled
@@ -39,17 +39,23 @@ public class Roll : Item {
 		StartCoroutine(rollFunc(rollInt * 0.1f));
 	}
 
+	protected override void animDone() {
+		player.freeAnim = true;
+		base.animDone();
+	}
+
 	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
 	private IEnumerator rollFunc(float rollTime) {
 		yield return StartCoroutine(rollTimeFunc(rollTime));
 		yield return StartCoroutine(rollLagTime());
-		player.freeAnim = true;
+
+		animDone();
 	}
 
 	// Timer and velocity changing thing
 	private IEnumerator rollTimeFunc(float rollTime) {
 		for (float timer = 0; timer <= rollTime; timer += Time.deltaTime) {
-			player.rigidbody.velocity = player.curFacing.normalized * player.stats.speed * 1.5f * rollSpeed;
+			player.rigidbody.velocity = player.facing.normalized * player.stats.speed * 1.5f * rollSpeed;
 			if (timer < rollTime * iFrameTime) player.invincible = true;
 			else player.invincible = false;
 			yield return 0;
