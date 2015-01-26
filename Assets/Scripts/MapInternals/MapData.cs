@@ -32,6 +32,12 @@ public class MapData {
 		get{ return sceneryBlocks; }
 	}
 
+	private SceneryDictionary monsterBlocks = new MonsterDictionary();
+	
+	public SceneryDictionary MonsterBlocks {
+		get{ return monsterBlocks; }
+	}
+
 	public string getSaveString() {
 		return "";
 	}

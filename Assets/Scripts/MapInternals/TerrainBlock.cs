@@ -34,7 +34,7 @@ public class TerrainBlock {
 	private Dictionary<DIRECTION, TerrainBlock> neighbors = new Dictionary<DIRECTION, TerrainBlock>();
 	private SceneryBlock scenery;
 	private MonsterBlock monster;
-	private HashSet<ARTFRoom> rooms = new HashSet<ARTFRoom>();
+	private ARTFRoom room;
 	private Vector3 position = new Vector3();
 	private DIRECTION orientation;
 	private TerrainBlockInfo blockInfo;
@@ -53,8 +53,9 @@ public class TerrainBlock {
 		get{ return monster; }
 	}
 
-	public HashSet<ARTFRoom> Rooms {
-		get{ return rooms; } 
+	public ARTFRoom Room {
+		get{ return room; } 
+		set{ room = value; }
 	}
 
 	public Vector3 Position {
@@ -88,8 +89,8 @@ public class TerrainBlock {
 		this.neighbors = new Dictionary<DIRECTION, TerrainBlock>(original.neighbors);
 		this.scenery = original.scenery;
 		this.monster = original.monster;
-		this.rooms = new HashSet<ARTFRoom>(original.rooms);
-		this.position = new Vector3().Set(original.position.x, original.position.y, original.position.z);
+		this.room = original.room;
+		this.position = original.position.Copy();
 		this.orientation = original.orientation;
 		this.blockInfo = original.blockInfo;
 	}

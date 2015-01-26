@@ -83,6 +83,11 @@ public class TerrainDictionary : Dictionary<string, List<TerrainBlock>>
 		block.clearNeighbors ();
 	}
 
+	public bool relinkNeighbors(TerrainBlock block){
+		unlinkNeighbors(block);
+		return linkNeighbors(block);
+	}
+
 	/*
 	 * public bool removeBlock (Vector3 position)
 	 * 
@@ -102,6 +107,8 @@ public class TerrainDictionary : Dictionary<string, List<TerrainBlock>>
 		}
 		//unlink neighbors
 		unlinkNeighbors (tgtBlock);
+		MapData.Instance.SceneryBlocks.removeBlock(position);
+		MapData.Instance.MonsterBlocks.removeBlock(position);
 		//remove from list
 		return this [tgtBlock.BlockInfo.BlockID].Remove (tgtBlock);
 	}
