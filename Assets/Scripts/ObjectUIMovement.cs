@@ -8,7 +8,7 @@ public class ObjectUIMovement : MonoBehaviour
 	public Transform thing; //In-world object this little UI thing is sticking to
 	public Camera cam; //Camera to make the UI face (must mimic its rotation)
 
-	void Update () 
+	void LateUpdate () 
 	{
 		//Set the UI's position to the object's position
 		Vector3 p = new Vector3();
