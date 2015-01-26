@@ -1,7 +1,12 @@
 ﻿//Andrew Miller
 //Created 1/17/15
+//
+//Levelgui.CS provides the bulk of the logic for the game state manager. Here scene transitions will occure when the proper conditions are met
+//this script uses functions in the gamestate.cs script.
+//
 
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class levelgui : MonoBehaviour {

@@ -1,7 +1,11 @@
 ﻿//Andrew Miller
 //Created: 1/17/15
+//
+//The gamestate.cs script holds the actual game state, and provides acces to it for other scripts.
+//
 
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class gamestate : MonoBehaviour {
