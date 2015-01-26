@@ -264,13 +264,13 @@ public class TerrainBlock {
 		this.monster = null;
 	}
 
-	public void Move(Vector3 offset){
+	public void move(Vector3 offset){
 		if(this.scenery != null && this.scenery.Position.Equals(this.position)) {
 			this.scenery.Position.Add(offset);
 		}
 		this.position.Add(offset);
 		if(this.monster != null) {
-			this.monster.Position = this.position;
+			this.monster.Position.Add(offset);
 		}
 
 	}

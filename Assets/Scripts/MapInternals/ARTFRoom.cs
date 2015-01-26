@@ -76,15 +76,13 @@ public class ARTFRoom {
 		URposition = URposition.Add(offset);
 		//add offsets to all blocks
 		foreach(TerrainBlock blk in blocks) {
-			blk.Position.Add(offset);
+			blk.move(offset);
 		}
 		//for each edge block
 		//	for each neighbor
 		foreach(TerrainBlock blk in blocks) {
-			if(isEdge(blk){
-				if(!MapData.Instance.TerrainBlocks.relinkNeighbors(blk)){
-					return false;
-				}
+			if(isEdge(blk.Position)){
+				MapData.Instance.TerrainBlocks.relinkNeighbors(blk);
 			}
 		}
 		return true;

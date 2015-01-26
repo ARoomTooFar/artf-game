@@ -4,10 +4,12 @@ using System.Collections.Generic;
 
 public class MapData {
 
-	private MapData() {
-	}
+	private MapData() {}
 
 	private static MapData instance;
+	private TerrainDictionary terrainBlocks = new TerrainDictionary();
+	private SceneryDictionary sceneryBlocks = new SceneryDictionary();
+	private MonsterDictionary monsterBlocks = new MonsterDictionary();
 
 	public static MapData Instance {
 		get {
@@ -18,23 +20,15 @@ public class MapData {
 		}
 	}
 
-	private TerrainDictionary terrainBlocks = new TerrainDictionary();
-
 	public TerrainDictionary TerrainBlocks {
-		get {
-			return terrainBlocks;
-		}
+		get { return terrainBlocks; }
 	}
-
-	private SceneryDictionary sceneryBlocks = new SceneryDictionary();
 
 	public SceneryDictionary SceneryBlocks {
 		get{ return sceneryBlocks; }
 	}
 
-	private SceneryDictionary monsterBlocks = new MonsterDictionary();
-	
-	public SceneryDictionary MonsterBlocks {
+	public MonsterDictionary MonsterBlocks {
 		get{ return monsterBlocks; }
 	}
 

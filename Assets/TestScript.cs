@@ -84,10 +84,24 @@ public class TestScript : MonoBehaviour {
 		Assert (DIRECTION.SouthEast == DIRECTION.NorthWest.Opposite (), "error with DIRECTION.NWSE");
 
 		testBlock = new TerrainBlock("block1", new Vector3(0,1,2), DIRECTION.North);
-		print (testBlock.SaveString);
 		Assert (testBlock.SaveString.Equals("0,1,2,North"), "save string error");
 
 
 		print ("TerrainBlockTests: Tests Done");
+	}
+
+	void MapDataTests(){
+		TerrainBlock testBlock = new TerrainBlock ("block1", new Vector3 (), DIRECTION.North);
+		
+		//Blocks in each cardinal and ordinal direction to testBlock
+		TerrainBlock testBlockNorth = new TerrainBlock ("block1", new Vector3 (.0f, .0f, 1.0f), DIRECTION.North);
+		TerrainBlock testBlockSouth = new TerrainBlock ("block1", new Vector3 (0f, .0f, -1.0f), DIRECTION.North);
+		TerrainBlock testBlockEast = new TerrainBlock ("block1", new Vector3 (1f, .0f, .0f), DIRECTION.North);
+		TerrainBlock testBlockWest = new TerrainBlock ("block1", new Vector3 (-1f, .0f, .0f), DIRECTION.North);
+		TerrainBlock testBlockNorthEast = new TerrainBlock ("block1", new Vector3 (1f, .0f, 1.0f), DIRECTION.North);
+		TerrainBlock testBlockSouthEast = new TerrainBlock ("block1", new Vector3 (1f, .0f, -1.0f), DIRECTION.North);
+		TerrainBlock testBlockNorthWest = new TerrainBlock ("block1", new Vector3 (-1f, .0f, 1.0f), DIRECTION.North);
+		TerrainBlock testBlockSouthWest = new TerrainBlock ("block1", new Vector3 (-1f, .0f, -1.0f), DIRECTION.North);
+	
 	}
 }
