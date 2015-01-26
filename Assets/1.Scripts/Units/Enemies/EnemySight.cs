@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemySight : Enemy{
+public class EnemySight: Enemy{
 
 	//Public variables to tweak in inspector
 	public float fov = 110f;
@@ -13,7 +13,7 @@ public class EnemySight : Enemy{
 	private Animator ani;
 	private SphereCollider col;
 	private GameObject[] players;
-	private GameObject target;
+	private GameObject target = null;
 
 	//Get players, navmesh and all colliders
 	void Awake (){
@@ -45,8 +45,10 @@ public class EnemySight : Enemy{
 
 							playerInSight = true;
 							//print ("Enemy can see me");
+							if (target != null)
+								target = other.gameObject;
 							targetPosition = other.transform.position;
-							attackPlayer(players[i]);
+							attackPlayer(target);
 														
 						}
 					}
@@ -59,12 +61,13 @@ public class EnemySight : Enemy{
 	void attackPlayer (GameObject player)
 	{
 		Vector3 distanceToTarget = transform.position - targetPosition;
-		if (distanceToTarget.sqrMagnitude > 8) 
+		if (distanceToTarget.sqrMagnitude > 12) 
 		{
 			nav.destination = targetPosition;
 			ani.SetBool ("Moving", true);
 		} else {
 			nav.Stop ();
+			transform.LookAt (targetPosition);
 			ani.SetBool ("Moving", false);
 		}
 	}
