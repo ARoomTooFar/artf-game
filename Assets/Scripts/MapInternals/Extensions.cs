@@ -124,6 +124,12 @@ public static class Extensions
 		return retVal;
 	}
 
+	public static Vector3 Copy(this Vector3 vec){
+		Vector3 retVal = new Vector3();
+		retVal.Set(vec.x, vec.y, vec.z);
+		return retVal;
+	}
+
 }
 
 
