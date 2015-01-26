@@ -47,7 +47,7 @@ public class ARTFRoom {
 	}
 
 	public void linkTerrain(){
-		blocks.Clear();
+		unlinkTerrain();
 		TerrainBlock blk;
 		Vector3 pos = new Vector3();
 		for(int i = 0; i <= Length; ++i){
@@ -59,23 +59,35 @@ public class ARTFRoom {
 					MapData.Instance.TerrainBlocks.addBlock(blk);
 				}
 				blocks.Add(blk);
-				blk.Rooms.Add(this);
+				blk.Room = this;
 			}
 		}
+	}
+
+	public void unlinkTerrain(){
+		foreach(TerrainBlock blk in blocks) {
+			blk.Room = null;
+		}
+		blocks.Clear();
 	}
 
 	public bool Move(Vector3 offset){
 		LLposition = LLposition.Add(offset);
 		URposition = URposition.Add(offset);
-		//for each edge block
-		//check for overlaps and clone
 		//add offsets to all blocks
+		foreach(TerrainBlock blk in blocks) {
+			blk.Position.Add(offset);
+		}
 		//for each edge block
 		//	for each neighbor
-		//		if block is not part of room, break link
-		//for each edge block
-		//check for overlaps and merge
-		return false;
+		foreach(TerrainBlock blk in blocks) {
+			if(isEdge(blk){
+				if(!MapData.Instance.TerrainBlocks.relinkNeighbors(blk)){
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	public bool Resize(Vector3 oldCorner, Vector3 newCorner){
@@ -97,13 +109,10 @@ public class ARTFRoom {
 		//remove blocks no longer in room
 		foreach(TerrainBlock blk in blocks) {
 			if(!inRoom(blk.Position)){
-				blk.Rooms.Remove(this);
-				if(blk.Rooms.Count == 0){
-					MapData.Instance.TerrainBlocks.removeBlock(blk.Position);
-				}
+				MapData.Instance.TerrainBlocks.removeBlock(blk.Position);
 			}
 		}
-		//add blocks that are now in room
+		//relink blocks to this room
 		linkTerrain();
 		return true;
 	}
