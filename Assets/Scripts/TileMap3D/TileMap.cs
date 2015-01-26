@@ -17,8 +17,8 @@ public class TileMap : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		grid_x = 25;
-		grid_z = 25;
+		grid_x = 30;
+		grid_z = 30;
 		buildMesh();
 	}
 
@@ -35,8 +35,8 @@ public class TileMap : MonoBehaviour {
 		int tri_total = tiles_total * 2;
 
 		// number of vertices in each x z rows and the total number of vertices
-		int vx = grid_x + 1;
-		int vz = grid_z + 1;
+		int vx = grid_x - 1;
+		int vz = grid_z - 1;
 		int vert_total = vx * vz;
 
 		// Initialization

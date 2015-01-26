@@ -43,7 +43,7 @@ public class MouseControl : MonoBehaviour {
 			if(selectedObject != null && Input.GetMouseButtonDown (0)){
 				Vector3 obj_pos = Camera.mainCamera.ScreenToWorldPoint(Input.mousePosition);
 				obj_pos.y = tilemap.transform.position.y;
-//				Debug.Log( obj_pos.x + " " + obj_pos.y + " " + obj_pos.z);
+			//	Debug.Log( obj_pos.x + " " + obj_pos.y + " " + obj_pos.z);
 				placeItems(selectedObject, obj_pos);
 			} else{
 				switch(hitInfo.collider.gameObject.name){
@@ -65,6 +65,8 @@ public class MouseControl : MonoBehaviour {
 		}
 	}
 
+
+	// selection box control
 	void snap2grid(float x, float z){
 		x = Mathf.RoundToInt( x / tilemap.tileSize );
 		z = Mathf.RoundToInt( z / tilemap.tileSize );
@@ -82,12 +84,14 @@ public class MouseControl : MonoBehaviour {
 		}
 	}
 
+	// highlight currently selected tile
 	void selectTile(){
 		notselected = false;
 		selectionCube.transform.position = currTile;
 		selectionCube.GetComponent<MeshRenderer> ().material.color = Color.blue;
 	}
 
+	// deselect the tile selected by selectTile()
 	void deselect(){
 		notselected = true;
 		selectionCube.GetComponent<MeshRenderer> ().material.color = Color.green;
