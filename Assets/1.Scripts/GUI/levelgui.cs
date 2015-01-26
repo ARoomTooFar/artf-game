@@ -14,6 +14,7 @@ public class levelgui : MonoBehaviour {
 	private string levelName;
 	private string newName = "Player Name";
 
+
 	// Initialize scene
 	void Start () 
 	{
@@ -24,9 +25,9 @@ public class levelgui : MonoBehaviour {
 	//--------------------------------
 	//OnGUI()
 	//--------------------------------
-	//Provides a GUI in scenes
+	//Provides scene transition conditions
 	//--------------------------------
-	void OnGUI()
+	public void OnGUI()
 	{
 		switch (levelName)
 		{
@@ -43,16 +44,13 @@ public class levelgui : MonoBehaviour {
 				//Add to the active player list for this session.
 				
 
-				//Set # of players. Add a player by pressing the "attack" button on station.
+				//Set # of players. Add a player by pressing the "attack" button on appropriate control station.
 				//Ready after longin press "Attack" button.
-		
-				//newName = GUI.TextField(new Rect(30, 100, 150, 30), newName, 25);
+				
+				//If all the players in the game pass the ready check they it will set the party as all ready
+				//moveToScene ("LevelSelect");
+			
 
-				//creates button to move between playerselect and levelselect and only if a number of players has been added.
-				if (GUI.Button (new Rect (30, 30, 150, 30), "Level Select")) 
-				{
-					moveToScene ("LevelSelect");
-				}
 				break;
 
 			case "LevelSelect":
@@ -156,13 +154,56 @@ public class levelgui : MonoBehaviour {
 	//--------------------------------
 	//Moves to specified scene which is passed as a string.
 	//--------------------------------
-	void moveToScene(string aScene)
+	public void moveToScene(string aScene)
 	{
 		levelName = aScene;
+		gamestate.Instance.resetPartyReady(); //resets the ready up state.
+		gamestate.Instance.setPlayerNotReady("all"); //resets all player ready statuses to false.
 		print("moving to "+ aScene);
 		gamestate.Instance.setLevel(aScene);
 		DontDestroyOnLoad (gamestate.Instance);
 		Application.LoadLevel(aScene);
 	}
 
+	//-------------------------------
+	//readyCheck()
+	//-------------------------------
+	//Check to see if all the player in the game are ready if so it sets the party status to ready
+	public void readyCheck()
+	{	
+		//gets the number of players from the GSM
+		int numberPlayers = gamestate.Instance.getNumPlayers();
+		int readyCount = 0;
+
+		//checks each player to see if they are ready, if they are it will add to the ready count
+		if(gamestate.Instance.getPlayerReadyStatus(1) == true)
+		{
+			readyCount ++;
+		}
+		if(gamestate.Instance.getPlayerReadyStatus(2) == true)
+		{
+			readyCount ++;
+		}
+		if(gamestate.Instance.getPlayerReadyStatus(3) == true)
+		{
+			readyCount ++;
+		}
+		if(gamestate.Instance.getPlayerReadyStatus(4) == true)
+		{
+			readyCount ++;
+		}
+
+		//checks to see if the ready count and the player count are the same, if they are then all players are ready.
+		if(readyCount == numberPlayers)
+		{
+			gamestate.Instance.setPartyReady();
+		}
+
+	}
+
+
 }
+
+
+
+

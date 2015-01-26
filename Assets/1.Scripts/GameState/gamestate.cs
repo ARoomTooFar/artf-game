@@ -15,10 +15,17 @@ public class gamestate : MonoBehaviour {
 	private string activeLevel;			//This is the level the players are currently on.
 	private string chosenLevel; 		//This is the level the players have chosen to play while in level selection.
 	private IList players;				//List of the Players in the game so stats can be checked in their player.cs class.
+	private int numPlayers;				//This is the total number of player left in the game.
 	private int numPlayersAlive;		//The number of players alive. When this is 0 the players go to the game over scene.
 	private bool victory;				//This is true when players reach the end of a dungeon the players will go to the rewards scene.
 	private bool chickens;				//If the players return to the enterance of a dungeon they will be sent back to the level selection scene.
-	
+	private bool p1ready;				//If the player is ready for the next scene
+	private bool p2ready;
+	private bool p3ready;
+	private	bool p4ready;	
+	private bool partyReady;				//If all the players in the game are ready
+
+
 	//----------------------------------
 	//gameState()
 	//----------------------------------
@@ -80,6 +87,125 @@ public class gamestate : MonoBehaviour {
 		players.Add(newPlayer);
 	}
 
+	//--------------------------------
+	//setPlayerReady(int playernumber)
+	//--------------------------------
+	//Set's a player's status to be ready for the next scene
+	//--------------------------------
+
+	public void setPlayerReady(int playerNumber)
+	{
+	
+		switch (playerNumber)
+		{
+			case 1:
+				p1ready = true;		
+				break;
+
+			case 2:
+				p2ready	= true;
+				break;
+
+			case 3:
+				p3ready = true;
+				break;
+
+			case 4:
+				p4ready = true;
+				break;
+		}
+
+	}
+
+	//--------------------------------
+	//setPlayerNotReady(int playernumber)
+	//--------------------------------
+	//Set's a player's status to be ready for the next scene
+	//--------------------------------
+	
+	public void setPlayerNotReady(string playerNumber)
+	{
+		
+		switch (playerNumber)
+		{
+		case "1":
+			p1ready = false;		
+			break;
+			
+		case "2":
+			p2ready	= false;
+			break;
+			
+		case "3":
+			p3ready = false;
+			break;
+			
+		case "4":
+			p4ready = false;
+			break;
+		case "all":
+			p1ready = false;
+			p2ready = false;
+			p3ready = false;
+			p4ready = false;
+			print ("reset all player ready values to false");
+			break;
+
+		default:
+			print ("Not a valit player number in Gamestate.Instance.setPlayerNotReady(string playerNumber)");
+			break;
+		}
+		
+	}
+
+	//--------------------------------
+	//setPartyReady()
+	//--------------------------------
+	//sets allReady to true, this means that all the active players in the game are ready to move on.
+	//--------------------------------
+	public void setPartyReady()
+	{
+		partyReady = true;
+	}
+
+	//--------------------------------
+	//resetPartyReady()
+	//--------------------------------
+	//sets allReady to true, this means that all the active players in the game are ready to move on.
+	//--------------------------------
+	public void resetPartyReady()
+	{
+		partyReady = false;
+	}
+
+	//--------------------------------
+	//setNumberPlayers()
+	//--------------------------------
+	//sets the total number of active players in the game, there could be a more elegant way of doing this by counting the IList.
+	//Should take input from a text field.
+	//--------------------------------
+	public void setNumberPlayers(string np)
+	{
+		switch (np) 
+		{
+		case "1":
+			numPlayers = 1;
+			break;
+
+		case "2":
+			numPlayers = 2;
+			break;
+		case "3":
+			numPlayers = 3;
+			break;
+		case "4":
+			numPlayers = 4;
+			break;
+		default:
+			print ("Not a valid number of players");
+			break;
+		}
+	}
 
 
 	//------------------------------------------------
@@ -156,8 +282,45 @@ public class gamestate : MonoBehaviour {
 		return chickens;
 	}
 
+	//--------------------------------
+	//getPlayerReadyStatus(int playernumber)
+	//--------------------------------
+	//Get's the players status for the next scene
+	//--------------------------------
+	
+	public bool getPlayerReadyStatus(int playerNumber)
+	{
+		
+		switch (playerNumber)
+		{
+		case 1:
+			return p1ready;		
+			break;
+			
+		case 2:
+			return p2ready;	
+			break;
+			
+		case 3:
+			return p3ready;	
+			break;
+			
+		case 4:
+			return p4ready;	
+			break;
+		}
+		return false;
+	}
 
-
+	//--------------------------------
+	//getPartyReady()
+	//--------------------------------
+	//tells whether the entire party is ready to move on to the next level.
+	//--------------------------------
+	public bool getPartyReady()
+	{
+		return partyReady;
+	}
 
 
 
