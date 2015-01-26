@@ -1,5 +1,5 @@
 // DamageManipulation class
-//     Used for manipulating damage value by a percent before armor  
+//     Used for manipulating damage value by a percent before armor 
 
 using UnityEngine;
 using System.Collections;
@@ -16,6 +16,7 @@ public class DamageManipulation {
 	// Consider swapping over to trees in the future
 
 	// Lists of damage changes based on positions
+	// Can be made more intricate later to have a sepaprate amp and reduction lists and other stuff
 	List<float> genChanges = new List<float>();
 	List<float> fntChanges = new List<float>();
 	List<float> backChanges = new List<float>();
@@ -26,33 +27,27 @@ public class DamageManipulation {
 	public float getDmgValue(Vector3 unitFacing, Transform unitPos, Vector3 atkPos) {
 		float ttlReduction = genValue;
 		
-		Vector3 distance = atkPos - unitPos.position;
 		Vector3 relativePosition = Vector3.zero;
 		
-		relativePosition.x = Vector3.Dot (distance, unitPos.right.normalized);
+		relativePosition.x = Vector3.Dot (atkPos - unitPos.position, unitPos.right.normalized);
 		relativePosition.y = 0.0f;
-		relativePosition.z = Vector3.Dot (distance, unitPos.forward.normalized);
+		relativePosition.z = Vector3.Dot (atkPos - unitPos.position, unitPos.forward.normalized);
 		
-		relativePosition = relativePosition.normalized;
-		unitFacing = unitFacing.normalized;
+		relativePosition.Normalize();
 	
-	
-	//	Vector3 newFacing = new Vector3(unitFacing.x * Mathf.Cos(135) + unitFacing.z * Mathf.Sin(135), 0.0f, -unitFacing.x * Mathf.Sin(135) + unitFacing.z * Mathf.Cos(135));
-		Debug.Log(getVectorByDegree(unitFacing, 135));
-		Debug.Log(getVectorByDegree(unitFacing, -135));
+		float angle = Vector2.Angle(new Vector2(relativePosition.x, relativePosition.z), new Vector2(unitFacing.x, unitFacing.z));
 		
-		// if (relativePosition.x < unitFacing.x)
-		
-		
+		if (angle <= 45.0f) {
+			ttlReduction *= fntValue;
+		} else if (angle <= 135.0f) {
+			ttlReduction *= sideValue;
+		} else if (angle <= 180.0f) {
+			ttlReduction *= backValue;
+		} else {
+			Debug.Log ("I shouldn't be here");
+		}
 		
 		return ttlReduction;
-	}
-	
-	// Gets the vector of a vector rotated by some degree
-	private Vector3 getVectorByDegree(Vector3 vec, float rotDegree) {
-		return new Vector3(vec.x * Mathf.Cos(rotDegree) + vec.z * Mathf.Sin(rotDegree),
-				0.0f,
-				-vec.x * Mathf.Sin(rotDegree) + vec.z * Mathf.Cos(rotDegree));
 	}
 	
 	// Damage Reduction Functions

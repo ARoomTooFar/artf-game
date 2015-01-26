@@ -232,7 +232,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	
 	public virtual void damage(int dmgTaken, Vector3 pos) {
 		if (!invincible) {
-			stats.dmgManip.getDmgValue(facing, transform, pos);
+			dmgTaken *= stats.dmgManip.getDmgValue(facing, transform, pos);
 		
 			stats.health -= dmgTaken;
 			

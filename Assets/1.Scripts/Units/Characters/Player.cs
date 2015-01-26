@@ -142,6 +142,9 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 	
 	public override void damage(int dmgTaken, Vector3 pos) {
 		if (!invincible) {
+		
+			dmgTaken *= stats.dmgManip.getDmgValue(facing, transform, pos);
+		
 			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
 			
