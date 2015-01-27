@@ -70,6 +70,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public Gear gear;
 	public Inventory inventory;
 	public bool freeAnim;
+	public AudioClip hurt, victory, failure;
 
 	public bool invincible = false;
 

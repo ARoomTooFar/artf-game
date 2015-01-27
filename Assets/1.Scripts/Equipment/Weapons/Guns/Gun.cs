@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Gun : Weapons {
 	//L = line, S = Shotty/Sprayheavy
 	public char bullPattern;
 	//for inaccuracy
 	public Quaternion spray;
+	public float variance;
+	public float kick;
+	public List<Shot> shots;
 	
 	// Use this for initialization
 	protected override void Start () {
@@ -17,7 +21,22 @@ public class Gun : Weapons {
 		stats.damage = 1;
 		stats.maxChgTime = 2.0f;
 		stats.weapType = 1;
+		
 		bullPattern = 'S';
+		if(bullPattern == 'L'){
+			//rifle(L,2) + pistol (L,1)
+			variance = 22f;
+			kick = 2f;
+		}
+		if(bullPattern == 'M'){
+			//machine gun
+			variance = 32f;
+			kick = 5f;
+		}
+		if(bullPattern == 'S'){
+			//shotty
+			variance = 47f;
+		}
 		spray = player.transform.rotation;
 		spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(12f-player.stats.coordination)+player.transform.eulerAngles.y,(12f-player.stats.coordination)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
 			spray = player.transform.rotation;
@@ -40,6 +59,7 @@ public class Gun : Weapons {
 			StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
 			print("Charge Attack power level:" + (int)(stats.curChgDuration/stats.chgLevels));
 		} else if (stats.curChgAtkTime == 0 && player.animSteInfo.normalizedTime > stats.colStart) {
+			StartCoroutine(makeSound(charge,playSound,charge.length));
 			stats.curChgAtkTime = Time.time;
 			particles.startSpeed = 0;
 			particles.Play();
@@ -54,25 +74,73 @@ public class Gun : Weapons {
 	}
 	private IEnumerator Shoot(int count)
     {
+		if(bullPattern == 'L'){
+			variance = 22f;
+		}
+		if(bullPattern == 'S'){
+			variance = 47f;
+		}
 		if(count == 0){
 			count = 1;
 		}
 		//High cap for basic is 12f variance, low cap for shotty is 22f
 		if(bullPattern=='L'){
+			spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(variance-player.stats.coordination)+player.transform.eulerAngles.y,(variance-player.stats.coordination)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
 			for (int i = 0; i < count; i++)
 			{
+				StartCoroutine(makeSound(action,playSound,action.length));
 				yield return StartCoroutine(Wait(.08f));
-				spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(22f-player.stats.coordination)+player.transform.eulerAngles.y,(22f-player.stats.coordination)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
-				/*GameObject bullet = (GameObject) */Instantiate(stats.projectile, player.transform.position, spray);
+				Instantiate(stats.projectile, player.transform.position, spray);
+				/*shots.Add(bullet);
+				foreach (Shot bull in shots){
+					bull.facing = spray.eulerAngles;
+				}*/
+				//variance -= 1;
+				if(stats.weapType == 1){
+					spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
+				}
+				if(stats.weapType == 2){
+					spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
+				}
+				kick += .2f;
+				if(kick >= 5f){
+					kick = 2f;
+				}
+			}
+		}
+		if(bullPattern == 'M'){//Glitchy
+			spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(variance-player.stats.coordination)+player.transform.eulerAngles.y,(variance-player.stats.coordination)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
+			StartCoroutine(makeSound(action,playSound,action.length));
+			for (int i = 0; i < count*count*count; i++)
+			{
+				yield return StartCoroutine(Wait(.01f));
+				Instantiate(stats.projectile, player.transform.position, spray);
+				/*shots.Add(bullet);
+				foreach (Shot bull in shots){
+					bull.facing = spray.eulerAngles;
+				}*/
+				//variance -= 1;
+				spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
+				kick += .2f;
+				if(kick >= 10f){
+					kick = 5f;
+				}
 			}
 		}
 		//High cap for shotty is 27f variance, low cap for shotty is 47f
 		if(bullPattern=='S'){
-			for (int i = 0; i < count*3; i++)
+			StartCoroutine(makeSound(action,playSound,action.length));
+			for (int i = 0; i < count*(int)Random.Range(3,5); i++)
 			{
 				yield return StartCoroutine(Wait(.02f));
-				spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(47f-player.stats.coordination*1.5f)+player.transform.eulerAngles.y,(47f-player.stats.coordination*1.5f)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
-				/*GameObject bullet = (GameObject) */Instantiate(stats.projectile, player.transform.position, spray);
+				spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(variance-player.stats.coordination*1.5f)+player.transform.eulerAngles.y,(variance-player.stats.coordination*1.5f)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
+				Instantiate(stats.projectile, player.transform.position, spray);
+				/*shots.Add(bullet);
+				foreach (Shot bull in shots){
+					bull.facing = spray.eulerAngles;
+				}
+				shots.Clear();*/
+				variance += 2;
 			}
 		}
     }
