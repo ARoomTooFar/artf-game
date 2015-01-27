@@ -3,8 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class TerrainDictionary : Dictionary<string, List<TerrainBlock>> {
-	public TerrainDictionary() {
+public class TerrainManager {
+
+	Dictionary<string, List<TerrainBlock>> dictionary = new Dictionary<string, List<TerrainBlock>>();
+	public TerrainManager() {
 	}
 
 	/*
@@ -24,11 +26,11 @@ public class TerrainDictionary : Dictionary<string, List<TerrainBlock>> {
 		//get the list for the block type
 		List<TerrainBlock> lst;
 		try{
-			lst = this[block.BlockInfo.BlockID];
+			lst = dictionary[block.BlockInfo.BlockID];
 		} catch (Exception){
 			//create one if needed
 			lst = new List<TerrainBlock>();
-			this.Add(block.BlockInfo.BlockID, lst);
+			dictionary.Add(block.BlockInfo.BlockID, lst);
 		}
 
 
@@ -49,7 +51,7 @@ public class TerrainDictionary : Dictionary<string, List<TerrainBlock>> {
 	 */
 	private bool linkNeighbors(TerrainBlock block) {
 		//Go through every set of blocks
-		foreach(KeyValuePair<string, List<TerrainBlock>> pair in this) {
+		foreach(KeyValuePair<string, List<TerrainBlock>> pair in dictionary) {
 			//for each extant block
 			foreach(TerrainBlock blk in pair.Value) {
 				//determine if the block is a neighbor of the input
@@ -113,7 +115,7 @@ public class TerrainDictionary : Dictionary<string, List<TerrainBlock>> {
 		MapData.Instance.SceneryBlocks.removeBlock(position);
 		MapData.Instance.MonsterBlocks.removeBlock(position);
 		//remove from list
-		return this[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
+		return dictionary[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
 	}
 
 	/*
@@ -126,7 +128,7 @@ public class TerrainDictionary : Dictionary<string, List<TerrainBlock>> {
 		//round position
 		Vector3 intPosition = position.Round();
 		//for each type of block
-		foreach(KeyValuePair<string, List<TerrainBlock>> kvPair in this) {
+		foreach(KeyValuePair<string, List<TerrainBlock>> kvPair in dictionary) {
 			//check each block
 			foreach(TerrainBlock blk in kvPair.Value) {
 				//return block if position matches
@@ -143,7 +145,7 @@ public class TerrainDictionary : Dictionary<string, List<TerrainBlock>> {
 		get {
 			string retVal = "";
 			string tempVal;
-			foreach(KeyValuePair<string, List<TerrainBlock>> kvPair in this) {
+			foreach(KeyValuePair<string, List<TerrainBlock>> kvPair in dictionary) {
 				tempVal = "";
 				tempVal += kvPair.Key + ": ";
 				foreach(TerrainBlock blk in kvPair.Value) {
@@ -155,9 +157,14 @@ public class TerrainDictionary : Dictionary<string, List<TerrainBlock>> {
 		}
 	}
 
+	/*
+	 * public int numTiles()
+	 * 
+	 * Returns the number of tiles stored
+	 */
 	public int numTiles(){
 		int retVal = 0;
-		foreach(KeyValuePair<string, List<TerrainBlock>> kvp in this) {
+		foreach(KeyValuePair<string, List<TerrainBlock>> kvp in dictionary) {
 			retVal += kvp.Value.Count;
 		}
 		return retVal;

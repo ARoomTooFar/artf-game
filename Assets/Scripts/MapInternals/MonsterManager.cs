@@ -2,8 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MonsterDictionary : Dictionary<string, List<MonsterBlock>> {
-	public MonsterDictionary() {
+public class MonsterManager {
+
+	Dictionary<string, List<MonsterBlock>> dictionary = new Dictionary<string, List<MonsterBlock>>();
+
+	public MonsterManager() {
 	}
 
 	/*
@@ -21,11 +24,11 @@ public class MonsterDictionary : Dictionary<string, List<MonsterBlock>> {
 			return false;
 		}
 		//get the list for the block type
-		List<MonsterBlock> lst = this[block.BlockInfo.BlockID];
+		List<MonsterBlock> lst = dictionary[block.BlockInfo.BlockID];
 		//create one if needed
 		if(lst == null) {
 			lst = new List<MonsterBlock>();
-			this.Add(block.BlockInfo.BlockID, lst);
+			dictionary.Add(block.BlockInfo.BlockID, lst);
 		}
 		//add the block to the list
 		lst.Add(block);
@@ -62,7 +65,7 @@ public class MonsterDictionary : Dictionary<string, List<MonsterBlock>> {
 	 */
 	private void unlinkTerrain(MonsterBlock block) {
 		TerrainBlock blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
-		if(blk.Monster.Equals(this)){
+		if(blk.Monster.Equals(block)){
 			blk.removeMonster();
 		}
 	}
@@ -87,7 +90,7 @@ public class MonsterDictionary : Dictionary<string, List<MonsterBlock>> {
 		//unlink neighbors
 		unlinkTerrain(tgtBlock);
 		//remove from list
-		return this[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
+		return dictionary[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
 	}
 
 	/*
@@ -100,7 +103,7 @@ public class MonsterDictionary : Dictionary<string, List<MonsterBlock>> {
 		//round position
 		Vector3 intPosition = position.Round();
 		//for each type of block
-		foreach(KeyValuePair<string, List<MonsterBlock>> kvPair in this) {
+		foreach(KeyValuePair<string, List<MonsterBlock>> kvPair in dictionary) {
 			//check each block
 			foreach(MonsterBlock blk in kvPair.Value) {
 				//return block if position matches
@@ -117,7 +120,7 @@ public class MonsterDictionary : Dictionary<string, List<MonsterBlock>> {
 		get {
 			string retVal = "";
 			string tempVal;
-			foreach(KeyValuePair<string, List<MonsterBlock>> kvPair in this) {
+			foreach(KeyValuePair<string, List<MonsterBlock>> kvPair in dictionary) {
 				tempVal = "";
 				tempVal += kvPair.Key + ": ";
 				foreach(MonsterBlock blk in kvPair.Value) {

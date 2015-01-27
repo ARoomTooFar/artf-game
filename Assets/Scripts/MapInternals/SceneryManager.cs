@@ -2,8 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
-	public SceneryDictionary() {
+public class SceneryManager {
+
+	Dictionary<string, List<SceneryBlock>> dictionary = new Dictionary<string, List<SceneryBlock>>();
+
+	public SceneryManager() {
 	}
 
 	/*
@@ -21,11 +24,11 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 			return false;
 		}
 		//get the list for the block type
-		List<SceneryBlock> lst = this[block.BlockInfo.BlockID];
+		List<SceneryBlock> lst = dictionary[block.BlockInfo.BlockID];
 		//create one if needed
 		if(lst == null) {
 			lst = new List<SceneryBlock>();
-			this.Add(block.BlockInfo.BlockID, lst);
+			dictionary.Add(block.BlockInfo.BlockID, lst);
 		}
 		//add the block to the list
 		lst.Add(block);
@@ -102,7 +105,7 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 		//unlink terrain
 		unlinkTerrain(tgtBlock);
 		//remove from list
-		return this[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
+		return dictionary[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
 	}
 
 	/*
@@ -115,7 +118,7 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 		//round position
 		Vector3 intPosition = position.Round();
 		//for each type of block
-		foreach(KeyValuePair<string, List<SceneryBlock>> kvPair in this) {
+		foreach(KeyValuePair<string, List<SceneryBlock>> kvPair in dictionary) {
 			//check each block
 			foreach(SceneryBlock blk in kvPair.Value) {
 				//return block if position matches
@@ -132,7 +135,7 @@ public class SceneryDictionary : Dictionary<string, List<SceneryBlock>> {
 		get {
 			string retVal = "";
 			string tempVal;
-			foreach(KeyValuePair<string, List<SceneryBlock>> kvPair in this) {
+			foreach(KeyValuePair<string, List<SceneryBlock>> kvPair in dictionary) {
 				tempVal = "";
 				tempVal += kvPair.Key + ": ";
 				foreach(SceneryBlock blk in kvPair.Value) {
