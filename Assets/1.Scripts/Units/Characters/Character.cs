@@ -26,7 +26,7 @@ public class Gear {
 	public Weapons weapon;
 	public Equipment helmet, bodyArmor;
 
-	public void equipItems(GameObject player) {
+	public void equipItems(Character player) {
 		if (weapon) weapon.equip(player);
 	}
 }
@@ -55,7 +55,7 @@ public class Inventory {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int, GameObject> {
+public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int, Character> {
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -87,7 +87,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		isDead = false;
 		freeAnim = true;
 		setInitValues();
-		gear.equipItems(gameObject);
+		gear.equipItems(this);
 		inventory.equipItems(this);
 		setAnimHash();
 	}
@@ -231,7 +231,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	// Damage Interface Implementation //
 	//---------------------------------//
 	
-	public virtual void damage(int dmgTaken, GameObject striker) {
+	public virtual void damage(int dmgTaken, Character striker) {
 		if (!invincible) {
 			Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(facing, transform.position, striker.transform.position)), 1, 100000);
 		

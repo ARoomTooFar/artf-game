@@ -140,7 +140,7 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 	// Damage Interface Implementation //
 	//---------------------------------//
 	
-	public override void damage(int dmgTaken, GameObject striker) {
+	public override void damage(int dmgTaken, Character striker) {
 		if (!invincible) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(facing, transform.position, striker.transform.position)), 1, 100000);
 		

@@ -62,7 +62,7 @@ public class Enemy : Character, IStunable<float>, IForcible<float> {
 			}
 	}
 
-	public override void damage(int dmgTaken, GameObject striker) {
+	public override void damage(int dmgTaken, Character striker) {
 		base.damage(dmgTaken, striker);
 		print ("Fuck: " + dmgTaken + " Damage taken");
 	}

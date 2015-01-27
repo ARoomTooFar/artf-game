@@ -27,9 +27,9 @@ public class Projectile : MonoBehaviour {
 		}
 
 		IDamageable<int, GameObject> component = (IDamageable<int, GameObject>) other.GetComponent( typeof(IDamageable<int, GameObject>) );
-		Enemy enemy = other.GetComponent<Enemy>();
+		Character enemy = other.GetComponent<Character>();
 		if( component != null && enemy != null) {
-			enemy.damage(damage, gameObject);
+			enemy.damage(damage, player);
 			particles.Stop();
 			Destroy(this.transform.parent.gameObject);
 		}

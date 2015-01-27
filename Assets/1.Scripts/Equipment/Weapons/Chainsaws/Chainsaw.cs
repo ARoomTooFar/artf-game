@@ -97,7 +97,7 @@ public class Chainsaw : Weapons {
 
 	void OnTriggerStay(Collider other) {
 		IDamageable<int, GameObject> component = (IDamageable<int, GameObject>) other.GetComponent( typeof(IDamageable<int, GameObject>) );
-		Enemy enemy = other.GetComponent<Enemy>();
+		Character enemy = other.GetComponent<Character>();
 		if(dealDamage && component != null && enemy != null) {
 			enemy.damage(stats.damage, user);
 		}
