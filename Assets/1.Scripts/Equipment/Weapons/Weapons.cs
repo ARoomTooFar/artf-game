@@ -63,7 +63,7 @@ public class Weapons : Equipment {
 	public virtual void initAttack() {
 		stats.curChgAtkTime = stats.curChgDuration = 0.0f;
 		stats.chgDamage = 0;
-		player.animator.SetTrigger("Attack"); // Swap over to weapon specific animation if we get some
+		user.GetComponent<Character>().animator.SetTrigger("Attack"); // Swap over to weapon specific animation if we get some
 	}
 
 	// Weapon attack functions

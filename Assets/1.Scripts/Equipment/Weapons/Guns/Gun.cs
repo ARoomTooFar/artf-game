@@ -18,10 +18,10 @@ public class Gun : Weapons {
 		stats.maxChgTime = 2.0f;
 		stats.weapType = 1;
 		bullPattern = 'S';
-		spray = player.transform.rotation;
-		spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(12f-player.stats.coordination)+player.transform.eulerAngles.y,(12f-player.stats.coordination)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
-			spray = player.transform.rotation;
-			spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(12f-player.stats.coordination)+player.transform.eulerAngles.y,(12f-player.stats.coordination)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
+		spray = user.GetComponent<Character>().transform.rotation;
+		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(12f-user.GetComponent<Character>().stats.coordination)+user.transform.eulerAngles.y,(12f-user.GetComponent<Character>().stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
+		spray = user.transform.rotation;
+		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(12f-user.GetComponent<Character>().stats.coordination)+user.transform.eulerAngles.y,(12f-user.GetComponent<Character>().stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
 
 	}
 	
@@ -35,20 +35,20 @@ public class Gun : Weapons {
 	}
 
 	public override void attack() {
-		if (!Input.GetKey(player.controls.attack) && stats.curChgAtkTime != -1) {
+		if (!Input.GetKey(user.GetComponent<Character>().controls.attack) && stats.curChgAtkTime != -1) {
 			stats.curChgAtkTime = -1;
 			StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
 			print("Charge Attack power level:" + (int)(stats.curChgDuration/stats.chgLevels));
-		} else if (stats.curChgAtkTime == 0 && player.animSteInfo.normalizedTime > stats.colStart) {
+		} else if (stats.curChgAtkTime == 0 && user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colStart) {
 			stats.curChgAtkTime = Time.time;
 			particles.startSpeed = 0;
 			particles.Play();
-		} else if (stats.curChgAtkTime != -1 && player.animSteInfo.normalizedTime > stats.colStart) {
+		} else if (stats.curChgAtkTime != -1 && user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colStart) {
 			stats.curChgDuration = Mathf.Clamp(Time.time - stats.curChgAtkTime, 0.0f, stats.maxChgTime);
 			particles.startSpeed = (int)(stats.curChgDuration/stats.chgLevels);
 		}
 		
-		if (player.animSteInfo.normalizedTime > stats.colEnd) {
+		if (user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colEnd) {
 			particles.Stop();
 		}
 	}
@@ -62,8 +62,8 @@ public class Gun : Weapons {
 			for (int i = 0; i < count; i++)
 			{
 				yield return StartCoroutine(Wait(.08f));
-				spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(22f-player.stats.coordination)+player.transform.eulerAngles.y,(22f-player.stats.coordination)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
-				/*GameObject bullet = (GameObject) */Instantiate(stats.projectile, player.transform.position, spray);
+				spray = Quaternion.Euler(new Vector3(user.GetComponent<Character>().transform.eulerAngles.x,Random.Range(-(22f-user.GetComponent<Character>().stats.coordination)+user.transform.eulerAngles.y,(22f-user.GetComponent<Character>().stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
+				/*GameObject bullet = (GameObject) */Instantiate(stats.projectile, user.transform.position, spray);
 			}
 		}
 		//High cap for shotty is 27f variance, low cap for shotty is 47f
@@ -71,8 +71,8 @@ public class Gun : Weapons {
 			for (int i = 0; i < count*3; i++)
 			{
 				yield return StartCoroutine(Wait(.02f));
-				spray = Quaternion.Euler(new Vector3(player.transform.eulerAngles.x,Random.Range(-(47f-player.stats.coordination*1.5f)+player.transform.eulerAngles.y,(47f-player.stats.coordination*1.5f)+player.transform.eulerAngles.y),player.transform.eulerAngles.z));
-				/*GameObject bullet = (GameObject) */Instantiate(stats.projectile, player.transform.position, spray);
+				spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(47f-user.GetComponent<Character>().stats.coordination*1.5f)+user.transform.eulerAngles.y,(47f-user.GetComponent<Character>().stats.coordination*1.5f)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
+				/*GameObject bullet = (GameObject) */Instantiate(stats.projectile, user.transform.position, spray);
 			}
 		}
     }

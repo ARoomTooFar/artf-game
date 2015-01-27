@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Equipment : MonoBehaviour {
 
-	public Character player;
+	public GameObject user;
 
 	public ParticleSystem particles;
 
@@ -12,8 +12,8 @@ public class Equipment : MonoBehaviour {
 
 	}
 
-	public void equip(Character play) {
-		player = play;
+	public void equip(GameObject u) {
+		user = u;
 		setInitValues();
 	}
 

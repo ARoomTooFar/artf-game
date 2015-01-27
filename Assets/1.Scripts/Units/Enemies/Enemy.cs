@@ -62,6 +62,11 @@ public class Enemy : Character, IStunable<float>, IForcible<float> {
 			}
 	}
 
+	public override void damage(int dmgTaken, GameObject striker) {
+		base.damage(dmgTaken, striker);
+		print ("Fuck: " + dmgTaken + " Damage taken");
+	}
+
 	public override void damage(int dmgTaken) {
 		//aggro is on and timer reset if attacked
 		if (aggro == false) {

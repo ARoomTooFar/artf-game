@@ -20,7 +20,7 @@ public class Chainsaw : Weapons {
 		
 		// Default sword stats
 		stats.atkSpeed = 3.0f;
-		stats.damage = (int)(1 + 0.1f * player.stats.strength);
+		stats.damage = (int)(1 + 0.1f * user.GetComponent<Character>().stats.strength);
 		
 		stats.maxChgTime = 3.0f;
 		stats.weapType = 0;
@@ -60,16 +60,16 @@ public class Chainsaw : Weapons {
 	
 	// Sword attack functions
 	public override void attack() {
-		if (!Input.GetKey(player.controls.attack) && stats.curChgAtkTime != -1) {
+		if (!Input.GetKey(user.GetComponent<Character>().controls.attack) && stats.curChgAtkTime != -1) {
 			stats.curChgAtkTime = -1;
-		} else if (stats.curChgAtkTime == 0 && player.animSteInfo.normalizedTime > stats.colStart) {
+		} else if (stats.curChgAtkTime == 0 && user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colStart) {
 			curDuration = maxDuration;
 			stats.curChgAtkTime = Time.time;
 			lastDmgTime = Time.time;
 			particles.startSpeed = 0;
 			this.GetComponent<Collider>().enabled = true;
 			particles.Play();
-		} else if (stats.curChgAtkTime != -1 && player.animSteInfo.normalizedTime > stats.colStart) {
+		} else if (stats.curChgAtkTime != -1 && user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colStart) {
 			stats.curChgDuration = Mathf.Clamp(Time.time - stats.curChgAtkTime, 0.0f, stats.maxChgTime);
 			stats.chgDamage = (int) (stats.curChgDuration/stats.chgLevels);
 			particles.startSpeed = stats.chgDamage;
@@ -80,7 +80,7 @@ public class Chainsaw : Weapons {
 			}
 		}
 		
-		if (player.animSteInfo.normalizedTime > stats.colEnd) {
+		if (user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colEnd) {
 			particles.Stop();
 			this.GetComponent<Collider>().enabled = false;
 		}
@@ -96,10 +96,10 @@ public class Chainsaw : Weapons {
 	}*/
 
 	void OnTriggerStay(Collider other) {
-		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
+		IDamageable<int, GameObject> component = (IDamageable<int, GameObject>) other.GetComponent( typeof(IDamageable<int, GameObject>) );
 		Enemy enemy = other.GetComponent<Enemy>();
 		if(dealDamage && component != null && enemy != null) {
-			enemy.damage(stats.damage);
+			enemy.damage(stats.damage, user);
 		}
 	}
 }
