@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TileMapEditor : MonoBehaviour {
+public class SelectionAnchor : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

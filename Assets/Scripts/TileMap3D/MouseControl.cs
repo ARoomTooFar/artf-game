@@ -1,55 +1,69 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MouseControl : MonoBehaviour {
 
-	// reference to tile map
+	/* reference to tile map */
 	TileMap tilemap;
 
-	// current tile
+	/* current tile */
 	Vector3 currTile;
 
-	// selecting objects
+	/* selecting objects */
 	GameObject selectionCube;
 	GameObject currentObj;
 
-	// reference to a list of objects to instantiate
+	public List<Vector3> selectedTiles;
+
+	/* reference to a list of objects to instantiate */
 	GameObject menu;
 
-	// select when mouse over
-	bool notselected;
+	/* select when mouse over */
 	string selectedObject;
 
-	// Initialize variables, setting booleans
-	void Awake () {
+	/* */
+	bool[,] isTileSelected;
+
+	/* Initialize variables, setting booleans */
+	void Start () {
 		tilemap = GetComponent<TileMap> ();
-		notselected = true;
-		selectionCube = Instantiate (Resources.Load("selectionCube")) as GameObject;
+		isTileSelected = new bool[tilemap.grid_x, tilemap.grid_z];
+		Debug.Log (tilemap.grid_x + " " + tilemap.grid_z);
+		for (int x = 0; x < tilemap.grid_x; ++x) {
+			for (int z = 0; z < tilemap.grid_z; ++z){
+				isTileSelected[x, z] = false;
+			}
+		}
 		selectedObject = null;
+		selectedTiles = new List<Vector3> ();
 	}
-	
+
+	/* Calling raycast function */
 	void Update () {
 		RayToScene ();
 	}
 
+	/* raycasting info and logic happens here */
 	void RayToScene(){
-		// get world coordinates with respect to mouse position by raycast
+		/* get world coordinates with respect to mouse position by raycast */
 		Ray ray = Camera.mainCamera.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hitInfo;
-		//Debug.DrawRay(Camera.mainCamera.transform.position, Input.mousePosition);
 		
+		/* getting raycast info and logic */
 		if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity)) {
-			// Debug.Log(hitInfo.collider.gameObject.name);
+
+			/* check if an object is selected and whether mouse is pressed */
 			if(selectedObject != null && Input.GetMouseButtonDown (0)){
 				Vector3 obj_pos = Camera.mainCamera.ScreenToWorldPoint(Input.mousePosition);
 				obj_pos.y = tilemap.transform.position.y;
-//				Debug.Log( obj_pos.x + " " + obj_pos.y + " " + obj_pos.z);
 				placeItems(selectedObject, obj_pos);
+			
 			} else{
+
+				/* check whether the ray hits an object or the tile map */
+
 				switch(hitInfo.collider.gameObject.name){
-				case "selectionCube(Clone)":
-					snap2grid(hitInfo.point.x, hitInfo.point.z);
-					break;
 				case "TileMap":
 					snap2grid(hitInfo.point.x, hitInfo.point.z);
 					break;
@@ -58,39 +72,38 @@ public class MouseControl : MonoBehaviour {
 					break;
 				}
 			}
-			//Debug.DrawRay(Camera.mainCamera.transform.position, hitInfo.point);
-			//Debug.Log (hitInfo.point);
-		} else {
-			//renderer.material.color = Color.red;
 		}
 	}
 
-	void snap2grid(float x, float z){
-		x = Mathf.RoundToInt( x / tilemap.tileSize );
-		z = Mathf.RoundToInt( z / tilemap.tileSize );
-		currTile.x = x;
-		currTile.z = z;
-		if(notselected) selectionCube.transform.position = currTile;
+	/* snap mouse selection to grid */
+	void snap2grid(float xf, float zf){
+
+//		Debug.Log (xf + " " + zf);
+
+		int x = Mathf.FloorToInt( xf / tilemap.tileSize );
+		int z = Mathf.FloorToInt( zf / tilemap.tileSize );
 		
-		if (Input.GetMouseButtonDown (0)) {
-			selectTile ();
+		/* check whether mouse is pressed AND the tile hasn't been selected */
+		if (Input.GetMouseButtonDown (0) && !isTileSelected[x, z]) {
+			selectTile (x, z);
 		}
-		
-		
-		if (Input.GetMouseButtonDown (1)) {
-			deselect();
+
+		if (Input.GetMouseButtonDown (1) && isTileSelected[x, z]) {
+			deselect(x, z);
 		}
 	}
 
-	void selectTile(){
-		notselected = false;
-		selectionCube.transform.position = currTile;
-		selectionCube.GetComponent<MeshRenderer> ().material.color = Color.blue;
+
+	/* Add selected tile index to a list to be access by the camera script for rendering */
+	void selectTile(int x, int z){
+		isTileSelected [x, z] = true;
+		selectedTiles.Add(new Vector3(x, 0, z));
+		Debug.Log (selectedTiles.Count);
 	}
 
-	void deselect(){
-		notselected = true;
-		selectionCube.GetComponent<MeshRenderer> ().material.color = Color.green;
+	void deselect(int x, int z){
+		isTileSelected [x, z] = false;
+//		selectionCube.GetComponent<MeshRenderer> ().material.color = Color.green;
 	}
 
 	void placeItems(string name, Vector3 position){
