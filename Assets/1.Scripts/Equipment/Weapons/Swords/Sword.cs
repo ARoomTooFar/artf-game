@@ -54,7 +54,7 @@ public class Sword : Weapons {
 	}
 	void OnTriggerEnter(Collider other) {
 		IDamageable<int, Vector3> component = (IDamageable<int, Vector3>) other.GetComponent( typeof(IDamageable<int, Vector3>) );
-		Enemy enemy = other.GetComponent<Enemy>();
+		Character enemy = other.GetComponent<Character>();
 		if( component != null && enemy != null) {
 			enemy.damage(stats.damage + stats.chgDamage, player.transform.position);
 		}

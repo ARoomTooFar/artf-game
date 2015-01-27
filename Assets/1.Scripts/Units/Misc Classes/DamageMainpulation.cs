@@ -27,22 +27,27 @@ public class DamageManipulation {
 	public float getDmgValue(Vector3 unitFacing, Transform unitPos, Vector3 atkPos) {
 		float ttlReduction = genValue;
 		
-		Vector3 relativePosition = Vector3.zero;
+		Debug.Log(unitPos.position);
 		
-		relativePosition.x = Vector3.Dot (atkPos - unitPos.position, unitPos.right.normalized);
-		relativePosition.y = 0.0f;
-		relativePosition.z = Vector3.Dot (atkPos - unitPos.position, unitPos.forward.normalized);
 		
-		relativePosition.Normalize();
+		//relativePosition.x = Vector3.Dot (atkPos - unitPos.position, unitPos.right.normalized);
+		//relativePosition.y = 0.0f;
+		//relativePosition.z = Vector3.Dot (atkPos - unitPos.position, unitPos.forward.normalized);
+		
+		//relativePosition.Normalize();
 	
-		float angle = Vector2.Angle(new Vector2(relativePosition.x, relativePosition.z), new Vector2(unitFacing.x, unitFacing.z));
+		float angle = Vector2.Angle(new Vector2(unitPos.position.x - atkPos.x, unitPos.position.z - atkPos.z), new Vector2(unitFacing.x, unitFacing.z));
+		
 		
 		if (angle <= 45.0f) {
 			ttlReduction *= fntValue;
+			Debug.Log("Front");
 		} else if (angle <= 135.0f) {
 			ttlReduction *= sideValue;
+			Debug.Log("Side");
 		} else if (angle <= 180.0f) {
 			ttlReduction *= backValue;
+			Debug.Log("Back");
 		} else {
 			Debug.Log ("I shouldn't be here");
 		}

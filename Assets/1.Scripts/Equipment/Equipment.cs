@@ -12,8 +12,8 @@ public class Equipment : MonoBehaviour {
 
 	}
 
-	public void equip(Character play) {
-		player = play;
+	public void equip(GameObject play) {
+		player = play.GetComponent<Character>();
 		setInitValues();
 	}
 

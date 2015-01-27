@@ -143,7 +143,7 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 	public override void damage(int dmgTaken, Vector3 pos) {
 		if (!invincible) {
 		
-			dmgTaken *= stats.dmgManip.getDmgValue(facing, transform, pos);
+			dmgTaken = Mathf.CeilToInt(dmgTaken * (int)stats.dmgManip.getDmgValue(facing, transform, pos));
 		
 			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
@@ -229,7 +229,7 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 	private IEnumerator RegenWait(){
 		yield return new WaitForSeconds(1);
 		if(inGrey && !stats.isDead){
-			print("Healed Grey and True");
+			// print("Healed Grey and True");
 			greyDamage--;
 			if(greyDamage > 0){
 				StartCoroutine("RegenWait");

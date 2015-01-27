@@ -26,8 +26,8 @@ public class Gear {
 	public Weapons weapon;
 	public Equipment helmet, bodyArmor;
 
-	public void equipItems(Character curPlayer) {
-		if (weapon) weapon.equip(curPlayer);
+	public void equipItems(GameObject player) {
+		if (weapon) weapon.equip(player);
 	}
 }
 
@@ -86,7 +86,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		isDead = false;
 		freeAnim = true;
 		setInitValues();
-		gear.equipItems(this);
+		gear.equipItems(gameObject);
 		inventory.equipItems(this);
 		setAnimHash();
 	}
@@ -232,7 +232,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	
 	public virtual void damage(int dmgTaken, Vector3 pos) {
 		if (!invincible) {
-			dmgTaken *= stats.dmgManip.getDmgValue(facing, transform, pos);
+			dmgTaken = Mathf.CeilToInt(dmgTaken * stats.dmgManip.getDmgValue(facing, transform, pos));
 		
 			stats.health -= dmgTaken;
 			
