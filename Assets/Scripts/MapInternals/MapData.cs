@@ -7,9 +7,9 @@ public class MapData {
 	private MapData() {}
 
 	private static MapData instance;
-	private TerrainDictionary terrainBlocks = new TerrainDictionary();
-	private SceneryDictionary sceneryBlocks = new SceneryDictionary();
-	private MonsterDictionary monsterBlocks = new MonsterDictionary();
+	private TerrainManager terrainBlocks = new TerrainManager();
+	private SceneryManager sceneryBlocks = new SceneryManager();
+	private MonsterManager monsterBlocks = new MonsterManager();
 	private ARTFRoomManager theFarRooms = new ARTFRoomManager();
 
 	public static MapData Instance {
@@ -21,15 +21,15 @@ public class MapData {
 		}
 	}
 
-	public TerrainDictionary TerrainBlocks {
+	public TerrainManager TerrainBlocks {
 		get { return terrainBlocks; }
 	}
 
-	public SceneryDictionary SceneryBlocks {
+	public SceneryManager SceneryBlocks {
 		get{ return sceneryBlocks; }
 	}
 
-	public MonsterDictionary MonsterBlocks {
+	public MonsterManager MonsterBlocks {
 		get{ return monsterBlocks; }
 	}
 
@@ -47,7 +47,7 @@ public class MapData {
 	}
 
 	public void moveRoom(Vector3 position, Vector3 nPosition){
-		theFarRooms.moveRoom(position, nPosition.Subtract(position));
+		theFarRooms.moveRoom(position, nPosition - position);
 	}
 	#endregion RoomManipulation
 }

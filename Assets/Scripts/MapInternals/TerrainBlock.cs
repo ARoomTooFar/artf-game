@@ -85,6 +85,9 @@ public class TerrainBlock {
 		this.orientation = orientation;
 	}
 
+	/*
+	 * Copy constructor
+	 */
 	public TerrainBlock(TerrainBlock original){
 		this.neighbors = new Dictionary<DIRECTION, TerrainBlock>(original.neighbors);
 		this.scenery = original.scenery;
@@ -264,14 +267,21 @@ public class TerrainBlock {
 		this.monster = null;
 	}
 
+	/*
+	 * public void move(Vector3 offset)
+	 * 
+	 * moves the block and associated scenery and monster
+	 */
 	public void move(Vector3 offset){
 		if(this.scenery != null && this.scenery.Position.Equals(this.position)) {
-			this.scenery.move(offset); //Position.Add(offset);
+			this.scenery.move(offset);
 		}
-		position = position.Add(offset);
+
 		if(this.monster != null) {
 			this.monster.move(offset);
 		}
+
+		position = position + offset;
 
 	}
 }

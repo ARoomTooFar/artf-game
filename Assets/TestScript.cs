@@ -7,7 +7,7 @@ public class TestScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//TerrainBlockTests ();
+		TerrainBlockTests ();
 		MapDataTests();
 	}
 	
@@ -107,7 +107,6 @@ public class TestScript : MonoBehaviour {
 		Assert(center.Neighbors.Count == 8, "Neighbors not properly assigned");
 
 		MapData.Instance.moveRoom(new Vector3(0, 0, 0), new Vector3(5, 0, 1));
-		print(center.Position.toCSV());
 		center = MapData.Instance.TerrainBlocks.findBlock(new Vector3(5, 0, 1));
 		Assert(center.Neighbors.Count == 8, "Move behaved Strangely");
 

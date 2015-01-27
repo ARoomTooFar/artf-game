@@ -45,7 +45,7 @@ public class SceneryBlock {
 			//for each coordinate
 			foreach(Vector3 vec in blockInfo.LocalCoordinates(Orientation)){
 				//shift it to the global coordinate
-				retVal.Add(vec.Add(position));
+				retVal.Add(vec + position);
 			}
 			//return the list
 			return retVal;
@@ -62,8 +62,13 @@ public class SceneryBlock {
 		this.orientation = orientation;
 	}
 
+	/*
+	 * public void move(Vector3 offset)
+	 * 
+	 * Alters the position of the scenery by offset
+	 */
 	public void move(Vector3 offset){
-		position = position.Add(offset);
+		position = position + offset;
 	}
 }
 

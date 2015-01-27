@@ -42,8 +42,13 @@ public class MonsterBlock {
 		this.orientation = orientation;
 	}
 
+	/*
+	 * public void move(Vector3 offset)
+	 * 
+	 * Alters the position of the monster by offset
+	 */
 	public void move(Vector3 offset){
-		position = position.Add(offset);
+		position = position + offset ;
 	}
 }
 
