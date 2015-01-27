@@ -50,11 +50,11 @@ public partial class ARTFRoom {
 	}
 
 	public float Height {
-		get { return URposition.z - LLposition.z; }
+		get { return 1 + URposition.z - LLposition.z; }
 	}
 
 	public float Length {
-		get { return URposition.x - LLposition.x; }
+		get { return 1+ URposition.x - LLposition.x; }
 	}
 	
 	/*
@@ -69,9 +69,9 @@ public partial class ARTFRoom {
 		unlinkTerrain();
 		TerrainBlock blk;
 		Vector3 pos = new Vector3();
-		for(int i = 0; i <= Length; ++i) {
-			for(int j = 0; j <= Height; ++j) {
-				pos.Set(i + Length, 0, j + Height);
+		for(int i = 0; i < Length; ++i) {
+			for(int j = 0; j < Height; ++j) {
+				pos.Set(i + LLCorner.x, 0, j + LLCorner.z);
 				blk = MapData.Instance.TerrainBlocks.findBlock(pos);
 				if(blk == null) {
 					blk = new TerrainBlock(defaultBlockID, pos, DIRECTION.North);
@@ -166,5 +166,9 @@ public partial class ARTFRoom {
 
 	public bool inRoom(Vector3 pos) {
 		return pos.z >= LLposition.z && pos.z <= URposition.z && pos.z >= LLposition.z && pos.z <= URposition.z;
+	}
+
+	public int numBlocks(){
+		return blocks.Count;
 	}
 }

@@ -266,11 +266,11 @@ public class TerrainBlock {
 
 	public void move(Vector3 offset){
 		if(this.scenery != null && this.scenery.Position.Equals(this.position)) {
-			this.scenery.Position.Add(offset);
+			this.scenery.move(offset); //Position.Add(offset);
 		}
-		this.position.Add(offset);
+		position = position.Add(offset);
 		if(this.monster != null) {
-			this.monster.Position.Add(offset);
+			this.monster.move(offset);
 		}
 
 	}

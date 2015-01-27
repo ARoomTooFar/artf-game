@@ -65,7 +65,7 @@ public class ARTFRoomManager {
 		return false;
 	}
 
-	private ARTFRoom getRoom(Vector3 position){
+	public ARTFRoom getRoom(Vector3 position){
 		foreach(ARTFRoom rm in roomList) {
 			if(rm.inRoom(position)){
 				return rm;

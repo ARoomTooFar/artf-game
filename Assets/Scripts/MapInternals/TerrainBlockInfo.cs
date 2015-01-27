@@ -24,7 +24,7 @@ public class TerrainBlockInfo {
 	private static void loadBlockInfo(){
 		infoDictionary = new Dictionary<string, TerrainBlockInfo> ();
 		//load data
-		infoDictionary.Add ("block1", new TerrainBlockInfo("block1", true));
+		infoDictionary.Add ("defaultBlockID", new TerrainBlockInfo("defaultBlockID", true));
 		//return true;
 	}
 	

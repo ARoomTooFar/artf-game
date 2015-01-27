@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -21,12 +22,16 @@ public class TerrainDictionary : Dictionary<string, List<TerrainBlock>> {
 			return false;
 		}
 		//get the list for the block type
-		List<TerrainBlock> lst = this[block.BlockInfo.BlockID];
-		//create one if needed
-		if(lst == null) {
+		List<TerrainBlock> lst;
+		try{
+			lst = this[block.BlockInfo.BlockID];
+		} catch (Exception){
+			//create one if needed
 			lst = new List<TerrainBlock>();
 			this.Add(block.BlockInfo.BlockID, lst);
 		}
+
+
 		//add the block to the list
 		lst.Add(block);
 
@@ -148,5 +153,13 @@ public class TerrainDictionary : Dictionary<string, List<TerrainBlock>> {
 			}
 			return retVal;
 		}
+	}
+
+	public int numTiles(){
+		int retVal = 0;
+		foreach(KeyValuePair<string, List<TerrainBlock>> kvp in this) {
+			retVal += kvp.Value.Count;
+		}
+		return retVal;
 	}
 }

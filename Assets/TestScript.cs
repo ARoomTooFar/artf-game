@@ -7,7 +7,8 @@ public class TestScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		TerrainBlockTests ();
+		//TerrainBlockTests ();
+		MapDataTests();
 	}
 	
 	// Update is called once per frame
@@ -91,17 +92,25 @@ public class TestScript : MonoBehaviour {
 	}
 
 	void MapDataTests(){
-		TerrainBlock testBlock = new TerrainBlock ("block1", new Vector3 (), DIRECTION.North);
-		
-		//Blocks in each cardinal and ordinal direction to testBlock
-		TerrainBlock testBlockNorth = new TerrainBlock ("block1", new Vector3 (.0f, .0f, 1.0f), DIRECTION.North);
-		TerrainBlock testBlockSouth = new TerrainBlock ("block1", new Vector3 (0f, .0f, -1.0f), DIRECTION.North);
-		TerrainBlock testBlockEast = new TerrainBlock ("block1", new Vector3 (1f, .0f, .0f), DIRECTION.North);
-		TerrainBlock testBlockWest = new TerrainBlock ("block1", new Vector3 (-1f, .0f, .0f), DIRECTION.North);
-		TerrainBlock testBlockNorthEast = new TerrainBlock ("block1", new Vector3 (1f, .0f, 1.0f), DIRECTION.North);
-		TerrainBlock testBlockSouthEast = new TerrainBlock ("block1", new Vector3 (1f, .0f, -1.0f), DIRECTION.North);
-		TerrainBlock testBlockNorthWest = new TerrainBlock ("block1", new Vector3 (-1f, .0f, 1.0f), DIRECTION.North);
-		TerrainBlock testBlockSouthWest = new TerrainBlock ("block1", new Vector3 (-1f, .0f, -1.0f), DIRECTION.North);
-	
+		Vector3 pos1 = new Vector3(-1, 0, -1);
+		Vector3 pos2 = new Vector3(1,0,1);
+		MapData.Instance.addRoom(pos1, pos2);
+		ARTFRoom room = MapData.Instance.TheRooms.getRoom(new Vector3(0, 0, 0));
+		Assert(room.numBlocks() == 9, "Add Room incorrect size.");
+
+
+		Assert(room.Length == 3, "room has strange length");
+		Assert(room.Height == 3, "room has strange height");
+		Assert(room.Area == 9, "room has strange area");
+		Assert(room.Perimeter == 12, "room has strange perimeter");
+		TerrainBlock center = MapData.Instance.TerrainBlocks.findBlock(new Vector3(0, 0, 0));
+		Assert(center.Neighbors.Count == 8, "Neighbors not properly assigned");
+
+		MapData.Instance.moveRoom(new Vector3(0, 0, 0), new Vector3(5, 0, 1));
+		print(center.Position.toCSV());
+		center = MapData.Instance.TerrainBlocks.findBlock(new Vector3(5, 0, 1));
+		Assert(center.Neighbors.Count == 8, "Move behaved Strangely");
+
+		print ("MapDataTests: Tests Done");
 	}
 }

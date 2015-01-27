@@ -61,6 +61,10 @@ public class SceneryBlock {
 		this.position = position.Round ();
 		this.orientation = orientation;
 	}
+
+	public void move(Vector3 offset){
+		position = position.Add(offset);
+	}
 }
 
 
