@@ -32,6 +32,7 @@ public class EnemySight: Enemy{
 				}
 	}
 
+
 	void OnTriggerStay (Collider other)
 	{
 		for (int i = 0; i <=3; i++) 
@@ -61,8 +62,12 @@ public class EnemySight: Enemy{
 			ani.SetBool ("Moving", true);
 		} else {
 			nav.Stop ();
-			transform.LookAt (targetPosition);
+			if (!facingPlayer (player))
+				transform.LookAt (targetPosition);
 			ani.SetBool ("Moving", false);
+
+			if (actable)
+				gear.weapon.initAttack();
 		}
 	}
 
