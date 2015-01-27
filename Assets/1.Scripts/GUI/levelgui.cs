@@ -20,6 +20,7 @@ public class levelgui : MonoBehaviour {
 	{
 		levelName = gamestate.Instance.getLevel ();
 		print ("Loaded: " + gamestate.Instance.getLevel ());
+		print ("There are still " + gamestate.Instance.getNumPlayers() + " in list");
 	}
 	
 	//--------------------------------
@@ -83,23 +84,27 @@ public class levelgui : MonoBehaviour {
 			case "GameScene":
 				
 				//if players go back to the enterance they will return to the level selection scene.
-				if(gamestate.Instance.areChicken())
-				{
-					moveToScene("levelSelection");
-				}
+				//if(gamestate.Instance.areChicken())
+				//{
+				//	moveToScene("levelSelection");
+				//}
 				
 				//checks whether the players have finished the dungeon.
-				if(gamestate.Instance.getVictory())
-				{
-					moveToScene ("RewardScene");
-				}
+				//if(gamestate.Instance.getVictory())
+				//{
+				//	moveToScene ("RewardScene");
+				//}
 				
 				//checks whether all the players are dead. If so it will cause a GameOver.
-				if(gamestate.Instance.getNumPlayersAlive() < 1)
-				{
-					moveToScene ("GameOverScene");
-				}	
+				//if(gamestate.Instance.getNumPlayersAlive() < 1)
+				//{
+				//	moveToScene ("GameOverScene");
+				//}	
 				
+
+				//TESTING
+				//moveToScene ("GameOverScreen");
+
 				break;
 
 			case "RewardScene":
@@ -122,26 +127,26 @@ public class levelgui : MonoBehaviour {
 
 			case "GameOverScene":
 				//Checks to see if the players want to play another dungeon
-				if (GUI.Button (new Rect (30, 90, 150, 30), "Try Another Dungeon!"))
-				{
-					moveToScene ("LevelSelect");
-				}
+				//if (GUI.Button (new Rect (30, 90, 150, 30), "Try Another Dungeon!"))
+				//{
+				//	moveToScene ("LevelSelect");
+				//}
 
 				//Checks to see if the players want to play the same dungeon again.
-				if (GUI.Button (new Rect (30, 130, 150, 30), "Try Again!"))
-				{
+				//if (GUI.Button (new Rect (30, 130, 150, 30), "Try Again!"))
+				//{
 					//reset players health and item use (may do this automatically)
 					
 					//gamestate.Instance.getNumPlayersAlive = gamestate.Instance.getNumPlayers;
-					moveToScene ("LevelSelect");
-				}
+				//	moveToScene ("LevelSelect");
+				//}
 			
 				//Checks to see if the players want to quit
-				if (GUI.Button (new Rect (30, 30, 150, 30), "Quit"))
-				{
-					moveToScene ("TitleScreen");
+				//if (GUI.Button (new Rect (30, 30, 150, 30), "Quit"))
+				//{
+				//	moveToScene ("TitleScreen");
 					
-				}
+				//}
 				break;
 
 			case "Credits":
@@ -166,9 +171,26 @@ public class levelgui : MonoBehaviour {
 	}
 
 	//-------------------------------
+	//moveToSceneAndQuit()
+	//-------------------------------
+	//Moves to the tile screen and clears the player lists and resets the game state manager
+	//-------------------------------
+	public void moveToSceneAndQuit()
+	{
+		gamestate.Instance.resetPartyReady ();
+		gamestate.Instance.setPlayerNotReady ("all");
+		print ("Quiting... Moving to title Screen");
+		gamestate.Instance.setLevel ("TitleScreen");
+		Application.LoadLevel("TitleScreen");
+	}
+
+
+
+	//-------------------------------
 	//readyCheck()
 	//-------------------------------
-	//Check to see if all the player in the game are ready if so it sets the party status to ready
+	//Check to see if all the player in the game are ready. If so it sets the party status to ready.
+	//-------------------------------
 	public void readyCheck()
 	{	
 		//gets the number of players from the GSM
@@ -199,6 +221,60 @@ public class levelgui : MonoBehaviour {
 			gamestate.Instance.setPartyReady();
 		}
 
+	}
+
+	//------------------------------
+	//victoryCheck()
+	//------------------------------
+	//Checks to see if all the players that are alive have reached the end of the dungeon. If so Victory has been achived
+	//and all the players in the game will be sent to the Rewards scene.
+	//------------------------------
+
+	public void victoryCheck()
+	{
+		//checks every player living player to see if they are in the victory zone, this victory property in the player class
+		//toggled by entering and exiting a zone in the exit portion of the the dungeon.
+		bool win = gamestate.Instance.getVictory();
+		if (win) 
+		{
+			moveToScene("Rewards");
+		}else{
+			print ("Not all living players have reached the end");
+		}
+	}
+
+	//------------------------------
+	//chickenCheck()
+	//------------------------------
+	//Checks to see if all the players that are alive have retreated to the beginning of the dungeon. If so they will be returned to
+	//the level selection scene.
+	//------------------------------
+	public void chickenCheck()
+	{
+		bool chicken = gamestate.Instance.areChicken();
+		if(chicken)
+		{
+			moveToScene("LevelSelect");
+		}else{
+			print ("Not all living players have retreated to the beginning");
+		}
+	}
+
+	//-------------------------------
+	//gameOverCheck()
+	//-------------------------------
+	//Checks to see if all the players in the game are dead, if so then it will move on to the game over scene.
+	//-------------------------------
+	public void gameOverCheck()
+	{
+		bool allDead = gamestate.Instance.getPartyDead();
+		if(allDead)
+		{
+			print ("All Players are dead");
+			moveToScene ("GameOverScreen");
+		} else {
+			print ("Not all players are dead");
+		}
 	}
 
 
