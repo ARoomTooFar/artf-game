@@ -139,7 +139,20 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 	//---------------------------------//
 	// Damage Interface Implementation //
 	//---------------------------------//
-
+	
+	public override void damage(int dmgTaken, GameObject striker) {
+		if (!invincible) {
+			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(facing, transform.position, striker.transform.position)), 1, 100000);
+		
+			print("UGH!" + dmgTaken);
+			stats.health -= greyTest(dmgTaken);
+			
+			if (stats.health <= 0) {
+				die();
+			}
+		}
+	}
+	
 	public override void damage(int dmgTaken) {
 		if (!invincible) {
 			print("UGH!" + dmgTaken);
@@ -215,7 +228,7 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 	private IEnumerator RegenWait(){
 		yield return new WaitForSeconds(1);
 		if(inGrey && !stats.isDead){
-			print("Healed Grey and True");
+			// print("Healed Grey and True");
 			greyDamage--;
 			if(greyDamage > 0){
 				StartCoroutine("RegenWait");
