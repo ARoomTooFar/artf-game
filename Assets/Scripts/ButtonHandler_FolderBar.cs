@@ -34,6 +34,8 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 	float openPosX = -107.5f;
 	float closePosX = 40f;
 	Vector3 currentPos;
+
+	string currentButton;
 	
 	void Start ()
 	{
@@ -68,9 +70,12 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 	public void OnPointerClick (PointerEventData data)
 	{
 		buttonIsSelected = !buttonIsSelected; //boolean for changing button color
-		//setButtonStates ();
+
 		setFolderStates (this.name);
+
 		slideFolderBar();
+
+		setButtonStates ();
 	}
 
 	void Update(){
@@ -108,14 +113,16 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 			if(hideFolderBar){
 				lerpingFolderClosed = true;
 				lerpingFolderOpen = false;
-				//if we don't want to lerp the folder closed
+
 //				folderBar.anchoredPosition = closePos;
 
 //				blankFolder.SetActive(true);
 			}else{
 				lerpingFolderClosed = false;
 				lerpingFolderOpen = true;
+
 //				folderBar.anchoredPosition = openPos;
+
 //				blankFolder.SetActive(false);
 			}
 		}
@@ -143,6 +150,7 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 			if (String.Equals (typeOfButton, typeOfFolder)) {
 				//reverse the boolean that controls if the folder object is active
 				folders [i].SetActive (!folders [i].activeSelf);
+				currentButton = "Button_" + typeOfButton;
 			} else {
 				//set the folder object active
 				folders [i].SetActive (false);
@@ -156,19 +164,20 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 	void setButtonStates ()
 	{
 		//loop through all buttons. if the button is the one we've just selected,
-		//change its color. otherwise, set it to black 
+		//change its color to grey. otherwise, set it to black 
 		for (int i = 0; i < numberOfbuttons; i++) {
-			if (String.Equals (this.name, buttons [i].name)) {
-				Image img = this.GetComponent<Image> ();
-				if (buttonIsSelected == true) {
-					img.color = Color.grey;
-				} else {
+			if (String.Equals (buttons [i].name, currentButton)) {
+				Image img = buttons [i].GetComponent<Image> ();
+				img.color = Color.grey;
+
+				//if the folder bar is going into its closed state, 
+				//no button should be highlighted
+				if(lerpingFolderClosed == true){
 					img.color = Color.black;
 				}
 			} else {
 				Image img = buttons [i].GetComponent<Image> ();
 				img.color = Color.black;
-
 			}
 		}
 	}
