@@ -73,10 +73,12 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 			//this string gets the type of folder
 			string typeOfButton = folders [i].name.Substring (folders [i].name.IndexOf ('_') + 1, 
 			                                                 (folders [i].name.Length - folders [i].name.IndexOf ('_') - 1));
-			//compare the button and folder and do the appropriate action
+			//compare the button and folder names, and do the appropriate action
 			if (String.Equals (typeOfButton, typeOfFolder)) {
+				//reverse the boolean that controls if the folder object is active
 				folders [i].SetActive (!folders [i].activeSelf);
 			} else {
+				//set the folder object active
 				folders [i].SetActive (false);
 			}
 		}
