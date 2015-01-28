@@ -4,34 +4,34 @@ using System.Collections.Generic;
 
 enum cam_views {play, top}; // rot90, rot180, rot270};
 
-[ExecuteInEditMode]
 public class LECamera : MonoBehaviour {
 
 	public Transform target;
 	public float smoothing = 5f;
 	GameObject tiles;
-	public Material mat;
-	List<Vector3> selectedTiles;
+	public Material gridMat;
+	public Material selectionMat;
+	HashSet<Vector3> selectedTiles= new HashSet<Vector3> ();
 
 	Vector3 offset;
 	
 	void Awake () {
 		tiles = GameObject.Find ("TileMap");
 		topview ();
+
 	}
 
 	void topview(){
 		transform.rotation = Quaternion.Euler (45, 0, 0);
 		//transform.LookAt (target);
 		transform.position = new Vector3(0, 10, 0);
-
 	}
 
 
 	/* draw the grid lines */
 	void drawGrid(){
 		GL.Begin (GL.LINES);
-		mat.SetPass (0);
+		gridMat.SetPass (0);
 
 		/* get size of tile map */
 		int size_x = 0; int size_z = 0;
@@ -60,8 +60,9 @@ public class LECamera : MonoBehaviour {
 
 	/* update function */
 	void OnPostRender () {
-		drawGrid ();
 		selectTiles ();
+		drawGrid ();
+
 	}
 
 	/* select tiles using a list from the mouse manager */
@@ -69,11 +70,12 @@ public class LECamera : MonoBehaviour {
 //		Debug.Log (selectedTiles.Count);
 		selectedTiles = tiles.GetComponent<MouseControl> ().selectedTiles;
 		GL.Begin (GL.QUADS);
-		for(int i = 0; i < selectedTiles.Count; i++){
-			GL.Vertex(new Vector3( selectedTiles[i].x, 0, selectedTiles[i].z ) );
-			GL.Vertex(new Vector3( selectedTiles[i].x, 0, selectedTiles[i].z + 1 ) );
-			GL.Vertex(new Vector3( selectedTiles[i].x + 1, 0, selectedTiles[i].z + 1 ) );
-			GL.Vertex(new Vector3( selectedTiles[i].x + 1, 0, selectedTiles[i].z ) );
+		selectionMat.SetPass (0);
+		foreach(Vector3 origin in selectedTiles){
+			GL.Vertex(new Vector3( origin.x, 0, origin.z ) );
+			GL.Vertex(new Vector3( origin.x, 0, origin.z + 1 ) );
+			GL.Vertex(new Vector3( origin.x + 1, 0, origin.z + 1 ) );
+			GL.Vertex(new Vector3( origin.x + 1, 0, origin.z ) );
 		}
 		GL.End ();
 
