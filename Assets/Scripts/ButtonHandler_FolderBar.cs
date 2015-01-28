@@ -22,6 +22,18 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 
 	//for toggling the color of the buttons
 	public bool buttonIsSelected = false;
+
+	//holds the entire folder bar. for use with sliding it off and on screen
+	public RectTransform folderBar;
+
+	public GameObject blankFolder;
+
+	bool lerpingFolderClosed = false;
+	bool lerpingFolderOpen = false;
+	float currentPosX = 0f;
+	float openPosX = -107.5f;
+	float closePosX = 40f;
+	Vector3 currentPos;
 	
 	void Start ()
 	{
@@ -42,6 +54,11 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 		for (int i = 0; i < numberOfbuttons; i++) {
 			buttons [i] = buttonObject.gameObject.transform.GetChild (i).gameObject;
 		}
+
+//		folderBar = GameObject.Find("FolderBar").GetComponent ("RectTransform") as RectTransform;
+		folderBar = GameObject.Find("FolderBar").GetComponent<RectTransform>();
+
+		blankFolder = GameObject.Find("BlankFolder");
 	}
 
 	//Pre: User clicked the button this script is attached to
@@ -53,6 +70,55 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 		buttonIsSelected = !buttonIsSelected; //boolean for changing button color
 		//setButtonStates ();
 		setFolderStates (this.name);
+		slideFolderBar();
+	}
+
+	void Update(){
+		if(lerpingFolderClosed == true){
+			currentPosX = Mathf.MoveTowards (folderBar.anchoredPosition.x, closePosX, Time.deltaTime * 300f);
+			currentPos = new Vector3(currentPosX, -245.5f, 0f);
+			folderBar.anchoredPosition = currentPos;
+
+			if(folderBar.anchoredPosition.x == closePosX){
+				lerpingFolderClosed = false;
+			}
+		}
+
+		if(lerpingFolderOpen == true){
+			currentPosX = Mathf.MoveTowards (folderBar.anchoredPosition.x, openPosX, Time.deltaTime * 300f);
+			currentPos = new Vector3(currentPosX, -245.5f, 0f);
+			folderBar.anchoredPosition = currentPos;
+			
+			if(folderBar.anchoredPosition.x == openPosX){
+				lerpingFolderOpen = false;
+			}
+		}
+	}
+
+	void slideFolderBar(){
+		bool hideFolderBar = true;
+		Vector3 openPos = new Vector3(openPosX, -245.5f, 0f);
+		Vector3 closePos = new Vector3(closePosX, -245.5f, 0f);
+
+		for (int i = 0; i < numberOfFolders; i++) {
+			if(folders [i].activeSelf){
+				hideFolderBar = false;
+			}
+
+			if(hideFolderBar){
+				lerpingFolderClosed = true;
+				lerpingFolderOpen = false;
+				//if we don't want to lerp the folder closed
+//				folderBar.anchoredPosition = closePos;
+
+//				blankFolder.SetActive(true);
+			}else{
+				lerpingFolderClosed = false;
+				lerpingFolderOpen = true;
+//				folderBar.anchoredPosition = openPos;
+//				blankFolder.SetActive(false);
+			}
+		}
 	}
 	
 	//This functions makes it so the correct folder is opened up, and all the
