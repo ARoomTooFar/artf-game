@@ -34,35 +34,4 @@ public class SpeedManipulation {
 	public void removeSpeedReduction(float red) {
 		spdPercents.removeReduction(red);
 	}
-
-	public void setSpeedAmpTimes(float amp, float duration) {
-		spdPercents.setAmplification(amp);
-		subMono.StartCoroutine(ampSpeed(amp, duration));
-	}
-
-	public void setSpeedRedTimes(float red, float duration) {
-		spdPercents.setReduction(red);
-		subMono.StartCoroutine(redSpeed(red, duration));
-	}
-
-	private IEnumerator redSpeed(float red, float duration) {
-		while (duration > 0) {
-			duration -= Time.deltaTime;
-			if (duration > 0) {
-				yield return null;
-			}
-		}
-		spdPercents.removeReduction(red);
-	}
-
-	private IEnumerator ampSpeed(float amp, float duration) {
-		while (duration > 0) {
-			duration -= Time.deltaTime;
-			if (duration > 0) {
-				Debug.Log ("Hi");
-				yield return null;
-			}
-		}
-		spdPercents.removeAmplification(amp);
-	}
 }

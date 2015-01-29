@@ -61,7 +61,7 @@ public class Inventory {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int, Character> {
+public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int, Character>, ISlowable<float> {
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -80,6 +80,8 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public AudioClip hurt, victory, failure;
 
 	public bool invincible = false;
+
+	protected delegate void BuffDelegate(float duration);
 
 	// Animation variables
 	public Animator animator;
@@ -266,4 +268,53 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	}
 
 	//----------------------------------//
+
+	//-------------------------------//
+	// Slow Interface Implementation //
+	//-------------------------------//
+
+	public virtual void slow(float slowStrength) {
+		stats.spdManip.setSpeedReduction(slowStrength);
+	}
+
+	public virtual void removeSlow(float slowStrength) {
+		stats.spdManip.removeSpeedReduction(slowStrength);
+	}
+
+	public virtual void slowForDuration(float slowStrength, float slowDuration) {
+		slow(slowStrength);
+		StartCoroutine(buffTiming(slowStrength, slowDuration, removeSlow));
+	}
+
+	public virtual void speed(float speedStrength) {
+		stats.spdManip.setSpeedAmplification(speedStrength);
+	}
+	
+	public virtual void removeSpeed(float speedStrength) {
+		stats.spdManip.removeSpeedAmplification(speedStrength);
+	}
+	
+	public virtual void speedForDuration(float speedStrength, float speedDuration) {
+		speed(speedStrength);
+		StartCoroutine(buffTiming(speedStrength, speedDuration, removeSpeed));
+	}
+
+	//-------------------------------//
+
+	//-----------------------------//
+	// Timing Event Implementation //
+	//-----------------------------//
+
+	// Used for buffs that are duration based
+	// Uses delegates to call function when over
+	// Will make virtual when neccessary
+	protected IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
+		while (duration > 0) {
+			duration -= Time.deltaTime;
+			yield return null;
+		}
+		bd(strValue);
+	}
+
+	//-----------------------------//
 }

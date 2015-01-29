@@ -17,7 +17,7 @@ public class Sprint : ToggleItem {
 	protected override void setInitValues() {
 		base.setInitValues();
 
-		cooldown = 15.0f;
+		cooldown = 10.0f;
 		maxDuration = 10;
 	}
 
@@ -35,9 +35,8 @@ public class Sprint : ToggleItem {
 
 	protected override IEnumerator bgnEffect() {
 		baseSpeed = player.stats.speed;
-		// player.stats.speed *= sprintSpeed;
 
-		player.stats.spdManip.setSpeedAmplification(sprintAmplification);
+		player.speed(sprintAmplification);
 
 		return base.bgnEffect();
 	}
@@ -47,7 +46,7 @@ public class Sprint : ToggleItem {
 	}
 
 	protected override void atvDeactivation() {
-		player.stats.spdManip.removeSpeedAmplification(sprintAmplification);
+		player.removeSpeed(sprintAmplification);
 
 		base.atvDeactivation();
 	}
