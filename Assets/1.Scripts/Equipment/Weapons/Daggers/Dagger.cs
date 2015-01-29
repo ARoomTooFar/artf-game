@@ -57,7 +57,7 @@ public class Dagger : Weapons {
 		}
 	}
 	void OnTriggerEnter(Collider other) {
-		IDamageable<int, GameObject> component = (IDamageable<int, GameObject>) other.GetComponent( typeof(IDamageable<int, GameObject>) );
+		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
 		Enemy enemy = other.GetComponent<Enemy>();
 		if( component != null && enemy != null) {
 			

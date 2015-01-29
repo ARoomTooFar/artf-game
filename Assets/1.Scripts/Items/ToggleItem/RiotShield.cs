@@ -39,7 +39,7 @@ public class RiotShield : ToggleItem {
 	protected override IEnumerator bgnEffect() {
 		collider.enabled = true;
 		meshRenderer.enabled = true;
-		player.stats.dmgManip.setFrontReduction(dmgReduction);
+		player.stats.dmgManip.fntDamage.setReduction(dmgReduction);
 		return base.bgnEffect();
 	}
 	
@@ -51,7 +51,7 @@ public class RiotShield : ToggleItem {
 		collider.enabled = false;
 		meshRenderer.enabled = false;
 
-		player.stats.dmgManip.removeFrontReduction(dmgReduction);
+		player.stats.dmgManip.fntDamage.removeReduction(dmgReduction);
 		base.atvDeactivation();
 	}
 
