@@ -5,8 +5,8 @@ using System.Collections;
 
 public class Sprint : ToggleItem {
 
-	[Range(2, 4)]
-	public int sprintSpeed;
+	[Range(1.5f, 3.0f)]
+	public float sprintAmplification;
 	private int baseSpeed;
 
 	// Use this for initialization
@@ -35,7 +35,10 @@ public class Sprint : ToggleItem {
 
 	protected override IEnumerator bgnEffect() {
 		baseSpeed = player.stats.speed;
-		player.stats.speed *= sprintSpeed;
+		// player.stats.speed *= sprintSpeed;
+
+		player.stats.spdManip.setSpeedAmplification(sprintAmplification);
+
 		return base.bgnEffect();
 	}
 
@@ -44,7 +47,7 @@ public class Sprint : ToggleItem {
 	}
 
 	protected override void atvDeactivation() {
-		player.stats.speed = baseSpeed;
+		player.stats.spdManip.removeSpeedAmplification(sprintAmplification);
 
 		base.atvDeactivation();
 	}

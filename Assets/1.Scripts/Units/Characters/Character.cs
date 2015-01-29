@@ -19,6 +19,12 @@ public class Stats{
 	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
 	*/
 	public DamageManipulation dmgManip;
+	public SpeedManipulation spdManip;
+
+	public Stats(MonoBehaviour subMono) {
+		dmgManip = new DamageManipulation(subMono);
+		spdManip = new SpeedManipulation(subMono);
+	}
 }
 
 [System.Serializable]
@@ -82,6 +88,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	
 	// Use this for initialization
 	protected virtual void Start () {
+		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
 		isDead = false;
@@ -93,7 +100,6 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	}
 	
 	protected virtual void setInitValues() {
-		stats.dmgManip = new DamageManipulation();
 	}
 
 	// Gets hash code for animations (Faster than using string name when running)
