@@ -12,7 +12,7 @@ using System.Collections.Generic;
  * 
  */
 public enum DIRECTION : int {
-	NotNeighbor = 0,
+	NonDirectional = 0,
 	North = 1,
 	South = -(int)North,
 	East = 2,
@@ -110,7 +110,7 @@ public class TerrainBlock {
 	 * 
 	 */
 	public bool addNeighbor(TerrainBlock that, DIRECTION dir) {
-		if(dir.Equals(DIRECTION.NotNeighbor)) {
+		if(dir.Equals(DIRECTION.NonDirectional)) {
 			throw new Exception("Invalid DIRECTION");
 		}
 		try {
@@ -200,7 +200,7 @@ public class TerrainBlock {
 		}
 
 		//default value of NotNeighbor
-		return DIRECTION.NotNeighbor;
+		return DIRECTION.NonDirectional;
 	}
 
 	/*

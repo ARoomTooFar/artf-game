@@ -57,7 +57,7 @@ public class TerrainManager {
 				//determine if the block is a neighbor of the input
 				DIRECTION dir = block.isNeighbor(blk);
 				//if not, move on to the next one
-				if(dir == DIRECTION.NotNeighbor) {
+				if(dir == DIRECTION.NonDirectional) {
 					continue;
 				}
 				//set the found block as a neighbor of the input
