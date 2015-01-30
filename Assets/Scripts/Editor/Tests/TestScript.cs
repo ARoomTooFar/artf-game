@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,7 +47,7 @@ public class TestScript : MonoBehaviour {
 		
 		//Make sure you cannot add a block in DIRECTION.NotNeighbor
 		try{
-			testBlock.addNeighbor(testBlockNorth, DIRECTION.NotNeighbor);
+			testBlock.addNeighbor(testBlockNorth, DIRECTION.NonDirectional);
 			Debug.LogError("Assigning neighbor in NotNeighbor direction not blocked");
 		}catch(Exception){
 		}
