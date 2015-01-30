@@ -47,13 +47,10 @@ public class DamageManipulation {
 
 		if (angle < 45.0f) {
 			ttlReduction *= backDamage.percentValue;
-			Debug.Log("Back");
 		} else if (angle < 135.0f) {
 			ttlReduction *= sideDamage.percentValue;
-			Debug.Log("Side");
 		} else if (angle <= 180.0f) {
 			ttlReduction *= fntDamage.percentValue;
-			Debug.Log("Front");
 		} else {
 			Debug.Log ("I shouldn't be here");
 		}

@@ -24,13 +24,22 @@ public class PercentValues {
 
 	// Setting and Removing percent reductions from the list
 	public void setReduction(float redValue) {
-		pntChanges.Add (-redValue);
+		if (redValue > 1.0f) {
+			Debug.LogWarning("Attempting to set a reduction greater than 1.0f. Setting reduction value of " + redValue + " to 1.0f.");
+			pntChanges.Add (-1.0f);
+		} else {
+			pntChanges.Add (-redValue);
+		}
 		calculatePercent();
 	}
 	
 	public void removeReduction(float redValue) {
-		pntChanges.Remove (-redValue);
-		calculatePercent ();
+		if (pntChanges.Contains (-redValue)) {
+			pntChanges.Remove (-redValue);
+			calculatePercent ();
+		} else {
+			Debug.LogWarning("Reduction " + -redValue + " does not exist.");
+		}
 	}
 
 	public void setAmplification(float ampValue) {
@@ -39,6 +48,12 @@ public class PercentValues {
 	}
 
 	public void removeAmplification(float ampValue) {
+		if (pntChanges.Contains (ampValue)) {
+			pntChanges.Remove (ampValue);
+			calculatePercent ();
+		} else {
+			Debug.LogWarning("Reduction " + ampValue + " does not exist.");
+		}
 		pntChanges.Remove (ampValue);
 		calculatePercent();
 	}
