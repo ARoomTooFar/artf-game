@@ -1,55 +1,61 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 
 public class MouseControl : MonoBehaviour {
 
-	// reference to tile map
+	/* reference to tile map */
 	TileMap tilemap;
 
-	// current tile
+	/* current tile */
 	Vector3 currTile;
 
-	// selecting objects
+	/* selecting objects */
 	GameObject selectionCube;
 	GameObject currentObj;
 
-	// reference to a list of objects to instantiate
-	GameObject menu;
+	/*The last selected tile, stored for shift click */
+	Vector3 shiftOrigin;
 
-	// select when mouse over
-	bool notselected;
+	/*HashSet that stores all selected tiles */
+	public HashSet<Vector3> selectedTiles;
+
+	/* select when clicked */
 	string selectedObject;
 
-	// Initialize variables, setting booleans
-	void Awake () {
+	/* Initialize variables, setting booleans */
+	void Start () {
 		tilemap = GetComponent<TileMap> ();
-		notselected = true;
-		selectionCube = Instantiate (Resources.Load("selectionCube")) as GameObject;
 		selectedObject = null;
+		selectedTiles = new HashSet<Vector3> ();
 	}
-	
+
+	/* Calling raycast function */
 	void Update () {
 		RayToScene ();
 	}
 
+	/* raycasting info and logic happens here */
 	void RayToScene(){
-		// get world coordinates with respect to mouse position by raycast
+		/* get world coordinates with respect to mouse position by raycast */
 		Ray ray = Camera.mainCamera.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hitInfo;
-		//Debug.DrawRay(Camera.mainCamera.transform.position, Input.mousePosition);
 		
+		/* getting raycast info and logic */
 		if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity)) {
-			// Debug.Log(hitInfo.collider.gameObject.name);
+
+			/* check if an object is selected and whether mouse is pressed */
 			if(selectedObject != null && Input.GetMouseButtonDown (0)){
 				Vector3 obj_pos = Camera.mainCamera.ScreenToWorldPoint(Input.mousePosition);
 				obj_pos.y = tilemap.transform.position.y;
-//				Debug.Log( obj_pos.x + " " + obj_pos.y + " " + obj_pos.z);
 				placeItems(selectedObject, obj_pos);
+			
 			} else{
+
+				/* check whether the ray hits an object or the tile map */
+
 				switch(hitInfo.collider.gameObject.name){
-				case "selectionCube(Clone)":
-					snap2grid(hitInfo.point.x, hitInfo.point.z);
-					break;
 				case "TileMap":
 					snap2grid(hitInfo.point.x, hitInfo.point.z);
 					break;
@@ -58,39 +64,75 @@ public class MouseControl : MonoBehaviour {
 					break;
 				}
 			}
-			//Debug.DrawRay(Camera.mainCamera.transform.position, hitInfo.point);
-			//Debug.Log (hitInfo.point);
-		} else {
-			//renderer.material.color = Color.red;
 		}
 	}
 
-	void snap2grid(float x, float z){
-		x = Mathf.RoundToInt( x / tilemap.tileSize );
-		z = Mathf.RoundToInt( z / tilemap.tileSize );
-		currTile.x = x;
-		currTile.z = z;
-		if(notselected) selectionCube.transform.position = currTile;
+	/* snap mouse selection to grid */
+	void snap2grid(float xf, float zf){
+
+//		Debug.Log (xf + " " + zf);
+
+		int x = Mathf.FloorToInt( xf / tilemap.tileSize );
+		int z = Mathf.FloorToInt( zf / tilemap.tileSize );
 		
+		/* check whether mouse is pressed AND the tile hasn't been selected */
 		if (Input.GetMouseButtonDown (0)) {
-			selectTile ();
-		}
-		
-		
-		if (Input.GetMouseButtonDown (1)) {
-			deselect();
+
+			/*Control functionality: selects tiles and adds to hashset */
+			if(Input.GetKey (KeyCode.LeftControl) || Input.GetKey (KeyCode.RightControl))
+			{
+				/*If the tile already has been selected, deselect it */
+				if( !selectedTiles.Add( (new Vector3(x, 0, z) ) ) ) {
+					deselect(new Vector3(x, 0, z));
+				}
+				/*Otherwise, select it */
+				else {
+					selectTile (new Vector3(x, 0, z));
+				}
+			}
+
+			/*Shift functionality: selects all tiles between last selected tile, and shift clicked tile */
+			else if(Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift))
+			{
+				/*If no tiles have been selected ever, just select that tile */
+				if(shiftOrigin == null) selectTile(new Vector3(x, 0, z));
+
+				/*Deselect other tiles, then select all tiles between bounds */
+				else{
+					deselectAll();
+					Vector3 vec = new Vector3(x, 0, z);
+					Vector3 max = vec.getMaxVals(shiftOrigin);
+					Vector3 min = vec.getMinVals(shiftOrigin);
+					for(int xx = (int) min.x; xx <= (int) max.x ; xx++){
+						for(int zz = (int) min.z; zz <= (int) max.z; zz++){
+							selectedTiles.Add(new Vector3(xx, 0, zz));
+						}
+					}
+				}
+			/*Normal click functionality: Deselect all selected, select target */	
+			} else {
+				deselectAll();
+				selectTile(new Vector3(x, 0, z));
+			}
 		}
 	}
 
-	void selectTile(){
-		notselected = false;
-		selectionCube.transform.position = currTile;
-		selectionCube.GetComponent<MeshRenderer> ().material.color = Color.blue;
+
+	/* Add selected tile index to a list to be access by the camera script for rendering 
+	 * and update the last selected tile in case of shift click */
+	void selectTile(Vector3 add){
+		selectedTiles.Add(add);
+		shiftOrigin = add;
 	}
 
-	void deselect(){
-		notselected = true;
-		selectionCube.GetComponent<MeshRenderer> ().material.color = Color.green;
+	/*deselects all tiles */
+	void deselectAll(){
+		selectedTiles.Clear ();
+	}
+
+	/*deselects tile passed into function */
+	void deselect(Vector3 remove){
+		selectedTiles.Remove (remove);
 	}
 
 	void placeItems(string name, Vector3 position){
