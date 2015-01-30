@@ -25,7 +25,8 @@ public static class ExtensionsVector3
 	 * 
 	 * Extension method for Vector3
 	 * 
-	 * returns a comma seperated list of a Vector3's values as a string
+	 * Returns a comma seperated list of a Vector3's values as a string
+	 * Decimals with abs value < 1 have a leading 0
 	 */
 	public static string toCSV(this Vector3 vec){
 		return string.Format ("{0},{1},{2}", vec.x, vec.y, vec.z);
@@ -37,19 +38,29 @@ public static class ExtensionsVector3
 	 * Extension method for Vector3
 	 * 
 	 * Returns a new vector rotated around 0,0,0 to face in DIRECTION dir
+	 * Assumes starting direction is North
+	 * Currently only supports Cardinal Directions
 	 */
 	public static Vector3 RotateTo(this Vector3 vec, DIRECTION dir){
+		if(!dir.isCardinal()) {
+			throw new UnityException("Invalid Direction Arguement to Vector3.RotateTo. Must be Cardinal Direction.");
+		}
+		Vector3 retVal = vec.Copy();
 		switch (dir) {
 		case DIRECTION.North:
-			return Quaternion.Euler(0, 0, 0) * vec;
+			retVal = Quaternion.Euler(0, 0, 0) * vec;
+			break;
 		case DIRECTION.East:
-			return Quaternion.Euler(0, 90, 0) * vec;
+			retVal = Quaternion.Euler(0, 90, 0) * vec;
+			break;
 		case DIRECTION.South:
-			return Quaternion.Euler(0, 180, 0) * vec;
+			retVal = Quaternion.Euler(0, 180, 0) * vec;
+			break;
 		case DIRECTION.West:
-			return Quaternion.Euler(0, 270, 0) * vec;
+			retVal = Quaternion.Euler(0, 270, 0) * vec;
+			break;
 		}
-		return vec;
+		return retVal.Round();
 	}
 
 	/*
