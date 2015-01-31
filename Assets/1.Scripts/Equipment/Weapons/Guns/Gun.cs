@@ -52,7 +52,7 @@ public class Gun : Weapons {
 		base.initAttack();
 	}
 
-	public override void attack() {
+	protected override void attack() {
 		if (!Input.GetKey(user.controls.attack) && stats.curChgAtkTime != -1) {
 			stats.curChgAtkTime = -1;
 			StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));

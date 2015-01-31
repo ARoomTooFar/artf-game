@@ -66,7 +66,7 @@ public class Chainsaw : Weapons {
 	}
 	
 	// Sword attack functions
-	public override void attack() {
+	protected override void attack() {
 		if (!Input.GetKey(user.GetComponent<Character>().controls.attack) && stats.curChgAtkTime != -1) {
 			stats.curChgAtkTime = -1;
 		} else if (stats.curChgAtkTime == 0 && user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colStart) {

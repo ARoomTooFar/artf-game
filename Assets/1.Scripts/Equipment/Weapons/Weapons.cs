@@ -65,15 +65,80 @@ public class Weapons : Equipment {
 		base.Update();
 	}
 
+	//----------------------------//
+	// Weapon Attacking Functions //
+	//----------------------------//
+	
 	public virtual void initAttack() {
-		stats.curChgAtkTime = stats.curChgDuration = 0.0f;
-		stats.chgDamage = 0;
 		user.GetComponent<Character>().animator.SetTrigger("Attack"); // Swap over to weapon specific animation if we get some
+		user.animator.speed = stats.atkSpeed;
+		StartCoroutine(bgnAttack());
+	}
+	
+	protected IEnumerator bgnAttack() {
+		while (user.animSteInfo.nameHash !=  user.atkHashCharge) {
+			yield return null;
+		}
+		
+		
+		stats.curChgDuration = 0.0f;
+		stats.chgDamage = 0;
+		particles.startSpeed = 0;
+		StartCoroutine(bgnCharge());
 	}
 
-	// Weapon attack functions
-	public virtual void attack() {
+	// If things need to be done while charging make this virtual 
+	protected IEnumerator bgnCharge() {
+		if (user.gear.charging) particles.Play();
+		while (user.gear.charging) {
+			stats.curChgDuration = Mathf.Clamp(stats.curChgDuration + Time.deltaTime, 0.0f, stats.maxChgTime);
+			stats.chgDamage = (int) (stats.curChgDuration/stats.chgLevels);
+			particles.startSpeed = stats.chgDamage;
+			yield return null;
+		}
+		
+		if (stats.curChgAtkTime >= 0.5f) {
+			chargedAttack();
+		} else {
+			attack ();
+		}
 	}
+
+	protected virtual void attack() {
+		print("Charged Attack; Power level:" + stats.chgDamage);
+		user.GetComponent<Character>().animator.SetTrigger("ChargeDone");
+		this.GetComponent<Collider>().enabled = true;
+		StartCoroutine(atkFinish());
+	}
+	
+	protected virtual void chargedAttack() {
+		print("Charged Attack; Power level:" + stats.chgDamage);
+		user.GetComponent<Character>().animator.SetTrigger("ChargeDone");
+		this.GetComponent<Collider>().enabled = true;
+		StartCoroutine(atkFinish());
+	}
+	
+	protected IEnumerator atkFinish() {
+		while (user.animator.GetCurrentAnimatorStateInfo(0).nameHash != Animator.StringToHash ("Attack.attackEnd")) {
+			yield return null;
+		}
+		
+		particles.Stop();
+		this.GetComponent<Collider>().enabled = false;
+		
+		user.animator.speed = 1.0f;
+	}
+	
+	//-------------------------//
+	
+	void OnTriggerEnter(Collider other) {
+		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
+		Character enemy = other.GetComponent<Character>();
+		if( component != null && enemy != null) {
+			enemy.damage(stats.damage + stats.chgDamage, user);
+		}
+	}
+	
 	public virtual IEnumerator makeSound(AudioClip sound, bool play, float duration){
 		AudioSource.PlayClipAtPoint (sound, transform.position);
 		play = false;

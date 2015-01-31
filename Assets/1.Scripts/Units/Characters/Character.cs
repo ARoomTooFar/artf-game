@@ -30,9 +30,11 @@ public class Stats{
 [System.Serializable]
 public class Gear {
 	public Weapons weapon;
+	public bool charging;
 	public Equipment helmet, bodyArmor;
 
 	public void equipItems(Character player) {
+		charging = false;
 		if (weapon) weapon.equip(player);
 	}
 }
@@ -76,7 +78,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public Stats stats;
 	public Gear gear;
 	public Inventory inventory;
-	public bool freeAnim;
+	public bool freeAnim, attacking;
 	public AudioClip hurt, victory, failure;
 
 	public bool invincible = false;
@@ -86,7 +88,9 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	// Animation variables
 	public Animator animator;
 	public AnimatorStateInfo animSteInfo;
-	protected int idleHash, runHash, atkHash;
+	
+	// Swap these over to weapons in the future
+	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashEnd, animSteHash;
 	
 	// Use this for initialization
 	protected virtual void Start () {
@@ -108,7 +112,12 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	protected virtual void setAnimHash() {
 		idleHash = Animator.StringToHash ("Base Layer.idle");
 		runHash = Animator.StringToHash ("Base Layer.run");
-		atkHash = Animator.StringToHash ("Base Layer.attack");
+		
+		// atkHash = Animator.StringToHash ("Base Layer.attack");
+		atkHashStart = Animator.StringToHash ("Attack.attackStart");
+		atkHashCharge = Animator.StringToHash ("Attack.attackCharge");
+		atkHashSwing = Animator.StringToHash ("Attack.attackSwing");
+		atkHashEnd = Animator.StringToHash ("Attack.attackEnd");
 	}
 	
 	protected virtual void FixedUpdate() {
@@ -121,7 +130,9 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-			actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+			animSteHash = animSteInfo.nameHash;
+			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
+			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 
 			if (isGrounded) {
 				actionCommands ();
@@ -141,6 +152,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		// Invokes an action/animation
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
+				gear.charging = true;
 				gear.weapon.initAttack();
 			} else if(Input.GetKeyDown (controls.secItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
@@ -155,9 +167,10 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 			}
 		// Continues with what is happening
 		} else {
-			if (animSteInfo.nameHash == atkHash) {
-				attacks();
-			} 
+			
+			if (!Input.GetKey(controls.attack)) {
+				gear.charging = false;
+			}
 			/*else if (animSteInfo.nameHash == rollHash) { for later
 			}
 			*/
@@ -174,7 +187,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 
 	// Constant animation updates (Main loop for characters movement/actions)
 	public virtual void animationUpdate() {
-		if (animSteInfo.nameHash == atkHash) {
+		if (attacking) {
 			attackAnimation();
 		} else {
 			movementAnimation();
@@ -186,7 +199,8 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	// Animation helper functions
 	protected virtual void attackAnimation() {
 		// Should this also be in the weapons?
-
+	
+		/*
 		if (gear.weapon.stats.curChgAtkTime > 0) {
 			// Change once we get animations
 			if(animSteInfo.normalizedTime < gear.weapon.stats.colStart) animator.speed = gear.weapon.stats.atkSpeed;
@@ -194,11 +208,11 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 			if (rigidbody.velocity != Vector3.zero) transform.localRotation = Quaternion.LookRotation(facing);
 		} else if (gear.weapon.stats.curChgAtkTime == -1) {
 			animator.speed = gear.weapon.stats.atkSpeed;
-		}
+		}*/
 	}
 
 	protected virtual void movementAnimation() {
-		animator.speed = 1; // Change animation speed back for other animations
+		// animator.speed = 1; // Change animation speed back for other animations
 		if (rigidbody.velocity != Vector3.zero) {
 			animator.SetBool("Moving", true);
 			transform.localRotation = Quaternion.LookRotation(facing);
@@ -228,7 +242,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 
 	// If using a basic attack, this will do checks (such as charging an attack)
 	public virtual void attacks() {
-		gear.weapon.attack ();
+		// gear.weapon.attack ();
 	}
 	
 	//---------------------------------//

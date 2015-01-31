@@ -27,7 +27,7 @@ public class TestChainsaw : Chainsaw {
 	}
 	
 	// Test sword attack functions
-	public override void attack() {
+	protected override void attack() {
 		base.attack ();
 	}
 }
