@@ -14,7 +14,7 @@ public class Sword : Weapons {
 
 		// Default sword stats
 		stats.atkSpeed = 1.0f;
-		stats.damage = 4 + player.stats.strength;
+		stats.damage = 4 + user.GetComponent<Character>().stats.strength;
 		
 		stats.maxChgTime = 2.0f;
 		stats.weapType = 0;
@@ -33,30 +33,30 @@ public class Sword : Weapons {
 
 	// Sword attack functions
 	public override void attack() {
-		if (!Input.GetKey(player.controls.attack) && stats.curChgAtkTime != -1) {
+		if (!Input.GetKey(user.GetComponent<Character>().controls.attack) && stats.curChgAtkTime != -1) {
 			stats.curChgAtkTime = -1;
 			this.GetComponent<Collider>().enabled = true;
 			print("Charge Attack power level:" + stats.chgDamage);
-		} else if (stats.curChgAtkTime == 0 && player.animSteInfo.normalizedTime > stats.colStart) {
+		} else if (stats.curChgAtkTime == 0 && user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colStart) {
 			stats.curChgAtkTime = Time.time;
 			particles.startSpeed = 0;
 			particles.Play();
-		} else if (stats.curChgAtkTime != -1 && player.animSteInfo.normalizedTime > stats.colStart) {
+		} else if (stats.curChgAtkTime != -1 && user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colStart) {
 			stats.curChgDuration = Mathf.Clamp(Time.time - stats.curChgAtkTime, 0.0f, stats.maxChgTime);
 			stats.chgDamage = (int) (stats.curChgDuration/stats.chgLevels);
 			particles.startSpeed = stats.chgDamage;
 		}
 		
-		if (player.animSteInfo.normalizedTime > stats.colEnd) {
+		if (user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colEnd) {
 			particles.Stop();
 			this.GetComponent<Collider>().enabled = false;
 		}
 	}
 	void OnTriggerEnter(Collider other) {
-		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
-		Enemy enemy = other.GetComponent<Enemy>();
+		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
+		Character enemy = other.GetComponent<Character>();
 		if( component != null && enemy != null) {
-			enemy.damage(stats.damage + stats.chgDamage);
+			enemy.damage(stats.damage + stats.chgDamage, user);
 		}
 	}
 }

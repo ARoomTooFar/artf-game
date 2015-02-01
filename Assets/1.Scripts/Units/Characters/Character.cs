@@ -5,21 +5,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class Controls {
-	//First 7 are Keys, last 2 are joystick axis
-	public string up, down, left, right, attack, secItem, cycItem, hori, vert;
-	//0 for Joystick off, 1 for Joystick on and no keys
-	public int joyUsed;
-}
-
-[System.Serializable]
 public class Stats{
 	//Base Stats
 	public int health, armor,maxHealth;
 	public int strength, coordination, speed, luck;
 	public bool isDead;
-	[Range(0.5f, 2.0f)]
-	public float atkSpeed;
 	/*
 	*Health: Health is the amount of damage a player can take before dying.
 	*Armor: Effects the amount of health that is lost when a player is hit with an attack, the higher the armor the less health is lost.
@@ -28,33 +18,50 @@ public class Stats{
 	*Speed: Affects the player's movement speed and recovery times after attacks. (this should have a cap)
 	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
 	*/
-	//Name of item
-	public Weapons weapon;
-	public Equipment helmet, bodyArmor;
+	public DamageManipulation dmgManip;
+	public SpeedManipulation spdManip;
 
-	public void equipItems(Character curPlayer) {
-		if (weapon) weapon.equip(curPlayer);// weapon.player = curPlayer;
+	public Stats(MonoBehaviour subMono) {
+		dmgManip = new DamageManipulation(subMono);
+		spdManip = new SpeedManipulation(subMono);
 	}
 }
 
 [System.Serializable]
-public class CharItems {
+public class Gear {
+	public Weapons weapon;
+	public Equipment helmet, bodyArmor;
+
+	public void equipItems(Character player) {
+		if (weapon) weapon.equip(player);
+	}
+}
+
+// might move to player depending on enemy stuff or have each class also have an inventory class inheriting this inventory
+[System.Serializable]
+public class Inventory {
 	public int selected;
+	public bool keepItemActive;
 	public List<Item> items = new List<Item>();
 
 	public void equipItems(Character curPlayer) {
 		for (int i = 0; i < items.Count; i++)
 			items[i].player = curPlayer;
 		selected = 0;
+		keepItemActive = false;
 	}
 
 	public void cycItems() {
+		ToggleItem isToggle = items[selected].GetComponent<ToggleItem>();
+		if (isToggle) {
+			isToggle.deactivateItem();
+		}
 		selected = (selected + 1)%items.Count;
 	}
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAttackable, IDamageable<int> {
+public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int, Character>, ISlowable<float> {
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -62,17 +69,19 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	public bool actable = true; // Boolean to show if a unit can act or is stuck in an animation
 	
 	public Vector3 facing; // Direction unit is facing
-	public Vector3 curFacing; // A better facing var, will change and combine in future
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
 	
 	public Controls controls;
 	public Stats stats;
-	public CharItems charItems;
-	//speed = (5.0f + 2.5f * (stats.speed*.2f));
+	public Gear gear;
+	public Inventory inventory;
 	public bool freeAnim;
+	public AudioClip hurt, victory, failure;
 
 	public bool invincible = false;
+
+	protected delegate void BuffDelegate(float duration);
 
 	// Animation variables
 	public Animator animator;
@@ -81,15 +90,17 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	
 	// Use this for initialization
 	protected virtual void Start () {
+		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
-		facing = curFacing = Vector3.forward;
+		facing = Vector3.forward;
 		isDead = false;
 		freeAnim = true;
 		setInitValues();
-		stats.equipItems(this);
-		charItems.equipItems(this);
+		gear.equipItems(this);
+		inventory.equipItems(this);
 		setAnimHash();
 	}
+	
 	protected virtual void setInitValues() {
 	}
 
@@ -104,22 +115,9 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	}
 	
-	public virtual void stun(float duration) {
-		print ("Stunned for " + duration + " seconds");
-	}
-	
 	// Update is called once per frame
 	protected virtual void Update () {
-		if(stats.health <= 0){
-			isDead = true;
-		}else{
-			isDead = false;
-		}
 	    if(!isDead) {
-
-			// Causes sprint to fail (What is this for?)
-			// speed = (5.0f + 2.5f * (stats.speed*.2f));
-
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -127,7 +125,6 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 			if (isGrounded) {
 				actionCommands ();
-				moveCommands ();
 			} else {
 				falling();
 			}
@@ -144,18 +141,17 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 		// Invokes an action/animation
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
-				stats.weapon.initAttack();
-				// chgAtkTime = chgDuration = 0;
-				// animator.SetTrigger("Attack");
+				gear.weapon.initAttack();
 			} else if(Input.GetKeyDown (controls.secItem)) {
-				if (charItems.items.Count > 0 && charItems.items[charItems.selected].curCoolDown <= 0) {
-					charItems.items[charItems.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
+				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
+					inventory.keepItemActive = true;
+					inventory.items[inventory.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
 				} else {
 					// Play sound for trying to use item on cooldown or items
 					print("Item on Cooldown");
 				}
 			} else if(Input.GetKeyDown (controls.cycItem)) {
-				charItems.cycItems();
+				inventory.cycItems();
 			}
 		// Continues with what is happening
 		} else {
@@ -169,42 +165,41 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 
 		if (Input.GetKeyUp (controls.secItem))  {
-			if (charItems.items.Count > 0) {
-				charItems.items[charItems.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
+			if (inventory.items.Count > 0) {
+				inventory.keepItemActive = false;
+				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
 			}
 		}
 	}
 
 	// Constant animation updates (Main loop for characters movement/actions)
 	public virtual void animationUpdate() {
-		Vector3 temp = facing;
-		temp.y = 0.0f;
 		if (animSteInfo.nameHash == atkHash) {
-			attackAnimation(temp);
+			attackAnimation();
 		} else {
-			movementAnimation(temp);
+			movementAnimation();
 		}
 	}
 
 	//-------------------------------------------//
 
 	// Animation helper functions
-	protected virtual void attackAnimation(Vector3 tFacing) {
+	protected virtual void attackAnimation() {
 		// Should this also be in the weapons?
 
-		if (stats.weapon.stats.curChgAtkTime > 0) {
+		if (gear.weapon.stats.curChgAtkTime > 0) {
 			// Change once we get animations
-			if(animSteInfo.normalizedTime < stats.weapon.stats.colStart) animator.speed = stats.atkSpeed;
+			if(animSteInfo.normalizedTime < gear.weapon.stats.colStart) animator.speed = gear.weapon.stats.atkSpeed;
 			else animator.speed = 0;
-			if (tFacing != Vector3.zero) transform.localRotation = Quaternion.LookRotation(facing);
-		} else if (stats.weapon.stats.curChgAtkTime == -1) {
-			animator.speed = stats.weapon.stats.atkSpeed;
+			if (rigidbody.velocity != Vector3.zero) transform.localRotation = Quaternion.LookRotation(facing);
+		} else if (gear.weapon.stats.curChgAtkTime == -1) {
+			animator.speed = gear.weapon.stats.atkSpeed;
 		}
 	}
 
-	protected virtual void movementAnimation(Vector3 tFacing) {
+	protected virtual void movementAnimation() {
 		animator.speed = 1; // Change animation speed back for other animations
-		if (tFacing != Vector3.zero) {
+		if (rigidbody.velocity != Vector3.zero) {
 			animator.SetBool("Moving", true);
 			transform.localRotation = Quaternion.LookRotation(facing);
 		} else {
@@ -213,54 +208,9 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	}
 
 
-	//-----------------------------------//
-	// Movement interface implementation //
-	//-----------------------------------//
-	
-	// Might separate commands into a protected function and just have a movement function
-	public virtual void moveCommands() {
-		Vector3 newMoveDir = Vector3.zero;
-
-		if (actable || stats.weapon.stats.curChgAtkTime > 0) { // Better Check here
-			//"Up" key assign pressed
-			if (Input.GetKey(controls.up)) {
-				newMoveDir += Vector3.forward;
-			}
-			//"Down" key assign pressed
-			if (Input.GetKey(controls.down)) {
-				newMoveDir += Vector3.back;
-			}
-			//"Left" key assign pressed
-			if (Input.GetKey(controls.left)) {
-				newMoveDir += Vector3.left;
-			}
-			//"Right" key assign pressed
-			if (Input.GetKey(controls.right)) {
-				newMoveDir += Vector3.right;
-			}
-			//Joystick form
-			if(controls.joyUsed == 1){
-				newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
-			}
-
-			facing = newMoveDir;
-			if (facing != Vector3.zero)
-				curFacing = facing;
-			
-			rigidbody.velocity = facing.normalized * (5.0f + 2.5f * (stats.speed*.2f));
-		} else if (freeAnim){
-			// Right now this stops momentum when performing an action
-			// If we trash the rigidbody later, we won't need this
-			rigidbody.velocity = Vector3.zero;
-		}
-	}
-
-	//-------------------------------------//
-
-
 	//----------------------------------//
 	// Falling Interface Implementation //
-	//----------------------------------//w
+	//----------------------------------//
 
 	public virtual void falling() {
 		// fake gravity
@@ -278,7 +228,7 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 
 	// If using a basic attack, this will do checks (such as charging an attack)
 	public virtual void attacks() {
-		stats.weapon.attack ();
+		gear.weapon.attack ();
 	}
 	
 	//---------------------------------//
@@ -289,11 +239,82 @@ public class Character : MonoBehaviour, IActionable, IMoveable, IFallable, IAtta
 	// Damage Interface Implementation //
 	//---------------------------------//
 	
+	public virtual void damage(int dmgTaken, Character striker) {
+		if (!invincible) {
+			Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(facing, transform.position, striker.transform.position)), 1, 100000);
+		
+			stats.health -= dmgTaken;
+			
+			if (stats.health <= 0) {
+				die();
+			}
+		}
+	}
+	
 	public virtual void damage(int dmgTaken) {
 		if (!invincible) {
 			stats.health -= dmgTaken;
+
+			if (stats.health <= 0) {
+				die();
+			}
 		}
 	}
 
+	// Add logic to this in the future
+	//     ie: Removing actions, player from camera etc
+	public virtual void die() {
+		stats.isDead = true;
+	}
+
 	//----------------------------------//
+
+	//-------------------------------//
+	// Slow Interface Implementation //
+	//-------------------------------//
+
+	public virtual void slow(float slowStrength) {
+		stats.spdManip.setSpeedReduction(slowStrength);
+	}
+
+	public virtual void removeSlow(float slowStrength) {
+		stats.spdManip.removeSpeedReduction(slowStrength);
+	}
+
+	public virtual void slowForDuration(float slowStrength, float slowDuration) {
+		slow(slowStrength);
+		StartCoroutine(buffTiming(slowStrength, slowDuration, removeSlow));
+	}
+
+	public virtual void speed(float speedStrength) {
+		stats.spdManip.setSpeedAmplification(speedStrength);
+	}
+	
+	public virtual void removeSpeed(float speedStrength) {
+		stats.spdManip.removeSpeedAmplification(speedStrength);
+	}
+	
+	public virtual void speedForDuration(float speedStrength, float speedDuration) {
+		speed(speedStrength);
+		StartCoroutine(buffTiming(speedStrength, speedDuration, removeSpeed));
+	}
+
+	//-------------------------------//
+
+	//-----------------------------//
+	// Timing Event Implementation //
+	//-----------------------------//
+
+	// Used for buffs that are duration based
+	// Uses delegates to call function when over
+	// Will make virtual when neccessary
+	protected IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
+		while (duration > 0) {
+			duration -= Time.deltaTime;
+			yield return null;
+		}
+		bd(strValue);
+	}
+
+	//-----------------------------//
 }

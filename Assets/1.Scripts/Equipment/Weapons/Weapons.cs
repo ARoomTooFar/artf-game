@@ -27,7 +27,10 @@ public class WeaponStats {
 public class Weapons : Equipment {
 
 	public WeaponStats stats;
-
+	public AudioClip charge;
+	public AudioClip action;
+	public bool playSound;
+	public float soundDur;
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -49,6 +52,8 @@ public class Weapons : Equipment {
 		stats.curChgDuration = 0.0f;
 		stats.chgLevels = 0.4f;
 		stats.chgDamage = 0;
+		soundDur = 0.1f;
+		playSound = true;
 	}
 
 	protected override void FixedUpdate() {
@@ -63,10 +68,17 @@ public class Weapons : Equipment {
 	public virtual void initAttack() {
 		stats.curChgAtkTime = stats.curChgDuration = 0.0f;
 		stats.chgDamage = 0;
-		player.animator.SetTrigger("Attack"); // Swap over to weapon specific animation if we get some
+		user.GetComponent<Character>().animator.SetTrigger("Attack"); // Swap over to weapon specific animation if we get some
 	}
 
 	// Weapon attack functions
 	public virtual void attack() {
 	}
+	public virtual IEnumerator makeSound(AudioClip sound, bool play, float duration){
+		AudioSource.PlayClipAtPoint (sound, transform.position);
+		play = false;
+		yield return new WaitForSeconds (duration);
+		play = true;
+	}
+	
 }

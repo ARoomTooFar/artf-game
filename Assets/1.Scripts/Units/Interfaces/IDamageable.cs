@@ -4,6 +4,8 @@
 using UnityEngine;
 using System.Collections;
 
-public interface IDamageable<D> {
-	void damage(D dmgTaken); // Damage function, when damage is taken
+public interface IDamageable<D, P> {
+	void damage(D dmgTaken, P atkPosition); // When damage taken depends on direction the unit is facing
+	void damage(D dmgTaken); // When damage taken is independent of unit facing (ie, flame trap)
+	void die(); // Called when killed
 }

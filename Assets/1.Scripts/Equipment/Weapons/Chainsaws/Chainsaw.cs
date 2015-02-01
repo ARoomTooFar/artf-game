@@ -1,12 +1,16 @@
-﻿// Chainsaw class, put into the head for now, could possibly expand this into a special type weapon os similarity to flamethrower
+// Chainsaw class, put into the head for now, could possibly expand this into a special type weapon os similarity to flamethrower
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Chainsaw : Weapons {
 
 	public float lastDmgTime, curDuration, maxDuration;
 	private bool dealDamage;
+	private float slowPercent;
+
+	private List<Character> chained;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -20,7 +24,7 @@ public class Chainsaw : Weapons {
 		
 		// Default sword stats
 		stats.atkSpeed = 3.0f;
-		stats.damage = (int)(1 + 0.1f * player.stats.strength);
+		stats.damage = (int)(1 + 0.1f * user.GetComponent<Character>().stats.strength);
 		
 		stats.maxChgTime = 3.0f;
 		stats.weapType = 0;
@@ -33,8 +37,11 @@ public class Chainsaw : Weapons {
 		lastDmgTime = 0.0f;
 		maxDuration = 5.0f;
 		curDuration = 0.0f;
+		slowPercent = 0.9f;
+		chained = new List<Character> ();
 	}
 
+	// Move to a Coroutine during our great weapon pur-refactor
 	protected override void FixedUpdate() {
 		base.FixedUpdate ();
 		// Placed here for consistent Damage
@@ -60,16 +67,16 @@ public class Chainsaw : Weapons {
 	
 	// Sword attack functions
 	public override void attack() {
-		if (!Input.GetKey(player.controls.attack) && stats.curChgAtkTime != -1) {
+		if (!Input.GetKey(user.GetComponent<Character>().controls.attack) && stats.curChgAtkTime != -1) {
 			stats.curChgAtkTime = -1;
-		} else if (stats.curChgAtkTime == 0 && player.animSteInfo.normalizedTime > stats.colStart) {
+		} else if (stats.curChgAtkTime == 0 && user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colStart) {
 			curDuration = maxDuration;
 			stats.curChgAtkTime = Time.time;
 			lastDmgTime = Time.time;
 			particles.startSpeed = 0;
 			this.GetComponent<Collider>().enabled = true;
 			particles.Play();
-		} else if (stats.curChgAtkTime != -1 && player.animSteInfo.normalizedTime > stats.colStart) {
+		} else if (stats.curChgAtkTime != -1 && user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colStart) {
 			stats.curChgDuration = Mathf.Clamp(Time.time - stats.curChgAtkTime, 0.0f, stats.maxChgTime);
 			stats.chgDamage = (int) (stats.curChgDuration/stats.chgLevels);
 			particles.startSpeed = stats.chgDamage;
@@ -80,26 +87,51 @@ public class Chainsaw : Weapons {
 			}
 		}
 		
-		if (player.animSteInfo.normalizedTime > stats.colEnd) {
+		if (user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colEnd) {
 			particles.Stop();
 			this.GetComponent<Collider>().enabled = false;
+
+			if (chained.Count > 0) {
+				foreach(Character meat in chained) {
+					meat.removeSlow(slowPercent);
+				}
+				chained.Clear();
+				user.removeSlow(slowPercent);
+			}
+
 		}
 	}
 
-	/*
 	void OnTriggerEnter(Collider other) {
-		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
-		Enemy enemy = other.GetComponent<Enemy>();
-		if( component != null && enemy != null) {
-			enemy.damage(stats.damage + stats.chgDamage);
-		}
-	}*/
+		Character enemy = other.GetComponent<Character>();
+		if (enemy != null && !chained.Contains(enemy)) {
+			if (chained.Count == 0) {
+				user.slow (slowPercent);
+			}
+			chained.Add(enemy);
+			enemy.slow (slowPercent);
+		} 
+	}
+
+	void OnTriggerExit(Collider other) {
+		Character enemy = other.GetComponent<Character>();
+		if (enemy != null) {
+			if (chained.Contains(enemy)) {
+				chained.Remove(enemy);
+				enemy.removeSlow (slowPercent);
+			}
+
+			if (chained.Count == 0) {
+				user.removeSlow (slowPercent);
+			}
+		} 
+	}
 
 	void OnTriggerStay(Collider other) {
-		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
-		Enemy enemy = other.GetComponent<Enemy>();
+		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
+		Character enemy = other.GetComponent<Character>();
 		if(dealDamage && component != null && enemy != null) {
-			enemy.damage(stats.damage);
+			enemy.damage(stats.damage, user);
 		}
 	}
 }
