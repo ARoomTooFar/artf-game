@@ -3,7 +3,7 @@ using System.Collections;
 
 
 //Interface for action classes
-interface ISMAction
+public interface ISMAction
 {
 	void action ();
 }
@@ -25,7 +25,7 @@ public class State
 }
 
 //Interface for condition classes
-interface ISMCondition
+public interface ISMCondition
 {
 	bool test ();
 }
@@ -45,14 +45,21 @@ public class Transition {
 		return targetState;
 	}
 
+	//Used to set the condition from outside this class
+	public void addCondition(ISMCondition cond)
+	{
+		condition = cond;
+	}
+
 }
 
 
 //The state machine keeps track of the states
 public class StateMachine : MonoBehaviour {
+	
+	public State initState;
 
 	private State[] states;
-	private State initState;
 	private State currState;
 	private Transition triggeredTransition;
 
