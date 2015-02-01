@@ -10,11 +10,7 @@ public class TestSpear : Spear {
 	
 	// Used for setting sword stats for each equipment piece
 	protected override void setInitValues() {
-		//base.setInitValues();
-		
-		//stats.damage = 4;
 		base.setInitValues();
-		stats.weapType = 0;
 	}
 	
 	// Update is called once per frame

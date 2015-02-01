@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Chainsaw : Weapons {
+public class OldChainsaw : Weapons {
 
 	public float lastDmgTime, curDuration, maxDuration;
 	private bool dealDamage;
@@ -21,15 +21,13 @@ public class Chainsaw : Weapons {
 	// Used for setting sword stats for each equipment piece
 	protected override void setInitValues() {
 		base.setInitValues();
-
-		// User dagger vars for now until we have chainsaw animations
-		stats.weapType = 1;
-		stats.weapTypeName = "dagger";
-
+		
+		// Default sword stats
 		stats.atkSpeed = 3.0f;
 		stats.damage = (int)(1 + 0.1f * user.GetComponent<Character>().stats.strength);
 		
 		stats.maxChgTime = 3.0f;
+		stats.weapType = 0;
 
 		stats.colStart = 0.5f;
 		stats.colEnd = 0.55f;
@@ -46,8 +44,6 @@ public class Chainsaw : Weapons {
 	// Move to a Coroutine during our great weapon pur-refactor
 	protected override void FixedUpdate() {
 		base.FixedUpdate ();
-
-		/*
 		// Placed here for consistent Damage
 		// Tells us when to deal damage
 		if (stats.curChgAtkTime > 0.0f && Time.time - lastDmgTime >= 0.6f/stats.curChgDuration) {
@@ -55,7 +51,7 @@ public class Chainsaw : Weapons {
 			lastDmgTime = Time.time;
 		} else {
 			dealDamage = false;
-		} */
+		}
 	}
 	
 	// Update is called once per frame
@@ -68,8 +64,7 @@ public class Chainsaw : Weapons {
 	public override void initAttack() {
 		base.initAttack();
 	}
-
-	/*
+	
 	// Sword attack functions
 	protected override void attack() {
 		if (!Input.GetKey(user.GetComponent<Character>().controls.attack) && stats.curChgAtkTime != -1) {
@@ -139,5 +134,4 @@ public class Chainsaw : Weapons {
 			enemy.damage(stats.damage, user);
 		}
 	}
-	*/
 }

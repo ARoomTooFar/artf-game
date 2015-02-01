@@ -10,11 +10,7 @@ public class TestChainsaw : Chainsaw {
 	
 	// Used for setting sword stats for each equipment piece
 	protected override void setInitValues() {
-		//base.setInitValues();
-		
-		//stats.damage = 4;
 		base.setInitValues();
-		stats.weapType = 0;
 	}
 	
 	// Update is called once per frame
@@ -25,8 +21,7 @@ public class TestChainsaw : Chainsaw {
 	public override void initAttack() {
 		base.initAttack();
 	}
-	
-	// Test sword attack functions
+
 	protected override void attack() {
 		base.attack ();
 	}
