@@ -15,8 +15,8 @@ public class gamestate : MonoBehaviour {
 	private static gamestate instance;	
 	private string activeLevel;			//This is the level the players are currently on.
 	private string chosenLevel; 		//This is the level the players have chosen to play while in level selection.
-	private List<Player> players = new List<Player>();	//List of the Players in the game so stats can be checked in their player.cs class.
-	private int numPlayersTest;			//This is the total number of player left in the game for testing.
+	public List<Player> players = new List<Player>();	//List of the Players in the game so stats can be checked in their player.cs class.
+	private int numPlayers;			//This is the total number of player in the game
 	//private int numPlayersAlive;		//The number of players alive. When this is 0 the players go to the game over scene.
 	//private bool victory;				//This is true when players reach the end of a dungeon the players will go to the rewards scene.
 	//private bool chickens;			//If the players return to the enterance of a dungeon they will be sent back to the level selection scene.
@@ -31,6 +31,10 @@ public class gamestate : MonoBehaviour {
 	public Player player3;
 	public Player player4;
 
+	private bool testBeginning = false;
+	private bool testEnd = false;
+
+	private string testUserName;
 	//----------------------------------
 	//gameState()
 	//----------------------------------
@@ -89,7 +93,8 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	public void addPlayer(Player newPlayer)
 	{
-		players.Add(newPlayer);
+
+		gamestate.instance.players.Add(newPlayer);
 	}
 
 	//--------------------------------
@@ -97,15 +102,43 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	//Adds test players to the player list to test functionality.
 	//--------------------------------
-	public void addTestPlayer ()
+	public void addPlayerToList ()
 	{
 
-		addPlayer(player1);
-		addPlayer(player2);
-		addPlayer(player3);
-		addPlayer(player4);
+		player1 = GameObject.Find ("Player1").GetComponent <Player>();
 
-		print ("There are " + players.Count + " Players in the Players List");
+		switch (gamestate.instance.numPlayers)
+		{
+		case 0:
+			player1 = GameObject.Find ("Player1").GetComponent <Player>();	
+			addPlayer(player1);
+			gamestate.instance.numPlayers++;
+			break;
+			
+		case 1:
+			player2 = GameObject.Find ("Player2").GetComponent <Player>();
+			addPlayer(player2);
+			gamestate.instance.numPlayers++;
+			break;
+			
+		case 2:
+			player3 = GameObject.Find ("Player3").GetComponent <Player>();
+			addPlayer(player3);
+			gamestate.instance.numPlayers++;
+			break;
+			
+		case 3:
+			player4 = GameObject.Find ("Player4").GetComponent <Player>();
+			addPlayer(player4);
+			gamestate.instance.numPlayers++;
+			break;
+		
+		default:
+			print ("Too Many Players.");
+			break;
+		}
+
+		print ("There are " + gamestate.instance.players.Count + " Players in the Players List");
 	}
 
 	//--------------------------------
@@ -186,7 +219,8 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	public void setPartyReady()
 	{
-		partyReady = true;
+		print ("The party is set to ready.");
+		gamestate.instance.partyReady = true;
 	}
 
 	//--------------------------------
@@ -196,37 +230,11 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	public void resetPartyReady()
 	{
-		partyReady = false;
+		print ("The party is set to not ready.");
+		gamestate.instance.partyReady = false;
 	}
 
-	//--------------------------------
-	//setNumberPlayers()
-	//--------------------------------
-	//sets the total number of active players in the game, there could be a more elegant way of doing this by counting the IList.
-	//Should take input from a text field.
-	//--------------------------------
-	public void setNumberPlayersTest(string np)
-	{
-		switch (np) 
-		{
-		case "1":
-			numPlayersTest = 1;
-			break;
 
-		case "2":
-			numPlayersTest = 2;
-			break;
-		case "3":
-			numPlayersTest = 3;
-			break;
-		case "4":
-			numPlayersTest = 4;
-			break;
-		default:
-			print ("Not a valid number of players");
-			break;
-		}
-	}
 
 
 	//------------------------------------------------
@@ -241,7 +249,7 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	public string getLevel()
 	{
-		return activeLevel;
+		return gamestate.instance.activeLevel;
 	}
 
 
@@ -253,7 +261,7 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	public string getChosenLevel()
 	{
-		return chosenLevel;
+		return gamestate.instance.chosenLevel;
 	}
 
 
@@ -267,21 +275,22 @@ public class gamestate : MonoBehaviour {
 	{
 
 		//gets the number of players that are still alive.
-		int alive = getNumPlayersAlive ();
+		int alive = gamestate.instance.getNumPlayersAlive ();
 
 		//number of players that are at the end of the dungeon, this property is triggered when a player enters an area in-game.
 		int numEnd = 0;
 
-		foreach (Player plr in players) 
+		foreach (Player plr in gamestate.instance.players) 
 		{
 			//if they are alive
 			if(!plr.isDead)
 			{
-				//commented out until these player properties are added.
-				//if(plr.atEnd)
-				//{
-					//numEnd++;
-				//}
+				//use plr.atEnd, when it is added to the player class
+				//test end is set to false to test if all the players are not at the end
+				if(false)
+				{
+					numEnd++;
+				}
 			}
 
 		}
@@ -290,8 +299,10 @@ public class gamestate : MonoBehaviour {
 		//have reached the end and they win.
 		if (alive == numEnd)
 		{
+			//print ("The players have completed the dungeon.");
 			return true;
 		} else {
+			//print ("The players have not yet completed the dugeon.");
 			return false;
 		}
 	}
@@ -314,6 +325,8 @@ public class gamestate : MonoBehaviour {
 				alive++;
 			}
 		}
+
+		print ("There are " + alive + "players alive. From gamestate.getNumPlayersAlive()");
 		return alive;
 	}
 
@@ -328,7 +341,7 @@ public class gamestate : MonoBehaviour {
 		int dead = 0;
 		int numPlayers = gamestate.instance.players.Count;
 		//checks the player class for each player in list of active players in the game to see if they are alive.
-		foreach (Player plr in players) 
+		foreach (Player plr in gamestate.instance.players) 
 		{
 			if(plr.isDead)
 			{
@@ -340,8 +353,10 @@ public class gamestate : MonoBehaviour {
 
 		if (dead == numPlayers) 
 		{
+			print ("All the players are dead :(.");
 			return true;
 		} else {
+			print ("There are still players alive.");
 			return false;
 		}
 
@@ -373,21 +388,22 @@ public class gamestate : MonoBehaviour {
 	{
 
 		//gets the number of players that are still alive.
-		int alive = getNumPlayersAlive ();
+		int alive = gamestate.instance.getNumPlayersAlive ();
 		
 		//number of players that are at the end of the dungeon, this property is triggered when a player enters an area in-game.
 		int numBegn = 0;
 		
-		foreach (Player plr in gamestate.Instance.players) 
+		foreach (Player plr in gamestate.instance.players) 
 		{
 			//if they are alive
 			if(!plr.isDead)
 			{
-				//commented out until these player properties are added.
-				//if(plr.atBeginning)
-				//{
-				//numBegn++;
-				//}
+				//replace with plr.atBegin when its added to the gamestate
+				//set to true for test
+				if(true)
+				{
+				numBegn++;
+				}
 			}
 			
 		}
@@ -396,8 +412,10 @@ public class gamestate : MonoBehaviour {
 		//have chichened out.
 		if (alive == numBegn)
 		{
+			print ("The players are fleeing the dungoen.");
 			return true;
 		} else {
+			print ("The players are still running the dungeon");
 			return false;
 		}
 	}
@@ -439,7 +457,8 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	public bool getPartyReady()
 	{
-		return partyReady;
+		print ("The party is ready >:|");
+		return gamestate.instance.partyReady;
 	}
 
 

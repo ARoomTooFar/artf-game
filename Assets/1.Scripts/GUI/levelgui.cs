@@ -166,6 +166,9 @@ public class levelgui : MonoBehaviour {
 		gamestate.Instance.setPlayerNotReady("all"); //resets all player ready statuses to false.
 		print("moving to "+ aScene);
 		gamestate.Instance.setLevel(aScene);
+		foreach (Player plr in gamestate.Instance.players) { //preserves all the players in the List of player in the game
+			DontDestroyOnLoad(plr);
+		}
 		DontDestroyOnLoad (gamestate.Instance);
 		Application.LoadLevel(aScene);
 	}
@@ -181,6 +184,7 @@ public class levelgui : MonoBehaviour {
 		gamestate.Instance.setPlayerNotReady ("all");
 		print ("Quiting... Moving to title Screen");
 		gamestate.Instance.setLevel ("TitleScreen");
+		DestroyObject (gamestate.Instance);
 		Application.LoadLevel("TitleScreen");
 	}
 
@@ -237,7 +241,8 @@ public class levelgui : MonoBehaviour {
 		bool win = gamestate.Instance.getVictory();
 		if (win) 
 		{
-			moveToScene("Rewards");
+			print ("The players have completed the dungeon!");
+			moveToScene("RewardScreen");
 		}else{
 			print ("Not all living players have reached the end");
 		}
