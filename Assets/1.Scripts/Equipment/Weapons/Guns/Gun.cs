@@ -19,7 +19,7 @@ public class Gun : Weapons {
 		stats.atkSpeed = 2.0f;
 		stats.damage = 1;
 		stats.maxChgTime = 2.0f;
-		stats.weapType = 1;
+		stats.weapType = 0;
 		
 		bullPattern = 'S';
 		if(bullPattern == 'L'){

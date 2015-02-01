@@ -12,6 +12,7 @@ public class WeaponStats {
 	public int multHit;
 	//0 -Melee, 1 -Gun, 2 -Flamethrower
 	public int weapType;
+	public string weapTypeName;
 	// When it actually deals damage in the animation
 	public float colStart, colEnd;
 	public GameObject projectile;
@@ -36,11 +37,19 @@ public class Weapons : Equipment {
 		base.Start ();
 	}
 
+	public virtual void equip(Character u) {
+		base.equip(u);
+		u.animator.SetInteger("WeaponType", stats.weapType);
+		u.weapTypeName = stats.weapTypeName;
+	}
+
 	// Used for setting stats for each weapon piece
 	protected override void setInitValues() {
 		base.setInitValues();
 
 		// default weapon stats
+		stats.weapType = 0;
+		stats.weapTypeName = "sword";
 		stats.atkSpeed = 1.0f;
 		stats.damage = 5;
 		stats.multHit = 0;
@@ -70,17 +79,16 @@ public class Weapons : Equipment {
 	//----------------------------//
 	
 	public virtual void initAttack() {
-		user.GetComponent<Character>().animator.SetTrigger("Attack"); // Swap over to weapon specific animation if we get some
+		user.animator.SetTrigger("Attack"); // Swap over to weapon specific animation if we get some
 		user.animator.speed = stats.atkSpeed;
 		StartCoroutine(bgnAttack());
 	}
 	
 	protected IEnumerator bgnAttack() {
-		while (user.animSteInfo.nameHash !=  user.atkHashCharge) {
+		while (user.animSteInfo.nameHash != user.atkHashCharge) {
 			yield return null;
 		}
-		
-		
+
 		stats.curChgDuration = 0.0f;
 		stats.chgDamage = 0;
 		particles.startSpeed = 0;
@@ -119,7 +127,7 @@ public class Weapons : Equipment {
 	}
 	
 	protected IEnumerator atkFinish() {
-		while (user.animator.GetCurrentAnimatorStateInfo(0).nameHash != Animator.StringToHash ("Attack.attackEnd")) {
+		while (user.animator.GetCurrentAnimatorStateInfo(0).nameHash != user.atkHashEnd) {
 			yield return null;
 		}
 		

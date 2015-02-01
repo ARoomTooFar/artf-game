@@ -13,11 +13,12 @@ public class Sword : Weapons {
 		base.setInitValues();
 
 		// Default sword stats
+		stats.weapType = 0;
+		stats.weapTypeName = "sword";
 		stats.atkSpeed = 1.0f;
 		stats.damage = 4 + user.GetComponent<Character>().stats.strength;
 		
 		stats.maxChgTime = 2.0f;
-		stats.weapType = 0;
 
 		stats.chgLevels = 0.4f;
 	}

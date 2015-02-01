@@ -90,6 +90,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public AnimatorStateInfo animSteInfo;
 	
 	// Swap these over to weapons in the future
+	public string weapTypeName;
 	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashEnd, animSteHash;
 	
 	// Use this for initialization
@@ -114,10 +115,10 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		runHash = Animator.StringToHash ("Base Layer.run");
 		
 		// atkHash = Animator.StringToHash ("Base Layer.attack");
-		atkHashStart = Animator.StringToHash ("Attack.attackStart");
-		atkHashCharge = Animator.StringToHash ("Attack.attackCharge");
-		atkHashSwing = Animator.StringToHash ("Attack.attackSwing");
-		atkHashEnd = Animator.StringToHash ("Attack.attackEnd");
+		atkHashStart = Animator.StringToHash (weapTypeName + "." + weapTypeName + "Start");
+		atkHashCharge = Animator.StringToHash (weapTypeName + "." + weapTypeName + "Charge");
+		atkHashSwing = Animator.StringToHash (weapTypeName + "." + weapTypeName + "Swing");
+		atkHashEnd = Animator.StringToHash (weapTypeName + "." + weapTypeName + "End");
 	}
 	
 	protected virtual void FixedUpdate() {

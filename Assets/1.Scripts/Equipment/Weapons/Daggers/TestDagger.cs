@@ -14,7 +14,6 @@ public class TestDagger : Dagger {
 		
 		//stats.damage = 4;
 		base.setInitValues();
-		stats.weapType = 0;
 	}
 	
 	// Update is called once per frame
