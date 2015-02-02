@@ -17,9 +17,9 @@ public class Player : Character, IMoveable {
 	public bool inGrey;
 	public int testDmg;
 	public int greyDamage;
-	public bool testable;
+	public bool testable, isReady, atEnd, atStart;
 	public Transform weapLocation, headLocation, bodyLocation, itemLocation;
-
+    public string[] loadData;
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -111,12 +111,31 @@ public class Player : Character, IMoveable {
 			rigidbody.velocity = Vector3.zero;
 		}
 		if(Input.GetKeyDown(KeyCode.Space)){
-		    equipPiece("W0");
+		    loadFromText();
+			/*equipPiece("W0");
 			equipPiece("C0");
 			equipPiece("H1");
 			equipPiece("I0");
 			equipPiece("I1");
 			equipPiece("I2");
+			System.IO.File.WriteAllText(path,System.String.Format("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n",name,"W0","C0","H1","I0","I1","I2"));*/
+		}
+		if(Input.GetKeyDown(KeyCode.M)){
+			saveToText();
+		}
+	}
+	public virtual void saveToText(){
+		loadData[0]=name;
+		System.IO.File.WriteAllLines(path,loadData);
+	}
+	public virtual void loadFromText(){
+		/*string[] */loadData = System.IO.File.ReadAllLines(path);
+		for(int i = 0; i<loadData.Length; i++){
+			if(i==0){//First line is name
+				name = loadData[i];
+			}else{//Rest of lines are things to equip
+				equipPiece(loadData[i]);
+			}
 		}
 	}
 	//Item type first char, number in array, second char++

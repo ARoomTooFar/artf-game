@@ -79,6 +79,8 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public Inventory inventory;
 	public bool freeAnim, attacking;
 	public AudioClip hurt, victory, failure;
+	public System.String path;
+	public System.String name;
 
 	public bool invincible = false;
 	
