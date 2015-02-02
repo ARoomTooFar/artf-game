@@ -116,7 +116,7 @@ public class Weapons : Equipment {
 
 	// Basic attack, a normal swing/stab/fire
 	protected virtual void basicAttack() {
-		print("Charged Attack; Power level:" + stats.chgDamage);
+		print("Normal Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
 		this.GetComponent<Collider>().enabled = true;
 		StartCoroutine(atkFinish());
