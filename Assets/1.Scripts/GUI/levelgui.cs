@@ -8,6 +8,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class levelgui : MonoBehaviour {
 
@@ -21,6 +22,11 @@ public class levelgui : MonoBehaviour {
 		levelName = gamestate.Instance.getLevel ();
 		print ("Loaded: " + gamestate.Instance.getLevel ());
 		print ("There are still " + gamestate.Instance.getNumPlayers() + " in list");
+		//finds and relocates the players to a game object called "StartPostion", if they need to be placed in the scene.
+		//GameObject.FindGameObjectWithTag ("Player1").transform.position = GameObject.Find ("StartPosition");
+		//GameObject.FindGameObjectWithTag("Player2").transform.position = GameObject.Find("StartPosition");
+		//GameObject.FindGameObjectWithTag("Player3").transform.position = GameObject.Find("StartPosition");
+		//GameObject.FindGameObjectWithTag("Player4").transform.position = GameObject.Find("StartPosition");
 	}
 	
 	//--------------------------------

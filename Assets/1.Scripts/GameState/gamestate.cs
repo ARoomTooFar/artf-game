@@ -38,7 +38,7 @@ public class gamestate : MonoBehaviour {
 	private Player player2;
 	private Player player3;
 	private Player player4;
-
+	
 	private string testUserName;
 	//----------------------------------
 	//gameState()
