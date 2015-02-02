@@ -33,7 +33,7 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 		stats.armor = 0;
 		stats.strength = 10;
 		stats.coordination=0;
-		stats.speed=5;
+		stats.speed=10;
 		stats.luck=0;
 		inGrey = false;
 		greyDamage = 0;
@@ -102,8 +102,7 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 				facing = newMoveDir;
 			}
 			
-			
-			rigidbody.velocity = newMoveDir.normalized * (5.0f + 2.5f * (stats.speed*.2f));
+			rigidbody.velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
 		} else if (freeAnim){
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this

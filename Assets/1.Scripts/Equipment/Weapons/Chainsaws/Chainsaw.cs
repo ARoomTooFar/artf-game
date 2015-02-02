@@ -1,12 +1,16 @@
-﻿// Chainsaw class, put into the head for now, could possibly expand this into a special type weapon os similarity to flamethrower
+// Chainsaw class, put into the head for now, could possibly expand this into a special type weapon os similarity to flamethrower
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Chainsaw : Weapons {
 
 	public float lastDmgTime, curDuration, maxDuration;
 	private bool dealDamage;
+	private float slowPercent;
+
+	private List<Character> chained;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -33,8 +37,11 @@ public class Chainsaw : Weapons {
 		lastDmgTime = 0.0f;
 		maxDuration = 5.0f;
 		curDuration = 0.0f;
+		slowPercent = 0.9f;
+		chained = new List<Character> ();
 	}
 
+	// Move to a Coroutine during our great weapon pur-refactor
 	protected override void FixedUpdate() {
 		base.FixedUpdate ();
 		// Placed here for consistent Damage
@@ -83,20 +90,45 @@ public class Chainsaw : Weapons {
 		if (user.GetComponent<Character>().animSteInfo.normalizedTime > stats.colEnd) {
 			particles.Stop();
 			this.GetComponent<Collider>().enabled = false;
+
+			if (chained.Count > 0) {
+				foreach(Character meat in chained) {
+					meat.removeSlow(slowPercent);
+				}
+				chained.Clear();
+				user.removeSlow(slowPercent);
+			}
+
 		}
 	}
 
-	/*
 	void OnTriggerEnter(Collider other) {
-		IDamageable<int> component = (IDamageable<int>) other.GetComponent( typeof(IDamageable<int>) );
-		Enemy enemy = other.GetComponent<Enemy>();
-		if( component != null && enemy != null) {
-			enemy.damage(stats.damage + stats.chgDamage);
-		}
-	}*/
+		Character enemy = other.GetComponent<Character>();
+		if (enemy != null && !chained.Contains(enemy)) {
+			if (chained.Count == 0) {
+				user.slow (slowPercent);
+			}
+			chained.Add(enemy);
+			enemy.slow (slowPercent);
+		} 
+	}
+
+	void OnTriggerExit(Collider other) {
+		Character enemy = other.GetComponent<Character>();
+		if (enemy != null) {
+			if (chained.Contains(enemy)) {
+				chained.Remove(enemy);
+				enemy.removeSlow (slowPercent);
+			}
+
+			if (chained.Count == 0) {
+				user.removeSlow (slowPercent);
+			}
+		} 
+	}
 
 	void OnTriggerStay(Collider other) {
-		IDamageable<int, GameObject> component = (IDamageable<int, GameObject>) other.GetComponent( typeof(IDamageable<int, GameObject>) );
+		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
 		Character enemy = other.GetComponent<Character>();
 		if(dealDamage && component != null && enemy != null) {
 			enemy.damage(stats.damage, user);

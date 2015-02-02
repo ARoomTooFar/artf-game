@@ -5,7 +5,7 @@ using System.Collections;
 
 public class RiotShield : ToggleItem {
 	
-	private float dmgReduction ;
+	private float dmgReduction, userSlow;
 	private MeshRenderer meshRenderer;
 	
 	// Use this for initialization
@@ -21,6 +21,7 @@ public class RiotShield : ToggleItem {
 		cooldown = 10.0f;
 		maxDuration = 5;
 		dmgReduction = 0.9f;
+		userSlow = 0.75f;
 	}
 	
 	// Update is called once per frame
@@ -39,7 +40,8 @@ public class RiotShield : ToggleItem {
 	protected override IEnumerator bgnEffect() {
 		collider.enabled = true;
 		meshRenderer.enabled = true;
-		player.stats.dmgManip.setFrontReduction(dmgReduction);
+		player.stats.dmgManip.setDamageReduction(1, dmgReduction);
+		player.slow (userSlow);
 		return base.bgnEffect();
 	}
 	
@@ -51,7 +53,8 @@ public class RiotShield : ToggleItem {
 		collider.enabled = false;
 		meshRenderer.enabled = false;
 
-		player.stats.dmgManip.removeFrontReduction(dmgReduction);
+		player.stats.dmgManip.removeDamageReduction(1, dmgReduction);
+		player.removeSlow (userSlow);
 		base.atvDeactivation();
 	}
 

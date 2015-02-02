@@ -26,7 +26,7 @@ public class Projectile : MonoBehaviour {
 			Destroy(this.transform.parent.gameObject);
 		}
 
-		IDamageable<int, GameObject> component = (IDamageable<int, GameObject>) other.GetComponent( typeof(IDamageable<int, GameObject>) );
+		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
 		Character enemy = other.GetComponent<Character>();
 		if( component != null && enemy != null) {
 			enemy.damage(damage, player);
