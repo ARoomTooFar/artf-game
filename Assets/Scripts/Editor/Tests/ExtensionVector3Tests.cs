@@ -48,5 +48,14 @@ public class ExtensionVector3Tests{
 		Assert.AreEqual(new Vector3(1, 0, 1), vec1.getMaxVals(vec2));
 		Assert.AreEqual(new Vector3(1, 0, 1), vec2.getMaxVals(vec1));
 	}
+
+	[Test]
+	public void CopyTest(){
+		Vector3 vec1 = new Vector3(3, 4, 5);
+		Vector3 vec2 = vec1.Copy();
+		Assert.AreEqual(vec1, vec2);
+		vec2.x = 0;
+		Assert.AreNotEqual(vec1, vec2);
+	}
 }
 

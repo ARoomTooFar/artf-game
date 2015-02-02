@@ -8,7 +8,7 @@ public partial class ARTFRoom {
 	#region PrivateVariables
 	private Vector3 LLposition = new Vector3();
 	private Vector3 URposition = new Vector3();
-	private List<TerrainBlock> blocks = new List<TerrainBlock>();
+	protected internal List<TerrainBlock> blocks = new List<TerrainBlock>();
 	private string defaultBlockID = "defaultBlockID";
 	#endregion PrivateVariables
 
@@ -238,15 +238,10 @@ public partial class ARTFRoom {
 	 * Check if a given position is on a tile in this room
 	 */
 	public bool inRoom(Vector3 pos) {
-		return pos.z >= LLposition.z && pos.z <= URposition.z && pos.z >= LLposition.z && pos.z <= URposition.z;
-	}
-
-	/*
-	 * public int numBlocks()
-	 * 
-	 * returns the number of blocks linked to this room
-	 */
-	public int numBlocks(){
-		return blocks.Count;
+		return
+			pos.z >= LLposition.z &&
+			pos.z <= URposition.z &&
+			pos.z >= LLposition.z &&
+			pos.z <= URposition.z;
 	}
 }

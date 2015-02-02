@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class MapData {
 
-	private MapData() {}
+	protected internal MapData() {}
 
-	private static MapData instance;
-	private TerrainManager terrainBlocks = new TerrainManager();
-	private SceneryManager sceneryBlocks = new SceneryManager();
-	private MonsterManager monsterBlocks = new MonsterManager();
-	private ARTFRoomManager theFarRooms = new ARTFRoomManager();
+	protected internal static MapData instance;
+	protected internal TerrainManager terrainBlocks = new TerrainManager();
+	protected internal SceneryManager sceneryBlocks = new SceneryManager();
+	protected internal MonsterManager monsterBlocks = new MonsterManager();
+	protected internal ARTFRoomManager theFarRooms = new ARTFRoomManager();
 
 	public static MapData Instance {
 		get {
@@ -19,6 +19,10 @@ public class MapData {
 			}
 			return instance;
 		}
+	}
+
+	public static void ClearData(){
+		instance = null;
 	}
 
 	public TerrainManager TerrainBlocks {

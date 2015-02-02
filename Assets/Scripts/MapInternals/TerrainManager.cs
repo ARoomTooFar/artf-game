@@ -5,8 +5,16 @@ using System.Collections.Generic;
 
 public class TerrainManager {
 
-	Dictionary<string, List<TerrainBlock>> dictionary = new Dictionary<string, List<TerrainBlock>>();
+	protected internal Dictionary<string, List<TerrainBlock>> dictionary =
+		new Dictionary<string, List<TerrainBlock>>();
+
+	//constructor
 	public TerrainManager() {
+	}
+
+	//Shallow copy constructor. Only for testing
+	protected internal TerrainManager(TerrainManager orig){
+		dictionary = orig.dictionary;
 	}
 
 	/*
@@ -155,18 +163,5 @@ public class TerrainManager {
 			}
 			return retVal;
 		}
-	}
-
-	/*
-	 * public int numTiles()
-	 * 
-	 * Returns the number of tiles stored
-	 */
-	public int numTiles(){
-		int retVal = 0;
-		foreach(KeyValuePair<string, List<TerrainBlock>> kvp in dictionary) {
-			retVal += kvp.Value.Count;
-		}
-		return retVal;
 	}
 }
