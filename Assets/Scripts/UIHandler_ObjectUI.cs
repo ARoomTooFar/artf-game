@@ -110,7 +110,6 @@ public class UIHandler_ObjectUI : MonoBehaviour
 	//
 	public void increaseArmor ()
 	{
-		Debug.Log ("increasAmor");
 		armor += 1;
 		updateMonsterStatText ();
 	}

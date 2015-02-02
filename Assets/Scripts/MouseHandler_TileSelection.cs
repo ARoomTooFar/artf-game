@@ -25,6 +25,7 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 
 
 
+	//This is the temporary home for object placement
 
 	/* select when clicked */
 	private string selectedObject;
@@ -52,6 +53,8 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 
 
 
+
+	//Actual mouse handling starts here
 
 	/* Initialize variables, setting booleans */
 	void Start () {
