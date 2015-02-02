@@ -82,71 +82,15 @@ public class levelgui : MonoBehaviour {
 				break;
 
 			case "GameScene":
-				
-				//if players go back to the enterance they will return to the level selection scene.
-				//if(gamestate.Instance.areChicken())
-				//{
-				//	moveToScene("levelSelection");
-				//}
-				
-				//checks whether the players have finished the dungeon.
-				//if(gamestate.Instance.getVictory())
-				//{
-				//	moveToScene ("RewardScene");
-				//}
-				
-				//checks whether all the players are dead. If so it will cause a GameOver.
-				//if(gamestate.Instance.getNumPlayersAlive() < 1)
-				//{
-				//	moveToScene ("GameOverScene");
-				//}	
-				
-
-				//TESTING
-				//moveToScene ("GameOverScreen");
 
 				break;
 
 			case "RewardScene":
-				//Players vote on items that they want. 
-				//When all votes are cast the loot is distributed
-				
 
-				//Checks to see if the players want to play another dungeon
-				if (GUI.Button (new Rect (30, 90, 150, 30), "Another Dungeon!"))
-				{
-					moveToScene ("LevelSelect");
-				}
-
-				//Checks to see if the players want to quit
-				if (GUI.Button (new Rect (30, 30, 150, 30), "Quit"))
-				{
-					moveToScene ("TitleScreen");
-				}
 				break;
 
 			case "GameOverScene":
-				//Checks to see if the players want to play another dungeon
-				//if (GUI.Button (new Rect (30, 90, 150, 30), "Try Another Dungeon!"))
-				//{
-				//	moveToScene ("LevelSelect");
-				//}
-
-				//Checks to see if the players want to play the same dungeon again.
-				//if (GUI.Button (new Rect (30, 130, 150, 30), "Try Again!"))
-				//{
-					//reset players health and item use (may do this automatically)
-					
-					//gamestate.Instance.getNumPlayersAlive = gamestate.Instance.getNumPlayers;
-				//	moveToScene ("LevelSelect");
-				//}
-			
-				//Checks to see if the players want to quit
-				//if (GUI.Button (new Rect (30, 30, 150, 30), "Quit"))
-				//{
-				//	moveToScene ("TitleScreen");
-					
-				//}
+				
 				break;
 
 			case "Credits":
@@ -172,6 +116,25 @@ public class levelgui : MonoBehaviour {
 		DontDestroyOnLoad (gamestate.Instance);
 		Application.LoadLevel(aScene);
 	}
+
+	//--------------------------------
+	//moveToSceneWC()
+	//--------------------------------
+	//Moves to specified scene which is passed as a string. Preforms a ready check first. If it does not pass it will not move
+	//on to the next scene.
+	//--------------------------------
+	public void moveToSceneWC(string aScene)
+	{
+		//checks to see if all the players in the game are ready.
+		readyCheck ();
+		//if all the players are ready move to the next scene.
+		if(gamestate.Instance.getPartyReady()){
+			moveToScene(aScene);
+		} else {
+			print ("Did not pass ready check, make sure everyone is ready");
+		}
+	}
+
 
 	//-------------------------------
 	//moveToSceneAndQuit()
@@ -202,27 +165,34 @@ public class levelgui : MonoBehaviour {
 		int readyCount = 0;
 
 		//checks each player to see if they are ready, if they are it will add to the ready count
-		if(gamestate.Instance.getPlayerReadyStatus(1) == true)
+		if(gamestate.Instance.getPlayerReadyStatus(1))
 		{
+			print("Player 1 is ready in check");
 			readyCount ++;
 		}
-		if(gamestate.Instance.getPlayerReadyStatus(2) == true)
+		if(gamestate.Instance.getPlayerReadyStatus(2))
 		{
+			print("Player 2 is ready in check");
 			readyCount ++;
 		}
-		if(gamestate.Instance.getPlayerReadyStatus(3) == true)
+		if(gamestate.Instance.getPlayerReadyStatus(3))
 		{
+			print("Player 3 is ready in check");
 			readyCount ++;
 		}
-		if(gamestate.Instance.getPlayerReadyStatus(4) == true)
+		if(gamestate.Instance.getPlayerReadyStatus(4))
 		{
+			print("Player 4 is ready in check");
 			readyCount ++;
 		}
 
 		//checks to see if the ready count and the player count are the same, if they are then all players are ready.
 		if(readyCount == numberPlayers)
 		{
+			print ("All players are ready " + readyCount + " / " + numberPlayers + ".");
 			gamestate.Instance.setPartyReady();
+		} else {
+			print ("Not all players are ready " + readyCount + " / " + numberPlayers + ".");
 		}
 
 	}
@@ -281,8 +251,7 @@ public class levelgui : MonoBehaviour {
 			print ("Not all players are dead");
 		}
 	}
-
-
+	
 }
 
 

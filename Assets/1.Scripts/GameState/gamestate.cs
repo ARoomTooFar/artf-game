@@ -13,26 +13,31 @@ public class gamestate : MonoBehaviour {
 
 	//Properties
 	private static gamestate instance;	
+
 	private string activeLevel;			//This is the level the players are currently on.
 	private string chosenLevel; 		//This is the level the players have chosen to play while in level selection.
-	public List<Player> players = new List<Player>();	//List of the Players in the game so stats can be checked in their player.cs class.
-	private int numPlayers;			//This is the total number of player in the game
-	//private int numPlayersAlive;		//The number of players alive. When this is 0 the players go to the game over scene.
-	//private bool victory;				//This is true when players reach the end of a dungeon the players will go to the rewards scene.
-	//private bool chickens;			//If the players return to the enterance of a dungeon they will be sent back to the level selection scene.
+
+	private string username1;			//This is the username for the first player
+	private string password1;			//This is the password for the first player
+
+	public List<string> usernames = new List<string>();
+	public List<string> passwords = new List<string>();
+
+	private int numPlayers;				//This is the total number of player in the game
+
+
 	private bool p1ready;				//If the player is ready for the next scene
 	private bool p2ready;
 	private bool p3ready;
 	private	bool p4ready;	
 	private bool partyReady;				//If all the players in the game are ready
 
-	public Player player1;
-	public Player player2;
-	public Player player3;
-	public Player player4;
+	public List<Player> players = new List<Player>();	//List of the Players in the game so stats can be checked in their player.cs class.
 
-	private bool testBeginning = false;
-	private bool testEnd = false;
+	private Player player1;
+	private Player player2;
+	private Player player3;
+	private Player player4;
 
 	private string testUserName;
 	//----------------------------------
@@ -100,7 +105,7 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	//addTestPlayers()
 	//--------------------------------
-	//Adds test players to the player list to test functionality.
+	//Adds a player to the game. There can only be 4 players in the game at a time. It will not let you add more than 4.
 	//--------------------------------
 	public void addPlayerToList ()
 	{
@@ -142,6 +147,86 @@ public class gamestate : MonoBehaviour {
 	}
 
 	//--------------------------------
+	//getUsername()
+	//--------------------------------
+	//gets the username from the UI. Takes in a string that comes from the UI, if it's null it won't assign it to the username variable.
+	//will assign un for whichever player is to log in next using the switch statement.
+	//--------------------------------
+	public void getUsername(string un)
+	{
+		if (un == "")
+		{
+			print ("Entered Username was empty, please re-enter.");
+		} else {
+			switch(gamestate.instance.numPlayers)
+			{
+			case 1:
+				gamestate.instance.username1 = un;
+				print("Player " + gamestate.instance.numPlayers + " Username is " + gamestate.instance.username1 + ".");
+				break;
+				
+			case 2:
+				print ("No username to place.");
+				break;
+				
+			case 3:
+				print ("No username to place.");
+				break;
+				
+			case 4:
+				print ("No username to place.");
+				break;
+				
+			default:
+				print ("All players acounted for.");
+				break;
+			}
+		}
+	}
+
+
+
+	//--------------------------------
+	//getPassword()
+	//--------------------------------
+	//gets the password from the UI. Takes in a string that comes from the UI, if it's null it won't assign it to the password variable.
+	//will assign the pw to the next player using the switch statement. 
+	//--------------------------------
+	public void getPassword(string pw)
+	{
+		if (pw == "")
+		{
+			print ("Entered password was empty, please re-enter.");
+
+		} else {
+			switch(gamestate.instance.numPlayers)
+			{
+				
+			case 1:
+				gamestate.instance.username1 = pw;
+				print("Player " + gamestate.instance.numPlayers + " password is " + gamestate.instance.username1 + ".");
+				break;
+				
+			case 2:
+				print ("No username to place.");
+				break;
+				
+			case 3:
+				print ("No username to place.");
+				break;
+				
+			case 4:
+				print ("No username to place.");
+				break;
+				
+			default:
+				print ("All players acounted for.");
+				break;
+			}
+		}
+	}
+
+	//--------------------------------
 	//setPlayerReady(int playernumber)
 	//--------------------------------
 	//Set's a player's status to be ready for the next scene
@@ -153,19 +238,19 @@ public class gamestate : MonoBehaviour {
 		switch (playerNumber)
 		{
 			case 1:
-				p1ready = true;		
+				gamestate.instance.p1ready = true;
 				break;
 
 			case 2:
-				p2ready	= true;
+				gamestate.instance.p2ready	= true;
 				break;
 
 			case 3:
-				p3ready = true;
+				gamestate.instance.p3ready = true;
 				break;
 
 			case 4:
-				p4ready = true;
+				gamestate.instance.p4ready = true;
 				break;
 		}
 
@@ -183,25 +268,25 @@ public class gamestate : MonoBehaviour {
 		switch (playerNumber)
 		{
 		case "1":
-			p1ready = false;		
+			gamestate.instance.p1ready = false;		
 			break;
 			
 		case "2":
-			p2ready	= false;
+			gamestate.instance.p2ready	= false;
 			break;
 			
 		case "3":
-			p3ready = false;
+			gamestate.instance.p3ready = false;
 			break;
 			
 		case "4":
-			p4ready = false;
+			gamestate.instance.p4ready = false;
 			break;
 		case "all":
-			p1ready = false;
-			p2ready = false;
-			p3ready = false;
-			p4ready = false;
+			gamestate.instance.p1ready = false;
+			gamestate.instance.p2ready = false;
+			gamestate.instance.p3ready = false;
+			gamestate.instance.p4ready = false;
 			print ("reset all player ready values to false");
 			break;
 
@@ -307,8 +392,81 @@ public class gamestate : MonoBehaviour {
 		}
 	}
 
+	//--------------------------------
+	//areChicken()
+	//--------------------------------
+	//Returns whether the all the players have "chickened out" by leaving the dungeon. Players have
+	//a property in the player.cs class that is set to true when they are in the vicinity of enterance of the dungeon.
+	//If that property is true in all players that are alive this function will return TRUE. If not it will return FALSE.
+	//--------------------------------
+	public bool areChicken()
+	{
+		
+		//gets the number of players that are still alive.
+		int alive = gamestate.instance.getNumPlayersAlive ();
+		
+		//number of players that are at the end of the dungeon, this property is triggered when a player enters an area in-game.
+		int numBegn = 0;
+		
+		foreach (Player plr in gamestate.instance.players) 
+		{
+			//if they are alive
+			if(!plr.isDead)
+			{
+				//replace with plr.atBegin when its added to the gamestate
+				//set to true for test
+				if(true)
+				{
+					numBegn++;
+				}
+			}
+			
+		}
+		
+		//if the number of players that are alive is the same as the number of player that are at the beginning then all the players
+		//have chichened out.
+		if (alive == numBegn)
+		{
+			print ("The players are fleeing the dungoen.");
+			return true;
+		} else {
+			print ("The players are still running the dungeon");
+			return false;
+		}
+	}
 
-
+	//--------------------------------
+	//getPartyAlive()
+	//--------------------------------
+	//returns true if all players are dead, returns false if there is still player alive.
+	//--------------------------------
+	public bool getPartyDead()
+	{
+		
+		int dead = 0;
+		int numPlayers = gamestate.instance.players.Count;
+		//checks the player class for each player in list of active players in the game to see if they are alive.
+		foreach (Player plr in gamestate.instance.players) 
+		{
+			if(plr.isDead)
+			{
+				dead++;
+			}
+		}
+		print ("There are " + numPlayers + " Players");
+		print ("There are " + dead + " Dead Players");
+		
+		if (dead == numPlayers) 
+		{
+			print ("All the players are dead :(.");
+			return true;
+		} else {
+			print ("There are still players alive.");
+			return false;
+		}
+		
+	}
+	
 	//--------------------------------
 	//getNumPlayersAlive()
 	//--------------------------------
@@ -330,37 +488,6 @@ public class gamestate : MonoBehaviour {
 		return alive;
 	}
 
-	//--------------------------------
-	//getPartyAlive()
-	//--------------------------------
-	//returns true if all players are dead, returns false if there is still player alive.
-	//--------------------------------
-	public bool getPartyDead()
-	{
-
-		int dead = 0;
-		int numPlayers = gamestate.instance.players.Count;
-		//checks the player class for each player in list of active players in the game to see if they are alive.
-		foreach (Player plr in gamestate.instance.players) 
-		{
-			if(plr.isDead)
-			{
-				dead++;
-			}
-		}
-		print ("There are " + numPlayers + " Players");
-		print ("There are " + dead + " Dead Players");
-
-		if (dead == numPlayers) 
-		{
-			print ("All the players are dead :(.");
-			return true;
-		} else {
-			print ("There are still players alive.");
-			return false;
-		}
-
-	}
 
 
 
@@ -377,53 +504,12 @@ public class gamestate : MonoBehaviour {
 		return numPlayers;
 	}
 
-	//--------------------------------
-	//areChicken()
-	//--------------------------------
-	//Returns whether the all the players have "chickened out" by leaving the dungeon. Players have
-	//a property in the player.cs class that is set to true when they are in the vicinity of enterance of the dungeon.
-	//If that property is true in all players that are alive this function will return TRUE. If not it will return FALSE.
-	//--------------------------------
-	public bool areChicken()
-	{
 
-		//gets the number of players that are still alive.
-		int alive = gamestate.instance.getNumPlayersAlive ();
-		
-		//number of players that are at the end of the dungeon, this property is triggered when a player enters an area in-game.
-		int numBegn = 0;
-		
-		foreach (Player plr in gamestate.instance.players) 
-		{
-			//if they are alive
-			if(!plr.isDead)
-			{
-				//replace with plr.atBegin when its added to the gamestate
-				//set to true for test
-				if(true)
-				{
-				numBegn++;
-				}
-			}
-			
-		}
-		
-		//if the number of players that are alive is the same as the number of player that are at the beginning then all the players
-		//have chichened out.
-		if (alive == numBegn)
-		{
-			print ("The players are fleeing the dungoen.");
-			return true;
-		} else {
-			print ("The players are still running the dungeon");
-			return false;
-		}
-	}
 
 	//--------------------------------
 	//getPlayerReadyStatus(int playernumber)
 	//--------------------------------
-	//Get's the players status for the next scene
+	//Gets the players status for the next scene
 	//--------------------------------
 	
 	public bool getPlayerReadyStatus(int playerNumber)
@@ -432,19 +518,19 @@ public class gamestate : MonoBehaviour {
 		switch (playerNumber)
 		{
 		case 1:
-			return p1ready;		
+			return gamestate.instance.p1ready;		
 			break;
 			
 		case 2:
-			return p2ready;	
+			return gamestate.instance.p2ready;	
 			break;
 			
 		case 3:
-			return p3ready;	
+			return gamestate.instance.p3ready;	
 			break;
 			
 		case 4:
-			return p4ready;	
+			return gamestate.instance.p4ready;	
 			break;
 		}
 		return false;
@@ -457,11 +543,13 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	public bool getPartyReady()
 	{
-		print ("The party is ready >:|");
+		//debugging stuff
+		if(gamestate.instance.partyReady){
+			print("Party is ready");
+		}else{
+			print ("Party is not ready");
+		}
 		return gamestate.instance.partyReady;
 	}
-
-
-
-
+	
 }
