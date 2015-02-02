@@ -15,10 +15,6 @@ public class SpeedManipulation {
 
 	public SpeedManipulation(MonoBehaviour sM) {
 		spdPercents = new PercentValues();
-<<<<<<< HEAD
-=======
-
->>>>>>> 3c88868c1dcf2268db0eebfccb80ea8cfeba6ffa
 		subMono = sM;
 	}
 
