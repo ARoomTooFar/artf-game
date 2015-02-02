@@ -64,7 +64,7 @@ public class MouseControl : MonoBehaviour {
 				switch(hitInfo.collider.gameObject.name){
 				case "TileMap":
 					snap2grid(hitInfo.point.x, hitInfo.point.z);
-					Debug.Log("Tile Map");
+//					Debug.Log("Tile Map");
 					break;
 				default: 
 					snap2grid(hitInfo.collider.gameObject.transform.position.x, hitInfo.collider.transform.position.z);

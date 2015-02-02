@@ -17,6 +17,7 @@ public class CameraAdjuster : MonoBehaviour {
 	public bool isDragging;
 	public Vector2 dragSpeed;
 	private Vector3 mouseLocation;
+	private float scrollSpeed;
 	void Start () {
 		transform.rotation = Quaternion.Euler(45,-45,0);
 		//base height
@@ -24,7 +25,7 @@ public class CameraAdjuster : MonoBehaviour {
 		//max height
 		maxY = 25f;
 		//min height
-		minY = baseY;
+		minY = 5f;
 		//Camera angle controller
 		isTopDown = false;
 		//Are we dragging camera?
@@ -32,25 +33,35 @@ public class CameraAdjuster : MonoBehaviour {
 //		dragSpeed.x = .5f;
 //		dragSpeed.y = .5f;
 
+		scrollSpeed = 2f;
+
+	}
+
+	public void zoomCamIn(float speed){
+		baseY += speed;
+		//So it won't go too high
+		if(baseY > maxY){
+			baseY = maxY;
+		}
+	}
+
+	public void zoomCamOut(float speed){
+		baseY -= speed;
+		//So it won't go too low
+		if(baseY < minY){
+			baseY = minY;
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//Scroll wheel forward? Go up.
 		if(Input.GetAxis ("Mouse ScrollWheel") < 0){
-			baseY += .1f;
-			//So it won't go too high
-			if(baseY > maxY){
-				baseY = maxY;
-			}
+			zoomCamIn(scrollSpeed);
 		}
 		//Scroll wheel back? Go down.
 		if(Input.GetAxis ("Mouse ScrollWheel") > 0 ){
-			baseY -= .1f;
-			//So it won't go too low
-			if(baseY < minY){
-				baseY = minY;
-			}
+			zoomCamOut(scrollSpeed);
 		}
 
 		//Do we switch the view?
