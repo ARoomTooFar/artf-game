@@ -3,7 +3,7 @@ using System.Collections;
 
 //This class sets the ground size and position to be the same
 //size as the tilemap
-public class GroundSizeAdjuster : MonoBehaviour {
+public class TransformHandler_Ground : MonoBehaviour {
 
 	TileMap tileMap;
 

@@ -6,7 +6,7 @@ using System.Collections;
 //as zoom in/out, and move along the x and z axis using
 //the arrow keys. Also movement along x and y axis
 //via dragging.
-public class CameraAdjuster : MonoBehaviour {
+public class TransformHandler_Camera : MonoBehaviour {
 	//Base location for camera, limits of camera,
 	//boolean control for camera angle, and speed of
 	//camera movement, drag speed, and mouse location

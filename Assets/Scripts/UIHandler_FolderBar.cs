@@ -8,7 +8,7 @@ using System.Collections;
 //This class attaches to every button in the folder bar.
 //It controls all all activity that takes place in the
 //folder bar due to user interaction.
-public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
+public class UIHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 {
 	//default color for the folder buttons
 	Color buttonColor = new Color32(0, 147, 176, 255);

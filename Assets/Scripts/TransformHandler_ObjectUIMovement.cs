@@ -3,7 +3,7 @@ using System.Collections;
 
 //This class is for keeping the UI that is attached to an object in world
 //oriented in the direction of the camera.
-public class ObjectUIMovement : MonoBehaviour 
+public class TransformHandler_ObjectUIMovement : MonoBehaviour 
 {
 	public Transform thing; //In-world object this little UI thing is sticking to
 	public Camera cam; //Camera to make the UI face (must mimic its rotation)

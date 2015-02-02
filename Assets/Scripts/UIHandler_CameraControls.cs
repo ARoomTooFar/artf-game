@@ -5,7 +5,11 @@ using System.IO;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Listener_CameraControl : MonoBehaviour {
+//This class listeners for clicks to camera control
+//buttons in the screen UI, which allow the user to switch
+//to preset camera views, as well as between orthographic
+//and perspective modes
+public class UIHandler_CameraControls: MonoBehaviour {
 
 	public Button Button_TopDown = null; // assign in the editor
 	public Button Button_Perspective = null; // assign in the editor

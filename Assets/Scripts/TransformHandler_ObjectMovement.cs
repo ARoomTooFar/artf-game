@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 //This class attaches to objects, and lets the rotate
 //by 90 degree increments, for when the user clicks the 
 //rotation arrow.
-public class ObjectMovement : MonoBehaviour {
+public class TransformHandler_ObjectMovement : MonoBehaviour {
 	public Button Button_Rotate = null; //holds the rotate button arrow
 	Vector3 objectRotation = new Vector3(); //for holding this object's rotation
 

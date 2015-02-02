@@ -7,17 +7,20 @@ using System.IO;
 
 //This class listens to UI elements that are on canvases attached to objects
 //in the world space
-public class Listener_ObjectUI : MonoBehaviour
+public class UIHandler_ObjectUI : MonoBehaviour
 {
 	//all the dang buttons
-	public Slider slider = null;
-	public InputField inputField = null;
+//	public Slider slider = null;
+//	public InputField inputField = null;
+
 	public Text attackText = null;
 	public Button Button_UpArrow_Attack = null;
 	public Button Button_DownArrow_Attack = null;
+
 	public Text healthText = null;
 	public Button Button_UpArrow_Health = null;
 	public Button Button_DownArrow_Health = null;
+
 	public Text armorText = null;
 	public Button Button_UpArrow_Armor = null;
 	public Button Button_DownArrow_Armor = null;
@@ -33,7 +36,8 @@ public class Listener_ObjectUI : MonoBehaviour
 
 		//Slider listener
 		//when the slider is moved, call sliderAction()
-		slider.onValueChanged.AddListener (this.sliderAction); 
+//		slider.onValueChanged.AddListener (this.sliderAction); 
+
 
 		//Attack upgrade/downgrade listeners
 		Button_UpArrow_Attack.onClick.AddListener (() => {

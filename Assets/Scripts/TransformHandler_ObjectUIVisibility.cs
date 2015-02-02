@@ -7,7 +7,7 @@ using System.Collections;
 
 //This class utilizes some of Unity's handlers to make sure the UI attached
 //to an object has visibility at the right times
-public class ObjectClickingHandler : MonoBehaviour, IPointerClickHandler, IEndDragHandler
+public class TransformHandler_ObjectUIVisibility : MonoBehaviour, IPointerClickHandler, IEndDragHandler
 {
 	public GameObject UIItems; //holds the object UI
 	

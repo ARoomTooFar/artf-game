@@ -5,7 +5,9 @@ using System.IO;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Listener_EditingControls : MonoBehaviour {
+//This class listens to the editing controls on the left hand side
+//of the screen (zoom in, zoom out, rotate, hand, and pointer)
+public class UIHandler_EditingControls : MonoBehaviour {
 
 	public Button Button_Hand = null; 
 	public Button Button_Pointer = null; 
@@ -13,7 +15,7 @@ public class Listener_EditingControls : MonoBehaviour {
 	public Button Button_ZoomOut = null; 
 	public Button Button_ZoomIn = null; 
 
-	public CameraAdjuster UICamera;
+	public TransformHandler_Camera UICamera;
 
 	// Use this for initialization
 	void Start () {

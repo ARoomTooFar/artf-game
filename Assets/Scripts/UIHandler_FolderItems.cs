@@ -5,17 +5,17 @@ using System.IO;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Listener_FolderItems : MonoBehaviour {
+public class UIHandler_FolderItems : MonoBehaviour {
 
 	public Button Button_Dino; 
 
-	public MouseControl mouseControl;
+	public MouseHandler_TileSelection mouseControl;
 
 	// Use this for initialization
 	void Start () {
 		Button_Dino = this.gameObject.GetComponent("Button") as Button;
 
-		mouseControl = GameObject.Find("TileMap").GetComponent("MouseControl") as MouseControl;
+		mouseControl = GameObject.Find("TileMap").GetComponent("MouseHandler_TileSelection") as MouseHandler_TileSelection;
 
 		Button_Dino.onClick.AddListener (() => {
 			setSelectedObject ("Prefabs/dino"); });

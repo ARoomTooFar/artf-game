@@ -3,7 +3,9 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-
+//This class is for the GamePlay UI.
+//It creates a circular healthbar around the object.
+//Currently it is not attached to any value, and is changed via a scrollbar
 [RequireComponent(typeof(Scrollbar))]
 public class Handler_HealthCircle : MonoBehaviour
 {
