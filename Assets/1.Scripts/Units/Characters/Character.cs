@@ -79,6 +79,11 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public Animator animator;
 	public AnimatorStateInfo animSteInfo;
 	protected int idleHash, runHash, atkHash;
+	public GameObject data;
+	
+	protected virtual void setChest(){
+		data = GameObject.Find("DataChest");
+	}
 	
 	// Use this for initialization
 	protected virtual void Start () {
@@ -94,6 +99,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	
 	protected virtual void setInitValues() {
 		stats.dmgManip = new DamageManipulation();
+		setChest();
 	}
 
 	// Gets hash code for animations (Faster than using string name when running)

@@ -9,7 +9,7 @@ public class Gun : Weapons {
 	public Quaternion spray;
 	public float variance;
 	public float kick;
-	
+	public GameObject bullet;
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -36,8 +36,6 @@ public class Gun : Weapons {
 			//shotty
 			variance = 47f;
 		}
-		spray = user.transform.rotation;
-		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(12f-user.stats.coordination)+user.transform.eulerAngles.y,(12f-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
 			spray = user.transform.rotation;
 			spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(12f-user.stats.coordination)+user.transform.eulerAngles.y,(12f-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
 
@@ -89,7 +87,12 @@ public class Gun : Weapons {
 			{
 				StartCoroutine(makeSound(action,playSound,action.length));
 				yield return StartCoroutine(Wait(.08f));
-				Instantiate(stats.projectile, user.transform.position, spray);
+				bullet = (GameObject) Instantiate(stats.projectile, user.transform.position, spray);
+				//bullet.transform.parent = gameObject.transform;
+				bullet.GetComponentInChildren<Bullet>().damage = 1;
+				bullet.GetComponentInChildren<Bullet>().speed = .5f;
+				bullet.GetComponentInChildren<Bullet>().particles.startSpeed = particles.startSpeed;
+				bullet.GetComponentInChildren<Bullet>().player = user;
 				/*shots.Add(bullet);
 				foreach (Shot bull in shots){
 					bull.facing = spray.eulerAngles;
@@ -110,10 +113,15 @@ public class Gun : Weapons {
 		if(bullPattern == 'M'){//Glitchy
 			spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination)+user.transform.eulerAngles.y,(variance-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
 			StartCoroutine(makeSound(action,playSound,action.length));
-			for (int i = 0; i < count*count*count; i++)
+			for (int i = 0; i < count*count; i++)
 			{
 				yield return StartCoroutine(Wait(.01f));
-				Instantiate(stats.projectile, user.transform.position, spray);
+				bullet = (GameObject) Instantiate(stats.projectile, user.transform.position, spray);
+				//bullet.transform.parent = gameObject.transform;
+				bullet.GetComponentInChildren<Bullet>().damage = 1;
+				bullet.GetComponentInChildren<Bullet>().speed = .5f;
+				bullet.GetComponentInChildren<Bullet>().particles.startSpeed = particles.startSpeed;
+				bullet.GetComponentInChildren<Bullet>().player = user;
 				/*shots.Add(bullet);
 				foreach (Shot bull in shots){
 					bull.facing = spray.eulerAngles;
@@ -121,7 +129,7 @@ public class Gun : Weapons {
 				//variance -= 1;
 				spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
 				kick += .2f;
-				if(kick >= 10f){
+				if(kick >= 6f){
 					kick = 5f;
 				}
 			}
@@ -131,9 +139,14 @@ public class Gun : Weapons {
 			StartCoroutine(makeSound(action,playSound,action.length));
 			for (int i = 0; i < count*(int)Random.Range(3,5); i++)
 			{
-				yield return StartCoroutine(Wait(.02f));
+				yield return 0;
 				spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y,(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
-				Instantiate(stats.projectile, user.transform.position, spray);
+				bullet = (GameObject) Instantiate(stats.projectile, user.transform.position, spray);
+				//bullet.transform.parent = gameObject.transform;
+				bullet.GetComponentInChildren<Bullet>().damage = 1;
+				bullet.GetComponentInChildren<Bullet>().speed = .5f;
+				bullet.GetComponentInChildren<Bullet>().particles.startSpeed = count;
+				bullet.GetComponentInChildren<Bullet>().player = user;
 				/*shots.Add(bullet);
 				foreach (Shot bull in shots){
 					bull.facing = spray.eulerAngles;
