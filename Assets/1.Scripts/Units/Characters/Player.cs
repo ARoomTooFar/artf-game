@@ -13,12 +13,13 @@ public class Controls {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
+public class Player : Character, IMoveable {
 	public bool inGrey;
 	public int testDmg;
 	public int greyDamage;
-	public bool testable;
-
+	public bool testable, isReady, atEnd, atStart;
+	public Transform weapLocation, headLocation, bodyLocation, itemLocation;
+    public string[] loadData;
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -38,6 +39,7 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 		greyDamage = 0;
 		testDmg = 0;
 		testable = true;
+		
 	}
 	
 	// Update is called once per frame
@@ -51,7 +53,9 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 			
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-			actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+			animSteHash = animSteInfo.nameHash;
+			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
+			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 			
 			if (isGrounded) {
 				actionCommands ();
@@ -72,7 +76,7 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 		
-		if (actable || gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
+		if (actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing))) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -106,34 +110,63 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 			// If we trash the rigidbody later, we won't need this
 			rigidbody.velocity = Vector3.zero;
 		}
+		if(Input.GetKeyDown(KeyCode.Space)){
+		    loadFromText();
+			/*equipPiece("W0");
+			equipPiece("C0");
+			equipPiece("H1");
+			equipPiece("I0");
+			equipPiece("I1");
+			equipPiece("I2");
+			System.IO.File.WriteAllText(path,System.String.Format("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n",name,"W0","C0","H1","I0","I1","I2"));*/
+		}
+		if(Input.GetKeyDown(KeyCode.M)){
+			saveToText();
+		}
 	}
-	
+	public virtual void saveToText(){
+		loadData[0]=name;
+		System.IO.File.WriteAllLines(path,loadData);
+	}
+	public virtual void loadFromText(){
+		/*string[] */loadData = System.IO.File.ReadAllLines(path);
+		for(int i = 0; i<loadData.Length; i++){
+			if(i==0){//First line is name
+				name = loadData[i];
+			}else{//Rest of lines are things to equip
+				equipPiece(loadData[i]);
+			}
+		}
+	}
+	//Item type first char, number in array, second char++
+	public virtual void equipPiece(System.String code){
+		int index = (int)(code[1]-'0');
+		if(code[0] == ('C')){
+		   Quaternion butt = Quaternion.Euler(new Vector3(bodyLocation.eulerAngles.x+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.x,bodyLocation.eulerAngles.y+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.y,bodyLocation.eulerAngles.z+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.z));
+		   gear.bodyArmor = (Armor) Instantiate(data.GetComponent<DataChest>().armory[index],headLocation.position,butt); //data.GetComponent<DataChest>().weaponry[1].transform.position+
+		   gear.bodyArmor.transform.parent = bodyLocation.transform;
+		   gear.bodyArmor.equip(gameObject.GetComponent<Character>());
+		}else if(code[0] == ('H')){
+		   //Quaternion butt = Quaternion.Euler(new Vector3(headLocation.eulerAngles.x+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.x,headLocation.eulerAngles.y+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.y,headLocation.eulerAngles.z+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.z));
+		   gear.helmet = (Armor) Instantiate(data.GetComponent<DataChest>().armory[index],headLocation.position,transform.rotation); //data.GetComponent<DataChest>().weaponry[1].transform.position+
+		   gear.helmet.transform.parent = headLocation.transform;
+		   gear.helmet.equip(gameObject.GetComponent<Character>());
+		}else if(code[0] == ('W')){
+		   
+		   Quaternion butt = Quaternion.Euler(new Vector3(weapLocation.eulerAngles.x+data.GetComponent<DataChest>().weaponry[index].transform.eulerAngles.x,weapLocation.eulerAngles.y+data.GetComponent<DataChest>().weaponry[index].transform.eulerAngles.y,weapLocation.eulerAngles.z+data.GetComponent<DataChest>().weaponry[index].transform.eulerAngles.z));
+		   gear.weapon = (Weapons) Instantiate(data.GetComponent<DataChest>().weaponry[index],weapLocation.position,butt); //data.GetComponent<DataChest>().weaponry[1].transform.position+
+		   gear.weapon.transform.parent = weapLocation.transform;
+		   gear.weapon.equip(gameObject.GetComponent<Character>());
+		}else if(code[0] == ('I')){
+		   Quaternion butt = Quaternion.Euler(new Vector3(itemLocation.eulerAngles.x+data.GetComponent<DataChest>().inventory[index].transform.eulerAngles.x,itemLocation.eulerAngles.y+data.GetComponent<DataChest>().inventory[index].transform.eulerAngles.y,itemLocation.eulerAngles.z+data.GetComponent<DataChest>().inventory[index].transform.eulerAngles.z));
+		   inventory.items.Add((Item) Instantiate(data.GetComponent<DataChest>().inventory[index],itemLocation.position,butt)); //data.GetComponent<DataChest>().weaponry[1].transform.position+
+		   inventory.items[inventory.items.Count-1].transform.parent = itemLocation.transform;
+		   inventory.equipItems(gameObject.GetComponent<Character>());
+		}else{
+			Debug.Log("You fucked up, bitch");
+		}
+	}
 	//-------------------------------------//
-
-	//-------------------------------//
-	// Stun Interface Implementation //
-	//-------------------------------//
-	 
-	public virtual void stun(float stunDuration) {
-		print ("Stunned for " + stunDuration + " seconds");
-	}
-
-	//-------------------------------//
-
-	//--------------------------------//
-	// Force Interface Implementation //
-	//--------------------------------//
-
-	// The duration are essentially stun, expand on these later
-	public virtual void pull(float pullDuration) {
-		stun(pullDuration);
-	}
-
-	public virtual void push(float pushDuration) {
-		stun(pushDuration);
-	}
-
-	//--------------------------------//
 
 	//---------------------------------//
 	// Damage Interface Implementation //
