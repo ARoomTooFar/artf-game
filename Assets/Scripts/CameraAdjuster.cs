@@ -29,8 +29,8 @@ public class CameraAdjuster : MonoBehaviour {
 		isTopDown = false;
 		//Are we dragging camera?
 		isDragging = false;
-		dragSpeed.x = .5f;
-		dragSpeed.y = .5f;
+//		dragSpeed.x = .5f;
+//		dragSpeed.y = .5f;
 
 	}
 	

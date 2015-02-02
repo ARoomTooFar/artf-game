@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 public class MouseControl : MonoBehaviour {
 
+	//holds UI camera
+	public Camera cam;
+
 	/* reference to tile map */
 	TileMap tilemap;
 
@@ -14,6 +17,7 @@ public class MouseControl : MonoBehaviour {
 	/* selecting objects */
 	GameObject selectionCube;
 	GameObject currentObj;
+	
 
 	/*The last selected tile, stored for shift click */
 	Vector3 shiftOrigin;
@@ -22,7 +26,7 @@ public class MouseControl : MonoBehaviour {
 	public HashSet<Vector3> selectedTiles;
 
 	/* select when clicked */
-	string selectedObject;
+	public string selectedObject;
 
 	/* Initialize variables, setting booleans */
 	void Start () {
@@ -39,7 +43,8 @@ public class MouseControl : MonoBehaviour {
 	/* raycasting info and logic happens here */
 	void RayToScene(){
 		/* get world coordinates with respect to mouse position by raycast */
-		Ray ray = Camera.mainCamera.ScreenPointToRay (Input.mousePosition);
+//		Ray ray = Camera.mainCamera.ScreenPointToRay (Input.mousePosition);
+		Ray ray = cam.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hitInfo;
 		
 		/* getting raycast info and logic */
@@ -47,7 +52,8 @@ public class MouseControl : MonoBehaviour {
 
 			/* check if an object is selected and whether mouse is pressed */
 			if(selectedObject != null && Input.GetMouseButtonDown (0)){
-				Vector3 obj_pos = Camera.mainCamera.ScreenToWorldPoint(Input.mousePosition);
+//				Vector3 obj_pos = Camera.mainCamera.ScreenToWorldPoint(Input.mousePosition);
+				Vector3 obj_pos = cam.ScreenToWorldPoint(Input.mousePosition);
 				obj_pos.y = tilemap.transform.position.y;
 				placeItems(selectedObject, obj_pos);
 			
@@ -62,7 +68,7 @@ public class MouseControl : MonoBehaviour {
 					break;
 				default: 
 					snap2grid(hitInfo.collider.gameObject.transform.position.x, hitInfo.collider.transform.position.z);
-					Debug.Log(hitInfo.collider.gameObject.name);
+//					Debug.Log(hitInfo.collider.gameObject.name);
 					break;
 				}
 			}

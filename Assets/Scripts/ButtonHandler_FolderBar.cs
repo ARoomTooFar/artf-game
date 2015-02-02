@@ -61,6 +61,8 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 		folderBar = GameObject.Find("FolderBar").GetComponent<RectTransform>();
 
 		blankFolder = GameObject.Find("BlankFolder");
+
+	
 	}
 
 	//Pre: User clicked the button this script is attached to

@@ -17,7 +17,7 @@ public class LECamera : MonoBehaviour {
 	
 	void Awake () {
 		tiles = GameObject.Find ("TileMap");
-		topview ();
+//		topview ();
 
 	}
 
