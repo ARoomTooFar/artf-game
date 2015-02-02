@@ -12,7 +12,7 @@ public class Equipment : MonoBehaviour {
 
 	}
 
-	public void equip(Character u) {
+	public virtual void equip(Character u) {
 		user = u;
 		setInitValues();
 	}
