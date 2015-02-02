@@ -15,7 +15,7 @@ public class SpeedManipulation {
 
 	public SpeedManipulation(MonoBehaviour sM) {
 		spdPercents = new PercentValues();
-	    Debug.Log(spdPercents);
+
 		subMono = sM;
 	}
 
