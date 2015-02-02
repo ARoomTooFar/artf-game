@@ -8,8 +8,8 @@ public class Bullet : Projectile {
 	}
 	protected override void setInitValues() {
 		base.setInitValues();
-		damage = 1;
-		speed = .35f;
+		//damage = 1;
+		//speed = .35f;
 	}
 
 	// Update is called once per frame
