@@ -89,7 +89,7 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 
 	void Update(){
 		if(lerpingFolderClosed == true){
-			currentPosX = Mathf.MoveTowards (folderBar.anchoredPosition.x, closePosX, Time.deltaTime * 300f);
+			currentPosX = Mathf.MoveTowards (folderBar.anchoredPosition.x, closePosX, Time.deltaTime * 600f);
 			currentPos = new Vector3(currentPosX, -245.5f, 0f);
 			folderBar.anchoredPosition = currentPos;
 
@@ -99,7 +99,7 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 		}
 
 		if(lerpingFolderOpen == true){
-			currentPosX = Mathf.MoveTowards (folderBar.anchoredPosition.x, openPosX, Time.deltaTime * 300f);
+			currentPosX = Mathf.MoveTowards (folderBar.anchoredPosition.x, openPosX, Time.deltaTime * 600f);
 			currentPos = new Vector3(currentPosX, -245.5f, 0f);
 			folderBar.anchoredPosition = currentPos;
 			

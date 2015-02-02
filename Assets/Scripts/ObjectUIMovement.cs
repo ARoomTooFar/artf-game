@@ -7,6 +7,15 @@ public class ObjectUIMovement : MonoBehaviour
 {
 	public Transform thing; //In-world object this little UI thing is sticking to
 	public Camera cam; //Camera to make the UI face (must mimic its rotation)
+	public Canvas objectUICanvas; //so we can access the Event Camera field in the Object UI Canvas
+
+	void Start(){
+		//must set these fields programmatically, because when instantiating a prefab,
+		//these fields do not work if things are drag-and-dropped
+		cam = GameObject.Find("UICamera").camera;
+		objectUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
+		objectUICanvas.worldCamera = cam; //required in order for buttons on canvas to react to clicks
+	}
 
 	void LateUpdate () 
 	{

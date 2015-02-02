@@ -15,7 +15,7 @@ public class MouseControl : MonoBehaviour {
 	Vector3 currTile;
 
 	/* selecting objects */
-	GameObject selectionCube;
+	//public GameObject selectionCube;
 	GameObject currentObj;
 	
 
@@ -26,7 +26,7 @@ public class MouseControl : MonoBehaviour {
 	public HashSet<Vector3> selectedTiles;
 
 	/* select when clicked */
-	public string selectedObject;
+	private string selectedObject;
 
 	/* Initialize variables, setting booleans */
 	void Start () {
@@ -38,6 +38,14 @@ public class MouseControl : MonoBehaviour {
 	/* Calling raycast function */
 	void Update () {
 		RayToScene ();
+	}
+
+	public void setSelectedObject(string s){
+		selectedObject = s;
+	}
+
+	public void clearSelectedObject(){
+		selectedObject = null;
 	}
 
 	/* raycasting info and logic happens here */
@@ -52,9 +60,14 @@ public class MouseControl : MonoBehaviour {
 
 			/* check if an object is selected and whether mouse is pressed */
 			if(selectedObject != null && Input.GetMouseButtonDown (0)){
+				int x = Mathf.FloorToInt( hitInfo.point.x / tilemap.tileSize );
+				int z = Mathf.FloorToInt( hitInfo.point.z / tilemap.tileSize );
+
+
 //				Vector3 obj_pos = Camera.mainCamera.ScreenToWorldPoint(Input.mousePosition);
-				Vector3 obj_pos = cam.ScreenToWorldPoint(Input.mousePosition);
-				obj_pos.y = tilemap.transform.position.y;
+//				Vector3 obj_pos = cam.ScreenToWorldPoint(Input.mousePosition);
+				Vector3 obj_pos = new Vector3(x, 0f, z);
+//				obj_pos.y = tilemap.transform.position.y;
 				placeItems(selectedObject, obj_pos);
 			
 			} else{
@@ -147,5 +160,6 @@ public class MouseControl : MonoBehaviour {
 		position.x = Mathf.RoundToInt( position.x / tilemap.tileSize );
 		position.z = Mathf.RoundToInt( position.z / tilemap.tileSize );
 		currentObj = Instantiate (Resources.Load(name), position, Quaternion.identity) as GameObject;
+		clearSelectedObject();
 	}
 }
