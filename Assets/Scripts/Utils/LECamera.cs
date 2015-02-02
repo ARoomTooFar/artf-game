@@ -6,6 +6,7 @@ enum cam_views {play, top}; // rot90, rot180, rot270};
 
 public class LECamera : MonoBehaviour {
 
+
 	public Transform target;
 	public float smoothing = 5f;
 	GameObject tiles;
@@ -46,13 +47,13 @@ public class LECamera : MonoBehaviour {
 			if(count == 5){
 				
 			}
-			GL.Vertex (new Vector3 (0f, 0f, z));
-			GL.Vertex (new Vector3 (size_x, 0f, z));
+//			GL.Vertex (new Vector3 (0f, 0f, z));
+//			GL.Vertex (new Vector3 (size_x, 0f, z));
 		}
 		
 		for (int x = 0; x < size_x; x++) {
-			GL.Vertex (new Vector3 (x, 0f, 0f));
-			GL.Vertex (new Vector3 (x, 0f, size_z - 0f));
+//			GL.Vertex (new Vector3 (x, 0f, 0f));
+//			GL.Vertex (new Vector3 (x, 0f, size_z - 0f));
 		}
 		
 		GL.End ();

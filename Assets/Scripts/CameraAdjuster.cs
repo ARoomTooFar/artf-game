@@ -69,7 +69,7 @@ public class CameraAdjuster : MonoBehaviour {
 		//note for Jim or Leland: It took me 2 hours 
 		//to realize I had to remove the baseY = transform.position.y
 		//to get the desired effect...Please count that :(
-		if (Input.GetMouseButton (0)) {
+		if (Input.GetMouseButton (1)) {
 			dx = Input.GetAxis("Mouse X") * dragSpeed.x;
 			dy = Input.GetAxis("Mouse Y") * dragSpeed.y;
 			transform.position -= transform.right * dx + transform.up * dy;

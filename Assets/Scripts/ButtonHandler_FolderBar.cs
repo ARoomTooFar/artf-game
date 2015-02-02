@@ -10,6 +10,11 @@ using System.Collections;
 //folder bar due to user interaction.
 public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 {
+	//default color for the folder buttons
+	Color buttonColor = new Color32(0, 147, 176, 255);
+
+	Color selectedButtonColor = Color.cyan;
+
 	//setup for the scrollviews for folders
 	public GameObject[] folders;
 	public GameObject folderObject;
@@ -55,6 +60,8 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 		//shove all of the folder button into the array we have for them
 		for (int i = 0; i < numberOfbuttons; i++) {
 			buttons [i] = buttonObject.gameObject.transform.GetChild (i).gameObject;
+			Image img = buttons [i].GetComponent<Image> ();
+			img.color = buttonColor;
 		}
 
 //		folderBar = GameObject.Find("FolderBar").GetComponent ("RectTransform") as RectTransform;
@@ -170,16 +177,16 @@ public class ButtonHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 		for (int i = 0; i < numberOfbuttons; i++) {
 			if (String.Equals (buttons [i].name, currentButton)) {
 				Image img = buttons [i].GetComponent<Image> ();
-				img.color = Color.grey;
+				img.color = selectedButtonColor;
 
 				//if the folder bar is going into its closed state, 
 				//no button should be highlighted
 				if(lerpingFolderClosed == true){
-					img.color = Color.black;
+					img.color = buttonColor;
 				}
 			} else {
 				Image img = buttons [i].GetComponent<Image> ();
-				img.color = Color.black;
+				img.color = buttonColor;
 			}
 		}
 	}
