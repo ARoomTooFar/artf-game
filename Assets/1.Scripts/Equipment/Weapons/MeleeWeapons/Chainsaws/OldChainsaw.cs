@@ -28,9 +28,7 @@ public class OldChainsaw : Weapons {
 		
 		stats.maxChgTime = 3.0f;
 		stats.weapType = 0;
-
-		stats.colStart = 0.5f;
-		stats.colEnd = 0.55f;
+		
 		stats.chgLevels = 0.5f;
 
 		dealDamage = false;
@@ -64,7 +62,8 @@ public class OldChainsaw : Weapons {
 	public override void initAttack() {
 		base.initAttack();
 	}
-	
+
+	/*
 	// Sword attack functions
 	protected override void attack() {
 		if (!Input.GetKey(user.GetComponent<Character>().controls.attack) && stats.curChgAtkTime != -1) {
@@ -133,5 +132,5 @@ public class OldChainsaw : Weapons {
 		if(dealDamage && component != null && enemy != null) {
 			enemy.damage(stats.damage, user);
 		}
-	}
+	}*/
 }

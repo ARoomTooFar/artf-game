@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class Gun : Weapons {
+public class Gun : RangedWeapons {
 	//L = line, S = Shotty/Sprayheavy
 	public char bullPattern;
 	//for inaccuracy
 	public Quaternion spray;
 	public float variance;
 	public float kick;
+
+	private float colStart = 0.33f;
+	private float colEnd = 0.7f;
 	
 	// Use this for initialization
 	protected override void Start () {
@@ -57,17 +59,17 @@ public class Gun : Weapons {
 			stats.curChgAtkTime = -1;
 			StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
 			print("Charge Attack power level:" + (int)(stats.curChgDuration/stats.chgLevels));
-		} else if (stats.curChgAtkTime == 0 && user.animSteInfo.normalizedTime > stats.colStart) {
+		} else if (stats.curChgAtkTime == 0 && user.animSteInfo.normalizedTime > colStart) {
 			StartCoroutine(makeSound(charge,playSound,charge.length));
 			stats.curChgAtkTime = Time.time;
 			particles.startSpeed = 0;
 			particles.Play();
-		} else if (stats.curChgAtkTime != -1 && user.animSteInfo.normalizedTime > stats.colStart) {
+		} else if (stats.curChgAtkTime != -1 && user.animSteInfo.normalizedTime > colStart) {
 			stats.curChgDuration = Mathf.Clamp(Time.time - stats.curChgAtkTime, 0.0f, stats.maxChgTime);
 			particles.startSpeed = (int)(stats.curChgDuration/stats.chgLevels);
 		}
 		
-		if (user.animSteInfo.normalizedTime > stats.colEnd) {
+		if (user.animSteInfo.normalizedTime > colEnd) {
 			particles.Stop();
 		}
 	}
@@ -89,7 +91,7 @@ public class Gun : Weapons {
 			{
 				StartCoroutine(makeSound(action,playSound,action.length));
 				yield return StartCoroutine(Wait(.08f));
-				Instantiate(stats.projectile, user.transform.position, spray);
+				Instantiate(projectile, user.transform.position, spray);
 				/*shots.Add(bullet);
 				foreach (Shot bull in shots){
 					bull.facing = spray.eulerAngles;
@@ -113,7 +115,7 @@ public class Gun : Weapons {
 			for (int i = 0; i < count*count*count; i++)
 			{
 				yield return StartCoroutine(Wait(.01f));
-				Instantiate(stats.projectile, user.transform.position, spray);
+				Instantiate(projectile, user.transform.position, spray);
 				/*shots.Add(bullet);
 				foreach (Shot bull in shots){
 					bull.facing = spray.eulerAngles;
@@ -133,7 +135,7 @@ public class Gun : Weapons {
 			{
 				yield return StartCoroutine(Wait(.02f));
 				spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y,(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
-				Instantiate(stats.projectile, user.transform.position, spray);
+				Instantiate(projectile, user.transform.position, spray);
 				/*shots.Add(bullet);
 				foreach (Shot bull in shots){
 					bull.facing = spray.eulerAngles;

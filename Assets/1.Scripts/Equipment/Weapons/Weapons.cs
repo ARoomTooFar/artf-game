@@ -13,16 +13,13 @@ public class WeaponStats {
 	//0 -Melee, 1 -Gun, 2 -Flamethrower
 	public int weapType;
 	public string weapTypeName;
-	// When it actually deals damage in the animation
-	public float colStart, colEnd;
-	public GameObject projectile;
+
 	//This will be used to implement abilities in the spread sheet since different weapons have different effects when charged up. 
 	//For now~ Using 1 as shoot a powerful singular shot, using 2 for a line of three shots (For gun, but base case 1 is same animation more powerful damage)
 	public int chgType;
-	//public GameObject user;
 	// Charge atk variables
 	public int chgDamage;
-	public float maxChgTime, chgLevels, curChgAtkTime, curChgDuration;
+	public float maxChgTime, chgLevels, curChgAtkTime, curChgDuration, timeForChgAttack;
 }
 
 public class Weapons : Equipment {
@@ -53,14 +50,13 @@ public class Weapons : Equipment {
 		stats.atkSpeed = 1.0f;
 		stats.damage = 5;
 		stats.multHit = 0;
-		stats.colStart = 0.33f;
-		stats.colEnd = 0.7f;
 
 		stats.maxChgTime = 3.0f;
 		stats.curChgAtkTime = -1.0f;
 		stats.curChgDuration = 0.0f;
 		stats.chgLevels = 0.4f;
 		stats.chgDamage = 0;
+		stats.timeForChgAttack = 0.5f;
 		soundDur = 0.1f;
 		playSound = true;
 	}
@@ -77,14 +73,16 @@ public class Weapons : Equipment {
 	//----------------------------//
 	// Weapon Attacking Functions //
 	//----------------------------//
-	
+
+	// Start by initiateing attack animation
 	public virtual void initAttack() {
-		user.animator.SetTrigger("Attack"); // Swap over to weapon specific animation if we get some
-		user.animator.speed = stats.atkSpeed;
+		user.animator.SetTrigger("Attack");
+		user.animator.speed = stats.atkSpeed; // Once we have it figured out, speed can be done by animation, unless we have atacking slowing abilities
 		StartCoroutine(bgnAttack());
 	}
-	
-	protected IEnumerator bgnAttack() {
+
+	// Once we get into the charge animation, we set our chg data and start the next co routine
+	protected virtual IEnumerator bgnAttack() {
 		while (user.animSteInfo.nameHash != user.atkHashCharge) {
 			yield return null;
 		}
@@ -95,39 +93,47 @@ public class Weapons : Equipment {
 		StartCoroutine(bgnCharge());
 	}
 
-	// If things need to be done while charging make this virtual 
-	protected IEnumerator bgnCharge() {
-		if (user.gear.charging) particles.Play();
-		while (user.gear.charging) {
+	// Checks for user holding down charge sets sata accordingly
+	protected virtual IEnumerator bgnCharge() {
+		if (user.animator.GetBool("Charging")) particles.Play();
+		while (user.animator.GetBool("Charging")) {
 			stats.curChgDuration = Mathf.Clamp(stats.curChgDuration + Time.deltaTime, 0.0f, stats.maxChgTime);
 			stats.chgDamage = (int) (stats.curChgDuration/stats.chgLevels);
 			particles.startSpeed = stats.chgDamage;
 			yield return null;
 		}
-		
-		if (stats.curChgAtkTime >= 0.5f) {
+		attack ();		
+	}
+
+	// When player stops holding down charge, we check parameter for what attack to perform
+	protected virtual void attack() {
+		if (stats.curChgDuration >= 0.5f) {
 			chargedAttack();
 		} else {
-			attack ();
+			basicAttack();
 		}
 	}
 
-	protected virtual void attack() {
+	// Basic attack, a normal swing/stab/fire
+	protected virtual void basicAttack() {
 		print("Charged Attack; Power level:" + stats.chgDamage);
-		user.GetComponent<Character>().animator.SetTrigger("ChargeDone");
+		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
 		this.GetComponent<Collider>().enabled = true;
 		StartCoroutine(atkFinish());
 	}
-	
+
+	// Charged attack, something unique to the weapon type
 	protected virtual void chargedAttack() {
 		print("Charged Attack; Power level:" + stats.chgDamage);
-		user.GetComponent<Character>().animator.SetTrigger("ChargeDone");
+		user.GetComponent<Character>().animator.SetBool("ChargedAttack", true);
 		this.GetComponent<Collider>().enabled = true;
 		StartCoroutine(atkFinish());
 	}
-	
-	protected IEnumerator atkFinish() {
-		while (user.animator.GetCurrentAnimatorStateInfo(0).nameHash != user.atkHashEnd) {
+
+	// When our attack swing finishes, remove colliders, particles, and other stuff
+	//     * Consider one more co routine after to check for when our animation is completely done
+	protected virtual IEnumerator atkFinish() {
+		while (user.animSteInfo.nameHash != user.atkHashEnd) {
 			yield return null;
 		}
 		
@@ -138,14 +144,6 @@ public class Weapons : Equipment {
 	}
 	
 	//-------------------------//
-	
-	void OnTriggerEnter(Collider other) {
-		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
-		Character enemy = other.GetComponent<Character>();
-		if( component != null && enemy != null) {
-			enemy.damage(stats.damage + stats.chgDamage, user);
-		}
-	}
 	
 	public virtual IEnumerator makeSound(AudioClip sound, bool play, float duration){
 		AudioSource.PlayClipAtPoint (sound, transform.position);

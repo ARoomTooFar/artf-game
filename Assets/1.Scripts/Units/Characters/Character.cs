@@ -30,11 +30,9 @@ public class Stats{
 [System.Serializable]
 public class Gear {
 	public Weapons weapon;
-	public bool charging;
 	public Equipment helmet, bodyArmor;
 
 	public void equipItems(Character player) {
-		charging = false;
 		if (weapon) weapon.equip(player);
 	}
 }
@@ -63,7 +61,7 @@ public class Inventory {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int, Character>, ISlowable<float> {
+public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int, Character>, ISlowable<float>, IStunable<float>, IForcible<float> {
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -91,7 +89,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	
 	// Swap these over to weapons in the future
 	public string weapTypeName;
-	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashEnd, animSteHash;
+	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
 	
 	// Use this for initialization
 	protected virtual void Start () {
@@ -118,6 +116,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		atkHashStart = Animator.StringToHash (weapTypeName + "." + weapTypeName + "Start");
 		atkHashCharge = Animator.StringToHash (weapTypeName + "." + weapTypeName + "Charge");
 		atkHashSwing = Animator.StringToHash (weapTypeName + "." + weapTypeName + "Swing");
+		atkHashChgSwing = Animator.StringToHash (weapTypeName + "." + weapTypeName + "ChargedSwing");
 		atkHashEnd = Animator.StringToHash (weapTypeName + "." + weapTypeName + "End");
 	}
 	
@@ -153,7 +152,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		// Invokes an action/animation
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
-				gear.charging = true;
+				animator.SetBool("Charging", true);
 				gear.weapon.initAttack();
 			} else if(Input.GetKeyDown (controls.secItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
@@ -170,7 +169,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		} else {
 			
 			if (!Input.GetKey(controls.attack)) {
-				gear.charging = false;
+				animator.SetBool ("Charging", false);
 			}
 			/*else if (animSteInfo.nameHash == rollHash) { for later
 			}
@@ -315,6 +314,34 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	}
 
 	//-------------------------------//
+
+
+	//-------------------------------//
+	// Stun Interface Implementation //
+	//-------------------------------//
+	
+	public virtual void stun(float stunDuration) {
+		print ("Stunned for " + stunDuration + " seconds");
+	}
+	
+	//-------------------------------//
+
+
+	//--------------------------------//
+	// Force Interface Implementation //
+	//--------------------------------//
+	
+	// The duration are essentially stun, expand on these later
+	public virtual void pull(float pullDuration) {
+		stun(pullDuration);
+	}
+	
+	public virtual void push(float pushDuration) {
+		stun(pushDuration);
+	}
+	
+	//--------------------------------//
+
 
 	//-----------------------------//
 	// Timing Event Implementation //
