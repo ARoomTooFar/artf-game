@@ -1,11 +1,55 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//All conditions need go here
+public class cApproach :  ISMCondition {
+	public TestSM e;
+	public bool test(){
+		return e.canSeePlayer ();
+	}
+	
+}
+public class cRest :  ISMCondition {
+	public TestSM e;
+	public bool test(){
+		return !(e.canSeePlayer ());
+	}
+	
+}
+public class cRetreat :  ISMCondition {
+	public TestSM e;
+	public bool test(){
+		return false;
+	}
+	
+}
+public class cAttack :  ISMCondition {
+	public TestSM e;
+	public bool test(){
+		return false;
+	}
+	
+}
+public class cSearch :  ISMCondition {
+	public TestSM e;
+	public bool test(){
+		return false;
+	}
+	
+}
+
+//All actions go here
+public class actionRest : ISMAction {
+	public void action(){
+		
+	}
+}
+
 public class TestSM: Enemy{
 	
 	//Public variables to tweak in inspector
 	public float fov = 110f;
-	public static bool playerInSight = false;
+	public bool playerInSight = false;
 	public Vector3 targetPosition;
 	
 	//Private variables for use in player detection
@@ -23,77 +67,111 @@ public class TestSM: Enemy{
 		col = GetComponent<SphereCollider> ();
 		ani = GetComponent<Animator> ();
 		players = GameObject.FindGameObjectsWithTag ("Player");
+		testStateMachine = new StateMachine ();
 
 		initStates ();
+		testStateMachine.Start ();
 	}
 	
 	protected override void Update()
 	{
 		base.Update ();
-		if (playerInSight) {
-			attackPlayer (target);
-		}
+		testStateMachine.Update ();
 	}
 
-//All conditions needed go here
-	public class conditionCanSee : ISMCondition {
-		public bool test(){
-			return playerInSight;
-		}
-	}
 
 //Initializes states, transitions and actions
 	public void initStates(){
+
 		//Initialize all states
-		State rest = new State();
-		State approach = new State();
-		State search = new State ();
-		State attack = new State ();
-		State retreat = new State ();
+		State rest = new State("rest");
+		State approach = new State("approach");
+		State search = new State ("search");
+		State attack = new State ("attack");
+		State retreat = new State ("retreat");
+
 
 		//Set initial state for the SM
 		testStateMachine.initState = rest;
 
+
 		//Initialize all transitions
-		Transition restToApproach = new Transition();
-		Transition approachToSearch = new Transition();
-		Transition approachToAttack = new Transition();
-		Transition attackToRetreat = new Transition();
-		Transition attackToSearch = new Transition();
-		Transition attackToApproach = new Transition();
-		Transition retreatToRest = new Transition();
-		Transition retreatToAttack = new Transition();
-		Transition restToAttack = new Transition();
-		Transition searchToRest = new Transition();
-		Transition searchToAttack = new Transition();
-		Transition searchToApproach = new Transition();
+		Transition tRest = new Transition(rest);
+		Transition tApproach = new Transition (approach);
+		Transition tAttack = new Transition (attack);
+		Transition tRetreat = new Transition (retreat);
+		Transition tSearch = new Transition (search);
+
+
+		//Set the transitions for the states
+		rest.addTransition (tApproach);
+		approach.addTransition (tSearch);
+		approach.addTransition (tAttack);
+		attack.addTransition (tRetreat);
+		attack.addTransition (tApproach);
+		attack.addTransition (tSearch);
+		retreat.addTransition (tRest);
+		retreat.addTransition (tAttack);
+		search.addTransition (tRest);
+		search.addTransition (tApproach);
+		search.addTransition (tAttack);
+
 
 		//Set conditions for the transitions
-		restToAttack.addCondition(conditionCanSee);
+		cApproach cApproach = new cApproach();
+		cApproach.e = this;
+		tApproach.addCondition(cApproach);
+
+		cRest cRest = new cRest ();
+		cRest.e = this;
+		tRest.addCondition (cRest);
+
+		cAttack cAttack = new cAttack ();
+		cAttack.e = this;
+		tAttack.addCondition (cAttack);
+
+		cRetreat cRetreat = new cRetreat ();
+		cRetreat.e = this;
+		tRetreat.addCondition (cRetreat);
+
+		cSearch cSearch = new cSearch ();
+		cSearch.e = this;
+		tSearch.addCondition (cSearch);
+
+
+		//Set actions for the states
+		actionRest actionRest = new actionRest ();
+		rest.addAction (actionRest);
 	}
-	
-	
-	void OnTriggerStay (Collider other)
+
+	public bool canSeePlayer()
 	{
-		for (int i = 0; i <=3; i++) 
+		foreach (GameObject p in players) 
 		{
-			if (other.gameObject == players[i]) 
+			// Check angle of forward direction vector against the vector of enemy position relative to player position
+			Vector3 direction = p.transform.position - transform.position;
+			float angle = Vector3.Angle (direction, transform.forward);
+		
+			if (angle < fov * 0.5f) 
 			{
-				if (facingPlayer (other.gameObject) == true)
+				RaycastHit hit;
+				if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, col.radius)) 
 				{
-					//print ("Enemy can see me");
-					if (target == null){
-						target = other.gameObject;
-					}targetPosition = target.transform.position;
-					
-					playerInSight = true;
-				}
 				
+					if (hit.collider.gameObject == p) 
+					{
+					return true;
+					
+					}
+				}
 			}
 		}
-	}
 	
-	void attackPlayer (GameObject player)
+		return false;
+	}
+
+	
+	/*void attackPlayer (GameObject player)
 	{
 		Vector3 distanceToTarget = transform.position - targetPosition;
 		if (distanceToTarget.sqrMagnitude > 12) 
@@ -109,27 +187,6 @@ public class TestSM: Enemy{
 			if (actable)
 				gear.weapon.initAttack();
 		}
-	}
-	
-	bool facingPlayer(GameObject player)
-	{
-		// Check angle of forward direction vector against the vector of enemy position relative to player position
-		Vector3 direction = player.transform.position - transform.position;
-		float angle = Vector3.Angle (direction, transform.forward);
-		
-		if (angle < fov * 0.5f) 
-		{
-			RaycastHit hit;
-			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, col.radius)) {
-				
-				if (hit.collider.gameObject == player) 
-				{
-					return true;
-					
-				}
-			}
-		}
-		return false;
-		
-	}
+	}*/
+
 }

@@ -1,26 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 //Interface for action classes
 public interface ISMAction
 {
 	void action ();
+	
 }
 
 //State class holds array of transitions, and the method to access them
 public class State 
 {
-	private Transition[] transitions;
-	public Transition[] getTransitions()
+	private string id;
+	public string sId()
+	{
+		return id;
+	}
+
+	private List<Transition> transitions = new List<Transition>();
+	public List<Transition> getTransitions()
 	{
 		return transitions;
+	}
+
+	public void addTransition(Transition t){
+		transitions.Add (t);
 	}
 
 	private ISMAction action;
 	public void getAction()
 	{
 		action.action();
+	}
+
+	public void addAction(ISMAction act)
+	{
+		action = act;
+	}
+
+	public State(string n){
+		id = n;
 	}
 }
 
@@ -33,6 +54,7 @@ public interface ISMCondition
 //Transitions have unique condition and action classes that inherit from the corresponding interfaces
 //They have a target state, a condition, and an action. All of these also have methods to access them
 public class Transition {
+
 	private ISMCondition condition;
 	public bool isTriggered()
 	{
@@ -49,13 +71,18 @@ public class Transition {
 	public void addCondition(ISMCondition cond)
 	{
 		condition = cond;
+		Debug.Log (cond);
 	}
 
+	public Transition(State t)
+	{
+		targetState = t;
+	}
 }
 
 
 //The state machine keeps track of the states
-public class StateMachine : MonoBehaviour {
+public class StateMachine{
 	
 	public State initState;
 
@@ -65,17 +92,19 @@ public class StateMachine : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () 
+	public void Start()
 	{
 		currState = initState;
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	public void Update () 
 	{
 		triggeredTransition = null;
 
-		Transition[] transList = currState.getTransitions ();
+		Debug.Log (currState.sId());
+
+		List<Transition> transList = currState.getTransitions ();
 		foreach (Transition t in transList) 
 		{
 			if(t.isTriggered())
