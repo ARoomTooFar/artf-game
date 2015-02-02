@@ -2,53 +2,52 @@
 using System.Collections;
 
 //All conditions need go here
-public class cApproach :  ISMCondition 
+public class cApproachR :  ISMCondition 
 {
-	public TestSM e;
+	public TestSMRanged e;
 	public bool test()
 	{
-		return e.distanceToPlayer(e.giveTarget()) < 500f && e.distanceToPlayer(e.giveTarget()) >= 8.5f && e.canSeePlayer (e.giveTarget());
+		return e.distanceToPlayer(e.giveTarget()) < 700f && e.distanceToPlayer(e.giveTarget()) >= 100f && e.canSeePlayer (e.giveTarget());
 	}
 	
 }
 
-public class cRest :  ISMCondition 
+public class cRestR :  ISMCondition 
 {
-	public TestSM e;
+	public TestSMRanged e;
 	public bool test()
 	{
 		return (e.giveLastSeenPos() == null);
 	}
 }
 
-
-public class cRetreat :  ISMCondition 
+public class cRetreatR :  ISMCondition 
 {
-	public TestSM e;
+	public TestSMRanged e;
 	public bool test()
 	{
-		return e.distanceToPlayer(e.giveTarget()) <= 5.5f;
+		return e.distanceToPlayer(e.giveTarget()) <= 20f;
 	}
 	
 }
 
-public class cAttack :  ISMCondition 
+public class cAttackR :  ISMCondition 
 {
-	public TestSM e;
+	public TestSMRanged e;
 	public bool test()
 	{
-		return  e.distanceToPlayer(e.giveTarget()) < 8.5f && e.distanceToPlayer(e.giveTarget()) > 5.5f;
+		return  e.distanceToPlayer(e.giveTarget()) < 100f && e.distanceToPlayer(e.giveTarget()) > 20f;
 	}
 	
 }
 
-public class cSearch :  ISMCondition 
+public class cSearchR :  ISMCondition 
 {
-	public TestSM e;
+	public TestSMRanged e;
 	public bool test()
 	{
-			return (e.giveLastSeenPos ().HasValue) && !(e.canSeePlayer (e.giveTarget()));
-
+		return (e.giveLastSeenPos ().HasValue) && !(e.canSeePlayer (e.giveTarget()));
+		
 	}
 	
 }
@@ -56,9 +55,9 @@ public class cSearch :  ISMCondition
 //All actions go here
 
 //Add patrolling
-public class aRest : ISMAction 
+public class aRestR : ISMAction 
 {
-	public TestSM e;
+	public TestSMRanged e;
 	public void action()
 	{
 		e.ani.SetBool ("Moving", false);
@@ -66,9 +65,9 @@ public class aRest : ISMAction
 	}
 }
 
-public class aApproach : ISMAction 
+public class aApproachR : ISMAction 
 {
-	public TestSM e;
+	public TestSMRanged e;
 	public void action()
 	{
 		e.ani.SetBool ("Moving", true);
@@ -76,9 +75,9 @@ public class aApproach : ISMAction
 	}
 }
 
-public class aAttack : ISMAction 
+public class aAttackR : ISMAction 
 {
-	public TestSM e;
+	public TestSMRanged e;
 	public void action()
 	{
 		e.ani.SetBool ("Moving", false);
@@ -92,9 +91,9 @@ public class aAttack : ISMAction
 
 
 //Improve search function to have multiple goals (scanning room, reaching last known position of target)
-public class aSearch : ISMAction 
+public class aSearchR : ISMAction 
 {
-	public TestSM e;
+	public TestSMRanged e;
 	public void action()
 	{
 		e.ani.SetBool ("Moving", true);
@@ -103,9 +102,9 @@ public class aSearch : ISMAction
 }
 
 //Improve retreat AI
-public class aRetreat : ISMAction 
+public class aRetreatR : ISMAction 
 {
-	public TestSM e;
+	public TestSMRanged e;
 	public void action()
 	{
 		e.ani.SetBool ("Moving", true);
@@ -114,7 +113,7 @@ public class aRetreat : ISMAction
 	}
 }
 
-public class TestSM: Enemy{
+public class TestSMRanged: Enemy{
 	
 	//Public variables to tweak in inspector
 	public float fov = 110f;
@@ -127,10 +126,10 @@ public class TestSM: Enemy{
 	private SphereCollider col;
 	private GameObject[] players;
 	private GameObject target;
-
+	
 	private Vector3? lastSeenPosition = null;
 	private float posTimer = 0f;
-
+	
 	private StateMachine testStateMachine;
 	
 	//Get players, navmesh and all colliders
@@ -141,10 +140,10 @@ public class TestSM: Enemy{
 		ani = GetComponent<Animator> ();
 		players = GameObject.FindGameObjectsWithTag ("Player");
 		retreatPos = transform.position;
-
+		
 		//Placeholder for more advanced aggro where target may change
 		target = players [1];
-
+		
 		//State machine initialization
 		testStateMachine = new StateMachine ();
 		initStates ();
@@ -166,34 +165,34 @@ public class TestSM: Enemy{
 			lastSeenPosition = null;
 		}
 		
-
+		
 		testStateMachine.Update ();
 	}
-
-
-//Initializes states, transitions and actions
+	
+	
+	//Initializes states, transitions and actions
 	public void initStates(){
-
+		
 		//Initialize all states
 		State rest = new State("rest");
 		State approach = new State("approach");
 		State search = new State ("search");
 		State attack = new State ("attack");
 		State retreat = new State ("retreat");
-
-
+		
+		
 		//Set initial state for the SM
 		testStateMachine.initState = rest;
-
-
+		
+		
 		//Initialize all transitions
 		Transition tRest = new Transition(rest);
 		Transition tApproach = new Transition (approach);
 		Transition tAttack = new Transition (attack);
 		Transition tRetreat = new Transition (retreat);
 		Transition tSearch = new Transition (search);
-
-
+		
+		
 		//Set the transitions for the states
 		rest.addTransition (tApproach);
 		approach.addTransition (tSearch);
@@ -206,92 +205,92 @@ public class TestSM: Enemy{
 		search.addTransition (tRest);
 		search.addTransition (tApproach);
 		search.addTransition (tAttack);
-
-
+		
+		
 		//Set conditions for the transitions
-		cApproach cApproach = new cApproach();
+		cApproachR cApproach = new cApproachR();
 		cApproach.e = this;
 		tApproach.addCondition(cApproach);
-
-		cRest cRest = new cRest ();
+		
+		cRestR cRest = new cRestR ();
 		cRest.e = this;
 		tRest.addCondition (cRest);
-
-		cAttack cAttack = new cAttack ();
+		
+		cAttackR cAttack = new cAttackR ();
 		cAttack.e = this;
 		tAttack.addCondition (cAttack);
-
-		cRetreat cRetreat = new cRetreat ();
+		
+		cRetreatR cRetreat = new cRetreatR ();
 		cRetreat.e = this;
 		tRetreat.addCondition (cRetreat);
-
-		cSearch cSearch = new cSearch ();
+		
+		cSearchR cSearch = new cSearchR ();
 		cSearch.e = this;
 		tSearch.addCondition (cSearch);
-
-
+		
+		
 		//Set actions for the states
-		aRest aRest = new aRest ();
+		aRestR aRest = new aRestR ();
 		aRest.e = this;
 		rest.addAction (aRest);
-
-		aSearch aSearch = new aSearch ();
+		
+		aSearchR aSearch = new aSearchR ();
 		aSearch.e = this;
 		search.addAction (aSearch);
-
-		aAttack aAttack = new aAttack ();
+		
+		aAttackR aAttack = new aAttackR ();
 		aAttack.e = this;
 		attack.addAction (aAttack);
-
-		aApproach aApproach = new aApproach ();
+		
+		aApproachR aApproach = new aApproachR ();
 		aApproach.e = this;
 		approach.addAction (aApproach);
-
-		aRetreat aRetreat = new aRetreat ();
+		
+		aRetreatR aRetreat = new aRetreatR ();
 		aRetreat.e = this;
 		retreat.addAction (aRetreat);
 	}
-
+	
 	public bool canSeePlayer(GameObject p)
 	{
-
-			// Check angle of forward direction vector against the vector of enemy position relative to player position
-			Vector3 direction = p.transform.position - transform.position;
-			float angle = Vector3.Angle (direction, transform.forward);
 		
-			if (angle < fov * 0.5f) 
+		// Check angle of forward direction vector against the vector of enemy position relative to player position
+		Vector3 direction = p.transform.position - transform.position;
+		float angle = Vector3.Angle (direction, transform.forward);
+		
+		if (angle < fov * 0.5f) 
+		{
+			RaycastHit hit;
+			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, col.radius)) 
 			{
-				RaycastHit hit;
-				if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, col.radius)) 
-				{
 				
-					if (hit.collider.gameObject == p) 
-					{
-						lastSeenPosition = p.transform.position;
-						return true;
+				if (hit.collider.gameObject == p) 
+				{
+					lastSeenPosition = p.transform.position;
+					return true;
 					
-					}
 				}
 			}
-
-	
+		}
+		
+		
 		return false;
 	}
-
+	
 	public float distanceToPlayer(GameObject p)
 	{
 		Vector3 distance = p.transform.position - transform.position;
 		return distance.sqrMagnitude;
 	}
-
+	
 	public Vector3? giveLastSeenPos()
 	{
 		return lastSeenPosition;
 	}
-
+	
 	public GameObject giveTarget()
 	{
 		return target;
 	}
-
+	
 }
