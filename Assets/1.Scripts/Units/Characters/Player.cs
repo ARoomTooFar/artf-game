@@ -115,11 +115,6 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 			equipPiece("I0");
 			equipPiece("I1");
 			equipPiece("I2");
-		   //Quaternion butt = Quaternion.Euler(new Vector3(transform.eulerAngles.x+data.GetComponent<DataChest>().weaponry[0].transform.eulerAngles.x,transform.eulerAngles.y+data.GetComponent<DataChest>().weaponry[0].transform.eulerAngles.y,transform.eulerAngles.z+data.GetComponent<DataChest>().weaponry[0].transform.eulerAngles.z));
-		   /*Quaternion butt = Quaternion.Euler(new Vector3(weapLocation.eulerAngles.x+data.GetComponent<DataChest>().weaponry[1].transform.eulerAngles.x,weapLocation.eulerAngles.y+data.GetComponent<DataChest>().weaponry[1].transform.eulerAngles.y,weapLocation.eulerAngles.z+data.GetComponent<DataChest>().weaponry[1].transform.eulerAngles.z));
-		   gear.weapon = (Weapons) Instantiate(data.GetComponent<DataChest>().weaponry[1],weapLocation.position,butt); //data.GetComponent<DataChest>().weaponry[1].transform.position+
-		   gear.weapon.transform.parent = weapLocation.transform;
-		   gear.weapon.equip(gameObject.GetComponent<Character>());*/
 		}
 	}
 	//Item type first char, number in array, second char++
@@ -131,13 +126,12 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 		   gear.bodyArmor.transform.parent = bodyLocation.transform;
 		   gear.bodyArmor.equip(gameObject.GetComponent<Character>());
 		}else if(code[0] == ('H')){
-		   Quaternion butt = Quaternion.Euler(new Vector3(headLocation.eulerAngles.x+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.x,headLocation.eulerAngles.y+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.y,headLocation.eulerAngles.z+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.z));
-		   gear.helmet = (Armor) Instantiate(data.GetComponent<DataChest>().armory[index],headLocation.position,butt); //data.GetComponent<DataChest>().weaponry[1].transform.position+
+		   //Quaternion butt = Quaternion.Euler(new Vector3(headLocation.eulerAngles.x+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.x,headLocation.eulerAngles.y+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.y,headLocation.eulerAngles.z+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.z));
+		   gear.helmet = (Armor) Instantiate(data.GetComponent<DataChest>().armory[index],headLocation.position,transform.rotation); //data.GetComponent<DataChest>().weaponry[1].transform.position+
 		   gear.helmet.transform.parent = headLocation.transform;
 		   gear.helmet.equip(gameObject.GetComponent<Character>());
 		}else if(code[0] == ('W')){
-		   /*int index = (int)(code[1]-'0');
-		   Debug.Log(index);*/
+		   
 		   Quaternion butt = Quaternion.Euler(new Vector3(weapLocation.eulerAngles.x+data.GetComponent<DataChest>().weaponry[index].transform.eulerAngles.x,weapLocation.eulerAngles.y+data.GetComponent<DataChest>().weaponry[index].transform.eulerAngles.y,weapLocation.eulerAngles.z+data.GetComponent<DataChest>().weaponry[index].transform.eulerAngles.z));
 		   gear.weapon = (Weapons) Instantiate(data.GetComponent<DataChest>().weaponry[index],weapLocation.position,butt); //data.GetComponent<DataChest>().weaponry[1].transform.position+
 		   gear.weapon.transform.parent = weapLocation.transform;
