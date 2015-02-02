@@ -13,7 +13,7 @@ public class Controls {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
+public class Player : Character, IMoveable {
 	public bool inGrey;
 	public int testDmg;
 	public int greyDamage;
@@ -53,7 +53,9 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 			
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-			actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+			animSteHash = animSteInfo.nameHash;
+			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
+			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 			
 			if (isGrounded) {
 				actionCommands ();
@@ -74,7 +76,7 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 		
-		if (actable || gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
+		if (actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing))) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -146,31 +148,6 @@ public class Player : Character, IMoveable, IStunable<float>, IForcible<float> {
 		}
 	}
 	//-------------------------------------//
-
-	//-------------------------------//
-	// Stun Interface Implementation //
-	//-------------------------------//
-	 
-	public virtual void stun(float stunDuration) {
-		print ("Stunned for " + stunDuration + " seconds");
-	}
-
-	//-------------------------------//
-
-	//--------------------------------//
-	// Force Interface Implementation //
-	//--------------------------------//
-
-	// The duration are essentially stun, expand on these later
-	public virtual void pull(float pullDuration) {
-		stun(pullDuration);
-	}
-
-	public virtual void push(float pushDuration) {
-		stun(pushDuration);
-	}
-
-	//--------------------------------//
 
 	//---------------------------------//
 	// Damage Interface Implementation //
