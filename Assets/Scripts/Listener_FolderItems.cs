@@ -18,7 +18,7 @@ public class Listener_FolderItems : MonoBehaviour {
 		mouseControl = GameObject.Find("TileMap").GetComponent("MouseControl") as MouseControl;
 
 		Button_Dino.onClick.AddListener (() => {
-			setSelectedObject ("dino"); });
+			setSelectedObject ("Prefabs/dino"); });
 	}
 
 	void setSelectedObject(string s){
