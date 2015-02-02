@@ -12,7 +12,7 @@ public class cApproach :  ISMCondition {
 public class cRest :  ISMCondition {
 	public TestSM e;
 	public bool test(){
-		return !(e.canSeePlayer ());
+		return !(e.canSeePlayer ()) && (e.giveLastSeenPos() == Vector3.zero);
 	}
 	
 }
@@ -33,7 +33,7 @@ public class cAttack :  ISMCondition {
 public class cSearch :  ISMCondition {
 	public TestSM e;
 	public bool test(){
-		return false;
+		return !(e.canSeePlayer ())&& (e.giveLastSeenPos() != Vector3.zero);
 	}
 	
 }
@@ -58,6 +58,10 @@ public class TestSM: Enemy{
 	private SphereCollider col;
 	private GameObject[] players;
 	private GameObject target = null;
+
+	private Vector3 lastSeenPosition = Vector3.zero;
+	private float posTimer = 0f;
+
 	private StateMachine testStateMachine;
 	
 	//Get players, navmesh and all colliders
@@ -76,6 +80,15 @@ public class TestSM: Enemy{
 	protected override void Update()
 	{
 		base.Update ();
+		if(lastSeenPosition != Vector3.zero)
+		{
+			posTimer += Time.deltaTime;
+		}
+		if(posTimer > 10f)
+		{
+			posTimer = 0f;
+			lastSeenPosition = Vector3.zero;
+		}
 		testStateMachine.Update ();
 	}
 
@@ -160,7 +173,8 @@ public class TestSM: Enemy{
 				
 					if (hit.collider.gameObject == p) 
 					{
-					return true;
+						lastSeenPosition = p.transform.position;
+						return true;
 					
 					}
 				}
@@ -168,6 +182,11 @@ public class TestSM: Enemy{
 		}
 	
 		return false;
+	}
+
+	public Vector3 giveLastSeenPos()
+	{
+		return lastSeenPosition;
 	}
 
 	
