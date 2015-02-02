@@ -19,6 +19,12 @@ public class Stats{
 	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
 	*/
 	public DamageManipulation dmgManip;
+	public SpeedManipulation spdManip;
+
+	public Stats(MonoBehaviour subMono) {
+		dmgManip = new DamageManipulation(subMono);
+		spdManip = new SpeedManipulation(subMono);
+	}
 }
 
 [System.Serializable]
@@ -55,7 +61,7 @@ public class Inventory {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int, Character> {
+public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int, Character>, ISlowable<float>{
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -74,6 +80,8 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public AudioClip hurt, victory, failure;
 
 	public bool invincible = false;
+	
+	protected delegate void BuffDelegate(float duration);
 
 	// Animation variables
 	public Animator animator;
@@ -87,6 +95,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	
 	// Use this for initialization
 	protected virtual void Start () {
+		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
 		isDead = false;
@@ -98,7 +107,6 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	}
 	
 	protected virtual void setInitValues() {
-		stats.dmgManip = new DamageManipulation();
 		setChest();
 	}
 
@@ -139,6 +147,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		// Invokes an action/animation
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
+				gear.weapon.initAttack();
 				gear.weapon.initAttack();
 			} else if(Input.GetKeyDown (controls.secItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
@@ -264,6 +273,53 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public virtual void die() {
 		stats.isDead = true;
 	}
-
+	
+	//-------------------------------//
+	
+	//-------------------------------//
+	// Slow Interface Implementation //
+	//-------------------------------//
 	//----------------------------------//
+	public virtual void slow(float slowStrength) {
+		stats.spdManip.setSpeedReduction(slowStrength);
+	}
+
+	public virtual void removeSlow(float slowStrength) {
+		stats.spdManip.removeSpeedReduction(slowStrength);
+	}
+
+	public virtual void slowForDuration(float slowStrength, float slowDuration) {
+		slow(slowStrength);
+		StartCoroutine(buffTiming(slowStrength, slowDuration, removeSlow));
+	}
+
+	public virtual void speed(float speedStrength) {
+		stats.spdManip.setSpeedAmplification(speedStrength);
+	}
+	
+	public virtual void removeSpeed(float speedStrength) {
+		stats.spdManip.removeSpeedAmplification(speedStrength);
+	}
+	
+	public virtual void speedForDuration(float speedStrength, float speedDuration) {
+		speed(speedStrength);
+		StartCoroutine(buffTiming(speedStrength, speedDuration, removeSpeed));
+	}
+
+	//-------------------------------//
+
+	//-----------------------------//
+	// Timing Event Implementation //
+	//-----------------------------//
+
+	// Used for buffs that are duration based
+	// Uses delegates to call function when over
+	// Will make virtual when neccessary
+	protected IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
+		while (duration > 0) {
+			duration -= Time.deltaTime;
+			yield return null;
+		}
+		bd(strValue);
+	}
 }
