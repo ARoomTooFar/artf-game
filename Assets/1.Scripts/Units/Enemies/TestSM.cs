@@ -2,46 +2,114 @@
 using System.Collections;
 
 //All conditions need go here
-public class cApproach :  ISMCondition {
+public class cApproach :  ISMCondition 
+{
 	public TestSM e;
-	public bool test(){
-		return e.canSeePlayer ();
+	public bool test()
+	{
+		return e.distanceToPlayer(e.giveTarget()) < 500f && e.distanceToPlayer(e.giveTarget()) >= 8.5f && e.canSeePlayer (e.giveTarget());
 	}
 	
 }
-public class cRest :  ISMCondition {
+
+public class cRest :  ISMCondition 
+{
 	public TestSM e;
-	public bool test(){
-		return !(e.canSeePlayer ()) && (e.giveLastSeenPos() == Vector3.zero);
+	public bool test()
+	{
+		return (e.giveLastSeenPos() == null);
+	}
+}
+
+public class cRetreat :  ISMCondition 
+{
+	public TestSM e;
+	public bool test()
+	{
+		return e.distanceToPlayer(e.giveTarget()) <= 5.5f;
 	}
 	
 }
-public class cRetreat :  ISMCondition {
+
+public class cAttack :  ISMCondition 
+{
 	public TestSM e;
-	public bool test(){
-		return false;
+	public bool test()
+	{
+		return  e.distanceToPlayer(e.giveTarget()) < 8.5f && e.distanceToPlayer(e.giveTarget()) > 5.5f;
 	}
 	
 }
-public class cAttack :  ISMCondition {
+
+public class cSearch :  ISMCondition 
+{
 	public TestSM e;
-	public bool test(){
-		return false;
-	}
-	
-}
-public class cSearch :  ISMCondition {
-	public TestSM e;
-	public bool test(){
-		return !(e.canSeePlayer ())&& (e.giveLastSeenPos() != Vector3.zero);
+	public bool test()
+	{
+			return (e.giveLastSeenPos ().HasValue) && !(e.canSeePlayer (e.giveTarget()));
+
 	}
 	
 }
 
 //All actions go here
-public class actionRest : ISMAction {
-	public void action(){
-		
+
+//Add patrolling
+public class aRest : ISMAction 
+{
+	public TestSM e;
+	public void action()
+	{
+		e.ani.SetBool ("Moving", false);
+		e.nav.Stop ();
+	}
+}
+
+public class aApproach : ISMAction 
+{
+	public TestSM e;
+	public void action()
+	{
+		e.ani.SetBool ("Moving", true);
+		e.nav.destination = e.giveTarget ().transform.position;
+	}
+}
+
+public class aAttack : ISMAction 
+{
+	public TestSM e;
+	public void action()
+	{
+		e.ani.SetBool ("Moving", false);
+		e.nav.destination = e.transform.position;
+		if (!e.canSeePlayer (e.giveTarget()))
+			e.transform.LookAt (e.giveTarget().transform.position);
+		if (e.actable)
+			e.gear.weapon.initAttack();
+	}
+}
+
+
+//Improve search function to have multiple goals (scanning room, reaching last known position of target)
+public class aSearch : ISMAction 
+{
+	public TestSM e;
+	public void action()
+	{
+		e.ani.SetBool ("Moving", true);
+		e.nav.destination = (Vector3)e.giveLastSeenPos ();
+	}
+}
+
+//Improve retreat AI
+public class aRetreat : ISMAction 
+{
+	public TestSM e;
+	public void action()
+	{
+		e.ani.SetBool ("Moving", true);
+		e.nav.speed = 5;
+		e.nav.destination = e.retreatPos;
 	}
 }
 
@@ -50,16 +118,16 @@ public class TestSM: Enemy{
 	//Public variables to tweak in inspector
 	public float fov = 110f;
 	public bool playerInSight = false;
-	public Vector3 targetPosition;
+	public NavMeshAgent nav;
+	public Animator ani;
+	public Vector3 retreatPos;
 	
 	//Private variables for use in player detection
-	private NavMeshAgent nav;
-	private Animator ani;
 	private SphereCollider col;
 	private GameObject[] players;
-	private GameObject target = null;
+	private GameObject target;
 
-	private Vector3 lastSeenPosition = Vector3.zero;
+	private Vector3? lastSeenPosition = null;
 	private float posTimer = 0f;
 
 	private StateMachine testStateMachine;
@@ -71,8 +139,13 @@ public class TestSM: Enemy{
 		col = GetComponent<SphereCollider> ();
 		ani = GetComponent<Animator> ();
 		players = GameObject.FindGameObjectsWithTag ("Player");
-		testStateMachine = new StateMachine ();
+		retreatPos = transform.position;
 
+		//Placeholder for more advanced aggro where target may change
+		target = players [1];
+
+		//State machine initialization
+		testStateMachine = new StateMachine ();
 		initStates ();
 		testStateMachine.Start ();
 	}
@@ -80,15 +153,19 @@ public class TestSM: Enemy{
 	protected override void Update()
 	{
 		base.Update ();
-		if(lastSeenPosition != Vector3.zero)
-		{
+		Debug.Log (lastSeenPosition.HasValue);
+		if (lastSeenPosition.HasValue && !canSeePlayer (target)) {
 			posTimer += Time.deltaTime;
+		} else if (canSeePlayer (target)){
+			posTimer = 0f;
 		}
 		if(posTimer > 10f)
 		{
 			posTimer = 0f;
-			lastSeenPosition = Vector3.zero;
+			lastSeenPosition = null;
 		}
+		
+
 		testStateMachine.Update ();
 	}
 
@@ -153,14 +230,30 @@ public class TestSM: Enemy{
 
 
 		//Set actions for the states
-		actionRest actionRest = new actionRest ();
-		rest.addAction (actionRest);
+		aRest aRest = new aRest ();
+		aRest.e = this;
+		rest.addAction (aRest);
+
+		aSearch aSearch = new aSearch ();
+		aSearch.e = this;
+		search.addAction (aSearch);
+
+		aAttack aAttack = new aAttack ();
+		aAttack.e = this;
+		attack.addAction (aAttack);
+
+		aApproach aApproach = new aApproach ();
+		aApproach.e = this;
+		approach.addAction (aApproach);
+
+		aRetreat aRetreat = new aRetreat ();
+		aRetreat.e = this;
+		retreat.addAction (aRetreat);
 	}
 
-	public bool canSeePlayer()
+	public bool canSeePlayer(GameObject p)
 	{
-		foreach (GameObject p in players) 
-		{
+
 			// Check angle of forward direction vector against the vector of enemy position relative to player position
 			Vector3 direction = p.transform.position - transform.position;
 			float angle = Vector3.Angle (direction, transform.forward);
@@ -179,33 +272,25 @@ public class TestSM: Enemy{
 					}
 				}
 			}
-		}
+
 	
 		return false;
 	}
 
-	public Vector3 giveLastSeenPos()
+	public float distanceToPlayer(GameObject p)
+	{
+		Vector3 distance = p.transform.position - transform.position;
+		return distance.sqrMagnitude;
+	}
+
+	public Vector3? giveLastSeenPos()
 	{
 		return lastSeenPosition;
 	}
 
-	
-	/*void attackPlayer (GameObject player)
+	public GameObject giveTarget()
 	{
-		Vector3 distanceToTarget = transform.position - targetPosition;
-		if (distanceToTarget.sqrMagnitude > 12) 
-		{
-			nav.destination = targetPosition;
-			ani.SetBool ("Moving", true);
-		} else {
-			nav.Stop ();
-			if (!facingPlayer (player))
-				transform.LookAt (targetPosition);
-			ani.SetBool ("Moving", false);
-			
-			if (actable)
-				gear.weapon.initAttack();
-		}
-	}*/
+		return target;
+	}
 
 }
