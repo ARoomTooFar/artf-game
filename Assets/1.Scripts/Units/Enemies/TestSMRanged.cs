@@ -12,6 +12,7 @@ public class cApproachR :  ISMCondition
 	
 }
 
+//Stuck in rest mode when search is over
 public class cRestR :  ISMCondition 
 {
 	public TestSMRanged e;
