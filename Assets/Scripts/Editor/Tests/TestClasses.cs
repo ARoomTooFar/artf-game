@@ -28,8 +28,8 @@ public class MasterTest {
 		 */
 		public int numTiles() {
 			int retVal = 0;
-			foreach(KeyValuePair<string, List<TerrainBlock>> kvp in dictionary) {
-				retVal += kvp.Value.Count;
+			foreach(List<TerrainBlock> val in dictionary.Values) {
+				retVal += val.Count;
 			}
 			return retVal;
 		}
@@ -38,6 +38,19 @@ public class MasterTest {
 	protected internal class test_MapData : MapData{
 		public static test_TerrainManager Terrain {
 			get{ return new test_TerrainManager(MapData.Instance.TerrainBlocks); }
+		}
+	}
+
+	protected internal class test_ARTFRoomManager : ARTFRoomManager {
+		public test_ARTFRoomManager(){}
+		public test_ARTFRoomManager(ARTFRoomManager rm) : base(rm){}
+
+		public List<ARTFRoom> RoomList{
+			get{ return base.roomList; }
+		}
+
+		public new ARTFRoom getRoom(Vector3 pos){
+			return base.getRoom(pos);
 		}
 	}
 
