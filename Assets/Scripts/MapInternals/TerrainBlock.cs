@@ -86,7 +86,7 @@ public class TerrainBlock {
 	}
 
 	/*
-	 * Copy constructor
+	 * Deep Copy constructor
 	 */
 	public TerrainBlock(TerrainBlock original){
 		this.neighbors = new Dictionary<DIRECTION, TerrainBlock>(original.neighbors);
@@ -141,9 +141,7 @@ public class TerrainBlock {
 	 * 
 	 */
 	public void clearNeighbors() {
-		foreach(DIRECTION dir in Enum.GetValues(typeof(DIRECTION))) {
-			neighbors.Remove(dir);
-		}
+		neighbors.Clear();
 	}
 
 	/*
