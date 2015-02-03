@@ -59,9 +59,9 @@ public class TerrainManager {
 	 */
 	private bool linkNeighbors(TerrainBlock block) {
 		//Go through every set of blocks
-		foreach(KeyValuePair<string, List<TerrainBlock>> pair in dictionary) {
+		foreach(List<TerrainBlock> lst in dictionary.Values) {
 			//for each extant block
-			foreach(TerrainBlock blk in pair.Value) {
+			foreach(TerrainBlock blk in lst) {
 				//determine if the block is a neighbor of the input
 				DIRECTION dir = block.isNeighbor(blk);
 				//if not, move on to the next one
