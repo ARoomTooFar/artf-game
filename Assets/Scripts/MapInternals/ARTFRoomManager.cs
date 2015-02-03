@@ -4,9 +4,14 @@ using System.Collections.Generic;
 
 public class ARTFRoomManager {
 
-	private List<ARTFRoom> roomList = new List<ARTFRoom>();
+	protected internal List<ARTFRoom> roomList = new List<ARTFRoom>();
 
 	public ARTFRoomManager() {
+	}
+
+	//Shallow Copy Constructor. Testing only
+	protected internal ARTFRoomManager(ARTFRoomManager rm){
+		this.roomList = rm.roomList;
 	}
 
 	/*
@@ -17,15 +22,24 @@ public class ARTFRoomManager {
 	public bool addRoom(Vector3 pos1, Vector3 pos2){
 		//Creates a new room
 		ARTFRoom nRoom = new ARTFRoom(pos1, pos2);
+		return addRoom(nRoom);
+	}
+
+	/*
+	 * public bool addRoom(ARTFRoom rm)
+	 * 
+	 * Adds a room
+	 */
+	public bool addRoom(ARTFRoom rm){
 		//If an existing room intersects with the new room
-		if(doAnyRoomsIntersect(nRoom)){
+		if(doAnyRoomsIntersect(rm)){
 			//abort and return false
 			return false;
 		}
 		//add the new room to the list of rooms
-		roomList.Add(nRoom);
+		roomList.Add(rm);
 		//link the needed terrain to it
-		nRoom.linkTerrain();
+		rm.linkTerrain();
 		return true;
 	}
 
@@ -41,6 +55,10 @@ public class ARTFRoomManager {
 		if(rm == null) {
 			return false;
 		}
+		//if the move would cause an intersect, abort
+		if(doAnyRoomsIntersect(rm, offset)){
+			return false;
+		}
 		//tell the room to move
 		return rm.Move(offset);
 	}
@@ -53,8 +71,16 @@ public class ARTFRoomManager {
 	public bool resizeRoom(Vector3 corner, Vector3 nCorner){
 		//get the room at corner
 		ARTFRoom rm = getRoom(corner);
-		//if it doesn't exist abort
+		//if corner is not a corner of the room, abort
+		if(!rm.isCorner(corner)) {
+			return false;
+		}
+		//if it doesn't exist, abort
 		if(rm == null) {
+			return false;
+		}
+		//if the resize would cause an intersect, abort
+		if(doAnyRoomsIntersect(rm, corner, nCorner)){
 			return false;
 		}
 		//tell the room to resize itself
@@ -89,9 +115,26 @@ public class ARTFRoomManager {
 	 */
 	public bool doAnyRoomsIntersect(ARTFRoom room, Vector3 offset){
 		//get a new room in the offset position
-		ARTFRoom tempRoom = new ARTFRoom(room.LLCorner + offset, room.URCorner + offset);
+		room.Move(offset);
 		//check if the new room intersects
-		return doAnyRoomsIntersect(tempRoom);
+		bool retVal = doAnyRoomsIntersect(room);
+		room.Move(-offset);
+		return retVal;
+	}
+
+	/*
+	 * public bool doAnyRoomsIntersect(ARTFRoom room, Vector3 corner, Vector3 nCorner)
+	 * 
+	 * Checks to see if a given room intersects with
+	 * any rooms already in the list if it is resized
+	 */
+	public bool doAnyRoomsIntersect(ARTFRoom room, Vector3 corner, Vector3 nCorner){
+		//get a new room in the offset position
+		room.Resize(corner, nCorner);
+		//check if the new room intersects
+		bool retVal = doAnyRoomsIntersect(room);
+		room.Resize(nCorner, corner);
+		return retVal;
 	}
 
 	/*
@@ -99,7 +142,7 @@ public class ARTFRoomManager {
 	 * 
 	 * Checks to see if two given rooms intersect with each other
 	 */
-	public bool doRoomsIntersect(ARTFRoom rm1, ARTFRoom rm2){
+	public static bool doRoomsIntersect(ARTFRoom rm1, ARTFRoom rm2){
 		//for each corner in room1
 		foreach(Vector3 corn in rm1.Corners) {
 			//if that corner is inside room2
@@ -122,7 +165,7 @@ public class ARTFRoomManager {
 	 * 
 	 * Gets the room at a given position
 	 */
-	public ARTFRoom getRoom(Vector3 position){
+	protected internal ARTFRoom getRoom(Vector3 position){
 		//for each extant room
 		foreach(ARTFRoom rm in roomList) {
 			//if the position is
