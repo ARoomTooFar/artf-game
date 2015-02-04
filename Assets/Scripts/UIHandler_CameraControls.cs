@@ -32,7 +32,7 @@ public class UIHandler_CameraControls: MonoBehaviour {
 	}
 
 	private void changeToTopDown(){
-		UICamera.transform.rotation = Quaternion.Euler (90, 0, 0);
+		UICamera.transform.rotation = Quaternion.Euler (90, 45, 0);
 	}
 
 	private void changeToPerspective(){

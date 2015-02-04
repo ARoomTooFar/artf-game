@@ -18,7 +18,7 @@ public class TransformHandler_ObjectMovement : MonoBehaviour {
 		objectRotation = transform.rotation.eulerAngles;
 		objectRotation.x = 0f;
 		objectRotation.z = 0f;
-		objectRotation.y = 90f;
+//		objectRotation.y = 90f;
 
 		//we work in euler angles because Quaternions are tarded
 		transform.rotation = Quaternion.Euler(objectRotation);

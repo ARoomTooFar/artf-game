@@ -19,7 +19,8 @@ public class TransformHandler_Camera : MonoBehaviour {
 	private Vector3 mouseLocation;
 	private float scrollSpeed;
 	void Start () {
-		transform.rotation = Quaternion.Euler(45,-45,0);
+		transform.rotation = Quaternion.Euler(45,45,0);
+		transform.position = new Vector3(-5f,21f,2.5f);
 		//base height
 		baseY = 15f;
 		//max height
