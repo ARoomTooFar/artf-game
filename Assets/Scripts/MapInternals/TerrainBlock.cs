@@ -282,6 +282,20 @@ public class TerrainBlock {
 		position = position + offset;
 
 	}
+
+	public bool changeType(string type){
+		TerrainBlockInfo nInf = TerrainBlockInfo.get(type);
+		if(!nInf.Pathable) {
+			if(this.monster != null){
+				return false;
+			}
+			if(this.scenery != null){
+				return false;
+			}
+		}
+		this.blockInfo = nInf;
+		return true;
+	}
 }
 
 

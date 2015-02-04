@@ -43,6 +43,16 @@ public class ARTFRoomManager {
 		return true;
 	}
 
+	public void removeRoom(Vector3 pos){
+		ARTFRoom rm = getRoom(pos);
+		removeRoom(rm);
+	}
+
+	public void removeRoom(ARTFRoom rm){
+		rm.remove();
+		this.roomList.Remove(rm);
+	}
+
 	/*
 	 * public bool moveRoom(Vector3 position, Vector3 offset)
 	 * 

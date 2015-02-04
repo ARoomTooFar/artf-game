@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class MapData {
 
-	protected internal MapData() {}
+	protected MapData() {}
 
-	protected internal static MapData instance;
-	protected internal TerrainManager terrainBlocks = new TerrainManager();
-	protected internal SceneryManager sceneryBlocks = new SceneryManager();
-	protected internal MonsterManager monsterBlocks = new MonsterManager();
-	protected internal ARTFRoomManager theFarRooms = new ARTFRoomManager();
+	protected static MapData instance;
+	protected TerrainManager terrainBlocks = new TerrainManager();
+	protected SceneryManager sceneryBlocks = new SceneryManager();
+	protected MonsterManager monsterBlocks = new MonsterManager();
+	protected ARTFRoomManager theFarRooms = new ARTFRoomManager();
 
 	public static MapData Instance {
 		get {
@@ -53,5 +53,29 @@ public class MapData {
 	public void moveRoom(Vector3 position, Vector3 nPosition){
 		theFarRooms.moveRoom(position, nPosition - position);
 	}
+
+	public void resizeRoom(Vector3 corner, Vector3 nCorner){
+		theFarRooms.resizeRoom(corner, nCorner);
+	}
+
+	public void removeRoom(Vector3 position){
+		theFarRooms.removeRoom(position);
+	}
 	#endregion RoomManipulation
+
+	#region TerrainManipulation
+	public bool replaceTerrain(Vector3 pos, string type){
+		TerrainBlock blk = TerrainBlocks.findBlock(pos);
+		if(blk == null) {
+			throw new UnityException("No TerrainBlock at provided location");
+		}
+		return blk.changeType(type);
+	}
+	#endregion TerrainManipulation
+
+	#region SceneryManipulation
+	public void addScenery(string type, Vector3 pos, DIRECTION dir){
+		sceneryBlocks.addBlock(new SceneryBlock(type, pos, dir);
+	}
+	#endregion SceneryManipulation
 }

@@ -8,7 +8,7 @@ public partial class ARTFRoom {
 	#region PrivateVariables
 	private Vector3 LLposition = new Vector3();
 	private Vector3 URposition = new Vector3();
-	protected internal List<TerrainBlock> blocks = new List<TerrainBlock>();
+	protected List<TerrainBlock> blocks = new List<TerrainBlock>();
 	private string defaultBlockID = "defaultBlockID";
 	#endregion PrivateVariables
 
@@ -194,6 +194,13 @@ public partial class ARTFRoom {
 
 	public bool Rotate(DIRECTION dir) {
 		return false;
+	}
+
+	public void remove(){
+		foreach(TerrainBlock blk in this.blocks){
+			MapData.Instance.TerrainBlocks.removeBlock(blk.Position);
+		}
+		this.blocks.Clear();
 	}
 
 	/*
