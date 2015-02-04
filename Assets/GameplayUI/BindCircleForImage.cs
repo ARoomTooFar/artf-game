@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-
+//This class controls the circle HP ring
 [RequireComponent(typeof(Scrollbar))]
 public class BindCircleForImage : MonoBehaviour
 {
@@ -28,7 +28,10 @@ public class BindCircleForImage : MonoBehaviour
 
     void Update()
     {
-        CircleImage.fillAmount = Mathf.Max( scrollbar.value,0.001f);
+		//This value is the amount that the ring is filled in.
+		//It goes between 0 and 1.
+		CircleImage.fillAmount = 0.6f;
+
         CircleImage.color = Color.Lerp(start, end, scrollbar.value);
         current = Color.Lerp(start, end, scrollbar.value);
     }
