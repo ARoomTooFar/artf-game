@@ -45,10 +45,10 @@ public class TransformHandler_ObjectMovement : MonoBehaviour {
 		//continually update the object's rotation, so it is locked in
 		//position and doesn't spin around all crazy
 		transform.rotation = Quaternion.Euler(objectRotation);
-		Vector3 pos = transform.position;
-		pos.y = 1f;
-		pos.x = Mathf.RoundToInt( pos.x  / tileMap.tileSize );
-		pos.z = Mathf.RoundToInt( pos.z  / tileMap.tileSize );
-		transform.position = pos;
+//		Vector3 pos = transform.position;
+//		pos.y = 1f;
+//		pos.x = Mathf.RoundToInt( pos.x  / tileMap.tileSize );
+//		pos.z = Mathf.RoundToInt( pos.z  / tileMap.tileSize );
+//		transform.position = pos;
 	}
 }
