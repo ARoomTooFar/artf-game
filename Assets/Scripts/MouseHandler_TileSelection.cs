@@ -79,8 +79,8 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 
 			/* check if an object is selected and whether mouse is pressed */
 			if(selectedObject != null && Input.GetMouseButtonDown (0)){
-				int x = Mathf.FloorToInt( hitInfo.point.x / tileMap.tileSize );
-				int z = Mathf.FloorToInt( hitInfo.point.z / tileMap.tileSize );
+				int x = Mathf.RoundToInt( hitInfo.point.x / tileMap.tileSize );
+				int z = Mathf.RoundToInt( hitInfo.point.z / tileMap.tileSize );
 
 				Vector3 obj_pos = new Vector3(x, 0f, z);
 				placeItems(selectedObject, obj_pos);
@@ -102,8 +102,8 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 
 	/* snap mouse selection to grid */
 	void snap2grid(float xf, float zf){
-		int x = Mathf.FloorToInt( xf / tileMap.tileSize );
-		int z = Mathf.FloorToInt( zf / tileMap.tileSize );
+		int x = Mathf.RoundToInt( xf / tileMap.tileSize );
+		int z = Mathf.RoundToInt( zf / tileMap.tileSize );
 		
 		/* check whether mouse is pressed AND the tile hasn't been selected */
 		if (Input.GetMouseButtonDown (0)) {

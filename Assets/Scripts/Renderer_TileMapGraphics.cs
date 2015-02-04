@@ -10,7 +10,7 @@ public class Renderer_TileMapGraphics : MonoBehaviour {
 	public Material selectionMat; //material for selected tiles
 	HashSet<Vector3> selectedTiles= new HashSet<Vector3> ();
 
-	//	public Material gridMat;
+		public Material gridMat;
 
 	Vector3 offset;
 	
@@ -21,7 +21,7 @@ public class Renderer_TileMapGraphics : MonoBehaviour {
 	/* update function */
 	void OnPostRender () {
 		selectTiles ();
-		//		drawGrid ();
+//				drawGrid ();
 	}
 	
 	/* select tiles using a list from the mouse manager */
@@ -31,10 +31,11 @@ public class Renderer_TileMapGraphics : MonoBehaviour {
 		GL.Begin (GL.QUADS);
 		selectionMat.SetPass (0);
 		foreach(Vector3 origin in selectedTiles){
-			GL.Vertex(new Vector3( origin.x, 0, origin.z ) );
-			GL.Vertex(new Vector3( origin.x, 0, origin.z + 1 ) );
-			GL.Vertex(new Vector3( origin.x + 1, 0, origin.z + 1 ) );
-			GL.Vertex(new Vector3( origin.x + 1, 0, origin.z ) );
+			GL.Vertex(new Vector3( origin.x-.5f, 0, origin.z-.5f ) );
+			GL.Vertex(new Vector3( origin.x-.5f, 0, origin.z +.5f ) );
+
+			GL.Vertex(new Vector3( origin.x +.5f, 0, origin.z+.5f ) );
+			GL.Vertex(new Vector3( origin.x +.5f, 0, origin.z -.5f ) );
 		}
 		GL.End ();
 	}

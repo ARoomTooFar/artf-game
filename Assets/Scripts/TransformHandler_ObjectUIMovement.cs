@@ -28,7 +28,7 @@ public class TransformHandler_ObjectUIMovement : MonoBehaviour
 	void LateUpdate () 
 	{
 		RaycastHit hit; //The raycast
-		bool rayHit = false;;
+		bool rayHit = false;
 		//check if clicking
 		if (Input.GetMouseButtonDown (0)) {
 			Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit);

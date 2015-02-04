@@ -11,6 +11,7 @@ using UnityEngine.EventSystems;
 public class TransformHandler_ObjectMovement : MonoBehaviour {
 	public Button Button_Rotate = null; //holds the rotate button arrow
 	Vector3 objectRotation = new Vector3(); //for holding this object's rotation
+	public TileMap tileMap;
 
 	void Start () {
 		//Initialize the object's rotation to 90 degrees
@@ -25,6 +26,7 @@ public class TransformHandler_ObjectMovement : MonoBehaviour {
 		//setup the listener for when the rotation button is clicked
 		Button_Rotate.onClick.AddListener (() => {
 			rotateObject (); });
+
 	}
 
 	//This function increments the object's rotation by 90 degrees
@@ -35,9 +37,18 @@ public class TransformHandler_ObjectMovement : MonoBehaviour {
 		objectRotation.y += 90f;
 	}
 
+	public void snapObjectToGrid(Vector3 vec){
+
+	}
+
 	void Update () {
 		//continually update the object's rotation, so it is locked in
 		//position and doesn't spin around all crazy
 		transform.rotation = Quaternion.Euler(objectRotation);
+		Vector3 pos = transform.position;
+		pos.y = 1f;
+		pos.x = Mathf.RoundToInt( pos.x  / tileMap.tileSize );
+		pos.z = Mathf.RoundToInt( pos.z  / tileMap.tileSize );
+		transform.position = pos;
 	}
 }
