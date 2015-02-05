@@ -124,6 +124,7 @@ public class Player : Character, IMoveable {
 			saveToText();
 		}
 	}
+
 	public virtual void saveToText(){
 		loadData[0]=name;
 		System.IO.File.WriteAllLines(path,loadData);
