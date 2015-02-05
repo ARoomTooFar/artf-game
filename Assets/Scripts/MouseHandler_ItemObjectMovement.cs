@@ -6,14 +6,6 @@ using System.Collections.Generic;
 //of letting the user drag things around.
 public class MouseHandler_ItemObjectMovement : MonoBehaviour
 { 
-	public float maxDistance = 100.0f;
-	public float spring = 50.0f;
-	public float damper = 5.0f;
-	public float drag = 10.0f;
-	public float angularDrag = 5.0f;
-	public float distance = 0.2f;
-	public bool attachToCenterOfMass = false;
-	private SpringJoint springJoint;
 	public TileMap tileMap;
 	public GameObject draggedObject;
 	public Camera cam;
@@ -38,10 +30,10 @@ public class MouseHandler_ItemObjectMovement : MonoBehaviour
 
 		Ray ray = cam.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit; 
-
 			
 		if (Physics.Raycast (ray, out hit, Mathf.Infinity)) {
 
+			//WORK IN PROGRESS
 			//if this script grabs ahold of the TileMap (or presumably
 			//any collider that isn't an object meant to be dragged),
 			//it will jack shit up. must catch them here.

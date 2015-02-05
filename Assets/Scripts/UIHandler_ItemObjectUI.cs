@@ -9,7 +9,7 @@ using System.IO;
 //in the world space
 public class UIHandler_ItemObjectUI : MonoBehaviour
 {
-	public TransformHandler_ItemObject transformHandler_object;
+	public TransformHandler_ItemObject transformHandler_itemObject;
 
 	public Text attackText = null;
 	public Button Button_UpArrow_Attack = null;
@@ -56,7 +56,7 @@ public class UIHandler_ItemObjectUI : MonoBehaviour
 
 		//setup the listener for when the rotation button is clicked
 		Button_Rotate.onClick.AddListener (() => {
-			transformHandler_object.rotateObject(90f); 
+			transformHandler_itemObject.rotateObject(90f); 
 		});
 
 	}

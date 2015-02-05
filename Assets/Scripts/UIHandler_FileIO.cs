@@ -9,13 +9,11 @@ using System.Collections.Generic;
 //This class listens to save/deploy/load buttons
 public class UIHandler_FileIO : MonoBehaviour
 {
-	public Button Button_Save = null; 
+	public Button Button_Save = null;
 	public Button Button_Deploy = null;
 	public Button Button_Load = null;
-
 	MouseHandler_TileSelection tileSelection;
 	Dictionary<string, Vector3> savedState;
-
 	DataHandler_Items data;
 
 	void Start ()
@@ -30,23 +28,31 @@ public class UIHandler_FileIO : MonoBehaviour
 		tileSelection = GameObject.Find ("TileMap").GetComponent ("MouseHandler_TileSelection") as MouseHandler_TileSelection;
 		savedState = new Dictionary<string, Vector3> ();
 
-		data = GameObject.Find ("ItemObjects").GetComponent("DataHandler_Items") as DataHandler_Items;
+		data = GameObject.Find ("ItemObjects").GetComponent ("DataHandler_Items") as DataHandler_Items;
 
 	}
 
 	public void saveFile ()
 	{
-		savedState.Clear ();
-		savedState = new Dictionary<string, Vector3> (data.getItemDictionary ());
+		if (data.getItemDictionary ().Count != 0) {
+			savedState.Clear ();
+			savedState = new Dictionary<string, Vector3> (data.getItemDictionary ());
+		}else{
+			Debug.Log ("Nothing to save");
+		}
 	}
 
 	public void loadFile ()
 	{
-		data.wipeItemObjects ();
-		data.clearItemDictionary ();
-		foreach (KeyValuePair<string, Vector3> entry in savedState) {
-			string key = entry.Key.Substring (0, entry.Key.IndexOf ('_'));
-			tileSelection.placeItems (key, entry.Value);
+		if (savedState.Count != 0) {
+			data.wipeItemObjects ();
+			data.clearItemDictionary ();
+			foreach (KeyValuePair<string, Vector3> entry in savedState) {
+				string key = entry.Key.Substring (0, entry.Key.IndexOf ('_'));
+				tileSelection.placeItems (key, entry.Value);
+			}
+		} else {
+			Debug.Log ("Nothing to load");
 		}
 	}
 		

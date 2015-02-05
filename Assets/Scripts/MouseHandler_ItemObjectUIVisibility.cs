@@ -13,7 +13,7 @@ public class MouseHandler_ItemObjectUIVisibility : MonoBehaviour {
 	Vector3 mouseStartPos = new Vector3(0,0,0);
 	Camera cam;
 	public GameObject toggle; //the object to toggle
-	public GameObject thing;
+	public GameObject ItemObject;
 
 	void Start () {
 		cam = GameObject.Find("UICamera").camera;
@@ -25,7 +25,7 @@ public class MouseHandler_ItemObjectUIVisibility : MonoBehaviour {
 		//this checks if the object this script applies to was clicked
 		if (Input.GetMouseButtonDown (0)) {
 			Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit);
-			if (hit.collider && (hit.collider.gameObject.GetInstanceID() == thing.GetInstanceID())){
+			if (hit.collider && (hit.collider.gameObject.GetInstanceID() == ItemObject.GetInstanceID())){
 				rayHit = true;
 				mouseStartPos = Input.mousePosition;
 			}

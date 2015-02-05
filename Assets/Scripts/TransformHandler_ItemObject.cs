@@ -12,27 +12,27 @@ using UnityEngine.EventSystems;
 //Object spawning takes place in MouseHandler_TileSelection
 
 public class TransformHandler_ItemObject : MonoBehaviour {
-	public GameObject thing; //object we're messing with
+	public GameObject ItemObject; //object we're messing with
 	public Vector3 objectRotation = new Vector3(); //for holding this object's rotation
 //	public TileMap tileMap;
 	float yRot;
 
 	void Start () {
 		//Initialize the object's rotation to 90 degrees
-		objectRotation = thing.transform.rotation.eulerAngles;
+		objectRotation = ItemObject.transform.rotation.eulerAngles;
 		objectRotation.x = 0f;
 		objectRotation.z = 0f;
 		objectRotation.y = 90f;
 
 		//we work in euler angles because Quaternions are tarded
-		thing.transform.rotation = Quaternion.Euler(objectRotation);
+		ItemObject.transform.rotation = Quaternion.Euler(objectRotation);
 	
 	}
 
 	void Update () {
 		//continually update the object's rotation, so it is locked in
 		//position and doesn't spin around all crazy
-		thing.transform.eulerAngles = objectRotation;
+		ItemObject.transform.eulerAngles = objectRotation;
 
 	}
 

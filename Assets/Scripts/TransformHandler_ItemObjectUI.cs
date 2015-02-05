@@ -9,9 +9,10 @@ using UnityEngine.EventSystems;
 //oriented in the direction of the camera.
 public class TransformHandler_ItemObjectUI : MonoBehaviour 
 {
-	public GameObject thing; //In-world object this little UI thing is sticking to
+	public GameObject ItemObject; //In-world object this little UI thing is sticking to
 	Camera cam; //Camera to make the UI face (must mimic its rotation)
 	public Canvas objectUICanvas; //so we can access the Event Camera field in the Object UI Canvas
+
 //	public GameObject bounding; //the transform of hoveroverthing used to create the bounding box
 	
 	void Start(){
@@ -29,7 +30,7 @@ public class TransformHandler_ItemObjectUI : MonoBehaviour
 
 		//Set the UI's position to the object's position
 		Vector3 p = new Vector3();
-		p = thing.transform.position;
+		p = ItemObject.transform.position;
 		objectUICanvas.transform.position = p; 
 
 		//Set the UI's rotation to the camera's rotation.

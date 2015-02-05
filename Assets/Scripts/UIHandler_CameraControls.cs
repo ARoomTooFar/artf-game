@@ -11,9 +11,9 @@ using UnityEngine.EventSystems;
 //and perspective modes
 public class UIHandler_CameraControls: MonoBehaviour {
 
-	public Button Button_TopDown = null; // assign in the editor
-	public Button Button_Perspective = null; // assign in the editor
-	public Button Button_Orthographic = null; // assign in the editor
+	public Button Button_TopDown = null; 
+	public Button Button_Perspective = null; 
+	public Button Button_Orthographic = null; 
 
 	//both cameras needed in order to change between perspective and orthog
 	public Camera UICamera;
