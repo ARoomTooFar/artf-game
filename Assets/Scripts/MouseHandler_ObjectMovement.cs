@@ -24,11 +24,14 @@ public class MouseHandler_ObjectMovement : MonoBehaviour
 //	Vector3 initMousePos;
 //	bool inMouseCheck = false;
 
-	MouseHandler_TileSelection tileSelection;
+//	MouseHandler_TileSelection tileSelection;
+
+	DataHandler_Items data;
 
 
 	void Start(){
-		tileSelection = GameObject.Find("TileMap").GetComponent("MouseHandler_TileSelection") as MouseHandler_TileSelection;
+//		tileSelection = GameObject.Find("TileMap").GetComponent("MouseHandler_TileSelection") as MouseHandler_TileSelection;
+		data = GameObject.Find ("ItemObjects").GetComponent("DataHandler_Items") as DataHandler_Items;
 	}
 	
 	void Update ()
@@ -84,7 +87,7 @@ public class MouseHandler_ObjectMovement : MonoBehaviour
 //					          ", New Pos: " +  new Vector3 (x * 1.0f, draggedObject.transform.position.y, z * 1.0f));
 					draggedObject.transform.position = new Vector3 (x * 1.0f, draggedObject.transform.position.y, z * 1.0f);
 //					Debug.Log(tileSelection.placedItems);
-					tileSelection.placedItems[draggedObject.name] = draggedObject.transform.position;
+					data.modifyItemDictionary(draggedObject.name, draggedObject.transform.position);
 				}
 			}
 			yield return null; 

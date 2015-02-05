@@ -19,33 +19,38 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 
 	/*The last selected tile, stored for shift click */
 	Vector3 shiftOrigin;
-
+	
 	/*HashSet that stores all selected tiles */
 	public HashSet<Vector3> selectedTiles;
 
-	public Dictionary<string, Vector3> placedItems;
-	int nameCounter = 0;
 
-	public Transform sceneObjects;
+
 	
 
+
+	DataHandler_Items data;
 
 
 
 	//This is where object spawning takes place
 
-	/* select when clicked */
-	private string selectedObject;
+//	public Dictionary<string, Vector3> placedItems;
+//	int nameCounter = 0;
+	
+//	public Transform sceneObjects;
 
-	/* selecting objects */
+//	/* select when clicked */
+	private string selectedItem;
+//
+//	/* selecting objects */
 	GameObject currentObj;
 
 	public void setSelectedObject(string s){
-		selectedObject = s;
+		selectedItem = s;
 	}
 	
 	public void clearSelectedObject(){
-		selectedObject = null;
+		selectedItem = null;
 	}
 	
 	//place a prefab from resources folder
@@ -53,36 +58,33 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 		position.x = Mathf.RoundToInt( position.x / tileMap.tileSize );
 		position.z = Mathf.RoundToInt( position.z / tileMap.tileSize );
 
-//		Debug.Log(name + ", " + position);
-
 		currentObj = Instantiate (Resources.Load(name), position, Quaternion.identity) as GameObject;
 
-		currentObj.transform.parent = sceneObjects;
+		currentObj.transform.parent = data.getItemObjects();
 
-		currentObj.name = name + "_" + nameCounter++;
-		placedItems.Add(currentObj.name, position);
-//		Debug.Log(placedItems.Count);
+		currentObj.name = data.makeName(name);
+		data.addToItemDictionary(currentObj.name, position);
+
 		clearSelectedObject();
 	}
 
-	public void wipeSceneObjects(){
-		foreach(Transform child in sceneObjects){
-			GameObject.Destroy(child.gameObject);
-		}
-	}
-
-	public void clearPlacedItems(){
-		placedItems.Clear ();
-	}
-
-	public void setPlacedItems(Dictionary<string, Vector3> dic){
-		placedItems = new Dictionary<string, Vector3>(dic);
-	}
-
-	public Dictionary<string, Vector3> getPlacedItems(){
-		return placedItems;
-	}
-
+//	public void wipeSceneObjects(){
+//		foreach(Transform child in sceneObjects){
+//			GameObject.Destroy(child.gameObject);
+//		}
+//	}
+//
+//	public void clearPlacedItems(){
+//		placedItems.Clear ();
+//	}
+//
+//	public void setPlacedItems(Dictionary<string, Vector3> dic){
+//		placedItems = new Dictionary<string, Vector3>(dic);
+//	}
+//
+//	public Dictionary<string, Vector3> getPlacedItems(){
+//		return placedItems;
+//	}
 
 
 
@@ -94,10 +96,11 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 	void Start () {
 		cam = GameObject.Find("UICamera").camera;
 		tileMap = GetComponent<TileMap> ();
-		selectedObject = null;
+		selectedItem = null;
 		selectedTiles = new HashSet<Vector3> ();
-		placedItems = new Dictionary<string, Vector3>();
-		sceneObjects = GameObject.Find ("SceneObjects").GetComponent("Transform") as Transform;
+//		placedItems = new Dictionary<string, Vector3>();
+//		sceneObjects = GameObject.Find ("SceneObjects").GetComponent("Transform") as Transform;
+		data = GameObject.Find ("ItemObjects").GetComponent("DataHandler_Items") as DataHandler_Items;
 	}
 
 	/* Calling raycast function */
@@ -117,12 +120,12 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 			//selectedObject gets set by UIHandler_ItemButtons calling setSelectedObject()
 			//in this script. the !Input.GetMouseButton (0) check below will indicate
 			//that a drag has ended, and so we can drop the object on the map.
-			if(selectedObject != null && !Input.GetMouseButton (0)){
+			if(selectedItem != null && !Input.GetMouseButton (0)){
 				int x = Mathf.RoundToInt( hitInfo.point.x / tileMap.tileSize );
 				int z = Mathf.RoundToInt( hitInfo.point.z / tileMap.tileSize );
 
 				Vector3 obj_pos = new Vector3(x, 0f, z);
-				placeItems(selectedObject, obj_pos);
+				placeItems(selectedItem, obj_pos);
 			} else{
 				/* check whether the ray hits an object or the tile map */
 				switch(hitInfo.collider.gameObject.name){
