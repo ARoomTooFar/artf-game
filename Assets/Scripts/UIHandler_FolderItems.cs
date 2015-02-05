@@ -14,16 +14,16 @@ public class UIHandler_FolderItems : MonoBehaviour
 	public Button[] buttonList;
 	public int numberOfButtons;
 //	MouseHandler_TileSelection mouseControl;
-	MouseHandler_DraggingItemFromFolder mouseHandler_DraggingItemFromFolder;
+//	MouseHandler_DraggingItemFromFolder mouseHandler_DraggingItemFromFolder;
 
 	// Use this for initialization
 	void Start ()
 	{
 
 //		mouseControl = GameObject.Find ("TileMap").GetComponent ("MouseHandler_TileSelection") as MouseHandler_TileSelection;
-		mouseHandler_DraggingItemFromFolder = 
-			GameObject.Find ("MouseHandler_DraggingItemFromFolder")
-				.GetComponent ("MouseHandler_DraggingItemFromFolder") as MouseHandler_DraggingItemFromFolder;
+//		mouseHandler_DraggingItemFromFolder = 
+//			GameObject.Find ("MouseHandler_DraggingItemFromFolder")
+//				.GetComponent ("MouseHandler_DraggingItemFromFolder") as MouseHandler_DraggingItemFromFolder;
 
 
 
@@ -51,7 +51,7 @@ public class UIHandler_FolderItems : MonoBehaviour
 	void setSelectedObject (string s, Image i)
 	{
 		Debug.Log(i);
-		mouseHandler_DraggingItemFromFolder.dragItem(s, i);
+//		mouseHandler_DraggingItemFromFolder.dragItem(s, i);
 //		mouseControl.setSelectedObject (s);
 	}
 	
