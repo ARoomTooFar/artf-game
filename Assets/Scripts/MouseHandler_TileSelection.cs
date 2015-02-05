@@ -80,8 +80,10 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 		/* getting raycast info and logic */
 		if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity)) {
 
-			/* check if an object is selected and whether mouse is pressed */
-			if(selectedObject != null && Input.GetMouseButtonDown (0)){
+			//selectedObject gets set by UIHandler_ItemButtons calling setSelectedObject()
+			//in this script. the !Input.GetMouseButton (0) check below will indicate
+			//that a drag has ended, and so we can drop the object on the map.
+			if(selectedObject != null && !Input.GetMouseButton (0)){
 				int x = Mathf.RoundToInt( hitInfo.point.x / tileMap.tileSize );
 				int z = Mathf.RoundToInt( hitInfo.point.z / tileMap.tileSize );
 

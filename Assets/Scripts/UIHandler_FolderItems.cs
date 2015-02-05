@@ -13,11 +13,20 @@ public class UIHandler_FolderItems : MonoBehaviour
 	public GameObject itemList;
 	public Button[] buttonList;
 	public int numberOfButtons;
-	MouseHandler_TileSelection mouseControl;
+//	MouseHandler_TileSelection mouseControl;
+	MouseHandler_DraggingItemFromFolder mouseHandler_DraggingItemFromFolder;
 
 	// Use this for initialization
 	void Start ()
 	{
+
+//		mouseControl = GameObject.Find ("TileMap").GetComponent ("MouseHandler_TileSelection") as MouseHandler_TileSelection;
+		mouseHandler_DraggingItemFromFolder = 
+			GameObject.Find ("MouseHandler_DraggingItemFromFolder")
+				.GetComponent ("MouseHandler_DraggingItemFromFolder") as MouseHandler_DraggingItemFromFolder;
+
+
+
 		//get number of items in scrollview and make an array for them
 		numberOfButtons = itemList.gameObject.transform.GetChildCount ();
 		buttonList = new Button[numberOfButtons];
@@ -27,27 +36,23 @@ public class UIHandler_FolderItems : MonoBehaviour
 			buttonList [i] = itemList.gameObject.transform.GetChild (i).gameObject.GetComponent ("Button") as Button;
 		}
 
-//		Button_Dino = this.gameObject.GetComponent("Button") as Button;
-
-		mouseControl = GameObject.Find ("TileMap").GetComponent ("MouseHandler_TileSelection") as MouseHandler_TileSelection;
-
 		for (int i = 0; i < numberOfButtons; i++) {
 
 			//have to construct this string outside the button listener declaration
 			//below, or it will return a strange looking IndexArrayOutOfBoundsException
-			string g = "Prefabs/" + buttonList [i].transform.gameObject.name;
-
-			buttonList [i].onClick.AddListener (() => {
-				setSelectedObject (g); });
+//			string g = "Prefabs/" + buttonList [i].transform.gameObject.name;
+//			Image u = buttonList[i].image;
+//
+//			buttonList [i]. onClick.AddListener (() => {
+//				setSelectedObject (g, u); });
 		}
-
-//		Button_Dino.onClick.AddListener (() => {
-//			setSelectedObject ("Prefabs/dino"); });
 	}
 
-	void setSelectedObject (string s)
+	void setSelectedObject (string s, Image i)
 	{
-		mouseControl.setSelectedObject (s);
+		Debug.Log(i);
+		mouseHandler_DraggingItemFromFolder.dragItem(s, i);
+//		mouseControl.setSelectedObject (s);
 	}
 	
 	// Update is called once per frame

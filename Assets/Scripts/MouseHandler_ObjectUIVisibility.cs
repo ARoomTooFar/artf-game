@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 
-//This class manages clicks to objects, which cause their object UI
+//This class manages clicks to objects, which causes their object UI
 //to show up.
 public class MouseHandler_ObjectUIVisibility : MonoBehaviour {
 	bool rayHit = false;
