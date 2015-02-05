@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class MouseHandler_TileSelection : MonoBehaviour {
 
 	//holds UI camera
-	public Camera cam;
+	Camera cam;
 
 	/* reference to tile map */
 	TileMap tileMap;
@@ -20,7 +20,6 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 
 	/*HashSet that stores all selected tiles */
 	public HashSet<Vector3> selectedTiles;
-
 
 
 
@@ -58,6 +57,7 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 
 	/* Initialize variables, setting booleans */
 	void Start () {
+		cam = GameObject.Find("UICamera").camera;
 		tileMap = GetComponent<TileMap> ();
 		selectedObject = null;
 		selectedTiles = new HashSet<Vector3> ();

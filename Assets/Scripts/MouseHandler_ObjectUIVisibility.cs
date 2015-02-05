@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 public class MouseHandler_ObjectUIVisibility : MonoBehaviour {
 	bool rayHit = false;
 	Vector3 mouseStartPos = new Vector3(0,0,0);
-	public Camera cam;
+	Camera cam;
 	public GameObject toggle; //the object to toggle
 	public GameObject thing;
 

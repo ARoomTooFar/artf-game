@@ -13,6 +13,8 @@ public class UIHandler_ObjectUI : MonoBehaviour
 //	public Slider slider = null;
 //	public InputField inputField = null;
 
+	public TransformHandler_Object transformHandler_object;
+
 	public Text attackText = null;
 	public Button Button_UpArrow_Attack = null;
 	public Button Button_DownArrow_Attack = null;
@@ -29,6 +31,9 @@ public class UIHandler_ObjectUI : MonoBehaviour
 	private int attack = 1;
 	private int health = 1;
 	private int armor = 1;
+	
+	public Button Button_Rotate = null; //holds the rotate button arrow
+
 
 	void Start ()
 	{
@@ -43,7 +48,7 @@ public class UIHandler_ObjectUI : MonoBehaviour
 		Button_UpArrow_Attack.onClick.AddListener (() => {
 			increaseAttack (); });
 		Button_DownArrow_Attack.onClick.AddListener (() => {
-			decreaseAttack (); });
+			decreaseAttack (); }); 
 
 		//Health upgrade/downgrade listeners
 		Button_UpArrow_Health.onClick.AddListener (() => {
@@ -56,14 +61,14 @@ public class UIHandler_ObjectUI : MonoBehaviour
 			increaseArmor (); });
 		Button_DownArrow_Armor.onClick.AddListener (() => {
 			decreaseArmor (); });
-	}
 
-	//Pre: slider was moved
-	//Post: slider's change in value has affected some object
-	public void sliderAction (float sliderValue)
-	{
-		//slider value is between 0 and 1
-		//do some stuff with that value
+
+
+		//setup the listener for when the rotation button is clicked
+		Button_Rotate.onClick.AddListener (() => {
+			transformHandler_object.rotateObject(90f); 
+		});
+
 	}
 
 

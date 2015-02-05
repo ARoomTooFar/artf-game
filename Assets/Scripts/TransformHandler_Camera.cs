@@ -12,15 +12,18 @@ public class TransformHandler_Camera : MonoBehaviour {
 	//camera movement, drag speed, and mouse location
 	//initialization maxX and maxY tbd based on needs 
 	//of level editor, left blank here
-	public float baseY, baseX, baseZ, minY, maxY, maxX, maxZ, dx, dy;
-	public bool isTopDown;
-	public bool isDragging;
-	public Vector2 dragSpeed;
+	float baseY, baseX, baseZ, minY, maxY, maxX, maxZ, dx, dy;
+	bool isTopDown;
+	bool isDragging;
+	Vector2 dragSpeed;
 	private Vector3 mouseLocation;
 	private float scrollSpeed;
+	Camera cam;
+
 	void Start () {
-		transform.rotation = Quaternion.Euler(45,45,0);
-		transform.position = new Vector3(-5f,21f,2.5f);
+		cam = GameObject.Find("UICamera").camera;
+		cam.transform.rotation = Quaternion.Euler(45,45,0);
+		cam.transform.position = new Vector3(-5f,21f,2.5f);
 		//base height
 		baseY = 15f;
 		//max height
@@ -69,11 +72,11 @@ public class TransformHandler_Camera : MonoBehaviour {
 		if (Input.GetButtonDown ("SwitchView")) {
 			if(isTopDown) {
 				isTopDown = false;
-				transform.rotation = Quaternion.Euler(45,-45,0);
+				cam.transform.rotation = Quaternion.Euler(45,-45,0);
 			}
 			else {
 				isTopDown = true;
-				transform.rotation = Quaternion.Euler(90,0,0);
+				cam.transform.rotation = Quaternion.Euler(90,0,0);
 			}
 		}
 
@@ -84,9 +87,9 @@ public class TransformHandler_Camera : MonoBehaviour {
 		if (Input.GetMouseButton (1)) {
 			dx = Input.GetAxis("Mouse X") * dragSpeed.x;
 			dy = Input.GetAxis("Mouse Y") * dragSpeed.y;
-			transform.position -= transform.right * dx + transform.up * dy;
-			baseX = transform.position.x;
-			baseZ = transform.position.z;
+			cam.transform.position -= cam.transform.right * dx + cam.transform.up * dy;
+			baseX = cam.transform.position.x;
+			baseZ = cam.transform.position.z;
 
 			if (baseY < minY) {
 				baseY = minY;
@@ -140,7 +143,7 @@ public class TransformHandler_Camera : MonoBehaviour {
 		}
 
 		//Update camera position.
-		transform.position = new Vector3 (baseX, baseY, baseZ);
+		//		cam.transform.position = new Vector3 (baseX, baseY, baseZ);
 				
 	}
 }

@@ -6,6 +6,7 @@ using System.Collections;
 public class TransformHandler_Ground : MonoBehaviour {
 
 	TileMap tileMap;
+	public GameObject ground;
 
 	// Use this for initialization
 	void Start () {
@@ -16,8 +17,8 @@ public class TransformHandler_Ground : MonoBehaviour {
 	void Update () {
 		float gridz = tileMap.grid_z * 1.0f;
 		float gridx = tileMap.grid_x * 1.0f;
-		transform.localScale = new Vector3(gridx, 0.03f, gridz);
+		ground.transform.localScale = new Vector3(gridx, 0.03f, gridz);
 
-		transform.position = new Vector3(gridx / 2f, 0f, gridz / 2f);
+		ground.transform.position = new Vector3(gridx / 2f, 0f, gridz / 2f);
 	}
 }
