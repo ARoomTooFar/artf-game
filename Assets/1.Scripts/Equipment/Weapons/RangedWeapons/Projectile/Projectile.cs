@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿// Projectile parent class
+//     For now, it just goes straight
+
+using UnityEngine;
 using System.Collections;
 
 public class Projectile : MonoBehaviour {
