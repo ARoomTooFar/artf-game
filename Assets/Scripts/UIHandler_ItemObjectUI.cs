@@ -7,9 +7,9 @@ using System.IO;
 
 //This class listens to UI elements that are on canvases attached to objects
 //in the world space
-public class UIHandler_ObjectUI : MonoBehaviour
+public class UIHandler_ItemObjectUI : MonoBehaviour
 {
-	public TransformHandler_Object transformHandler_object;
+	public TransformHandler_ItemObject transformHandler_object;
 
 	public Text attackText = null;
 	public Button Button_UpArrow_Attack = null;

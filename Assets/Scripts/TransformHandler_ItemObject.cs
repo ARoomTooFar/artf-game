@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 
 //Object spawning takes place in MouseHandler_TileSelection
 
-public class TransformHandler_Object : MonoBehaviour {
+public class TransformHandler_ItemObject : MonoBehaviour {
 	public GameObject thing; //object we're messing with
 	public Vector3 objectRotation = new Vector3(); //for holding this object's rotation
 //	public TileMap tileMap;

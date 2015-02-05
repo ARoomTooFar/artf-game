@@ -29,11 +29,10 @@ public class UIHandler_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragH
 
 	public void OnBeginDrag (PointerEventData data)
 	{
-//		Debug.Log ("asfasdf");
 		Image p = draggedImageAnchor.GetComponent("Image") as Image;
 		p.sprite = thisImage.sprite;
 		p.material = null;
-//		draggedImageAnchor.SetActive(true);
+
 		StartCoroutine (dragIt ());
 
 
@@ -41,20 +40,20 @@ public class UIHandler_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragH
 
 	public void OnEndDrag (PointerEventData data)
 	{
-//		Debug.Log ("ended");
-//		draggedImageAnchor.SetActive(false);
+
 		Image p = draggedImageAnchor.GetComponent("Image") as Image;
 		p.sprite = thisImage.sprite;
 		p.material = matToMakeInvisible;
+
 		string g = "Prefabs/" + this.transform.gameObject.name;
-		mouseControl.setSelectedObject (g);
+		mouseControl.setSelectedItem (g);
 	}
 
 	IEnumerator dragIt ()
 	{ 
 		while(Input.GetMouseButton(0)){
 			draggedImageAnchor.transform.position = Input.mousePosition;
-//			Debug.Log ("dragging");
+
 			yield return null; 
 		}
 

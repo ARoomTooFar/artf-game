@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 //This class manages clicks to objects, which causes their object UI
 //to show up.
-public class MouseHandler_ObjectUIVisibility : MonoBehaviour {
+public class MouseHandler_ItemObjectUIVisibility : MonoBehaviour {
 	bool rayHit = false;
 	Vector3 mouseStartPos = new Vector3(0,0,0);
 	Camera cam;

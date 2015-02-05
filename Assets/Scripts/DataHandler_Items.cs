@@ -61,8 +61,4 @@ public class DataHandler_Items : MonoBehaviour {
 	public string makeName(string s){
 		return s + "_" + nameCounter++;
 	}
-	
-
-
-
 }

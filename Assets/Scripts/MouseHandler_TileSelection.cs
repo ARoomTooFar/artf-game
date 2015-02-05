@@ -17,41 +17,21 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 	/* current tile */
 	Vector3 currTile;
 
-	/*The last selected tile, stored for shift click */
+	/* The last selected tile, stored for shift click */
 	Vector3 shiftOrigin;
 	
-	/*HashSet that stores all selected tiles */
+	/* HashSet that stores all selected tiles */
 	public HashSet<Vector3> selectedTiles;
 
-
-
-	
-
-
 	DataHandler_Items data;
-
-
-
-	//This is where object spawning takes place
-
-//	public Dictionary<string, Vector3> placedItems;
-//	int nameCounter = 0;
 	
-//	public Transform sceneObjects;
-
-//	/* select when clicked */
+	/* select when clicked */
 	private string selectedItem;
-//
-//	/* selecting objects */
+
+	/* selecting objects */
 	GameObject currentObj;
 
-	public void setSelectedObject(string s){
-		selectedItem = s;
-	}
-	
-	public void clearSelectedObject(){
-		selectedItem = null;
-	}
+
 	
 	//place a prefab from resources folder
 	public void placeItems(string name, Vector3 position){
@@ -65,41 +45,21 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 		currentObj.name = data.makeName(name);
 		data.addToItemDictionary(currentObj.name, position);
 
-		clearSelectedObject();
+		clearSelectedItem();
 	}
 
-//	public void wipeSceneObjects(){
-//		foreach(Transform child in sceneObjects){
-//			GameObject.Destroy(child.gameObject);
-//		}
-//	}
-//
-//	public void clearPlacedItems(){
-//		placedItems.Clear ();
-//	}
-//
-//	public void setPlacedItems(Dictionary<string, Vector3> dic){
-//		placedItems = new Dictionary<string, Vector3>(dic);
-//	}
-//
-//	public Dictionary<string, Vector3> getPlacedItems(){
-//		return placedItems;
-//	}
 
 
 
-
-
-	//Actual mouse handling starts here
 
 	/* Initialize variables, setting booleans */
 	void Start () {
 		cam = GameObject.Find("UICamera").camera;
 		tileMap = GetComponent<TileMap> ();
+
 		selectedItem = null;
 		selectedTiles = new HashSet<Vector3> ();
-//		placedItems = new Dictionary<string, Vector3>();
-//		sceneObjects = GameObject.Find ("SceneObjects").GetComponent("Transform") as Transform;
+
 		data = GameObject.Find ("ItemObjects").GetComponent("DataHandler_Items") as DataHandler_Items;
 	}
 
@@ -117,7 +77,7 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 		/* getting raycast info and logic */
 		if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity)) {
 
-			//selectedObject gets set by UIHandler_ItemButtons calling setSelectedObject()
+			//selectedItem gets set by UIHandler_ItemButtons calling setSelectedItem()
 			//in this script. the !Input.GetMouseButton (0) check below will indicate
 			//that a drag has ended, and so we can drop the object on the map.
 			if(selectedItem != null && !Input.GetMouseButton (0)){
@@ -207,6 +167,14 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 	/*deselects tile passed into function */
 	void deselect(Vector3 remove){
 		selectedTiles.Remove (remove);
+	}
+
+	public void setSelectedItem(string s){
+		selectedItem = s;
+	}
+	
+	public void clearSelectedItem(){
+		selectedItem = null;
 	}
 
 }

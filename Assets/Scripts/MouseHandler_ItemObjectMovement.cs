@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 //This class handles mouse raycasts to objects for the purpose
 //of letting the user drag things around.
-public class MouseHandler_ObjectMovement : MonoBehaviour
+public class MouseHandler_ItemObjectMovement : MonoBehaviour
 { 
 	public float maxDistance = 100.0f;
 	public float spring = 50.0f;
@@ -24,13 +24,10 @@ public class MouseHandler_ObjectMovement : MonoBehaviour
 //	Vector3 initMousePos;
 //	bool inMouseCheck = false;
 
-//	MouseHandler_TileSelection tileSelection;
-
 	DataHandler_Items data;
 
 
 	void Start(){
-//		tileSelection = GameObject.Find("TileMap").GetComponent("MouseHandler_TileSelection") as MouseHandler_TileSelection;
 		data = GameObject.Find ("ItemObjects").GetComponent("DataHandler_Items") as DataHandler_Items;
 	}
 	
@@ -81,12 +78,10 @@ public class MouseHandler_ObjectMovement : MonoBehaviour
 
 					//for now we leave the y position as it is in the original prefab.
 					//eventually we should use the object's collder's size/position/center,
-					//and the object's scale/position (and perhaps also the ground's y value), 
+					//and the object's scale/position (and maybe also the ground's y value), 
 					//in order to calculate what its y value should be.
-//					Debug.Log(draggedObject.name + ": old pos: " + draggedObject.transform.position + 
-//					          ", New Pos: " +  new Vector3 (x * 1.0f, draggedObject.transform.position.y, z * 1.0f));
 					draggedObject.transform.position = new Vector3 (x * 1.0f, draggedObject.transform.position.y, z * 1.0f);
-//					Debug.Log(tileSelection.placedItems);
+
 					data.modifyItemDictionary(draggedObject.name, draggedObject.transform.position);
 				}
 			}

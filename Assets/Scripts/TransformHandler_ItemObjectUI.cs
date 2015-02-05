@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 //This class is for keeping the UI that is attached to an object in world
 //oriented in the direction of the camera.
-public class TransformHandler_ObjectUI : MonoBehaviour 
+public class TransformHandler_ItemObjectUI : MonoBehaviour 
 {
 	public GameObject thing; //In-world object this little UI thing is sticking to
 	Camera cam; //Camera to make the UI face (must mimic its rotation)

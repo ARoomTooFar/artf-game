@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-//This class listens to save/deploy buttons
+//This class listens to save/deploy/load buttons
 public class UIHandler_FileIO : MonoBehaviour
 {
 	public Button Button_Save = null; 
