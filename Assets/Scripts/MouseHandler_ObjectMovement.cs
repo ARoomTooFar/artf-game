@@ -36,6 +36,8 @@ public class MouseHandler_ObjectMovement : MonoBehaviour
 				StartCoroutine (DragObject (hit.distance)); 
 			}
 		}
+
+
 	}
 	
 	IEnumerator DragObject (float distance)
@@ -48,18 +50,14 @@ public class MouseHandler_ObjectMovement : MonoBehaviour
 				if(hitInfo.collider.gameObject.name == "TileMap"){
 					int x = Mathf.RoundToInt (hitInfo.point.x / tileMap.tileSize);
 					int z = Mathf.RoundToInt (hitInfo.point.z / tileMap.tileSize);
-					draggedObject.transform.position = new Vector3 (x * 1.0f, 1f, z * 1.0f);
-				}
+//					BoxCollider objectBoxCollider = draggedObject.GetComponent("BoxCollider") as BoxCollider;
 
-//				switch (hitInfo.collider.gameObject.name) {
-//				case "TileMap":
-//					int x = Mathf.RoundToInt (hitInfo.point.x / tileMap.tileSize);
-//					int z = Mathf.RoundToInt (hitInfo.point.z / tileMap.tileSize);
-//
-//					draggedObject.transform.position = new Vector3 (x * 1.0f, 1f, z * 1.0f);
-//
-//					break;			
-//				}
+					//for now we leave the y position as it is in the original prefab.
+					//eventually we should use the object's collder's size/position/center,
+					//and the object's scale/position (and perhaps also the ground's y value), 
+					//in order to calculate what its y value should be.
+					draggedObject.transform.position = new Vector3 (x * 1.0f, draggedObject.transform.position.y, z * 1.0f);
+				}
 			}
 			yield return null; 
 		}

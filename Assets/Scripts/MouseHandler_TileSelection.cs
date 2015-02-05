@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 //This class handles mouse clicks on the tile map.
 //It maintains a HashSet of all tiles currently selected.
+
+//Also handles object spawning
 public class MouseHandler_TileSelection : MonoBehaviour {
 
 	//holds UI camera
@@ -20,11 +22,12 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 
 	/*HashSet that stores all selected tiles */
 	public HashSet<Vector3> selectedTiles;
+	
 
 
 
 
-	//This is the temporary home for object placement
+	//This is where object spawning takes place
 
 	/* select when clicked */
 	private string selectedObject;
@@ -146,6 +149,7 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 			}
 
 		}
+
 	}
 
 

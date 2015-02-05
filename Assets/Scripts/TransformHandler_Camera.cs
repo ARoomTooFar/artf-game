@@ -14,7 +14,7 @@ public class TransformHandler_Camera : MonoBehaviour {
 	//of level editor, left blank here
 	float baseY, baseX, baseZ, minY, maxY, maxX, maxZ, dx, dy;
 	bool isTopDown;
-	bool isDragging;
+//	bool isDragging;
 	Vector2 dragSpeed;
 	private Vector3 mouseLocation;
 	private float scrollSpeed;
@@ -33,7 +33,7 @@ public class TransformHandler_Camera : MonoBehaviour {
 		//Camera angle controller
 		isTopDown = false;
 		//Are we dragging camera?
-		isDragging = false;
+//		isDragging = false;
 //		dragSpeed.x = .5f;
 //		dragSpeed.y = .5f;
 

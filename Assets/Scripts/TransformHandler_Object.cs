@@ -8,6 +8,9 @@ using UnityEngine.EventSystems;
 //This class attaches to objects, and lets the rotate
 //by 90 degree increments, for when the user clicks the 
 //rotation arrow.
+
+//Object spawning takes place in MouseHandler_TileSelection
+
 public class TransformHandler_Object : MonoBehaviour {
 	public GameObject thing; //object we're messing with
 	public Vector3 objectRotation = new Vector3(); //for holding this object's rotation

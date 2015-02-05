@@ -9,10 +9,6 @@ using System.IO;
 //in the world space
 public class UIHandler_ObjectUI : MonoBehaviour
 {
-	//all the dang buttons
-//	public Slider slider = null;
-//	public InputField inputField = null;
-
 	public TransformHandler_Object transformHandler_object;
 
 	public Text attackText = null;
@@ -39,11 +35,6 @@ public class UIHandler_ObjectUI : MonoBehaviour
 	{
 		updateMonsterStatText ();
 
-		//Slider listener
-		//when the slider is moved, call sliderAction()
-//		slider.onValueChanged.AddListener (this.sliderAction); 
-
-
 		//Attack upgrade/downgrade listeners
 		Button_UpArrow_Attack.onClick.AddListener (() => {
 			increaseAttack (); });
@@ -61,7 +52,6 @@ public class UIHandler_ObjectUI : MonoBehaviour
 			increaseArmor (); });
 		Button_DownArrow_Armor.onClick.AddListener (() => {
 			decreaseArmor (); });
-
 
 
 		//setup the listener for when the rotation button is clicked

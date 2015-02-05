@@ -15,7 +15,7 @@ public class UIHandler_EditingControls : MonoBehaviour {
 	public Button Button_ZoomOut = null; 
 	public Button Button_ZoomIn = null; 
 
-	public TransformHandler_Camera UICamera;
+	public TransformHandler_Camera transformHandler_Camera;
 
 	// Use this for initialization
 	void Start () {
@@ -47,11 +47,11 @@ public class UIHandler_EditingControls : MonoBehaviour {
 	}
 
 	private void zoomIn(){
-		UICamera.zoomCamIn(2f);
+		transformHandler_Camera.zoomCamIn(2f);
 	}
 
 	private void zoomOut(){
-		UICamera.zoomCamOut(2f);
+		transformHandler_Camera.zoomCamOut(2f);
 	}
 	
 	// Update is called once per frame
