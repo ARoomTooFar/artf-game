@@ -65,6 +65,24 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 		clearSelectedObject();
 	}
 
+	public void wipeSceneObjects(){
+		foreach(Transform child in sceneObjects){
+			GameObject.Destroy(child.gameObject);
+		}
+	}
+
+	public void clearPlacedItems(){
+		placedItems.Clear ();
+	}
+
+	public void setPlacedItems(Dictionary<string, Vector3> dic){
+		placedItems = new Dictionary<string, Vector3>(dic);
+	}
+
+	public Dictionary<string, Vector3> getPlacedItems(){
+		return placedItems;
+	}
+
 
 
 

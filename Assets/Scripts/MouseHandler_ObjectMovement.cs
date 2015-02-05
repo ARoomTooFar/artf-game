@@ -80,8 +80,8 @@ public class MouseHandler_ObjectMovement : MonoBehaviour
 					//eventually we should use the object's collder's size/position/center,
 					//and the object's scale/position (and perhaps also the ground's y value), 
 					//in order to calculate what its y value should be.
-					Debug.Log(draggedObject.name + ": old pos: " + draggedObject.transform.position + 
-					          ", New Pos: " +  new Vector3 (x * 1.0f, draggedObject.transform.position.y, z * 1.0f));
+//					Debug.Log(draggedObject.name + ": old pos: " + draggedObject.transform.position + 
+//					          ", New Pos: " +  new Vector3 (x * 1.0f, draggedObject.transform.position.y, z * 1.0f));
 					draggedObject.transform.position = new Vector3 (x * 1.0f, draggedObject.transform.position.y, z * 1.0f);
 //					Debug.Log(tileSelection.placedItems);
 					tileSelection.placedItems[draggedObject.name] = draggedObject.transform.position;
