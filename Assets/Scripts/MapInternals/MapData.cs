@@ -73,9 +73,33 @@ public class MapData {
 	}
 	#endregion TerrainManipulation
 
+	#region Scenery
 	#region SceneryManipulation
 	public void addScenery(string type, Vector3 pos, DIRECTION dir){
-		sceneryBlocks.addBlock(new SceneryBlock(type, pos, dir);
+		sceneryBlocks.addBlock(new SceneryBlock(type, pos, dir));
+	}
+
+	public void moveScenery(Vector3 pos, Vector3 offset){
+		sceneryBlocks.moveBlock(pos, offset);
+	}
+
+	public void removeScenery(Vector3 pos){
+		SceneryBlocks.removeBlock(pos);
 	}
 	#endregion SceneryManipulation
+
+	#region SceneryValidation
+	public bool isSceneryBlockValid(Vector3 position){
+		return sceneryBlocks.isBlockValid(position);
+	}
+
+	public bool isSceneryRotationValid(Vector3 postion, DIRECTION dir){
+		return sceneryBlocks.isRotationValid(postion, dir);
+	}
+
+	public bool isSceneryMoveValid(Vector3 position, Vector3 offset){
+		return sceneryBlocks.isMoveValid(position, offset);
+	}
+	#endregion SceneryValidation
+	#endregion Scenery
 }

@@ -51,11 +51,11 @@ public class SceneryManager {
 			//get the terrain block in that position
 			blk = MapData.Instance.TerrainBlocks.findBlock(coordinate);
 			//if there's no block there, this block is not placeable
-			if(blk == null){
+			if(blk == null) {
 				return false;
 			}
 			//try to link the scenery, return false if problem
-			if(!blk.addScenery(block)){
+			if(!blk.addScenery(block)) {
 				return false;
 			}
 		}
@@ -75,11 +75,11 @@ public class SceneryManager {
 			//get the terrain block in that position
 			blk = MapData.Instance.TerrainBlocks.findBlock(coordinate);
 			//if there's no block then... what? continue anyways
-			if(blk == null){
+			if(blk == null) {
 				continue;
 			}
 			//if the block is linked to this piece of scenery, then unlink it
-			if(blk.Scenery.Equals(block)){
+			if(blk.Scenery.Equals(block)) {
 				blk.removeScenery();
 			}
 		}
@@ -131,6 +131,73 @@ public class SceneryManager {
 		return null;
 	}
 
+	public void moveBlock(SceneryBlock blk, Vector3 offset) {
+		unlinkTerrain(blk);
+		blk.move(offset);
+		linkTerrain(blk);
+	}
+
+	public void moveBlock(Vector3 pos, Vector3 offset) {
+		moveBlock(findBlock(pos), offset);
+	}
+
+	public void rotateBlock(SceneryBlock blk, DIRECTION dir) {
+		unlinkTerrain(blk);
+		blk.Orientation = dir;
+		linkTerrain(blk);
+	}
+
+	public void rotateBlock(Vector3 pos, DIRECTION dir) {
+		rotateBlock(findBlock(pos), dir);
+	}
+
+	public bool isRotationValid(Vector3 pos, DIRECTION dir) {
+		return isRotationValid(findBlock(pos), dir);
+	}
+
+	public bool isRotationValid(SceneryBlock blk, DIRECTION dir) {
+		DIRECTION oDir = blk.Orientation;
+		blk.Orientation = dir;
+		bool retVal = isBlockValid(blk);
+		blk.Orientation = oDir;
+		return retVal;
+	}
+
+	public bool isMoveValid(Vector3 pos, Vector3 offset) {
+		return isMoveValid(findBlock(pos), offset);
+	}
+
+	public bool isMoveValid(SceneryBlock blk, Vector3 offset) {
+		blk.move(offset);
+		bool retVal = isBlockValid(blk);
+		blk.move(-offset);
+		return retVal;
+	}
+
+	public bool isBlockValid(Vector3 pos) {
+		return isBlockValid(findBlock(pos));
+	}
+
+	public bool isBlockValid(SceneryBlock blk) {
+		TerrainBlock terBlk;
+		foreach(Vector3 coordinate in blk.Coordinates) {
+			//get the terrain block in that position
+			terBlk = MapData.Instance.TerrainBlocks.findBlock(coordinate);
+			//if there's no block there, this block is not placeable
+			if(terBlk == null) {
+				return false;
+			}
+			//try to link the scenery, return false if problem
+			if(terBlk != null) {
+				return false;
+			}
+			if(terBlk.Scenery != blk) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public string ScenerySaveString {
 		get {
 			string retVal = "";

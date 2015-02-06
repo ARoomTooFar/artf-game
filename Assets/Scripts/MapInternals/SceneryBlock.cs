@@ -26,6 +26,7 @@ public class SceneryBlock {
 
 	public DIRECTION Orientation{
 		get{ return orientation; }
+		set{ orientation = value; }
 	}
 
 	public string SaveString{
