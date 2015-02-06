@@ -46,11 +46,7 @@ public class AssaultRifle : RangedWeapons {
 			StartCoroutine(makeSound(action,playSound,action.length));
 			for (int i = 0; i < count*count; i++) {
 				yield return StartCoroutine(Wait(.01f));
-				bullet = (GameObject) Instantiate(projectile, user.transform.position, spray);
-				bullet.GetComponentInChildren<Bullet>().damage = 1;
-				bullet.GetComponentInChildren<Bullet>().speed = .5f;
-				bullet.GetComponentInChildren<Bullet>().particles.startSpeed = particles.startSpeed;
-				bullet.GetComponentInChildren<Bullet>().player = user;
+				fireProjectile();
 				currAmmo--;
 				if(currAmmo<=0){
 					reload = true;

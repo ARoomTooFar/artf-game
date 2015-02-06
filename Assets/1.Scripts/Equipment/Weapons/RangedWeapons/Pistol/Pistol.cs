@@ -53,11 +53,7 @@ public class Pistol : RangedWeapons {
 				
 				StartCoroutine(makeSound(action,playSound,action.length));
 				yield return StartCoroutine(Wait(.08f));
-				bullet = (GameObject) Instantiate(projectile, user.transform.position, spray);
-				bullet.GetComponentInChildren<Bullet>().damage = 1+(int)count/2;
-				bullet.GetComponentInChildren<Bullet>().speed = .5f;
-				bullet.GetComponentInChildren<Bullet>().particles.startSpeed = particles.startSpeed;
-				bullet.GetComponentInChildren<Bullet>().player = user;
+				fireProjectile();
 				currAmmo--;
 				if(currAmmo<=0){
 					reload = true;
