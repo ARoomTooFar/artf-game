@@ -39,7 +39,7 @@ public class MouseHandler_ItemObjectUIVisibility : MonoBehaviour {
 		if (Input.GetMouseButtonUp(0) && rayHit == true){ 
 			Vector3 offset = Input.mousePosition - mouseStartPos;
 
-			//if the offeset is not zero, then a drag happened
+			//if the offset is not zero, then a drag happened
 			if (Math.Abs(offset.x) == 0){
 				toggle.SetActive (!toggle.activeSelf);
 			}
