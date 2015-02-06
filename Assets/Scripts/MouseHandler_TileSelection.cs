@@ -31,8 +31,11 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 	/* selecting objects */
 	GameObject currentObj;
 
-
+	ItemClass itemClass = new ItemClass();
 	
+	//object in hierarchy that holds itemObjects
+	Transform itemObjects;
+
 	//place a prefab from resources folder
 	public void placeItems(string name, Vector3 position){
 		position.x = Mathf.RoundToInt( position.x / tileMap.tileSize );
@@ -40,10 +43,11 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 
 		currentObj = Instantiate (Resources.Load(name), position, Quaternion.identity) as GameObject;
 
-		currentObj.transform.parent = data.getItemObjects();
+		currentObj.transform.parent = itemObjects;
 
-		currentObj.name = data.makeName(name);
-		data.addToItemDictionary(currentObj.name, position);
+		currentObj.name = itemClass.makeName(name);
+//		data.addToItemList(currentObj.name, position);
+		itemClass.addToItemList(currentObj.name, position);
 
 		clearSelectedItem();
 	}
@@ -61,6 +65,8 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 		selectedTiles = new HashSet<Vector3> ();
 
 		data = GameObject.Find ("ItemObjects").GetComponent("DataHandler_Items") as DataHandler_Items;
+
+		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 	}
 
 	/* Calling raycast function */

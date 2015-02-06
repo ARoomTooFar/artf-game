@@ -20,6 +20,8 @@ public class MouseHandler_ItemObjectMovement : MonoBehaviour
 	bool inMouseCheck = false;
 	DataHandler_Items data;
 
+	ItemClass itemClass = new ItemClass();
+
 	void Start ()
 	{
 		data = GameObject.Find ("ItemObjects").GetComponent ("DataHandler_Items") as DataHandler_Items;
@@ -75,7 +77,9 @@ public class MouseHandler_ItemObjectMovement : MonoBehaviour
 
 						//for now y-pos remains as prefab's default.
 						draggedObject.transform.position = new Vector3 (x * 1.0f, draggedObject.transform.position.y, z * 1.0f);
-						data.modifyItemDictionary (draggedObject.name, draggedObject.transform.position);
+
+//						data.modifyItemList (draggedObject.name, draggedObject.transform.position);
+						itemClass.modifyItemList (draggedObject.name, draggedObject.transform.position);
 					}
 				}
 			}

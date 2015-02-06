@@ -11,10 +11,9 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 
-[System.Serializable]
 public class ItemClass
 {
-	[SerializeField]
+
 	public static List<ItemStruct>
 		itemList;
 
@@ -25,9 +24,10 @@ public class ItemClass
 		public float x;
 		public float y;
 		public float z;
+
 	}
 
-	int nameCounter = 0;
+	static int nameCounter = 0;
 
 	
 	public ItemClass ()
@@ -57,6 +57,34 @@ public class ItemClass
 
 	public string makeName(string s){
 		return s + "_" + nameCounter++;
+	}
+
+	public void resetNameCounter(){
+		nameCounter = 0;
+	}
+
+	public void clearItemList(){
+		itemList.Clear();
+	}
+
+	public void modifyItemList(string s, Vector3 pos){
+		this.removeItemFromList(s);
+		
+		ItemStruct its = new ItemStruct();
+		its.item = s;
+		its.x = pos.x;
+		its.y = pos.y;
+		its.z = pos.z;
+		this.addToItemList(its);
+	}
+
+	public void addToItemList(string s, Vector3 pos){
+		ItemStruct its = new ItemStruct();
+		its.item = s;
+		its.x = pos.x;
+		its.y = pos.y;
+		its.z = pos.z;
+		addToItemList(its);
 	}
 
 }

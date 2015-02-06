@@ -16,13 +16,15 @@ public class UIHandler_FileIO : MonoBehaviour
 	public Button Button_Deploy = null;
 	public Button Button_Load = null;
 	MouseHandler_TileSelection tileSelection;
-	Dictionary<string, Vector3> savedState;
+//	Dictionary<string, Vector3> savedState;
 	DataHandler_Items data;
 	BinaryWriter bin;
 	private StreamWriter writer; // This is the writer that writes to the file
 	private string assetText;
 	ItemClass itemClass = new ItemClass ();
 
+	//object in hierarchy that holds itemObjects
+	Transform itemObjects;
 
 	void Start ()
 	{
@@ -35,11 +37,11 @@ public class UIHandler_FileIO : MonoBehaviour
 
 
 		tileSelection = GameObject.Find ("TileMap").GetComponent ("MouseHandler_TileSelection") as MouseHandler_TileSelection;
-		savedState = new Dictionary<string, Vector3> ();
+//		savedState = new Dictionary<string, Vector3> ();
 
 		data = GameObject.Find ("ItemObjects").GetComponent ("DataHandler_Items") as DataHandler_Items;
 
-
+		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 
 	}
 
@@ -49,9 +51,9 @@ public class UIHandler_FileIO : MonoBehaviour
 		
 		BinaryFormatter bf = new BinaryFormatter ();
 		FileStream file = File.Create ("Assets/Resources/savedLevel.txt");
-		if(itemClass.getItemList ().Count != 0){
+		if (itemClass.getItemList ().Count != 0) {
 			bf.Serialize (file, itemClass.getItemList ());
-		}else{
+		} else {
 			Debug.Log ("ItemClass.itemList is empty. Nothing to write.");
 		}
 		file.Close ();
@@ -68,8 +70,11 @@ public class UIHandler_FileIO : MonoBehaviour
 	{
 
 		if (File.Exists ("Assets/Resources/savedLevel.txt")) {
-			data.wipeItemObjects ();
-			data.clearItemDictionary ();
+//			data.wipeItemObjects ();
+			wipeItemObjects ();
+
+//			data.clearItemDictionary ();
+			itemClass.clearItemList ();
 
 			BinaryFormatter bf = new BinaryFormatter ();
 			FileStream file = File.Open ("Assets/Resources/savedLevel.txt", FileMode.Open);
@@ -78,11 +83,11 @@ public class UIHandler_FileIO : MonoBehaviour
 			file.Close ();
 
 			for (int i = 0; i < savedFile.Count; i++) {
-				Vector3 pos = new Vector3(savedFile[i].x, savedFile[i].y, savedFile[i].z);
-				string name = savedFile[i].item.Substring (0, savedFile[i].item.IndexOf ('_'));
+				Vector3 pos = new Vector3 (savedFile [i].x, savedFile [i].y, savedFile [i].z);
+				string name = savedFile [i].item.Substring (0, savedFile [i].item.IndexOf ('_'));
 				tileSelection.placeItems (name, pos);
 			}
-		}else{
+		} else {
 			Debug.Log ("savedLevel.txt does not exist. Cannot load.");
 		}
 
@@ -100,6 +105,19 @@ public class UIHandler_FileIO : MonoBehaviour
 //			Debug.Log ("Nothing to load");
 //		}
 	}
+
+	public void wipeItemObjects ()
+	{
+		foreach (Transform child in itemObjects) {
+			GameObject.Destroy (child.gameObject);
+		}
+		itemClass.resetNameCounter ();
+	}
+
+//	public Transform getItemObjects ()
+//	{
+//		return itemObjects;
+//	}
 		
 
 }
