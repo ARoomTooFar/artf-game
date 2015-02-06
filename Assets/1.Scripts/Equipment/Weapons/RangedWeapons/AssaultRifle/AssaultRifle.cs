@@ -45,14 +45,7 @@ public class AssaultRifle : RangedWeapons {
 		for (int i = 0; i < count*count; i++) {
 			yield return StartCoroutine(Wait(.01f));
 
-			//Instantiate(projectile, user.transform.position, spray);
-
-			bullet = (GameObject) Instantiate(projectile, user.transform.position, spray);
-			//bullet.transform.parent = gameObject.transform;
-			bullet.GetComponentInChildren<Bullet>().damage = 1;
-			bullet.GetComponentInChildren<Bullet>().speed = .5f;
-			bullet.GetComponentInChildren<Bullet>().particles.startSpeed = particles.startSpeed;
-			bullet.GetComponentInChildren<Bullet>().player = user;
+			fireProjectile();
 
 			/*shots.Add(bullet);
 			foreach (Shot bull in shots){

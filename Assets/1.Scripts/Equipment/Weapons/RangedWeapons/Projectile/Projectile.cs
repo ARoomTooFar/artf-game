@@ -4,14 +4,22 @@ using System.Collections;
 public class Projectile : MonoBehaviour {
 	public int damage;
 	public float speed;
-	public Character player;
+	private Character user;
 	public ParticleSystem particles;
 	public Transform target;
 	// Use this for initialization
 	protected virtual void Start() {
-		setInitValues();
+
 	}
-	protected virtual void setInitValues() {
+	public virtual void setInitValues(Character player, float partSpeed) {
+		user = player;
+
+		transform.Rotate(Vector3.right * 90);
+
+		damage = 1;
+		speed = 0.5f;
+
+		particles.startSpeed = partSpeed;
 		particles.Play();
 	}
 
@@ -23,15 +31,15 @@ public class Projectile : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Wall") {
 			particles.Stop();
-			Destroy(this.transform.parent.gameObject);
+			Destroy(gameObject);
 		}
 
 		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
 		Enemy enemy = other.GetComponent<Enemy>();
 		if( component != null && enemy != null) {
-			enemy.damage(damage, player);
+			enemy.damage(damage, user);
 			particles.Stop();
-			Destroy(this.transform.parent.gameObject);
+			Destroy(gameObject);
 		}
 	}
 }

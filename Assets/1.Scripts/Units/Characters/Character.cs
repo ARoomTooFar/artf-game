@@ -58,7 +58,6 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		public Transform weapLocation, headLocation, chestLocation;
 		
 		public void equipGear(Character player, GameObject[] equipment) {
-			
 			foreach (GameObject equip in equipment) {
 				if (equip.GetComponent<Weapons>()) {
 					// GameObject newGear = Instantiate(equip, headLocation.position, headLocation.rotation) as GameObject;
@@ -76,6 +75,15 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 				} else {
 					Debug.LogWarning("Non-weapon/armor passed into gear class");
 				}
+			}
+		}
+
+		public void equipGear(Character player) {
+			weapon = weapLocation.GetComponentInChildren<Weapons>();
+			if (weapon) {
+				weapon.equip (player);
+			} else {
+				Debug.LogWarning(gameObject.name + " does not have a weapon in the weapon slot.");
 			}
 		}
 	}
