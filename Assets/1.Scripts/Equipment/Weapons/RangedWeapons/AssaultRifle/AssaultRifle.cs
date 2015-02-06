@@ -9,7 +9,8 @@ public class AssaultRifle : RangedWeapons {
 	}
 	protected override void setInitValues() {
 		base.setInitValues();
-
+		maxAmmo = 40;
+		currAmmo = maxAmmo;
 		stats.weapType = 0;
 		stats.weapTypeName = "sword";
 		
@@ -36,34 +37,32 @@ public class AssaultRifle : RangedWeapons {
 	}
 	
 	protected override IEnumerator Shoot(int count) {
-		if(count == 0){
-			count = 1;
-		}
+		if(!reload){
+			if(count == 0){
+				count = 1;
+			}
 
-		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination)+user.transform.eulerAngles.y,(variance-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
-		StartCoroutine(makeSound(action,playSound,action.length));
-		for (int i = 0; i < count*count; i++) {
-			yield return StartCoroutine(Wait(.01f));
-
-			//Instantiate(projectile, user.transform.position, spray);
-
-			bullet = (GameObject) Instantiate(projectile, user.transform.position, spray);
-			//bullet.transform.parent = gameObject.transform;
-			bullet.GetComponentInChildren<Bullet>().damage = 1;
-			bullet.GetComponentInChildren<Bullet>().speed = .5f;
-			bullet.GetComponentInChildren<Bullet>().particles.startSpeed = particles.startSpeed;
-			bullet.GetComponentInChildren<Bullet>().player = user;
-
-			/*shots.Add(bullet);
-			foreach (Shot bull in shots){
-				bull.facing = spray.eulerAngles;
-			}*/
-			//variance -= 1;
-			spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
-			kick += .2f;
-			if(kick >= 6f){
-				kick = 5f;
+			spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination)+user.transform.eulerAngles.y,(variance-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
+			StartCoroutine(makeSound(action,playSound,action.length));
+			for (int i = 0; i < count*count; i++) {
+				yield return StartCoroutine(Wait(.01f));
+				bullet = (GameObject) Instantiate(projectile, user.transform.position, spray);
+				bullet.GetComponentInChildren<Bullet>().damage = 1;
+				bullet.GetComponentInChildren<Bullet>().speed = .5f;
+				bullet.GetComponentInChildren<Bullet>().particles.startSpeed = particles.startSpeed;
+				bullet.GetComponentInChildren<Bullet>().player = user;
+				currAmmo--;
+				if(currAmmo<=0){
+					reload = true;
+					StartCoroutine(loadAmmo());
+				}
+				spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
+				kick += .2f;
+				if(kick >= 6f){
+					kick = 5f;
+				}
 			}
 		}
+		
 	}
 }

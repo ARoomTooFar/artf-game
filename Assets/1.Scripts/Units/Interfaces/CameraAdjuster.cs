@@ -2,10 +2,10 @@
 using System.Collections;
 
 public class CameraAdjuster : MonoBehaviour {
-	public Player p1; //
-	public Player p2;//
-	public Player p3;//
-	public Player p4;//
+	public Character p1; //
+	public Character p2;//
+	public Character p3;//
+	public Character p4;//
 	//Average X, Z (Pulled from Player Locations)
 	//Base X,Y,Z (To be adjusted by the multiplier Value)
     //Value of Adjustment

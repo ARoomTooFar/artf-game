@@ -9,11 +9,12 @@ public class Shotgun : RangedWeapons {
 	}
 	protected override void setInitValues() {
 		base.setInitValues();
-		
+		maxAmmo = 30;
+		currAmmo = maxAmmo;
 		// Use sword animations for now
 		stats.weapType = 0;
 		stats.weapTypeName = "sword";
-		
+		loadSpeed = 5f;
 		stats.atkSpeed = 2.0f;
 		stats.damage = 1;
 		stats.maxChgTime = 2.0f;
@@ -37,33 +38,34 @@ public class Shotgun : RangedWeapons {
 	}
 	
 	protected override IEnumerator Shoot(int count) {
-		variance = 47f;
+		if(!reload){
+			//High cap for shotty is 27f variance, low cap for shotty is 47f
 
-		if(count == 0){
-			count = 1;
-		}
-
-		//High cap for shotty is 27f variance, low cap for shotty is 47f
-
-		StartCoroutine(makeSound(action,playSound,action.length));
-		for (int i = 0; i < count*(int)Random.Range(3,5); i++) {
-			yield return 0;
-			spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y,(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
+			StartCoroutine(makeSound(action,playSound,action.length));
+			for (int i = 0; i < count*(int)Random.Range(3,5); i++) {
+				yield return 0;
+				spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y,(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
 
 			//Instantiate(projectile, user.transform.position, spray);
 
-			bullet = (GameObject) Instantiate(projectile, user.transform.position, spray);
+				bullet = (GameObject) Instantiate(projectile, user.transform.position, spray);
 			//bullet.transform.parent = gameObject.transform;
-			bullet.GetComponentInChildren<Bullet>().damage = 1;
-			bullet.GetComponentInChildren<Bullet>().speed = .5f;
-			bullet.GetComponentInChildren<Bullet>().particles.startSpeed = count;
-			bullet.GetComponentInChildren<Bullet>().player = user;
+				bullet.GetComponentInChildren<Bullet>().damage = 1+(int)(count/4);
+				bullet.GetComponentInChildren<Bullet>().speed = .5f;
+				bullet.GetComponentInChildren<Bullet>().particles.startSpeed = count;
+				bullet.GetComponentInChildren<Bullet>().player = user;
+				currAmmo--;
+				if(currAmmo<=0){
+					reload = true;
+					StartCoroutine(loadAmmo());
+				}
 			/*shots.Add(bullet);
 			foreach (Shot bull in shots){
 				bull.facing = spray.eulerAngles;
 			}
 			shots.Clear();*/
-			variance += 2;
+				variance += 2;
+			}
 		}
 	}
 }
