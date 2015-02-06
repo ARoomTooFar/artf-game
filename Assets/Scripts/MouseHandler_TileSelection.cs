@@ -162,7 +162,7 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 	}
 
 	/*deselects tile passed into function */
-	void deselect(Vector3 remove){
+	public void deselect(Vector3 remove){
 		selectedTiles.Remove (remove);
 	}
 
