@@ -70,17 +70,17 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
 				animator.SetBool("Charging", true);
-				gears.weapon.initAttack();
+				gear.weapon.initAttack();
 			} else if(Input.GetKeyDown (controls.secItem)) {
-				if (inventories.items.Count > 0 && inventories.items[inventories.selected].curCoolDown <= 0) {
-					inventories.keepItemActive = true;
-					inventories.items[inventories.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
+				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
+					inventory.keepItemActive = true;
+					inventory.items[inventory.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
 				} else {
 					// Play sound for trying to use item on cooldown or items
 					print("Item on Cooldown");
 				}
 			} else if(Input.GetKeyDown (controls.cycItem)) {
-				inventories.cycItems();
+				inventory.cycItems();
 			}
 			// Continues with what is happening
 		} else {
@@ -95,9 +95,9 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 		
 		
 		if (Input.GetKeyUp (controls.secItem))  {
-			if (inventories.items.Count > 0) {
-				inventories.keepItemActive = false;
-				// inventories.items[inventories.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
+			if (inventory.items.Count > 0) {
+				inventory.keepItemActive = false;
+				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
 			}
 		}
 	}
@@ -208,7 +208,7 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 		if(damage > (stats.maxHealth/20)){
 			//print("Got Here"+(stats.maxHealth/20)+":"+damage);
 			int tempDmg = greyDamage;
-			if(inGrey){
+			if(inGrey) {
 				greyDamage = damage - stats.maxHealth/20;
 				//print("Grey!:"+tempDmg);
 				inGrey = true;
@@ -218,7 +218,7 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 				}
 				//print("True!WGAT:"+(stats.maxHealth/20 + tempDmg));
 				return stats.health/20 + tempDmg;
-			}else{
+			} else {
 				inGrey = true;
 				greyDamage = damage - stats.maxHealth/20;
 				//print("Grey!:"+(damage - stats.maxHealth/20));
@@ -234,8 +234,7 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 			inGrey = false;
 			//print("True!WGBT:"+(damage + greyDamage));
 			return damage + greyDamage;
-		}
-		else{
+		} else {
 			inGrey = false;
 			//print("True!NG:"+damage);
 			return damage;
