@@ -10,12 +10,6 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
-	public Texture2D bgImage; 
-    public Texture2D fgImage; 
-	public Texture2D fgImage2;
-	public GameObject healthBar;
-    
-    public float healthBarLength;
 	public Controls controls;
 	
 	// Use this for initialization
@@ -37,46 +31,9 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 		greyDamage = 0;
 		testDmg = 0;
 		testable = true;
-		//healthBarLength = Screen.width/16;
-		//healthBarLength =(Screen.width /16) * (stats.health / (float)stats.maxHealth);
 	}
-	/*void OnGUI () {
-         // Create one Group to contain both images
-         // Adjust the first 2 coordinates to place it somewhere else on-screen
-         GUI.BeginGroup (new Rect (0,0, healthBarLength,32));
- 
-         // Draw the background image
-         GUI.Box (new Rect (0,0, healthBarLength,32), bgImage);
-		 
-		 GUI.BeginGroup (new Rect (100,100, healthBarLength,32));
-		 GUI.Box (new Rect (100,100, healthBarLength, 32), bgImage);
- 
-         // Create a second Group which will be clipped
-         // We want to clip the image and not scale it, which is why we need the second Group
-         GUI.BeginGroup (new Rect (0,0, stats.health / stats.maxHealth * healthBarLength, 32));
-		 
-         // Draw the foreground image
-         GUI.Box (new Rect (0,0,healthBarLength,32), fgImage);
-		 
-		 GUI.BeginGroup (new Rect (100,100, stats.health / stats.maxHealth * healthBarLength, 32));
-		 GUI.Box (new Rect (100,100,healthBarLength,32), fgImage2);
-         // End both Groups
-         GUI.EndGroup ();
-		 GUI.EndGroup ();
-		 GUI.EndGroup ();
-         GUI.EndGroup ();
-      }*/
- 
-	// Health between [0.0f,1.0f] == (currentHealth / totalHealth)
-	public void SetHealthVisual(float healthNormalized){
-		healthBar.transform.localScale = new Vector3( healthNormalized,
-                                              healthBar.transform.localScale.y,
-                                              healthBar.transform.localScale.z);
-	} 
 	// Update is called once per frame
 	protected override void Update () {
-		SetHealthVisual(stats.health/stats.maxHealth);
-		//healthBarLength =(Screen.width /16) * (stats.health / (float)stats.maxHealth);
 		if(stats.health <= 0){
 			isDead = true;
 		} else {

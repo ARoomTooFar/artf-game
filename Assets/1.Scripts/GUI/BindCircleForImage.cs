@@ -17,7 +17,7 @@ public class BindCircleForImage : MonoBehaviour
     [SerializeField]
     Color current;
 
-    Scrollbar scrollbar { get { return GetComponent<Scrollbar>(); } }
+    //Scrollbar scrollbar { get { return GetComponent<Scrollbar>(); } }
 
     void Start()
     {
@@ -30,10 +30,10 @@ public class BindCircleForImage : MonoBehaviour
     {
 		//This value is the amount that the ring is filled in.
 		//It goes between 0 and 1.
-		CircleImage.fillAmount = 0.6f;
+		CircleImage.fillAmount = 1f;
 
-        CircleImage.color = Color.Lerp(start, end, scrollbar.value);
-        current = Color.Lerp(start, end, scrollbar.value);
+        CircleImage.color = Color.Lerp(start, end, 1);
+        current = Color.Lerp(start, end, 1);
     }
 
      

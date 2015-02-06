@@ -18,7 +18,6 @@ public class Player : Character, IMoveable {
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
-
 	public Controls controls;
 
 	// Use this for initialization
