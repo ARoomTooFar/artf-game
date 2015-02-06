@@ -43,7 +43,6 @@ public class MouseHandler_ItemObjectMovement : MonoBehaviour
 
 				draggedObject = hit.collider.gameObject; 
 				if (inMouseCheck == false) {
-					Debug.Log ("in mouse check");
 					initMousePos = Input.mousePosition;
 					inMouseCheck = true;
 				}
@@ -84,7 +83,6 @@ public class MouseHandler_ItemObjectMovement : MonoBehaviour
 		}
 
 		inMouseCheck = false;
-		Debug.Log ("left mouse check");
 	}
 
 }

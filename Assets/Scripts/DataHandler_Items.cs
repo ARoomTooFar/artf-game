@@ -4,58 +4,69 @@ using System.Collections.Generic;
 
 public class DataHandler_Items : MonoBehaviour {
 	
-	Transform ItemObjects;
+	Transform itemObjects;
 	
-	Dictionary<string, Vector3> ItemDictionary;
+	Dictionary<string, Vector3> itemDictionary;
 
 	int nameCounter = 0;
 
-
+	ItemClass itemClass = new ItemClass();
 
 	void Start () {
-		ItemDictionary = new Dictionary<string, Vector3>();
-		ItemObjects = GameObject.Find ("ItemObjects").GetComponent("Transform") as Transform;
+		itemDictionary = new Dictionary<string, Vector3>();
+		itemObjects = GameObject.Find ("ItemObjects").GetComponent("Transform") as Transform;
 	}
 	
-
-	void Update () {
-	
-	}
-
 
 	//actual objects in scene
 
 	public void wipeItemObjects(){
-		foreach(Transform child in ItemObjects){
+		foreach(Transform child in itemObjects){
 			GameObject.Destroy(child.gameObject);
 		}
 		nameCounter = 0;
 	}
 
 	public Transform getItemObjects(){
-		return ItemObjects;
+		return itemObjects;
 	}
 
 	//dictionary storage of objects in scene
 
 	public void clearItemDictionary(){
-		ItemDictionary.Clear ();
+		itemDictionary.Clear ();
 	}
 
 	public Dictionary<string, Vector3> getItemDictionary(){
-		return ItemDictionary;
+		return itemDictionary;
 	}
 	
 	public void copyIntoItemDictionary(Dictionary<string, Vector3> dic){
-		ItemDictionary = new Dictionary<string, Vector3>(dic);
+		itemDictionary = new Dictionary<string, Vector3>(dic);
 	}
 
 	public void addToItemDictionary(string s, Vector3 pos){
-		ItemDictionary.Add (s, pos);
+		itemDictionary.Add (s, pos);
+
+		ItemClass.ItemStruct its = new ItemClass.ItemStruct();
+		its.item = s;
+		its.x = pos.x;
+		its.y = pos.y;
+		its.z = pos.z;
+		itemClass.addToItemList(its);
 	}
 
 	public void modifyItemDictionary(string s, Vector3 pos){
-		ItemDictionary[s] = pos;
+		itemDictionary[s] = pos;
+
+		itemClass.removeItemFromList(s);
+
+		ItemClass.ItemStruct its = new ItemClass.ItemStruct();
+		its.item = s;
+		its.x = pos.x;
+		its.y = pos.y;
+		its.z = pos.z;
+		itemClass.addToItemList(its);
 	}
 
 	public string makeName(string s){
