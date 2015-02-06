@@ -4,49 +4,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-
-/*
-[System.Serializable]
-public class Testgears {
-	public Weapons weapon;
-	public Equipment helmet, bodyArmor;
-	
-	public void equipItems(Character player) {
-		if (weapon) weapon.equip(player);
-	}
-}*/
-
-// might move to player depending on enemy stuff or have each class also have an inventories class inheriting this inventories
-[System.Serializable]
-public class Testinventories {
-	public int selected;
-	public bool keepItemActive;
-	public List<Item> items = new List<Item>();
-	
-	public void equipItems(Character curPlayer) {
-		for (int i = 0; i < items.Count; i++)
-			items[i].player = curPlayer;
-		selected = 0;
-		keepItemActive = false;
-	}
-	
-	public void cycItems() {
-		ToggleItem isToggle = items[selected].GetComponent<ToggleItem>();
-		if (isToggle) {
-			isToggle.deactivateItem();
-		}
-		selected = (selected + 1)%items.Count;
-	}
-}
-
 [RequireComponent(typeof(Rigidbody))]
-
 public class TestingCharacter : Character, IActionable, IFallable, IAttackable, IDamageable<int, Character>, ISlowable<float>, IStunable<float>, IForcible<float> {
 
-	// public Testgears gears;
-	public Testinventories inventories;
-
-	
 	// Use this for initialization
 	protected override void Start () {
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
@@ -55,8 +15,8 @@ public class TestingCharacter : Character, IActionable, IFallable, IAttackable, 
 		isDead = false;
 		freeAnim = true;
 		setInitValues();
-		gear.equipItems(this);
-		inventories.equipItems(this);
+		gear.equipGear(this);
+		inventory.equipItems(this);
 		setAnimHash();
 	}
 	

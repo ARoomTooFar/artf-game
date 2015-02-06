@@ -78,15 +78,31 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 			}
 		}
 
+		// Equip method for testing purposes
 		public void equipGear(Character player) {
 			weapon = weapLocation.GetComponentInChildren<Weapons>();
 			if (weapon) {
 				weapon.equip (player);
 			} else {
-				Debug.LogWarning(gameObject.name + " does not have a weapon in the weapon slot.");
+				Debug.LogWarning(player.gameObject.name + " does not have a weapon in the weapon slot.");
+			}
+
+			helmet = headLocation.GetComponentInChildren<Helmet>();
+			if (helmet) {
+				helmet.equip (player);
+			} else {
+				Debug.LogWarning(player.gameObject.name + " does not have a helmet in the helmet slot.");
+			}
+
+			chest = chestLocation.GetComponentInChildren<Chest>();
+			if (chest) {
+				chest.equip (player);
+			} else {
+				Debug.LogWarning(player.gameObject.name + " does not have armor in the armor slot.");
 			}
 		}
 	}
+
 
 	public Inventory inventory;
 	// might move to player depending on enemy stuff or have each class also have an inventory class inheriting this inventory
@@ -110,6 +126,22 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 			keepItemActive = false;
 		}
 		
+		public void equipItems(Character player) {
+			items.Clear ();
+			items.AddRange(itemLocation.GetComponentsInChildren<Item>());
+
+			if (items.Count == 0) {
+				Debug.LogWarning(player.gameObject.name + " does not have any abilities in the item slot.");
+			}
+
+			foreach (Item item in items) {
+				item.player = player;
+			}
+			
+			selected = 0;
+			keepItemActive = false;
+		}
+
 		public void cycItems() {
 			ToggleItem isToggle = items[selected].GetComponent<ToggleItem>();
 			if (isToggle) {
