@@ -1,0 +1,76 @@
+﻿using UnityEngine;
+using System.Collections;
+using System;
+using System.IO; 
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Collections.Generic;
+using System.Text;
+
+public class Input_Camera : MonoBehaviour {
+
+	Output_Camera cameraControl = new Output_Camera();
+
+	Button Button_TopDown;
+	Button Button_Perspective;
+	Button Button_Orthographic;
+	Button Button_ZoomOut;
+	Button Button_ZoomIn;
+
+	void Start () {
+		Button_TopDown = GameObject.Find ("Button_TopDown").GetComponent("Button") as Button;
+		Button_Perspective = GameObject.Find ("Button_Perspective").GetComponent("Button") as Button;
+		Button_Orthographic = GameObject.Find ("Button_Orthographic").GetComponent("Button") as Button;
+		Button_ZoomOut = GameObject.Find ("Button_ZoomOut").GetComponent("Button") as Button;
+		Button_ZoomIn = GameObject.Find ("Button_ZoomIn").GetComponent("Button") as Button;
+
+		Button_ZoomIn.onClick.AddListener (() => {
+			cameraControl.zoomCamIn ();});
+		Button_ZoomOut.onClick.AddListener (() => {
+			cameraControl.zoomCamOut ();});
+		Button_TopDown.onClick.AddListener (() => {
+			cameraControl.changeToTopDown (); });
+		Button_Perspective.onClick.AddListener (() => {
+			cameraControl.changeToPerspective ();});
+		Button_Orthographic.onClick.AddListener (() => {
+			cameraControl.changetoOrthographic ();});
+	}
+
+	void Update () {
+		checkForMouseScrolling();
+		checkForMouseClicks();
+
+		//don't move cam in proper direction right now
+//		checkForKeyPresses();
+	}
+
+	void checkForMouseScrolling(){
+		if (Input.GetAxis ("Mouse ScrollWheel") < 0) {
+			cameraControl.zoomCamIn ();
+		}
+		if (Input.GetAxis ("Mouse ScrollWheel") > 0) {
+			cameraControl.zoomCamOut ();
+		}
+	}
+
+	void checkForMouseClicks(){
+		if (Input.GetMouseButton (1)) {
+			cameraControl.dragCamera();
+		}
+	}
+
+	void checkForKeyPresses(){
+		if (Input.GetKey (KeyCode.UpArrow)) {
+			cameraControl.moveForward ();
+		}
+		if (Input.GetKey (KeyCode.DownArrow)) {
+			cameraControl.moveBackward ();
+		}
+		if (Input.GetKey (KeyCode.LeftArrow)) {
+			cameraControl.moveLeft ();
+		}
+		if (Input.GetKey (KeyCode.RightArrow)) {
+			cameraControl.moveRight ();
+		}
+	}
+}
