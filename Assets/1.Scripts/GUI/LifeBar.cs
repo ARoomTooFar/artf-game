@@ -7,8 +7,8 @@ using UnityEngine.EventSystems;
 public class LifeBar: MonoBehaviour
 {
 	public float max;
-	public float curr;
+	public float current;
 	void Update () { 
-		renderer.material.SetFloat("_Cutoff", Mathf.InverseLerp(0, Screen.width, curr/max)); 
+		renderer.material.SetFloat("_Cutoff", Mathf.InverseLerp(0, Screen.width, current/max)); 
 	}
 }
