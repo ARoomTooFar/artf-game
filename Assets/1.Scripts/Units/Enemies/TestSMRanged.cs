@@ -1,117 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//All conditions need go here
-public class cApproachR :  ISMCondition 
-{
-	public TestSMRanged e;
-	public bool test()
-	{
-		return e.distanceToPlayer(e.giveTarget()) < 700f && e.distanceToPlayer(e.giveTarget()) >= 100f && e.canSeePlayer (e.giveTarget());
-	}
-	
-}
 
-public class cRestR :  ISMCondition 
-{
-	public TestSMRanged e;
-	public bool test()
-	{
-		return (e.giveLastSeenPos() == null);
-	}
-}
-
-public class cRetreatR :  ISMCondition 
-{
-	public TestSMRanged e;
-	public bool test()
-	{
-		return e.distanceToPlayer(e.giveTarget()) <= 20f;
-	}
-	
-}
-
-public class cAttackR :  ISMCondition 
-{
-	public TestSMRanged e;
-	public bool test()
-	{
-		return  e.distanceToPlayer(e.giveTarget()) < 100f && e.distanceToPlayer(e.giveTarget()) > 20f;
-	}
-	
-}
-
-public class cSearchR :  ISMCondition 
-{
-	public TestSMRanged e;
-	public bool test()
-	{
-		return (e.giveLastSeenPos ().HasValue) && !(e.canSeePlayer (e.giveTarget()));
-		
-	}
-	
-}
-
-//All actions go here
-
-//Add patrolling
-public class aRestR : ISMAction 
-{
-	public TestSMRanged e;
-	public void action()
-	{
-		e.ani.SetBool ("Moving", false);
-		e.nav.Stop ();
-	}
-}
-
-public class aApproachR : ISMAction 
-{
-	public TestSMRanged e;
-	public void action()
-	{
-		e.ani.SetBool ("Moving", true);
-		e.nav.destination = e.giveTarget ().transform.position;
-	}
-}
-
-public class aAttackR : ISMAction 
-{
-	public TestSMRanged e;
-	public void action()
-	{
-		e.ani.SetBool ("Moving", false);
-		e.nav.destination = e.transform.position;
-		if (!e.canSeePlayer (e.giveTarget()))
-			e.transform.LookAt (e.giveTarget().transform.position);
-		if (e.actable)
-			e.gear.weapon.initAttack();
-	}
-}
-
-
-//Improve search function to have multiple goals (scanning room, reaching last known position of target)
-public class aSearchR : ISMAction 
-{
-	public TestSMRanged e;
-	public void action()
-	{
-		e.ani.SetBool ("Moving", true);
-		e.nav.destination = (Vector3)e.giveLastSeenPos ();
-	}
-}
-
-//Improve retreat AI
-public class aRetreatR : ISMAction 
-{
-	public TestSMRanged e;
-	public void action()
-	{
-		e.ani.SetBool ("Moving", true);
-		e.nav.speed = 5;
-		e.nav.destination = e.retreatPos;
-	}
-}
 
 public class TestSMRanged: Enemy{
 	
@@ -208,47 +98,95 @@ public class TestSMRanged: Enemy{
 		
 		
 		//Set conditions for the transitions
-		cApproachR cApproach = new cApproachR();
-		cApproach.e = this;
-		tApproach.addCondition(cApproach);
-		
-		cRestR cRest = new cRestR ();
-		cRest.e = this;
-		tRest.addCondition (cRest);
-		
-		cAttackR cAttack = new cAttackR ();
-		cAttack.e = this;
-		tAttack.addCondition (cAttack);
-		
-		cRetreatR cRetreat = new cRetreatR ();
-		cRetreat.e = this;
-		tRetreat.addCondition (cRetreat);
-		
-		cSearchR cSearch = new cSearchR ();
-		cSearch.e = this;
-		tSearch.addCondition (cSearch);
+		tApproach.addCondition(isApproaching, this);
+		tRest.addCondition (isResting, this);
+		tAttack.addCondition (isAttacking, this);
+		tRetreat.addCondition (isRetreating, this);
+		tSearch.addCondition (isSearching, this);
 		
 		
 		//Set actions for the states
-		aRestR aRest = new aRestR ();
-		aRest.e = this;
-		rest.addAction (aRest);
+		rest.addAction (Rest, this);
+		search.addAction (Search, this);
+		attack.addAction (Attack, this);
+		approach.addAction (Approach, this);
+		retreat.addAction (Retreat, this);
+	}
+	
+	public bool isApproaching(Character a)
+	{
+		TestSMRanged agent = (TestSMRanged)a;
+		return agent.distanceToPlayer(agent.giveTarget()) < 700f 
+			&& agent.distanceToPlayer(agent.giveTarget()) >= 8.5f && agent.canSeePlayer (agent.giveTarget());
+	}
+	
+	public bool isResting(Character a)
+	{
+		TestSMRanged agent = (TestSMRanged)a;
+		return (agent.giveLastSeenPos() == null);
+	}
+	
+	public bool isRetreating(Character a)
+	{
+		TestSMRanged agent = (TestSMRanged)a;
+		return agent.distanceToPlayer(agent.giveTarget()) <= 20f;
+	}
+	
+	public bool isAttacking(Character a)
+	{
+		TestSMRanged agent = (TestSMRanged)a;
+		return  agent.distanceToPlayer(agent.giveTarget()) < 100f && agent.distanceToPlayer(agent.giveTarget()) > 20f;
+	}
+	
+	public bool isSearching(Character a)
+	{
+		TestSMRanged agent = (TestSMRanged)a;
+		return (agent.giveLastSeenPos ().HasValue) && !(agent.canSeePlayer (agent.giveTarget()));
 		
-		aSearchR aSearch = new aSearchR ();
-		aSearch.e = this;
-		search.addAction (aSearch);
-		
-		aAttackR aAttack = new aAttackR ();
-		aAttack.e = this;
-		attack.addAction (aAttack);
-		
-		aApproachR aApproach = new aApproachR ();
-		aApproach.e = this;
-		approach.addAction (aApproach);
-		
-		aRetreatR aRetreat = new aRetreatR ();
-		aRetreat.e = this;
-		retreat.addAction (aRetreat);
+	}
+	
+	public void Approach(Character a)
+	{
+		TestSMRanged agent = (TestSMRanged)a;
+		agent.ani.SetBool ("Moving", true);
+		agent.nav.destination = agent.giveTarget ().transform.position;
+	}
+	
+	public void Attack(Character a)
+	{
+		TestSMRanged agent = (TestSMRanged)a;
+		agent.ani.SetBool ("Moving", false);
+		agent.nav.destination = agent.transform.position;
+		if (!agent.canSeePlayer (agent.giveTarget()))
+			agent.transform.LookAt (agent.giveTarget().transform.position);
+		if (agent.actable)
+			agent.gear.weapon.initAttack();
+	}
+	
+	
+	//Improve search function to have multiple goals (scanning room, reaching last known position of target)
+	public void Search(Character a)
+	{
+		TestSMRanged agent = (TestSMRanged)a;
+		agent.ani.SetBool ("Moving", true);
+		agent.nav.destination = (Vector3)agent.giveLastSeenPos ();
+	}
+	
+	
+	//Improve retreat AI
+	public void Retreat(Character a)
+	{
+		TestSMRanged agent = (TestSMRanged)a;
+		agent.ani.SetBool ("Moving", true);
+		agent.nav.speed = 5;
+		agent.nav.destination = agent.retreatPos;
+	}
+	
+	public void Rest(Character a)
+	{
+		TestSMRanged agent = (TestSMRanged)a;
+		agent.ani.SetBool ("Moving", false);
+		agent.nav.Stop ();
 	}
 	
 	public bool canSeePlayer(GameObject p)
