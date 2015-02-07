@@ -9,8 +9,7 @@ using UnityEngine.EventSystems;
 //of the screen (zoom in, zoom out, rotate, hand, and pointer)
 public class UIHandler_EditingControls : MonoBehaviour {
 
-	public Button Button_Hand = null; 
-	public Button Button_Pointer = null; 
+
 	public Button Button_Rotate = null;
 //	public Button Button_ZoomOut = null; 
 //	public Button Button_ZoomIn = null; 
@@ -20,10 +19,7 @@ public class UIHandler_EditingControls : MonoBehaviour {
 //	// Use this for initialization
 	void Start () {
 //
-		Button_Hand.onClick.AddListener (() => {
-			cursorToHand (); });
-		Button_Pointer.onClick.AddListener (() => {
-			cursorToPointer ();});
+
 		Button_Rotate.onClick.AddListener (() => {
 			rotateObject ();});
 //		Button_ZoomIn.onClick.AddListener (() => {
@@ -34,13 +30,7 @@ public class UIHandler_EditingControls : MonoBehaviour {
 //	
 	}
 //
-	private void cursorToHand(){
 
-	}
-
-	private void cursorToPointer(){
-		
-	}
 //
 	private void rotateObject(){
 		//implement when we have object-focus functionality

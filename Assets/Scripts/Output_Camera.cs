@@ -9,8 +9,8 @@ using System.Text;
 
 public class Output_Camera : MonoBehaviour
 {
-	public static Camera UICamera;
-	public static Camera OnTopCamera;
+	static Camera UICamera;
+	static Camera OnTopCamera;
 
 	static float baseY = 21f;
 	static float baseX = -5f;
@@ -38,6 +38,14 @@ public class Output_Camera : MonoBehaviour
 	void Update ()
 	{
 		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
+	}
+
+	public void cursorToHand(){
+		
+	}
+	
+	public void cursorToPointer(){
+		
 	}
 
 	void setCameraRotation (Vector3 rot)

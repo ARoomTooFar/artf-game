@@ -16,13 +16,17 @@ public class Input_Camera : MonoBehaviour {
 	Button Button_Orthographic;
 	Button Button_ZoomOut;
 	Button Button_ZoomIn;
-
+	Button Button_Hand; 
+	Button Button_Pointer; 
+	
 	void Start () {
 		Button_TopDown = GameObject.Find ("Button_TopDown").GetComponent("Button") as Button;
 		Button_Perspective = GameObject.Find ("Button_Perspective").GetComponent("Button") as Button;
 		Button_Orthographic = GameObject.Find ("Button_Orthographic").GetComponent("Button") as Button;
 		Button_ZoomOut = GameObject.Find ("Button_ZoomOut").GetComponent("Button") as Button;
 		Button_ZoomIn = GameObject.Find ("Button_ZoomIn").GetComponent("Button") as Button;
+		Button_Hand = GameObject.Find ("Button_Hand").GetComponent("Button") as Button;
+		Button_Pointer = GameObject.Find ("Button_Pointer").GetComponent("Button") as Button;
 
 		Button_ZoomIn.onClick.AddListener (() => {
 			cameraControl.zoomCamIn ();});
@@ -34,13 +38,17 @@ public class Input_Camera : MonoBehaviour {
 			cameraControl.changeToPerspective ();});
 		Button_Orthographic.onClick.AddListener (() => {
 			cameraControl.changetoOrthographic ();});
+		Button_Hand.onClick.AddListener (() => {
+			cameraControl.cursorToHand (); });
+		Button_Pointer.onClick.AddListener (() => {
+			cameraControl.cursorToPointer ();});
 	}
 
 	void Update () {
 		checkForMouseScrolling();
 		checkForMouseClicks();
 
-		//don't move cam in proper direction right now
+		//doesn't move cam in proper direction right now
 //		checkForKeyPresses();
 	}
 
