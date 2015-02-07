@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
-
 public class TestSMRanged: Enemy{
 	
 	//Public variables to tweak in inspector
