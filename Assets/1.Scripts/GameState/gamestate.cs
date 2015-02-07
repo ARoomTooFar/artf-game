@@ -24,12 +24,11 @@ public class gamestate : MonoBehaviour {
 	public List<string> passwords = new List<string>();
 
 	private int numPlayers;				//This is the total number of player in the game
-
-
-	private bool p1ready;				//If the player is ready for the next scene
-	private bool p2ready;
-	private bool p3ready;
-	private	bool p4ready;	
+	
+	//private bool p1ready;				//If the player is ready for the next scene
+	//private bool p2ready;
+	//private bool p3ready;
+	//private	bool p4ready;	
 	private bool partyReady;				//If all the players in the game are ready
 
 	public List<Player> players = new List<Player>();	//List of the Players in the game so stats can be checked in their player.cs class.
@@ -235,25 +234,29 @@ public class gamestate : MonoBehaviour {
 	public void setPlayerReady(int playerNumber)
 	{
 	
-		switch (playerNumber)
+		if (players != null)
 		{
-			case 1:
-				gamestate.instance.p1ready = true;
-				break;
+			switch (playerNumber)
+			{
+				case 1:
+					gamestate.instance.players[0].isReady = true;
+					break;
 
-			case 2:
-				gamestate.instance.p2ready	= true;
-				break;
+				case 2:
+					gamestate.instance.players[1].isReady = true;
+					break;
 
-			case 3:
-				gamestate.instance.p3ready = true;
-				break;
+				case 3:
+					gamestate.instance.players[2].isReady = true;
+					break;
 
-			case 4:
-				gamestate.instance.p4ready = true;
-				break;
+				case 4:
+					gamestate.instance.players[3].isReady = true;
+					break;
+			}
+		} else {
+			print ("No players to set as ready.");
 		}
-
 	}
 
 	//--------------------------------
@@ -267,26 +270,26 @@ public class gamestate : MonoBehaviour {
 		
 		switch (playerNumber)
 		{
-		case "1":
-			gamestate.instance.p1ready = false;		
-			break;
+			case "1":
+				gamestate.instance.players[0].isReady = false;
+				break;
 			
-		case "2":
-			gamestate.instance.p2ready	= false;
-			break;
+			case "2":
+				gamestate.instance.players[1].isReady = false;
+				break;
 			
-		case "3":
-			gamestate.instance.p3ready = false;
-			break;
+			case "3":
+				gamestate.instance.players[2].isReady = false;
+				break;
 			
-		case "4":
-			gamestate.instance.p4ready = false;
-			break;
-		case "all":
-			gamestate.instance.p1ready = false;
-			gamestate.instance.p2ready = false;
-			gamestate.instance.p3ready = false;
-			gamestate.instance.p4ready = false;
+			case "4":
+				gamestate.instance.players[3].isReady = false;
+				break;
+			case "all":
+				gamestate.instance.players[0].isReady = false;
+				gamestate.instance.players[1].isReady = false;
+				gamestate.instance.players[2].isReady = false;
+				gamestate.instance.players[3].isReady = false;
 			print ("reset all player ready values to false");
 			break;
 
@@ -370,9 +373,8 @@ public class gamestate : MonoBehaviour {
 			//if they are alive
 			if(!plr.isDead)
 			{
-				//use plr.atEnd, when it is added to the player class
-				//test end is set to false to test if all the players are not at the end
-				if(false)
+				//checks to see if the player is at the end of the dungeon
+				if(plr.atEnd)
 				{
 					numEnd++;
 				}
@@ -413,9 +415,8 @@ public class gamestate : MonoBehaviour {
 			//if they are alive
 			if(!plr.isDead)
 			{
-				//replace with plr.atBegin when its added to the gamestate
-				//set to true for test
-				if(true)
+				//checks to see if the player is at the start of the dungeon
+				if(plr.atStart)
 				{
 					numBegn++;
 				}
@@ -514,26 +515,28 @@ public class gamestate : MonoBehaviour {
 	
 	public bool getPlayerReadyStatus(int playerNumber)
 	{
-		
 		switch (playerNumber)
 		{
 		case 1:
-			return gamestate.instance.p1ready;		
+			return gamestate.instance.players[0].isReady;		
 			break;
 			
 		case 2:
-			return gamestate.instance.p2ready;	
+			return gamestate.instance.players[1].isReady;	
 			break;
 			
 		case 3:
-			return gamestate.instance.p3ready;	
+			return gamestate.instance.players[2].isReady;	
 			break;
 			
 		case 4:
-			return gamestate.instance.p4ready;	
+			return gamestate.instance.players[3].isReady;	
+			break;
+		
+		default:
+			return false;
 			break;
 		}
-		return false;
 	}
 
 	//--------------------------------
