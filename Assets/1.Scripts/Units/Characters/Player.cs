@@ -21,6 +21,10 @@ public class Player : Character, IMoveable {
 
 	public Controls controls;
 
+	protected override void Awake() {
+		base.Awake();
+	}
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();

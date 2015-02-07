@@ -158,15 +158,19 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	// Swap these over to weapons in the future
 	public string weapTypeName;
 	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
-	
-	// Use this for initialization
-	protected virtual void Start () {
+
+	protected virtual void Awake() {
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
 		isDead = false;
 		freeAnim = true;
 		setInitValues();
+	}
+
+	// Use this for initialization
+	protected virtual void Start () {
+
 	}
 	
 	protected virtual void setInitValues() {
