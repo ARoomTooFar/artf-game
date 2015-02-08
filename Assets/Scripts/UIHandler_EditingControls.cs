@@ -49,22 +49,16 @@ public class UIHandler_EditingControls : MonoBehaviour {
 	}
 
 	private void zoomIn(){
-		suppressSelection ();
 		UICamera.zoomCamIn(2f);
+
 	}
 
 	private void zoomOut(){
 		UICamera.zoomCamOut(2f);
 	}
 
-	//If a button is clicked, don't select the tile below it, if there is a tile
-	private void suppressSelection() {
 
-		Vector3 mousePos = Input.mousePosition;
-		tilemap.GetComponent <MouseHandler_TileSelection> ().deselect (mousePos);
-	}
 	// Update is called once per frame
 	void Update () {
-	
 	}
 }

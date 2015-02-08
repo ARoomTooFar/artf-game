@@ -106,7 +106,7 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 		int z = Mathf.FloorToInt( zf / tileMap.tileSize );
 		
 		/* check whether mouse is pressed AND the tile hasn't been selected */
-		if (Input.GetMouseButtonDown (0)) {
+		if (Input.GetMouseButtonDown (0) && GUIUtility.hotControl == 1) {
 
 			/*Control functionality: selects tiles and adds to hashset */
 			if(Input.GetKey (KeyCode.LeftControl) || Input.GetKey (KeyCode.RightControl))
@@ -162,7 +162,7 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 	}
 
 	/*deselects tile passed into function */
-	public void deselect(Vector3 remove){
+	void deselect(Vector3 remove){
 		selectedTiles.Remove (remove);
 	}
 
