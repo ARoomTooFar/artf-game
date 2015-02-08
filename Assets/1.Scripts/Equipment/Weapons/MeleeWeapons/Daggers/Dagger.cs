@@ -23,6 +23,7 @@ public class Dagger : MeleeWeapons {
 		stats.maxChgTime = 1.0f;
 
 		stats.chgLevels = 0.2f;
+		stats.timeForChgAttack = 0.2f;
 	}
 	
 	// Update is called once per frame

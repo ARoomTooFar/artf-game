@@ -121,7 +121,7 @@ public class Weapons : Equipment {
 
 	// When player stops holding down charge, we check parameter for what attack to perform
 	protected virtual void attack() {
-		if (stats.curChgDuration >= 0.5f) {
+		if (stats.curChgDuration >= stats.timeForChgAttack) {
 			chargedAttack();
 		} else {
 			basicAttack();
