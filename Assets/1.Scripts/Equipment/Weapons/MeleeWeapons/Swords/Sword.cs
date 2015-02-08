@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class Sword : MeleeWeapons {
+
+	public GameObject shockwave;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -29,5 +32,10 @@ public class Sword : MeleeWeapons {
 
 	public override void initAttack() {
 		base.initAttack();
+	}
+
+	public override void specialAttack() {
+		ParticleEmitter particle = (ParticleEmitter) Instantiate (shockwave, user.transform.position, user.transform.rotation);
+		// particle.
 	}
 }

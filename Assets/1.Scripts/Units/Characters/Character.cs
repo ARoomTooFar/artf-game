@@ -303,6 +303,10 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public virtual void attackEnd() {
 		gear.weapon.collideOff ();
 	}
+
+	public virtual void specialAttack() {
+		gear.weapon.specialAttack ();
+	}
 	
 	//---------------------------------//
 

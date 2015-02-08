@@ -21,6 +21,7 @@ public class WeaponStats {
 	// Charge atk variables
 	public int chgDamage;
 	public float maxChgTime, chgLevels, curChgAtkTime, curChgDuration, timeForChgAttack;
+	public int specialAttackType;
 }
 
 public class Weapons : Equipment {
@@ -43,6 +44,7 @@ public class Weapons : Equipment {
 		u.animator.SetInteger("WeaponType", stats.weapType);
 		u.weapTypeName = stats.weapTypeName;
 		opposition = ene;
+		user.GetComponent<Character>().animator.SetInteger("ChargedAttackNum", stats.specialAttackType);
 	}
 
 	// Used for setting stats for each weapon piece
@@ -62,6 +64,7 @@ public class Weapons : Equipment {
 		stats.chgLevels = 0.4f;
 		stats.chgDamage = 0;
 		stats.timeForChgAttack = 0.5f;
+		stats.specialAttackType = 0;
 		soundDur = 0.1f;
 		playSound = true;
 	}
@@ -85,6 +88,11 @@ public class Weapons : Equipment {
 	
 	public virtual void collideOff() {
 		this.GetComponent<Collider>().enabled = false;
+	}
+
+	// A unique attack command called from thje animator
+	//     eg. Shockwave
+	public virtual void specialAttack() {
 	}
 
 	//-----------------------//
