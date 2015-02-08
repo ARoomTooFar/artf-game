@@ -6,8 +6,9 @@ using UnityEngine;
 using System.Collections;
 
 public class UIHandler_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragHandler {
+	Input_TileMap input_tileMap;
 
-	MouseHandler_TileSelection mouseControl;
+//	MouseHandler_TileSelection mouseControl;
 	Image thisImage;
 	GameObject draggedImageAnchor;
 	string itemToPlace;
@@ -15,7 +16,8 @@ public class UIHandler_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragH
 
 	
 	void Start () {
-		mouseControl = GameObject.Find ("TileMap").GetComponent ("MouseHandler_TileSelection") as MouseHandler_TileSelection;
+		input_tileMap = GameObject.Find ("TileMap").GetComponent("Input_TileMap") as Input_TileMap;
+//		mouseControl = GameObject.Find ("TileMap").GetComponent ("MouseHandler_TileSelection") as MouseHandler_TileSelection;
 		thisImage = this.GetComponent("Image") as Image;
 		draggedImageAnchor = GameObject.Find ("DraggedImageAnchor");
 		Image p = draggedImageAnchor.GetComponent("Image") as Image;
@@ -46,7 +48,8 @@ public class UIHandler_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragH
 		p.material = matToMakeInvisible;
 
 		string g = "Prefabs/" + this.transform.gameObject.name;
-		mouseControl.setSelectedItem (g);
+//		mouseControl.setSelectedItem (g);
+		input_tileMap.setSelectedItem(g);
 	}
 
 	IEnumerator dragIt ()

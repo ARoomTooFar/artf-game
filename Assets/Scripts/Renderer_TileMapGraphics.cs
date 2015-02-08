@@ -5,33 +5,30 @@ using System.Collections.Generic;
 //This class renders the highlighting for selected tiles
 public class Renderer_TileMapGraphics : MonoBehaviour
 {
-
-	GameObject tileMap;
+	Input_TileMap input_tileMap;
 	public Material selectionMat; //material for selected tiles
 	HashSet<Vector3> selectedTiles = new HashSet<Vector3> ();
-//	public Material gridMat;
-//	Vector3 offset;
 	
 	void Awake ()
 	{
-		tileMap = GameObject.Find ("TileMap");
+		input_tileMap = GameObject.Find ("TileMap").GetComponent ("Input_TileMap") as Input_TileMap;
 	}
 
 	/* update function */
 	void OnPostRender ()
 	{
 		selectTiles ();
-//				drawGrid ();
+//		drawGrid ();
 	}
 	
 	/* select tiles using a list from the mouse manager */
 	void selectTiles ()
 	{
-//		Debug.Log (selectedTiles.Count);
-		selectedTiles = tileMap.GetComponent<MouseHandler_TileSelection> ().selectedTiles;
+//		selectedTiles = tileMap.GetComponent<MouseHandler_TileSelection> ().selectedTiles;
+		HashSet<Vector3> selTile = input_tileMap.getSelectedTiles ();
 		GL.Begin (GL.QUADS);
 		selectionMat.SetPass (0);
-		foreach (Vector3 origin in selectedTiles) {
+		foreach (Vector3 origin in selTile) {
 			GL.Vertex (new Vector3 (origin.x - .5f, 0, origin.z - .5f));
 			GL.Vertex (new Vector3 (origin.x - .5f, 0, origin.z + .5f));
 

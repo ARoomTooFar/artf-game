@@ -12,6 +12,8 @@ using System.Text;
 //This class listens to save/deploy/load buttons
 public class UIHandler_FileIO : MonoBehaviour
 {
+	Output_TileMap output_tileMap;
+
 	public Button Button_Save = null;
 	public Button Button_Deploy = null;
 	public Button Button_Load = null;
@@ -31,6 +33,7 @@ public class UIHandler_FileIO : MonoBehaviour
 
 	void Start ()
 	{
+		output_tileMap = GameObject.Find ("TileMap").GetComponent("Output_TileMap") as Output_TileMap;
 
 		serv = gameObject.AddComponent<Farts> ();
 		Button_Save.onClick.AddListener (() => {
@@ -118,7 +121,8 @@ public class UIHandler_FileIO : MonoBehaviour
 			for (int i = 0; i < savedFile.Count; i++) {
 				Vector3 pos = new Vector3 (savedFile [i].x, savedFile [i].y, savedFile [i].z);
 				string name = savedFile [i].item.Substring (0, savedFile [i].item.IndexOf ('_'));
-				tileSelection.placeItems (name, pos);
+//				tileSelection.placeItems (name, pos);
+				output_tileMap.instantiateItemObject(name, pos);
 			}
 		} else {
 			Debug.Log ("ItemClass.itemList is empty. Cannot Load.");
