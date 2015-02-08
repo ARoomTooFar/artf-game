@@ -283,9 +283,17 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	// Attack Interface Implementation //
 	//---------------------------------//
 
-	// If using a basic attack, this will do checks (such as charging an attack)
+	// Since animations are on the characters, we will use the attack methods to turn collisions on and off
 	public virtual void attacks() {
-		// gear.weapon.attack ();
+
+	}
+
+	public virtual void attackStart() {
+		gear.weapon.collideOn ();
+	}
+
+	public virtual void attackEnd() {
+		gear.weapon.collideOff ();
 	}
 	
 	//---------------------------------//

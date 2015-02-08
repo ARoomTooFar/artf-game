@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Collections;
 
 public class Dagger : MeleeWeapons {
-	
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -32,5 +32,12 @@ public class Dagger : MeleeWeapons {
 	
 	public override void initAttack() {
 		base.initAttack();
+	}
+
+	public override void collideOn () {
+		base.collideOn ();
+		if (stats.chgDamage-- == 0) { // Our multistab counter
+			user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
+		}
 	}
 }

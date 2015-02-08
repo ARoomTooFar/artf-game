@@ -70,6 +70,20 @@ public class Weapons : Equipment {
 		base.Update();
 	}
 
+	//-----------------------//
+	// Some Helper Functions //
+	//-----------------------//
+
+	public virtual void collideOn() {
+		this.GetComponent<Collider>().enabled = true;
+	}
+	
+	public virtual void collideOff() {
+		this.GetComponent<Collider>().enabled = false;
+	}
+
+	//-----------------------//
+
 	//----------------------------//
 	// Weapon Attacking Functions //
 	//----------------------------//
@@ -118,7 +132,6 @@ public class Weapons : Equipment {
 	protected virtual void basicAttack() {
 		print("Normal Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
-		this.GetComponent<Collider>().enabled = true;
 		StartCoroutine(atkFinish());
 	}
 
@@ -126,7 +139,6 @@ public class Weapons : Equipment {
 	protected virtual void chargedAttack() {
 		print("Charged Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", true);
-		this.GetComponent<Collider>().enabled = true;
 		StartCoroutine(atkFinish());
 	}
 
@@ -138,7 +150,6 @@ public class Weapons : Equipment {
 		}
 		
 		particles.Stop();
-		this.GetComponent<Collider>().enabled = false;
 		
 		user.animator.speed = 1.0f;
 	}
