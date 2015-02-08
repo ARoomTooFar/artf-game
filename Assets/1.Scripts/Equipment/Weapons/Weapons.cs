@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 [System.Serializable]
 public class WeaponStats {
@@ -29,15 +30,19 @@ public class Weapons : Equipment {
 	public AudioClip action;
 	public bool playSound;
 	public float soundDur;
+
+	public Type opposition;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
 	}
 
-	public virtual void equip(Character u) {
+	public virtual void equip(Character u, Type ene) {
 		base.equip(u);
 		u.animator.SetInteger("WeaponType", stats.weapType);
 		u.weapTypeName = stats.weapTypeName;
+		opposition = ene;
 	}
 
 	// Used for setting stats for each weapon piece

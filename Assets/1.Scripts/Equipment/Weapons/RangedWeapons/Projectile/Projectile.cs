@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class Projectile : MonoBehaviour {
 	public int damage;
@@ -10,12 +11,16 @@ public class Projectile : MonoBehaviour {
 	private Character user;
 	public ParticleSystem particles;
 	public Transform target;
+
+	protected Type opposition;
+
 	// Use this for initialization
 	protected virtual void Start() {
 
 	}
-	public virtual void setInitValues(Character player, float partSpeed) {
+	public virtual void setInitValues(Character player, Type ene, float partSpeed) {
 		user = player;
+		opposition = ene;
 
 		transform.Rotate(Vector3.right * 90);
 
@@ -38,7 +43,7 @@ public class Projectile : MonoBehaviour {
 		}
 
 		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
-		Enemy enemy = other.GetComponent<Enemy>();
+		Character enemy = (Character) other.GetComponent(opposition);
 		if( component != null && enemy != null) {
 			enemy.damage(damage, user);
 			particles.Stop();

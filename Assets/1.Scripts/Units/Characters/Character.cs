@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 [System.Serializable]
 public class Stats{
@@ -43,7 +44,11 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public AudioClip hurt, victory, failure;
 
 	public bool invincible = false;
-	
+
+// 	protected string opposition;
+
+	protected Type opposition;
+
 	protected delegate void BuffDelegate(float duration);
 
 	// Serialized classes
@@ -57,13 +62,13 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		public Chest chest;
 		public Transform weapLocation, headLocation, chestLocation;
 		
-		public void equipGear(Character player, GameObject[] equipment) {
+		public void equipGear(Character player, Type ene, GameObject[] equipment) {
 			foreach (GameObject equip in equipment) {
 				if (equip.GetComponent<Weapons>()) {
 					// GameObject newGear = Instantiate(equip, headLocation.position, headLocation.rotation) as GameObject;
 					weapon = (Instantiate(equip) as GameObject).GetComponent<Weapons>();
 					weapon.transform.SetParent(weapLocation, false);
-					weapon.equip(player);
+					weapon.equip(player, ene);
 				} else if (equip.GetComponent<Helmet>()) {
 					helmet = (Instantiate(equip) as GameObject).GetComponent<Helmet>();
 					helmet.transform.SetParent(headLocation, false);
@@ -79,10 +84,10 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		}
 
 		// Equip method for testing purposes
-		public void equipGear(Character player) {
+		public void equipGear(Character player, Type ene) {
 			weapon = weapLocation.GetComponentInChildren<Weapons>();
 			if (weapon) {
-				weapon.equip (player);
+				weapon.equip (player, ene);
 			} else {
 				Debug.LogWarning(player.gameObject.name + " does not have a weapon in the weapon slot.");
 			}
@@ -160,6 +165,9 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
 
 	protected virtual void Awake() {
+		// enemy = Types.GetType ("Dagger", "Assembly-CSharp"));
+		// opposition = "Player";
+		opposition = Type.GetType ("Player");
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
@@ -178,7 +186,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	}
 
 	public virtual void equipTest(GameObject[] equip, GameObject[] abilities) {
-		gear.equipGear(this, equip);
+		gear.equipGear(this, opposition,equip);
 		inventory.equipItems(this, abilities);
 		setAnimHash();
 	}

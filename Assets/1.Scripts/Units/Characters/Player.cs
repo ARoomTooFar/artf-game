@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
 
 [System.Serializable]
 public class Controls {
@@ -23,6 +24,7 @@ public class Player : Character, IMoveable {
 
 	protected override void Awake() {
 		base.Awake();
+		opposition = Type.GetType("Enemy");
 	}
 
 	// Use this for initialization

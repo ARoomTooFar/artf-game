@@ -136,7 +136,7 @@ public class Chainsaw : MeleeWeapons {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		Character enemy = other.GetComponent<Character>();
+		Character enemy = (Character) other.GetComponent(opposition);
 		if (enemy != null && !chained.Contains(enemy)) {
 
 			if (user.animator.GetBool("Charging")) {
@@ -153,7 +153,7 @@ public class Chainsaw : MeleeWeapons {
 	}
 	
 	void OnTriggerExit(Collider other) {
-		Character enemy = other.GetComponent<Character>();
+		Character enemy = (Character) other.GetComponent(opposition);
 		if (enemy != null) {
 			if (chained.Contains(enemy)) {
 				chained.Remove(enemy);
