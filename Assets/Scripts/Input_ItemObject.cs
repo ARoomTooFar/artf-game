@@ -7,13 +7,13 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 public class Input_ItemObject : MonoBehaviour {
-	Output_ItemObject itemObjectOutput;
+	Output_ItemObject output_itemObject;
 
 	public LayerMask draggingLayerMask;
 	static Camera UICamera;
 	bool inMouseCheck = false;
 	Vector3 initMousePos;
-	ItemClass itemClass = new ItemClass();
+	static ItemClass itemClass = new ItemClass();
 	TileMap tileMap;
 	float mouseDeadZone = 10f;
 	
@@ -21,7 +21,7 @@ public class Input_ItemObject : MonoBehaviour {
 	void Start () {
 		UICamera = GameObject.Find ("UICamera").camera;
 		tileMap = GameObject.Find ("TileMap").GetComponent("TileMap") as TileMap;
-		itemObjectOutput = this.gameObject.GetComponent("Output_ItemObject") as Output_ItemObject;
+		output_itemObject = this.gameObject.GetComponent("Output_ItemObject") as Output_ItemObject;
 	}
 	
 
@@ -34,9 +34,7 @@ public class Input_ItemObject : MonoBehaviour {
 		
 		if (Physics.Raycast (ray, out hit, Mathf.Infinity)) {
 
-			//if this script grabs ahold of the TileMap (or presumably
-			//any collider that isn't an object meant to be dragged),
-			//it will jack shit up. must catch them here.
+			//check for tilemap so we don't try to drag it
 			if (hit.collider.gameObject.name != "TileMap" 
 			    && hit.collider.gameObject.GetInstanceID() == this.gameObject.GetInstanceID()) {
 				if (inMouseCheck == false) {
@@ -61,7 +59,7 @@ public class Input_ItemObject : MonoBehaviour {
 				if (hitInfo.collider.gameObject.name == "TileMap") {
 					int x = Mathf.RoundToInt (hitInfo.point.x / tileMap.tileSize);
 					int z = Mathf.RoundToInt (hitInfo.point.z / tileMap.tileSize);
-					//					BoxCollider objectBoxCollider = draggedObject.GetComponent("BoxCollider") as BoxCollider;
+					//BoxCollider objectBoxCollider = draggedObject.GetComponent("BoxCollider") as BoxCollider;
 					
 					//if mouse left deadzone, begin dragging it
 					if (Math.Abs (mouseChange.x) > mouseDeadZone 
@@ -69,12 +67,10 @@ public class Input_ItemObject : MonoBehaviour {
 					    || Math.Abs (mouseChange.z) > mouseDeadZone) {
 						
 						//for now y-pos remains as prefab's default.
-						Vector3 newp = new Vector3 (x * 1.0f, itemObjectOutput.getPosition().y, z * 1.0f);
-						itemObjectOutput.changePosition(newp);
-//						Debug.Log (itemObjectOutput.getPosition());
+						Vector3 newp = new Vector3 (x * 1.0f, output_itemObject.getPosition().y, z * 1.0f);
+						output_itemObject.changePosition(newp);
 
-						//						data.modifyItemList (draggedObject.name, draggedObject.transform.position);
-						itemClass.modifyItemList(itemObjectOutput.getName(), itemObjectOutput.getPosition());
+						itemClass.modifyItemList(output_itemObject.getName(), output_itemObject.getPosition());
 					}
 				}
 			}

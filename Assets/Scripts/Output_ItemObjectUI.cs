@@ -21,6 +21,7 @@ public class Output_ItemObjectUI : MonoBehaviour
 	Canvas itemObjectUICanvas;
 
 	GameObject buttons;
+	GameObject text;
 
 	void Start ()
 	{
@@ -33,8 +34,13 @@ public class Output_ItemObjectUI : MonoBehaviour
 		UICamera = GameObject.Find("UICamera").camera;
 		itemObjectUICanvas.worldCamera = UICamera;
 
-		//finds the buttons object in the object tree below
+		//ui elements we need to toggle on click
 		buttons = transform.Find("Buttons").gameObject;
+		text = transform.Find("Text").gameObject;
+
+		//initialize UI to be invisible
+		buttons.SetActive(false);
+		text.SetActive(false);
 	}
 
 	//Update causes itemObjectUI flickering
@@ -121,8 +127,8 @@ public class Output_ItemObjectUI : MonoBehaviour
 	}
 
 	public void toggleItemObjectUI(){
-		//		GameObject buttons = transform.Find("Buttons") as GameObject;
 		buttons.SetActive(!buttons.activeSelf);
+		text.SetActive(!text.activeSelf);
 	}
 
 }

@@ -5,7 +5,6 @@ public class Output_ItemObject : MonoBehaviour {
 //	GameObject itemObject; //object we're messing with
 	Vector3 rotation = new Vector3(0f, 90f, 0f);
 	Vector3 position;
-	string name;
 
 	void Update () {
 		maintainOrientation();
@@ -45,11 +44,11 @@ public class Output_ItemObject : MonoBehaviour {
 	//name
 
 	public string getName(){
-		return name;
+		return this.gameObject.name;
 	}
 
 	public void setName(string s){
-		name = s;
+		this.gameObject.name = s;
 	}
 
 	public GameObject getGameObject(){

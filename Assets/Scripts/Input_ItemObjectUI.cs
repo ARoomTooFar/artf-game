@@ -26,6 +26,8 @@ public class Input_ItemObjectUI : MonoBehaviour {
 
 	Vector3 mouseStartPos = new Vector3(0,0,0);
 
+	bool rayHit = false;
+
 	void Start () {
 //		Button_UpArrow_Attack = transform.Find("ToggledItems/MonsterUpgrade/Attack/Button_UpArrow_Attack").GetComponent("Button") as Button;
 		Button_UpArrow_Attack = transform.Find("Buttons/Button_UpArrow_Attack").GetComponent("Button") as Button;
@@ -70,7 +72,7 @@ public class Input_ItemObjectUI : MonoBehaviour {
 
 	void Update(){
 		RaycastHit hit;
-		bool rayHit = false;
+
 		
 		//this checks if the object this script applies to was clicked
 		if (Input.GetMouseButtonDown (0)) {

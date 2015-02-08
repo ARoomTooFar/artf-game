@@ -21,7 +21,7 @@ public class UIHandler_FileIO : MonoBehaviour
 	BinaryWriter bin;
 	private StreamWriter writer; // This is the writer that writes to the file
 	private string assetText;
-	ItemClass itemClass = new ItemClass ();
+	static ItemClass itemClass = new ItemClass ();
 
 	private Farts serv;
 	long levelId;
@@ -57,7 +57,8 @@ public class UIHandler_FileIO : MonoBehaviour
 		if (itemClass.getItemList ().Count != 0) {
 //			bf.Serialize (file, itemClass.getItemList ());
 //			File.WriteAllText("Assets/Resources/savedLevel.txt", bf.Serialize (file, itemClass.getItemList ()));
-			Debug.Log ("Items saved right now: " + itemClass.getItemList ().Count);
+//			Debug.Log ("Items saved right now: " + itemClass.getItemList ().Count);
+			Debug.Log ("saving list " + itemClass.getItemList ().GetHashCode());
 
 			BinaryFormatter bf = new BinaryFormatter ();
 			MemoryStream stream = new MemoryStream (2048);
@@ -87,7 +88,7 @@ public class UIHandler_FileIO : MonoBehaviour
 
 	public void loadFile ()
 	{
-
+		if (itemClass.getItemList ().Count != 0) {
 //		if (File.Exists ("Assets/Resources/savedLevel.txt")) {
 //			data.wipeItemObjects ();
 			wipeItemObjects ();
@@ -119,6 +120,9 @@ public class UIHandler_FileIO : MonoBehaviour
 				string name = savedFile [i].item.Substring (0, savedFile [i].item.IndexOf ('_'));
 				tileSelection.placeItems (name, pos);
 			}
+		} else {
+			Debug.Log ("ItemClass.itemList is empty. Cannot Load.");
+		}
 //		} else {
 //			Debug.Log ("savedLevel.txt does not exist. Cannot load.");
 //		}

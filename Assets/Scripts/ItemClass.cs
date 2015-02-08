@@ -40,10 +40,34 @@ public class ItemClass
 		return itemList;
 	}
 
-	public void addToItemList (ItemStruct h)
+
+	
+	public void modifyItemList(string s, Vector3 pos){
+		this.removeItemFromList(s);
+		
+		ItemStruct its = new ItemStruct();
+		its.item = s;
+		its.x = pos.x;
+		its.y = pos.y;
+		its.z = pos.z;
+		this.addStructToItemList(its);
+	}
+
+
+	public void addToItemList(string s, Vector3 pos){
+		ItemStruct its = new ItemStruct();
+		its.item = s;
+		its.x = pos.x;
+		its.y = pos.y;
+		its.z = pos.z;
+		addStructToItemList(its);
+	}
+
+	public void addStructToItemList (ItemStruct h)
 	{
 		itemList.Add (h);
 	}
+
 
 	public void removeItemFromList (string s)
 	{
@@ -67,24 +91,5 @@ public class ItemClass
 		itemList.Clear();
 	}
 
-	public void modifyItemList(string s, Vector3 pos){
-		this.removeItemFromList(s);
-		
-		ItemStruct its = new ItemStruct();
-		its.item = s;
-		its.x = pos.x;
-		its.y = pos.y;
-		its.z = pos.z;
-		this.addToItemList(its);
-	}
-
-	public void addToItemList(string s, Vector3 pos){
-		ItemStruct its = new ItemStruct();
-		its.item = s;
-		its.x = pos.x;
-		its.y = pos.y;
-		its.z = pos.z;
-		addToItemList(its);
-	}
 
 }

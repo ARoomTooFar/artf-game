@@ -23,7 +23,7 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 	/* HashSet that stores all selected tiles */
 	public HashSet<Vector3> selectedTiles;
 
-	DataHandler_Items data;
+//	DataHandler_Items data;
 	
 	/* select when clicked */
 	private string selectedItem;
@@ -31,7 +31,7 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 	/* selecting objects */
 	GameObject currentObj;
 
-	ItemClass itemClass = new ItemClass();
+	static ItemClass itemClass = new ItemClass();
 	
 	//object in hierarchy that holds itemObjects
 	Transform itemObjects;
@@ -50,6 +50,8 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 		(currentObj.GetComponent("Output_ItemObject") as Output_ItemObject).changePosition(position);
 //		data.addToItemList(currentObj.name, position);
 		itemClass.addToItemList(currentObj.name, position);
+//		Debug.Log ("Added: " + currentObj.name + " with position " + position);
+//		Debug.Log ("Items saved right now: " + itemClass.getItemList ().Count);
 
 
 
@@ -68,7 +70,7 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 		selectedItem = null;
 		selectedTiles = new HashSet<Vector3> ();
 
-		data = GameObject.Find ("ItemObjects").GetComponent("DataHandler_Items") as DataHandler_Items;
+//		data = GameObject.Find ("ItemObjects").GetComponent("DataHandler_Items") as DataHandler_Items;
 
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 	}

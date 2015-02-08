@@ -20,7 +20,7 @@ public class MouseHandler_ItemObjectMovement : MonoBehaviour
 	bool inMouseCheck = false;
 	DataHandler_Items data;
 
-	ItemClass itemClass = new ItemClass();
+	static ItemClass itemClass = new ItemClass();
 
 	void Start ()
 	{
