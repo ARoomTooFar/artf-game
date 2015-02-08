@@ -18,7 +18,7 @@ public class Dagger : MeleeWeapons {
 		stats.weapType = 1;
 		stats.weapTypeName = "dagger";
 		stats.atkSpeed = 2.0f;
-		stats.damage = (int)(2 + 1f * user.GetComponent<Character>().stats.strength);
+		stats.damage = (int)(2 + 0.75f * user.GetComponent<Character>().stats.strength);
 		
 		stats.maxChgTime = 1.0f;
 
@@ -40,5 +40,14 @@ public class Dagger : MeleeWeapons {
 		if (stats.chgDamage-- == 0) { // Our multistab counter
 			user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
 		}
+	}
+
+	protected override void onHit(Character enemy) {
+		if (ARTFUtilities.isBehind(user.transform.position, enemy.facing, enemy.transform.position)) {
+			enemy.damage((int)((stats.damage + stats.chgDamage) * 1.5f), user);
+		} else {
+			enemy.damage(stats.damage + stats.chgDamage, user);
+		}
+
 	}
 }

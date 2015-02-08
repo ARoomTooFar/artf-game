@@ -179,7 +179,7 @@ public class Player : Character, IMoveable {
 	
 	public override void damage(int dmgTaken, Character striker) {
 		if (!invincible) {
-			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(facing, transform.position, striker.transform.position)), 1, 100000);
+			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 		
 			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
