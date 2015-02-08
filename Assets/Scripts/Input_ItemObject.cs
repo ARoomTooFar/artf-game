@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 public class Input_ItemObject : MonoBehaviour {
+	public Output_ItemObject itemObjectOutput;
+
 	public LayerMask draggingLayerMask;
 	static Camera UICamera;
 	GameObject itemObjectBeingDragged;
@@ -15,7 +17,7 @@ public class Input_ItemObject : MonoBehaviour {
 	ItemClass itemClass = new ItemClass();
 	TileMap tileMap;
 	float mouseDeadZone = 10f;
-
+	
 
 	void Start () {
 		UICamera = GameObject.Find ("UICamera").camera;
@@ -67,10 +69,12 @@ public class Input_ItemObject : MonoBehaviour {
 					    || Math.Abs (mouseChange.z) > mouseDeadZone) {
 						
 						//for now y-pos remains as prefab's default.
-						itemObjectBeingDragged.transform.position = new Vector3 (x * 1.0f, itemObjectBeingDragged.transform.position.y, z * 1.0f);
-						
+//						itemObjectBeingDragged.transform.position = new Vector3 (x * 1.0f, itemObjectBeingDragged.transform.position.y, z * 1.0f);
+						itemObjectOutput.changePosition(new Vector3 (x * 1.0f, itemObjectOutput.getPosition().y, z * 1.0f));
+
 						//						data.modifyItemList (draggedObject.name, draggedObject.transform.position);
-						itemClass.modifyItemList (itemObjectBeingDragged.name, itemObjectBeingDragged.transform.position);
+//						itemClass.modifyItemList (itemObjectBeingDragged.name, itemObjectBeingDragged.transform.position);
+						itemClass.modifyItemList(itemObjectOutput.getName(), itemObjectOutput.getPosition());
 					}
 				}
 			}

@@ -30,6 +30,8 @@ public class UIHandler_ItemObjectUI : MonoBehaviour
 	
 	public Button Button_Rotate = null; //holds the rotate button arrow
 
+//	Output_ItemObject itemObjectOutput;
+
 
 	void Start ()
 	{
@@ -57,6 +59,7 @@ public class UIHandler_ItemObjectUI : MonoBehaviour
 		//setup the listener for when the rotation button is clicked
 		Button_Rotate.onClick.AddListener (() => {
 			transformHandler_itemObject.rotateObject(90f); 
+//			itemObjectOutput.rotate (90f);
 		});
 
 	}

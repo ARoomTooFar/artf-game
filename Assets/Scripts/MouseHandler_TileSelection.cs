@@ -41,6 +41,7 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 		position.x = Mathf.RoundToInt( position.x / tileMap.tileSize );
 		position.z = Mathf.RoundToInt( position.z / tileMap.tileSize );
 
+
 		currentObj = Instantiate (Resources.Load(name), position, Quaternion.identity) as GameObject;
 
 		currentObj.transform.parent = itemObjects;
