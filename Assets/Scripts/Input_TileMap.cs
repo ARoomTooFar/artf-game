@@ -45,7 +45,8 @@ public class Input_TileMap : MonoBehaviour
 				int z = Mathf.RoundToInt (hitInfo.point.z / tileMap.tileSize);
 				
 				Vector3 obj_pos = new Vector3 (x, 0f, z);
-				output_tileMap.instantiateItemObject (selectedItem, obj_pos);
+				Vector3 obj_rot = new Vector3 (0f, 90f, 0f);
+				output_tileMap.instantiateItemObject (selectedItem, obj_pos, obj_rot);
 				clearSelectedItem ();
 			} else {
 				/* check whether the ray hits an object or the tile map */

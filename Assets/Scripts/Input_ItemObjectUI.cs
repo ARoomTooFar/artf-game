@@ -21,6 +21,7 @@ public class Input_ItemObjectUI : MonoBehaviour {
 	Button Button_DownArrow_Armor;
 
 	Button Button_Rotate;
+	Button Screen_Button_Rotate = null;
 
 	Camera UICamera;
 
@@ -38,6 +39,7 @@ public class Input_ItemObjectUI : MonoBehaviour {
 		Button_DownArrow_Armor = transform.Find("Buttons/Button_UpArrow_Attack").GetComponent("Button") as Button;
 
 		Button_Rotate = transform.Find("Buttons/Button_Rotate").GetComponent("Button") as Button;
+		Screen_Button_Rotate = GameObject.Find("Screen_Button_Rotate").GetComponent("Button") as Button;
 
 		UICamera = GameObject.Find("UICamera").camera;
 		output_itemObjectUI = this.gameObject.GetComponent("Output_ItemObjectUI") as Output_ItemObjectUI;
@@ -65,6 +67,12 @@ public class Input_ItemObjectUI : MonoBehaviour {
 		Button_Rotate.onClick.AddListener (() => {
 			output_itemObject.rotate(90f); 
 		});
+
+		//screen button object rotate.
+		//intended to rotate focused object
+//		Screen_Button_Rotate.onClick.AddListener (() => {
+//			output_itemObject.rotate(90f);
+//		});
 
 
 	}
@@ -96,8 +104,4 @@ public class Input_ItemObjectUI : MonoBehaviour {
 			rayHit = false;
 		}
 	}
-
-
-
-
 }

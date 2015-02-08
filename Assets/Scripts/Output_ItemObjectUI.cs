@@ -10,6 +10,7 @@ public class Output_ItemObjectUI : MonoBehaviour
 {
 	public Output_ItemObject output_itemObject;
 
+
 	int attack = 1;
 	int health = 1;
 	int armor = 1;
@@ -41,6 +42,7 @@ public class Output_ItemObjectUI : MonoBehaviour
 		//initialize UI to be invisible
 		buttons.SetActive(false);
 		text.SetActive(false);
+
 	}
 
 	//Update causes itemObjectUI flickering
@@ -129,6 +131,9 @@ public class Output_ItemObjectUI : MonoBehaviour
 	public void toggleItemObjectUI(){
 		buttons.SetActive(!buttons.activeSelf);
 		text.SetActive(!text.activeSelf);
+
+		//temporary
+		output_itemObject.setToFocused();
 	}
 
 }

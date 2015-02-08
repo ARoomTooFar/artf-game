@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 public class UIHandler_EditingControls : MonoBehaviour {
 
 
-	public Button Button_Rotate = null;
+//	public Button Button_Rotate = null;
 //	public Button Button_ZoomOut = null; 
 //	public Button Button_ZoomIn = null; 
 //
@@ -20,8 +20,8 @@ public class UIHandler_EditingControls : MonoBehaviour {
 	void Start () {
 //
 
-		Button_Rotate.onClick.AddListener (() => {
-			rotateObject ();});
+//		Button_Rotate.onClick.AddListener (() => {
+//			rotateObject ();});
 //		Button_ZoomIn.onClick.AddListener (() => {
 //			zoomIn ();});
 //		Button_ZoomOut.onClick.AddListener (() => {

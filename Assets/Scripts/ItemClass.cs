@@ -25,6 +25,10 @@ public class ItemClass
 		public float y;
 		public float z;
 
+		public float xrot;
+		public float yrot;
+		public float zrot;
+
 	}
 
 	static int nameCounter = 0;
@@ -42,7 +46,8 @@ public class ItemClass
 
 
 	
-	public void modifyItemList(string s, Vector3 pos){
+	public void modifyItemList(string s, Vector3 pos, Vector3 rot){
+
 		this.removeItemFromList(s);
 		
 		ItemStruct its = new ItemStruct();
@@ -50,16 +55,28 @@ public class ItemClass
 		its.x = pos.x;
 		its.y = pos.y;
 		its.z = pos.z;
+
+		its.xrot = rot.x;
+		its.yrot = rot.y;
+		its.zrot = rot.z;
+
 		this.addStructToItemList(its);
 	}
 
 
-	public void addToItemList(string s, Vector3 pos){
+	public void addToItemList(string s, Vector3 pos, Vector3 rot){
+
 		ItemStruct its = new ItemStruct();
 		its.item = s;
+
 		its.x = pos.x;
 		its.y = pos.y;
 		its.z = pos.z;
+
+		its.xrot = rot.x;
+		its.yrot = rot.y;
+		its.zrot = rot.z;
+
 		addStructToItemList(its);
 	}
 

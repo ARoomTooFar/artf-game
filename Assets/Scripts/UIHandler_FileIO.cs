@@ -120,9 +120,10 @@ public class UIHandler_FileIO : MonoBehaviour
 //			Debug.Log ((List<ItemClass.ItemStruct>)bf.Deserialize);
 			for (int i = 0; i < savedFile.Count; i++) {
 				Vector3 pos = new Vector3 (savedFile [i].x, savedFile [i].y, savedFile [i].z);
+				Vector3 rot = new Vector3 (savedFile [i].xrot, savedFile [i].yrot, savedFile [i].zrot);
 				string name = savedFile [i].item.Substring (0, savedFile [i].item.IndexOf ('_'));
 //				tileSelection.placeItems (name, pos);
-				output_tileMap.instantiateItemObject(name, pos);
+				output_tileMap.instantiateItemObject(name, pos, rot);
 			}
 		} else {
 			Debug.Log ("ItemClass.itemList is empty. Cannot Load.");
