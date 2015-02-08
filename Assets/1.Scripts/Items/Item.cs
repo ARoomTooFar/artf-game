@@ -7,7 +7,7 @@ public class Item : MonoBehaviour {
 
 	public Character player;
 
-	protected float cooldown;
+	public float cooldown;
 	public float curCoolDown;
 
 	// Use this for initialization

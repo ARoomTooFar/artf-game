@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
 public class TestingPlayer : TestingCharacter, IMoveable {
@@ -10,6 +11,8 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
+	public LifeBar hpBar;
+	public List<LifeBar> coolDowns = new List<LifeBar>();
 	public Controls controls;
 	
 	// Use this for initialization
@@ -32,8 +35,20 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 		testDmg = 0;
 		testable = true;
 	}
+	void ItemCooldowns(){
+		for(int i = 0; i < inventory.items.Count; i++){
+			//Debug.Log(i);
+			if(inventory.items[i] is ChargeItem){
+				coolDowns[i].current = inventory.items[i].curCoolDown;
+				coolDowns[i].max = inventory.items[i].cooldown + (inventory.items[i].GetComponent<ChargeItem>().curChgTime*3);
+			}
+		}
+	}
 	// Update is called once per frame
 	protected override void Update () {
+		ItemCooldowns();
+		hpBar.max = stats.maxHealth;
+		hpBar.current = stats.health;
 		if(stats.health <= 0){
 			isDead = true;
 		} else {
