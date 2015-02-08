@@ -11,3 +11,5 @@
 /*.userprefs
 /*.pidb
 /*.booproj
+Assets/Scripts/MouseHandler_TileSelection.cs
+Assets/Scripts/UIHandler_EditingControls.cs

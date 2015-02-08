@@ -2,39 +2,38 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-//This class renders grid graphics using
-//GL calls
-public class Renderer_TileMapGraphics : MonoBehaviour {
-
-	GameObject tileMap;
+//This class renders the highlighting for selected tiles
+public class Renderer_TileMapGraphics : MonoBehaviour
+{
+	Input_TileMap input_tileMap;
 	public Material selectionMat; //material for selected tiles
-	HashSet<Vector3> selectedTiles= new HashSet<Vector3> ();
-
-	//	public Material gridMat;
-
-	Vector3 offset;
+	HashSet<Vector3> selectedTiles = new HashSet<Vector3> ();
 	
-	void Awake () {
-		tileMap = GameObject.Find ("TileMap");
+	void Awake ()
+	{
+		input_tileMap = GameObject.Find ("TileMap").GetComponent ("Input_TileMap") as Input_TileMap;
 	}
 
 	/* update function */
-	void OnPostRender () {
+	void OnPostRender ()
+	{
 		selectTiles ();
-		//		drawGrid ();
+//		drawGrid ();
 	}
 	
 	/* select tiles using a list from the mouse manager */
-	void selectTiles(){
-//		Debug.Log (selectedTiles.Count);
-		selectedTiles = tileMap.GetComponent<MouseHandler_TileSelection> ().selectedTiles;
+	void selectTiles ()
+	{
+//		selectedTiles = tileMap.GetComponent<MouseHandler_TileSelection> ().selectedTiles;
+		HashSet<Vector3> selTile = input_tileMap.getSelectedTiles ();
 		GL.Begin (GL.QUADS);
 		selectionMat.SetPass (0);
-		foreach(Vector3 origin in selectedTiles){
-			GL.Vertex(new Vector3( origin.x, 0, origin.z ) );
-			GL.Vertex(new Vector3( origin.x, 0, origin.z + 1 ) );
-			GL.Vertex(new Vector3( origin.x + 1, 0, origin.z + 1 ) );
-			GL.Vertex(new Vector3( origin.x + 1, 0, origin.z ) );
+		foreach (Vector3 origin in selTile) {
+			GL.Vertex (new Vector3 (origin.x - .5f, 0, origin.z - .5f));
+			GL.Vertex (new Vector3 (origin.x - .5f, 0, origin.z + .5f));
+
+			GL.Vertex (new Vector3 (origin.x + .5f, 0, origin.z + .5f));
+			GL.Vertex (new Vector3 (origin.x + .5f, 0, origin.z - .5f));
 		}
 		GL.End ();
 	}

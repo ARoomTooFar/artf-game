@@ -17,8 +17,8 @@ public class TileMap : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		grid_x = 30;
-		grid_z = 30;
+		grid_x = 60;
+		grid_z = 60;
 		buildMesh();
 	}
 
