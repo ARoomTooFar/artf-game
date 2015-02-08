@@ -22,6 +22,7 @@ public class UIHandler_FileIO : MonoBehaviour
 	private StreamWriter writer; // This is the writer that writes to the file
 	private string assetText;
 	ItemClass itemClass = new ItemClass ();
+
 	private Farts serv;
 	long levelId;
 
@@ -58,63 +59,15 @@ public class UIHandler_FileIO : MonoBehaviour
 //			File.WriteAllText("Assets/Resources/savedLevel.txt", bf.Serialize (file, itemClass.getItemList ()));
 
 
-
-
-
-
-//			string hi = "";
-//			StreamWriter outStream = new StreamWriter(hi);
-//			bf.Serialize (outStream, itemClass.getItemList ());
-
-
-//			Debug.Log (outStream);
-
-
 			BinaryFormatter bf = new BinaryFormatter ();
 			MemoryStream stream = new MemoryStream (2048);
-//			ASCIIEncoding charEncoding = new ASCIIEncoding ();
 			bf.Serialize (stream, itemClass.getItemList ());
 			string tmp = System.Convert.ToBase64String (stream.ToArray ());
 			PlayerPrefs.SetString ("levelData", tmp);
-//			Debug.Log (PlayerPrefs.GetString("levelData"));
 
-
-
-
-
-//			MemoryStream m = new MemoryStream();
-//			if (itemClass.getItemList () != null)
-//			{
-//				BinaryFormatter b = new BinaryFormatter();
-//				b.Serialize(m, itemClass.getItemList ());
-//			}
-//
-//
-//			ASCIIEncoding charEncoding = new ASCIIEncoding ();
-//			byte[] byteArray;
-//			byteArray = new byte[m.Length];
-//			for(int i = 0; i < m.Length; i++){
-//				byteArray[i] = Convert.ToByte (m.ReadByte ());
-//			}
-//			char[] charArray;
-//			charArray = new char[charEncoding.GetCharCount (byteArray, 0, byteArray.Length)];
-
-
-
-
-
-
-//			Debug.Log (builder.ToString());
-
-//			int count = 0;
-//			byte[] byteArray;
-//			char[] charArray;
-//			byteArray = new byte[stream.Length];
-//			while (count < stream.Length)
-//				byteArray[count++] = Convert.ToByte (stream.ReadByte ());
-//			charArray = new char[charEncoding.GetCharCount (byteArray, 0, count)];
-//			charEncoding.GetDecoder ().GetChars (byteArray, 0, count, charArray, 0);
-
+			//give error: SecurityException: No valid crossdomain policy available to allow access
+//			string ulLevelData = serv.newLevel(123, "Level Name", tmp);
+//			Debug.Log(ulLevelData);
 
 //			string levelData = bf.Serialize (file, itemClass.getItemList ());
 //			levelId = serv.newLevel(123, "Level Name", levelData);
@@ -142,27 +95,16 @@ public class UIHandler_FileIO : MonoBehaviour
 			itemClass.clearItemList ();
 
 
-//			TextAsset textFile = new TextAsset();
-//			textFile = Resources.Load("savedLevel", typeof(TextAsset)) as TextAsset;
-//			StreamReader inp_stm = new StreamReader("Assets/Resources/savedLevel.txt");
-//			string inp_ln = "";
-			
-//			while(!inp_stm.EndOfStream)
-//			{
-//				inp_ln = inp_stm.ReadLine( );
-//				// Do Something with the input. 
-//			}
-
 			BinaryFormatter bf = new BinaryFormatter ();
 			string tmp = PlayerPrefs.GetString ("levelData", string.Empty);
 			MemoryStream memoryStream = new MemoryStream (System.Convert.FromBase64String (tmp));
 			List<ItemClass.ItemStruct> savedFile = (List<ItemClass.ItemStruct>)bf.Deserialize (memoryStream);
 
-//			string levelData = "";
-//			levelData = serverConnect.getLevel(levelId); //string is level ID
+		//download levelData from server
+		//			string levelData = "";
+		//			levelData = serverConnect.getLevel(levelId); //string is level ID
 
 			
-//			inp_stm.Close( ); 
 
 
 //			BinaryFormatter bf = new BinaryFormatter ();
@@ -171,11 +113,6 @@ public class UIHandler_FileIO : MonoBehaviour
 //			file.Close ();
 
 //			Debug.Log ((List<ItemClass.ItemStruct>)bf.Deserialize);
-
-			//download levelData from server
-			//			string levelData = "";
-			//			levelData = serverConnect.getLevel(levelId); //string is level ID
-
 			for (int i = 0; i < savedFile.Count; i++) {
 				Vector3 pos = new Vector3 (savedFile [i].x, savedFile [i].y, savedFile [i].z);
 				string name = savedFile [i].item.Substring (0, savedFile [i].item.IndexOf ('_'));

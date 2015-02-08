@@ -70,7 +70,9 @@ public class Input_ItemObject : MonoBehaviour {
 						
 						//for now y-pos remains as prefab's default.
 //						itemObjectBeingDragged.transform.position = new Vector3 (x * 1.0f, itemObjectBeingDragged.transform.position.y, z * 1.0f);
-						itemObjectOutput.changePosition(new Vector3 (x * 1.0f, itemObjectOutput.getPosition().y, z * 1.0f));
+						Vector3 newp = new Vector3 (x * 1.0f, itemObjectOutput.getPosition().y, z * 1.0f);
+						itemObjectOutput.changePosition(newp);
+//						Debug.Log (itemObjectOutput.getPosition());
 
 						//						data.modifyItemList (draggedObject.name, draggedObject.transform.position);
 //						itemClass.modifyItemList (itemObjectBeingDragged.name, itemObjectBeingDragged.transform.position);

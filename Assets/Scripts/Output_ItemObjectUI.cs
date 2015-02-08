@@ -18,7 +18,9 @@ public class Output_ItemObjectUI : MonoBehaviour
 	Text Text_Armor;
 
 	Camera UICamera;
-	public Canvas itemObjectUICanvas;
+	Canvas itemObjectUICanvas;
+
+	public GameObject buttons;
 
 	void Start ()
 	{
@@ -27,22 +29,26 @@ public class Output_ItemObjectUI : MonoBehaviour
 		Text_Armor = transform.Find("Text/Text_Armor").GetComponent("Text") as Text;
 		updateMonsterStatText ();
 
-		itemObjectUICanvas = this.GetComponent("Canvas") as Canvas;
+		itemObjectUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
 		UICamera = GameObject.Find("UICamera").camera;
 		itemObjectUICanvas.worldCamera = UICamera;
 	}
 
-	void Update(){
+	//Update causes itemObjectUI flickering
+	//LateUpdate prevents it
+	void LateUpdate(){
 		faceUIToCamera();
 	}
 
 	void faceUIToCamera(){
 		Vector3 p = new Vector3();
+
 		p = output_itemObject.getPosition();
 		itemObjectUICanvas.transform.position = p; 
 
 		p = UICamera.transform.rotation.eulerAngles;
 		itemObjectUICanvas.transform.rotation = Quaternion.Euler(p);
+
 	}
 
 
@@ -109,6 +115,11 @@ public class Output_ItemObjectUI : MonoBehaviour
 		Text_Attack.text = "Attack: " + attack.ToString ();
 		Text_Health.text = "Health: " + health.ToString ();
 		Text_Armor.text = "Armor: " + armor.ToString ();
+	}
+
+	public void toggleItemObjectUI(){
+		//		GameObject buttons = transform.Find("Buttons") as GameObject;
+		buttons.SetActive(!buttons.activeSelf);
 	}
 
 }

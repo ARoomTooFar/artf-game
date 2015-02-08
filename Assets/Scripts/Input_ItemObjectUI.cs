@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class Input_ItemObjectUI : MonoBehaviour {
 	public Output_ItemObjectUI output_itemObjectUI;
 	public Output_ItemObject output_itemObject;
-	public GameObject buttons;
+
 
 	Button Button_UpArrow_Attack;
 	Button Button_DownArrow_Attack;
@@ -78,27 +78,21 @@ public class Input_ItemObjectUI : MonoBehaviour {
 			}
 		}
 		
-		//this is to check if a drag has been performed.
-		//if a drag has been performed, the game will register it
-		//as a click. we have to prevent this by checking if the mouse
-		//has moved since the last mouseButtonDown. if it has, it means
-		//we're dragging, and so we choose not to toggle the object UI.
+		//checks if a drag has been performed. drags count as clicks.
+		//if drag, toggle UI to turn it to its original state
 		if (Input.GetMouseButtonUp(0) && rayHit == true){ 
 			Vector3 offset = Input.mousePosition - mouseStartPos;
 			
 			//if the offset is not zero, then a drag happened
 			if (Math.Abs(offset.x) == 0){
 //				toggle.SetActive (!toggle.activeSelf);
-				toggleItemObjectUI();
+				output_itemObjectUI.toggleItemObjectUI();
 			}
 			rayHit = false;
 		}
 	}
 
-	public void toggleItemObjectUI(){
-//		GameObject buttons = transform.Find("Buttons") as GameObject;
-		buttons.SetActive(!buttons.activeSelf);
-	}
+
 
 
 }
