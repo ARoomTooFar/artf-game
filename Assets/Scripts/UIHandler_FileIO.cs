@@ -57,13 +57,14 @@ public class UIHandler_FileIO : MonoBehaviour
 		if (itemClass.getItemList ().Count != 0) {
 //			bf.Serialize (file, itemClass.getItemList ());
 //			File.WriteAllText("Assets/Resources/savedLevel.txt", bf.Serialize (file, itemClass.getItemList ()));
-
+			Debug.Log ("Items saved right now: " + itemClass.getItemList ().Count);
 
 			BinaryFormatter bf = new BinaryFormatter ();
 			MemoryStream stream = new MemoryStream (2048);
 			bf.Serialize (stream, itemClass.getItemList ());
 			string tmp = System.Convert.ToBase64String (stream.ToArray ());
 			PlayerPrefs.SetString ("levelData", tmp);
+
 
 			//give error: SecurityException: No valid crossdomain policy available to allow access
 //			string ulLevelData = serv.newLevel(123, "Level Name", tmp);

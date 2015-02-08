@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 public class Input_ItemObjectUI : MonoBehaviour {
-	public Output_ItemObjectUI output_itemObjectUI;
+	Output_ItemObjectUI output_itemObjectUI;
 	public Output_ItemObject output_itemObject;
 
 
@@ -37,6 +37,9 @@ public class Input_ItemObjectUI : MonoBehaviour {
 
 		Button_Rotate = transform.Find("Buttons/Button_Rotate").GetComponent("Button") as Button;
 
+		UICamera = GameObject.Find("UICamera").camera;
+		output_itemObjectUI = this.gameObject.GetComponent("Output_ItemObjectUI") as Output_ItemObjectUI;
+
 
 		//Attack upgrade/downgrade listeners
 		Button_UpArrow_Attack.onClick.AddListener (() => {
@@ -61,7 +64,7 @@ public class Input_ItemObjectUI : MonoBehaviour {
 			output_itemObject.rotate(90f); 
 		});
 
-		UICamera = GameObject.Find("UICamera").camera;
+
 	}
 
 

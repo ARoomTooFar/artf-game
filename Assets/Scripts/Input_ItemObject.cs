@@ -7,11 +7,10 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 public class Input_ItemObject : MonoBehaviour {
-	public Output_ItemObject itemObjectOutput;
+	Output_ItemObject itemObjectOutput;
 
 	public LayerMask draggingLayerMask;
 	static Camera UICamera;
-	GameObject itemObjectBeingDragged;
 	bool inMouseCheck = false;
 	Vector3 initMousePos;
 	ItemClass itemClass = new ItemClass();
@@ -22,6 +21,7 @@ public class Input_ItemObject : MonoBehaviour {
 	void Start () {
 		UICamera = GameObject.Find ("UICamera").camera;
 		tileMap = GameObject.Find ("TileMap").GetComponent("TileMap") as TileMap;
+		itemObjectOutput = this.gameObject.GetComponent("Output_ItemObject") as Output_ItemObject;
 	}
 	
 
@@ -37,8 +37,8 @@ public class Input_ItemObject : MonoBehaviour {
 			//if this script grabs ahold of the TileMap (or presumably
 			//any collider that isn't an object meant to be dragged),
 			//it will jack shit up. must catch them here.
-			if (hit.collider.gameObject.name != "TileMap") {
-				itemObjectBeingDragged = hit.collider.gameObject; 
+			if (hit.collider.gameObject.name != "TileMap" 
+			    && hit.collider.gameObject.GetInstanceID() == this.gameObject.GetInstanceID()) {
 				if (inMouseCheck == false) {
 					initMousePos = Input.mousePosition;
 					inMouseCheck = true;
@@ -69,13 +69,11 @@ public class Input_ItemObject : MonoBehaviour {
 					    || Math.Abs (mouseChange.z) > mouseDeadZone) {
 						
 						//for now y-pos remains as prefab's default.
-//						itemObjectBeingDragged.transform.position = new Vector3 (x * 1.0f, itemObjectBeingDragged.transform.position.y, z * 1.0f);
 						Vector3 newp = new Vector3 (x * 1.0f, itemObjectOutput.getPosition().y, z * 1.0f);
 						itemObjectOutput.changePosition(newp);
 //						Debug.Log (itemObjectOutput.getPosition());
 
 						//						data.modifyItemList (draggedObject.name, draggedObject.transform.position);
-//						itemClass.modifyItemList (itemObjectBeingDragged.name, itemObjectBeingDragged.transform.position);
 						itemClass.modifyItemList(itemObjectOutput.getName(), itemObjectOutput.getPosition());
 					}
 				}

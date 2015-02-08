@@ -47,8 +47,11 @@ public class MouseHandler_TileSelection : MonoBehaviour {
 		currentObj.transform.parent = itemObjects;
 
 		currentObj.name = itemClass.makeName(name);
+		(currentObj.GetComponent("Output_ItemObject") as Output_ItemObject).changePosition(position);
 //		data.addToItemList(currentObj.name, position);
 		itemClass.addToItemList(currentObj.name, position);
+
+
 
 		clearSelectedItem();
 	}

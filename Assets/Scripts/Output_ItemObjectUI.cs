@@ -20,7 +20,7 @@ public class Output_ItemObjectUI : MonoBehaviour
 	Camera UICamera;
 	Canvas itemObjectUICanvas;
 
-	public GameObject buttons;
+	GameObject buttons;
 
 	void Start ()
 	{
@@ -32,6 +32,9 @@ public class Output_ItemObjectUI : MonoBehaviour
 		itemObjectUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
 		UICamera = GameObject.Find("UICamera").camera;
 		itemObjectUICanvas.worldCamera = UICamera;
+
+		//finds the buttons object in the object tree below
+		buttons = transform.Find("Buttons").gameObject;
 	}
 
 	//Update causes itemObjectUI flickering
