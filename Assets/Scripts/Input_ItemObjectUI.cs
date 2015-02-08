@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 public class Input_ItemObjectUI : MonoBehaviour {
 	Output_ItemObjectUI output_itemObjectUI;
-	public Output_ItemObject output_itemObject;
+	Output_ItemObject output_itemObject;
 
 
 	Button Button_UpArrow_Attack;
@@ -21,7 +21,9 @@ public class Input_ItemObjectUI : MonoBehaviour {
 	Button Button_DownArrow_Armor;
 
 	Button Button_Rotate;
-	Button Screen_Button_Rotate = null;
+	Button Screen_Button_Rotate;
+
+	Button Button_X;
 
 	Camera UICamera;
 
@@ -30,6 +32,8 @@ public class Input_ItemObjectUI : MonoBehaviour {
 	bool rayHit = false;
 
 	void Start () {
+		output_itemObject = transform.parent.GetComponent("Output_ItemObject") as Output_ItemObject;
+
 //		Button_UpArrow_Attack = transform.Find("ToggledItems/MonsterUpgrade/Attack/Button_UpArrow_Attack").GetComponent("Button") as Button;
 		Button_UpArrow_Attack = transform.Find("Buttons/Button_UpArrow_Attack").GetComponent("Button") as Button;
 		Button_DownArrow_Attack = transform.Find("Buttons/Button_DownArrow_Attack").GetComponent("Button") as Button;
@@ -40,6 +44,8 @@ public class Input_ItemObjectUI : MonoBehaviour {
 
 		Button_Rotate = transform.Find("Buttons/Button_Rotate").GetComponent("Button") as Button;
 		Screen_Button_Rotate = GameObject.Find("Screen_Button_Rotate").GetComponent("Button") as Button;
+
+		Button_X = transform.Find("Buttons/Button_X").GetComponent("Button") as Button;
 
 		UICamera = GameObject.Find("UICamera").camera;
 		output_itemObjectUI = this.gameObject.GetComponent("Output_ItemObjectUI") as Output_ItemObjectUI;
@@ -66,6 +72,11 @@ public class Input_ItemObjectUI : MonoBehaviour {
 		//rotate object button
 		Button_Rotate.onClick.AddListener (() => {
 			output_itemObject.rotate(90f); 
+		});
+
+		//X out
+		Button_X.onClick.AddListener (() => {
+			output_itemObjectUI.toggleItemObjectUI(); 
 		});
 
 		//screen button object rotate.

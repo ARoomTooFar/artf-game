@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 public class Output_ItemObjectUI : MonoBehaviour
 {
-	public Output_ItemObject output_itemObject;
+	Output_ItemObject output_itemObject;
 
 
 	int attack = 1;
@@ -26,6 +26,8 @@ public class Output_ItemObjectUI : MonoBehaviour
 
 	void Start ()
 	{
+		output_itemObject = transform.parent.GetComponent("Output_ItemObject") as Output_ItemObject;
+
 		Text_Attack = transform.Find("Text/Text_Attack").GetComponent("Text") as Text;
 		Text_Health = transform.Find("Text/Text_Health").GetComponent("Text") as Text;
 		Text_Armor = transform.Find("Text/Text_Armor").GetComponent("Text") as Text;
