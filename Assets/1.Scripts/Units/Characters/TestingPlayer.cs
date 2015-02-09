@@ -4,32 +4,20 @@
 using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
-public class Controls {
-	//First 7 are Keys, last 2 are joystick axis
-	public string up, down, left, right, attack, secItem, cycItem, hori, vert;
-	//0 for Joystick off, 1 for Joystick on and no keys
-	public int joyUsed;
-}
-
 [RequireComponent(typeof(Rigidbody))]
-public class Player : Character, IMoveable {
+public class TestingPlayer : TestingCharacter, IMoveable {
 	public bool inGrey;
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
-
+	
 	public Controls controls;
-
-	protected override void Awake() {
-		base.Awake();
-	}
-
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
 	}
-
+	
 	protected override void setInitValues() {
 		base.setInitValues();
 		//Testing with base 0-10 on stats with 10 being 100/cap%
@@ -72,7 +60,7 @@ public class Player : Character, IMoveable {
 			animationUpdate ();
 		}
 	}
-
+	
 	//---------------------------------//
 	// Action interface implementation //
 	//---------------------------------//
@@ -82,7 +70,6 @@ public class Player : Character, IMoveable {
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
 				animator.SetBool("Charging", true);
-				gear.weapon.initAttack();
 				gear.weapon.initAttack();
 			} else if(Input.GetKeyDown (controls.secItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
@@ -125,7 +112,7 @@ public class Player : Character, IMoveable {
 	}
 	
 	//-------------------------------------------//
-
+	
 	//-----------------------------------//
 	// Movement interface implementation //
 	//-----------------------------------//
@@ -134,7 +121,7 @@ public class Player : Character, IMoveable {
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 		
-		if (actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing))) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
+		if (actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing))) {//gears.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -170,7 +157,7 @@ public class Player : Character, IMoveable {
 		}
 	}
 	//-------------------------------------//
-
+	
 	//---------------------------------//
 	// Damage Interface Implementation //
 	//---------------------------------//
@@ -178,7 +165,7 @@ public class Player : Character, IMoveable {
 	public override void damage(int dmgTaken, Character striker) {
 		if (!invincible) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(facing, transform.position, striker.transform.position)), 1, 100000);
-		
+			
 			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
 			
@@ -192,19 +179,19 @@ public class Player : Character, IMoveable {
 		if (!invincible) {
 			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
-
+			
 			if (stats.health <= 0) {
 				die();
 			}
 		}
 	}
-
+	
 	public override void die() {
 		base.die();
 	}
-
+	
 	//----------------------------------//
-
+	
 	// Grey Health functions
 	public virtual int greyTest(int damage){
 		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){
@@ -221,7 +208,7 @@ public class Player : Character, IMoveable {
 		if(damage > (stats.maxHealth/20)){
 			//print("Got Here"+(stats.maxHealth/20)+":"+damage);
 			int tempDmg = greyDamage;
-			if(inGrey){
+			if(inGrey) {
 				greyDamage = damage - stats.maxHealth/20;
 				//print("Grey!:"+tempDmg);
 				inGrey = true;
@@ -231,7 +218,7 @@ public class Player : Character, IMoveable {
 				}
 				//print("True!WGAT:"+(stats.maxHealth/20 + tempDmg));
 				return stats.health/20 + tempDmg;
-			}else{
+			} else {
 				inGrey = true;
 				greyDamage = damage - stats.maxHealth/20;
 				//print("Grey!:"+(damage - stats.maxHealth/20));
@@ -247,8 +234,7 @@ public class Player : Character, IMoveable {
 			inGrey = false;
 			//print("True!WGBT:"+(damage + greyDamage));
 			return damage + greyDamage;
-		}
-		else{
+		} else {
 			inGrey = false;
 			//print("True!NG:"+damage);
 			return damage;
@@ -271,6 +257,6 @@ public class Player : Character, IMoveable {
 		}
 		yield return 0;
 	}
-
+	
 	//----------------------------------//
 }

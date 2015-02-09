@@ -6,10 +6,11 @@ public class Bullet : Projectile {
 	protected override void Start() {
 		base.Start();
 	}
-	protected override void setInitValues() {
-		base.setInitValues();
-		//damage = 1;
-		//speed = .35f;
+
+	public override void setInitValues(Character player, float partSpeed) {
+		base.setInitValues(player, partSpeed);
+
+		// Set stats here is each bullet will have its own properties
 	}
 
 	// Update is called once per frame

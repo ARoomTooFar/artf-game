@@ -50,14 +50,8 @@ public class Shotgun : RangedWeapons {
 			yield return 0;
 			spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y,(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
 
-			//Instantiate(projectile, user.transform.position, spray);
+			fireProjectile();
 
-			bullet = (GameObject) Instantiate(projectile, user.transform.position, spray);
-			//bullet.transform.parent = gameObject.transform;
-			bullet.GetComponentInChildren<Bullet>().damage = 1;
-			bullet.GetComponentInChildren<Bullet>().speed = .5f;
-			bullet.GetComponentInChildren<Bullet>().particles.startSpeed = count;
-			bullet.GetComponentInChildren<Bullet>().player = user;
 			/*shots.Add(bullet);
 			foreach (Shot bull in shots){
 				bull.facing = spray.eulerAngles;
