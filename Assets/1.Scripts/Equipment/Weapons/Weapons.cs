@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 [System.Serializable]
 public class WeaponStats {
@@ -20,6 +21,7 @@ public class WeaponStats {
 	// Charge atk variables
 	public int chgDamage;
 	public float maxChgTime, chgLevels, curChgAtkTime, curChgDuration, timeForChgAttack;
+	public int specialAttackType;
 }
 
 public class Weapons : Equipment {
@@ -29,15 +31,20 @@ public class Weapons : Equipment {
 	public AudioClip action;
 	public bool playSound;
 	public float soundDur;
+
+	public Type opposition;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
 	}
 
-	public virtual void equip(Character u) {
+	public virtual void equip(Character u, Type ene) {
 		base.equip(u);
 		u.animator.SetInteger("WeaponType", stats.weapType);
 		u.weapTypeName = stats.weapTypeName;
+		opposition = ene;
+		user.GetComponent<Character>().animator.SetInteger("ChargedAttackNum", stats.specialAttackType);
 	}
 
 	// Used for setting stats for each weapon piece
@@ -57,6 +64,7 @@ public class Weapons : Equipment {
 		stats.chgLevels = 0.4f;
 		stats.chgDamage = 0;
 		stats.timeForChgAttack = 0.5f;
+		stats.specialAttackType = 0;
 		soundDur = 0.1f;
 		playSound = true;
 	}
@@ -69,6 +77,25 @@ public class Weapons : Equipment {
 	protected override void Update () {
 		base.Update();
 	}
+
+	//-----------------------//
+	// Some Helper Functions //
+	//-----------------------//
+
+	public virtual void collideOn() {
+		this.GetComponent<Collider>().enabled = true;
+	}
+	
+	public virtual void collideOff() {
+		this.GetComponent<Collider>().enabled = false;
+	}
+
+	// A unique attack command called from thje animator
+	//     eg. Shockwave
+	public virtual void specialAttack() {
+	}
+
+	//-----------------------//
 
 	//----------------------------//
 	// Weapon Attacking Functions //
@@ -107,7 +134,7 @@ public class Weapons : Equipment {
 
 	// When player stops holding down charge, we check parameter for what attack to perform
 	protected virtual void attack() {
-		if (stats.curChgDuration >= 0.5f) {
+		if (stats.curChgDuration >= stats.timeForChgAttack) {
 			chargedAttack();
 		} else {
 			basicAttack();
@@ -118,7 +145,6 @@ public class Weapons : Equipment {
 	protected virtual void basicAttack() {
 		print("Normal Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
-		this.GetComponent<Collider>().enabled = true;
 		StartCoroutine(atkFinish());
 	}
 
@@ -126,7 +152,6 @@ public class Weapons : Equipment {
 	protected virtual void chargedAttack() {
 		print("Charged Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", true);
-		this.GetComponent<Collider>().enabled = true;
 		StartCoroutine(atkFinish());
 	}
 
@@ -138,7 +163,6 @@ public class Weapons : Equipment {
 		}
 		
 		particles.Stop();
-		this.GetComponent<Collider>().enabled = false;
 		
 		user.animator.speed = 1.0f;
 	}

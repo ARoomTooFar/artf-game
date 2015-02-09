@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
 
 [System.Serializable]
 public class Controls {
@@ -20,6 +21,11 @@ public class Player : Character, IMoveable {
 	public bool testable, isReady, atEnd, atStart;
 
 	public Controls controls;
+
+	protected override void Awake() {
+		base.Awake();
+		opposition = Type.GetType("Enemy");
+	}
 
 	// Use this for initialization
 	protected override void Start () {
@@ -173,7 +179,7 @@ public class Player : Character, IMoveable {
 	
 	public override void damage(int dmgTaken, Character striker) {
 		if (!invincible) {
-			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(facing, transform.position, striker.transform.position)), 1, 100000);
+			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 		
 			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);

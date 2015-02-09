@@ -24,6 +24,12 @@ public class RangedWeapons : Weapons {
 		base.setInitValues();
 	}
 
+	public override void collideOn() {
+	}
+	
+	public override void collideOff() {
+	}
+
 	public override void initAttack() {
 		base.initAttack();
 	}
@@ -74,6 +80,6 @@ public class RangedWeapons : Weapons {
 
 	protected void fireProjectile() {
 		Projectile newBullet = ((GameObject)Instantiate(projectile, user.transform.position, spray)).GetComponent<Projectile>();
-		newBullet.setInitValues(user, particles.startSpeed);
+		newBullet.setInitValues(user, opposition, particles.startSpeed);
 	}
 }

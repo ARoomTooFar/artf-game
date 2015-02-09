@@ -2,13 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
-//Interface for action classes
-public interface ISMAction
-{
-	void action ();
-	
-}
+public delegate bool AICondTest( Character agent );
+public delegate void AIAction( Character agent );
 
 //State class holds array of transitions, and the method to access them
 public class State 
@@ -29,15 +24,17 @@ public class State
 		transitions.Add (t);
 	}
 
-	private ISMAction action;
+	private AIAction action;
+	private Character agent;
 	public void getAction()
 	{
-		action.action();
+		action(agent);
 	}
 
-	public void addAction(ISMAction act)
+	public void addAction(AIAction act, Character a)
 	{
 		action = act;
+		agent = a;
 	}
 
 	public State(string n){
@@ -45,20 +42,16 @@ public class State
 	}
 }
 
-//Interface for condition classes
-public interface ISMCondition
-{
-	bool test ();
-}
-
 //Transitions have unique condition and action classes that inherit from the corresponding interfaces
 //They have a target state, a condition, and an action. All of these also have methods to access them
 public class Transition {
 
-	private ISMCondition condition;
+	private AICondTest condition;
+	private Character agent;
+
 	public bool isTriggered()
 	{
-		return condition.test ();
+		return condition(agent);
 	}
 
 	private State targetState;
@@ -68,9 +61,10 @@ public class Transition {
 	}
 
 	//Used to set the condition from outside this class
-	public void addCondition(ISMCondition cond)
+	public void addCondition(AICondTest cond, Character a)
 	{
 		condition = cond;
+		agent = a;
 		Debug.Log (cond);
 	}
 

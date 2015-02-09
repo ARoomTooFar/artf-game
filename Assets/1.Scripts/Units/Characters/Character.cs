@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 [System.Serializable]
 public class Stats{
@@ -43,8 +44,12 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public AudioClip hurt, victory, failure;
 
 	public bool invincible = false;
-	
-	protected delegate void BuffDelegate(float duration);
+
+// 	protected string opposition;
+
+	protected Type opposition;
+
+	protected delegate void BuffDelegate(float strength);
 
 	// Serialized classes
 	public Stats stats;
@@ -57,13 +62,13 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		public Chest chest;
 		public Transform weapLocation, headLocation, chestLocation;
 		
-		public void equipGear(Character player, GameObject[] equipment) {
+		public void equipGear(Character player, Type ene, GameObject[] equipment) {
 			foreach (GameObject equip in equipment) {
 				if (equip.GetComponent<Weapons>()) {
 					// GameObject newGear = Instantiate(equip, headLocation.position, headLocation.rotation) as GameObject;
 					weapon = (Instantiate(equip) as GameObject).GetComponent<Weapons>();
 					weapon.transform.SetParent(weapLocation, false);
-					weapon.equip(player);
+					weapon.equip(player, ene);
 				} else if (equip.GetComponent<Helmet>()) {
 					helmet = (Instantiate(equip) as GameObject).GetComponent<Helmet>();
 					helmet.transform.SetParent(headLocation, false);
@@ -79,10 +84,10 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		}
 
 		// Equip method for testing purposes
-		public void equipGear(Character player) {
+		public void equipGear(Character player, Type ene) {
 			weapon = weapLocation.GetComponentInChildren<Weapons>();
 			if (weapon) {
-				weapon.equip (player);
+				weapon.equip (player, ene);
 			} else {
 				Debug.LogWarning(player.gameObject.name + " does not have a weapon in the weapon slot.");
 			}
@@ -158,9 +163,11 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	// Swap these over to weapons in the future
 	public string weapTypeName;
 	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
-	
-	// Use this for initialization
-	protected virtual void Start () {
+
+	protected virtual void Awake() {
+		// enemy = Types.GetType ("Dagger", "Assembly-CSharp"));
+		// opposition = "Player";
+		opposition = Type.GetType ("Player");
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
@@ -168,13 +175,18 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 		freeAnim = true;
 		setInitValues();
 	}
+
+	// Use this for initialization
+	protected virtual void Start () {
+
+	}
 	
 	protected virtual void setInitValues() {
 
 	}
 
 	public virtual void equipTest(GameObject[] equip, GameObject[] abilities) {
-		gear.equipGear(this, equip);
+		gear.equipGear(this, opposition,equip);
 		inventory.equipItems(this, abilities);
 		setAnimHash();
 	}
@@ -279,9 +291,21 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	// Attack Interface Implementation //
 	//---------------------------------//
 
-	// If using a basic attack, this will do checks (such as charging an attack)
+	// Since animations are on the characters, we will use the attack methods to turn collisions on and off
 	public virtual void attacks() {
-		// gear.weapon.attack ();
+
+	}
+
+	public virtual void attackStart() {
+		gear.weapon.collideOn ();
+	}
+
+	public virtual void attackEnd() {
+		gear.weapon.collideOff ();
+	}
+
+	public virtual void specialAttack() {
+		gear.weapon.specialAttack ();
 	}
 	
 	//---------------------------------//
@@ -294,7 +318,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	
 	public virtual void damage(int dmgTaken, Character striker) {
 		if (!invincible) {
-			Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(facing, transform.position, striker.transform.position)), 1, 100000);
+			Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 		
 			stats.health -= dmgTaken;
 			
@@ -370,7 +394,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	// Force Interface Implementation //
 	//--------------------------------//
 	
-	// The duration are essentially stun, expand on these later
+	// The duration are essentiall y stun, expand on these later
 	public virtual void pull(float pullDuration) {
 		stun(pullDuration);
 	}
