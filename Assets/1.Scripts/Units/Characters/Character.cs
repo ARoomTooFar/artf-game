@@ -232,7 +232,6 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 			movementAnimation();
 		}
 	}
-
 	//-------------------------------------------//
 
 	// Animation helper functions

@@ -12,7 +12,8 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
 	public LifeBar hpBar;
-	public List<LifeBar> coolDowns = new List<LifeBar>();
+	public AmmoBar ammoBar;
+	public List<CooldownBar> coolDowns = new List<CooldownBar>();
 	public Controls controls;
 	
 	// Use this for initialization
@@ -37,16 +38,20 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 	}
 	void ItemCooldowns(){
 		for(int i = 0; i < inventory.items.Count; i++){
-			//Debug.Log(i);
-			if(inventory.items[i] is ChargeItem){
-				coolDowns[i].current = inventory.items[i].curCoolDown;
-				coolDowns[i].max = inventory.items[i].cooldown + (inventory.items[i].GetComponent<ChargeItem>().curChgTime*3);
-			}
+			inventory.items[i].cdBar = coolDowns[i];
+		}
+		if(gear.weapon is RangedWeapons){
+			//gear.weapon.GetComponent<RangedWeapons>().ammoBar = ammoBar;
+			gear.weapon.GetComponent<RangedWeapons>().loadData(ammoBar);
 		}
 	}
+	
 	// Update is called once per frame
 	protected override void Update () {
-		ItemCooldowns();
+		if(testable){
+			ItemCooldowns();
+			testable = false;
+		}
 		hpBar.max = stats.maxHealth;
 		hpBar.current = stats.health;
 		if(stats.health <= 0){
