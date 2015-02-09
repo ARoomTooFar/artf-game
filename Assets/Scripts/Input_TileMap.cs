@@ -69,7 +69,7 @@ public class Input_TileMap : MonoBehaviour
 		int z = Mathf.RoundToInt (zf / tileMap.tileSize);
 		
 		/* check whether mouse is pressed AND the tile hasn't been selected */
-		if (Input.GetMouseButtonDown (0)) {
+		if (Input.GetMouseButtonDown (0) && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
 			
 			/*Control functionality: selects tiles and adds to hashset */
 			if (Input.GetKey (KeyCode.LeftControl) || Input.GetKey (KeyCode.RightControl)) {

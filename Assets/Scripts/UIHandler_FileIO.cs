@@ -70,7 +70,10 @@ public class UIHandler_FileIO : MonoBehaviour
 			bf.Serialize (stream, itemClass.getItemList ());
 			string tmp = System.Convert.ToBase64String (stream.ToArray ());
 			PlayerPrefs.SetString (InputField_Save.text, tmp);
-			savedFiles.Add(InputField_Save.text);
+
+			if (!savedFiles.Contains(InputField_Save.text)){
+				savedFiles.Add(InputField_Save.text);
+			}
 
 
 			//give error: SecurityException: No valid crossdomain policy available to allow access
@@ -124,16 +127,17 @@ public class UIHandler_FileIO : MonoBehaviour
 	{
 
 		if (savedFiles.Count != 0) {
-			float y = -140f;
+			float y = -415f;
 			foreach (string s in savedFiles) {
 				GameObject newButton = Instantiate (Resources.Load ("Button_Filename")) as GameObject;
 				Button button = newButton.GetComponent ("Button") as Button;
 				button.transform.parent = GameObject.Find("FilenameButtons").GetComponent("Transform") as Transform;
 				RectTransform rt = button.GetComponent("RectTransform") as RectTransform;
-				rt.anchoredPosition = new Vector2(-61f, y);
+				rt.localScale = new Vector3(1f, 1f, 1f);
+				rt.anchoredPosition = new Vector2(-286.8f, y);
 				Text buttonText = (button.transform.Find("Text")).GetComponent ("Text") as Text;
 				buttonText.text = s;
-				y -= 24f;
+				y += 25f;
 
 				button.onClick.AddListener (() => {
 					buttonLoadFile (buttonText.text);});
