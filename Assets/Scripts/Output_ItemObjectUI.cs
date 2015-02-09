@@ -141,12 +141,13 @@ public class Output_ItemObjectUI : MonoBehaviour
 	//This will select or deselect all objects
 	public void selectOrDeselectAll() {
 		GameObject obj = GameObject.Find ("ItemObjects");
+		Components[] children = obj.GetComponentsInChildren ();
 		Debug.Log ("stuff");
-		/*foreach(GameObject child in obj) {
-			GameObject manip = child.Find ("ObjectUI");
-			manip.GetComponent("Output_ItemObjectUI").toggleItemObjectUI();
-
-		} */
+		foreach(Component child in children) {
+			if(child == child.GetComponentInParent("Output_ItemObjectUI")){
+				child.toggleItemObjectUI();
+			}
+		} 
 
 	}
 
