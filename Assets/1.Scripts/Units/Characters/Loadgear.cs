@@ -13,10 +13,17 @@ public class Loadgear : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		for (int i = 0; i < players.Count; i++) {
+			loadFromText("P" + (i + 1).ToString());
+			players[i].equipTest(equipment.ToArray(), abilities.ToArray());
+			equipment.Clear();
+			abilities.Clear();
+		}
 	}
 
 	void Update() {
+
+		/*
 		if(Input.GetKeyDown(KeyCode.Space)) {
 
 			for (int i = 0; i < players.Count; i++) {
@@ -25,7 +32,7 @@ public class Loadgear : MonoBehaviour {
 				equipment.Clear();
 				abilities.Clear();
 			}
-		}
+		}*/
 	}
 
 	private void loadFromText(string text) {

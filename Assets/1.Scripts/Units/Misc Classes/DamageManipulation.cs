@@ -40,11 +40,19 @@ public class DamageManipulation {
 
 	// Gets the total % of the damage change
 	// Takes in the facing and position of the unit receiving the damage and the position of the attack(er)
-	public float getDmgValue(Vector3 unitFacing, Vector3 unitPos, Vector3 atkPos) {
+	public float getDmgValue(Vector3 atkPos, Vector3 unitFacing, Vector3 unitPos) {
+		
 		float ttlReduction = genDamage.percentValue;
 
-		float angle = Vector2.Angle(new Vector2(unitPos.x - atkPos.x, unitPos.z - atkPos.z), new Vector2(unitFacing.x, unitFacing.z));
+		if (ARTFUtilities.isBehind(atkPos, unitFacing, unitPos)) {
+			ttlReduction *= backDamage.percentValue;
+		} else {
+			ttlReduction *= fntDamage.percentValue;
+		}
 
+		/*
+		float angle = Vector2.Angle(new Vector2(unitPos.x - atkPos.x, unitPos.z - atkPos.z), new Vector2(unitFacing.x, unitFacing.z));
+		
 		if (angle < 45.0f) {
 			ttlReduction *= backDamage.percentValue;
 		} else if (angle < 135.0f) {
@@ -53,7 +61,7 @@ public class DamageManipulation {
 			ttlReduction *= fntDamage.percentValue;
 		} else {
 			Debug.Log ("I shouldn't be here");
-		}
+		}*/
 		
 		return ttlReduction;
 	}

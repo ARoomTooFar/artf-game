@@ -34,4 +34,11 @@ public class Spear: MeleeWeapons {
 	public override void initAttack() {
 		base.initAttack();
 	}
+
+	public override void collideOn () {
+		base.collideOn ();
+		if (stats.chgDamage-- == 0) { // Our multistab counter
+			user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
+		}
+	}
 }
