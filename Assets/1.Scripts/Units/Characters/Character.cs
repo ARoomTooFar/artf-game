@@ -49,7 +49,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 
 	protected Type opposition;
 
-	protected delegate void BuffDelegate(float duration);
+	protected delegate void BuffDelegate(float strength);
 
 	// Serialized classes
 	public Stats stats;
@@ -394,7 +394,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	// Force Interface Implementation //
 	//--------------------------------//
 	
-	// The duration are essentially stun, expand on these later
+	// The duration are essentiall y stun, expand on these later
 	public virtual void pull(float pullDuration) {
 		stun(pullDuration);
 	}

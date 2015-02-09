@@ -76,15 +76,13 @@ public class Chainsaw : MeleeWeapons {
 		base.attack ();
 	}
 
-	// Basic attack, a normal swing/stab/fire
 	protected override void basicAttack() {
 		print("Charged Attack; Power level:" + stats.chgDamage);
 		user.animator.SetBool("ChargedAttack", false);
 		this.GetComponent<Collider>().enabled = true;
 		StartCoroutine(atkFinish());
 	}
-	
-	// Charged attack, something unique to the weapon type
+
 	protected override void chargedAttack() {
 		print("Charged Attack; Power level:" + stats.chgDamage);
 		user.animator.SetBool("ChargedAttack", true);
