@@ -23,6 +23,8 @@ public class Input_ItemObjectUI : MonoBehaviour {
 	Button Button_Rotate;
 	Button Screen_Button_Rotate;
 
+	Button Button_Select_All;
+
 	Button Button_X;
 
 	Camera UICamera;
@@ -44,6 +46,7 @@ public class Input_ItemObjectUI : MonoBehaviour {
 
 		Button_Rotate = transform.Find("Buttons/Button_Rotate").GetComponent("Button") as Button;
 		Screen_Button_Rotate = GameObject.Find("Screen_Button_Rotate").GetComponent("Button") as Button;
+		Button_Select_All = GameObject.Find ("Button_all_select").GetComponent ("Button") as Button;
 
 		Button_X = transform.Find("Buttons/Button_X").GetComponent("Button") as Button;
 
@@ -77,6 +80,11 @@ public class Input_ItemObjectUI : MonoBehaviour {
 		//X out
 		Button_X.onClick.AddListener (() => {
 			output_itemObjectUI.toggleItemObjectUI(); 
+		});
+
+		//Select All button
+		Button_Select_All.onClick.AddListener (() => {
+			output_itemObjectUI.selectOrDeselectAll (); 
 		});
 
 		//screen button object rotate.

@@ -59,6 +59,7 @@ public class Output_ItemObject : MonoBehaviour {
 		rotation.x = 0f;
 		rotation.z = 0f;
 		rotation.y += deg;
+		Debug.Log ("Working");
 
 		itemClass.modifyItemList(getName(), getPosition(), rotation);
 //		Debug.Log (getRotation());

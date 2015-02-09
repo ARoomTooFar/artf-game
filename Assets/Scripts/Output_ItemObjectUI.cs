@@ -138,4 +138,21 @@ public class Output_ItemObjectUI : MonoBehaviour
 		output_itemObject.setToFocused();
 	}
 
+	//This will select or deselect all objects
+	public void selectOrDeselectAll() {
+		GameObject obj = GameObject.Find ("ItemObjects");
+		Debug.Log ("stuff");
+		/*foreach(GameObject child in obj) {
+			GameObject manip = child.Find ("ObjectUI");
+			manip.GetComponent("Output_ItemObjectUI").toggleItemObjectUI();
+
+		} */
+
+	}
+
+	/*
+	 * for each child of ItemObjects
+	 * 		get that objects "ObjectUI" child
+	 * 		get that ObjectUI's component script
+	 * 		use that script to toggle */
 }
