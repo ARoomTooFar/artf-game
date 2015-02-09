@@ -15,6 +15,8 @@ public class levelgui : MonoBehaviour {
 	private string levelName;
 	private string newName = "Player Name";
 
+	GameObject loadGear;
+	GameObject cameras;
 
 	// Initialize scene
 	void Start () 
@@ -22,11 +24,28 @@ public class levelgui : MonoBehaviour {
 		levelName = gamestate.Instance.getLevel ();
 		print ("Loaded: " + gamestate.Instance.getLevel ());
 		print ("There are still " + gamestate.Instance.getNumPlayers() + " in list");
-		//finds and relocates the players to a game object called "StartPostion", if they need to be placed in the scene.
-		//GameObject.FindGameObjectWithTag ("Player1").transform.position = GameObject.Find ("StartPosition");
-		//GameObject.FindGameObjectWithTag("Player2").transform.position = GameObject.Find("StartPosition");
-		//GameObject.FindGameObjectWithTag("Player3").transform.position = GameObject.Find("StartPosition");
-		//GameObject.FindGameObjectWithTag("Player4").transform.position = GameObject.Find("StartPosition");
+
+		//resets the spawn of the player in the new scene
+		for(int i = 0; i < gamestate.Instance.getNumPlayers(); i++)
+		{	
+			//gamestate.Instance.players[0] = GameObject.FindGameObjectWithTag("Player1");
+			gamestate.Instance.players[i].transform.position  = new Vector3(0,30,0);
+
+		}
+		/*
+		if (gamestate.Instance.getLevel () == "FirstPlayableScene")
+		{
+			print ("FirstPLayableFound!");
+			loadGear = GameObject.FindGameObjectWithTag("LoadGear").GetComponent<Loadgear>();
+
+			for(int i = 0; i < gamestate.Instance.getNumPlayers();i++)
+			{
+				print("added player to loadGear list");
+				loadGear.players.Add (gamestate.Instance.players[i]);
+			}
+		}
+		*/
+
 	}
 	
 	//--------------------------------
@@ -83,7 +102,7 @@ public class levelgui : MonoBehaviour {
 				//creates button to move between InventorySelect and LevelSelect
 				if (GUI.Button (new Rect (30, 30, 150, 30), "Game Scene"))
 				{
-					moveToScene ("GameScene");
+					moveToScene ("FirstPlayableScene");
 				}
 				break;
 
@@ -119,6 +138,22 @@ public class levelgui : MonoBehaviour {
 		foreach (Player plr in gamestate.Instance.players) { //preserves all the players in the List of player in the game
 			DontDestroyOnLoad(plr);
 		}
+		//resets the spawn of the player in the new scene
+		for(int i = 0; i < gamestate.Instance.getNumPlayers(); i++)
+		{	
+			//gamestate.Instance.players[0] = GameObject.FindGameObjectWithTag("Player1");
+			gamestate.Instance.players[i].transform.position  = new Vector3(0,50,0);
+			
+		}
+		loadGear = GameObject.FindGameObjectWithTag("LoadGear");
+		cameras = GameObject.FindGameObjectWithTag("GameCameras");
+		DontDestroyOnLoad (loadGear);
+		DontDestroyOnLoad (cameras);
+		//DontDestroyOnLoad (CameraAdjuster.Instance.p1);
+		//DontDestroyOnLoad (CameraAdjuster.Instance.p2);
+		//DontDestroyOnLoad (CameraAdjuster.Instance.p3);
+		//DontDestroyOnLoad (CameraAdjuster.Instance.p4);
+		//DontDestroyOnLoad (CameraAdjuster.Instance);
 		DontDestroyOnLoad (gamestate.Instance);
 		Application.LoadLevel(aScene);
 	}
