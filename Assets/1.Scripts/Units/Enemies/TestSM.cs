@@ -1,11 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public class TestSM: Enemy{
 	
 	//Public variables to tweak in inspector
 	public float fov = 110f;
+	public float patrolSpeed = 2f;
+	public float approachSpeed = 5f;
+	public float reactionTime = 5f;			// Time buffer between player sighting and giving chase
+	public float patrolWaitTime = 1f;		// Time wait when reaching the patrol way point
+	public float aggroTimer = 10f;
+	public int waypointIndex = 0;
+	public Vector3 resetpos;
+
+	private GameObject target;
+
+	// Waypoints for patrolling
+	public List<Transform> patrolWP = new List<Transform>();
+
+
 	public bool playerInSight = false;
 	public NavMeshAgent nav;
 	public Animator ani;
@@ -14,7 +29,6 @@ public class TestSM: Enemy{
 	//Private variables for use in player detection
 	private SphereCollider col;
 	private GameObject[] players;
-	private GameObject target;
 
 	private Vector3? lastSeenPosition = null;
 	private float posTimer = 0f;
@@ -29,6 +43,8 @@ public class TestSM: Enemy{
 		ani = GetComponent<Animator> ();
 		players = GameObject.FindGameObjectsWithTag ("Player");
 		retreatPos = transform.position;
+		resetpos = transform.position;
+		patrolWP.Add (transform);
 
 		//Placeholder for more advanced aggro where target may change
 		target = players [1];
@@ -48,7 +64,7 @@ public class TestSM: Enemy{
 		} else if (canSeePlayer (target)){
 			posTimer = 0f;
 		}
-		if(posTimer > 10f)
+		if(posTimer > aggroTimer)
 		{
 			posTimer = 0f;
 			lastSeenPosition = null;
@@ -114,6 +130,7 @@ public class TestSM: Enemy{
 
 	public bool isApproaching(Character a)
 	{
+		nav.speed = approachSpeed;
 		TestSM agent = (TestSM)a;
 		return agent.distanceToPlayer(agent.giveTarget()) < 500f 
 			&& agent.distanceToPlayer(agent.giveTarget()) >= 8.5f && agent.canSeePlayer (agent.giveTarget());
@@ -184,8 +201,27 @@ public class TestSM: Enemy{
 	public void Rest(Character a)
 	{
 		TestSM agent = (TestSM)a;
-		agent.ani.SetBool ("Moving", false);
-		agent.nav.Stop ();
+//		agent.ani.SetBool ("Moving", false);
+		Patrol (a);
+	}
+
+	public void Patrol(Character a){
+		nav.speed = patrolSpeed;
+		TestSM agent = (TestSM)a;
+		agent.ani.SetBool ("Moving", true);
+
+		Debug.Log(waypointIndex);
+
+		if (agent.nav.remainingDistance < agent.nav.stoppingDistance) {
+			if(agent.waypointIndex <= agent.patrolWP.Count - 1){
+				agent.waypointIndex++;
+
+			}
+			else agent.waypointIndex = 0;
+
+		}
+
+		agent.nav.destination = agent.patrolWP[waypointIndex].position;
 	}
 
 	public bool canSeePlayer(GameObject p)
