@@ -21,6 +21,7 @@ public class ItemClass
 	public struct ItemStruct
 	{
 		public string item;
+
 		public float x;
 		public float y;
 		public float z;
@@ -28,6 +29,19 @@ public class ItemClass
 		public float xrot;
 		public float yrot;
 		public float zrot;
+
+//		[System.Serializable]
+//		public struct PosVecStruct{
+//			public float x;
+//			public float y;
+//			public float z;
+//		}
+//		
+//		public List<PosVecStruct> PosVecLists;
+//
+//		public void makeNewPosVecStruct(){
+//			PosVecLists = new List<PosVecStruct> ();
+//		}
 
 	}
 
@@ -72,6 +86,9 @@ public class ItemClass
 		its.x = pos.x;
 		its.y = pos.y;
 		its.z = pos.z;
+
+		//$
+//		its.makeNewPosVecStruct ();
 
 		its.xrot = rot.x;
 		its.yrot = rot.y;

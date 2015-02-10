@@ -121,7 +121,7 @@ public class Output_ItemObjectUI : MonoBehaviour
 		updateMonsterStatText ();
 	}
 	
-	
+
 	//Update the monster stat text with the newly changed value
 	void updateMonsterStatText ()
 	{
