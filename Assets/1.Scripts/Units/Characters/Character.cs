@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 [System.Serializable]
 public class Stats{
@@ -27,41 +28,7 @@ public class Stats{
 	}
 }
 
-[System.Serializable]
-public class Gear {
-	public Weapons weapon;
-	public Equipment helmet, bodyArmor;
-
-	public void equipItems(Character player) {
-		if (weapon) weapon.equip(player);
-	}
-}
-
-// might move to player depending on enemy stuff or have each class also have an inventory class inheriting this inventory
-[System.Serializable]
-public class Inventory {
-	public int selected;
-	public bool keepItemActive;
-	public List<Item> items = new List<Item>();
-
-	public void equipItems(Character curPlayer) {
-		for (int i = 0; i < items.Count; i++)
-			items[i].player = curPlayer;
-		selected = 0;
-		keepItemActive = false;
-	}
-
-	public void cycItems() {
-		ToggleItem isToggle = items[selected].GetComponent<ToggleItem>();
-		if (isToggle) {
-			isToggle.deactivateItem();
-		}
-		selected = (selected + 1)%items.Count;
-	}
-}
-
 [RequireComponent(typeof(Rigidbody))]
-
 public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int, Character>, ISlowable<float>, IStunable<float>, IForcible<float> {
 
 	public float gravity = 50.0f;
@@ -72,19 +39,122 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public Vector3 facing; // Direction unit is facing
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
-	
-	public Controls controls;
-	public Stats stats;
-	public Gear gear;
-	public Inventory inventory;
+
 	public bool freeAnim, attacking;
 	public AudioClip hurt, victory, failure;
-	public System.String path;
-	public System.String name;
 
 	public bool invincible = false;
-	
-	protected delegate void BuffDelegate(float duration);
+
+// 	protected string opposition;
+
+	protected Type opposition;
+
+	protected delegate void BuffDelegate(float strength);
+
+	// Serialized classes
+	public Stats stats;
+
+	public Gear gear;
+	[System.Serializable]
+	public class Gear {
+		public Weapons weapon;
+		public Helmet helmet;
+		public Chest chest;
+		public Transform weapLocation, headLocation, chestLocation;
+		
+		public void equipGear(Character player, Type ene, GameObject[] equipment) {
+			foreach (GameObject equip in equipment) {
+				if (equip.GetComponent<Weapons>()) {
+					// GameObject newGear = Instantiate(equip, headLocation.position, headLocation.rotation) as GameObject;
+					weapon = (Instantiate(equip) as GameObject).GetComponent<Weapons>();
+					weapon.transform.SetParent(weapLocation, false);
+					weapon.equip(player, ene);
+				} else if (equip.GetComponent<Helmet>()) {
+					helmet = (Instantiate(equip) as GameObject).GetComponent<Helmet>();
+					helmet.transform.SetParent(headLocation, false);
+					helmet.equip(player);
+				} else if (equip.GetComponent<Chest>()) {
+					chest = (Instantiate(equip) as GameObject).GetComponent<Chest>();
+					chest.transform.SetParent(chestLocation, false);
+					chest.equip(player);
+				} else {
+					Debug.LogWarning("Non-weapon/armor passed into gear class");
+				}
+			}
+		}
+
+		// Equip method for testing purposes
+		public void equipGear(Character player, Type ene) {
+			weapon = weapLocation.GetComponentInChildren<Weapons>();
+			if (weapon) {
+				weapon.equip (player, ene);
+			} else {
+				Debug.LogWarning(player.gameObject.name + " does not have a weapon in the weapon slot.");
+			}
+
+			helmet = headLocation.GetComponentInChildren<Helmet>();
+			if (helmet) {
+				helmet.equip (player);
+			} else {
+				Debug.LogWarning(player.gameObject.name + " does not have a helmet in the helmet slot.");
+			}
+
+			chest = chestLocation.GetComponentInChildren<Chest>();
+			if (chest) {
+				chest.equip (player);
+			} else {
+				Debug.LogWarning(player.gameObject.name + " does not have armor in the armor slot.");
+			}
+		}
+	}
+
+
+	public Inventory inventory;
+	// might move to player depending on enemy stuff or have each class also have an inventory class inheriting this inventory
+	[System.Serializable]
+	public class Inventory {
+		public int selected;
+		public bool keepItemActive;
+		public Transform itemLocation;
+		
+		public List<Item> items = new List<Item>();
+		
+		public void equipItems(Character player, GameObject[] abilities) {
+			foreach (GameObject item in abilities) {
+				Item newItem = (Instantiate(item) as GameObject).GetComponent<Item>();
+				newItem.transform.SetParent(itemLocation, false);
+				newItem.player = player;
+				items.Add(newItem);
+			}
+				
+			selected = 0;
+			keepItemActive = false;
+		}
+		
+		public void equipItems(Character player) {
+			items.Clear ();
+			items.AddRange(itemLocation.GetComponentsInChildren<Item>());
+
+			if (items.Count == 0) {
+				Debug.LogWarning(player.gameObject.name + " does not have any abilities in the item slot.");
+			}
+
+			foreach (Item item in items) {
+				item.player = player;
+			}
+			
+			selected = 0;
+			keepItemActive = false;
+		}
+
+		public void cycItems() {
+			ToggleItem isToggle = items[selected].GetComponent<ToggleItem>();
+			if (isToggle) {
+				isToggle.deactivateItem();
+			}
+			selected = (selected + 1)%items.Count;
+		}
+	}
 
 	// Animation variables
 	public Animator animator;
@@ -94,27 +164,31 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public string weapTypeName;
 	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
 
-	public GameObject data;
-	
-	protected virtual void setChest(){
-		data = GameObject.Find("DataChest");
-	}
-	
-	// Use this for initialization
-	protected virtual void Start () {
+	protected virtual void Awake() {
+		// enemy = Types.GetType ("Dagger", "Assembly-CSharp"));
+		// opposition = "Player";
+		opposition = Type.GetType ("Player");
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
 		isDead = false;
 		freeAnim = true;
 		setInitValues();
-		gear.equipItems(this);
-		inventory.equipItems(this);
-		setAnimHash();
+	}
+
+	// Use this for initialization
+	protected virtual void Start () {
+
 	}
 	
 	protected virtual void setInitValues() {
-		setChest();
+
+	}
+
+	public virtual void equipTest(GameObject[] equip, GameObject[] abilities) {
+		gear.equipGear(this, opposition,equip);
+		inventory.equipItems(this, abilities);
+		setAnimHash();
 	}
 
 	// Gets hash code for animations (Faster than using string name when running)
@@ -159,41 +233,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	//---------------------------------//
 
 	public virtual void actionCommands() {
-		// Invokes an action/animation
-		if (actable) {
-			if(Input.GetKeyDown(controls.attack)) {
-				animator.SetBool("Charging", true);
-				gear.weapon.initAttack();
-				gear.weapon.initAttack();
-			} else if(Input.GetKeyDown (controls.secItem)) {
-				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
-					inventory.keepItemActive = true;
-					inventory.items[inventory.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
-				} else {
-					// Play sound for trying to use item on cooldown or items
-					print("Item on Cooldown");
-				}
-			} else if(Input.GetKeyDown (controls.cycItem)) {
-				inventory.cycItems();
-			}
-		// Continues with what is happening
-		} else {
-			
-			if (!Input.GetKey(controls.attack)) {
-				animator.SetBool ("Charging", false);
-			}
-			/*else if (animSteInfo.nameHash == rollHash) { for later
-			}
-			*/
-		}
 
-
-		if (Input.GetKeyUp (controls.secItem))  {
-			if (inventory.items.Count > 0) {
-				inventory.keepItemActive = false;
-				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
-			}
-		}
 	}
 
 	// Constant animation updates (Main loop for characters movement/actions)
@@ -251,9 +291,21 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	// Attack Interface Implementation //
 	//---------------------------------//
 
-	// If using a basic attack, this will do checks (such as charging an attack)
+	// Since animations are on the characters, we will use the attack methods to turn collisions on and off
 	public virtual void attacks() {
-		// gear.weapon.attack ();
+
+	}
+
+	public virtual void attackStart() {
+		gear.weapon.collideOn ();
+	}
+
+	public virtual void attackEnd() {
+		gear.weapon.collideOff ();
+	}
+
+	public virtual void specialAttack() {
+		gear.weapon.specialAttack ();
 	}
 	
 	//---------------------------------//
@@ -266,7 +318,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	
 	public virtual void damage(int dmgTaken, Character striker) {
 		if (!invincible) {
-			Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(facing, transform.position, striker.transform.position)), 1, 100000);
+			Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 		
 			stats.health -= dmgTaken;
 			
@@ -342,7 +394,7 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	// Force Interface Implementation //
 	//--------------------------------//
 	
-	// The duration are essentially stun, expand on these later
+	// The duration are essentiall y stun, expand on these later
 	public virtual void pull(float pullDuration) {
 		stun(pullDuration);
 	}

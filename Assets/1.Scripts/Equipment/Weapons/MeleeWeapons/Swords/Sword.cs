@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class Sword : MeleeWeapons {
+
+	public GameObject shockwave;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -16,7 +19,7 @@ public class Sword : MeleeWeapons {
 		stats.weapTypeName = "sword";
 		stats.atkSpeed = 1.0f;
 		stats.damage = 4 + user.GetComponent<Character>().stats.strength;
-		
+
 		stats.maxChgTime = 2.0f;
 
 		stats.chgLevels = 0.4f;
@@ -29,5 +32,10 @@ public class Sword : MeleeWeapons {
 
 	public override void initAttack() {
 		base.initAttack();
+	}
+
+	public override void specialAttack() {
+		GameObject wave = (GameObject)Instantiate(shockwave, user.transform.position, user.transform.rotation);
+		wave.GetComponent<Shockwave>().setInitValues(user, opposition, stats.damage + stats.chgDamage);
 	}
 }

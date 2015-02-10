@@ -13,7 +13,7 @@ public class RangedWeapons : Weapons {
 	protected float variance;
 	protected float kick;
 	
-	protected GameObject bullet;
+	protected Projectile bullet;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -22,6 +22,12 @@ public class RangedWeapons : Weapons {
 
 	protected override void setInitValues() {
 		base.setInitValues();
+	}
+
+	public override void collideOn() {
+	}
+	
+	public override void collideOff() {
 	}
 
 	public override void initAttack() {
@@ -70,5 +76,10 @@ public class RangedWeapons : Weapons {
 		particles.Stop();
 		
 		user.animator.speed = 1.0f;
+	}
+
+	protected void fireProjectile() {
+		Projectile newBullet = ((GameObject)Instantiate(projectile, user.transform.position, spray)).GetComponent<Projectile>();
+		newBullet.setInitValues(user, opposition, particles.startSpeed);
 	}
 }

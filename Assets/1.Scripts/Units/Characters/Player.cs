@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
 
 [System.Serializable]
 public class Controls {
@@ -18,8 +19,14 @@ public class Player : Character, IMoveable {
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
-	public Transform weapLocation, headLocation, bodyLocation, itemLocation;
-    public string[] loadData;
+
+	public Controls controls;
+
+	protected override void Awake() {
+		base.Awake();
+		opposition = Type.GetType("Enemy");
+	}
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -68,6 +75,59 @@ public class Player : Character, IMoveable {
 		}
 	}
 
+	//---------------------------------//
+	// Action interface implementation //
+	//---------------------------------//
+	
+	public override void actionCommands() {
+		// Invokes an action/animation
+		if (actable) {
+			if(Input.GetKeyDown(controls.attack)) {
+				animator.SetBool("Charging", true);
+				gear.weapon.initAttack();
+				gear.weapon.initAttack();
+			} else if(Input.GetKeyDown (controls.secItem)) {
+				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
+					inventory.keepItemActive = true;
+					inventory.items[inventory.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
+				} else {
+					// Play sound for trying to use item on cooldown or items
+					print("Item on Cooldown");
+				}
+			} else if(Input.GetKeyDown (controls.cycItem)) {
+				inventory.cycItems();
+			}
+			// Continues with what is happening
+		} else {
+			
+			if (!Input.GetKey(controls.attack)) {
+				animator.SetBool ("Charging", false);
+			}
+			/*else if (animSteInfo.nameHash == rollHash) { for later
+			}
+			*/
+		}
+		
+		
+		if (Input.GetKeyUp (controls.secItem))  {
+			if (inventory.items.Count > 0) {
+				inventory.keepItemActive = false;
+				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
+			}
+		}
+	}
+	
+	// Constant animation updates (Main loop for characters movement/actions)
+	public override void animationUpdate() {
+		if (attacking) {
+			attackAnimation();
+		} else {
+			movementAnimation();
+		}
+	}
+	
+	//-------------------------------------------//
+
 	//-----------------------------------//
 	// Movement interface implementation //
 	//-----------------------------------//
@@ -110,61 +170,6 @@ public class Player : Character, IMoveable {
 			// If we trash the rigidbody later, we won't need this
 			rigidbody.velocity = Vector3.zero;
 		}
-		if(Input.GetKeyDown(KeyCode.Space)){
-		    loadFromText();
-			/*equipPiece("W0");
-			equipPiece("C0");
-			equipPiece("H1");
-			equipPiece("I0");
-			equipPiece("I1");
-			equipPiece("I2");
-			System.IO.File.WriteAllText(path,System.String.Format("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n",name,"W0","C0","H1","I0","I1","I2"));*/
-		}
-		if(Input.GetKeyDown(KeyCode.M)){
-			saveToText();
-		}
-	}
-	public virtual void saveToText(){
-		loadData[0]=name;
-		System.IO.File.WriteAllLines(path,loadData);
-	}
-	public virtual void loadFromText(){
-		/*string[] */loadData = System.IO.File.ReadAllLines(path);
-		for(int i = 0; i<loadData.Length; i++){
-			if(i==0){//First line is name
-				name = loadData[i];
-			}else{//Rest of lines are things to equip
-				equipPiece(loadData[i]);
-			}
-		}
-	}
-	//Item type first char, number in array, second char++
-	public virtual void equipPiece(System.String code){
-		int index = (int)(code[1]-'0');
-		if(code[0] == ('C')){
-		   Quaternion butt = Quaternion.Euler(new Vector3(bodyLocation.eulerAngles.x+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.x,bodyLocation.eulerAngles.y+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.y,bodyLocation.eulerAngles.z+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.z));
-		   gear.bodyArmor = (Armor) Instantiate(data.GetComponent<DataChest>().armory[index],headLocation.position,butt); //data.GetComponent<DataChest>().weaponry[1].transform.position+
-		   gear.bodyArmor.transform.parent = bodyLocation.transform;
-		   gear.bodyArmor.equip(gameObject.GetComponent<Character>());
-		}else if(code[0] == ('H')){
-		   //Quaternion butt = Quaternion.Euler(new Vector3(headLocation.eulerAngles.x+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.x,headLocation.eulerAngles.y+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.y,headLocation.eulerAngles.z+data.GetComponent<DataChest>().armory[index].transform.eulerAngles.z));
-		   gear.helmet = (Armor) Instantiate(data.GetComponent<DataChest>().armory[index],headLocation.position,transform.rotation); //data.GetComponent<DataChest>().weaponry[1].transform.position+
-		   gear.helmet.transform.parent = headLocation.transform;
-		   gear.helmet.equip(gameObject.GetComponent<Character>());
-		}else if(code[0] == ('W')){
-		   
-		   Quaternion butt = Quaternion.Euler(new Vector3(weapLocation.eulerAngles.x+data.GetComponent<DataChest>().weaponry[index].transform.eulerAngles.x,weapLocation.eulerAngles.y+data.GetComponent<DataChest>().weaponry[index].transform.eulerAngles.y,weapLocation.eulerAngles.z+data.GetComponent<DataChest>().weaponry[index].transform.eulerAngles.z));
-		   gear.weapon = (Weapons) Instantiate(data.GetComponent<DataChest>().weaponry[index],weapLocation.position,butt); //data.GetComponent<DataChest>().weaponry[1].transform.position+
-		   gear.weapon.transform.parent = weapLocation.transform;
-		   gear.weapon.equip(gameObject.GetComponent<Character>());
-		}else if(code[0] == ('I')){
-		   Quaternion butt = Quaternion.Euler(new Vector3(itemLocation.eulerAngles.x+data.GetComponent<DataChest>().inventory[index].transform.eulerAngles.x,itemLocation.eulerAngles.y+data.GetComponent<DataChest>().inventory[index].transform.eulerAngles.y,itemLocation.eulerAngles.z+data.GetComponent<DataChest>().inventory[index].transform.eulerAngles.z));
-		   inventory.items.Add((Item) Instantiate(data.GetComponent<DataChest>().inventory[index],itemLocation.position,butt)); //data.GetComponent<DataChest>().weaponry[1].transform.position+
-		   inventory.items[inventory.items.Count-1].transform.parent = itemLocation.transform;
-		   inventory.equipItems(gameObject.GetComponent<Character>());
-		}else{
-			Debug.Log("You fucked up, bitch");
-		}
 	}
 	//-------------------------------------//
 
@@ -174,7 +179,7 @@ public class Player : Character, IMoveable {
 	
 	public override void damage(int dmgTaken, Character striker) {
 		if (!invincible) {
-			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(facing, transform.position, striker.transform.position)), 1, 100000);
+			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 		
 			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);

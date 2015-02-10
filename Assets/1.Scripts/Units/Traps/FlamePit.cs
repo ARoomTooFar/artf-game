@@ -3,31 +3,21 @@ using System.Collections;
 
 public class FlamePit : Traps {
 
-	private bool dealDamage;
-	private float lastDmgTime;
+	// protected delegate void FireDelegate(Character enemy);
 
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
-		dealDamage = false;
-		lastDmgTime = 0.0f;
 	}
 
 	protected override void setInitValues() {
 		base.setInitValues ();
+
 		stats.damage = 1;
 	}
 
 	protected override void FixedUpdate() {
 		base.FixedUpdate();
-
-		// Placed here for consistent damage
-		if (Time.time - lastDmgTime >= 0.1f) {
-			dealDamage = true;
-			lastDmgTime = Time.time;
-		} else {
-			dealDamage = false;
-		}
 	}
 
 	// Update is called once per framea
@@ -35,10 +25,27 @@ public class FlamePit : Traps {
 		base.Update ();
 	}
 
-	void OnTriggerStay(Collider other) {
-		IDamageable<int, Vector3> component = (IDamageable<int, Vector3>) other.GetComponent( typeof(IDamageable<int, Vector3>) );
-		if (dealDamage && component != null) {
-			component.damage (stats.damage);
+	protected virtual void inFire(Character enemy) {
+		if (enemy && enemy.collider.bounds.Intersects(collider.bounds)) {
+			enemy.damage (stats.damage);
+			StartCoroutine(fireTiming(enemy, 0.3f));
+		}
+	}
+
+	protected IEnumerator fireTiming(Character enemy, float duration) {
+		while (duration > 0) {
+			duration -= Time.deltaTime;
+			yield return null;
+		}
+		inFire(enemy);
+	}
+
+	void OnTriggerEnter(Collider other) {
+		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
+		Character enemy = other.GetComponent<Character>();
+		if (component != null && enemy != null) {
+			enemy.damage (stats.damage);
+			StartCoroutine(fireTiming(enemy, 0.3f));
 		}
 	}
 }
