@@ -36,6 +36,7 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 		testDmg = 0;
 		testable = true;
 	}
+	//Set cooldown bars to current items. 
 	void ItemCooldowns(){
 		for(int i = 0; i < inventory.items.Count; i++){
 			inventory.items[i].cdBar = coolDowns[i];
@@ -53,6 +54,7 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 			testable = false;
 		}
 		hpBar.max = stats.maxHealth;
+		//greyBar.max = stats.maxHealth;
 		hpBar.current = stats.health;
 		if(stats.health <= 0){
 			isDead = true;
@@ -259,7 +261,7 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 	}
 	private IEnumerator Wait(float duration){
 		for (float timer = 0; timer < duration; timer += Time.deltaTime){
-			testable = true;
+			//testable = true;
 			yield return 0;
 		}
 	}

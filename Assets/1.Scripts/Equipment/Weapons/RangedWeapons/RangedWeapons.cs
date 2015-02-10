@@ -56,7 +56,6 @@ public class RangedWeapons : Weapons {
 		print("Normal Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
 		StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
-		ammoBar.current = currAmmo;
 		StartCoroutine(atkFinish());
 	}
 
@@ -64,7 +63,6 @@ public class RangedWeapons : Weapons {
 		print("Charged Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", true);
 		StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
-		ammoBar.current = currAmmo;
 		StartCoroutine(atkFinish());
 	}
 
@@ -91,14 +89,22 @@ public class RangedWeapons : Weapons {
 		}
 	}
 	protected virtual IEnumerator loadAmmo(){
-		yield return StartCoroutine(loadWait(loadSpeed));
-		if(reload){
-			currAmmo = maxAmmo;
-			ammoBar.active = 1;
-			ammoBar.max = maxAmmo;
-			ammoBar.current = currAmmo;
-			reload = false;
+		if(ammoBar != null){
+			yield return StartCoroutine(loadWait(loadSpeed));
+			if(reload){
+				currAmmo = maxAmmo;
+				ammoBar.active = 1;
+				ammoBar.max = maxAmmo;
+				ammoBar.current = currAmmo;
+				reload = false;
+			}
 		}
+        else{
+			yield return StartCoroutine(Wait(loadSpeed));
+			if(reload){
+				reload = false;
+			}
+		}			
 	}
 
 	protected override IEnumerator atkFinish() {
@@ -106,7 +112,9 @@ public class RangedWeapons : Weapons {
 			yield return null;
 		}
 		particles.Stop();
-		ammoBar.current = currAmmo;
+		if(ammoBar != null){
+			ammoBar.current = currAmmo;
+		}
 		user.animator.speed = 1.0f;
 	}
 
