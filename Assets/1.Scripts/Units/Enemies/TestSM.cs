@@ -23,7 +23,6 @@ public class TestSM: Enemy{
 
 	public bool playerInSight = false;
 	public NavMeshAgent nav;
-	public Animator ani;
 	public Vector3 retreatPos;
 	
 	//Private variables for use in player detection
@@ -36,18 +35,19 @@ public class TestSM: Enemy{
 	private StateMachine testStateMachine;
 	
 	//Get players, navmesh and all colliders
-	void Awake ()
+	protected override void Awake ()
 	{
+		base.Awake ();
 		nav = GetComponent<NavMeshAgent> ();
 		col = GetComponent<SphereCollider> ();
-		ani = GetComponent<Animator> ();
+		//animator = GetComponent<Animator> ();
 		players = GameObject.FindGameObjectsWithTag ("Player");
 		retreatPos = transform.position;
 		resetpos = transform.position;
 		patrolWP.Add (transform);
 
 		//Placeholder for more advanced aggro where target may change
-		target = players [1];
+		target = players [0];
 
 		//State machine initialization
 		testStateMachine = new StateMachine ();
@@ -58,7 +58,6 @@ public class TestSM: Enemy{
 	protected override void Update()
 	{
 		base.Update ();
-		Debug.Log (lastSeenPosition.HasValue);
 		if (lastSeenPosition.HasValue && !canSeePlayer (target)) {
 			posTimer += Time.deltaTime;
 		} else if (canSeePlayer (target)){
@@ -69,6 +68,9 @@ public class TestSM: Enemy{
 			posTimer = 0f;
 			lastSeenPosition = null;
 		}
+
+		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+		actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
 		
 
 		testStateMachine.Update ();
@@ -164,19 +166,23 @@ public class TestSM: Enemy{
 	public void Approach(Character a)
 	{
 		TestSM agent = (TestSM)a;
-		agent.ani.SetBool ("Moving", true);
+		agent.animator.SetBool ("Moving", true);
 		agent.nav.destination = agent.giveTarget ().transform.position;
 	}
 
 	public void Attack(Character a)
 	{
 		TestSM agent = (TestSM)a;
-		agent.ani.SetBool ("Moving", false);
+		agent.animator.SetBool ("Moving", false);
 		agent.nav.destination = agent.transform.position;
 		if (!agent.canSeePlayer (agent.giveTarget()))
 			agent.transform.LookAt (agent.giveTarget().transform.position);
-		if (agent.actable)
+		if (agent.actable){
+		/*******************
+			//Should be causing damage, is only triggering attack animation
+		******************/
 			agent.gear.weapon.initAttack();
+		}
 	}
 
 
@@ -184,7 +190,7 @@ public class TestSM: Enemy{
 	public void Search(Character a)
 	{
 		TestSM agent = (TestSM)a;
-		agent.ani.SetBool ("Moving", true);
+		agent.animator.SetBool ("Moving", true);
 		agent.nav.destination = (Vector3)agent.giveLastSeenPos ();
 	}
 
@@ -193,7 +199,7 @@ public class TestSM: Enemy{
 	public void Retreat(Character a)
 	{
 		TestSM agent = (TestSM)a;
-		agent.ani.SetBool ("Moving", true);
+		agent.animator.SetBool ("Moving", true);
 		agent.nav.speed = 5;
 		agent.nav.destination = agent.retreatPos;
 	}
@@ -201,16 +207,14 @@ public class TestSM: Enemy{
 	public void Rest(Character a)
 	{
 		TestSM agent = (TestSM)a;
-//		agent.ani.SetBool ("Moving", false);
+//		agent.animator.SetBool ("Moving", false);
 		Patrol (a);
 	}
 
 	public void Patrol(Character a){
 		nav.speed = patrolSpeed;
 		TestSM agent = (TestSM)a;
-		agent.ani.SetBool ("Moving", true);
-
-		Debug.Log(waypointIndex);
+		agent.animator.SetBool ("Moving", true);
 
 		if (agent.nav.remainingDistance < agent.nav.stoppingDistance) {
 			if(agent.waypointIndex <= agent.patrolWP.Count - 1){
