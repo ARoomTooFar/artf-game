@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Collections;
 
 public class Dagger : MeleeWeapons {
-	
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -18,11 +18,12 @@ public class Dagger : MeleeWeapons {
 		stats.weapType = 1;
 		stats.weapTypeName = "dagger";
 		stats.atkSpeed = 2.0f;
-		stats.damage = (int)(2 + 1f * user.GetComponent<Character>().stats.strength);
+		stats.damage = (int)(2 + 0.75f * user.GetComponent<Character>().stats.strength);
 		
 		stats.maxChgTime = 1.0f;
 
 		stats.chgLevels = 0.2f;
+		stats.timeForChgAttack = 0.2f;
 	}
 	
 	// Update is called once per frame
@@ -32,5 +33,21 @@ public class Dagger : MeleeWeapons {
 	
 	public override void initAttack() {
 		base.initAttack();
+	}
+
+	public override void collideOn () {
+		base.collideOn ();
+		if (stats.chgDamage-- == 0) { // Our multistab counter
+			user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
+		}
+	}
+
+	protected override void onHit(Character enemy) {
+		if (ARTFUtilities.isBehind(user.transform.position, enemy.facing, enemy.transform.position)) {
+			enemy.damage((int)((stats.damage + stats.chgDamage) * 1.5f), user);
+		} else {
+			enemy.damage(stats.damage + stats.chgDamage, user);
+		}
+
 	}
 }

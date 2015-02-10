@@ -15,7 +15,7 @@ public class TestingCharacter : Character, IActionable, IFallable, IAttackable, 
 		isDead = false;
 		freeAnim = true;
 		setInitValues();
-		gear.equipGear(this);
+		gear.equipGear(this, opposition);
 		inventory.equipItems(this);
 		setAnimHash();
 	}

@@ -76,15 +76,13 @@ public class Chainsaw : MeleeWeapons {
 		base.attack ();
 	}
 
-	// Basic attack, a normal swing/stab/fire
 	protected override void basicAttack() {
 		print("Charged Attack; Power level:" + stats.chgDamage);
 		user.animator.SetBool("ChargedAttack", false);
 		this.GetComponent<Collider>().enabled = true;
 		StartCoroutine(atkFinish());
 	}
-	
-	// Charged attack, something unique to the weapon type
+
 	protected override void chargedAttack() {
 		print("Charged Attack; Power level:" + stats.chgDamage);
 		user.animator.SetBool("ChargedAttack", true);
@@ -136,7 +134,7 @@ public class Chainsaw : MeleeWeapons {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		Character enemy = other.GetComponent<Character>();
+		Character enemy = (Character) other.GetComponent(opposition);
 		if (enemy != null && !chained.Contains(enemy)) {
 
 			if (user.animator.GetBool("Charging")) {
@@ -153,7 +151,7 @@ public class Chainsaw : MeleeWeapons {
 	}
 	
 	void OnTriggerExit(Collider other) {
-		Character enemy = other.GetComponent<Character>();
+		Character enemy = (Character) other.GetComponent(opposition);
 		if (enemy != null) {
 			if (chained.Contains(enemy)) {
 				chained.Remove(enemy);

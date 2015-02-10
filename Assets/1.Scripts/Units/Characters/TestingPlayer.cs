@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
 
 [RequireComponent(typeof(Rigidbody))]
 public class TestingPlayer : TestingCharacter, IMoveable {
@@ -14,6 +15,7 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 	
 	// Use this for initialization
 	protected override void Start () {
+		opposition = Type.GetType("Enemy");
 		base.Start ();
 	}
 	

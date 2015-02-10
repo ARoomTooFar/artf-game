@@ -27,7 +27,7 @@ public class MeleeWeapons : Weapons {
 
 	void OnTriggerEnter(Collider other) {
 		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
-		Character enemy = other.GetComponent<Character>();
+		Character enemy = (Character) other.GetComponent(opposition);
 		if( component != null && enemy != null) {
 			onHit(enemy);
 		}
