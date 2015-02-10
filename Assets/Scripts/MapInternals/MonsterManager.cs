@@ -116,6 +116,10 @@ public class MonsterManager {
 		return null;
 	}
 
+	public void moveMonster(Vector3 pos, Vector3 offset){
+		findBlock(pos).move(offset);
+	}
+
 	public string MonsterSaveString {
 		get {
 			string retVal = "";
