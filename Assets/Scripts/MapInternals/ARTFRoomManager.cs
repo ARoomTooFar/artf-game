@@ -43,13 +43,23 @@ public class ARTFRoomManager {
 		return true;
 	}
 
+	/*
+	 * public void removeRoom(Vector3 pos)
+	 * 
+	 * Removes a room at the given position from the stored data
+	 */
 	public void removeRoom(Vector3 pos){
 		ARTFRoom rm = getRoom(pos);
 		removeRoom(rm);
 	}
 
+	/*
+	 * public void removeRoom(ARTFRoom rm)
+	 * 
+	 * Removes the specified room from the stored data
+	 */
 	public void removeRoom(ARTFRoom rm){
-		rm.remove();
+		rm.Remove();
 		this.roomList.Remove(rm);
 	}
 

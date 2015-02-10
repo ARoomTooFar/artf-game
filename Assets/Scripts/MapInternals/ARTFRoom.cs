@@ -196,7 +196,12 @@ public partial class ARTFRoom {
 		return false;
 	}
 
-	public void remove(){
+	/*
+	 * public void Remove()
+	 * 
+	 * Removes all linked blocks from MapData
+	 */
+	public void Remove(){
 		foreach(TerrainBlock blk in this.blocks){
 			MapData.Instance.TerrainBlocks.removeBlock(blk.Position);
 		}
