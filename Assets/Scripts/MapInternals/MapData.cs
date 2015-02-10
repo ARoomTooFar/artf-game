@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class MapData {
 
+	#region PrivateVariables
 	protected MapData() {}
 
 	protected static MapData instance;
@@ -11,6 +12,7 @@ public class MapData {
 	protected SceneryManager sceneryBlocks = new SceneryManager();
 	protected MonsterManager monsterBlocks = new MonsterManager();
 	protected ARTFRoomManager theFarRooms = new ARTFRoomManager();
+	#endregion PrivateVariables
 
 	public static MapData Instance {
 		get {
@@ -72,6 +74,22 @@ public class MapData {
 		return blk.changeType(type);
 	}
 	#endregion TerrainManipulation
+
+	#region MonsterManipulation
+	public void addMonster(string type, Vector3 pos, DIRECTION dir){
+		monsterBlocks.addBlock(new MonsterBlock(type, pos, dir));
+	}
+
+	public void moveMonster(Vector3 pos, Vector3 offset){
+		monsterBlocks.moveMonster(pos, offset);
+	}
+
+	public void removeMonster(Vector3 pos){
+		monsterBlocks.removeBlock(pos);
+	}
+
+	#endregion MonsterManipulation
+
 
 	#region Scenery
 	#region SceneryManipulation
