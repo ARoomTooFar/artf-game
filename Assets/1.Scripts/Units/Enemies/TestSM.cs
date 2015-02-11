@@ -177,6 +177,7 @@ public class TestSM: Enemy{
 		agent.nav.destination = agent.transform.position;
 		if (!agent.canSeePlayer (agent.giveTarget()))
 			agent.transform.LookAt (agent.giveTarget().transform.position);
+
 		if (agent.actable){
 		/*******************
 			//Should be causing damage, is only triggering attack animation

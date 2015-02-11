@@ -22,7 +22,7 @@ public class Enemy : Character, IStunable<float>, IForcible<float> {
 	private EnemySight enemySight;
 
 	protected override void Awake() {
-		opposition = Type.GetType ("Player");
+		opposition = Type.GetType ("TestingPlayer");
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
@@ -53,6 +53,7 @@ public class Enemy : Character, IStunable<float>, IForcible<float> {
 		greyDamage = 0;
 		testDmg = 0;
 		testable = true;
+		setAnimHash ();
 	}
 	
 	// Update is called once per frame
