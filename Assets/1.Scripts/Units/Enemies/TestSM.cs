@@ -1,20 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public class TestSM: Enemy{
 	
 	//Public variables to tweak in inspector
 	public float fov = 110f;
+	public float patrolSpeed = 2f;
+	public float approachSpeed = 5f;
+	public float reactionTime = 5f;			// Time buffer between player sighting and giving chase
+	public float patrolWaitTime = 1f;		// Time wait when reaching the patrol way point
+	public float aggroTimer = 10f;
+	public int waypointIndex = 0;
+	public Vector3 resetpos;
+
+	public GameObject target;
+
+	// Waypoints for patrolling
+	public List<Transform> patrolWP = new List<Transform>();
+
+
 	public bool playerInSight = false;
 	public NavMeshAgent nav;
-	public Animator ani;
 	public Vector3 retreatPos;
 	
 	//Private variables for use in player detection
 	private SphereCollider col;
 	private GameObject[] players;
-	private GameObject target;
+	private AggroTable aggro;
 
 	private Vector3? lastSeenPosition = null;
 	private float posTimer = 0f;
@@ -22,16 +36,20 @@ public class TestSM: Enemy{
 	private StateMachine testStateMachine;
 	
 	//Get players, navmesh and all colliders
-	void Awake ()
+	protected override void Awake ()
 	{
+		base.Awake ();
+		aggro = new AggroTable();
 		nav = GetComponent<NavMeshAgent> ();
 		col = GetComponent<SphereCollider> ();
-		ani = GetComponent<Animator> ();
+		//animator = GetComponent<Animator> ();
 		players = GameObject.FindGameObjectsWithTag ("Player");
 		retreatPos = transform.position;
+		resetpos = transform.position;
+		patrolWP.Add (transform);
 
 		//Placeholder for more advanced aggro where target may change
-		target = players [1];
+
 
 		//State machine initialization
 		testStateMachine = new StateMachine ();
@@ -42,20 +60,28 @@ public class TestSM: Enemy{
 	protected override void Update()
 	{
 		base.Update ();
-		Debug.Log (lastSeenPosition.HasValue);
-		if (lastSeenPosition.HasValue && !canSeePlayer (target)) {
+		target = aggro.getTarget ();
+		if (target && lastSeenPosition.HasValue && !canSeePlayer (target)) {
 			posTimer += Time.deltaTime;
-		} else if (canSeePlayer (target)){
+		} else if (target && canSeePlayer (target)){
 			posTimer = 0f;
 		}
-		if(posTimer > 10f)
+		if(posTimer > aggroTimer)
 		{
 			posTimer = 0f;
 			lastSeenPosition = null;
 		}
+
+		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+		actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
 		
 
 		testStateMachine.Update ();
+	}
+
+	public override void damage(int dmgTaken, Character striker) {
+		base.damage(dmgTaken, striker);
+		aggro.add (striker.gameObject, dmgTaken);
 	}
 
 
@@ -114,6 +140,7 @@ public class TestSM: Enemy{
 
 	public bool isApproaching(Character a)
 	{
+		nav.speed = approachSpeed;
 		TestSM agent = (TestSM)a;
 		return agent.distanceToPlayer(agent.giveTarget()) < 500f 
 			&& agent.distanceToPlayer(agent.giveTarget()) >= 8.5f && agent.canSeePlayer (agent.giveTarget());
@@ -147,19 +174,24 @@ public class TestSM: Enemy{
 	public void Approach(Character a)
 	{
 		TestSM agent = (TestSM)a;
-		agent.ani.SetBool ("Moving", true);
+		agent.animator.SetBool ("Moving", true);
 		agent.nav.destination = agent.giveTarget ().transform.position;
 	}
 
 	public void Attack(Character a)
 	{
 		TestSM agent = (TestSM)a;
-		agent.ani.SetBool ("Moving", false);
+		agent.animator.SetBool ("Moving", false);
 		agent.nav.destination = agent.transform.position;
 		if (!agent.canSeePlayer (agent.giveTarget()))
 			agent.transform.LookAt (agent.giveTarget().transform.position);
-		if (agent.actable)
+
+		if (agent.actable){
+		/*******************
+			//Should be causing damage, is only triggering attack animation
+		******************/
 			agent.gear.weapon.initAttack();
+		}
 	}
 
 
@@ -167,7 +199,7 @@ public class TestSM: Enemy{
 	public void Search(Character a)
 	{
 		TestSM agent = (TestSM)a;
-		agent.ani.SetBool ("Moving", true);
+		agent.animator.SetBool ("Moving", true);
 		agent.nav.destination = (Vector3)agent.giveLastSeenPos ();
 	}
 
@@ -176,7 +208,7 @@ public class TestSM: Enemy{
 	public void Retreat(Character a)
 	{
 		TestSM agent = (TestSM)a;
-		agent.ani.SetBool ("Moving", true);
+		agent.animator.SetBool ("Moving", true);
 		agent.nav.speed = 5;
 		agent.nav.destination = agent.retreatPos;
 	}
@@ -184,8 +216,25 @@ public class TestSM: Enemy{
 	public void Rest(Character a)
 	{
 		TestSM agent = (TestSM)a;
-		agent.ani.SetBool ("Moving", false);
-		agent.nav.Stop ();
+//		agent.animator.SetBool ("Moving", false);
+		Patrol (a);
+	}
+
+	public void Patrol(Character a){
+		nav.speed = patrolSpeed;
+		TestSM agent = (TestSM)a;
+		agent.animator.SetBool ("Moving", true);
+
+		if (agent.nav.remainingDistance < agent.nav.stoppingDistance) {
+			if(agent.waypointIndex <= agent.patrolWP.Count - 1){
+				agent.waypointIndex++;
+
+			}
+			else agent.waypointIndex = 0;
+
+		}
+
+		agent.nav.destination = agent.patrolWP[waypointIndex].position;
 	}
 
 	public bool canSeePlayer(GameObject p)
@@ -203,6 +252,7 @@ public class TestSM: Enemy{
 				
 					if (hit.collider.gameObject == p) 
 					{
+						aggro.add(p,1);
 						lastSeenPosition = p.transform.position;
 						return true;
 					
@@ -216,6 +266,8 @@ public class TestSM: Enemy{
 
 	public float distanceToPlayer(GameObject p)
 	{
+		if (p == null)
+			return 0.0f;
 		Vector3 distance = p.transform.position - transform.position;
 		return distance.sqrMagnitude;
 	}
