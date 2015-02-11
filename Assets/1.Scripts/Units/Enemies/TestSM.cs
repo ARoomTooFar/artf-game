@@ -15,7 +15,7 @@ public class TestSM: Enemy{
 	public int waypointIndex = 0;
 	public Vector3 resetpos;
 
-	private GameObject target;
+	public GameObject target;
 
 	// Waypoints for patrolling
 	public List<Transform> patrolWP = new List<Transform>();
@@ -28,6 +28,7 @@ public class TestSM: Enemy{
 	//Private variables for use in player detection
 	private SphereCollider col;
 	private GameObject[] players;
+	private AggroTable aggro;
 
 	private Vector3? lastSeenPosition = null;
 	private float posTimer = 0f;
@@ -38,6 +39,7 @@ public class TestSM: Enemy{
 	protected override void Awake ()
 	{
 		base.Awake ();
+		aggro = new AggroTable();
 		nav = GetComponent<NavMeshAgent> ();
 		col = GetComponent<SphereCollider> ();
 		//animator = GetComponent<Animator> ();
@@ -47,7 +49,7 @@ public class TestSM: Enemy{
 		patrolWP.Add (transform);
 
 		//Placeholder for more advanced aggro where target may change
-		target = players [0];
+
 
 		//State machine initialization
 		testStateMachine = new StateMachine ();
@@ -58,9 +60,10 @@ public class TestSM: Enemy{
 	protected override void Update()
 	{
 		base.Update ();
-		if (lastSeenPosition.HasValue && !canSeePlayer (target)) {
+		target = aggro.getTarget ();
+		if (target && lastSeenPosition.HasValue && !canSeePlayer (target)) {
 			posTimer += Time.deltaTime;
-		} else if (canSeePlayer (target)){
+		} else if (target && canSeePlayer (target)){
 			posTimer = 0f;
 		}
 		if(posTimer > aggroTimer)
@@ -74,6 +77,11 @@ public class TestSM: Enemy{
 		
 
 		testStateMachine.Update ();
+	}
+
+	public override void damage(int dmgTaken, Character striker) {
+		base.damage(dmgTaken, striker);
+		aggro.add (striker.gameObject, dmgTaken);
 	}
 
 
@@ -244,6 +252,7 @@ public class TestSM: Enemy{
 				
 					if (hit.collider.gameObject == p) 
 					{
+						aggro.add(p,1);
 						lastSeenPosition = p.transform.position;
 						return true;
 					
@@ -257,6 +266,8 @@ public class TestSM: Enemy{
 
 	public float distanceToPlayer(GameObject p)
 	{
+		if (p == null)
+			return 0.0f;
 		Vector3 distance = p.transform.position - transform.position;
 		return distance.sqrMagnitude;
 	}

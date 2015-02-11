@@ -34,8 +34,13 @@ public class AggroTable
 	private AggroNode tail;
 	public bool testing = false;
 
+	public AggroTable(){
+		head = new AggroNode (null, 0);
+	}
+
 	public void add(GameObject g1, int p1)
 	{
+		Debug.Log ("Adding " + g1 + " with prio " + p1);
 		AggroNode n = new AggroNode (g1, p1);
 
 		AggroNode runner = head;
@@ -45,7 +50,14 @@ public class AggroTable
 			runner = runner.r;
 			if (g1 == temp.getObj ())
 			{
-				deleteNode (temp);
+				if (p1 > temp.getPrio ())
+				{
+					deleteNode (temp);
+				}
+				else
+				{
+					return;
+				}
 			}
 		}
 
