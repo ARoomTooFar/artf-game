@@ -1,6 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.IO; 
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary; 
+using System.Runtime.Serialization;
+using System.Reflection;
+using System.Text;
+using System.Linq;
 
 public class Output_TileMap : MonoBehaviour {
 	Input_TileMap input_tileMap;
@@ -44,6 +53,14 @@ public class Output_TileMap : MonoBehaviour {
 
 //		Debug.Log (name + " at " + position);
 		GameObject temp = Instantiate (Resources.Load(name), position, Quaternion.Euler(rotation)) as GameObject;
+
+		//attempt at loading prefab with its default position. doesn't work.
+//		GameObject temps = Resources.Load(name) as GameObject;
+//		Vector3 prefabPos = temps.transform.position;
+//		prefabPos.x = position.x;
+//		prefabPos.z = position.z;
+//		GameObject temp = Instantiate (Resources.Load(name), prefabPos, Quaternion.Euler(rotation)) as GameObject;
+
 		temp.transform.parent = itemObjects;
 		temp.name = itemClass.makeName(name);
 		
@@ -53,13 +70,51 @@ public class Output_TileMap : MonoBehaviour {
 		itemClass.addToItemList(temp.name, position, rotation);
 	}
 
-	public void fillInRoom(HashSet<Vector3> st){
+	//fill in selected tiles with floor tiles
+	public void fillInRoom(HashSet<Vector3> st, float firstCornerX, float firstCornerZ, float secondCornerX, float secondCornerZ){
+
+
 		foreach(Vector3 pos in st){
 			Vector3 rot = new Vector3(0f, 0f, 0f);
-			string name = "Prefabs/floortile";
-			Debug.Log ("itemlist length: " + itemClass.getItemListLength());
-			if(!itemClass.itemOnPlace(name, pos)){
-				instantiateItemObject(name, pos, rot);
+			string floortile = "Prefabs/floortile";
+			string walltile = "Prefabs/walltile";
+
+			//if we're on an edge of the selected box
+			if((pos.x == firstCornerX || pos.x == secondCornerX
+			   || pos.z == firstCornerZ || pos.z == secondCornerZ)){
+
+				//if there's no wall or floor tiles there
+				if((!itemClass.itemOnPlace(walltile, pos) && !itemClass.itemOnPlace(floortile, pos))){
+
+					//instantiate a wall tile
+					instantiateItemObject(walltile, pos, rot);
+				}
+
+
+			//if we're not on an edge (i.e. the center area)
+			}else if(!itemClass.itemOnPlace(floortile, pos)/* && !itemClass.itemOnPlace(walltile, pos)*/){
+
+				//if there's a wall tile there
+				if(itemClass.itemOnPlace(walltile, pos)){
+
+					//find item in itemList and remove it (the data entry for it)
+					for (int i = 0; i < itemClass.getItemList().Count; i++) {
+						if (itemClass.getItemList()[i].x == pos.x
+						    && itemClass.getItemList()[i].z == pos.z
+						    && itemClass.getItemList()[i].y == pos.y) {
+							string s = itemClass.getItemList()[i].item;
+							itemClass.getItemList().Remove (itemClass.getItemList()[i]);
+
+							//find list in itemObject list and remove it (the prefab for it)
+							foreach (Transform child in itemObjects) {
+								if(String.Equals(child.transform.name, s)){
+									GameObject.Destroy (child.gameObject);
+								}
+							}
+						}
+					}
+				}
+				instantiateItemObject(floortile, pos, rot);
 			}
 		}
 	}

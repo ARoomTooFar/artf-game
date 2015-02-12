@@ -117,25 +117,31 @@ public class ItemClass
 		return itemList.Count;
 	}
 
+	//check if an item of a certain type is on a certain tile position
 	public bool itemOnPlace(string name, Vector3 pos){
+
+		//if the itemlist is empty, no need to search
 		if(getItemListLength() == 0){
 			return false;
 		}
-//		string placedObjectType = name.Substring (0, name.IndexOf ('_'));
+
 		string prefabType;
-		string placedObjectType = name;
 
 		for (int i = 0; i < itemList.Count; i++) {
 			prefabType = itemList[i].item.Substring (0, itemList[i].item.IndexOf ('_'));
 
-			Debug.Log ("comparing " + prefabType + " and " + placedObjectType);
-			if (String.Equals (prefabType, placedObjectType)
+			//if itemlist entry is type we're looking for, and if
+			//it occupies the position we're checking against
+			Debug.Log ("comaring " + prefabType + " with " + name );
+			if (String.Equals (prefabType, name)
 			    && itemList[i].x == pos.x
 			    && itemList[i].y == pos.y
 			    && itemList[i].z == pos.z) {
 				return true;
 			}
 		}
+
+		//if no match was found, the tile doesn't have the thing on it
 		return false;
 	}
 

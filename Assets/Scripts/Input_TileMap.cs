@@ -68,7 +68,7 @@ public class Input_TileMap : MonoBehaviour
 		int x = Mathf.RoundToInt (xf / tileMap.tileSize);
 		int z = Mathf.RoundToInt (zf / tileMap.tileSize);
 		
-		/* check whether mouse is pressed AND the tile hasn't been selected */
+		/* check whether mouse is pressed AND the tile hasn't been selected AND weather we're over a screen UI element */
 		if (Input.GetMouseButtonDown (0) && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
 			
 			/*Control functionality: selects tiles and adds to hashset */
@@ -95,12 +95,14 @@ public class Input_TileMap : MonoBehaviour
 					Vector3 vec = new Vector3 (x, 0, z);
 					Vector3 max = vec.getMaxVals (shiftOrigin);
 					Vector3 min = vec.getMinVals (shiftOrigin);
+//					Debug.Log (shiftOrigin + " to " + x + ", " + z);
 					for (int xx = (int) min.x; xx <= (int) max.x; xx++) {
 						for (int zz = (int) min.z; zz <= (int) max.z; zz++) {
 							selectedTiles.Add (new Vector3 (xx, 0, zz));
 						}
 					}
-					output_tileMap.fillInRoom(selectedTiles);
+					//fill in selected area with a room
+					output_tileMap.fillInRoom(selectedTiles, shiftOrigin.x, shiftOrigin.z, x, z);
 				}
 				/*Normal click functionality: Deselect all selected, select target */	
 			} else {
