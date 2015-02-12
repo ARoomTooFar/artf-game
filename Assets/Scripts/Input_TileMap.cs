@@ -100,6 +100,7 @@ public class Input_TileMap : MonoBehaviour
 							selectedTiles.Add (new Vector3 (xx, 0, zz));
 						}
 					}
+					output_tileMap.fillInRoom(selectedTiles);
 				}
 				/*Normal click functionality: Deselect all selected, select target */	
 			} else {

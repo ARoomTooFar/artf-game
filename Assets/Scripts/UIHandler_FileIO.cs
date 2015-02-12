@@ -77,7 +77,7 @@ public class UIHandler_FileIO : MonoBehaviour
 
 
 			//give error: SecurityException: No valid crossdomain policy available to allow access
-			string ulLevelData = serv.newLevel(123, "Level Name", tmp);
+//			string ulLevelData = serv.newLevel(123, "Level Name", tmp);
 //			Debug.Log(ulLevelData);
 
 //			string levelData = bf.Serialize (file, itemClass.getItemList ());

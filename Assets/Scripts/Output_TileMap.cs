@@ -41,7 +41,8 @@ public class Output_TileMap : MonoBehaviour {
 	public void instantiateItemObject(string name, Vector3 position, Vector3 rotation){
 		position.x = Mathf.RoundToInt( position.x / tileMap.tileSize );
 		position.z = Mathf.RoundToInt( position.z / tileMap.tileSize );
-		
+
+//		Debug.Log (name + " at " + position);
 		GameObject temp = Instantiate (Resources.Load(name), position, Quaternion.Euler(rotation)) as GameObject;
 		temp.transform.parent = itemObjects;
 		temp.name = itemClass.makeName(name);
@@ -50,6 +51,17 @@ public class Output_TileMap : MonoBehaviour {
 		(temp.GetComponent("Output_ItemObject") as Output_ItemObject).changeOrientation(rotation);
 
 		itemClass.addToItemList(temp.name, position, rotation);
+	}
+
+	public void fillInRoom(HashSet<Vector3> st){
+		foreach(Vector3 pos in st){
+			Vector3 rot = new Vector3(0f, 0f, 0f);
+			string name = "Prefabs/floortile";
+			Debug.Log ("itemlist length: " + itemClass.getItemListLength());
+			if(!itemClass.itemOnPlace(name, pos)){
+				instantiateItemObject(name, pos, rot);
+			}
+		}
 	}
 
 	//update

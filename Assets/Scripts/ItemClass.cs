@@ -113,6 +113,32 @@ public class ItemClass
 		}
 	}
 
+	public int getItemListLength(){
+		return itemList.Count;
+	}
+
+	public bool itemOnPlace(string name, Vector3 pos){
+		if(getItemListLength() == 0){
+			return false;
+		}
+//		string placedObjectType = name.Substring (0, name.IndexOf ('_'));
+		string prefabType;
+		string placedObjectType = name;
+
+		for (int i = 0; i < itemList.Count; i++) {
+			prefabType = itemList[i].item.Substring (0, itemList[i].item.IndexOf ('_'));
+
+			Debug.Log ("comparing " + prefabType + " and " + placedObjectType);
+			if (String.Equals (prefabType, placedObjectType)
+			    && itemList[i].x == pos.x
+			    && itemList[i].y == pos.y
+			    && itemList[i].z == pos.z) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public string makeName(string s){
 		return s + "_" + nameCounter++;
 	}
