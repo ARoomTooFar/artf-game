@@ -12,9 +12,35 @@ using System.Collections.Generic;
 
 public class levelgui : MonoBehaviour {
 
+	private static gamestate instance;	
 	private string levelName;
 	private string newName = "Player Name";
 
+	GameObject loadGear;
+	GameObject cameras;
+
+	//----------------------------------
+	//levelgui()
+	//----------------------------------
+	//Creates an instance of the gamestate as a gameobject if an instance does not exist
+	//----------------------------------
+	//public static levelgui Instance
+	//{
+	//	get
+	//	{
+	//		if(instance == null)
+	//		{
+	//			instance = new GameObject("levelgui").AddComponent<levelgui>();
+	//		}
+	//		return instance;
+	//	}	
+	//}
+	
+	//Sets the instance to null when the application quits
+	//public void OnApplicationQuit()
+	//{
+	//	instance = null;
+	//}
 
 	// Initialize scene
 	void Start () 
@@ -22,11 +48,15 @@ public class levelgui : MonoBehaviour {
 		levelName = gamestate.Instance.getLevel ();
 		print ("Loaded: " + gamestate.Instance.getLevel ());
 		print ("There are still " + gamestate.Instance.getNumPlayers() + " in list");
-		//finds and relocates the players to a game object called "StartPostion", if they need to be placed in the scene.
-		//GameObject.FindGameObjectWithTag ("Player1").transform.position = GameObject.Find ("StartPosition");
-		//GameObject.FindGameObjectWithTag("Player2").transform.position = GameObject.Find("StartPosition");
-		//GameObject.FindGameObjectWithTag("Player3").transform.position = GameObject.Find("StartPosition");
-		//GameObject.FindGameObjectWithTag("Player4").transform.position = GameObject.Find("StartPosition");
+
+		//resets the spawn of the player in the new scene
+		for(int i = 0; i < gamestate.Instance.getNumPlayers(); i++)
+		{	
+			//gamestate.Instance.players[0] = GameObject.FindGameObjectWithTag("Player1");
+			gamestate.Instance.players[i].transform.position  = new Vector3(0,30,0);
+
+		}
+
 	}
 	
 	//--------------------------------
@@ -83,7 +113,7 @@ public class levelgui : MonoBehaviour {
 				//creates button to move between InventorySelect and LevelSelect
 				if (GUI.Button (new Rect (30, 30, 150, 30), "Game Scene"))
 				{
-					moveToScene ("GameScene");
+					moveToScene ("FirstPlayableScene");
 				}
 				break;
 
@@ -117,8 +147,20 @@ public class levelgui : MonoBehaviour {
 		print("moving to "+ aScene);
 		gamestate.Instance.setLevel(aScene);
 		foreach (Player plr in gamestate.Instance.players) { //preserves all the players in the List of player in the game
+			plr.atStart = false;
+			plr.atEnd = false;
+			plr.isReady = false;
 			DontDestroyOnLoad(plr);
 		}
+		//resets the spawn of the player in the new scene
+		for(int i = 0; i < gamestate.Instance.getNumPlayers(); i++)
+		{	
+			gamestate.Instance.players[i].transform.position  = new Vector3(0,50,0);	
+		}
+		loadGear = GameObject.FindGameObjectWithTag("LoadGear");
+		cameras = GameObject.FindGameObjectWithTag("GameCameras");
+		DontDestroyOnLoad (loadGear);
+		DontDestroyOnLoad (cameras);
 		DontDestroyOnLoad (gamestate.Instance);
 		Application.LoadLevel(aScene);
 	}
@@ -132,7 +174,7 @@ public class levelgui : MonoBehaviour {
 	public void moveToSceneWC(string aScene)
 	{
 		//checks to see if all the players in the game are ready.
-		readyCheck ();
+		//	readyCheck ();
 		//if all the players are ready move to the next scene.
 		if(gamestate.Instance.getPartyReady()){
 			moveToScene(aScene);
@@ -162,43 +204,22 @@ public class levelgui : MonoBehaviour {
 	//-------------------------------
 	//readyCheck()
 	//-------------------------------
-	//Check to see if all the player in the game are ready. If so it sets the party status to ready.
+	//Check to see if all the player in the game are ready. Then moves to the next scene.
 	//-------------------------------
-	public void readyCheck()
+	public void readyCheck(string ascene)
 	{	
-		//gets the number of players from the GSM
-		int numberPlayers = gamestate.Instance.getNumPlayers();
-		int readyCount = 0;
 
-		//checks each player to see if they are ready, if they are it will add to the ready count
-		if(gamestate.Instance.getPlayerReadyStatus(1))
-		{
-			print("Player 1 is ready in check");
-			readyCount ++;
-		}
-		if(gamestate.Instance.getPlayerReadyStatus(2))
-		{
-			print("Player 2 is ready in check");
-			readyCount ++;
-		}
-		if(gamestate.Instance.getPlayerReadyStatus(3))
-		{
-			print("Player 3 is ready in check");
-			readyCount ++;
-		}
-		if(gamestate.Instance.getPlayerReadyStatus(4))
-		{
-			print("Player 4 is ready in check");
-			readyCount ++;
-		}
 
-		//checks to see if the ready count and the player count are the same, if they are then all players are ready.
-		if(readyCount == numberPlayers)
+		//checks every player living player to see if they are in the victory zone, this victory property in the player class
+		//toggled by entering and exiting a zone in the exit portion of the the dungeon.
+		bool ready = gamestate.Instance.getReady();
+		if (ready) 
 		{
-			print ("All players are ready " + readyCount + " / " + numberPlayers + ".");
-			gamestate.Instance.setPartyReady();
-		} else {
-			print ("Not all players are ready " + readyCount + " / " + numberPlayers + ".");
+			print ("The players are ready. Moving on.");
+
+			moveToScene(ascene);
+		}else{
+			print ("The Players are not prepared...");
 		}
 
 	}

@@ -15,7 +15,7 @@ public class gamestate : MonoBehaviour {
 	private static gamestate instance;	
 
 	private string activeLevel;			//This is the level the players are currently on.
-	private string chosenLevel; 		//This is the level the players have chosen to play while in level selection.
+	public string chosenLevel; 		//This is the level the players have chosen to play while in level selection.
 
 	private string username1;			//This is the username for the first player
 	private string password1;			//This is the password for the first player
@@ -42,7 +42,7 @@ public class gamestate : MonoBehaviour {
 	//----------------------------------
 	//gameState()
 	//----------------------------------
-	//Creates an instance of the gamestate as a gameobject if an instance does not exist
+	//Creates an instance of the gamestate as a gameobject if an instance does not exist. Singleton.
 	//----------------------------------
 	public static gamestate Instance
 	{
@@ -233,30 +233,44 @@ public class gamestate : MonoBehaviour {
 
 	public void setPlayerReady(int playerNumber)
 	{
-	
-		if (players != null)
+
+
+		if (gamestate.instance.players != null)
 		{
+
+
 			switch (playerNumber)
 			{
 				case 1:
-					gamestate.instance.players[0].isReady = true;
+					
+						gamestate.instance.players[0].isReady = true;
+					
 					break;
 
 				case 2:
-					gamestate.instance.players[1].isReady = true;
+
+						gamestate.instance.players[1].isReady = true;
+				
 					break;
 
 				case 3:
-					gamestate.instance.players[2].isReady = true;
-					break;
+			
+						gamestate.instance.players[2].isReady = true;
+
+				break;
 
 				case 4:
-					gamestate.instance.players[3].isReady = true;
+
+						gamestate.instance.players[3].isReady = true;
+				
 					break;
+			default:
+				break;
 			}
 		} else {
 			print ("No players to set as ready.");
 		}
+
 	}
 
 	//--------------------------------
@@ -300,6 +314,7 @@ public class gamestate : MonoBehaviour {
 		
 	}
 
+
 	//--------------------------------
 	//setPartyReady()
 	//--------------------------------
@@ -307,7 +322,8 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	public void setPartyReady()
 	{
-		print ("The party is set to ready.");
+	
+		print ("the party is set to ready");
 		gamestate.instance.partyReady = true;
 	}
 
@@ -393,6 +409,38 @@ public class gamestate : MonoBehaviour {
 			return false;
 		}
 	}
+
+	//--------------------------------
+	//getReady()
+	//--------------------------------
+	//checks to see if all the players are ready.
+	//--------------------------------
+	public bool getReady()
+	{
+		int ready = 0;
+		//checks the player class for each player in list of active players in the game to see if they are ready.
+		foreach (Player plr in gamestate.instance.players) 
+		{
+			if(plr.isReady)
+			{
+				ready++;
+			}
+		}
+		
+		print ("There are " + ready + "players ready.");
+
+		if (ready == gamestate.instance.getNumPlayers ()) {
+			gamestate.instance.partyReady = true;
+			print ("The party is ready");
+		} else {
+			gamestate.instance.partyReady = false;
+			print ("The party is not ready");
+		}
+
+		return gamestate.instance.partyReady;
+	}
+
+
 
 	//--------------------------------
 	//areChicken()
@@ -515,6 +563,7 @@ public class gamestate : MonoBehaviour {
 	
 	public bool getPlayerReadyStatus(int playerNumber)
 	{
+
 		switch (playerNumber)
 		{
 		case 1:
