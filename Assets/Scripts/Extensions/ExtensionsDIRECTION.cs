@@ -37,6 +37,42 @@ public static class ExtensionsDIRECTION
 	public static bool isOrdinal(this DIRECTION dir){
 		return Mathf.Abs((int)dir) == 3 || Mathf.Abs((int)dir) == 4;
 	}
+
+	public static DIRECTION QuarterTurn(this DIRECTION dir, bool goClockwise = true){
+		DIRECTION val;
+
+		switch(dir) {
+		case DIRECTION.North:
+			val = DIRECTION.East;
+			break;
+		case DIRECTION.East:
+			val = DIRECTION.South;
+			break;
+		case DIRECTION.South:
+			val = DIRECTION.West;
+			break;
+		case DIRECTION.West:
+			val = DIRECTION.North;
+			break;
+		case DIRECTION.NorthEast:
+			val = DIRECTION.SouthEast;
+			break;
+		case DIRECTION.SouthEast:
+			val = DIRECTION.SouthWest;
+			break;
+		case DIRECTION.SouthWest:
+			val = DIRECTION.NorthWest;
+			break;
+		case DIRECTION.NorthWest:
+			val = DIRECTION.NorthEast;
+			break;
+		default:
+			val = DIRECTION.NonDirectional;
+			break;
+		}
+
+		return goClockwise ? val : val.Opposite();
+	}
 }
 
 
