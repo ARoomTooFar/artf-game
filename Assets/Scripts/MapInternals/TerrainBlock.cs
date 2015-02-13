@@ -74,6 +74,10 @@ public class TerrainBlock {
 	public string SaveString {
 		get{ return position.toCSV() + "," + orientation.ToString();}
 	}
+
+	public bool Pathable{
+		get{ return blockInfo.Pathable && (scenery == null?true:scenery.BlockInfo.Pathable); }
+	}
 	#endregion Properties
 
 	/*

@@ -128,6 +128,14 @@ public class MonsterManager {
 		rotate(pos, goClockwise);
 	}
 
+	public bool isAddValid(Vector3 pos){
+		TerrainBlock blk = MapData.Instance.TerrainBlocks.find(pos);
+		if(blk == null) {
+			return false;
+		}
+		return blk.Pathable;
+	}
+
 	public string SaveString {
 		get {
 			string retVal = "";
