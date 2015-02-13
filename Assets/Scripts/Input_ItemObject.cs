@@ -70,7 +70,11 @@ public class Input_ItemObject : MonoBehaviour {
 						Vector3 newp = new Vector3 (x * 1.0f, output_itemObject.getPosition().y, z * 1.0f);
 						output_itemObject.changePosition(newp);
 
+						//old way
 						itemClass.modifyItemList(output_itemObject.getName(), output_itemObject.getPosition(), output_itemObject.getRotation());
+
+						//new way
+
 					}
 				}
 			}

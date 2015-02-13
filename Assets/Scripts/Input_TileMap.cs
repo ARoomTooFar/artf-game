@@ -15,6 +15,7 @@ public class Input_TileMap : MonoBehaviour
 	GameObject currentObj;
 
 	static ItemClass itemClass = new ItemClass ();
+	
 
 	void Start ()
 	{
