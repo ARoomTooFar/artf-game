@@ -9,6 +9,7 @@ public class MonsterManager {
 	public MonsterManager() {
 	}
 
+	#region Manipulation
 	/*
 	 * public bool addBlock (MonsterBlock block)
 	 * 
@@ -16,13 +17,9 @@ public class MonsterManager {
 	 * Returns true if successful.
 	 * Returns false if a block already seems to exist in its position.
 	 */
-	public bool add(MonsterBlock block) {
+	public void add(MonsterBlock block) {
 		//attempt to link the input to its neighbors
-		if(!linkTerrain(block)) {
-			//if something goes wrong, 
-			unlinkTerrain(block);
-			return false;
-		}
+		linkTerrain(block);
 		//get the list for the block type
 		List<MonsterBlock> lst = dictionary[block.BlockInfo.BlockID];
 		//create one if needed
@@ -32,33 +29,58 @@ public class MonsterManager {
 		}
 		//add the block to the list
 		lst.Add(block);
-
-		return true;
 	}
 
+	public void move(Vector3 pos, Vector3 offset){
+		find(pos).move(offset);
+	}
+	
+	public void move(MonsterBlock blk, Vector3 offset){
+		blk.move(offset);
+	}
+
+	public void rotate(Vector3 pos, bool goClockwise = true){
+		rotate(pos, goClockwise);
+	}
+	
+	public void rotate(MonsterBlock blk, bool goClockwise = true){
+		blk.rotate(goClockwise);
+	}
+
+	
 	/*
-	 * private bool linkTerrain (SceneryBlock block)
+	 * public bool remove (Vector3 position)
+	 * 
+	 * Remove a block from the map data.
+	 */
+	public void remove(Vector3 position) {
+		remove(find(position));
+	}
+	
+	public void remove(MonsterBlock blk){
+		//unlink neighbors
+		unlinkTerrain(blk);
+		//remove from list
+		dictionary[blk.BlockInfo.BlockID].Remove(blk);
+	}
+
+
+	#endregion Manipulation
+
+
+	#region (un)linkTerrain
+	/*
+	 * private void linkTerrain (MonsterBlock block)
 	 * 
 	 * Gets the adjacent blocks and adds them as neighbors to block.
 	 * Also links block as a neighbor to any adjacent blocks.
-	 * 
-	 * Returns true if successful.
-	 * Returns false if a block already has a neighbor in that position.
 	 */
-	private bool linkTerrain(MonsterBlock block) {
-		TerrainBlock blk = MapData.Instance.TerrainBlocks.find(block.Position);
-		if(blk == null) {
-			return false;
-		}
-		if(!blk.addMonster(block)) {
-			return false;
-		}
-
-		return true;
+	private void linkTerrain(MonsterBlock block) {
+		MapData.Instance.TerrainBlocks.find(block.Position).addMonster(block);
 	}
 
 	/*
-	 * private void unlinkNeighbors(TerrainBlock block)
+	 * private void unlinkTerrain(MonsterBlock block)
 	 * 
 	 * Breaks all neighbor links between block and its list of neighbors.
 	 * 
@@ -69,29 +91,8 @@ public class MonsterManager {
 			blk.removeMonster();
 		}
 	}
+	#endregion (un)linkTerrain
 
-	/*
-	 * public bool removeBlock (Vector3 position)
-	 * 
-	 * Remove a block from the map data.
-	 * 
-	 * returns true if the block wasn't or is no longer part of the data
-	 * returns false if something bad happens
-	 */
-	public bool remove(Vector3 position) {
-		//round position
-		Vector3 intPosition = position.Round();
-		//find block at position
-		MonsterBlock tgtBlock = find(intPosition);
-		if(tgtBlock == null) {
-			//if block doesn't exist, return true
-			return true;
-		}
-		//unlink neighbors
-		unlinkTerrain(tgtBlock);
-		//remove from list
-		return dictionary[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
-	}
 
 	/*
 	 * public TerrainBlock findBlock (Vector3 position)
@@ -100,14 +101,12 @@ public class MonsterManager {
 	 * Returns null if there is no block in that position.
 	 */
 	public MonsterBlock find(Vector3 position) {
-		//round position
-		Vector3 intPosition = position.Round();
 		//for each type of block
 		foreach(KeyValuePair<string, List<MonsterBlock>> kvPair in dictionary) {
 			//check each block
 			foreach(MonsterBlock blk in kvPair.Value) {
 				//return block if position matches
-				if(blk.Position.Equals(intPosition)) {
+				if(blk.Position.Equals(position)) {
 					return blk;
 				}//otherwise continue to next
 			}
@@ -116,25 +115,23 @@ public class MonsterManager {
 		return null;
 	}
 
-	public void move(Vector3 pos, Vector3 offset){
-		find(pos).move(offset);
-	}
 
-	public void rotate(MonsterBlock blk, bool goClockwise = true){
-		blk.rotate(goClockwise);
-	}
 
-	public void rotate(Vector3 pos, bool goClockwise = true){
-		rotate(pos, goClockwise);
-	}
 
+
+
+	#region Validation
 	public bool isAddValid(Vector3 pos){
 		TerrainBlock blk = MapData.Instance.TerrainBlocks.find(pos);
 		if(blk == null) {
 			return false;
 		}
+		if(blk.Monster != null) {
+			return false;
+		}
 		return blk.Pathable;
 	}
+	#endregion Validation
 
 	public string SaveString {
 		get {

@@ -71,12 +71,12 @@ public class MapData {
 		return theFarRooms.doAnyRoomsIntersect(new ARTFRoom(pos1, pos2));
 	}
 
-	public bool isResizeRoomValid(Vector3 oldCorner, Vector3 newCorner){
-		return theFarRooms.isResizeValid(oldCorner, newCorner);
-	}
-
 	public bool isMoveRoomValid(Vector3 pos, Vector3 nPos){
 		return theFarRooms.isMoveValid(pos, nPos);
+	}
+
+	public bool isResizeRoomValid(Vector3 oldCorner, Vector3 newCorner){
+		return theFarRooms.isResizeValid(oldCorner, newCorner);
 	}
 	#endregion RoomValidation
 	#endregion Rooms
@@ -101,12 +101,12 @@ public class MapData {
 		monsterBlocks.move(pos, offset);
 	}
 
-	public void removeMonster(Vector3 pos){
-		monsterBlocks.remove(pos);
-	}
-
 	public void rotateMonster(Vector3 pos, bool goClockwise = true){
 		monsterBlocks.rotate(pos, goClockwise);
+	}
+
+	public void removeMonster(Vector3 pos){
+		monsterBlocks.remove(pos);
 	}
 	#endregion MonsterManipulation
 
@@ -127,12 +127,12 @@ public class MapData {
 		sceneryBlocks.move(pos, offset);
 	}
 
-	public void removeScenery(Vector3 pos){
-		SceneryBlocks.remove(pos);
-	}
-
 	public void rotateScenery(Vector3 pos, bool goClockwise = true){
 		SceneryBlocks.rotate(pos, goClockwise);
+	}
+
+	public void removeScenery(Vector3 pos){
+		SceneryBlocks.remove(pos);
 	}
 	#endregion SceneryManipulation
 
@@ -141,12 +141,12 @@ public class MapData {
 		return isAddSceneryValid(type, position, dir);
 	}
 
-	public bool isRotateSceneryValid(Vector3 postion, bool goClockwise = true){
-		return sceneryBlocks.isRotationValid(postion, goClockwise);
-	}
-
 	public bool isMoveSceneryValid(Vector3 position, Vector3 offset){
 		return sceneryBlocks.isMoveValid(position, offset);
+	}
+
+	public bool isRotateSceneryValid(Vector3 postion, bool goClockwise = true){
+		return sceneryBlocks.isRotationValid(postion, goClockwise);
 	}
 	#endregion SceneryValidation
 	#endregion Scenery

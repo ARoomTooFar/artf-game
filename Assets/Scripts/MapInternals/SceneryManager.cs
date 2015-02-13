@@ -174,7 +174,7 @@ public class SceneryManager {
 	}
 
 	public bool isAddValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North){
-		isBlockValid(new SceneryBlock(type, pos, dir));
+		return isBlockValid(new SceneryBlock(type, pos, dir));
 	}
 
 	public bool isBlockValid(Vector3 pos) {

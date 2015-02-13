@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SelecPoolTest : MonoBehaviour {
 
-	float reps = 1000000;
+	float reps = 100;
 
 	// Use this for initialization
 	void Start () {
@@ -12,7 +12,7 @@ public class SelecPoolTest : MonoBehaviour {
 	}
 
 	void Update(){
-		if(Input.GetButtonDown("Space")) {
+		if(Input.GetButtonDown("Jump")) {
 			SelectionPoolTest();
 		}
 	}
