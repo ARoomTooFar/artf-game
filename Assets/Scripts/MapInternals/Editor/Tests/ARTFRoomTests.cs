@@ -72,7 +72,7 @@ public class ARTFRoomTests : MasterTest{
 		test_ARTFRoom test = new test_ARTFRoom(new Vector3(0, 0, 0), new Vector3(5, 0, 5));
 		Vector3 pos1 = new Vector3(0, 0, 0);
 		Vector3 pos2 = new Vector3(1, 0, 1);
-		Vector3 pos3 = new Vector3(-1, 0, -1);
+		Vector3 pos3 = new Vector3(-1, 0, 3);
 
 		Assert.IsTrue(test.isCorner(pos1));
 		Assert.IsTrue(test.isEdge(pos1));

@@ -251,8 +251,8 @@ public partial class ARTFRoom {
 	 */
 	public bool inRoom(Vector3 pos) {
 		return
-			pos.z >= LLposition.z &&
-			pos.z <= URposition.z &&
+			pos.x >= LLposition.x &&
+			pos.x <= URposition.x &&
 			pos.z >= LLposition.z &&
 			pos.z <= URposition.z;
 	}
