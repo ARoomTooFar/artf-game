@@ -3,23 +3,25 @@ using System.Collections;
 
 public class SelecPoolTest : MonoBehaviour {
 
-	float reps = 100000;
+	float reps = 1000000;
 
 	// Use this for initialization
 	void Start () {
 		SelectionPoolTest();
-		SelectionPoolUnweightedTest();
+		//SelectionPoolUnweightedTest();
 	}
 
 	void Update(){
-
+		if(Input.GetButtonDown("Space")) {
+			SelectionPoolTest();
+		}
 	}
 
 	private void SelectionPoolTest(){
 		SelectionPool<string> pool = new SelectionPool<string>();
 		pool.addItem(new SelectionItem<string>("test1"), 5)
-		.addItem(new SelectionItem<string>("test2"), 4)
-		.addItem(new SelectionItem<string>("test3"), 1);
+			.addItem(new SelectionItem<string>("test3"), 0)
+			.addItem(new SelectionItem<string>("test2"), 5);
 
 		int test1 = 0;
 		int test2 = 0;
@@ -41,8 +43,7 @@ public class SelecPoolTest : MonoBehaviour {
 				break;
 			}
 		}
-
-		print(string.Format("{0}, {1}, {2}", test1 / reps * 100.0, test2 / reps * 100.0, test3 / reps * 100.0));
+		print(string.Format("{0}, {1}, {2}", test1, test2, test3));
 	}
 
 	private void SelectionPoolUnweightedTest(){

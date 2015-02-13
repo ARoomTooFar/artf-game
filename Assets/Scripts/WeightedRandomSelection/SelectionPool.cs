@@ -36,11 +36,13 @@ public class SelectionPool<T> : ISelectionPool<T> {
 	}
 
 	public ISelectionItem<T> getItem(){
-		float rand = UnityEngine.Random.value * totalWeight;
-
+		float rand = 1;
+		while(rand == 1) {
+			rand = UnityEngine.Random.value * totalWeight;
+		}
 		ISelectionItem<T> retVal = null;
 		foreach(KeyValuePair<ISelectionItem<T>, float> kvp in pool) {
-			if(rand <= kvp.Value){
+			if(rand < kvp.Value){
 				retVal = kvp.Key;
 				break;
 			}
