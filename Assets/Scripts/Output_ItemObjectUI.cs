@@ -140,16 +140,28 @@ public class Output_ItemObjectUI : MonoBehaviour
 
 	//This will select or deselect all objects
 	public void selectOrDeselectAll() {
-		GameObject obj = GameObject.Find ("ItemObjects");
-		Components[] children = obj.GetComponentsInChildren ();
+		GameObject ObjectUI = gameObject;
+		GameObject prefabd1 = ObjectUI.GetComponentInParent<Transform> ().gameObject;
+		GameObject itemObjects = prefabd1.GetComponentInParent<Transform> ().gameObject;
+		Transform[] allPrefabs = itemObjects.GetComponentsInChildren<Transform> ();
+		foreach (Transform trans in allPrefabs) {
+			GameObject obj = trans.gameObject;
+			print (obj.GetType());
+			Output_ItemObjectUI objui = obj.GetComponent<Output_ItemObjectUI>();
+			objui.toggleItemObjectUI();
+		}
+		/*	GameObject obj = GameObject.Find ("ItemObjects") as GameObject;
+		Transform[] children = obj.GetComponentsInChildren<Transform> ();
+		//Component[] children = obj.GetComponentsInChildren ();
+		//GameObject[] children = obj.GetComponentsInChildren ();
 		Debug.Log ("stuff");
-		foreach(Component child in children) {
-			if(child == child.GetComponentInParent("Output_ItemObjectUI")){
-				child.toggleItemObjectUI();
-			}
+		foreach(Transform child in children) {
+			GameObject childObj = child.gameObject;
+			childObj.GetComponent<Output_ItemObjectUI>().toggleItemObjectUI();
+
 		} 
 
-	}
+	*/}
 
 	/*
 	 * for each child of ItemObjects

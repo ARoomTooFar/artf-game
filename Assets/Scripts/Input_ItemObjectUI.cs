@@ -34,6 +34,7 @@ public class Input_ItemObjectUI : MonoBehaviour {
 	bool rayHit = false;
 
 	void Start () {
+		Debug.Log("HERP");
 		output_itemObject = transform.parent.GetComponent("Output_ItemObject") as Output_ItemObject;
 
 //		Button_UpArrow_Attack = transform.Find("ToggledItems/MonsterUpgrade/Attack/Button_UpArrow_Attack").GetComponent("Button") as Button;
@@ -46,7 +47,7 @@ public class Input_ItemObjectUI : MonoBehaviour {
 
 		Button_Rotate = transform.Find("Buttons/Button_Rotate").GetComponent("Button") as Button;
 		Screen_Button_Rotate = GameObject.Find("Screen_Button_Rotate").GetComponent("Button") as Button;
-		Button_Select_All = GameObject.Find ("Button_all_select").GetComponent ("Button") as Button;
+		Button_Select_All = GameObject.Find ("Button_Select_All").GetComponent ("Button") as Button;
 
 		Button_X = transform.Find("Buttons/Button_X").GetComponent("Button") as Button;
 
@@ -82,11 +83,12 @@ public class Input_ItemObjectUI : MonoBehaviour {
 			output_itemObjectUI.toggleItemObjectUI(); 
 		});
 
+
 		//Select All button
 		Button_Select_All.onClick.AddListener (() => {
 			output_itemObjectUI.selectOrDeselectAll (); 
 		});
-
+		print ("DERP");
 		//screen button object rotate.
 		//intended to rotate focused object
 //		Screen_Button_Rotate.onClick.AddListener (() => {
