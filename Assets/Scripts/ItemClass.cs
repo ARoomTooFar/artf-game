@@ -68,7 +68,7 @@ public class ItemClass
 	}
 
 	//remove all items of a particular type from a location
-	public void removeItemByType(string type, Vector3 posVec){
+	public void removeItemTypesAtLocation(string type, Vector3 posVec){
 
 		//remove from nameDic
 		foreach(string s in nameDic.Keys){
@@ -236,7 +236,7 @@ public class ItemClass
 
 			//if itemlist entry is type we're looking for, and if
 			//it occupies the position we're checking against
-			Debug.Log ("comaring " + prefabType + " with " + name );
+//			Debug.Log ("comaring " + prefabType + " with " + name );
 			if (String.Equals (prefabType, name)
 			    && itemList[i].x == pos.x
 			    && itemList[i].y == pos.y
