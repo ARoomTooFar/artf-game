@@ -16,7 +16,7 @@ public class MonsterManager {
 	 * Returns true if successful.
 	 * Returns false if a block already seems to exist in its position.
 	 */
-	public bool addBlock(MonsterBlock block) {
+	public bool add(MonsterBlock block) {
 		//attempt to link the input to its neighbors
 		if(!linkTerrain(block)) {
 			//if something goes wrong, 
@@ -46,7 +46,7 @@ public class MonsterManager {
 	 * Returns false if a block already has a neighbor in that position.
 	 */
 	private bool linkTerrain(MonsterBlock block) {
-		TerrainBlock blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
+		TerrainBlock blk = MapData.Instance.TerrainBlocks.find(block.Position);
 		if(blk == null) {
 			return false;
 		}
@@ -64,7 +64,7 @@ public class MonsterManager {
 	 * 
 	 */
 	private void unlinkTerrain(MonsterBlock block) {
-		TerrainBlock blk = MapData.Instance.TerrainBlocks.findBlock(block.Position);
+		TerrainBlock blk = MapData.Instance.TerrainBlocks.find(block.Position);
 		if(blk.Monster.Equals(block)){
 			blk.removeMonster();
 		}
@@ -78,11 +78,11 @@ public class MonsterManager {
 	 * returns true if the block wasn't or is no longer part of the data
 	 * returns false if something bad happens
 	 */
-	public bool removeBlock(Vector3 position) {
+	public bool remove(Vector3 position) {
 		//round position
 		Vector3 intPosition = position.Round();
 		//find block at position
-		MonsterBlock tgtBlock = findBlock(intPosition);
+		MonsterBlock tgtBlock = find(intPosition);
 		if(tgtBlock == null) {
 			//if block doesn't exist, return true
 			return true;
@@ -99,7 +99,7 @@ public class MonsterManager {
 	 * Returns the block at position
 	 * Returns null if there is no block in that position.
 	 */
-	public MonsterBlock findBlock(Vector3 position) {
+	public MonsterBlock find(Vector3 position) {
 		//round position
 		Vector3 intPosition = position.Round();
 		//for each type of block
@@ -116,11 +116,19 @@ public class MonsterManager {
 		return null;
 	}
 
-	public void moveMonster(Vector3 pos, Vector3 offset){
-		findBlock(pos).move(offset);
+	public void move(Vector3 pos, Vector3 offset){
+		find(pos).move(offset);
 	}
 
-	public string MonsterSaveString {
+	public void rotate(MonsterBlock blk, bool goClockwise = true){
+		blk.rotate(goClockwise);
+	}
+
+	public void rotate(Vector3 pos, bool goClockwise = true){
+		rotate(pos, goClockwise);
+	}
+
+	public string SaveString {
 		get {
 			string retVal = "";
 			string tempVal;

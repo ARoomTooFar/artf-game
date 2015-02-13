@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -66,43 +66,50 @@ public class MapData {
 	#endregion RoomManipulation
 
 	#region TerrainManipulation
-	public bool replaceTerrain(Vector3 pos, string type){
-		TerrainBlock blk = TerrainBlocks.findBlock(pos);
-		if(blk == null) {
-			throw new UnityException("No TerrainBlock at provided location");
-		}
-		return blk.changeType(type);
+	public void changeTerrainType(Vector3 pos, string type){
+		TerrainBlocks.changeType(pos, type);
+	}
+
+	public void rotateTerrain(Vector3 pos, bool goClockwise = true){
+		terrainBlocks.rotate(pos, goClockwise);
 	}
 	#endregion TerrainManipulation
 
 	#region MonsterManipulation
 	public void addMonster(string type, Vector3 pos, DIRECTION dir){
-		monsterBlocks.addBlock(new MonsterBlock(type, pos, dir));
+		monsterBlocks.add(new MonsterBlock(type, pos, dir));
 	}
 
 	public void moveMonster(Vector3 pos, Vector3 offset){
-		monsterBlocks.moveMonster(pos, offset);
+		monsterBlocks.move(pos, offset);
 	}
 
 	public void removeMonster(Vector3 pos){
-		monsterBlocks.removeBlock(pos);
+		monsterBlocks.remove(pos);
 	}
 
+	public void rotateMonster(Vector3 pos, bool goClockwise = true){
+		monsterBlocks.rotate(pos, goClockwise);
+	}
 	#endregion MonsterManipulation
 
 
 	#region Scenery
 	#region SceneryManipulation
 	public void addScenery(string type, Vector3 pos, DIRECTION dir){
-		sceneryBlocks.addBlock(new SceneryBlock(type, pos, dir));
+		sceneryBlocks.add(new SceneryBlock(type, pos, dir));
 	}
 
 	public void moveScenery(Vector3 pos, Vector3 offset){
-		sceneryBlocks.moveBlock(pos, offset);
+		sceneryBlocks.move(pos, offset);
 	}
 
 	public void removeScenery(Vector3 pos){
-		SceneryBlocks.removeBlock(pos);
+		SceneryBlocks.remove(pos);
+	}
+
+	public void rotateScenert(Vector3 pos, bool goClockwise = true){
+		SceneryBlocks.rotate(pos, goClockwise);
 	}
 	#endregion SceneryManipulation
 
@@ -111,8 +118,8 @@ public class MapData {
 		return sceneryBlocks.isBlockValid(position);
 	}
 
-	public bool isSceneryRotationValid(Vector3 postion, DIRECTION dir){
-		return sceneryBlocks.isRotationValid(postion, dir);
+	public bool isSceneryRotationValid(Vector3 postion, bool goClockwise = true){
+		return sceneryBlocks.isRotationValid(postion, goClockwise);
 	}
 
 	public bool isSceneryMoveValid(Vector3 position, Vector3 offset){

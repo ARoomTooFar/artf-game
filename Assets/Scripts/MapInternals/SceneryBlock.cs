@@ -71,6 +71,10 @@ public class SceneryBlock {
 	public void move(Vector3 offset){
 		position = position + offset;
 	}
+
+	public void rotate(bool goClockwise = true){
+		orientation = orientation.QuarterTurn(goClockwise);
+	}
 }
 
 

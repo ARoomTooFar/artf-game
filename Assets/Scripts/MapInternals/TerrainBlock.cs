@@ -296,6 +296,10 @@ public class TerrainBlock {
 		this.blockInfo = nInf;
 		return true;
 	}
+
+	public void rotate(bool goClockwise = true){
+		orientation = orientation.QuarterTurn(goClockwise);
+	}
 }
 
 

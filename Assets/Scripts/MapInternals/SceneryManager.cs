@@ -16,7 +16,7 @@ public class SceneryManager {
 	 * Returns true if successful.
 	 * Returns false if a block already seems to exist in its position.
 	 */
-	public bool addBlock(SceneryBlock block) {
+	public bool add(SceneryBlock block) {
 		//attempt to link the scenery to the appropriate terrain
 		if(!linkTerrain(block)) {
 			//if something goes wrong, 
@@ -49,7 +49,7 @@ public class SceneryManager {
 		//for each coordinate this block occupies
 		foreach(Vector3 coordinate in block.Coordinates) {
 			//get the terrain block in that position
-			blk = MapData.Instance.TerrainBlocks.findBlock(coordinate);
+			blk = MapData.Instance.TerrainBlocks.find(coordinate);
 			//if there's no block there, this block is not placeable
 			if(blk == null) {
 				return false;
@@ -73,7 +73,7 @@ public class SceneryManager {
 		//for each coordinate this block occupies
 		foreach(Vector3 coordinate in block.Coordinates) {
 			//get the terrain block in that position
-			blk = MapData.Instance.TerrainBlocks.findBlock(coordinate);
+			blk = MapData.Instance.TerrainBlocks.find(coordinate);
 			//if there's no block then... what? continue anyways
 			if(blk == null) {
 				continue;
@@ -93,11 +93,11 @@ public class SceneryManager {
 	 * returns true if the scenery wasn't or is no longer part of the data
 	 * returns false if something bad happens
 	 */
-	public bool removeBlock(Vector3 position) {
+	public bool remove(Vector3 position) {
 		//round position
 		Vector3 intPosition = position.Round();
 		//find block at position
-		SceneryBlock tgtBlock = findBlock(intPosition);
+		SceneryBlock tgtBlock = find(intPosition);
 		if(tgtBlock == null) {
 			//if block doesn't exist, return true
 			return true;
@@ -114,7 +114,7 @@ public class SceneryManager {
 	 * Returns the scenery at position
 	 * Returns null if there is no block in that position.
 	 */
-	public SceneryBlock findBlock(Vector3 position) {
+	public SceneryBlock find(Vector3 position) {
 		//round position
 		Vector3 intPosition = position.Round();
 		//for each type of block
@@ -131,40 +131,39 @@ public class SceneryManager {
 		return null;
 	}
 
-	public void moveBlock(SceneryBlock blk, Vector3 offset) {
+	public void move(SceneryBlock blk, Vector3 offset) {
 		unlinkTerrain(blk);
 		blk.move(offset);
 		linkTerrain(blk);
 	}
 
-	public void moveBlock(Vector3 pos, Vector3 offset) {
-		moveBlock(findBlock(pos), offset);
+	public void move(Vector3 pos, Vector3 offset) {
+		move(find(pos), offset);
 	}
 
-	public void rotateBlock(SceneryBlock blk, DIRECTION dir) {
+	public void rotate(Vector3 pos, bool goClockwise = true){
+		rotate(find(pos), goClockwise);
+	}
+
+	public void rotate(SceneryBlock blk, bool goClockwise = true){
 		unlinkTerrain(blk);
-		blk.Orientation = dir;
+		blk.rotate(goClockwise);
 		linkTerrain(blk);
 	}
 
-	public void rotateBlock(Vector3 pos, DIRECTION dir) {
-		rotateBlock(findBlock(pos), dir);
+	public bool isRotationValid(Vector3 pos, bool goClockwise = true) {
+		return isRotationValid(find(pos), goClockwise);
 	}
 
-	public bool isRotationValid(Vector3 pos, DIRECTION dir) {
-		return isRotationValid(findBlock(pos), dir);
-	}
-
-	public bool isRotationValid(SceneryBlock blk, DIRECTION dir) {
-		DIRECTION oDir = blk.Orientation;
-		blk.Orientation = dir;
+	public bool isRotationValid(SceneryBlock blk, bool goClockwise = true) {
+		blk.rotate(goClockwise);
 		bool retVal = isBlockValid(blk);
-		blk.Orientation = oDir;
+		blk.rotate(!goClockwise);
 		return retVal;
 	}
 
 	public bool isMoveValid(Vector3 pos, Vector3 offset) {
-		return isMoveValid(findBlock(pos), offset);
+		return isMoveValid(find(pos), offset);
 	}
 
 	public bool isMoveValid(SceneryBlock blk, Vector3 offset) {
@@ -175,14 +174,14 @@ public class SceneryManager {
 	}
 
 	public bool isBlockValid(Vector3 pos) {
-		return isBlockValid(findBlock(pos));
+		return isBlockValid(find(pos));
 	}
 
 	public bool isBlockValid(SceneryBlock blk) {
 		TerrainBlock terBlk;
 		foreach(Vector3 coordinate in blk.Coordinates) {
 			//get the terrain block in that position
-			terBlk = MapData.Instance.TerrainBlocks.findBlock(coordinate);
+			terBlk = MapData.Instance.TerrainBlocks.find(coordinate);
 			//if there's no block there, this block is not placeable
 			if(terBlk == null) {
 				return false;

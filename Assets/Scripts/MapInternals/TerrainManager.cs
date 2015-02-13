@@ -24,7 +24,7 @@ public class TerrainManager {
 	 * Returns true if successful.
 	 * Returns false if a block already seems to exist in its position.
 	 */
-	public bool addBlock(TerrainBlock block) {
+	public bool add(TerrainBlock block) {
 		//attempt to link the input to its neighbors
 		if(!linkNeighbors(block)) {
 			//if something goes wrong, 
@@ -109,19 +109,19 @@ public class TerrainManager {
 	 * returns true if the block wasn't or is no longer part of the data
 	 * returns false if something bad happens
 	 */
-	public bool removeBlock(Vector3 position) {
+	public bool remove(Vector3 position) {
 		//round position
 		Vector3 intPosition = position.Round();
 		//find block at position
-		TerrainBlock tgtBlock = findBlock(intPosition);
+		TerrainBlock tgtBlock = find(intPosition);
 		if(tgtBlock == null) {
 			//if block doesn't exist, return true
 			return true;
 		}
 		//unlink neighbors
 		unlinkNeighbors(tgtBlock);
-		MapData.Instance.SceneryBlocks.removeBlock(position);
-		MapData.Instance.MonsterBlocks.removeBlock(position);
+		MapData.Instance.SceneryBlocks.remove(position);
+		MapData.Instance.MonsterBlocks.remove(position);
 		//remove from list
 		return dictionary[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
 	}
@@ -132,7 +132,7 @@ public class TerrainManager {
 	 * Returns the block at position
 	 * Returns null if there is no block in that position.
 	 */
-	public TerrainBlock findBlock(Vector3 position) {
+	public TerrainBlock find(Vector3 position) {
 		//round position
 		Vector3 intPosition = position.Round();
 		//for each type of block
@@ -147,6 +147,22 @@ public class TerrainManager {
 		}
 		//return null if none found
 		return null;
+	}
+
+	public void rotate(Vector3 pos, bool goClockwise = true){
+		rotate(find(pos), goClockwise);
+	}
+
+	public void rotate(TerrainBlock blk, bool goClockwise = true){
+		blk.rotate(goClockwise);
+	}
+
+	public void changeType(Vector3 pos, string type){
+		changeType(find(pos), type);
+	}
+
+	public void changeType(TerrainBlock blk, string type){
+		blk.changeType(type);
 	}
 
 	public string TerrainSaveString {

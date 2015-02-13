@@ -94,13 +94,13 @@ public partial class ARTFRoom {
 				//set a Vector3 to the correct position
 				pos.Set(i + LLCorner.x, 0, j + LLCorner.z);
 				//try to find an existing block at that coordinate
-				blk = MapData.Instance.TerrainBlocks.findBlock(pos);
+				blk = MapData.Instance.TerrainBlocks.find(pos);
 				//if it doesn't exist
 				if(blk == null) {
 					//create a new one
 					blk = new TerrainBlock(defaultBlockID, pos, DIRECTION.North);
 					//and add it to the MapData
-					MapData.Instance.TerrainBlocks.addBlock(blk);
+					MapData.Instance.TerrainBlocks.add(blk);
 				}
 				//link the block to the room
 				blocks.Add(blk);
@@ -184,7 +184,7 @@ public partial class ARTFRoom {
 		//remove blocks no longer in room
 		foreach(TerrainBlock blk in blocks) {
 			if(!inRoom(blk.Position)) {
-				MapData.Instance.TerrainBlocks.removeBlock(blk.Position);
+				MapData.Instance.TerrainBlocks.remove(blk.Position);
 			}
 		}
 		//relink blocks to this room
@@ -203,7 +203,7 @@ public partial class ARTFRoom {
 	 */
 	public void Remove(){
 		foreach(TerrainBlock blk in this.blocks){
-			MapData.Instance.TerrainBlocks.removeBlock(blk.Position);
+			MapData.Instance.TerrainBlocks.remove(blk.Position);
 		}
 		this.blocks.Clear();
 	}
