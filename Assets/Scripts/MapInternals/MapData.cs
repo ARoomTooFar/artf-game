@@ -49,19 +49,19 @@ public class MapData {
 
 	#region RoomManipulation
 	public void addRoom(Vector3 pos1, Vector3 pos2){
-		theFarRooms.addRoom(pos1, pos2);
+		theFarRooms.add(pos1, pos2);
 	}
 
 	public void moveRoom(Vector3 position, Vector3 nPosition){
-		theFarRooms.moveRoom(position, nPosition - position);
+		theFarRooms.move(position, nPosition - position);
 	}
 
 	public void resizeRoom(Vector3 corner, Vector3 nCorner){
-		theFarRooms.resizeRoom(corner, nCorner);
+		theFarRooms.resize(corner, nCorner);
 	}
 
 	public void removeRoom(Vector3 position){
-		theFarRooms.removeRoom(position);
+		theFarRooms.remove(position);
 	}
 	#endregion RoomManipulation
 

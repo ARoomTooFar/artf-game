@@ -13,6 +13,7 @@ public partial class ARTFRoom {
 	#endregion PrivateVariables
 
 	#region Properties
+	#region Corners
 	//Lower Left Corner
 	public Vector3 LLCorner {
 		get { return LLposition; }
@@ -43,11 +44,9 @@ public partial class ARTFRoom {
 			return retVal;
 		}
 	}
-	
-	public string SaveString {
-		get{ return LLposition.toCSV() + "," + URposition.toCSV();}
-	}
+	#endregion Corners
 
+	#region SquareProperties
 	public float Area {
 		get { return Length * Height; }
 	}
@@ -64,6 +63,11 @@ public partial class ARTFRoom {
 	public float Length {
 		get { return 1+ URposition.x - LLposition.x; }
 	}
+	#endregion SquareProperties
+
+	public string SaveString {
+		get{ return LLposition.toCSV() + "," + URposition.toCSV();}
+	}
 	#endregion Properties
 	
 	/*
@@ -74,6 +78,7 @@ public partial class ARTFRoom {
 		this.URposition = pos1.getMaxVals(pos2);
 	}
 
+	#region (un)linkTerrain
 	/*
 	 * public void linkTerrain() 
 	 * 
@@ -125,17 +130,16 @@ public partial class ARTFRoom {
 		//remove all the links to terrain
 		blocks.Clear();
 	}
+	#endregion (un)linkTerrain
 
+	#region ManipulationFunctions
 	/*
-	 * public bool Move(Vector3 offset)
+	 * public void move(Vector3 offset)
 	 * 
 	 * Moves a room in the x/y/z direction specified
 	 * by the offset Vector3
-	 * 
-	 * Returns true if successful
-	 * Returns false otherwise 
 	 */
-	public bool Move(Vector3 offset) {
+	public void move(Vector3 offset) {
 		//Shift the LowerLeft and UpperRight corners by offset
 		LLposition = LLposition + offset;
 		URposition = URposition + offset;
@@ -151,21 +155,17 @@ public partial class ARTFRoom {
 				MapData.Instance.TerrainBlocks.relinkNeighbors(blk);
 			}
 		}
-		return true;
 	}
 
 	/*
-	 * public bool Resize(Vector3 oldCorner, Vector3 newCorner)
+	 * public void resize(Vector3 oldCorner, Vector3 newCorner)
 	 * 
 	 * Resizes a room by moving one corner to a new position
-	 * 
-	 * Returns true if successful.
-	 * Returns false otherwise.
 	 */
-	public bool Resize(Vector3 oldCorner, Vector3 newCorner) {
+	public void resize(Vector3 oldCorner, Vector3 newCorner) {
 		//Make sure that the old corner is actually a corner
 		if(!isCorner(oldCorner)) {
-			return false;
+			return;
 		}
 		//get the offset
 		Vector3 offset = newCorner - oldCorner;
@@ -189,25 +189,22 @@ public partial class ARTFRoom {
 		}
 		//relink blocks to this room
 		linkTerrain();
-		return true;
-	}
-
-	public bool Rotate(DIRECTION dir) {
-		return false;
 	}
 
 	/*
-	 * public void Remove()
+	 * public void remove()
 	 * 
 	 * Removes all linked blocks from MapData
 	 */
-	public void Remove(){
+	public void remove(){
 		foreach(TerrainBlock blk in this.blocks){
 			MapData.Instance.TerrainBlocks.remove(blk.Position);
 		}
 		this.blocks.Clear();
 	}
+	#endregion ManipulationFunctions
 
+	#region PositionChecks
 	/*
 	 * public bool isCorner(Vector3 pos)
 	 * 
@@ -256,4 +253,5 @@ public partial class ARTFRoom {
 			pos.z >= LLposition.z &&
 			pos.z <= URposition.z;
 	}
+	#endregion PositionChecks
 }

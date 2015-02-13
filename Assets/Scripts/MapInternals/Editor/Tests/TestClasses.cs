@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -50,7 +50,7 @@ public class MasterTest {
 		}
 
 		public new ARTFRoom getRoom(Vector3 pos){
-			return base.getRoom(pos);
+			return base.find(pos);
 		}
 	}
 

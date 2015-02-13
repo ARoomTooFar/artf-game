@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -44,7 +44,7 @@ public class ARTFRoomTests : MasterTest{
 		Assert.IsNull(test_MapData.Terrain.find(new Vector3(4, 0, 3)));
 		float oLength = test.Length;
 		float oHeight = test.Height;
-		test.Move(new Vector3(2, 0, 1));
+		test.move(new Vector3(2, 0, 1));
 		Assert.AreEqual(new Vector3(3, 0, 2), test.LLCorner);
 		Assert.AreEqual(new Vector3(4, 0, 3), test.URCorner);
 		Assert.IsNotNull(test_MapData.Terrain.find(new Vector3(4, 0, 3)));
@@ -58,7 +58,7 @@ public class ARTFRoomTests : MasterTest{
 		test_ARTFRoom test = new test_ARTFRoom(new Vector3(0, 0, 0), new Vector3(1, 0, 1));
 		test.linkTerrain();
 		Assert.IsNull(test_MapData.Terrain.find(new Vector3(2, 0, 2)));
-		test.Resize(new Vector3(1, 0, 1), new Vector3(2, 0, 2));
+		test.resize(new Vector3(1, 0, 1), new Vector3(2, 0, 2));
 		Assert.AreEqual(new Vector3(0, 0, 0), test.LLCorner);
 		Assert.AreEqual(new Vector3(2, 0, 2), test.URCorner);
 		Assert.AreEqual(3, test.Length);
