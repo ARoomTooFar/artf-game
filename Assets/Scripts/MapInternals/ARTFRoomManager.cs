@@ -23,7 +23,7 @@ public class ARTFRoomManager {
 	 * 
 	 * Adds a room with two corners at the given positions
 	 */
-	public bool add(Vector3 pos1, Vector3 pos2){
+	public void add(Vector3 pos1, Vector3 pos2){
 		add(new ARTFRoom(pos1, pos2));
 	}
 
@@ -68,7 +68,7 @@ public class ARTFRoomManager {
 	 * Moves the room at position by a value specified by offset
 	 */
 	public void move(Vector3 position, Vector3 offset){
-		move(find(position));
+		move(find(position), offset);
 	}
 
 	/*

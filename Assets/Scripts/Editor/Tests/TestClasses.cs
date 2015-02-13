@@ -49,7 +49,7 @@ public class MasterTest {
 			get{ return base.roomList; }
 		}
 
-		public new ARTFRoom getRoom(Vector3 pos){
+		public new ARTFRoom find(Vector3 pos){
 			return base.find(pos);
 		}
 	}
