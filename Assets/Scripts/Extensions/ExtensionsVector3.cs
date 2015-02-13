@@ -106,6 +106,33 @@ public static class ExtensionsVector3
 		return retVal;
 	}
 
+	public static DIRECTION toDirection(this Vector3 vec){
+		float val = vec.y;
+		val /= 360;
+		val /= 45;
+		int intval = Mathf.RoundToInt(val);
+		switch(intval) {
+		case 0:
+			return DIRECTION.North;
+		case 1:
+			return DIRECTION.NorthEast;
+		case 2:
+			return DIRECTION.East;
+		case 3:
+			return DIRECTION.SouthEast;
+		case 4:
+			return DIRECTION.South;
+		case 5:
+			return DIRECTION.SouthWest;
+		case 6:
+			return DIRECTION.West;
+		case 7:
+			return DIRECTION.NorthWest;
+		default:
+			return DIRECTION.NonDirectional;
+		}
+	}
+
 }
 
 
