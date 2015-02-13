@@ -11,12 +11,14 @@ public class SelectionPoolUnweighted<T> : ISelectionPool<T> {
 	public SelectionPoolUnweighted() {
 	}
 
-	public void addItem(ISelectionItem<T> item, float value){
+	public ISelectionPool<T> addItem(ISelectionItem<T> item, float value){
 		pool.Add(item);
+		return this;
 	}
 
-	public void removeItem(ISelectionItem<T> item){
+	public ISelectionPool<T> removeItem(ISelectionItem<T> item){
 		pool.Remove(item);
+		return this;
 	}
 
 	public ISelectionItem<T> getItem(){

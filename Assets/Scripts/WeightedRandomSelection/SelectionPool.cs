@@ -12,7 +12,7 @@ public class SelectionPool<T> : ISelectionPool<T> {
 	public SelectionPool() {
 	}
 
-	public void addItem(ISelectionItem<T> item, float value){
+	public ISelectionPool<T> addItem(ISelectionItem<T> item, float value){
 		if(value < 0){ throw new ArgumentException("value must be greater than 0"); }
 		float oldValue;
 		try{
@@ -22,15 +22,17 @@ public class SelectionPool<T> : ISelectionPool<T> {
 		}
 		pool[item] = value;
 		totalWeight += value - oldValue;
+		return this;
 	}
 
-	public void removeItem(ISelectionItem<T> item){
+	public ISelectionPool<T> removeItem(ISelectionItem<T> item){
 		try{
 			totalWeight -= pool[item];
 		} catch (KeyNotFoundException){
-			return;
+			return this;
 		}
 		pool.Remove(item);
+		return this;
 	}
 
 	public ISelectionItem<T> getItem(){

@@ -17,9 +17,9 @@ public class SelecPoolTest : MonoBehaviour {
 
 	private void SelectionPoolTest(){
 		SelectionPool<string> pool = new SelectionPool<string>();
-		pool.addItem(new SelectionItem<string>("test1"), 5);
-		pool.addItem(new SelectionItem<string>("test2"), 4);
-		pool.addItem(new SelectionItem<string>("test3"), 1);
+		pool.addItem(new SelectionItem<string>("test1"), 5)
+		.addItem(new SelectionItem<string>("test2"), 4)
+		.addItem(new SelectionItem<string>("test3"), 1);
 
 		int test1 = 0;
 		int test2 = 0;
@@ -47,9 +47,9 @@ public class SelecPoolTest : MonoBehaviour {
 
 	private void SelectionPoolUnweightedTest(){
 		SelectionPoolUnweighted<string> pool = new SelectionPoolUnweighted<string>();
-		pool.addItem(new SelectionItem<string>("test1"), 5);
-		pool.addItem(new SelectionItem<string>("test2"), 4);
-		pool.addItem(new SelectionItem<string>("test3"), 1);
+		pool.addItem(new SelectionItem<string>("test1"), 5)
+		.addItem(new SelectionItem<string>("test2"), 4)
+		.addItem(new SelectionItem<string>("test3"), 1);
 		
 		int test1 = 0;
 		int test2 = 0;
