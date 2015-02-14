@@ -80,12 +80,13 @@ public class TerrainBlock {
 	}
 	#endregion Properties
 
+	#region Constructors
 	/*
 	 * Constructor
 	 */
-	public TerrainBlock(string blockID, Vector3 position, DIRECTION orientation) {
+	public TerrainBlock(string blockID, Vector3 pos, DIRECTION orientation) {
 		this.blockInfo = TerrainBlockInfo.get(blockID);
-		this.position = position.Round();
+		this.position = pos.Round();
 		this.orientation = orientation;
 	}
 
@@ -101,7 +102,9 @@ public class TerrainBlock {
 		this.orientation = original.orientation;
 		this.blockInfo = original.blockInfo;
 	}
+	#endregion Constructors
 
+	#region Neighbors
 	/*
 	 * public bool addNeighbor(TerrainBlock that, DIRECTION dir)
 	 * 
@@ -113,12 +116,12 @@ public class TerrainBlock {
 	 * Throws exception if dir is NotDirection.
 	 * 
 	 */
-	public bool addNeighbor(TerrainBlock that, DIRECTION dir) {
+	public bool addNeighbor(TerrainBlock blk, DIRECTION dir) {
 		if(dir.Equals(DIRECTION.NonDirectional)) {
 			throw new Exception("Invalid DIRECTION");
 		}
 		try {
-			neighbors.Add(dir, that);
+			neighbors.Add(dir, blk);
 		} catch(ArgumentException) {
 			return false;
 		}
@@ -204,7 +207,9 @@ public class TerrainBlock {
 		//default value of NotNeighbor
 		return DIRECTION.NonDirectional;
 	}
+	#endregion Neighbors
 
+	#region Scenery
 	/*
 	 * public bool addScenery(SceneryBlock scenery)
 	 * 
@@ -213,18 +218,18 @@ public class TerrainBlock {
 	 * Returns true if successfully linked
 	 * Returns false if not.
 	 */
-	public bool addScenery(SceneryBlock scenery) {
+	public bool addScenery(SceneryBlock scn) {
 		//return false if there is already scenery
 		if(this.scenery != null) {
 			return false;
 		}
 
 		//if the scenery blocks movement and there is a monster, return false
-		if(!scenery.BlockInfo.Pathable && this.monster != null) {
+		if(!scn.BlockInfo.Pathable && this.monster != null) {
 			return false;
 		}
 		
-		this.scenery = scenery;
+		this.scenery = scn;
 		return true;
 	}
 
@@ -236,7 +241,9 @@ public class TerrainBlock {
 	public void removeScenery() {
 		this.scenery = null;
 	}
+	#endregion Scenery
 
+	#region Monster
 	/*
 	 * public bool addMonster(MonsterBlock monster)
 	 * 
@@ -245,7 +252,7 @@ public class TerrainBlock {
 	 * Returns true if successfully linked
 	 * Returns false if not.
 	 */
-	public bool addMonster(MonsterBlock monster) {
+	public bool addMonster(MonsterBlock mon) {
 		//return false if there is already a monster linked
 		if(this.monster != null) {
 			return false;
@@ -256,7 +263,7 @@ public class TerrainBlock {
 			return false;
 		}
 		
-		this.monster = monster;
+		this.monster = mon;
 		return true;
 	}
 
@@ -268,7 +275,9 @@ public class TerrainBlock {
 	public void removeMonster() {
 		this.monster = null;
 	}
+	#endregion Monster
 
+	#region Manipulation
 	/*
 	 * public void move(Vector3 offset)
 	 * 
@@ -304,6 +313,7 @@ public class TerrainBlock {
 	public void rotate(bool goClockwise = true){
 		orientation = orientation.QuarterTurn(goClockwise);
 	}
+	#endregion Manipulation
 }
 
 

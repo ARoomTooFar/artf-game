@@ -9,33 +9,7 @@ public class SceneryManager {
 	public SceneryManager() {
 	}
 
-	/*
-	 * public bool addBlock (SceneryBlock block)
-	 * 
-	 * Adds a SceneryBlock to the appropriate list.
-	 * Returns true if successful.
-	 * Returns false if a block already seems to exist in its position.
-	 */
-	public bool add(SceneryBlock block) {
-		//attempt to link the scenery to the appropriate terrain
-		if(!linkTerrain(block)) {
-			//if something goes wrong, 
-			unlinkTerrain(block);
-			return false;
-		}
-		//get the list for the block type
-		List<SceneryBlock> lst = dictionary[block.BlockInfo.BlockID];
-		//create one if needed
-		if(lst == null) {
-			lst = new List<SceneryBlock>();
-			dictionary.Add(block.BlockInfo.BlockID, lst);
-		}
-		//add the block to the list
-		lst.Add(block);
-
-		return true;
-	}
-
+	#region (un)linkTerrain
 	/*
 	 * private bool linkTerrain (SceneryBlock block)
 	 * 
@@ -44,79 +18,130 @@ public class SceneryManager {
 	 * Returns true if successful.
 	 * Returns false if a piece of terrain is already linked to scenery
 	 */
-	private bool linkTerrain(SceneryBlock block) {
-		TerrainBlock blk;
+	private bool linkTerrain(SceneryBlock blk) {
+		TerrainBlock terBlk;
 		//for each coordinate this block occupies
-		foreach(Vector3 coordinate in block.Coordinates) {
+		foreach(Vector3 coordinate in blk.Coordinates) {
 			//get the terrain block in that position
-			blk = MapData.Instance.TerrainBlocks.find(coordinate);
+			terBlk = MapData.Instance.TerrainBlocks.find(coordinate);
 			//if there's no block there, this block is not placeable
-			if(blk == null) {
+			if(terBlk == null) {
 				return false;
 			}
 			//try to link the scenery, return false if problem
-			if(!blk.addScenery(block)) {
+			if(!terBlk.addScenery(blk)) {
 				return false;
 			}
 		}
 		return true;
 	}
-
+	
 	/*
 	 * private void unlinkTerrain(SceneryBlock block)
 	 * 
 	 * Break the link to this SceneryBlock from associated terrain blocks
 	 * 
 	 */
-	private void unlinkTerrain(SceneryBlock block) {
-		TerrainBlock blk;
+	private void unlinkTerrain(SceneryBlock blk) {
+		TerrainBlock terBlk;
 		//for each coordinate this block occupies
-		foreach(Vector3 coordinate in block.Coordinates) {
+		foreach(Vector3 coordinate in blk.Coordinates) {
 			//get the terrain block in that position
-			blk = MapData.Instance.TerrainBlocks.find(coordinate);
+			terBlk = MapData.Instance.TerrainBlocks.find(coordinate);
 			//if there's no block then... what? continue anyways
-			if(blk == null) {
+			if(terBlk == null) {
 				continue;
 			}
 			//if the block is linked to this piece of scenery, then unlink it
-			if(blk.Scenery.Equals(block)) {
-				blk.removeScenery();
+			if(terBlk.Scenery.Equals(blk)) {
+				terBlk.removeScenery();
 			}
 		}
 	}
+	#endregion (un)linkTerrain
 
+	#region Manipulation
 	/*
-	 * public bool removeBlock (Vector3 position)
+	 * public bool add (SceneryBlock block)
+	 * 
+	 * Adds a SceneryBlock to the appropriate list.
+	 * Returns true if successful.
+	 * Returns false if a block already seems to exist in its position.
+	 */
+	public bool add(SceneryBlock blk) {
+		//attempt to link the scenery to the appropriate terrain
+		if(!linkTerrain(blk)) {
+			//if something goes wrong, 
+			unlinkTerrain(blk);
+			return false;
+		}
+		//get the list for the block type
+		List<SceneryBlock> lst = dictionary[blk.BlockInfo.BlockID];
+		//create one if needed
+		if(lst == null) {
+			lst = new List<SceneryBlock>();
+			dictionary.Add(blk.BlockInfo.BlockID, lst);
+		}
+		//add the block to the list
+		lst.Add(blk);
+
+		return true;
+	}
+
+	#region Remove
+	/*
+	 * public bool remove (Vector3 position)
 	 * 
 	 * Remove a piece of scenery from the map data.
 	 * 
 	 * returns true if the scenery wasn't or is no longer part of the data
 	 * returns false if something bad happens
 	 */
-	public bool remove(Vector3 position) {
-		//round position
-		Vector3 intPosition = position.Round();
-		//find block at position
-		SceneryBlock tgtBlock = find(intPosition);
-		if(tgtBlock == null) {
-			//if block doesn't exist, return true
-			return true;
-		}
-		//unlink terrain
-		unlinkTerrain(tgtBlock);
-		//remove from list
-		return dictionary[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
+	public void remove(Vector3 pos) {
+		remove(find(pos));
 	}
 
+	public void remove(SceneryBlock blk){
+		unlinkTerrain(blk);
+		dictionary[blk.BlockInfo.BlockID].Remove(blk);
+	}
+	#endregion Remove
+
+	#region Move
+	public void move(Vector3 pos, Vector3 offset) {
+		move(find(pos), offset);
+	}
+
+	public void move(SceneryBlock blk, Vector3 offset) {
+		unlinkTerrain(blk);
+		blk.move(offset);
+		linkTerrain(blk);
+	}
+	#endregion Move
+
+	#region Rotate
+	public void rotate(Vector3 pos, bool goClockwise = true){
+		rotate(find(pos), goClockwise);
+	}
+
+	public void rotate(SceneryBlock blk, bool goClockwise = true){
+		unlinkTerrain(blk);
+		blk.rotate(goClockwise);
+		linkTerrain(blk);
+	}
+	#endregion Rotate
+	#endregion Manipulation
+
+	
 	/*
-	 * public SceneryBlock findBlock (Vector3 position)
+	 * public SceneryBlock find (Vector3 position)
 	 * 
 	 * Returns the scenery at position
 	 * Returns null if there is no block in that position.
 	 */
-	public SceneryBlock find(Vector3 position) {
+	public SceneryBlock find(Vector3 pos) {
 		//round position
-		Vector3 intPosition = position.Round();
+		Vector3 intPosition = pos.Round();
 		//for each type of block
 		foreach(KeyValuePair<string, List<SceneryBlock>> kvPair in dictionary) {
 			//check each block
@@ -131,37 +156,22 @@ public class SceneryManager {
 		return null;
 	}
 
-	public void move(SceneryBlock blk, Vector3 offset) {
-		unlinkTerrain(blk);
-		blk.move(offset);
-		linkTerrain(blk);
+	#region Validation
+
+	#region isRotateValid
+	public bool isRotateValid(Vector3 pos, bool goClockwise = true) {
+		return isRotateValid(find(pos), goClockwise);
 	}
 
-	public void move(Vector3 pos, Vector3 offset) {
-		move(find(pos), offset);
-	}
-
-	public void rotate(Vector3 pos, bool goClockwise = true){
-		rotate(find(pos), goClockwise);
-	}
-
-	public void rotate(SceneryBlock blk, bool goClockwise = true){
-		unlinkTerrain(blk);
-		blk.rotate(goClockwise);
-		linkTerrain(blk);
-	}
-
-	public bool isRotationValid(Vector3 pos, bool goClockwise = true) {
-		return isRotationValid(find(pos), goClockwise);
-	}
-
-	public bool isRotationValid(SceneryBlock blk, bool goClockwise = true) {
+	public bool isRotateValid(SceneryBlock blk, bool goClockwise = true) {
 		blk.rotate(goClockwise);
 		bool retVal = isBlockValid(blk);
 		blk.rotate(!goClockwise);
 		return retVal;
 	}
+	#endregion isRotateValid
 
+	#region isMoveValid
 	public bool isMoveValid(Vector3 pos, Vector3 offset) {
 		return isMoveValid(find(pos), offset);
 	}
@@ -172,11 +182,13 @@ public class SceneryManager {
 		blk.move(-offset);
 		return retVal;
 	}
+	#endregion isMoveValid
 
 	public bool isAddValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North){
 		return isBlockValid(new SceneryBlock(type, pos, dir));
 	}
 
+	#region isBlockValid
 	public bool isBlockValid(Vector3 pos) {
 		return isBlockValid(find(pos));
 	}
@@ -190,16 +202,14 @@ public class SceneryManager {
 			if(terBlk == null) {
 				return false;
 			}
-			//try to link the scenery, return false if problem
-			if(terBlk != null) {
-				return false;
-			}
-			if(terBlk.Scenery != blk) {
+			if(terBlk.Scenery != null && terBlk.Scenery != blk) {
 				return false;
 			}
 		}
 		return true;
 	}
+	#endregion isBlockValid
+	#endregion Validation
 	
 	public string ScenerySaveString {
 		get {

@@ -11,8 +11,8 @@ public class ARTFRoomManager {
 	}
 
 	//Shallow Copy Constructor. Testing only
-	protected internal ARTFRoomManager(ARTFRoomManager rm){
-		this.roomList = rm.roomList;
+	protected internal ARTFRoomManager(ARTFRoomManager rmMan){
+		this.roomList = rmMan.roomList;
 	}
 
 	#region ManipulationFunctions
@@ -67,8 +67,8 @@ public class ARTFRoomManager {
 	 * 
 	 * Moves the room at position by a value specified by offset
 	 */
-	public void move(Vector3 position, Vector3 offset){
-		move(find(position), offset);
+	public void move(Vector3 pos, Vector3 offset){
+		move(find(pos), offset);
 	}
 
 	/*
@@ -86,19 +86,19 @@ public class ARTFRoomManager {
 	 * 
 	 * Resizes the room at corner by moving corner to nCorner
 	 */
-	public void resize(Vector3 corner, Vector3 nCorner){
+	public void resize(Vector3 oldCor, Vector3 newCor){
 		//get the room at corner
-		ARTFRoom rm = find(corner);
+		ARTFRoom rm = find(oldCor);
 		//if it doesn't exist, abort
 		if(rm == null) {
 			return;
 		}
 		//if corner is not a corner of the room, abort
-		if(!rm.isCorner(corner)) {
+		if(!rm.isCorner(oldCor)) {
 			return;
 		}
 		//tell the room to resize itself
-		rm.resize(corner, nCorner);
+		rm.resize(oldCor, newCor);
 	}
 
 	#endregion ManipulationFunctions
@@ -113,16 +113,16 @@ public class ARTFRoomManager {
 	 */
 	public static bool doRoomsIntersect(ARTFRoom rm1, ARTFRoom rm2){
 		//for each corner in room1
-		foreach(Vector3 corn in rm1.Corners) {
+		foreach(Vector3 cor in rm1.Corners) {
 			//if that corner is inside room2
-			if(rm2.inRoom(corn)){
+			if(rm2.inRoom(cor)){
 				return true;
 			}
 		}
 		//for each corner in room2
-		foreach(Vector3 corn in rm2.Corners) {
+		foreach(Vector3 cor in rm2.Corners) {
 			//if that corner is inside room1
-			if(rm1.inRoom(corn)){
+			if(rm1.inRoom(cor)){
 				return true;
 			}
 		}
@@ -135,14 +135,14 @@ public class ARTFRoomManager {
 	 * Checks to see if a given room intersects with
 	 * any rooms already in the list.
 	 */
-	public bool doAnyRoomsIntersect(ARTFRoom room){
+	public bool doAnyRoomsIntersect(ARTFRoom rm){
 		//for each extant room
-		foreach(ARTFRoom rm in roomList) {
+		foreach(ARTFRoom other in roomList) {
 			//if the room is the room we're checking, move on
-			if(rm.Equals(room)) continue;
+			if(other.Equals(rm)) continue;
 
 			//if the rooms intersect
-			if(doRoomsIntersect(rm, room)){
+			if(doRoomsIntersect(other, rm)){
 				return true;
 			}
 		}
@@ -161,19 +161,19 @@ public class ARTFRoomManager {
 	 * Checks to see if a given room intersects with
 	 * any rooms already in the list if it is moved by offset.
 	 */
-	public bool isMoveValid(ARTFRoom room, Vector3 offset){
+	public bool isMoveValid(ARTFRoom rm, Vector3 offset){
 		//get a new room in the offset position
-		room.move(offset);
+		rm.move(offset);
 		//check if the new room intersects
-		bool retVal = doAnyRoomsIntersect(room);
-		room.move(-offset);
+		bool retVal = doAnyRoomsIntersect(rm);
+		rm.move(-offset);
 		return retVal;
 	}
 	#endregion Move
 
 	#region Resize
-	public bool isResizeValid(Vector3 oldCorner, Vector3 newCorner){
-		return isResizeValid(find(oldCorner), oldCorner, newCorner);
+	public bool isResizeValid(Vector3 oldCor, Vector3 newCor){
+		return isResizeValid(find(oldCor), oldCor, newCor);
 	}
 
 	/*
@@ -182,12 +182,12 @@ public class ARTFRoomManager {
 	 * Checks to see if a given room intersects with
 	 * any rooms already in the list if it is resized
 	 */
-	public bool isResizeValid(ARTFRoom room, Vector3 corner, Vector3 nCorner){
+	public bool isResizeValid(ARTFRoom rm, Vector3 oldCor, Vector3 newCor){
 		//get a new room in the offset position
-		room.resize(corner, nCorner);
+		rm.resize(oldCor, newCor);
 		//check if the new room intersects
-		bool retVal = doAnyRoomsIntersect(room);
-		room.resize(nCorner, corner);
+		bool retVal = doAnyRoomsIntersect(rm);
+		rm.resize(newCor, oldCor);
 		return retVal;
 	}
 	#endregion Resize
@@ -199,11 +199,11 @@ public class ARTFRoomManager {
 	 * 
 	 * Gets the room at a given position
 	 */
-	protected internal ARTFRoom find(Vector3 position){
+	protected internal ARTFRoom find(Vector3 pos){
 		//for each extant room
 		foreach(ARTFRoom rm in roomList) {
 			//if the position is
-			if(rm.inRoom(position)){
+			if(rm.inRoom(pos)){
 				return rm;
 			}
 		}

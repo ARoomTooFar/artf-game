@@ -36,9 +36,9 @@ public class MonsterBlock {
 	/*
 	 * Constructor
 	 */
-	public MonsterBlock (string blockID, Vector3 position, DIRECTION orientation) {
+	public MonsterBlock (string blockID, Vector3 pos, DIRECTION orientation) {
 		this.blockInfo = MonsterBlockInfo.get (blockID);
-		this.position = position.Round ();
+		this.position = pos.Round ();
 		this.orientation = orientation;
 	}
 

@@ -53,16 +53,16 @@ public class MapData {
 		theFarRooms.add(pos1, pos2);
 	}
 
-	public void moveRoom(Vector3 position, Vector3 nPosition){
-		theFarRooms.move(position, nPosition - position);
+	public void moveRoom(Vector3 oldPos, Vector3 newPos){
+		theFarRooms.move(oldPos, newPos - oldPos);
 	}
 
-	public void resizeRoom(Vector3 corner, Vector3 nCorner){
-		theFarRooms.resize(corner, nCorner);
+	public void resizeRoom(Vector3 oldCor, Vector3 newCor){
+		theFarRooms.resize(oldCor, newCor);
 	}
 
-	public void removeRoom(Vector3 position){
-		theFarRooms.remove(position);
+	public void removeRoom(Vector3 pos){
+		theFarRooms.remove(pos);
 	}
 	#endregion RoomManipulation
 
@@ -71,12 +71,12 @@ public class MapData {
 		return theFarRooms.doAnyRoomsIntersect(new ARTFRoom(pos1, pos2));
 	}
 
-	public bool isMoveRoomValid(Vector3 pos, Vector3 nPos){
-		return theFarRooms.isMoveValid(pos, nPos);
+	public bool isMoveRoomValid(Vector3 oldPos, Vector3 newPos){
+		return theFarRooms.isMoveValid(oldPos, newPos);
 	}
 
-	public bool isResizeRoomValid(Vector3 oldCorner, Vector3 newCorner){
-		return theFarRooms.isResizeValid(oldCorner, newCorner);
+	public bool isResizeRoomValid(Vector3 oldCor, Vector3 newCor){
+		return theFarRooms.isResizeValid(oldCor, newCor);
 	}
 	#endregion RoomValidation
 	#endregion Rooms
@@ -137,16 +137,16 @@ public class MapData {
 	#endregion SceneryManipulation
 
 	#region SceneryValidation
-	public bool isAddSceneryValid(string type, Vector3 position, DIRECTION dir = DIRECTION.North){
-		return isAddSceneryValid(type, position, dir);
+	public bool isAddSceneryValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North){
+		return isAddSceneryValid(type, pos, dir);
 	}
 
-	public bool isMoveSceneryValid(Vector3 position, Vector3 offset){
-		return sceneryBlocks.isMoveValid(position, offset);
+	public bool isMoveSceneryValid(Vector3 pos, Vector3 offset){
+		return sceneryBlocks.isMoveValid(pos, offset);
 	}
 
-	public bool isRotateSceneryValid(Vector3 postion, bool goClockwise = true){
-		return sceneryBlocks.isRotationValid(postion, goClockwise);
+	public bool isRotateSceneryValid(Vector3 pos, bool goClockwise = true){
+		return sceneryBlocks.isRotateValid(pos, goClockwise);
 	}
 	#endregion SceneryValidation
 	#endregion Scenery

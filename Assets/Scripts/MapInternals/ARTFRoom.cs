@@ -162,21 +162,21 @@ public partial class ARTFRoom {
 	 * 
 	 * Resizes a room by moving one corner to a new position
 	 */
-	public void resize(Vector3 oldCorner, Vector3 newCorner) {
+	public void resize(Vector3 oldCor, Vector3 newCor) {
 		//Make sure that the old corner is actually a corner
-		if(!isCorner(oldCorner)) {
+		if(!isCorner(oldCor)) {
 			return;
 		}
 		//get the offset
-		Vector3 offset = newCorner - oldCorner;
+		Vector3 offset = newCor - oldCor;
 		//determine which corner to move in the x direction
-		if(oldCorner.x == LLposition.x) {
+		if(oldCor.x == LLposition.x) {
 			LLposition.x += offset.x;
 		} else {
 			URposition.x += offset.x;
 		}
 		//determine which corner to move in the z direction
-		if(oldCorner.z == LLposition.z) {
+		if(oldCor.z == LLposition.z) {
 			LLposition.z += offset.z;
 		} else {
 			URposition.z += offset.z;

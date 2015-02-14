@@ -57,9 +57,9 @@ public class SceneryBlock {
 	/*
 	 * Constructor
 	 */
-	public SceneryBlock (string blockID, Vector3 position, DIRECTION orientation) {
+	public SceneryBlock (string blockID, Vector3 pos, DIRECTION orientation) {
 		this.blockInfo = SceneryBlockInfo.get (blockID);
-		this.position = position.Round ();
+		this.position = pos.Round ();
 		this.orientation = orientation;
 	}
 

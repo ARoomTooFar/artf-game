@@ -13,41 +13,11 @@ public class TerrainManager {
 	}
 
 	//Shallow copy constructor. Only for testing
-	protected internal TerrainManager(TerrainManager orig){
-		dictionary = orig.dictionary;
+	protected internal TerrainManager(TerrainManager other){
+		dictionary = other.dictionary;
 	}
 
-	/*
-	 * public bool addBlock (TerrainBlock block)
-	 * 
-	 * Adds a TerrainBlock to the appropriate list.
-	 * Returns true if successful.
-	 * Returns false if a block already seems to exist in its position.
-	 */
-	public bool add(TerrainBlock block) {
-		//attempt to link the input to its neighbors
-		if(!linkNeighbors(block)) {
-			//if something goes wrong, 
-			unlinkNeighbors(block);
-			return false;
-		}
-		//get the list for the block type
-		List<TerrainBlock> lst;
-		try{
-			lst = dictionary[block.BlockInfo.BlockID];
-		} catch (Exception){
-			//create one if needed
-			lst = new List<TerrainBlock>();
-			dictionary.Add(block.BlockInfo.BlockID, lst);
-		}
-
-
-		//add the block to the list
-		lst.Add(block);
-
-		return true;
-	}
-
+	#region (un)linkNeighbors
 	/*
 	 * private bool linkNeighbors (TerrainBlock block)
 	 * 
@@ -57,22 +27,22 @@ public class TerrainManager {
 	 * Returns true if successful.
 	 * Returns false if a block already has a neighbor in that position.
 	 */
-	private bool linkNeighbors(TerrainBlock block) {
+	private bool linkNeighbors(TerrainBlock blk) {
 		//Go through every set of blocks
 		foreach(List<TerrainBlock> lst in dictionary.Values) {
 			//for each extant block
-			foreach(TerrainBlock blk in lst) {
+			foreach(TerrainBlock other in lst) {
 				//determine if the block is a neighbor of the input
-				DIRECTION dir = block.isNeighbor(blk);
+				DIRECTION dir = blk.isNeighbor(other);
 				//if not, move on to the next one
 				if(dir == DIRECTION.NonDirectional) {
 					continue;
 				}
 				//set the found block as a neighbor of the input
-				block.addNeighbor(blk, dir);
+				blk.addNeighbor(other, dir);
 				//try to set the input as a neighbor of the found block.
 				//if something goes wrong, stop the whole function.
-				if(!blk.addNeighbor(block, dir.Opposite())) {
+				if(!other.addNeighbor(blk, dir.Opposite())) {
 					return false;
 				}
 			}
@@ -86,21 +56,55 @@ public class TerrainManager {
 	 * Breaks all neighbor links between block and its list of neighbors.
 	 * 
 	 */
-	private void unlinkNeighbors(TerrainBlock block) {
+	private void unlinkNeighbors(TerrainBlock blk) {
 		//for each TerrainBlock in block's list of neighbors
-		foreach(KeyValuePair<DIRECTION, TerrainBlock> blk in block.Neighbors) {
+		foreach(KeyValuePair<DIRECTION, TerrainBlock> other in blk.Neighbors) {
 			//remove block from the neighbors list of neighbors
-			blk.Value.removeNeighbor(blk.Key.Opposite());
+			other.Value.removeNeighbor(other.Key.Opposite());
 		}
 		//remove all neighbors from block;
-		block.clearNeighbors();
+		blk.clearNeighbors();
 	}
 
-	public bool relinkNeighbors(TerrainBlock block) {
-		unlinkNeighbors(block);
-		return linkNeighbors(block);
+	public bool relinkNeighbors(TerrainBlock blk) {
+		unlinkNeighbors(blk);
+		return linkNeighbors(blk);
+	}
+	#endregion (un)linkNeighbors
+
+	#region Manipulation
+	/*
+	 * public bool addBlock (TerrainBlock block)
+	 * 
+	 * Adds a TerrainBlock to the appropriate list.
+	 * Returns true if successful.
+	 * Returns false if a block already seems to exist in its position.
+	 */
+	public bool add(TerrainBlock blk) {
+		//attempt to link the input to its neighbors
+		if(!linkNeighbors(blk)) {
+			//if something goes wrong, 
+			unlinkNeighbors(blk);
+			return false;
+		}
+		//get the list for the block type
+		List<TerrainBlock> lst;
+		try{
+			lst = dictionary[blk.BlockInfo.BlockID];
+		} catch (Exception){
+			//create one if needed
+			lst = new List<TerrainBlock>();
+			dictionary.Add(blk.BlockInfo.BlockID, lst);
+		}
+		
+		
+		//add the block to the list
+		lst.Add(blk);
+		
+		return true;
 	}
 
+	#region Remove
 	/*
 	 * public bool removeBlock (Vector3 position)
 	 * 
@@ -109,32 +113,52 @@ public class TerrainManager {
 	 * returns true if the block wasn't or is no longer part of the data
 	 * returns false if something bad happens
 	 */
-	public bool remove(Vector3 position) {
-		//round position
-		Vector3 intPosition = position.Round();
-		//find block at position
-		TerrainBlock tgtBlock = find(intPosition);
-		if(tgtBlock == null) {
-			//if block doesn't exist, return true
-			return true;
-		}
-		//unlink neighbors
-		unlinkNeighbors(tgtBlock);
-		MapData.Instance.SceneryBlocks.remove(position);
-		MapData.Instance.MonsterBlocks.remove(position);
-		//remove from list
-		return dictionary[tgtBlock.BlockInfo.BlockID].Remove(tgtBlock);
+	public bool remove(Vector3 pos) {
+		return remove(find(pos));
 	}
 
+	public bool remove(TerrainBlock blk){
+		//unlink neighbors
+		unlinkNeighbors(blk);
+		MapData.Instance.SceneryBlocks.remove(blk.Scenery);
+		MapData.Instance.MonsterBlocks.remove(blk.Monster);
+		//remove from list
+		return dictionary[blk.BlockInfo.BlockID].Remove(blk);
+	}
+	#endregion Remove
+
+
+	#region Rotate
+	public void rotate(Vector3 pos, bool goClockwise = true){
+		rotate(find(pos), goClockwise);
+	}
+
+	public void rotate(TerrainBlock blk, bool goClockwise = true){
+		blk.rotate(goClockwise);
+	}
+	#endregion Rotate
+
+	#region changeType
+	public void changeType(Vector3 pos, string type){
+		changeType(find(pos), type);
+	}
+
+	public void changeType(TerrainBlock blk, string type){
+		blk.changeType(type);
+	}
+	#endregion changeType
+	#endregion Manipulation
+
+	
 	/*
 	 * public TerrainBlock findBlock (Vector3 position)
 	 * 
 	 * Returns the block at position
 	 * Returns null if there is no block in that position.
 	 */
-	public TerrainBlock find(Vector3 position) {
+	public TerrainBlock find(Vector3 pos) {
 		//round position
-		Vector3 intPosition = position.Round();
+		Vector3 intPosition = pos.Round();
 		//for each type of block
 		foreach(KeyValuePair<string, List<TerrainBlock>> kvPair in dictionary) {
 			//check each block
@@ -147,22 +171,6 @@ public class TerrainManager {
 		}
 		//return null if none found
 		return null;
-	}
-
-	public void rotate(Vector3 pos, bool goClockwise = true){
-		rotate(find(pos), goClockwise);
-	}
-
-	public void rotate(TerrainBlock blk, bool goClockwise = true){
-		blk.rotate(goClockwise);
-	}
-
-	public void changeType(Vector3 pos, string type){
-		changeType(find(pos), type);
-	}
-
-	public void changeType(TerrainBlock blk, string type){
-		blk.changeType(type);
 	}
 
 	public string TerrainSaveString {
