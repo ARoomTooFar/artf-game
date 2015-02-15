@@ -1,10 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-public class Spike : Traps {
+public class SpikeTrap : Traps {
 	
 	public GameObject spike;
 
+	protected float timeToReset;
 	protected Vector3 spikeInitial;
 	protected int unitsInTrap;
 	protected bool firing;
@@ -22,6 +23,7 @@ public class Spike : Traps {
 		base.setInitValues ();
 		
 		damage = 5;
+		spike.GetComponent<HurtBox> ().damage = damage;
 	}
 	
 	protected override void FixedUpdate() {
@@ -43,22 +45,30 @@ public class Spike : Traps {
 	protected virtual IEnumerator riseUp() {
 		Vector3 newPos = spike.transform.localPosition + new Vector3 (0f, 10f, 0f);
 		while (spike.transform.localPosition.y <= newPos.y - .1) {
-			spike.transform.localPosition = Vector3.MoveTowards(spike.transform.localPosition, newPos, Time.deltaTime * 50);
+			spike.transform.localPosition = Vector3.MoveTowards(spike.transform.localPosition, newPos, Time.deltaTime * 60);
 			yield return null;
 		}
-		StartCoroutine(countDown());
+		StartCoroutine(lower());
+	}
+
+	protected virtual IEnumerator lower() {
+		while (spike.transform.localPosition.y >= spikeInitial.y + .1) {
+			spike.transform.localPosition = Vector3.MoveTowards(spike.transform.localPosition, spikeInitial, Time.deltaTime * 5);
+			yield return null;
+		}
+		StartCoroutine (countDown ());
 	}
 
 	protected virtual IEnumerator countDown() {
-		while (spike.transform.localPosition.y >= spikeInitial.y + .1) {
-			spike.transform.localPosition = Vector3.MoveTowards(spike.transform.localPosition, spikeInitial, Time.deltaTime * 3);
+		timeToReset = 0.0f;
+		while (timeToReset <= 1.0f) {
+			timeToReset += Time.deltaTime;
 			yield return null;
 		}
-		print ("hi");
 		firing = true;
 		if (unitsInTrap > 0) spikeRise ();
 	}
-	
+
 	void OnTriggerEnter(Collider other) {
 		unitsInTrap++;
 		spikeRise ();
