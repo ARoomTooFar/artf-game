@@ -1,19 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TestSMRanged: Enemy{
 	
 	//Public variables to tweak in inspector
-	public float fov = 110f;
+	public float fov = 150f;
+	public float patrolSpeed = 2f;
+	public float approachSpeed = 5f;
+	public float reactionTime = 5f;			// Time buffer between player sighting and giving chase
+	public float patrolWaitTime = 1f;		// Time wait when reaching the patrol way point
+	public float aggroTimer = 10f;
+	public int waypointIndex = 0;
+	public bool alerted = false;
+	public bool inPursuit = false;
+	public Vector3 resetpos;
+	public Vector3 lastTargetPosition;
+	float aggro_radius = 700f;
+	float attack_radius = 100f;
+	float lineofsight = 15f;
+	SphereCollider awareness;
+	
+	private GameObject target;
+	
+	// Waypoints for patrolling
+	public List<Transform> patrolWP = new List<Transform>();
+	
+	
 	public bool playerInSight = false;
 	public NavMeshAgent nav;
-	public Animator ani;
 	public Vector3 retreatPos;
 	
 	//Private variables for use in player detection
 	private SphereCollider col;
 	private GameObject[] players;
-	private GameObject target;
 	
 	private Vector3? lastSeenPosition = null;
 	private float posTimer = 0f;
@@ -23,14 +43,19 @@ public class TestSMRanged: Enemy{
 	//Get players, navmesh and all colliders
 	void Awake ()
 	{
+		base.Awake ();
 		nav = GetComponent<NavMeshAgent> ();
 		col = GetComponent<SphereCollider> ();
-		ani = GetComponent<Animator> ();
+		//animator = GetComponent<Animator> ();
 		players = GameObject.FindGameObjectsWithTag ("Player");
 		retreatPos = transform.position;
+		resetpos = transform.position;
+		patrolWP.Add (transform);
+		awareness = GetComponent<SphereCollider> ();
 		
 		//Placeholder for more advanced aggro where target may change
-		target = players [1];
+		target = players [0];
+		lastTargetPosition = target.transform.position;
 		
 		//State machine initialization
 		testStateMachine = new StateMachine ();
@@ -41,18 +66,20 @@ public class TestSMRanged: Enemy{
 	protected override void Update()
 	{
 		base.Update ();
-		Debug.Log (lastSeenPosition.HasValue);
 		if (lastSeenPosition.HasValue && !canSeePlayer (target)) {
 			posTimer += Time.deltaTime;
 		} else if (canSeePlayer (target)){
 			posTimer = 0f;
 		}
-		if(posTimer > 10f)
+		if(posTimer > aggroTimer)
 		{
 			posTimer = 0f;
 			lastSeenPosition = null;
 		}
 		
+		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+		actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+		lastTargetPosition = target.transform.position;
 		
 		testStateMachine.Update ();
 	}
@@ -110,12 +137,22 @@ public class TestSMRanged: Enemy{
 		approach.addAction (Approach, this);
 		retreat.addAction (Retreat, this);
 	}
+
+	public bool Alerted(){
+		return alerted;
+	}
 	
+	public bool canFeel(){
+		return inPursuit;
+	}
+
 	public bool isApproaching(Character a)
 	{
+		nav.speed = approachSpeed;
 		TestSMRanged agent = (TestSMRanged)a;
-		return agent.distanceToPlayer(agent.giveTarget()) < 700f 
-			&& agent.distanceToPlayer(agent.giveTarget()) >= 8.5f && agent.canSeePlayer (agent.giveTarget());
+		float distance = agent.distanceToPlayer(agent.giveTarget());
+		return (distance < aggro_radius 
+		        && distance >= attack_radius && (agent.canSeePlayer (agent.giveTarget()) || agent.canFeel()) );
 	}
 	
 	public bool isResting(Character a)
@@ -127,13 +164,15 @@ public class TestSMRanged: Enemy{
 	public bool isRetreating(Character a)
 	{
 		TestSMRanged agent = (TestSMRanged)a;
-		return agent.distanceToPlayer(agent.giveTarget()) <= 20f;
+		float distance = agent.distanceToPlayer(agent.giveTarget());
+		return distance <= 20f;
 	}
 	
 	public bool isAttacking(Character a)
 	{
 		TestSMRanged agent = (TestSMRanged)a;
-		return  agent.distanceToPlayer(agent.giveTarget()) < 100f && agent.distanceToPlayer(agent.giveTarget()) > 20f;
+		float distance = agent.distanceToPlayer(agent.giveTarget());
+		return distance < attack_radius && distance > 20f;
 	}
 	
 	public bool isSearching(Character a)
@@ -146,19 +185,27 @@ public class TestSMRanged: Enemy{
 	public void Approach(Character a)
 	{
 		TestSMRanged agent = (TestSMRanged)a;
-		agent.ani.SetBool ("Moving", true);
+		agent.inPursuit = true;
+		agent.alerted = true;
+		agent.animator.SetBool ("Moving", true);
 		agent.nav.destination = agent.giveTarget ().transform.position;
 	}
 	
 	public void Attack(Character a)
 	{
 		TestSMRanged agent = (TestSMRanged)a;
-		agent.ani.SetBool ("Moving", false);
+		agent.alerted = true;
+		agent.animator.SetBool ("Moving", false);
 		agent.nav.destination = agent.transform.position;
 		if (!agent.canSeePlayer (agent.giveTarget()))
 			agent.transform.LookAt (agent.giveTarget().transform.position);
-		if (agent.actable)
+		
+		if (agent.actable){
+			/*******************
+			//Should be causing damage, is only triggering attack animation
+		******************/
 			agent.gear.weapon.initAttack();
+		}
 	}
 	
 	
@@ -166,8 +213,11 @@ public class TestSMRanged: Enemy{
 	public void Search(Character a)
 	{
 		TestSMRanged agent = (TestSMRanged)a;
-		agent.ani.SetBool ("Moving", true);
+		agent.inPursuit = true;
+		agent.alerted = true;
+		agent.animator.SetBool ("Moving", true);
 		agent.nav.destination = (Vector3)agent.giveLastSeenPos ();
+
 	}
 	
 	
@@ -175,7 +225,9 @@ public class TestSMRanged: Enemy{
 	public void Retreat(Character a)
 	{
 		TestSMRanged agent = (TestSMRanged)a;
-		agent.ani.SetBool ("Moving", true);
+		agent.inPursuit = true;;
+		agent.alerted = true;
+		agent.animator.SetBool ("Moving", true);
 		agent.nav.speed = 5;
 		agent.nav.destination = agent.retreatPos;
 	}
@@ -183,8 +235,26 @@ public class TestSMRanged: Enemy{
 	public void Rest(Character a)
 	{
 		TestSMRanged agent = (TestSMRanged)a;
-		agent.ani.SetBool ("Moving", false);
-		agent.nav.Stop ();
+		agent.inPursuit = false;
+		//		agent.animator.SetBool ("Moving", false);
+		Patrol (a);
+	}
+
+	public void Patrol(Character a){
+		nav.speed = patrolSpeed;
+		TestSMRanged agent = (TestSMRanged)a;
+		agent.animator.SetBool ("Moving", true);
+		
+		if (agent.nav.remainingDistance < agent.nav.stoppingDistance) {
+			if(agent.waypointIndex <= agent.patrolWP.Count - 1){
+				agent.waypointIndex++;
+				
+			}
+			else agent.waypointIndex = 0;
+			
+		}
+		
+		if(agent.patrolWP.Count > 0) agent.nav.destination = agent.patrolWP[waypointIndex].position;
 	}
 	
 	public bool canSeePlayer(GameObject p)
@@ -197,12 +267,13 @@ public class TestSMRanged: Enemy{
 		if (angle < fov * 0.5f) 
 		{
 			RaycastHit hit;
-			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, col.radius)) 
+			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, lineofsight)) 
 			{
 				
 				if (hit.collider.gameObject == p) 
 				{
 					lastSeenPosition = p.transform.position;
+					alerted = true;
 					return true;
 					
 				}
@@ -211,6 +282,21 @@ public class TestSMRanged: Enemy{
 		
 		
 		return false;
+	}
+
+	void OnTriggerEnter(Collider other) {
+		if (!alerted) {
+			inPursuit = false;
+			Debug.Log("gaar");
+			return;
+		}
+		
+		awareness.radius = 10f;
+		
+		if(other.gameObject == target){
+			inPursuit = true;
+			lastSeenPosition = target.transform.position;
+		}
 	}
 	
 	public float distanceToPlayer(GameObject p)

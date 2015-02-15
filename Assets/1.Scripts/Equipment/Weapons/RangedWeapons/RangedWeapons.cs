@@ -12,6 +12,10 @@ public class RangedWeapons : Weapons {
 	protected Quaternion spray;
 	protected float variance;
 	protected float kick;
+	public int currAmmo;
+	public int maxAmmo;
+	protected float loadSpeed;
+	protected bool reload;
 	
 	protected Projectile bullet;
 
@@ -22,6 +26,7 @@ public class RangedWeapons : Weapons {
 
 	protected override void setInitValues() {
 		base.setInitValues();
+		reload = false;
 	}
 
 	public override void collideOn() {
@@ -67,6 +72,13 @@ public class RangedWeapons : Weapons {
 	protected IEnumerator Wait(float duration){
 		for (float timer = 0; timer < duration; timer += Time.deltaTime)
 			yield return 0;
+	}
+	protected virtual IEnumerator loadAmmo(){
+		yield return StartCoroutine(Wait(loadSpeed));
+		if(reload){
+			currAmmo = maxAmmo;
+			reload = false;
+		}
 	}
 
 	protected override IEnumerator atkFinish() {

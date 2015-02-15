@@ -11,7 +11,6 @@ public class TestPistol : Pistol {
 	// Used for setting sword stats for each equipment piece
 	protected override void setInitValues() {
 		base.setInitValues();
-		
 		stats.atkSpeed = 2.0f;
 		stats.damage = 1;
 		stats.maxChgTime = 2.0f;

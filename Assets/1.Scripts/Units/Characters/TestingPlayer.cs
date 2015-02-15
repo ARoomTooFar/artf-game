@@ -11,7 +11,6 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
-	
 	public Controls controls;
 	
 	// Use this for initialization
@@ -34,9 +33,7 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 		greyDamage = 0;
 		testDmg = 0;
 		testable = true;
-		
 	}
-	
 	// Update is called once per frame
 	protected override void Update () {
 		if(stats.health <= 0){

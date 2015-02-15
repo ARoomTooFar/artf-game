@@ -2,6 +2,8 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
+
 
 public class Enemy : Character, IStunable<float>, IForcible<float> {
 
@@ -18,7 +20,19 @@ public class Enemy : Character, IStunable<float>, IForcible<float> {
 	public bool aggro = false;
 
 	private EnemySight enemySight;
-	
+
+	protected override void Awake() {
+		opposition = Type.GetType ("TestingPlayer");
+		stats = new Stats(this.GetComponent<MonoBehaviour>());
+		animator = GetComponent<Animator>();
+		facing = Vector3.forward;
+		isDead = false;
+		gear.equipGear(this, opposition);
+		inventory.equipItems(this);
+		freeAnim = true;
+		setInitValues();
+	}
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
@@ -39,6 +53,7 @@ public class Enemy : Character, IStunable<float>, IForcible<float> {
 		greyDamage = 0;
 		testDmg = 0;
 		testable = true;
+		setAnimHash ();
 	}
 	
 	// Update is called once per frame

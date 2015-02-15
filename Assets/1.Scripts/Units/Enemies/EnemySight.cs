@@ -4,8 +4,9 @@ using System.Collections;
 public class EnemySight: Enemy{
 
 	//Public variables to tweak in inspector
-	public float fov = 110f;
+	public float fov = 180;
 	public bool playerInSight = false;
+	public bool alerted = false;
 	public Vector3 targetPosition;
 
 	//Private variables for use in player detection
@@ -77,7 +78,7 @@ public class EnemySight: Enemy{
 				Vector3 direction = player.transform.position - transform.position;
 				float angle = Vector3.Angle (direction, transform.forward);
 			
-				if (angle < fov * 0.5f) 
+				if (angle < fov) 
 				{
 					RaycastHit hit;
 					if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, col.radius)) {
