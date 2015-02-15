@@ -8,20 +8,24 @@ public class Input_TileMap : MonoBehaviour
 	Output_TileMap output_tileMap;
 	Camera UICamera;
 	TileMap tileMap;
-	public HashSet<Vector3> selectedTiles = new HashSet<Vector3> ();
+	public HashSet<Vector3> selectedTiles;
 	Vector3 currTile;
 	Vector3 shiftOrigin;
-	string selectedItem = null;
+	string selectedItem;
 	GameObject currentObj;
 
-	static ItemClass itemClass = new ItemClass ();
+	static ItemClass itemClass;
 	
 
 	void Start ()
 	{
+		itemClass = new ItemClass ();
+		selectedTiles = new HashSet<Vector3> ();
+		tileMap = this.gameObject.GetComponent<TileMap> ();
 		UICamera = GameObject.Find ("UICamera").camera;
 		output_tileMap = this.gameObject.GetComponent ("Output_TileMap") as Output_TileMap;
-		tileMap = this.gameObject.GetComponent<TileMap> ();
+
+
 	}
 
 	void Update ()

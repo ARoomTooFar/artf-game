@@ -13,12 +13,13 @@ public class Input_ItemObject : MonoBehaviour {
 	static Camera UICamera;
 	bool inMouseCheck = false;
 	Vector3 initMousePos;
-	static ItemClass itemClass = new ItemClass();
+	static ItemClass itemClass;
 	TileMap tileMap;
 	float mouseDeadZone = 10f;
 	
 
 	void Start () {
+		itemClass = new ItemClass();
 		UICamera = GameObject.Find ("UICamera").camera;
 		tileMap = GameObject.Find ("TileMap").GetComponent("TileMap") as TileMap;
 		output_itemObject = this.gameObject.GetComponent("Output_ItemObject") as Output_ItemObject;
@@ -74,7 +75,7 @@ public class Input_ItemObject : MonoBehaviour {
 						itemClass.modifyItemList(output_itemObject.getName(), output_itemObject.getPosition(), output_itemObject.getRotation());
 
 						//new way
-						itemClass.changeItemPosition(output_itemObject.getName(), output_itemObject.getPosition());
+//						itemClass.changeItemPosition(output_itemObject.getName(), output_itemObject.getPosition());
 					}
 				}
 			}

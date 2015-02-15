@@ -24,8 +24,8 @@ public class UIHandler_FileIO : MonoBehaviour
 	BinaryWriter bin;
 	private StreamWriter writer; // This is the writer that writes to the file
 	private string assetText;
-	static ItemClass itemClass = new ItemClass ();
-	List<string> savedFiles = new List<string>();
+	static ItemClass itemClass;
+	List<string> savedFiles;
 	string fileToLoad;
 	private Farts serv;
 	long levelId;
@@ -35,6 +35,9 @@ public class UIHandler_FileIO : MonoBehaviour
 
 	void Start ()
 	{
+		savedFiles = new List<string>();
+		itemClass = new ItemClass ();
+
 		output_tileMap = GameObject.Find ("TileMap").GetComponent ("Output_TileMap") as Output_TileMap;
 
 		serv = gameObject.AddComponent<Farts> ();
@@ -104,6 +107,13 @@ public class UIHandler_FileIO : MonoBehaviour
 		wipeItemObjects ();
 		itemClass.clearItemList ();
 
+
+
+
+
+
+
+		//old way
 		BinaryFormatter bf = new BinaryFormatter ();
 		string tmp = PlayerPrefs.GetString (s);
 		MemoryStream memoryStream = new MemoryStream (System.Convert.FromBase64String (tmp));
@@ -121,6 +131,7 @@ public class UIHandler_FileIO : MonoBehaviour
 		foreach (Transform child in h) {
 			GameObject.Destroy (child.gameObject);
 		}
+	
 	}
 	
 	public void loadFile ()
