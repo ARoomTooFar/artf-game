@@ -24,8 +24,8 @@ public class UIHandler_FileIO : MonoBehaviour
 	BinaryWriter bin;
 	private StreamWriter writer; // This is the writer that writes to the file
 	private string assetText;
-	static ItemClass itemClass;
-	List<string> savedFiles;
+	static ItemClass itemClass = new ItemClass ();
+	List<string> savedFiles = new List<string>();
 	string fileToLoad;
 	private Farts serv;
 	long levelId;
@@ -35,9 +35,6 @@ public class UIHandler_FileIO : MonoBehaviour
 
 	void Start ()
 	{
-		savedFiles = new List<string>();
-		itemClass = new ItemClass ();
-
 		output_tileMap = GameObject.Find ("TileMap").GetComponent ("Output_TileMap") as Output_TileMap;
 
 		serv = gameObject.AddComponent<Farts> ();
@@ -82,6 +79,8 @@ public class UIHandler_FileIO : MonoBehaviour
 			//give error: SecurityException: No valid crossdomain policy available to allow access
 //			string ulLevelData = serv.newLevel(123, "Level Name", tmp);
 //			Debug.Log(ulLevelData);
+			string aaronTest = "aaronTest";
+			serv.newLevel(aaronTest,  "34534567", "34563456", "345345", "32453245");
 
 //			string levelData = bf.Serialize (file, itemClass.getItemList ());
 //			levelId = serv.newLevel(123, "Level Name", levelData);
@@ -107,13 +106,6 @@ public class UIHandler_FileIO : MonoBehaviour
 		wipeItemObjects ();
 		itemClass.clearItemList ();
 
-
-
-
-
-
-
-		//old way
 		BinaryFormatter bf = new BinaryFormatter ();
 		string tmp = PlayerPrefs.GetString (s);
 		MemoryStream memoryStream = new MemoryStream (System.Convert.FromBase64String (tmp));
@@ -131,7 +123,6 @@ public class UIHandler_FileIO : MonoBehaviour
 		foreach (Transform child in h) {
 			GameObject.Destroy (child.gameObject);
 		}
-	
 	}
 	
 	public void loadFile ()

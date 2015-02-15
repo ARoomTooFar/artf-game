@@ -14,17 +14,16 @@ using System.Linq;
 public class Output_TileMap : MonoBehaviour
 {
 	Input_TileMap input_tileMap;
-//	HashSet<Vector3> selectedTiles = new HashSet<Vector3> ();
+	HashSet<Vector3> selectedTiles = new HashSet<Vector3> ();
 //	public Material selectionMat; //material for selected tiles
 	Transform itemObjects;
 	TileMap tileMap;
-	static ItemClass itemClass;
+	static ItemClass itemClass = new ItemClass ();
 	GameObject groundGrid;
 
 	//start
 	void Awake ()
 	{
-		itemClass = new ItemClass ();
 		tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 		input_tileMap = this.gameObject.GetComponent ("Input_TileMap") as Input_TileMap;
@@ -75,13 +74,12 @@ public class Output_TileMap : MonoBehaviour
 		itemClass.addToItemList (temp.name, position, rotation);
 
 		//new way
-//		itemClass.addItem (temp.name, position, rotation);
+		itemClass.addItem (temp.name, position, rotation);
 	}
 
 	//fill in selected tiles with floor tiles
 	public void fillInRoom (HashSet<Vector3> st, float firstCornerX, float firstCornerZ, float secondCornerX, float secondCornerZ)
 	{
-
 
 
 		foreach (Vector3 pos in st) {
@@ -93,33 +91,24 @@ public class Output_TileMap : MonoBehaviour
 			if ((pos.x == firstCornerX || pos.x == secondCornerX
 				|| pos.z == firstCornerZ || pos.z == secondCornerZ)) {
 
-//				if location already has a wall tile, destroy it
-				if (itemClass.itemOnPlace (walltile, pos)) {
-					for (int i = 0; i < itemClass.getItemList().Count; i++) {
-						if (itemClass.getItemList () [i].x == pos.x
-							&& itemClass.getItemList () [i].z == pos.z
-							&& itemClass.getItemList () [i].y == pos.y) {
-
-							itemClass.getItemList ().Remove (itemClass.getItemList () [i]);
-							foreach (Transform child in itemObjects) {
-								string t = child.transform.name.Substring (0, child.transform.name.IndexOf ('_'));
-								if (String.Equals (t, walltile)) {
-									GameObject.Destroy (child.gameObject);
-								}
-							}
-						}
-					}
-				}
-
-
-				//new way
-//				if (!itemClass.positionContainsType (pos, walltile) && !itemClass.positionContainsType (pos, floortile)) {
-//					instantiateItemObject (walltile, pos, rot);
+				//if location already has a wall tile, destroy it
+//				if (itemClass.itemOnPlace (walltile, pos)) {
+//					for (int i = 0; i < itemClass.getItemList().Count; i++) {
+//						if (itemClass.getItemList () [i].x == pos.x
+//							&& itemClass.getItemList () [i].z == pos.z
+//							&& itemClass.getItemList () [i].y == pos.y) {
+//
+//							itemClass.getItemList ().Remove (itemClass.getItemList () [i]);
+//							foreach (Transform child in itemObjects) {
+//								string t = child.transform.name.Substring (0, child.transform.name.IndexOf ('_'));
+//								if (String.Equals (t, walltile)) {
+//									GameObject.Destroy (child.gameObject);
+//								}
+//							}
+//						}
+//					}
 //				}
 
-
-
-				//old way
 				//if there's no floor or wall tiles there
 				if ((!itemClass.itemOnPlace(walltile, pos) && !itemClass.itemOnPlace (floortile, pos))) {
 
@@ -129,19 +118,10 @@ public class Output_TileMap : MonoBehaviour
 
 				}
 
-				//old way
+
 				//if we're not on an edge (i.e. the center area)
 			} else if (!itemClass.itemOnPlace (floortile, pos)/* && !itemClass.itemOnPlace(walltile, pos)*/) {
 
-				//new way
-//			} else {
-
-//				if (itemClass.positionContainsType (pos, walltile)) {
-//					itemClass.removeItemTypesAtLocation (walltile, pos);
-//				}
-
-
-				//old way
 				//if there's a wall tile there
 				if (itemClass.itemOnPlace (walltile, pos)) {
 
@@ -162,8 +142,6 @@ public class Output_TileMap : MonoBehaviour
 						}
 					}
 				}
-
-				//both ways
 				instantiateItemObject (floortile, pos, rot);
 			}
 		}

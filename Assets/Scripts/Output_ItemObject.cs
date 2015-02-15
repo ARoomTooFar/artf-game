@@ -8,10 +8,9 @@ public class Output_ItemObject : MonoBehaviour {
 	Shader focusedShader;
 	Shader nonFocusedShader;
 
-	static ItemClass itemClass;
+	static ItemClass itemClass = new ItemClass ();
 
 	void Start(){
-		itemClass = new ItemClass ();
 		focusedShader = Shader.Find("Toon/Lighted Outline");
 		nonFocusedShader = Shader.Find("Bumped Diffuse");
 		setToNonFocused();
@@ -61,11 +60,8 @@ public class Output_ItemObject : MonoBehaviour {
 		rotation.z = 0f;
 		rotation.y += deg;
 
-		//old way
 		itemClass.modifyItemList(getName(), getPosition(), rotation);
-
-		//new way
-//		itemClass.changeItemRotation(getName(), rotation);
+//		Debug.Log (getRotation());
 	}
 	
 	public void changeOrientation(Vector3 newRot){
