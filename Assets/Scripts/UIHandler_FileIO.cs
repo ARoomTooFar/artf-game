@@ -183,7 +183,7 @@ public class UIHandler_FileIO : MonoBehaviour
 		//old playerprefs way of storing
 		//			string tmp = PlayerPrefs.GetString (InputField_Load.text);
 		//new google drive way
-		string tmp = serv.getLevel(levelTHING);
+		string tmp = serv.getLevel("6211504244260864");
 		
 		MemoryStream memoryStream = new MemoryStream (System.Convert.FromBase64String (tmp));
 		Debug.Log (" file contents: " + tmp);
