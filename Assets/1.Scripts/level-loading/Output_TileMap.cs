@@ -13,7 +13,7 @@ using System.Linq;
 
 public class Output_TileMap : MonoBehaviour
 {
-	Input_TileMap input_tileMap;
+//	Input_TileMap input_tileMap;
 	HashSet<Vector3> selectedTiles;
 	//	public Material selectionMat; //material for selected tiles
 	Transform itemObjects;
@@ -28,7 +28,7 @@ public class Output_TileMap : MonoBehaviour
 
 		tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
-		input_tileMap = this.gameObject.GetComponent ("Input_TileMap") as Input_TileMap;
+//		input_tileMap = this.gameObject.GetComponent ("Input_TileMap") as Input_TileMap;
 		groundGrid = GameObject.Find ("Ground");
 	}
 	
