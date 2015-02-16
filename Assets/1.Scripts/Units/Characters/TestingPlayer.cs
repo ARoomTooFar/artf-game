@@ -11,6 +11,7 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
+	public GameObject UI;
 	public LifeBar hpBar;
 	public AmmoBar ammoBar;
 	public List<CooldownBar> coolDowns = new List<CooldownBar>();
@@ -34,7 +35,7 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 		inGrey = false;
 		greyDamage = 0;
 		testDmg = 0;
-		testable = true;
+		//testable = true;
 	}
 	//Set cooldown bars to current items. 
 	void ItemCooldowns(){

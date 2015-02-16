@@ -20,6 +20,7 @@ public class Player : Character, IMoveable {
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
+	public GameObject UI;
 	public LifeBar hpBar, greyBar;
 	public AmmoBar ammoBar;
 	public List<CooldownBar> coolDowns = new List<CooldownBar>();
@@ -48,13 +49,13 @@ public class Player : Character, IMoveable {
 		inGrey = false;
 		greyDamage = 0;
 		testDmg = 0;
-		testable = true;
+		//testable = true;
 		
 	}
 	//Set cooldown bars to current items. 
 	void ItemCooldowns(){
 		for(int i = 0; i < inventory.items.Count; i++){
-			inventory.items[i].cdBar = coolDowns[i];
+			//inventory.items[i].cdBar = UI.getComponent("LifeBar");//coolDowns[i];
 		}
 		if(gear.weapon is RangedWeapons){
 			gear.weapon.GetComponent<RangedWeapons>().loadData(ammoBar);
@@ -68,12 +69,15 @@ public class Player : Character, IMoveable {
 			//testable = false;
 		}
 		if(stats.health <= 0){
+			
 			isDead = true;
 		} else {
+			if(testable){
 			hpBar.max = stats.maxHealth;
 			greyBar.max = stats.maxHealth;
 			greyBar.current = stats.health+greyDamage;
 			hpBar.current = stats.health;
+			}
 			isDead = false;
 		}
 		if(!isDead) {
