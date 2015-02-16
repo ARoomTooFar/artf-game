@@ -26,7 +26,7 @@ public class Input_ItemObject : MonoBehaviour {
 	
 	
 	void Update () {
-		if (!Input.GetMouseButtonDown (0)) 
+		if (!Input.GetMouseButtonDown (0) || UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == true) 
 			return; 
 		
 		Ray ray = UICamera.ScreenPointToRay (Input.mousePosition);
