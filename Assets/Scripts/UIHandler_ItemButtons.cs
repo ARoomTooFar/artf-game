@@ -50,6 +50,11 @@ public class UIHandler_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragH
 		string g = "Prefabs/" + this.transform.gameObject.name;
 //		mouseControl.setSelectedItem (g);
 		input_tileMap.setSelectedItem(g);
+
+		//make sure image anchor is way off screen, so it doesn't interfere
+		//with dragging of objects
+		RectTransform anchorRect = draggedImageAnchor.GetComponent("RectTransform") as RectTransform;
+		anchorRect.anchoredPosition = new Vector2(-22f, -100f);
 	}
 
 	IEnumerator dragIt ()
