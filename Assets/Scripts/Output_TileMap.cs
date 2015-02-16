@@ -74,7 +74,7 @@ public class Output_TileMap : MonoBehaviour
 		itemClass.addToItemList (temp.name, position, rotation);
 
 		//new way
-		itemClass.addItem (temp.name, position, rotation);
+//		itemClass.addItem (temp.name, position, rotation);
 	}
 
 	//fill in selected tiles with floor tiles

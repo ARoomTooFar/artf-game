@@ -74,7 +74,7 @@ public class Input_ItemObject : MonoBehaviour {
 						itemClass.modifyItemList(output_itemObject.getName(), output_itemObject.getPosition(), output_itemObject.getRotation());
 
 						//new way
-						itemClass.changeItemPosition(output_itemObject.getName(), output_itemObject.getPosition());
+//						itemClass.changeItemPosition(output_itemObject.getName(), output_itemObject.getPosition());
 					}
 				}
 			}
