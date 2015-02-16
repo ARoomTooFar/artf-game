@@ -9,6 +9,6 @@ public class LifeBar: MonoBehaviour
 	public float max;
 	public float current;
 	void Update () { 
-		renderer.material.SetFloat("_Cutoff", Mathf.InverseLerp(0, Screen.width, current/max)); 
+		renderer.material.SetFloat("_Cutoff", Mathf.InverseLerp(max, 0, current)); 
 	}
 }
