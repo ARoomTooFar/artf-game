@@ -59,7 +59,7 @@ public class HookShot : ChargeItem {
 	
 	public override void useItem() {
 		base.useItem ();
-		// player.animator.SetTrigger("Charging Charge"); Once we have the animation for it
+		// user.animator.SetTrigger("Charging Charge"); Once we have the animation for it
 	}
 
 	public override void deactivateItem() {
@@ -80,7 +80,7 @@ public class HookShot : ChargeItem {
 		if(foe != null) {
 			((IForcible<float>)foe.GetComponent(typeof(IForcible<float>))).pull(tempStun);
 		}
-		//player.freeAnim = true;
+		//user.freeAnim = true;
 		start.GetComponent<Collider>().enabled = true;
 		hitEnd = false;
 		hasHit = true;
@@ -90,7 +90,7 @@ public class HookShot : ChargeItem {
 	}
 
 	private IEnumerator hookFunc(float hookTime) {
-		player.freeAnim = false;
+		user.freeAnim = false;
 		yield return StartCoroutine(hookTimeFunc((hookDist + curChgTime) * 0.1f));
 		
 		animDone();
@@ -133,7 +133,7 @@ public class HookShot : ChargeItem {
 		if(other.tag == "HStart"){
 			foe = null;
 			hitEnd = true;
-			player.freeAnim = true;
+			user.freeAnim = true;
 		}
 	}
 }

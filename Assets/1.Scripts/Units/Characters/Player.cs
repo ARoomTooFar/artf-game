@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 [System.Serializable]
@@ -19,6 +20,10 @@ public class Player : Character, IMoveable {
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
+	public GameObject UI;
+	public LifeBar hpBar, greyBar;
+	public AmmoBar ammoBar;
+	public List<CooldownBar> coolDowns = new List<CooldownBar>();
 	public Controls controls;
 
 	protected override void Awake() {
@@ -44,15 +49,35 @@ public class Player : Character, IMoveable {
 		inGrey = false;
 		greyDamage = 0;
 		testDmg = 0;
-		testable = true;
+		//testable = true;
 		
+	}
+	//Set cooldown bars to current items. 
+	void ItemCooldowns(){
+		for(int i = 0; i < inventory.items.Count; i++){
+			//inventory.items[i].cdBar = UI.getComponent("LifeBar");//coolDowns[i];
+		}
+		if(gear.weapon is RangedWeapons){
+			gear.weapon.GetComponent<RangedWeapons>().loadData(ammoBar);
+		}
 	}
 	
 	// Update is called once per frame
 	protected override void Update () {
+		if(testable){
+			ItemCooldowns();
+			//testable = false;
+		}
 		if(stats.health <= 0){
+			
 			isDead = true;
 		} else {
+			if(testable){
+			hpBar.max = stats.maxHealth;
+			greyBar.max = stats.maxHealth;
+			greyBar.current = stats.health+greyDamage;
+			hpBar.current = stats.health;
+			}
 			isDead = false;
 		}
 		if(!isDead) {
@@ -81,9 +106,12 @@ public class Player : Character, IMoveable {
 	public override void actionCommands() {
 		// Invokes an action/animation
 		if (actable) {
+			/*if(Input.GetKey("space")&&testable){
+				damage(testDmg);
+				testable = false;
+			}*/
 			if(Input.GetKeyDown(controls.attack)) {
 				animator.SetBool("Charging", true);
-				gear.weapon.initAttack();
 				gear.weapon.initAttack();
 			} else if(Input.GetKeyDown (controls.secItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
@@ -231,7 +259,7 @@ public class Player : Character, IMoveable {
 					StartCoroutine("RegenWait");
 				}
 				//print("True!WGAT:"+(stats.maxHealth/20 + tempDmg));
-				return stats.health/20 + tempDmg;
+				return damage + tempDmg;
 			}else{
 				inGrey = true;
 				greyDamage = damage - stats.maxHealth/20;
@@ -241,7 +269,7 @@ public class Player : Character, IMoveable {
 				if(inGrey &&!stats.isDead){
 					StartCoroutine("RegenWait");
 				}
-				return stats.maxHealth/20;
+				return damage;
 			}
 		}
 		if(inGrey){
@@ -257,7 +285,6 @@ public class Player : Character, IMoveable {
 	}
 	private IEnumerator Wait(float duration){
 		for (float timer = 0; timer < duration; timer += Time.deltaTime){
-			testable = true;
 			yield return 0;
 		}
 	}
@@ -265,7 +292,9 @@ public class Player : Character, IMoveable {
 		yield return new WaitForSeconds(1);
 		if(inGrey && !stats.isDead){
 			// print("Healed Grey and True");
+			stats.health++;
 			greyDamage--;
+			greyBar.current = greyDamage+stats.health;
 			if(greyDamage > 0){
 				StartCoroutine("RegenWait");
 			}

@@ -24,9 +24,10 @@ public class CameraAdjuster : MonoBehaviour {
 		//Adjusted value points
 		baseX = baseY/2 + adjVal;
 		baseZ = -(baseY/2 + adjVal);
+		//if(p1 != null || 
 		//Average the x's and z's for the target location of the camera's focus
-		avgX = (p1.transform.position.x + p2.transform.position.x + p3.transform.position.x + p4.transform.position.x)/4 + baseX; // 
-		avgZ = (p1.transform.position.z + p2.transform.position.z + p3.transform.position.z + p4.transform.position.z)/4 + baseZ; //
+		//avgX = (p1.transform.position.x + p2.transform.position.x + p3.transform.position.x + p4.transform.position.x)/4 + baseX; // 
+		//avgZ = (p1.transform.position.z + p2.transform.position.z + p3.transform.position.z + p4.transform.position.z)/4 + baseZ; //
 	}
 	
 	// Update is called once per frame

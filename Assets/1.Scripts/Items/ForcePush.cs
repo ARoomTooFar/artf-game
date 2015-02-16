@@ -36,7 +36,7 @@ public class ForcePush : ChargeItem {
 	}
 	public override void useItem() {
 		base.useItem ();
-		// player.animator.SetTrigger("Charging Charge"); Once we have the animation for it
+		// user.animator.SetTrigger("Charging Charge"); Once we have the animation for it
 	}
 
 	public override void deactivateItem() {
@@ -44,16 +44,16 @@ public class ForcePush : ChargeItem {
 	}
 	// Update is called once per frame
 	protected override void chgDone() {
-		// player.animator.SetTrigger("Charge Forward");
+		// user.animator.SetTrigger("Charge Forward");
 		
 		//collider.enabled = true;
-		player.freeAnim = false;
-		facing = player.facing;
+		user.freeAnim = false;
+		facing = user.facing;
 		StartCoroutine(chargeFunc((chgDist + curChgTime) * 0.1f));
 	}
 
 	protected override void animDone() {
-		player.freeAnim = true;
+		user.freeAnim = true;
 		collider.enabled = false;
 		hit = false;
 	    rigidbody.isKinematic = true;
@@ -79,10 +79,10 @@ public class ForcePush : ChargeItem {
 	// Timer and velocity changing thing
 	private IEnumerator chgTimeFunc(float chgTime) {
 		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
-			rigidbody.velocity = facing.normalized * player.stats.speed * 1.5f * chargeSpeed;
+			rigidbody.velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 			transform.localScale += new Vector3(0.20f,0,0.20f);
 			foreach(Character foe in foes) {
-				foe.rigidbody.velocity = facing.normalized * player.stats.speed * 1.5f * chargeSpeed;
+				foe.rigidbody.velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 			}
 			//((IForcible<float>)foe.GetComponent(typeof(IForcible<float>))).push(0.1f);
 			yield return 0;
@@ -91,13 +91,13 @@ public class ForcePush : ChargeItem {
 	private IEnumerator retTimeFunc(float chgTime) {
 		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
             transform.localScale -= new Vector3(0.20f,0,0.20f);
-			rigidbody.velocity = -facing.normalized * player.stats.speed * 1.5f * chargeSpeed;
+			rigidbody.velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 			/*if (!hit) {
 				rigidbody.velocity = Vector3.zero;
 				yield break;
 			}*/
 			foreach(Character foe in foes) {
-				foe.rigidbody.velocity = facing.normalized * player.stats.speed * 1.5f * chargeSpeed;
+				foe.rigidbody.velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 				//((IForcible<float>)foe.GetComponent(typeof(IForcible<float>))).push(0.1f);
 			}
 			yield return 0;
@@ -113,7 +113,7 @@ public class ForcePush : ChargeItem {
 
 	void OnTriggerEnter (Collider other) {
 			RiotShield rShield = other.GetComponent<RiotShield>();
-			if (other.tag == "Wall" || rShield && rShield.player.facing.normalized + player.facing.normalized == Vector3.zero) {
+			if (other.tag == "Wall" || rShield && rShield.user.facing.normalized + user.facing.normalized == Vector3.zero) {
 				hit = true;
 			}
 			IForcible<float> component = (IForcible<float>) other.GetComponent( typeof(IForcible<float>) );
@@ -122,7 +122,7 @@ public class ForcePush : ChargeItem {
 				foes.Add (foe);
 			}
 		// Will need a differentiation in the future(Or not if we want this)
-		//     I suggest having the players know what is there enemy and settign ti that way somehow
+		//     I suggest having the users know what is there enemy and settign ti that way somehow
 
 	}
 }
