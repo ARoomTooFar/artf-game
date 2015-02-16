@@ -11,7 +11,8 @@ public class WeaponStats {
 	public int damage;
 	//counts number of hits so far in the multiple hit string
 	public int multHit;
-	//0 -Melee, 1 -Gun, 2 -Flamethrower
+
+
 	public int weapType;
 	public string weapTypeName;
 
@@ -20,7 +21,7 @@ public class WeaponStats {
 	public int chgType;
 	// Charge atk variables
 	public int chgDamage;
-	public float maxChgTime, chgLevels, curChgAtkTime, curChgDuration, timeForChgAttack;
+	public float maxChgTime, chgLevels, curChgAtkTime, curChgDuration, timeForChgAttack, timeForSpecial;
 	public int specialAttackType;
 }
 
@@ -63,7 +64,8 @@ public class Weapons : Equipment {
 		stats.curChgDuration = 0.0f;
 		stats.chgLevels = 0.4f;
 		stats.chgDamage = 0;
-		stats.timeForChgAttack = 0.5f;
+		stats.timeForChgAttack = 0.8f;
+		stats.timeForSpecial = 1.6f;
 		stats.specialAttackType = 0;
 		soundDur = 0.1f;
 		playSound = true;
@@ -101,6 +103,7 @@ public class Weapons : Equipment {
 	// Weapon Attacking Functions //
 	//----------------------------//
 
+
 	// Start by initiateing attack animation
 	public virtual void initAttack() {
 		user.animator.SetTrigger("Attack");
@@ -134,7 +137,11 @@ public class Weapons : Equipment {
 
 	// When player stops holding down charge, we check parameter for what attack to perform
 	protected virtual void attack() {
-		if (stats.curChgDuration >= stats.timeForChgAttack) {
+		if (stats.curChgDuration >= stats.timeForSpecial) {
+			user.GetComponent<Character>().animator.SetInteger("ChargedAttackNum", 1);
+			chargedAttack();
+		} else if (stats.curChgDuration >= stats.timeForChgAttack) {
+			user.GetComponent<Character>().animator.SetInteger("ChargedAttackNum", 0);
 			chargedAttack();
 		} else {
 			basicAttack();

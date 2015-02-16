@@ -1,14 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
-public class TrapStats {
-	public int damage;
-}
-
 public class Traps : MonoBehaviour {
 	
-	public TrapStats stats;
+	public int damage;
 
 	// Use this for initialization
 	protected virtual void Start () {
@@ -16,7 +11,7 @@ public class Traps : MonoBehaviour {
 	}
 
 	protected virtual void setInitValues() {
-		stats.damage = 1;
+		damage = 1;
 	}
 
 	protected virtual void FixedUpdate() {

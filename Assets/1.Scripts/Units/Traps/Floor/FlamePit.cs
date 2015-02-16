@@ -13,7 +13,7 @@ public class FlamePit : Traps {
 	protected override void setInitValues() {
 		base.setInitValues ();
 
-		stats.damage = 1;
+		damage = 1;
 	}
 
 	protected override void FixedUpdate() {
@@ -27,7 +27,7 @@ public class FlamePit : Traps {
 
 	protected virtual void inFire(Character enemy) {
 		if (enemy && enemy.collider.bounds.Intersects(collider.bounds)) {
-			enemy.damage (stats.damage);
+			enemy.damage (damage);
 			StartCoroutine(fireTiming(enemy, 0.3f));
 		}
 	}
@@ -44,7 +44,7 @@ public class FlamePit : Traps {
 		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
 		Character enemy = other.GetComponent<Character>();
 		if (component != null && enemy != null) {
-			enemy.damage (stats.damage);
+			enemy.damage (damage);
 			StartCoroutine(fireTiming(enemy, 0.3f));
 		}
 	}
