@@ -71,7 +71,7 @@ public class RangedWeapons : Weapons {
 	}
 	public virtual void loadData(AmmoBar ammoB){
 		ammoBar = ammoB;
-		ammoBar.active = 1;
+		ammoBar.onState = 1;
 		ammoBar.max = maxAmmo;
 		ammoBar.current = currAmmo;
 	}
@@ -81,7 +81,7 @@ public class RangedWeapons : Weapons {
 			yield return 0;
 	}
 	protected IEnumerator loadWait(float duration){
-		ammoBar.active = 2;
+		ammoBar.onState = 2;
 		ammoBar.max = duration;
 		for (float timer = 0; timer < duration; timer += Time.deltaTime){
 			ammoBar.current = timer;
@@ -93,7 +93,7 @@ public class RangedWeapons : Weapons {
 			yield return StartCoroutine(loadWait(loadSpeed));
 			if(reload){
 				currAmmo = maxAmmo;
-				ammoBar.active = 1;
+				ammoBar.onState = 1;
 				ammoBar.max = maxAmmo;
 				ammoBar.current = currAmmo;
 				reload = false;
