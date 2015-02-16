@@ -4,31 +4,33 @@ using System.Collections.Generic;
 
 public class Input_TileMap : MonoBehaviour
 {
-
+	
 	Output_TileMap output_tileMap;
 	Camera UICamera;
 	TileMap tileMap;
-	public HashSet<Vector3> selectedTiles = new HashSet<Vector3> ();
+	public HashSet<Vector3> selectedTiles;
 	Vector3 currTile;
 	Vector3 shiftOrigin;
 	string selectedItem = null;
 	GameObject currentObj;
-
+	
 	static ItemClass itemClass = new ItemClass ();
 	
-
+	
 	void Start ()
 	{
+		selectedTiles = new HashSet<Vector3> ();
+
 		UICamera = GameObject.Find ("UICamera").camera;
 		output_tileMap = this.gameObject.GetComponent ("Output_TileMap") as Output_TileMap;
 		tileMap = this.gameObject.GetComponent<TileMap> ();
 	}
-
+	
 	void Update ()
 	{
 		RayToScene ();
 	}
-
+	
 	void RayToScene ()
 	{
 		/* get world coordinates with respect to mouse position by raycast */
@@ -62,7 +64,7 @@ public class Input_TileMap : MonoBehaviour
 			}
 		}
 	}
-
+	
 	/* snap mouse selection to grid */
 	void snapToGrid (float xf, float zf)
 	{
@@ -96,7 +98,7 @@ public class Input_TileMap : MonoBehaviour
 					Vector3 vec = new Vector3 (x, 0, z);
 					Vector3 max = vec.getMaxVals (shiftOrigin);
 					Vector3 min = vec.getMinVals (shiftOrigin);
-//					Debug.Log (shiftOrigin + " to " + x + ", " + z);
+					//					Debug.Log (shiftOrigin + " to " + x + ", " + z);
 					for (int xx = (int) min.x; xx <= (int) max.x; xx++) {
 						for (int zz = (int) min.z; zz <= (int) max.z; zz++) {
 							selectedTiles.Add (new Vector3 (xx, 0, zz));
@@ -114,7 +116,7 @@ public class Input_TileMap : MonoBehaviour
 		}
 		
 	}
-
+	
 	/* Add selected tile index to a list to be access by the camera script for rendering 
 	 * and update the last selected tile in case of shift click */
 	void selectTile (Vector3 add)
@@ -144,7 +146,7 @@ public class Input_TileMap : MonoBehaviour
 	{
 		selectedItem = null;
 	}
-
+	
 	public HashSet<Vector3> getSelectedTiles ()
 	{
 		return selectedTiles;

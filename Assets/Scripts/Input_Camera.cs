@@ -9,7 +9,7 @@ using System.Text;
 
 public class Input_Camera : MonoBehaviour {
 
-	Output_Camera cameraControl = new Output_Camera();
+	Output_Camera cameraControl;
 
 	Button Button_TopDown;
 	Button Button_Perspective;
@@ -20,6 +20,9 @@ public class Input_Camera : MonoBehaviour {
 	Button Button_Pointer; 
 	
 	void Start () {
+//		cameraControl = new Output_Camera();
+		cameraControl = GameObject.Find("Output_Camera").GetComponent("Output_Camera") as Output_Camera;
+
 		Button_TopDown = GameObject.Find ("Button_TopDown").GetComponent("Button") as Button;
 		Button_Perspective = GameObject.Find ("Button_Perspective").GetComponent("Button") as Button;
 		Button_Orthographic = GameObject.Find ("Button_Orthographic").GetComponent("Button") as Button;

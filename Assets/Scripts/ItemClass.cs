@@ -14,96 +14,96 @@ using System.Linq;
 public class ItemClass
 {
 
-
-	//names with aspects
-	//e.g. what's the position of walltile_45?
-	public static Dictionary<string, itemAspects> nameDic = new Dictionary<string, itemAspects>();
-
-	//positions with types
-	//e.g. does tile (4, 15, 12) have a wall tile on it?
-	public static Dictionary<Vector3, List<string>> positionDic = new Dictionary<Vector3, List<string>>();
-
-	//types with aspects
-	//e.g. where a
-//	public static Dictionary<string, itemAspects> typeDic = new Dictionary<string, itemAspects>();
-
-	public struct itemAspects{
-		public string type;
-		public string name;
-		public Vector3 position;
-		public Vector3 rotation;
-	}
-	
-
-	public void addItem(string name, Vector3 posVec, Vector3 rotVec){
-		itemAspects its = new itemAspects();
-
-		its.type = name.Substring (0, name.IndexOf ('_'));
-		its.name = name;
-		its.position = posVec;
-		its.rotation = rotVec;
-
-		nameDic.Add (its.name, its);
-
-		//if no entry in position dictionary, create one
-
-		//if positionDic doesn't have the vector, add it
-		if(!positionDic.ContainsKey(posVec)){
-			List<string> list = new List<string>();
-			list.Add(its.type);
-			positionDic.Add(posVec, list);
-		//if positionDic has the vector, but not the type, add it
-		}else if (positionDic.ContainsKey(posVec) && !positionDic[posVec].Contains(its.type)){
-			positionDic[posVec].Add(its.type);
-		//if list exists, and it doesn't contain the type, add it
-		}
-
-	}
-
-	public void removeItemByName(string name){
-		positionDic.Remove(nameDic[name].position);
-
-		//must be done last
-		nameDic.Remove(name);
-	}
-
-	//remove all items of a particular type from a location
-	public void removeItemTypesAtLocation(string type, Vector3 posVec){
-
-		//remove from nameDic
-		foreach(string s in nameDic.Keys){
-			string nameToType = s.Substring (0, s.IndexOf ('_'));
-			if(String.Equals(nameToType, type)){
-				nameDic.Remove(s);
-			}
-		}
-
-		//remove from positionDic
-		if(positionDic.ContainsKey(posVec) && positionDic[posVec].Contains(type)){
-			positionDic[posVec].Remove(type);
-		}
-
-	}
-
-	public void changeItemPosition(string name, Vector3 posVec){
-		//if no entry in position dictionary, create one
-		if(!positionDic.ContainsKey(posVec)){
-			List<string> list = new List<string>();
-			list.Add(nameDic[name].type);
-			positionDic.Add(posVec, list);
-		//if list exists, but doesn't contain type, add the type
-		//can be used later for checking for placing multiple items on one tile
-		}else if(positionDic.ContainsKey(posVec) && !positionDic[posVec].Contains(nameDic[name].type)){
-			positionDic[posVec].Add(nameDic[name].type);
-		}
-
-		//update nameDic
-		itemAspects its = nameDic[name];
-		its.position = posVec;
-		nameDic[name] = its; 
-	}
-
-
+//
+//	//names with aspects
+//	//e.g. what's the position of walltile_45?
+//	public static Dictionary<string, itemAspects> nameDic = new Dictionary<string, itemAspects>();
+//
+//	//positions with types
+//	//e.g. does tile (4, 15, 12) have a wall tile on it?
+//	public static Dictionary<Vector3, List<string>> positionDic = new Dictionary<Vector3, List<string>>();
+//
+//	//types with aspects
+//	//e.g. where a
+////	public static Dictionary<string, itemAspects> typeDic = new Dictionary<string, itemAspects>();
+//
+//	public struct itemAspects{
+//		public string type;
+//		public string name;
+//		public Vector3 position;
+//		public Vector3 rotation;
+//	}
+//	
+//
+//	public void addItem(string name, Vector3 posVec, Vector3 rotVec){
+//		itemAspects its = new itemAspects();
+//
+//		its.type = name.Substring (0, name.IndexOf ('_'));
+//		its.name = name;
+//		its.position = posVec;
+//		its.rotation = rotVec;
+//
+//		nameDic.Add (its.name, its);
+//
+//		//if no entry in position dictionary, create one
+//
+//		//if positionDic doesn't have the vector, add it
+//		if(!positionDic.ContainsKey(posVec)){
+//			List<string> list = new List<string>();
+//			list.Add(its.type);
+//			positionDic.Add(posVec, list);
+//		//if positionDic has the vector, but not the type, add it
+//		}else if (positionDic.ContainsKey(posVec) && !positionDic[posVec].Contains(its.type)){
+//			positionDic[posVec].Add(its.type);
+//		//if list exists, and it doesn't contain the type, add it
+//		}
+//
+//	}
+//
+//	public void removeItemByName(string name){
+//		positionDic.Remove(nameDic[name].position);
+//
+//		//must be done last
+//		nameDic.Remove(name);
+//	}
+//
+//	//remove all items of a particular type from a location
+//	public void removeItemTypesAtLocation(string type, Vector3 posVec){
+//
+//		//remove from nameDic
+//		foreach(string s in nameDic.Keys){
+//			string nameToType = s.Substring (0, s.IndexOf ('_'));
+//			if(String.Equals(nameToType, type)){
+//				nameDic.Remove(s);
+//			}
+//		}
+//
+//		//remove from positionDic
+//		if(positionDic.ContainsKey(posVec) && positionDic[posVec].Contains(type)){
+//			positionDic[posVec].Remove(type);
+//		}
+//
+//	}
+//
+//	public void changeItemPosition(string name, Vector3 posVec){
+//		//if no entry in position dictionary, create one
+//		if(!positionDic.ContainsKey(posVec)){
+//			List<string> list = new List<string>();
+//			list.Add(nameDic[name].type);
+//			positionDic.Add(posVec, list);
+//		//if list exists, but doesn't contain type, add the type
+//		//can be used later for checking for placing multiple items on one tile
+//		}else if(positionDic.ContainsKey(posVec) && !positionDic[posVec].Contains(nameDic[name].type)){
+//			positionDic[posVec].Add(nameDic[name].type);
+//		}
+//
+//		//update nameDic
+//		itemAspects its = nameDic[name];
+//		its.position = posVec;
+//		nameDic[name] = its; 
+//	}
+//
+//
 
 
 

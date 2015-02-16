@@ -7,10 +7,11 @@ public class Renderer_TileMapGraphics : MonoBehaviour
 {
 	Input_TileMap input_tileMap;
 	public Material selectionMat; //material for selected tiles
-	HashSet<Vector3> selectedTiles = new HashSet<Vector3> ();
+	HashSet<Vector3> selectedTiles;
 	
 	void Awake ()
 	{
+		selectedTiles = new HashSet<Vector3> ();
 		input_tileMap = GameObject.Find ("TileMap").GetComponent ("Input_TileMap") as Input_TileMap;
 	}
 

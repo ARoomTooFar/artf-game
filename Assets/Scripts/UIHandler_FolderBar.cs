@@ -11,7 +11,7 @@ using System.Collections;
 public class UIHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 {
 	//default color for the folder buttons
-	Color buttonColor = new Color32(0, 147, 176, 255);
+	Color buttonColor;
 
 	Color selectedButtonColor = Color.cyan;
 
@@ -44,6 +44,8 @@ public class UIHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 	
 	void Start ()
 	{
+		buttonColor = new Color32(0, 147, 176, 255);
+
 		//get number of folder scrollviews and make an array for them
 		numberOfFolders = folderObject.gameObject.transform.GetChildCount ();
 		folders = new GameObject[numberOfFolders];

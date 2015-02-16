@@ -27,11 +27,13 @@ public class Input_ItemObjectUI : MonoBehaviour {
 
 	Camera UICamera;
 
-	Vector3 mouseStartPos = new Vector3(0,0,0);
+	Vector3 mouseStartPos;
 
 	bool rayHit = false;
 
 	void Start () {
+		mouseStartPos = new Vector3(0,0,0);
+
 		output_itemObject = transform.parent.GetComponent("Output_ItemObject") as Output_ItemObject;
 
 //		Button_UpArrow_Attack = transform.Find("ToggledItems/MonsterUpgrade/Attack/Button_UpArrow_Attack").GetComponent("Button") as Button;

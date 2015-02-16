@@ -17,7 +17,7 @@ public class Output_Camera : MonoBehaviour
 	static float baseZ = 2.5f;
 	static float minY = 5f;
 	static float maxY = 25f;
-	static Vector2 dragSpeed = new Vector2 (3f, 3f);
+	static Vector2 dragSpeed;
 	static float scrollSpeed = 2f;
 	static float zoomSpeed = 2f;
 	static bool isTopDown = false;
@@ -26,6 +26,8 @@ public class Output_Camera : MonoBehaviour
 
 	void Start ()
 	{
+		dragSpeed = new Vector2 (3f, 3f);
+
 		UICamera = GameObject.Find ("UICamera").camera;
 		OnTopCamera = GameObject.Find ("LayersOnTopOfEverythingCamera").camera;
 
