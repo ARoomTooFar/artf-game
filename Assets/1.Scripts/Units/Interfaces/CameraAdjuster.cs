@@ -12,6 +12,7 @@ public class CameraAdjuster : MonoBehaviour {
 	public float avgX,avgZ,baseY,baseX,baseZ,adjVal,supBaseY,avgNum,avgPX,avgPZ;
 	// Use this for initialization
 	void Start () {
+
 		transform.rotation = Quaternion.Euler(45,-45,0);
 		//transform.rotation = Quaternion.Euler(90,0,0);
 		//arbitrarily decided point

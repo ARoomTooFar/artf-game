@@ -25,6 +25,7 @@ public class MeleeWeapons : Weapons {
 		enemy.damage(stats.damage + stats.chgDamage, user);
 	}
 
+	// only capsule collider should be checked in this function
 	void OnTriggerEnter(Collider other) {
 		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
 		Character enemy = (Character) other.GetComponent(opposition);
