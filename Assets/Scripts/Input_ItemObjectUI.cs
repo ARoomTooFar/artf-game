@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class Input_ItemObjectUI : MonoBehaviour {
 	Output_ItemObjectUI output_itemObjectUI;
 	Output_ItemObject output_itemObject;
-//	Select_Deselect_All select_Deselect_All;
+
 
 
 	Button Button_UpArrow_Attack;
@@ -24,7 +24,7 @@ public class Input_ItemObjectUI : MonoBehaviour {
 	Button Button_Rotate;
 	Button Screen_Button_Rotate;
 
-//	Button Button_Select_All;
+
 
 	Button Button_X;
 
@@ -48,13 +48,13 @@ public class Input_ItemObjectUI : MonoBehaviour {
 
 		Button_Rotate = transform.Find("Buttons/Button_Rotate").GetComponent("Button") as Button;
 		Screen_Button_Rotate = GameObject.Find("Screen_Button_Rotate").GetComponent("Button") as Button;
-	//	Button_Select_All = GameObject.Find ("Button_Select_All").GetComponent ("Button") as Button;
+
 
 		Button_X = transform.Find("Buttons/Button_X").GetComponent("Button") as Button;
 
 		UICamera = GameObject.Find("UICamera").camera;
 		output_itemObjectUI = this.gameObject.GetComponent("Output_ItemObjectUI") as Output_ItemObjectUI;
-//		select_Deselect_All = GameObject.Find ("ItemObjects").GetComponent ("Select_Deselect_All") as Select_Deselect_All;
+
 		//Attack upgrade/downgrade listeners
 		Button_UpArrow_Attack.onClick.AddListener (() => {
 			output_itemObjectUI.increaseAttack (); });
@@ -84,10 +84,6 @@ public class Input_ItemObjectUI : MonoBehaviour {
 		});
 
 
-		//Select All button
-	//	Button_Select_All.onClick.AddListener (() => {
-	//		select_Deselect_All.selectOrDeselectAll (); 
-	//	});
 		//screen button object rotate.
 		//intended to rotate focused object
 //		Screen_Button_Rotate.onClick.AddListener (() => {
