@@ -64,6 +64,7 @@ public class UIHandler_FileIO : MonoBehaviour
 //		BinaryFormatter bf = new BinaryFormatter ();
 //		FileStream file = File.Create ("Assets/Resources/savedLevel.txt");
 
+		Debug.Log(itemClass.getItemList ().Count);
 		if (itemClass.getItemList ().Count != 0) {
 		//old playerprefs way
 //		if (itemClass.getItemList ().Count != 0 && InputField_Save.text.Length != 0) {
@@ -85,7 +86,7 @@ public class UIHandler_FileIO : MonoBehaviour
 //			}
 
 			//new 1/15 v3.0 server way
-			levelTHING = serv.newLevel("stuff",  "34534567", "34563456", tmp, "32453245");
+			levelTHING = serv.newLevel("6211504244260864",  "stuff", "34563456", tmp, "32453245");
 			Debug.Log(levelTHING);
 
 

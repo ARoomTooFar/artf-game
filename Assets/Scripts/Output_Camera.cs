@@ -12,8 +12,8 @@ public class Output_Camera : MonoBehaviour
 	static Camera UICamera;
 	static Camera OnTopCamera;
 
+	static float baseX = 43f;
 	static float baseY = 21f;
-	static float baseX = -5f;
 	static float baseZ = 2.5f;
 	static float minY = 5f;
 	static float maxY = 25f;
@@ -31,7 +31,7 @@ public class Output_Camera : MonoBehaviour
 		UICamera = GameObject.Find ("UICamera").camera;
 		OnTopCamera = GameObject.Find ("LayersOnTopOfEverythingCamera").camera;
 
-		setCameraRotation (new Vector3 (45, 45, 0));
+		setCameraRotation (new Vector3 (45, -45, 0));
 		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
 
 		changeToPerspective ();
@@ -139,7 +139,7 @@ public class Output_Camera : MonoBehaviour
 
 	public void changeToTopDown ()
 	{
-		setCameraRotation (new Vector3 (90, 45, 0));
+		setCameraRotation (new Vector3 (90, -45, 0));
 		isTopDown = true;
 	}
 	
@@ -149,7 +149,7 @@ public class Output_Camera : MonoBehaviour
 		OnTopCamera.orthographic = false;
 		isTopDown = false;
 
-		setCameraRotation (new Vector3 (45, 45, 0));
+		setCameraRotation (new Vector3 (45, -45, 0));
 	}
 	
 	public void changetoOrthographic ()
@@ -158,6 +158,6 @@ public class Output_Camera : MonoBehaviour
 		OnTopCamera.orthographic = true;
 		isTopDown = false;
 
-		setCameraRotation (new Vector3 (45, 45, 0));
+		setCameraRotation (new Vector3 (45, -45, 0));
 	}
 }
