@@ -18,7 +18,7 @@ public class Output_Camera : MonoBehaviour
 	static float minY = 5f;
 	static float maxY = 25f;
 	static Vector2 dragSpeed;
-	static float scrollSpeed = 2f;
+//	static float scrollSpeed = 2f;
 	static float zoomSpeed = 2f;
 	static bool isTopDown = false;
 	float dx;

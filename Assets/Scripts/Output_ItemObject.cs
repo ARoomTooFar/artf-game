@@ -5,15 +5,15 @@ public class Output_ItemObject : MonoBehaviour {
 	//	GameObject itemObject; //object we're messing with
 	Vector3 rotation;
 	Vector3 position;
-	Shader focusedShader;
-	Shader nonFocusedShader;
+//	Shader focusedShader;
+//	Shader nonFocusedShader;
 	
 	static ItemClass itemClass = new ItemClass ();
 	
 	void Start(){
-		focusedShader = Shader.Find("Toon/Lighted Outline");
-		nonFocusedShader = Shader.Find("Bumped Diffuse");
-		setToNonFocused();
+//		focusedShader = Shader.Find("Toon/Lighted Outline");
+//		nonFocusedShader = Shader.Find("Bumped Diffuse");
+//		setToNonFocused();
 	}
 	
 	void Update () {
@@ -25,14 +25,14 @@ public class Output_ItemObject : MonoBehaviour {
 	//focus	
 	
 	
-	public void setToFocused(){
-		//		this.gameObject.renderer.material.shader = focusedShader;
-		//		this.gameObject.renderer.material.SetColor("_OutlineColor", Color.yellow);
-	}
-	
-	public void setToNonFocused(){
-		//		this.gameObject.renderer.material.shader = nonFocusedShader;
-	}
+//	public void setToFocused(){
+//		//		this.gameObject.renderer.material.shader = focusedShader;
+//		//		this.gameObject.renderer.material.SetColor("_OutlineColor", Color.yellow);
+//	}
+//	
+//	public void setToNonFocused(){
+//		//		this.gameObject.renderer.material.shader = nonFocusedShader;
+//	}
 	
 	
 	//position

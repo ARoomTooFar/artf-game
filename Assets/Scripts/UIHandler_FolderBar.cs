@@ -47,7 +47,7 @@ public class UIHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 		buttonColor = new Color32(0, 147, 176, 255);
 
 		//get number of folder scrollviews and make an array for them
-		numberOfFolders = folderObject.gameObject.transform.GetChildCount ();
+		numberOfFolders = folderObject.gameObject.transform.childCount;
 		folders = new GameObject[numberOfFolders];
 
 		//add all the folder scrollviews to their array
@@ -56,7 +56,7 @@ public class UIHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 		}
 
 		//get number of folder buttons and setup the array for them
-		numberOfbuttons = buttonObject.gameObject.transform.GetChildCount ();
+		numberOfbuttons = buttonObject.gameObject.transform.childCount;
 		buttons = new GameObject[numberOfbuttons];
 
 		//shove all of the folder button into the array we have for them
@@ -113,8 +113,8 @@ public class UIHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 
 	void slideFolderBar(){
 		bool hideFolderBar = true;
-		Vector3 openPos = new Vector3(openPosX, -245.5f, 0f);
-		Vector3 closePos = new Vector3(closePosX, -245.5f, 0f);
+//		Vector3 openPos = new Vector3(openPosX, -245.5f, 0f);
+//		Vector3 closePos = new Vector3(closePosX, -245.5f, 0f);
 
 		for (int i = 0; i < numberOfFolders; i++) {
 			if(folders [i].activeSelf){

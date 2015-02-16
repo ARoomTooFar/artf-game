@@ -18,15 +18,15 @@ public class UIHandler_FileIO : MonoBehaviour
 	public Button Button_Load = null;
 	//	public InputField InputField_Save = null;
 	//	public InputField InputField_Load = null;
-	MouseHandler_TileSelection tileSelection;
+//	MouseHandler_TileSelection tileSelection;
 	//	Dictionary<string, Vector3> savedState;
-	DataHandler_Items data;
+//	DataHandler_Items data;
 	BinaryWriter bin;
-	private StreamWriter writer; // This is the writer that writes to the file
-	private string assetText;
+//	private StreamWriter writer; // This is the writer that writes to the file
+//	private string assetText;
 	static ItemClass itemClass;
-	List<string> savedFiles;
-	string fileToLoad;
+//	List<string> savedFiles;
+//	string fileToLoad;
 	private Farts serv;
 	long levelId;
 	string levelTHING;
@@ -37,7 +37,7 @@ public class UIHandler_FileIO : MonoBehaviour
 	void Start ()
 	{
 		itemClass = new ItemClass ();
-		savedFiles = new List<string>();
+//		savedFiles = new List<string>();
 		
 		output_tileMap = GameObject.Find ("TileMap").GetComponent ("Output_TileMap") as Output_TileMap;
 		
@@ -48,10 +48,10 @@ public class UIHandler_FileIO : MonoBehaviour
 			loadFile ();});
 		
 		
-		tileSelection = GameObject.Find ("TileMap").GetComponent ("MouseHandler_TileSelection") as MouseHandler_TileSelection;
+//		tileSelection = GameObject.Find ("TileMap").GetComponent ("MouseHandler_TileSelection") as MouseHandler_TileSelection;
 		//		savedState = new Dictionary<string, Vector3> ();
 		
-		data = GameObject.Find ("ItemObjects").GetComponent ("DataHandler_Items") as DataHandler_Items;
+//		data = GameObject.Find ("ItemObjects").GetComponent ("DataHandler_Items") as DataHandler_Items;
 		
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 		
@@ -186,7 +186,7 @@ public class UIHandler_FileIO : MonoBehaviour
 		string tmp = serv.getLevel("6211504244260864");
 		
 		MemoryStream memoryStream = new MemoryStream (System.Convert.FromBase64String (tmp));
-		Debug.Log (" file contents: " + tmp);
+//		Debug.Log (" file contents: " + tmp);
 		List<ItemClass.ItemStruct> savedFile = (List<ItemClass.ItemStruct>)bf.Deserialize (memoryStream);
 		
 		

@@ -31,13 +31,13 @@ public class TileMap : MonoBehaviour {
 	void buildMesh(){
 
 		/* total values */
-		int tiles_total = grid_x * grid_z;
-		int tri_total = tiles_total * 2;
+//		int tiles_total = grid_x * grid_z;
+//		int tri_total = tiles_total * 2;
 
 		/* number of vertices in each x z rows and the total number of vertices */
 		int vx = grid_x - 1;
 		int vz = grid_z - 1;
-		int vert_total = vx * vz;
+//		int vert_total = vx * vz;
 
 		/* Initialization */
 		Vector3[] vertices = new Vector3[4];
@@ -73,7 +73,7 @@ public class TileMap : MonoBehaviour {
 		mesh.normals = normals;
 
 		MeshFilter mesh_filter = GetComponent<MeshFilter>();
-		MeshRenderer mesh_render = GetComponent<MeshRenderer>();
+//		MeshRenderer mesh_render = GetComponent<MeshRenderer>();
 		MeshCollider mesh_collider = GetComponent<MeshCollider>();
 
 		mesh_filter.mesh = mesh;

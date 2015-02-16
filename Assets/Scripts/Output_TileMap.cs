@@ -13,8 +13,8 @@ using System.Linq;
 
 public class Output_TileMap : MonoBehaviour
 {
-	Input_TileMap input_tileMap;
-	HashSet<Vector3> selectedTiles;
+//	Input_TileMap input_tileMap;
+//	HashSet<Vector3> selectedTiles;
 	//	public Material selectionMat; //material for selected tiles
 	Transform itemObjects;
 	TileMap tileMap;
@@ -24,11 +24,11 @@ public class Output_TileMap : MonoBehaviour
 	//start
 	void Awake ()
 	{
-		selectedTiles = new HashSet<Vector3> ();
+//		selectedTiles = new HashSet<Vector3> ();
 
 		tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
-		input_tileMap = this.gameObject.GetComponent ("Input_TileMap") as Input_TileMap;
+//		input_tileMap = this.gameObject.GetComponent ("Input_TileMap") as Input_TileMap;
 		groundGrid = GameObject.Find ("Ground");
 	}
 	

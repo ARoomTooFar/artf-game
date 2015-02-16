@@ -135,7 +135,7 @@ public class Output_ItemObjectUI : MonoBehaviour
 		text.SetActive(!text.activeSelf);
 
 		//temporary
-		output_itemObject.setToFocused();
+//		output_itemObject.setToFocused();
 	}
 
 }

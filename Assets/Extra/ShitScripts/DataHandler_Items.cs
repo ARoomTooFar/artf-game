@@ -8,7 +8,7 @@ public class DataHandler_Items : MonoBehaviour {
 	
 //	Dictionary<string, Vector3> itemDictionary;
 
-	int nameCounter = 0;
+//	int nameCounter = 0;
 
 //	ItemClass itemClass = new ItemClass();
 
