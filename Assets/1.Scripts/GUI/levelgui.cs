@@ -71,24 +71,6 @@ public class levelgui : MonoBehaviour {
 		{
 			case "PlayerSelect":
 				
-				//Players must log in here, choosing a name that matches the list that is synced online.
-				//Players must provide a password that also syncs with a list online.
-				//Once these are both done add the player to the active list of players in this game session.
-
-				//If they don't have a character, make one with a random name.
-				//Let the player choose from a selection of staring items.
-				//Give the player a code they can use online to claim the character.
-				//Add to the player list (File) and sync with web.
-				//Add to the active player list for this session.
-				
-
-				//Set # of players. Add a player by pressing the "attack" button on appropriate control station.
-				//Ready after longin press "Attack" button.
-				
-				//If all the players in the game pass the ready check they it will set the party as all ready
-				//moveToScene ("LevelSelect");
-			
-
 				break;
 
 			case "LevelSelect":
@@ -166,6 +148,7 @@ public class levelgui : MonoBehaviour {
 		}
 		loadGear = GameObject.FindGameObjectWithTag("LoadGear");
 		cameras = GameObject.FindGameObjectWithTag("GameCameras");
+
 		DontDestroyOnLoad (loadGear);
 		DontDestroyOnLoad (cameras);
 		DontDestroyOnLoad (gamestate.Instance);

@@ -33,12 +33,15 @@ public class CameraAdjuster : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Check if they are far enough to need to stretch the distancing
-		scrollCheck();
+		if((p1 != null) || (p2 !=null) || (p3 !=null) || (p4 != null)){
+			scrollCheck();
+			avgMake();
+		}
 		//Same adjustment values for X and Z as start
 		baseX = baseY/2 + adjVal;
 		baseZ = -(baseY/2 + adjVal);
 		//Average the x's and z's for the target location of the camera's focus
-		avgMake();
+		//avgMake();
 		//Translate the camera after everything is done
 		transform.position = new Vector3(avgX,baseY,avgZ);
 	}
@@ -46,22 +49,22 @@ public class CameraAdjuster : MonoBehaviour {
 		avgNum = 0;
 		avgPX = 0;
 		avgPZ = 0;
-		if(!p1.isDead){
+		if(!p1.isDead && (p1 != null)){
 		  avgNum++;
 		  avgPX += p1.transform.position.x;
 		  avgPZ += p1.transform.position.z;
 		}
-		if(!p2.isDead){
+		if(!p2.isDead && (p2 !=null)){
 		  avgNum++;
 		  avgPX += p2.transform.position.x;
 		  avgPZ += p2.transform.position.z;
 		}
-		if(!p3.isDead){
+		if(!p3.isDead && (p3 !=null)){
 		  avgNum++;
 		  avgPX += p3.transform.position.x;
 		  avgPZ += p3.transform.position.z;
 		}
-		if(!p4.isDead){
+		if(!p4.isDead && (p4 != null)){
 		  avgNum++;
 		  avgPX += p4.transform.position.x;
 		  avgPZ += p4.transform.position.z;

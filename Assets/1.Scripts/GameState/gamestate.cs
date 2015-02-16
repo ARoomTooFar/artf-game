@@ -31,8 +31,12 @@ public class gamestate : MonoBehaviour {
 	private Player player2;
 	private Player player3;
 	private Player player4;
+
+	private CameraAdjuster cam;
+	private Loadgear gear;
 	
 	private string testUserName;
+	
 	//----------------------------------
 	//gameState()
 	//----------------------------------
@@ -373,9 +377,6 @@ public class gamestate : MonoBehaviour {
 		{
 			print ("Player number is not valid");
 		}
-		CameraAdjuster cam = GameObject.Find ("PerspectiveCamera").GetComponent <CameraAdjuster>();
-		Loadgear gear = GameObject.Find ("LoadGear").GetComponent <Loadgear> ();
-		Player plr;
 		//if the login is successful (user name and password are both correct).
 		if(true)
 		{
@@ -384,39 +385,21 @@ public class gamestate : MonoBehaviour {
 			case 1: 
 				addPlayerToList(playerNumber);
 				gamestate.instance.setPlayerReady (playerNumber);
-				//adds player object to the camera list of players
-
-				plr = GameObject.Find ("Player1").GetComponent <Player>();
-				cam.p1 = plr;
-				gear.players[0] = plr;
-				//adds player to the loadgear list of players
 				break;
 
 			case 2: 
 				addPlayerToList(playerNumber);
 				gamestate.instance.setPlayerReady (playerNumber);
-
-				plr = GameObject.Find ("Player2").GetComponent <Player>();
-				cam.p2 = plr;
-				gear.players[1] = plr;
 				break;
 
 			case 3: 
 				addPlayerToList(playerNumber);
 				gamestate.instance.setPlayerReady (playerNumber);
-
-				plr = GameObject.Find ("Player3").GetComponent <Player>();
-				cam.p3 = plr;
-				gear.players[2] = plr;
 				break;
 			
 			case 4: 
 				addPlayerToList(playerNumber);
 				gamestate.instance.setPlayerReady (playerNumber);
-
-				plr = GameObject.Find ("Player4").GetComponent <Player>();
-				cam.p4 = player4;
-				gear.players[3] = plr;
 				break;
 			
 			default:
