@@ -113,7 +113,6 @@ public class Player : Character, IMoveable {
 			if(Input.GetKeyDown(controls.attack)) {
 				animator.SetBool("Charging", true);
 				gear.weapon.initAttack();
-				gear.weapon.initAttack();
 			} else if(Input.GetKeyDown (controls.secItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;

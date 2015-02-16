@@ -34,14 +34,14 @@ public class RiotShield : ToggleItem {
 	public override void useItem() {
 		base.useItem();
 
-		// player.animator.SetTrigger("Sprint"); Set speed var in animator once we have the animation
+		// user.animator.SetTrigger("Sprint"); Set speed var in animator once we have the animation
 	}
 
 	protected override IEnumerator bgnEffect() {
 		collider.enabled = true;
 		meshRenderer.enabled = true;
-		player.stats.dmgManip.setDamageReduction(1, dmgReduction);
-		player.slow (userSlow);
+		user.stats.dmgManip.setDamageReduction(1, dmgReduction);
+		user.slow (userSlow);
 		return base.bgnEffect();
 	}
 	
@@ -53,8 +53,8 @@ public class RiotShield : ToggleItem {
 		collider.enabled = false;
 		meshRenderer.enabled = false;
 
-		player.stats.dmgManip.removeDamageReduction(1, dmgReduction);
-		player.removeSlow (userSlow);
+		user.stats.dmgManip.removeDamageReduction(1, dmgReduction);
+		user.removeSlow (userSlow);
 		base.atvDeactivation();
 	}
 

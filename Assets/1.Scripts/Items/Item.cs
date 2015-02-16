@@ -5,9 +5,13 @@ using System.Collections;
 
 public class Item : MonoBehaviour {
 
-	public Character player;
+	public Character user;
+
+	// protected float cooldown;
+
     public CooldownBar cdBar;
 	public float cooldown;
+
 	public float curCoolDown;
 
 	// Use this for initialization
