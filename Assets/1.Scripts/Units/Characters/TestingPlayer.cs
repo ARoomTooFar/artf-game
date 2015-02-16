@@ -3,7 +3,7 @@
 
 using UnityEngine;
 using System.Collections;
-using System;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
 public class TestingPlayer : TestingCharacter, IMoveable {
@@ -11,11 +11,14 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
+	public GameObject UI;
+	public LifeBar hpBar;
+	public AmmoBar ammoBar;
+	public List<CooldownBar> coolDowns = new List<CooldownBar>();
 	public Controls controls;
 	
 	// Use this for initialization
 	protected override void Start () {
-		opposition = Type.GetType("Enemy");
 		base.Start ();
 	}
 	
@@ -32,10 +35,28 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 		inGrey = false;
 		greyDamage = 0;
 		testDmg = 0;
-		testable = true;
+		//testable = true;
 	}
+	//Set cooldown bars to current items. 
+	void ItemCooldowns(){
+		for(int i = 0; i < inventory.items.Count; i++){
+			inventory.items[i].cdBar = coolDowns[i];
+		}
+		if(gear.weapon is RangedWeapons){
+			//gear.weapon.GetComponent<RangedWeapons>().ammoBar = ammoBar;
+			gear.weapon.GetComponent<RangedWeapons>().loadData(ammoBar);
+		}
+	}
+	
 	// Update is called once per frame
 	protected override void Update () {
+		if(testable){
+			ItemCooldowns();
+			testable = false;
+		}
+		hpBar.max = stats.maxHealth;
+		//greyBar.max = stats.maxHealth;
+		hpBar.current = stats.health;
 		if(stats.health <= 0){
 			isDead = true;
 		} else {
@@ -241,7 +262,7 @@ public class TestingPlayer : TestingCharacter, IMoveable {
 	}
 	private IEnumerator Wait(float duration){
 		for (float timer = 0; timer < duration; timer += Time.deltaTime){
-			testable = true;
+			//testable = true;
 			yield return 0;
 		}
 	}

@@ -33,7 +33,11 @@ public class Hook : ChargeItem {
 	}
 	public override void useItem() {
 		base.useItem ();
+
 		// user.animator.SetTrigger("Charging Charge"); Once we have the animation for it
+
+		renderer.enabled = true;
+
 	}
 
 	public override void deactivateItem() {
@@ -53,6 +57,7 @@ public class Hook : ChargeItem {
 		user.freeAnim = true;
 		collider.enabled = false;
 		hit = false;
+		renderer.enabled = false;
 	    rigidbody.isKinematic = true;
 		foe = null;
 		base.animDone ();
