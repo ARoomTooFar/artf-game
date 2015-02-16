@@ -133,6 +133,8 @@ public class Output_ItemObjectUI : MonoBehaviour
 	public bool toggleItemObjectUI(){
 		buttons.SetActive(!buttons.activeSelf);
 		text.SetActive(!text.activeSelf);
+
+		//if already active return false, otherwise return true (used for select/deselect all)
 		if (!buttons.activeSelf)
 			return false;
 		else 
