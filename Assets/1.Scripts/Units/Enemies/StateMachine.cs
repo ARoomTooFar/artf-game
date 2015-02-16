@@ -9,6 +9,12 @@ public delegate void AIAction( Character agent );
 public class State 
 {
 	private string id;
+
+	private AIAction action;
+	private AIAction exitAction;
+
+	private Character agent;
+
 	public string sId()
 	{
 		return id;
@@ -24,17 +30,27 @@ public class State
 		transitions.Add (t);
 	}
 
-	private AIAction action;
-	private Character agent;
+
 	public void getAction()
 	{
 		action(agent);
+	}
+
+	public void onExit(){
+		if(exitAction != null){
+			exitAction (agent);
+		}
 	}
 
 	public void addAction(AIAction act, Character a)
 	{
 		action = act;
 		agent = a;
+	}
+
+	public void addExitAction(AIAction act)
+	{
+		exitAction = act;
 	}
 
 	public State(string n){
@@ -48,13 +64,13 @@ public class Transition {
 
 	private AICondTest condition;
 	private Character agent;
+	private State targetState;
 
 	public bool isTriggered()
 	{
 		return condition(agent);
 	}
 
-	private State targetState;
 	public State getTargetState()
 	{
 		return targetState;
@@ -104,6 +120,7 @@ public class StateMachine{
 			if(t.isTriggered())
 			{
 				triggeredTransition = t;
+				currState.onExit();
 				break;
 			}
 		}
@@ -111,6 +128,7 @@ public class StateMachine{
 		if (triggeredTransition != null) 
 		{
 			currState = triggeredTransition.getTargetState();
+
 		}
 
 		currState.getAction ();
