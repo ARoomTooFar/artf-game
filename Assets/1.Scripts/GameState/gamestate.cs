@@ -22,17 +22,11 @@ public class gamestate : MonoBehaviour {
 
 	public List<string> usernames = new List<string>();
 	public List<string> passwords = new List<string>();
-
-	private int numPlayers;				//This is the total number of player in the game
 	
-	//private bool p1ready;				//If the player is ready for the next scene
-	//private bool p2ready;
-	//private bool p3ready;
-	//private	bool p4ready;	
 	private bool partyReady;				//If all the players in the game are ready
 
 	public List<Player> players = new List<Player>();	//List of the Players in the game so stats can be checked in their player.cs class.
-
+	
 	private Player player1;
 	private Player player2;
 	private Player player3;
@@ -93,48 +87,48 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	//addPlayer()
 	//--------------------------------
-	//Adds a player to the list of players in the game
+	//Adds a player to the list of players at the index for the relavent player, ie player1 goes into players[0] and so on.
 	//--------------------------------
-	public void addPlayer(Player newPlayer)
+	public void addPlayer(Player newPlayer, int playerNumber)
 	{
-
-		gamestate.instance.players.Add(newPlayer);
+		//playerNumber - 1 because that will be off by 1.
+		print (gamestate.instance.players.Count);
+		// print ("player to be added is player" + playerNumber);
+		//gamestate.instance.players.Insert((playerNumber - 1),newPlayer);
+		gamestate.instance.players [playerNumber - 1] = newPlayer;
 	}
 
 	//--------------------------------
 	//addTestPlayers()
 	//--------------------------------
 	//Adds a player to the game. There can only be 4 players in the game at a time. It will not let you add more than 4.
+	//takes in in playerNumber which tells where to put the player in the list.
 	//--------------------------------
-	public void addPlayerToList ()
+	public void addPlayerToList (int playerNumber)
 	{
 
-		player1 = GameObject.Find ("Player1").GetComponent <Player>();
-
-		switch (gamestate.instance.numPlayers)
+		//player1 = GameObject.Find ("Player1").GetComponent <Player>();
+		gamestate.instance.players.Capacity = 4; //is sure to set the max capacity of the list to 4 (of by one perhaps?).
+		switch (playerNumber)
 		{
-		case 0:
-			player1 = GameObject.Find ("Player1").GetComponent <Player>();	
-			addPlayer(player1);
-			gamestate.instance.numPlayers++;
-			break;
-			
 		case 1:
-			player2 = GameObject.Find ("Player2").GetComponent <Player>();
-			addPlayer(player2);
-			gamestate.instance.numPlayers++;
+			player1 = GameObject.Find ("Player1").GetComponent <Player>();	
+			addPlayer(player1, playerNumber);
 			break;
 			
 		case 2:
-			player3 = GameObject.Find ("Player3").GetComponent <Player>();
-			addPlayer(player3);
-			gamestate.instance.numPlayers++;
+			player2 = GameObject.Find ("Player2").GetComponent <Player>();
+			addPlayer(player2, playerNumber);
 			break;
 			
 		case 3:
+			player3 = GameObject.Find ("Player3").GetComponent <Player>();
+			addPlayer(player3, playerNumber);
+			break;
+			
+		case 4:
 			player4 = GameObject.Find ("Player4").GetComponent <Player>();
-			addPlayer(player4);
-			gamestate.instance.numPlayers++;
+			addPlayer(player4, playerNumber);
 			break;
 		
 		default:
@@ -151,17 +145,17 @@ public class gamestate : MonoBehaviour {
 	//gets the username from the UI. Takes in a string that comes from the UI, if it's null it won't assign it to the username variable.
 	//will assign un for whichever player is to log in next using the switch statement.
 	//--------------------------------
-	public void getUsername(string un)
+	public void getUsername(string un, int playerNumber)
 	{
 		if (un == "")
 		{
 			print ("Entered Username was empty, please re-enter.");
 		} else {
-			switch(gamestate.instance.numPlayers)
+			switch(playerNumber)
 			{
 			case 1:
 				gamestate.instance.username1 = un;
-				print("Player " + gamestate.instance.numPlayers + " Username is " + gamestate.instance.username1 + ".");
+				print("Player " + playerNumber + " Username is " + gamestate.instance.username1 + ".");
 				break;
 				
 			case 2:
@@ -191,19 +185,19 @@ public class gamestate : MonoBehaviour {
 	//gets the password from the UI. Takes in a string that comes from the UI, if it's null it won't assign it to the password variable.
 	//will assign the pw to the next player using the switch statement. 
 	//--------------------------------
-	public void getPassword(string pw)
+	public void getPassword(string pw, int playerNumber)
 	{
 		if (pw == "")
 		{
 			print ("Entered password was empty, please re-enter.");
 
 		} else {
-			switch(gamestate.instance.numPlayers)
+			switch(playerNumber)
 			{
 				
 			case 1:
 				gamestate.instance.username1 = pw;
-				print("Player " + gamestate.instance.numPlayers + " password is " + gamestate.instance.username1 + ".");
+				print("Player " + playerNumber + " password is " + gamestate.instance.username1 + ".");
 				break;
 				
 			case 2:
@@ -234,7 +228,7 @@ public class gamestate : MonoBehaviour {
 	public void setPlayerReady(int playerNumber)
 	{
 
-
+		//makes sure the list has stuff in it.
 		if (gamestate.instance.players != null)
 		{
 
@@ -243,25 +237,43 @@ public class gamestate : MonoBehaviour {
 			{
 				case 1:
 					
+					if(players[0] != null) 
+					{
 						gamestate.instance.players[0].isReady = true;
-					
+					} else {
+						print ("Player at this index is null");
+					}
 					break;
 
 				case 2:
 
+					if(players[1] != null) 
+					{
 						gamestate.instance.players[1].isReady = true;
+					} else {
+						print ("Player at this index is null");
+					}
 				
 					break;
 
 				case 3:
 			
+					if(players[2] != null) 
+					{
 						gamestate.instance.players[2].isReady = true;
-
-				break;
+					} else {
+						print ("Player at this index is null");
+					}
+					break;
 
 				case 4:
 
+					if(players[3] != null) 
+					{
 						gamestate.instance.players[3].isReady = true;
+					} else {
+						print ("Player at this index is null");
+					}
 				
 					break;
 			default:
@@ -300,10 +312,17 @@ public class gamestate : MonoBehaviour {
 				gamestate.instance.players[3].isReady = false;
 				break;
 			case "all":
-				gamestate.instance.players[0].isReady = false;
-				gamestate.instance.players[1].isReady = false;
-				gamestate.instance.players[2].isReady = false;
-				gamestate.instance.players[3].isReady = false;
+					
+			foreach (Player plr in gamestate.instance.players) 
+			{
+				//if they exist
+				if(plr != null)
+				{
+					plr.isReady = false;
+				}
+				
+			}
+
 			print ("reset all player ready values to false");
 			break;
 
@@ -339,6 +358,76 @@ public class gamestate : MonoBehaviour {
 	}
 
 
+	//loginPlayer()
+	//--------------------------------
+	//Logs in the player using their information passed in from text feild GUI's. If sucessful it will add a player to the list in their
+	//proper position (player 1 is always at gamestate.instance.players[0], etc) it will then set their status to ready.
+	//If the login fails it will not add the player to the list and it will not make the player ready.
+	//Takes in int playerNumber which tells the GS where to place the logged in player in the players <list>.
+	//--------------------------------
+	public void loginPlayer(int playerNumber) 
+	{
+		print ("Tring to login the player");
+		//checks to see if the playerNumber is valid. if not says so.
+		if(playerNumber > 4 || playerNumber < 1) 
+		{
+			print ("Player number is not valid");
+		}
+		CameraAdjuster cam = GameObject.Find ("PerspectiveCamera").GetComponent <CameraAdjuster>();
+		Loadgear gear = GameObject.Find ("LoadGear").GetComponent <Loadgear> ();
+		Player plr;
+		//if the login is successful (user name and password are both correct).
+		if(true)
+		{
+			switch (playerNumber)
+			{
+			case 1: 
+				addPlayerToList(playerNumber);
+				gamestate.instance.setPlayerReady (playerNumber);
+				//adds player object to the camera list of players
+
+				plr = GameObject.Find ("Player1").GetComponent <Player>();
+				cam.p1 = plr;
+				gear.players[0] = plr;
+				//adds player to the loadgear list of players
+				break;
+
+			case 2: 
+				addPlayerToList(playerNumber);
+				gamestate.instance.setPlayerReady (playerNumber);
+
+				plr = GameObject.Find ("Player2").GetComponent <Player>();
+				cam.p2 = plr;
+				gear.players[1] = plr;
+				break;
+
+			case 3: 
+				addPlayerToList(playerNumber);
+				gamestate.instance.setPlayerReady (playerNumber);
+
+				plr = GameObject.Find ("Player3").GetComponent <Player>();
+				cam.p3 = plr;
+				gear.players[2] = plr;
+				break;
+			
+			case 4: 
+				addPlayerToList(playerNumber);
+				gamestate.instance.setPlayerReady (playerNumber);
+
+				plr = GameObject.Find ("Player4").GetComponent <Player>();
+				cam.p4 = player4;
+				gear.players[3] = plr;
+				break;
+			
+			default:
+				print ("did not add or make player ready");
+				break;
+			}
+
+		} else {
+			print ("Failed to login");
+		}
+	}
 
 
 	//------------------------------------------------
@@ -387,7 +476,7 @@ public class gamestate : MonoBehaviour {
 		foreach (Player plr in gamestate.instance.players) 
 		{
 			//if they are alive
-			if(!plr.isDead)
+			if(plr != null && !plr.isDead)
 			{
 				//checks to see if the player is at the end of the dungeon
 				if(plr.atEnd)
@@ -421,7 +510,7 @@ public class gamestate : MonoBehaviour {
 		//checks the player class for each player in list of active players in the game to see if they are ready.
 		foreach (Player plr in gamestate.instance.players) 
 		{
-			if(plr.isReady)
+			if(plr != null && plr.isReady)
 			{
 				ready++;
 			}
@@ -460,8 +549,8 @@ public class gamestate : MonoBehaviour {
 		
 		foreach (Player plr in gamestate.instance.players) 
 		{
-			//if they are alive
-			if(!plr.isDead)
+			//if they are alive and are in the list
+			if(plr != null && !plr.isDead)
 			{
 				//checks to see if the player is at the start of the dungeon
 				if(plr.atStart)
@@ -493,11 +582,11 @@ public class gamestate : MonoBehaviour {
 	{
 		
 		int dead = 0;
-		int numPlayers = gamestate.instance.players.Count;
+		int numPlayers = gamestate.instance.getNumPlayers();
 		//checks the player class for each player in list of active players in the game to see if they are alive.
 		foreach (Player plr in gamestate.instance.players) 
 		{
-			if(plr.isDead)
+			if(plr != null && plr.isDead)
 			{
 				dead++;
 			}
@@ -527,7 +616,7 @@ public class gamestate : MonoBehaviour {
 		//checks the player class for each player in list of active players in the game to see if they are alive.
 		foreach (Player plr in gamestate.instance.players) 
 		{
-			if(!plr.isDead)
+			if(plr != null && !plr.isDead)
 			{
 				alive++;
 			}
@@ -543,12 +632,23 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	//getNumPlayers()
 	//--------------------------------
-	//returns an int with the number of players.
+	//Checks the players <list> for players, when it finds one (not null) it adds that to the total. Returns an int with the total number of players.
 	//--------------------------------
 	public int getNumPlayers()
 	{
+		int numPlayers = 0;
 		//gets the number of players in the players list
-		int numPlayers = gamestate.instance.players.Count;
+		foreach (Player plr in gamestate.instance.players) 
+		{
+			if(plr != null)
+			{
+				numPlayers++;
+				print ("player is added to numPlayers");
+			} else {
+				print("player index is null");
+			}
+		}
+
 		print ("There are " + numPlayers + "in the game");
 		return numPlayers;
 	}

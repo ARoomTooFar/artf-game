@@ -25,7 +25,11 @@ public class gamestart : MonoBehaviour {
 		print ("Starting Game");
 		DontDestroyOnLoad (gamestate.Instance);
 		gamestate.Instance.startState ();
-
+		gamestate.Instance.players.Add (null);
+		gamestate.Instance.players.Add (null);
+		gamestate.Instance.players.Add (null);
+		gamestate.Instance.players.Add (null);
+		print(gamestate.Instance.players.Count);
 		//Send game off to player selection (Login)
 		gamestate.Instance.setLevel("PlayerSelect");
 		Application.LoadLevel("PlayerSelect");

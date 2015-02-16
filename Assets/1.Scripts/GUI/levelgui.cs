@@ -52,9 +52,10 @@ public class levelgui : MonoBehaviour {
 		//resets the spawn of the player in the new scene
 		for(int i = 0; i < gamestate.Instance.getNumPlayers(); i++)
 		{	
-			//gamestate.Instance.players[0] = GameObject.FindGameObjectWithTag("Player1");
-			gamestate.Instance.players[i].transform.position  = new Vector3(0,30,0);
-
+			if(gamestate.Instance.players[i] != null)
+			{
+				gamestate.Instance.players[i].transform.position  = new Vector3(0,50,0);	
+			}
 		}
 
 	}
@@ -113,7 +114,7 @@ public class levelgui : MonoBehaviour {
 				//creates button to move between InventorySelect and LevelSelect
 				if (GUI.Button (new Rect (30, 30, 150, 30), "Game Scene"))
 				{
-					moveToScene ("FirstPlayableScene");
+					moveToScene ("FirstPlayableSceneWithGS");
 				}
 				break;
 
@@ -147,15 +148,21 @@ public class levelgui : MonoBehaviour {
 		print("moving to "+ aScene);
 		gamestate.Instance.setLevel(aScene);
 		foreach (Player plr in gamestate.Instance.players) { //preserves all the players in the List of player in the game
-			plr.atStart = false;
-			plr.atEnd = false;
-			plr.isReady = false;
-			DontDestroyOnLoad(plr);
+			if(plr != null)
+			{
+				plr.atStart = false;
+				plr.atEnd = false;
+				plr.isReady = false;
+				DontDestroyOnLoad(plr);
+			}
 		}
 		//resets the spawn of the player in the new scene
 		for(int i = 0; i < gamestate.Instance.getNumPlayers(); i++)
 		{	
-			gamestate.Instance.players[i].transform.position  = new Vector3(0,50,0);	
+			if(gamestate.Instance.players[i] != null)
+			{
+				gamestate.Instance.players[i].transform.position  = new Vector3(0,50,0);	
+			}
 		}
 		loadGear = GameObject.FindGameObjectWithTag("LoadGear");
 		cameras = GameObject.FindGameObjectWithTag("GameCameras");
