@@ -250,7 +250,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			movementAnimation();
 		}
 	}
-
 	//-------------------------------------------//
 
 	// Animation helper functions
