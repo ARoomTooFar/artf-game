@@ -123,7 +123,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			foreach (GameObject item in abilities) {
 				Item newItem = (Instantiate(item) as GameObject).GetComponent<Item>();
 				newItem.transform.SetParent(itemLocation, false);
-				newItem.player = player;
+				newItem.user = player;
 				items.Add(newItem);
 			}
 				
@@ -140,7 +140,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			}
 
 			foreach (Item item in items) {
-				item.player = player;
+				item.user = player;
 			}
 			
 			selected = 0;

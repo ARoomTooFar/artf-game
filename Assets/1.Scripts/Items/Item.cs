@@ -5,7 +5,7 @@ using System.Collections;
 
 public class Item : MonoBehaviour {
 
-	public Character player;
+	public Character user;
 
 	protected float cooldown;
 	public float curCoolDown;

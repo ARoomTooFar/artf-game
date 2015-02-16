@@ -4,9 +4,18 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class TestDummy : Enemy {
 
+	protected override void Awake() {
+		stats = new Stats(this.GetComponent<MonoBehaviour>());
+		animator = GetComponent<Animator>();
+		facing = Vector3.forward;
+		isDead = false;
+		freeAnim = true;
+		setInitValues();
+	}
+
 	// Use this for initialization
 	protected override void Start () {
-		base.Start ();
+		// base.Start ();
 	}
 	
 	// Update is called once per frame

@@ -41,7 +41,7 @@ public class ChargeItem : Item {
 	// If things need to be done while charging make this virtual 
 	protected IEnumerator bgnCharge() {
 		curChgTime = 0.0f;
-		while (player.inventory.keepItemActive) {
+		while (user.inventory.keepItemActive) {
 			curChgTime = Mathf.Clamp(curChgTime + Time.deltaTime, 0.0f, maxChgTime);
 			yield return null;
 		}
