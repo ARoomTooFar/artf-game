@@ -29,7 +29,7 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDamageable<int, Character>, ISlowable<float>, IStunable<float>, IForcible<float> {
+public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, ISlowable<float>, IStunable<float>, IForcible<float> {
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -43,9 +43,9 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public bool freeAnim, attacking;
 	public AudioClip hurt, victory, failure;
 
-	public bool invincible = false;
+	public bool testing; // Whether it takes gear in automatically or lets the gear loader to it
 
-// 	protected string opposition;
+	public bool invincible = false;
 
 	protected Type opposition;
 
@@ -165,8 +165,6 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
 
 	protected virtual void Awake() {
-		// enemy = Types.GetType ("Dagger", "Assembly-CSharp"));
-		// opposition = "Player";
 		opposition = Type.GetType ("Player");
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
@@ -178,7 +176,11 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 
 	// Use this for initialization
 	protected virtual void Start () {
-
+		if (testing) {
+			gear.equipGear(this, opposition);
+			inventory.equipItems(this);
+			setAnimHash();
+		}
 	}
 	
 	protected virtual void setInitValues() {
@@ -231,6 +233,10 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	//---------------------------------//
 	// Action interface implementation //
 	//---------------------------------//
+
+	public virtual void setActable(bool canAct) {
+		actable = canAct;
+	}
 
 	public virtual void actionCommands() {
 
@@ -292,15 +298,19 @@ public class Character : MonoBehaviour, IActionable, IFallable, IAttackable, IDa
 	//---------------------------------//
 
 	// Since animations are on the characters, we will use the attack methods to turn collisions on and off
+	public virtual void initAttack() {
+	}
+
 	public virtual void attacks() {
 
 	}
 
-	public virtual void attackStart() {
+
+	public virtual void colliderStart() {
 		gear.weapon.collideOn ();
 	}
 
-	public virtual void attackEnd() {
+	public virtual void colliderEnd() {
 		gear.weapon.collideOff ();
 	}
 

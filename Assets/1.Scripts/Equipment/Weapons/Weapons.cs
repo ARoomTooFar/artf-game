@@ -11,7 +11,8 @@ public class WeaponStats {
 	public int damage;
 	//counts number of hits so far in the multiple hit string
 	public int multHit;
-	//0 -Melee, 1 -Gun, 2 -Flamethrower
+
+
 	public int weapType;
 	public string weapTypeName;
 
@@ -100,6 +101,7 @@ public class Weapons : Equipment {
 	//----------------------------//
 	// Weapon Attacking Functions //
 	//----------------------------//
+
 
 	// Start by initiateing attack animation
 	public virtual void initAttack() {

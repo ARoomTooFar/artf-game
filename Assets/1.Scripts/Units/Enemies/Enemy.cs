@@ -22,7 +22,7 @@ public class Enemy : Character, IStunable<float>, IForcible<float> {
 	private EnemySight enemySight;
 
 	protected override void Awake() {
-		opposition = Type.GetType ("TestingPlayer");
+		opposition = Type.GetType ("Player");
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
