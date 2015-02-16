@@ -20,6 +20,7 @@ public class Input_TileMap : MonoBehaviour
 	void Start ()
 	{
 		selectedTiles = new HashSet<Vector3> ();
+		shiftOrigin = new Vector3(0f, 0f, 0f);
 
 		UICamera = GameObject.Find ("UICamera").camera;
 		output_tileMap = this.gameObject.GetComponent ("Output_TileMap") as Output_TileMap;
@@ -89,7 +90,8 @@ public class Input_TileMap : MonoBehaviour
 			/*Shift functionality: selects all tiles between last selected tile, and shift clicked tile */
 			else if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
 				/*If no tiles have been selected ever, just select that tile */
-				if (shiftOrigin == null)
+//				if (shiftOrigin == null)
+				if (shiftOrigin.x == 0f && shiftOrigin.y == 0f && shiftOrigin.z == 0f)
 					selectTile (new Vector3 (x, 0, z));
 				
 				/*Deselect other tiles, then select all tiles between bounds */
