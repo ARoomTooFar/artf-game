@@ -113,16 +113,16 @@ public class Enemy : Character, IStunable<float>, IForcible<float> {
 	}
 
 	// Change this for other units in the future, ie. Unit that can be stunned and those that can't
-	public virtual void stun(float stunDuration) {
+	public override void stun(float stunDuration) {
 		print ("Stunned for " + stunDuration + " seconds");
 	}
 
 	// The duration are essentially stun, expand on these later
-	public virtual void pull(float pullDuration) {
+	public override void pull(float pullDuration) {
 		stun(pullDuration);
 	}
 	
-	public virtual void push(float pushDuration) {
+	public override void push(float pushDuration) {
 		stun(pushDuration);
 	}
 

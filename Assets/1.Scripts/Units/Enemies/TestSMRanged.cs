@@ -41,7 +41,7 @@ public class TestSMRanged: Enemy{
 	private StateMachine testStateMachine;
 	
 	//Get players, navmesh and all colliders
-	void Awake ()
+	protected override void Awake ()
 	{
 		base.Awake ();
 		nav = GetComponent<NavMeshAgent> ();

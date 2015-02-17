@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class ForcePush : ChargeItem {
@@ -18,11 +15,11 @@ public class ForcePush : ChargeItem {
 	private bool hit;
 	private Vector3 facing;
 	public List<Character> foes;
-	private Collider collider;
+	//private Collider collider;
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
-		collider = GetComponent<Collider>();
+		//collider = GetComponent<Collider>();
 		collider.enabled = false;
 	}
 	

@@ -20,10 +20,10 @@ public class Player : Character, IMoveable {
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
-	public GameObject UI;
-	public LifeBar hpBar, greyBar;
-	public AmmoBar ammoBar;
-	public List<CooldownBar> coolDowns = new List<CooldownBar>();
+	public UIActive UI;
+	//public LifeBar hpBar, greyBar;
+	//public AmmoBar ammoBar;
+	//public List<CooldownBar> coolDowns = new List<CooldownBar>();
 	public Controls controls;
 
 	protected override void Awake() {
@@ -54,29 +54,38 @@ public class Player : Character, IMoveable {
 	}
 	//Set cooldown bars to current items. 
 	void ItemCooldowns(){
+		UI.onState = true;
+		UI.hpBar.onState =1;
+		UI.greyBar.onState =1;
 		for(int i = 0; i < inventory.items.Count; i++){
+			UI.coolDowns[i].onState = 3;
+			inventory.items[i].cdBar=UI.coolDowns[i];
 			//inventory.items[i].cdBar = UI.getComponent("LifeBar");//coolDowns[i];
 		}
 		if(gear.weapon is RangedWeapons){
-			gear.weapon.GetComponent<RangedWeapons>().loadData(ammoBar);
+			gear.weapon.GetComponent<RangedWeapons>().loadData(UI.ammoBar);
 		}
 	}
 	
 	// Update is called once per frame
 	protected override void Update () {
-		if(testable){
-			ItemCooldowns();
+		if(UI!=null){
+			if(!UI.onState){
+				ItemCooldowns();
+			}
 			//testable = false;
 		}
 		if(stats.health <= 0){
 			
 			isDead = true;
 		} else {
-			if(testable){
-			hpBar.max = stats.maxHealth;
-			greyBar.max = stats.maxHealth;
-			greyBar.current = stats.health+greyDamage;
-			hpBar.current = stats.health;
+			if(UI!=null){
+				if(UI.onState){
+					UI.hpBar.max = stats.maxHealth;
+					UI.greyBar.max = stats.maxHealth;
+					UI.greyBar.current = stats.health+greyDamage;
+					UI.hpBar.current = stats.health;
+				}
 			}
 			isDead = false;
 		}
@@ -294,7 +303,7 @@ public class Player : Character, IMoveable {
 			// print("Healed Grey and True");
 			stats.health++;
 			greyDamage--;
-			greyBar.current = greyDamage+stats.health;
+			UI.greyBar.current = greyDamage+stats.health;
 			if(greyDamage > 0){
 				StartCoroutine("RegenWait");
 			}

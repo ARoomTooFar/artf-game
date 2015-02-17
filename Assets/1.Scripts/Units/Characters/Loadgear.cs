@@ -9,7 +9,7 @@ public class Loadgear : MonoBehaviour {
 	public List<Character> players = new List<Character>();
 	public List<GameObject> equipment = new List<GameObject>();
 	public List<GameObject> abilities = new List<GameObject>();
-	public string name;
+	public string cName;
 
 	// Use this for initialization
 	void Start () {
@@ -42,7 +42,7 @@ public class Loadgear : MonoBehaviour {
 		if (loadData.Length == 0) Debug.LogWarning("Load data file " + text + " is empty.");
 		else if (loadData.Length != 7) Debug.LogWarning("Load data file " + text + " does not contain exactly 7 lines.");
 		else {
-			name = loadData[0];	// Set the players ign
+			cName = loadData[0];	// Set the players ign
 
 			for(int i = 1; i<loadData.Length; i++){ //Set our data
 				equipPiece(loadData[i]);
@@ -76,7 +76,7 @@ public class Loadgear : MonoBehaviour {
 			equipPiece("I0");
 			equipPiece("I1");
 			equipPiece("I2");
-			System.IO.File.WriteAllText(path,System.String.Format("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n",name,"W0","C0","H1","I0","I1","I2"));
+			System.IO.File.WriteAllText(path,System.String.Format("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n",cName,"W0","C0","H1","I0","I1","I2"));
 		}
 		if(Input.GetKeyDown(KeyCode.M)){
 			saveToText();
@@ -85,14 +85,14 @@ public class Loadgear : MonoBehaviour {
 
 	
 	public virtual void saveToText(){
-		loadData[0]=name;
+		loadData[0]=cName;
 		System.IO.File.WriteAllLines(path,loadData);
 	}
 	public virtual void loadFromText(){
 		loadData = System.IO.File.ReadAllLines(path);
 		for(int i = 0; i<loadData.Length; i++){
-			if(i==0){//First line is name
-				name = loadData[i];
+			if(i==0){//First line is cName
+				cName = loadData[i];
 			}else{//Rest of lines are things to equip
 				equipPiece(loadData[i]);
 			}

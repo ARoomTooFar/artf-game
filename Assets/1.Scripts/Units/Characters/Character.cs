@@ -423,7 +423,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	// Used for buffs that are duration based
 	// Uses delegates to call function when over
 	// Will make virtual when neccessary
-	protected IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
+	protected virtual IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
 		while (duration > 0) {
 			duration -= Time.deltaTime;
 			yield return null;

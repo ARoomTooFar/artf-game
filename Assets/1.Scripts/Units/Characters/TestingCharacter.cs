@@ -187,7 +187,7 @@ public class TestingCharacter : Character, IActionable<bool>, IFallable, IAttack
 		stats.spdManip.setSpeedAmplification(speedStrength);
 	}
 	
-	public virtual void removeSpeed(float speedStrength) {
+	public override void removeSpeed(float speedStrength) {
 		stats.spdManip.removeSpeedAmplification(speedStrength);
 	}
 	
@@ -233,7 +233,7 @@ public class TestingCharacter : Character, IActionable<bool>, IFallable, IAttack
 	// Used for buffs that are duration based
 	// Uses delegates to call function when over
 	// Will make virtual when neccessary
-	protected IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
+	protected override IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
 		while (duration > 0) {
 			duration -= Time.deltaTime;
 			yield return null;
