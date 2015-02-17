@@ -131,6 +131,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			keepItemActive = false;
 		}
 		
+		// Equip method for testing purposes
 		public void equipItems(Character player) {
 			items.Clear ();
 			items.AddRange(itemLocation.GetComponentsInChildren<Item>());
