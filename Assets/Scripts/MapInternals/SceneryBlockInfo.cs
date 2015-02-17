@@ -13,8 +13,8 @@ public class SceneryBlockInfo {
      * Constructor
      */
 	private SceneryBlockInfo(string blockID, bool pathable, List<Vector3> coordinates) {
-		this.blockid = blockID;
-		this.pathable = pathable;
+		this.BlockID = blockID;
+		this.Pathable = pathable;
 		this.localCoordinates = coordinates;
 	}
 
@@ -54,17 +54,16 @@ public class SceneryBlockInfo {
 	}
 
 	//blockID of block
-	private string blockid;
-
 	public string BlockID {
-		get{ return blockid;}
+		get;
+		private set;
 	}
 
 	//true if block can be walked on/through
-	private bool pathable;
 
 	public bool Pathable {
-		get{ return pathable; }
+		get;
+		private set;
 	}
 
 	private List<Vector3> localCoordinates;

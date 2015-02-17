@@ -5,14 +5,15 @@ using System.Collections.Generic;
 public class MapData {
 
 	#region PrivateVariables
-	protected MapData() {}
-
 	protected static MapData instance;
-	protected TerrainManager terrainBlocks = new TerrainManager();
-	protected SceneryManager sceneryBlocks = new SceneryManager();
-	protected MonsterManager monsterBlocks = new MonsterManager();
-	protected ARTFRoomManager theFarRooms = new ARTFRoomManager();
 	#endregion PrivateVariables
+
+	protected MapData() {
+		TerrainBlocks = new TerrainManager();
+		SceneryBlocks = new SceneryManager();
+		MonsterBlocks = new MonsterManager();
+		TheFarRooms = new ARTFRoomManager();
+	}
 
 	public static MapData Instance {
 		get {
@@ -28,19 +29,23 @@ public class MapData {
 	}
 
 	public TerrainManager TerrainBlocks {
-		get { return terrainBlocks; }
+		get;
+		private set;
 	}
 
 	public SceneryManager SceneryBlocks {
-		get{ return sceneryBlocks; }
+		get;
+		private set;
 	}
 
 	public MonsterManager MonsterBlocks {
-		get{ return monsterBlocks; }
+		get;
+		private set;
 	}
 
-	public ARTFRoomManager TheRooms{
-		get { return theFarRooms; }
+	public ARTFRoomManager TheFarRooms {
+		get;
+		private set;
 	}
 
 	public string getSaveString() {
@@ -50,33 +55,33 @@ public class MapData {
 	#region Rooms
 	#region RoomManipulation
 	public void addRoom(Vector3 pos1, Vector3 pos2){
-		theFarRooms.add(pos1, pos2);
+		TheFarRooms.add(pos1, pos2);
 	}
 
 	public void moveRoom(Vector3 oldPos, Vector3 newPos){
-		theFarRooms.move(oldPos, newPos - oldPos);
+		TheFarRooms.move(oldPos, newPos - oldPos);
 	}
 
 	public void resizeRoom(Vector3 oldCor, Vector3 newCor){
-		theFarRooms.resize(oldCor, newCor);
+		TheFarRooms.resize(oldCor, newCor);
 	}
 
 	public void removeRoom(Vector3 pos){
-		theFarRooms.remove(pos);
+		TheFarRooms.remove(pos);
 	}
 	#endregion RoomManipulation
 
 	#region RoomValidation
 	public bool isAddRoomValid(Vector3 pos1, Vector3 pos2){
-		return theFarRooms.doAnyRoomsIntersect(new ARTFRoom(pos1, pos2));
+		return TheFarRooms.doAnyRoomsIntersect(new ARTFRoom(pos1, pos2));
 	}
 
 	public bool isMoveRoomValid(Vector3 oldPos, Vector3 newPos){
-		return theFarRooms.isMoveValid(oldPos, newPos);
+		return TheFarRooms.isMoveValid(oldPos, newPos);
 	}
 
 	public bool isResizeRoomValid(Vector3 oldCor, Vector3 newCor){
-		return theFarRooms.isResizeValid(oldCor, newCor);
+		return TheFarRooms.isResizeValid(oldCor, newCor);
 	}
 	#endregion RoomValidation
 	#endregion Rooms
@@ -87,32 +92,32 @@ public class MapData {
 	}
 
 	public void rotateTerrain(Vector3 pos, bool goClockwise = true){
-		terrainBlocks.rotate(pos, goClockwise);
+		TerrainBlocks.rotate(pos, goClockwise);
 	}
 	#endregion TerrainManipulation
 
 	#region Monsters
 	#region MonsterManipulation
 	public void addMonster(string type, Vector3 pos, DIRECTION dir){
-		monsterBlocks.add(new MonsterBlock(type, pos, dir));
+		MonsterBlocks.add(new MonsterBlock(type, pos, dir));
 	}
 
 	public void moveMonster(Vector3 pos, Vector3 offset){
-		monsterBlocks.move(pos, offset);
+		MonsterBlocks.move(pos, offset);
 	}
 
 	public void rotateMonster(Vector3 pos, bool goClockwise = true){
-		monsterBlocks.rotate(pos, goClockwise);
+		MonsterBlocks.rotate(pos, goClockwise);
 	}
 
 	public void removeMonster(Vector3 pos){
-		monsterBlocks.remove(pos);
+		MonsterBlocks.remove(pos);
 	}
 	#endregion MonsterManipulation
 
 	#region MonsterValidation
 	public bool isAddMonsterValid(Vector3 pos){
-		return monsterBlocks.isAddValid(pos);
+		return MonsterBlocks.isAddValid(pos);
 	}
 	#endregion MonsterValidation
 	#endregion Monsters
@@ -120,11 +125,11 @@ public class MapData {
 	#region Scenery
 	#region SceneryManipulation
 	public void addScenery(string type, Vector3 pos, DIRECTION dir){
-		sceneryBlocks.add(new SceneryBlock(type, pos, dir));
+		SceneryBlocks.add(new SceneryBlock(type, pos, dir));
 	}
 
 	public void moveScenery(Vector3 pos, Vector3 offset){
-		sceneryBlocks.move(pos, offset);
+		SceneryBlocks.move(pos, offset);
 	}
 
 	public void rotateScenery(Vector3 pos, bool goClockwise = true){
@@ -142,11 +147,11 @@ public class MapData {
 	}
 
 	public bool isMoveSceneryValid(Vector3 pos, Vector3 offset){
-		return sceneryBlocks.isMoveValid(pos, offset);
+		return SceneryBlocks.isMoveValid(pos, offset);
 	}
 
 	public bool isRotateSceneryValid(Vector3 pos, bool goClockwise = true){
-		return sceneryBlocks.isRotateValid(pos, goClockwise);
+		return SceneryBlocks.isRotateValid(pos, goClockwise);
 	}
 	#endregion SceneryValidation
 	#endregion Scenery

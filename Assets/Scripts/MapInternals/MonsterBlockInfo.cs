@@ -13,7 +13,7 @@ public class MonsterBlockInfo {
      * Constructor
      */
 	private MonsterBlockInfo(string blockID) {
-		this.blockid = blockID;
+		this.BlockID = blockID;
 	}
 
 	//static dictionary containing info for every block
@@ -51,11 +51,9 @@ public class MonsterBlockInfo {
 		}
 	}
 
-	//blockID of block
-	private string blockid;
-
 	public string BlockID {
-		get{ return blockid;}
+		get;
+		private set;
 	}
 }
 

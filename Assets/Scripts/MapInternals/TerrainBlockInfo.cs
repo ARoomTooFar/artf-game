@@ -9,8 +9,8 @@ public class TerrainBlockInfo {
 	 * Constructor
 	 */
 	private TerrainBlockInfo(string blockID, bool pathable){
-		this.blockid = blockID;
-		this.pathable = pathable;
+		this.BlockID = blockID;
+		this.Pathable = pathable;
 	}
 
 	//static dictionary containing info for every block
@@ -49,15 +49,15 @@ public class TerrainBlockInfo {
 	}
 
 	//blockID of block
-	private string blockid;
-	public string BlockID{
-		get{ return blockid;}
+	public string BlockID {
+		get;
+		private set;
 	}
 
 	//true if block can be walked on
-	private bool pathable;
-	public bool Pathable{
-		get{ return pathable; }
+	public bool Pathable {
+		get;
+		private set;
 	}
 
 

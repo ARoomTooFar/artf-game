@@ -30,53 +30,49 @@ public enum DIRECTION : int {
  * 
  */
 public class TerrainBlock {
-	#region PrivateVariables
-	private Dictionary<DIRECTION, TerrainBlock> neighbors = new Dictionary<DIRECTION, TerrainBlock>();
-	private SceneryBlock scenery;
-	private MonsterBlock monster;
-	private ARTFRoom room;
-	private Vector3 position = new Vector3();
-	private DIRECTION orientation;
-	private TerrainBlockInfo blockInfo;
-	#endregion PrivateVariables
 
 	#region Properties
 	public Dictionary<DIRECTION, TerrainBlock> Neighbors {
-		get { return neighbors; }
+		get;
+		private set;
 	}
 
 	public SceneryBlock Scenery {
-		get{ return scenery; }
+		get;
+		private set;
 	}
 
 	public MonsterBlock Monster {
-		get{ return monster; }
+		get;
+		private set;
 	}
 
 	public ARTFRoom Room {
-		get{ return room; } 
-		set{ room = value; }
+		get;
+		set;
 	}
 
 	public Vector3 Position {
-		get { return position; }
-		set { position = value.Round(); }
+		get;
+		set;
 	}
 
 	public DIRECTION Orientation {
-		get { return orientation; }
+		get;
+		private set;
 	}
 
 	public TerrainBlockInfo BlockInfo {
-		get{ return blockInfo; }
+		get;
+		private set;
 	}
 
 	public string SaveString {
-		get{ return position.toCSV() + "," + orientation.ToString();}
+		get{ return Position.toCSV() + "," + Orientation.ToString();}
 	}
 
 	public bool Pathable{
-		get{ return blockInfo.Pathable && (scenery == null?true:scenery.BlockInfo.Pathable); }
+		get{ return BlockInfo.Pathable && (Scenery == null?true:Scenery.BlockInfo.Pathable); }
 	}
 	#endregion Properties
 
@@ -85,22 +81,22 @@ public class TerrainBlock {
 	 * Constructor
 	 */
 	public TerrainBlock(string blockID, Vector3 pos, DIRECTION orientation) {
-		this.blockInfo = TerrainBlockInfo.get(blockID);
-		this.position = pos.Round();
-		this.orientation = orientation;
+		this.BlockInfo = TerrainBlockInfo.get(blockID);
+		this.Position = pos.Round();
+		this.Orientation = orientation;
 	}
 
 	/*
 	 * Deep Copy constructor
 	 */
 	public TerrainBlock(TerrainBlock original){
-		this.neighbors = new Dictionary<DIRECTION, TerrainBlock>(original.neighbors);
-		this.scenery = original.scenery;
-		this.monster = original.monster;
-		this.room = original.room;
-		this.position = original.position.Copy();
-		this.orientation = original.orientation;
-		this.blockInfo = original.blockInfo;
+		this.Neighbors = new Dictionary<DIRECTION, TerrainBlock>(original.Neighbors);
+		this.Scenery = original.Scenery;
+		this.Monster = original.Monster;
+		this.Room = original.Room;
+		this.Position = original.Position.Copy();
+		this.Orientation = original.Orientation;
+		this.BlockInfo = original.BlockInfo;
 	}
 	#endregion Constructors
 
@@ -121,7 +117,7 @@ public class TerrainBlock {
 			throw new Exception("Invalid DIRECTION");
 		}
 		try {
-			neighbors.Add(dir, blk);
+			Neighbors.Add(dir, blk);
 		} catch(ArgumentException) {
 			return false;
 		}
@@ -138,7 +134,7 @@ public class TerrainBlock {
 	 * 
 	 */
 	public bool removeNeighbor(DIRECTION dir) {
-		return neighbors.Remove(dir);
+		return Neighbors.Remove(dir);
 	}
 
 	/*
@@ -148,7 +144,7 @@ public class TerrainBlock {
 	 * 
 	 */
 	public void clearNeighbors() {
-		neighbors.Clear();
+		Neighbors.Clear();
 	}
 
 	/*
@@ -159,7 +155,7 @@ public class TerrainBlock {
 	 */
 	public TerrainBlock getNeighbor(DIRECTION dir) {
 		try {
-			return neighbors[dir];
+			return Neighbors[dir];
 		} catch(Exception) {
 			return null;
 		}
@@ -220,16 +216,16 @@ public class TerrainBlock {
 	 */
 	public bool addScenery(SceneryBlock scn) {
 		//return false if there is already scenery
-		if(this.scenery != null) {
+		if(this.Scenery != null) {
 			return false;
 		}
 
 		//if the scenery blocks movement and there is a monster, return false
-		if(!scn.BlockInfo.Pathable && this.monster != null) {
+		if(!scn.BlockInfo.Pathable && this.Monster != null) {
 			return false;
 		}
 		
-		this.scenery = scn;
+		this.Scenery = scn;
 		return true;
 	}
 
@@ -239,7 +235,7 @@ public class TerrainBlock {
 	 * Unlinks the piece of scenery linked to this block
 	 */
 	public void removeScenery() {
-		this.scenery = null;
+		this.Scenery = null;
 	}
 	#endregion Scenery
 
@@ -254,16 +250,16 @@ public class TerrainBlock {
 	 */
 	public bool addMonster(MonsterBlock mon) {
 		//return false if there is already a monster linked
-		if(this.monster != null) {
+		if(this.Monster != null) {
 			return false;
 		}
 
 		//return false if there is a piece of scenery that blocks pathing
-		if(this.scenery != null && !this.scenery.BlockInfo.Pathable) {
+		if(this.Scenery != null && !this.Scenery.BlockInfo.Pathable) {
 			return false;
 		}
 		
-		this.monster = mon;
+		this.Monster = mon;
 		return true;
 	}
 
@@ -273,7 +269,7 @@ public class TerrainBlock {
 	 * Unlinks the monster linked to this block
 	 */
 	public void removeMonster() {
-		this.monster = null;
+		this.Monster = null;
 	}
 	#endregion Monster
 
@@ -284,34 +280,34 @@ public class TerrainBlock {
 	 * moves the block and associated scenery and monster
 	 */
 	public void move(Vector3 offset){
-		if(this.scenery != null && this.scenery.Position.Equals(this.position)) {
-			this.scenery.move(offset);
+		if(this.Scenery != null && this.Scenery.Position.Equals(this.Position)) {
+			this.Scenery.move(offset);
 		}
 
-		if(this.monster != null) {
-			this.monster.move(offset);
+		if(this.Monster != null) {
+			this.Monster.move(offset);
 		}
 
-		position = position + offset;
+		Position = Position + offset;
 
 	}
 
 	public bool changeType(string type){
 		TerrainBlockInfo nInf = TerrainBlockInfo.get(type);
 		if(!nInf.Pathable) {
-			if(this.monster != null){
+			if(this.Monster != null){
 				return false;
 			}
-			if(this.scenery != null){
+			if(this.Scenery != null){
 				return false;
 			}
 		}
-		this.blockInfo = nInf;
+		this.BlockInfo = nInf;
 		return true;
 	}
 
 	public void rotate(bool goClockwise = true){
-		orientation = orientation.QuarterTurn(goClockwise);
+		Orientation = Orientation.QuarterTurn(goClockwise);
 	}
 	#endregion Manipulation
 }

@@ -9,27 +9,24 @@ using System.Collections.Generic;
  */
 public class MonsterBlock {
 
-	#region PrivateVariables
-	private MonsterBlockInfo blockInfo;
-	private Vector3 position = new Vector3 ();
-	private DIRECTION orientation;
-	#endregion PrivateVariables
-
 	#region Properties
 	public MonsterBlockInfo BlockInfo {
-		get{ return blockInfo; }
+		get;
+		private set;
 	}
 	
 	public Vector3 Position {
-		get { return position; }
+		get;
+		private set;
 	}
 
-	public DIRECTION Orientation{
-		get{ return orientation; }
+	public DIRECTION Orientation {
+		get;
+		private set;
 	}
 
 	public string SaveString{
-		get{ return position.toCSV () + "," + Orientation.ToString(); }
+		get{ return Position.toCSV () + "," + Orientation.ToString(); }
 	}
 	#endregion Properties
 
@@ -37,9 +34,9 @@ public class MonsterBlock {
 	 * Constructor
 	 */
 	public MonsterBlock (string blockID, Vector3 pos, DIRECTION orientation) {
-		this.blockInfo = MonsterBlockInfo.get (blockID);
-		this.position = pos.Round ();
-		this.orientation = orientation;
+		this.BlockInfo = MonsterBlockInfo.get (blockID);
+		this.Position = pos.Round ();
+		this.Orientation = orientation;
 	}
 
 	/*
@@ -48,11 +45,11 @@ public class MonsterBlock {
 	 * Alters the position of the monster by offset
 	 */
 	public void move(Vector3 offset){
-		position = position + offset ;
+		Position = Position + offset ;
 	}
 
 	public void rotate(bool goClockwise = true){
-		orientation = orientation.QuarterTurn(goClockwise);
+		Orientation = Orientation.QuarterTurn(goClockwise);
 	}
 }
 

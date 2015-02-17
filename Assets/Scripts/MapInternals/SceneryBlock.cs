@@ -9,28 +9,24 @@ using System.Collections.Generic;
  */
 public class SceneryBlock {
 
-	#region PrivateVariables
-	private SceneryBlockInfo blockInfo;
-	private Vector3 position = new Vector3 ();
-	private DIRECTION orientation;
-	#endregion PrivateVariables
-
 	#region Properties
 	public SceneryBlockInfo BlockInfo {
-		get{ return blockInfo; }
+		get;
+		private set;
 	}
 
 	public Vector3 Position {
-		get { return position; }
+		get;
+		private set;
 	}
 
-	public DIRECTION Orientation{
-		get{ return orientation; }
-		set{ orientation = value; }
+	public DIRECTION Orientation {
+		get;
+		private set;
 	}
 
 	public string SaveString{
-		get{ return position.toCSV () + "," + Orientation.ToString(); }
+		get{ return Position.toCSV () + "," + Orientation.ToString(); }
 	}
 
 	/*
@@ -44,9 +40,9 @@ public class SceneryBlock {
 			//get the local coordinates this piece of scenery occupies in a given rotation
 			List<Vector3> retVal = new List<Vector3>();
 			//for each coordinate
-			foreach(Vector3 vec in blockInfo.LocalCoordinates(Orientation)){
+			foreach(Vector3 vec in BlockInfo.LocalCoordinates(Orientation)){
 				//shift it to the global coordinate
-				retVal.Add(vec + position);
+				retVal.Add(vec + Position);
 			}
 			//return the list
 			return retVal;
@@ -58,9 +54,9 @@ public class SceneryBlock {
 	 * Constructor
 	 */
 	public SceneryBlock (string blockID, Vector3 pos, DIRECTION orientation) {
-		this.blockInfo = SceneryBlockInfo.get (blockID);
-		this.position = pos.Round ();
-		this.orientation = orientation;
+		this.BlockInfo = SceneryBlockInfo.get (blockID);
+		this.Position = pos.Round ();
+		this.Orientation = orientation;
 	}
 
 	/*
@@ -69,11 +65,11 @@ public class SceneryBlock {
 	 * Alters the position of the scenery by offset
 	 */
 	public void move(Vector3 offset){
-		position = position + offset;
+		Position = Position + offset;
 	}
 
 	public void rotate(bool goClockwise = true){
-		orientation = orientation.QuarterTurn(goClockwise);
+		Orientation = Orientation.QuarterTurn(goClockwise);
 	}
 }
 

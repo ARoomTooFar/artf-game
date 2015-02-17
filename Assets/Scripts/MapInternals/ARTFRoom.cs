@@ -6,8 +6,6 @@ using System.Collections.Generic;
 public partial class ARTFRoom {
 
 	#region PrivateVariables
-	private Vector3 LLposition = new Vector3();
-	private Vector3 URposition = new Vector3();
 	protected List<TerrainBlock> blocks = new List<TerrainBlock>();
 	private string defaultBlockID = "defaultBlockID";
 	#endregion PrivateVariables
@@ -16,12 +14,14 @@ public partial class ARTFRoom {
 	#region Corners
 	//Lower Left Corner
 	public Vector3 LLCorner {
-		get { return LLposition; }
+		get;
+		private set;
 	}
 
 	//Upper Right Corner
 	public Vector3 URCorner {
-		get { return URposition; }
+		get;
+		private set;
 	}
 
 	//Lower Right Corner
@@ -57,16 +57,16 @@ public partial class ARTFRoom {
 
 	//Add 1 because a grid with corners in the same position has Length/Height == 1
 	public float Height {
-		get { return 1 + URposition.z - LLposition.z; }
+		get { return 1 + URCorner.z - LLCorner.z; }
 	}
 
 	public float Length {
-		get { return 1+ URposition.x - LLposition.x; }
+		get { return 1+ URCorner.x - LLCorner.x; }
 	}
 	#endregion SquareProperties
 
 	public string SaveString {
-		get{ return LLposition.toCSV() + "," + URposition.toCSV();}
+		get{ return LLCorner.toCSV() + "," + URCorner.toCSV();}
 	}
 	#endregion Properties
 	
@@ -74,8 +74,8 @@ public partial class ARTFRoom {
 	 * Constructor
 	 */
 	public ARTFRoom(Vector3 pos1, Vector3 pos2) {
-		this.LLposition = pos1.getMinVals(pos2);
-		this.URposition = pos1.getMaxVals(pos2);
+		this.LLCorner = pos1.getMinVals(pos2);
+		this.URCorner = pos1.getMaxVals(pos2);
 	}
 
 	#region (un)linkTerrain
@@ -141,8 +141,8 @@ public partial class ARTFRoom {
 	 */
 	public void move(Vector3 offset) {
 		//Shift the LowerLeft and UpperRight corners by offset
-		LLposition = LLposition + offset;
-		URposition = URposition + offset;
+		LLCorner = LLCorner + offset;
+		URCorner = URCorner + offset;
 		//move each block by offset
 		foreach(TerrainBlock blk in blocks) {
 			blk.move(offset);
@@ -170,16 +170,16 @@ public partial class ARTFRoom {
 		//get the offset
 		Vector3 offset = newCor - oldCor;
 		//determine which corner to move in the x direction
-		if(oldCor.x == LLposition.x) {
-			LLposition.x += offset.x;
+		if(oldCor.x == LLCorner.x) {
+			LLCorner += new Vector3(offset.x, 0, 0);
 		} else {
-			URposition.x += offset.x;
+			URCorner += new Vector3(offset.x, 0, 0);
 		}
 		//determine which corner to move in the z direction
-		if(oldCor.z == LLposition.z) {
-			LLposition.z += offset.z;
+		if(oldCor.z == LLCorner.z) {
+			LLCorner += new Vector3(0, 0, offset.z);
 		} else {
-			URposition.z += offset.z;
+			URCorner += new Vector3(0, 0, offset.z);
 		}
 		//remove blocks no longer in room
 		foreach(TerrainBlock blk in blocks) {
@@ -228,13 +228,13 @@ public partial class ARTFRoom {
 	 * Check if a position is on one of the outermost tiles
 	 */
 	public bool isEdge(Vector3 pos) {
-		if(pos.x.Equals(LLposition.x) || pos.x.Equals(URposition.x)) {
-			if(pos.z >= LLposition.z && pos.z <= URposition.z) {
+		if(pos.x.Equals(LLCorner.x) || pos.x.Equals(URCorner.x)) {
+			if(pos.z >= LLCorner.z && pos.z <= URCorner.z) {
 				return true;
 			}
 		}
-		if(pos.z.Equals(LLposition.z) || pos.z.Equals(URposition.z)) {
-			if(pos.x >= LLposition.x && pos.x <= URposition.x) {
+		if(pos.z.Equals(LLCorner.z) || pos.z.Equals(URCorner.z)) {
+			if(pos.x >= LLCorner.x && pos.x <= URCorner.x) {
 				return true;
 			}
 		}
@@ -248,10 +248,10 @@ public partial class ARTFRoom {
 	 */
 	public bool inRoom(Vector3 pos) {
 		return
-			pos.x >= LLposition.x &&
-			pos.x <= URposition.x &&
-			pos.z >= LLposition.z &&
-			pos.z <= URposition.z;
+			pos.x >= LLCorner.x &&
+			pos.x <= URCorner.x &&
+			pos.z >= LLCorner.z &&
+			pos.z <= URCorner.z;
 	}
 	#endregion PositionChecks
 }
