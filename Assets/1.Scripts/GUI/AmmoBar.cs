@@ -7,12 +7,12 @@ public class AmmoBar : LifeBar {
 	//public int onState;
 	public Material mat;
 	public Material mat2;
-	void Start(){
+	protected override void Start(){
 		base.Start();
 	}
 	// Update is called once per frame
-	void Update () {
-		//Renderer[] rs = GetComponentsInChildren<Renderer>();
+	protected override void Update () {
+		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		if(onState==1){
 			renderer.enabled = true;
 			foreach (Renderer r in rs) {

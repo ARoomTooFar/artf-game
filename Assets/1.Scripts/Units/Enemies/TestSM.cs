@@ -35,7 +35,7 @@ public class TestSM: Enemy{
 	//Private variables for use in player detection
 	private SphereCollider col;
 	private GameObject[] players;
-	private AggroTable aggro;
+	private AggroTable aggroT;
 
 	private Vector3? lastSeenPosition = null;
 	private float posTimer = 0f;
@@ -46,7 +46,7 @@ public class TestSM: Enemy{
 	protected override void Awake ()
 	{
 		base.Awake ();
-		aggro = new AggroTable();
+		aggroT = new AggroTable();
 		nav = GetComponent<NavMeshAgent> ();
 		col = GetComponent<SphereCollider> ();
 		//animator = GetComponent<Animator> ();
@@ -70,7 +70,7 @@ public class TestSM: Enemy{
 	protected override void Update()
 	{
 		base.Update ();
-		target = aggro.getTarget ();
+		target = aggroT.getTarget ();
 		if (target && lastSeenPosition.HasValue && !canSeePlayer (target)) {
 			posTimer += Time.deltaTime;
 		} else if (target && canSeePlayer (target)){
@@ -90,7 +90,7 @@ public class TestSM: Enemy{
 
 	public override void damage(int dmgTaken, Character striker) {
 		base.damage(dmgTaken, striker);
-		aggro.add (striker.gameObject, dmgTaken);
+		aggroT.add (striker.gameObject, dmgTaken);
 	}
 
 
@@ -280,7 +280,7 @@ public class TestSM: Enemy{
 				
 					if (hit.collider.gameObject == p) 
 					{
-						aggro.add(p,1);
+						aggroT.add(p,1);
 						lastSeenPosition = p.transform.position;
 						alerted = true;
 						return true;

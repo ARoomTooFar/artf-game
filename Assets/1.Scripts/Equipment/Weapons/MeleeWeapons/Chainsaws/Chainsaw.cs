@@ -115,7 +115,7 @@ public class Chainsaw : MeleeWeapons {
 	
 	// When our attack swing finishes, remove colliders, particles, and other stuff
 	//     * Consider one more co routine after to check for when our animation is completely done
-	protected virtual IEnumerator atkFinish() {
+	protected override IEnumerator atkFinish() {
 		while (user.animSteInfo.nameHash != user.atkHashEnd) {
 			yield return null;
 		}

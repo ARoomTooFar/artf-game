@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class UIonState : MonoBehaviour {
+public class UIActive : MonoBehaviour {
 	public bool onState;
 	public LifeBar hpBar, greyBar;
 	public AmmoBar ammoBar;
@@ -22,5 +22,8 @@ public class UIonState : MonoBehaviour {
 			coolDowns[1].onState = 0;
 			coolDowns[2].onState = 0;
 		}
+	}
+	void beginBars(){
+		
 	}
 }

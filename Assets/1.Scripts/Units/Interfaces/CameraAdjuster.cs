@@ -40,11 +40,14 @@ public class CameraAdjuster : MonoBehaviour {
 			Debug.DrawLine(transform.position,hit.point,Color.red);*/
           //  print("Hit something");
 	    if( Physics.Raycast(Camera.main.transform.position, dir, out hit, 1000, layerMask)){
-			Debug.Log(hit.collider.name+", "+hit.collider.tag);
-			Debug.DrawLine(transform.position,target.transform.position,Color.red);
+			if(hit.collider.tag == "Wall"){
+				hit.collider.gameObject.GetComponent<Wall>().toggleShow();
+				Debug.Log(hit.collider.name+", "+hit.collider.tag);
+			}
+			//Debug.DrawLine(transform.position,target.transform.position,Color.red);
 		} else {
-			Debug.Log(hit.collider.name+", "+hit.collider.tag);
-			Debug.DrawLine(transform.position,target.transform.position,Color.blue);
+			//Debug.Log(hit.collider.name+", "+hit.collider.tag);
+			//Debug.DrawLine(transform.position,target.transform.position,Color.blue);
 		}
 		/*if (Physics.Raycast(transform.position,(transform.position - target.transform.position
 		                           ).normalized, out hit, distance, layerMask)) {
