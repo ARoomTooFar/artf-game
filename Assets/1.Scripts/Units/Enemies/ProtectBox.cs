@@ -21,26 +21,26 @@ public class ProtectBox
 		float firstR = Random.value;
 		float secondR = Random.value;
 
-		if(firstR < 0.5){
-			firstR = -1.0;
+		if(firstR < 0.5f){
+			firstR = -1.0f;
 		}else {
-			firstR = 1.0;
+			firstR = 1.0f;
 		}
 
-		if (secondR < 0.5){
-			secondR = -1.0;
+		if (secondR < 0.5f){
+			secondR = -1.0f;
 		}else {
-			secondR = 1.0;
+			secondR = 1.0f;
 		}
 
 		//First random is horizontal
 		//Second random is vertical
 
-		float xmin = targetV.x + ((firstR) * (5.0));
-		float xmax = targetV.x + ((firstR) * (10.0));
+		float xmin = targetV.x + ((firstR) * (5.0f));
+		float xmax = targetV.x + ((firstR) * (10.0f));
 
-		float zmin = targetV.z + ((secondR) * (5.0));
-		float zmax = targetV.z + ((secondR) * (10.0));
+		float zmin = targetV.z + ((secondR) * (5.0f));
+		float zmax = targetV.z + ((secondR) * (10.0f));
 
 		float x = Random.Range (xmin, xmax);
 		float z = Random.Range (zmin, zmax);
