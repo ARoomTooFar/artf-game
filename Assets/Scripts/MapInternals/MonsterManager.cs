@@ -62,14 +62,13 @@ public class MonsterManager {
 	}
 	
 	public void remove(MonsterBlock blk){
+		GameObjectResourcePool.returnResource(blk.BlockInfo.BlockID, blk.GameObj);
 		//unlink neighbors
 		unlinkTerrain(blk);
 		//remove from list
 		dictionary[blk.BlockInfo.BlockID].Remove(blk);
 	}
 	#endregion Remove
-
-
 	#endregion Manipulation
 
 

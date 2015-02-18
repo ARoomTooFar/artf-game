@@ -12,12 +12,15 @@ public static class GameObjectResourcePool {
 		Growth = 5;
 	}
 
-	public static GameObject getResource(string type){
+	public static GameObject getResource(string type, Vector3 pos, Vector3 dir){
 		Stack<GameObject> stk = getStack(type);
 		if(stk.Count == 0){
 			restock(type);
 		}
-		return stk.Pop();
+		GameObject retVal = stk.Pop();
+		retVal.transform.position = pos;
+		retVal.transform.eulerAngles = dir;
+		return retVal;
 	}
 
 	public static void returnResource(string type, GameObject obj){

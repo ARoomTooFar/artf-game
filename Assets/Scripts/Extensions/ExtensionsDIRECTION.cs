@@ -73,6 +73,10 @@ public static class ExtensionsDIRECTION
 
 		return goClockwise ? val : val.Opposite();
 	}
+
+	public static Vector3 toRotationVector(this DIRECTION dir){
+		return new Vector3();
+	}
 }
 
 

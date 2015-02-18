@@ -29,6 +29,11 @@ public class SceneryBlock {
 		get{ return Position.toCSV () + "," + Orientation.ToString(); }
 	}
 
+	public GameObject GameObj {
+		get;
+		private set;
+	}
+
 	/*
 	 * public List<Vector3> Coordinates
 	 * 
@@ -53,10 +58,11 @@ public class SceneryBlock {
 	/*
 	 * Constructor
 	 */
-	public SceneryBlock (string blockID, Vector3 pos, DIRECTION orientation) {
+	public SceneryBlock (string blockID, Vector3 pos, DIRECTION dir) {
 		this.BlockInfo = SceneryBlockInfo.get (blockID);
 		this.Position = pos.Round ();
-		this.Orientation = orientation;
+		this.Orientation = dir;
+		this.GameObj = GameObjectResourcePool.getResource(blockID, pos, dir.toRotationVector());
 	}
 
 	/*
@@ -65,11 +71,13 @@ public class SceneryBlock {
 	 * Alters the position of the scenery by offset
 	 */
 	public void move(Vector3 offset){
-		Position = Position + offset;
+		Position += offset;
+		GameObj.transform.position = Position;
 	}
 
 	public void rotate(bool goClockwise = true){
 		Orientation = Orientation.QuarterTurn(goClockwise);
+		GameObj.transform.eulerAngles = Orientation.toRotationVector();
 	}
 }
 

@@ -118,6 +118,7 @@ public class TerrainManager {
 	}
 
 	public bool remove(TerrainBlock blk){
+		GameObjectResourcePool.returnResource(blk.BlockInfo.BlockID, blk.GameObj);
 		//unlink neighbors
 		unlinkNeighbors(blk);
 		MapData.Instance.SceneryBlocks.remove(blk.Scenery);

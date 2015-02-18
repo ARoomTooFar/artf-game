@@ -101,7 +101,8 @@ public class SceneryManager {
 		remove(find(pos));
 	}
 
-	public void remove(SceneryBlock blk){
+	public void remove(SceneryBlock blk) {
+		GameObjectResourcePool.returnResource(blk.BlockInfo.BlockID, blk.GameObj);
 		unlinkTerrain(blk);
 		dictionary[blk.BlockInfo.BlockID].Remove(blk);
 	}
@@ -120,11 +121,11 @@ public class SceneryManager {
 	#endregion Move
 
 	#region Rotate
-	public void rotate(Vector3 pos, bool goClockwise = true){
+	public void rotate(Vector3 pos, bool goClockwise = true) {
 		rotate(find(pos), goClockwise);
 	}
 
-	public void rotate(SceneryBlock blk, bool goClockwise = true){
+	public void rotate(SceneryBlock blk, bool goClockwise = true) {
 		unlinkTerrain(blk);
 		blk.rotate(goClockwise);
 		linkTerrain(blk);
@@ -157,7 +158,6 @@ public class SceneryManager {
 	}
 
 	#region Validation
-
 	#region isRotateValid
 	public bool isRotateValid(Vector3 pos, bool goClockwise = true) {
 		return isRotateValid(find(pos), goClockwise);
@@ -184,7 +184,7 @@ public class SceneryManager {
 	}
 	#endregion isMoveValid
 
-	public bool isAddValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North){
+	public bool isAddValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North) {
 		return isBlockValid(new SceneryBlock(type, pos, dir));
 	}
 

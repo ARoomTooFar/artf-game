@@ -74,16 +74,22 @@ public class TerrainBlock {
 	public bool Pathable{
 		get{ return BlockInfo.Pathable && (Scenery == null?true:Scenery.BlockInfo.Pathable); }
 	}
+
+	public GameObject GameObj {
+		get;
+		private set;
+	}
 	#endregion Properties
 
 	#region Constructors
 	/*
 	 * Constructor
 	 */
-	public TerrainBlock(string blockID, Vector3 pos, DIRECTION orientation) {
+	public TerrainBlock(string blockID, Vector3 pos, DIRECTION dir) {
 		this.BlockInfo = TerrainBlockInfo.get(blockID);
 		this.Position = pos.Round();
-		this.Orientation = orientation;
+		this.Orientation = dir;
+		this.GameObj = GameObjectResourcePool.getResource(blockID, pos, dir.toRotationVector());
 	}
 
 	/*
@@ -288,11 +294,14 @@ public class TerrainBlock {
 			this.Monster.move(offset);
 		}
 
-		Position = Position + offset;
+		Position += offset;
+		GameObj.transform.position = Position;
 
 	}
 
 	public bool changeType(string type){
+		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
+		GameObj = null;
 		TerrainBlockInfo nInf = TerrainBlockInfo.get(type);
 		if(!nInf.Pathable) {
 			if(this.Monster != null){
@@ -303,11 +312,14 @@ public class TerrainBlock {
 			}
 		}
 		this.BlockInfo = nInf;
+		GameObj = GameObjectResourcePool.getResource(BlockInfo.BlockID, Position, Orientation.toRotationVector());
+
 		return true;
 	}
 
 	public void rotate(bool goClockwise = true){
 		Orientation = Orientation.QuarterTurn(goClockwise);
+		GameObj.transform.eulerAngles = Orientation.toRotationVector();
 	}
 	#endregion Manipulation
 }

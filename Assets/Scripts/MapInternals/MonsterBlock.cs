@@ -28,15 +28,21 @@ public class MonsterBlock {
 	public string SaveString{
 		get{ return Position.toCSV () + "," + Orientation.ToString(); }
 	}
+
+	public GameObject GameObj {
+		get;
+		private set;
+	}
 	#endregion Properties
 
 	/*
 	 * Constructor
 	 */
-	public MonsterBlock (string blockID, Vector3 pos, DIRECTION orientation) {
+	public MonsterBlock (string blockID, Vector3 pos, DIRECTION dir) {
 		this.BlockInfo = MonsterBlockInfo.get (blockID);
 		this.Position = pos.Round ();
-		this.Orientation = orientation;
+		this.Orientation = dir;
+		this.GameObj = GameObjectResourcePool.getResource(blockID, pos, dir.toRotationVector());
 	}
 
 	/*
@@ -45,11 +51,13 @@ public class MonsterBlock {
 	 * Alters the position of the monster by offset
 	 */
 	public void move(Vector3 offset){
-		Position = Position + offset ;
+		Position += offset;
+		GameObj.transform.position = Position;
 	}
 
 	public void rotate(bool goClockwise = true){
 		Orientation = Orientation.QuarterTurn(goClockwise);
+		GameObj.transform.eulerAngles = Orientation.toRotationVector();
 	}
 }
 
