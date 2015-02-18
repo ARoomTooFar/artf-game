@@ -16,7 +16,7 @@ public class RangedWeapons : Weapons {
 	public int maxAmmo;
 	protected float loadSpeed;
 	protected bool reload;
-	
+	public AmmoBar ammoBar;
 	protected Projectile bullet;
 
 	// Use this for initialization
@@ -27,6 +27,7 @@ public class RangedWeapons : Weapons {
 	protected override void setInitValues() {
 		base.setInitValues();
 		reload = false;
+		
 	}
 
 	public override void collideOn() {
@@ -68,17 +69,42 @@ public class RangedWeapons : Weapons {
 	protected virtual IEnumerator Shoot(int count) {
 		yield return 0;
 	}
+	public virtual void loadData(AmmoBar ammoB){
+		ammoBar = ammoB;
+		ammoBar.onState = 1;
+		ammoBar.max = maxAmmo;
+		ammoBar.current = currAmmo;
+	}
 
 	protected IEnumerator Wait(float duration){
 		for (float timer = 0; timer < duration; timer += Time.deltaTime)
 			yield return 0;
 	}
-	protected virtual IEnumerator loadAmmo(){
-		yield return StartCoroutine(Wait(loadSpeed));
-		if(reload){
-			currAmmo = maxAmmo;
-			reload = false;
+	protected IEnumerator loadWait(float duration){
+		ammoBar.onState = 2;
+		ammoBar.max = duration;
+		for (float timer = 0; timer < duration; timer += Time.deltaTime){
+			ammoBar.current = timer;
+			yield return 0;
 		}
+	}
+	protected virtual IEnumerator loadAmmo(){
+		if(ammoBar != null){
+			yield return StartCoroutine(loadWait(loadSpeed));
+			if(reload){
+				currAmmo = maxAmmo;
+				ammoBar.onState = 1;
+				ammoBar.max = maxAmmo;
+				ammoBar.current = currAmmo;
+				reload = false;
+			}
+		}
+        else{
+			yield return StartCoroutine(Wait(loadSpeed));
+			if(reload){
+				reload = false;
+			}
+		}			
 	}
 
 	protected override IEnumerator atkFinish() {
@@ -86,7 +112,9 @@ public class RangedWeapons : Weapons {
 			yield return null;
 		}
 		particles.Stop();
-		
+		if(ammoBar != null){
+			ammoBar.current = currAmmo;
+		}
 		user.animator.speed = 1.0f;
 	}
 

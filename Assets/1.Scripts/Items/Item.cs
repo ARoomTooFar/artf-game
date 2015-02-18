@@ -5,9 +5,13 @@ using System.Collections;
 
 public class Item : MonoBehaviour {
 
-	public Character player;
+	public Character user;
 
-	protected float cooldown;
+	// protected float cooldown;
+
+    public CooldownBar cdBar;
+	public float cooldown;
+
 	public float curCoolDown;
 
 	// Use this for initialization
@@ -44,7 +48,11 @@ public class Item : MonoBehaviour {
 	// Change to virtual if it seems there are items that do things while it cools down
 	protected IEnumerator bgnCooldown() {
 		for(int i = 0; i <= curCoolDown; curCoolDown -= Time.deltaTime) {
+			cdBar.current = curCoolDown;
 			yield return null;
 		}
+		cdBar.onState = 3;
+		cdBar.max = 0;
+		cdBar.current = 0;
 	}
 }

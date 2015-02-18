@@ -35,16 +35,20 @@ public class ChargeItem : Item {
 	// Called when character with an this item selected uses their item key
 	public override void useItem() {
 		base.useItem();
+		cdBar.onState = 2;
+		cdBar.max = 3;
 		StartCoroutine(bgnCharge());
 	}
 
 	// If things need to be done while charging make this virtual 
 	protected IEnumerator bgnCharge() {
 		curChgTime = 0.0f;
-		while (player.inventory.keepItemActive) {
+		while (user.inventory.keepItemActive) {
 			curChgTime = Mathf.Clamp(curChgTime + Time.deltaTime, 0.0f, maxChgTime);
+			cdBar.current = curChgTime + Time.deltaTime;
 			yield return null;
 		}
+		//cdBar.current = curChgTime;
 		deactivateItem();
 	}
 	
@@ -57,6 +61,8 @@ public class ChargeItem : Item {
 
 	protected override void animDone() {
 		curCoolDown = cooldown + (curChgTime * 3);
+		cdBar.onState = 1;
+		cdBar.max = curCoolDown;
 		curChgTime = -1.0f;
 
 		base.animDone ();

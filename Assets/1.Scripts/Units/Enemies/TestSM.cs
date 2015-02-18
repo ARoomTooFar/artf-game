@@ -35,7 +35,7 @@ public class TestSM: Enemy{
 	//Private variables for use in player detection
 	private SphereCollider col;
 	private GameObject[] players;
-	private AggroTable aggro;
+	private AggroTable aggroT;
 
 	private Vector3? lastSeenPosition = null;
 	private float posTimer = 0f;
@@ -46,7 +46,7 @@ public class TestSM: Enemy{
 	protected override void Awake ()
 	{
 		base.Awake ();
-		aggro = new AggroTable();
+		aggroT = new AggroTable();
 		nav = GetComponent<NavMeshAgent> ();
 		col = GetComponent<SphereCollider> ();
 		//animator = GetComponent<Animator> ();
@@ -70,7 +70,8 @@ public class TestSM: Enemy{
 	protected override void Update()
 	{
 		base.Update ();
-		target = aggro.getTarget ();
+		target = aggroT.getTarget ();
+		if(target != null) Debug.Log (target.name);
 		if (target && lastSeenPosition.HasValue && !canSeePlayer (target)) {
 			posTimer += Time.deltaTime;
 		} else if (target && canSeePlayer (target)){
@@ -90,7 +91,7 @@ public class TestSM: Enemy{
 
 	public override void damage(int dmgTaken, Character striker) {
 		base.damage(dmgTaken, striker);
-		aggro.add (striker.gameObject, dmgTaken);
+		aggroT.add (striker.gameObject, dmgTaken);
 	}
 
 
@@ -262,12 +263,12 @@ public class TestSM: Enemy{
 
 		}
 
-		if(agent.patrolWP.Count > 0) agent.nav.destination = agent.patrolWP[waypointIndex].position;
+//		if(agent.patrolWP.Count > 0) agent.nav.destination = agent.patrolWP[waypointIndex].position;
 	}
 
 	public bool canSeePlayer(GameObject p)
 	{
-
+		Debug.Log ("tutturu");
 			// Check angle of forward direction vector against the vector of enemy position relative to player position
 			Vector3 direction = p.transform.position - transform.position;
 			float angle = Vector3.Angle (direction, transform.forward);
@@ -280,7 +281,8 @@ public class TestSM: Enemy{
 				
 					if (hit.collider.gameObject == p) 
 					{
-						aggro.add(p,1);
+						aggroT.add(p,1);
+					Debug.Log(p.name);
 						lastSeenPosition = p.transform.position;
 						alerted = true;
 						return true;

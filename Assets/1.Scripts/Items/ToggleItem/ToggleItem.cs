@@ -50,7 +50,10 @@ public class ToggleItem : Item {
 	protected virtual IEnumerator bgnEffect() {
 		isActive = true;
 		curDuration = maxDuration;
+		cdBar.onState = 2;
+		cdBar.max = maxDuration;
 		while (curDuration > 0) {
+			cdBar.current = curDuration;
 			curDuration -= Time.deltaTime;
 			if (curDuration > 0) {
 				yield return null;
@@ -76,6 +79,8 @@ public class ToggleItem : Item {
 	}
 
 	protected override void animDone() {
+		cdBar.onState = 1;
+		cdBar.max = curCoolDown;
 		base.animDone ();
 	}
 }

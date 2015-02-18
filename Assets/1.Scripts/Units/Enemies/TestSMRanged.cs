@@ -41,7 +41,7 @@ public class TestSMRanged: Enemy{
 	private StateMachine testStateMachine;
 	
 	//Get players, navmesh and all colliders
-	void Awake ()
+	protected override void Awake ()
 	{
 		base.Awake ();
 		nav = GetComponent<NavMeshAgent> ();
@@ -254,7 +254,7 @@ public class TestSMRanged: Enemy{
 			
 		}
 		
-		if(agent.patrolWP.Count > 0) agent.nav.destination = agent.patrolWP[waypointIndex].position;
+//		if(agent.patrolWP.Count > 0) agent.nav.destination = agent.patrolWP[waypointIndex].position;
 	}
 	
 	public bool canSeePlayer(GameObject p)
