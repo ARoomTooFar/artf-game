@@ -20,11 +20,15 @@ public class Output_TileMap : MonoBehaviour
 	TileMap tileMap;
 	static ItemClass itemClass = new ItemClass ();
 	GameObject groundGrid;
+
+	Dictionary<Vector3, List<GameObject>> wallDic;
 	
 	//start
 	void Awake ()
 	{
 //		selectedTiles = new HashSet<Vector3> ();
+
+		wallDic = new Dictionary<Vector3, List<GameObject>>();
 
 		tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
@@ -49,7 +53,7 @@ public class Output_TileMap : MonoBehaviour
 		groundGrid.renderer.material.mainTextureScale = new Vector2 (tileMap.grid_x, tileMap.grid_z);
 	}
 	
-	public void instantiateItemObject (string name, Vector3 position, Vector3 rotation)
+	public GameObject instantiateItemObject (string name, Vector3 position, Vector3 rotation)
 	{
 		position.x = Mathf.RoundToInt (position.x / tileMap.tileSize);
 		position.z = Mathf.RoundToInt (position.z / tileMap.tileSize);
@@ -77,6 +81,8 @@ public class Output_TileMap : MonoBehaviour
 		
 		//new way
 		//		itemClass.addItem (temp.name, position, rotation);
+
+		return temp;
 	}
 	
 	//fill in selected tiles with floor tiles
@@ -92,61 +98,64 @@ public class Output_TileMap : MonoBehaviour
 			//if we're on an edge of the selected box
 			if ((pos.x == firstCornerX || pos.x == secondCornerX
 			     || pos.z == firstCornerZ || pos.z == secondCornerZ)) {
-				
-				//if location already has a wall tile, destroy it
-				//				if (itemClass.itemOnPlace (walltile, pos)) {
-				//					for (int i = 0; i < itemClass.getItemList().Count; i++) {
-				//						if (itemClass.getItemList () [i].x == pos.x
-				//							&& itemClass.getItemList () [i].z == pos.z
-				//							&& itemClass.getItemList () [i].y == pos.y) {
-				//
-				//							itemClass.getItemList ().Remove (itemClass.getItemList () [i]);
-				//							foreach (Transform child in itemObjects) {
-				//								string t = child.transform.name.Substring (0, child.transform.name.IndexOf ('_'));
-				//								if (String.Equals (t, walltile)) {
-				//									GameObject.Destroy (child.gameObject);
-				//								}
-				//							}
-				//						}
-				//					}
-				//				}
-				
+
 				//if there's no floor or wall tiles there
 				if ((!itemClass.itemOnPlace(walltile, pos) && !itemClass.itemOnPlace (floortile, pos))) {
-					
 					//instantiate a wall tile
-					instantiateItemObject (walltile, pos, rot);
-					
-					
+
+					GameObject newWallTile = instantiateItemObject (walltile, pos, rot);
+
+					//if on first corner
+//					if (pos.x == firstCornerX && pos.z == firstCornerZ){
+//						//if wall dictionary is empty or isn't empty, but doesn't contain key
+//						if(!wallDic.Any() || !wallDic.ContainsKey(pos)){
+//							List<GameObject> newList = new List<GameObject>();
+//							newList.Add(newWallTile);
+//							wallDic.Add(pos, newList);
+//							Debug.Log ("wallDic[" + pos + "]: " + wallDic[pos].Count + " entries");
+//						//if dictionary not empty, and does contain key
+//						}else if(wallDic.ContainsKey(pos)){
+//							wallDic[pos].Add(newWallTile);
+//
+//						}
+//					//if on wall x
+//					}else if(pos.x == firstCornerX){
+//
+//					}
+
 				}
+
+
 				
 				
-				//if we're not on an edge (i.e. the center area)
-			} else if (!itemClass.itemOnPlace (floortile, pos)/* && !itemClass.itemOnPlace(walltile, pos)*/) {
+			//if we're not on an edge (i.e. we are on the center area)
+			//and if no floor tile there
+			} else if (!itemClass.itemOnPlace (floortile, pos) && !itemClass.itemOnPlace(walltile, pos)) {
 				
 				//if there's a wall tile there
-				if (itemClass.itemOnPlace (walltile, pos)) {
-					
-					//find item in itemList and remove it (the data entry for it)
-					for (int i = 0; i < itemClass.getItemList().Count; i++) {
-						if (itemClass.getItemList () [i].x == pos.x
-						    && itemClass.getItemList () [i].z == pos.z
-						    && itemClass.getItemList () [i].y == pos.y) {
-							string s = itemClass.getItemList () [i].item;
-							itemClass.getItemList ().Remove (itemClass.getItemList () [i]);
-							
-							//find list in itemObject list and remove it (the prefab for it)
-							foreach (Transform child in itemObjects) {
-								if (String.Equals (child.transform.name, s)) {
-									GameObject.Destroy (child.gameObject);
-								}
-							}
-						}
-					}
-				}
+//				if (itemClass.itemOnPlace (walltile, pos)) {
+//					
+//					//find item in itemList and remove it (the data entry for it)
+//					for (int i = 0; i < itemClass.getItemList().Count; i++) {
+//						if (itemClass.getItemList () [i].x == pos.x
+//						    && itemClass.getItemList () [i].z == pos.z
+//						    && itemClass.getItemList () [i].y == pos.y) {
+//							string s = itemClass.getItemList () [i].item;
+//							itemClass.getItemList ().Remove (itemClass.getItemList () [i]);
+//							
+//							//find list in itemObject list and remove it (the prefab for it)
+//							foreach (Transform child in itemObjects) {
+//								if (String.Equals (child.transform.name, s)) {
+//									GameObject.Destroy (child.gameObject);
+//								}
+//							}
+//						}
+//					}
+//				}
 				instantiateItemObject (floortile, pos, rot);
 			}
 		}
+
 	}
 	
 	//update

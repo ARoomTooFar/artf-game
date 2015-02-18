@@ -72,7 +72,10 @@ public class Input_ItemObject : MonoBehaviour {
 						
 						//old way
 						itemClass.modifyItemList(output_itemObject.getName(), output_itemObject.getPosition(), output_itemObject.getRotation());
-						
+
+//						string prefabType = output_itemObject.getName().Substring (0, output_itemObject.getName().IndexOf ('_'));
+//						Debug.Log(prefabType);
+
 						//new way
 						//						itemClass.changeItemPosition(output_itemObject.getName(), output_itemObject.getPosition());
 					}
