@@ -15,11 +15,11 @@ public class Hook : ChargeItem {
 	private bool hit;
 	private Vector3 facing;
 	private Character foe;
-	private Collider collider;
+	//private Collider collider;
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
-		collider = GetComponent<Collider>();
+		//collider = GetComponent<Collider>();
 		collider.enabled = false;
 	}
 	
@@ -33,8 +33,11 @@ public class Hook : ChargeItem {
 	}
 	public override void useItem() {
 		base.useItem ();
+
+		// user.animator.SetTrigger("Charging Charge"); Once we have the animation for it
+
 		renderer.enabled = true;
-		// player.animator.SetTrigger("Charging Charge"); Once we have the animation for it
+
 	}
 
 	public override void deactivateItem() {
@@ -42,16 +45,16 @@ public class Hook : ChargeItem {
 	}
 	// Update is called once per frame
 	protected override void chgDone() {
-		// player.animator.SetTrigger("Charge Forward");
+		// user.animator.SetTrigger("Charge Forward");
 		
 		//collider.enabled = true;
-		player.freeAnim = false;
-		facing = player.facing;
+		user.freeAnim = false;
+		facing = user.facing;
 		StartCoroutine(chargeFunc((chgDist + curChgTime) * 0.1f));
 	}
 
 	protected override void animDone() {
-		player.freeAnim = true;
+		user.freeAnim = true;
 		collider.enabled = false;
 		hit = false;
 		renderer.enabled = false;
@@ -81,7 +84,7 @@ public class Hook : ChargeItem {
 	// Timer and velocity changing thing
 	private IEnumerator chgTimeFunc(float chgTime) {
 		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
-			rigidbody.velocity = facing.normalized * player.stats.speed * 1.5f * chargeSpeed;
+			rigidbody.velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 			if(foe!=null){
 				foe.transform.position = transform.position;
 			}
@@ -99,7 +102,7 @@ public class Hook : ChargeItem {
 			if(foe!=null){
 				foe.transform.position = transform.position;
 			}
-			rigidbody.velocity = -facing.normalized * player.stats.speed * 1.5f * chargeSpeed;
+			rigidbody.velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 			yield return 0;
 		}
 	}
@@ -114,7 +117,7 @@ public class Hook : ChargeItem {
 	void OnTriggerEnter (Collider other) {
 		if(!hit){
 			RiotShield rShield = other.GetComponent<RiotShield>();
-			if (other.tag == "Wall" || rShield && rShield.player.facing.normalized + player.facing.normalized == Vector3.zero) {
+			if (other.tag == "Wall" || rShield && rShield.user.facing.normalized + user.facing.normalized == Vector3.zero) {
 				hit = true;
 			}
 			IForcible<float> component = (IForcible<float>) other.GetComponent( typeof(IForcible<float>) );
@@ -125,7 +128,7 @@ public class Hook : ChargeItem {
 			}
 		}
 		// Will need a differentiation in the future(Or not if we want this)
-		//     I suggest having the players know what is there enemy and settign ti that way somehow
+		//     I suggest having the users know what is there enemy and settign ti that way somehow
 
 	}
 }

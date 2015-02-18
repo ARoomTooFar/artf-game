@@ -30,13 +30,13 @@ public class Sprint : ToggleItem {
 	public override void useItem() {
 		base.useItem();
 
-		// player.animator.SetTrigger("Sprint"); Set speed var in animator once we have the animation
+		// user.animator.SetTrigger("Sprint"); Set speed var in animator once we have the animation
 	}
 
 	protected override IEnumerator bgnEffect() {
-		baseSpeed = player.stats.speed;
+		baseSpeed = user.stats.speed;
 
-		player.speed(sprintAmplification);
+		user.speed(sprintAmplification);
 
 		return base.bgnEffect();
 	}
@@ -46,7 +46,7 @@ public class Sprint : ToggleItem {
 	}
 
 	protected override void atvDeactivation() {
-		player.removeSpeed(sprintAmplification);
+		user.removeSpeed(sprintAmplification);
 
 		base.atvDeactivation();
 	}

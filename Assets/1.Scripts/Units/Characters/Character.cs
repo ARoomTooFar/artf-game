@@ -123,7 +123,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			foreach (GameObject item in abilities) {
 				Item newItem = (Instantiate(item) as GameObject).GetComponent<Item>();
 				newItem.transform.SetParent(itemLocation, false);
-				newItem.player = player;
+				newItem.user = player;
 				items.Add(newItem);
 			}
 				
@@ -131,6 +131,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			keepItemActive = false;
 		}
 		
+		// Equip method for testing purposes
 		public void equipItems(Character player) {
 			items.Clear ();
 			items.AddRange(itemLocation.GetComponentsInChildren<Item>());
@@ -140,7 +141,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			}
 
 			foreach (Item item in items) {
-				item.player = player;
+				item.user = player;
 			}
 			
 			selected = 0;
@@ -422,7 +423,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	// Used for buffs that are duration based
 	// Uses delegates to call function when over
 	// Will make virtual when neccessary
-	protected IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
+	protected virtual IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
 		while (duration > 0) {
 			duration -= Time.deltaTime;
 			yield return null;

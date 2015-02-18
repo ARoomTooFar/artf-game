@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HUDCharacterUI : MonoBehaviour {
+public class Override : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

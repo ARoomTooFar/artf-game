@@ -4,23 +4,23 @@ using System.Collections.Generic;
 
 public class AmmoBar : LifeBar {
 
-	public int active;
+	//public int onState;
 	public Material mat;
 	public Material mat2;
-	void Start(){
-		active = 0;
+	protected override void Start(){
+		base.Start();
 	}
 	// Update is called once per frame
-	void Update () {
+	protected override void Update () {
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		if(active==1){
+		if(onState==1){
 			renderer.enabled = true;
 			foreach (Renderer r in rs) {
 				r.enabled = true;
 			}
 			renderer.material = mat2;
 			renderer.material.SetFloat("_Cutoff", Mathf.InverseLerp(max, 0, current)); 
-		}else if(active==2){
+		}else if(onState==2){
 			renderer.enabled = true;
 			foreach (Renderer r in rs) {
 				r.enabled = true;
