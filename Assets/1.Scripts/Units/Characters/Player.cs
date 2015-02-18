@@ -9,7 +9,7 @@ using System;
 [System.Serializable]
 public class Controls {
 	//First 7 are Keys, last 2 are joystick axis
-	public string up, down, left, right, attack, secItem, cycItem, hori, vert;
+	public string up, down, left, right, attack, secItem, cycItem, hori, vert, SI, CI, AT;
 	//0 for Joystick off, 1 for Joystick on and no keys
 	public int joyUsed;
 }
@@ -119,10 +119,13 @@ public class Player : Character, IMoveable {
 				damage(testDmg);
 				testable = false;
 			}*/
-			if(Input.GetKeyDown(controls.attack)) {
+            if (Input.GetKeyDown(controls.attack) || Input.GetButtonUp(controls.AT))
+            {
 				animator.SetBool("Charging", true);
 				gear.weapon.initAttack();
-			} else if(Input.GetKeyDown (controls.secItem)) {
+            }
+            else if (Input.GetKeyDown(controls.secItem) || Input.GetButtonDown(controls.SI))
+            {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
 					inventory.items[inventory.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
@@ -130,7 +133,9 @@ public class Player : Character, IMoveable {
 					// Play sound for trying to use item on cooldown or items
 					print("Item on Cooldown");
 				}
-			} else if(Input.GetKeyDown (controls.cycItem)) {
+            }
+            else if (Input.GetKeyDown(controls.cycItem) || Input.GetButtonUp(controls.CI))
+            {
 				inventory.cycItems();
 			}
 			// Continues with what is happening
@@ -145,7 +150,7 @@ public class Player : Character, IMoveable {
 		}
 		
 		
-		if (Input.GetKeyUp (controls.secItem))  {
+		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.SI))  {
 			if (inventory.items.Count > 0) {
 				inventory.keepItemActive = false;
 				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
