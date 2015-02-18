@@ -30,6 +30,7 @@ public class Chainsaw : MeleeWeapons {
 		stats.damage = (int)(1 + 0.1f * user.GetComponent<Character>().stats.strength);
 		
 		stats.maxChgTime = 3.0f;
+		stats.timeForChgAttack = 0.5f;
 		
 		stats.chgLevels = 0.5f;
 
@@ -48,8 +49,6 @@ public class Chainsaw : MeleeWeapons {
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
-
-
 	}
 	
 	public override void initAttack() {
@@ -63,7 +62,7 @@ public class Chainsaw : MeleeWeapons {
 	// Chainsaw attacks in a unique way
 	protected override IEnumerator bgnCharge() {
 		if (user.animator.GetBool("Charging")) particles.Play();
-		while (user.animator.GetBool("Charging") && stats.curChgDuration < 0.5f) {
+		while (user.animator.GetBool("Charging") && stats.curChgDuration < stats.timeForChgAttack) {
 			stats.curChgDuration = Mathf.Clamp(stats.curChgDuration + Time.deltaTime, 0.0f, stats.maxChgTime);
 			stats.chgDamage = (int) (stats.curChgDuration/stats.chgLevels);
 			particles.startSpeed = stats.chgDamage;

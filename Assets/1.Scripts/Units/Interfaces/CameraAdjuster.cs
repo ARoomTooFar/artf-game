@@ -80,7 +80,7 @@ public class CameraAdjuster : MonoBehaviour {
 		avgPX = 0;
 		avgPZ = 0;
 		if(!p1.isDead){
-		  seeable(p1);
+		  //seeable(p1);
 		  avgNum++;
 		  avgPX += p1.transform.position.x;
 		  avgPZ += p1.transform.position.z;
