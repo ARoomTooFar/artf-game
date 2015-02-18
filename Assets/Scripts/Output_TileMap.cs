@@ -105,6 +105,9 @@ public class Output_TileMap : MonoBehaviour
 
 					GameObject newWallTile = instantiateItemObject (walltile, pos, rot);
 
+					//for video demo only:
+					instantiateItemObject (floortile, pos, rot);
+
 					//if on first corner
 //					if (pos.x == firstCornerX && pos.z == firstCornerZ){
 //						//if wall dictionary is empty or isn't empty, but doesn't contain key
@@ -133,25 +136,25 @@ public class Output_TileMap : MonoBehaviour
 			} else if (!itemClass.itemOnPlace (floortile, pos) && !itemClass.itemOnPlace(walltile, pos)) {
 				
 				//if there's a wall tile there
-//				if (itemClass.itemOnPlace (walltile, pos)) {
-//					
-//					//find item in itemList and remove it (the data entry for it)
-//					for (int i = 0; i < itemClass.getItemList().Count; i++) {
-//						if (itemClass.getItemList () [i].x == pos.x
-//						    && itemClass.getItemList () [i].z == pos.z
-//						    && itemClass.getItemList () [i].y == pos.y) {
-//							string s = itemClass.getItemList () [i].item;
-//							itemClass.getItemList ().Remove (itemClass.getItemList () [i]);
-//							
-//							//find list in itemObject list and remove it (the prefab for it)
-//							foreach (Transform child in itemObjects) {
-//								if (String.Equals (child.transform.name, s)) {
-//									GameObject.Destroy (child.gameObject);
-//								}
-//							}
-//						}
-//					}
-//				}
+				if (itemClass.itemOnPlace (walltile, pos)) {
+					
+					//find item in itemList and remove it (the data entry for it)
+					for (int i = 0; i < itemClass.getItemList().Count; i++) {
+						if (itemClass.getItemList () [i].x == pos.x
+						    && itemClass.getItemList () [i].z == pos.z
+						    && itemClass.getItemList () [i].y == pos.y) {
+							string s = itemClass.getItemList () [i].item;
+							itemClass.getItemList ().Remove (itemClass.getItemList () [i]);
+							
+							//find list in itemObject list and remove it (the prefab for it)
+							foreach (Transform child in itemObjects) {
+								if (String.Equals (child.transform.name, s)) {
+									GameObject.Destroy (child.gameObject);
+								}
+							}
+						}
+					}
+				}
 				instantiateItemObject (floortile, pos, rot);
 			}
 		}
