@@ -55,6 +55,11 @@ public class MonsterBlock {
 		GameObj.transform.position = Position;
 	}
 
+	/*
+	 * public void rotate(bool goClockwise = true)
+	 * 
+	 * Rotates the monster
+	 */
 	public void rotate(bool goClockwise = true){
 		Orientation = Orientation.QuarterTurn(goClockwise);
 		GameObj.transform.eulerAngles = Orientation.toRotationVector();

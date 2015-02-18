@@ -89,6 +89,7 @@ public class TerrainBlock {
 		this.BlockInfo = TerrainBlockInfo.get(blockID);
 		this.Position = pos.Round();
 		this.Orientation = dir;
+		this.Neighbors = new Dictionary<DIRECTION, TerrainBlock>();
 		this.GameObj = GameObjectResourcePool.getResource(blockID, pos, dir.toRotationVector());
 	}
 

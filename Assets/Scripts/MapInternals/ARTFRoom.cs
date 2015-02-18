@@ -7,7 +7,7 @@ public partial class ARTFRoom {
 
 	#region PrivateVariables
 	protected List<TerrainBlock> blocks = new List<TerrainBlock>();
-	private string defaultBlockID = "defaultBlockID";
+	private static string defaultBlockID = "defaultBlockID";
 	#endregion PrivateVariables
 
 	#region Properties
@@ -184,7 +184,7 @@ public partial class ARTFRoom {
 		//remove blocks no longer in room
 		foreach(TerrainBlock blk in blocks) {
 			if(!inRoom(blk.Position)) {
-				MapData.Instance.TerrainBlocks.remove(blk.Position);
+				MapData.Instance.TerrainBlocks.remove(blk);
 			}
 		}
 		//relink blocks to this room
@@ -198,7 +198,7 @@ public partial class ARTFRoom {
 	 */
 	public void remove(){
 		foreach(TerrainBlock blk in this.blocks){
-			MapData.Instance.TerrainBlocks.remove(blk.Position);
+			MapData.Instance.TerrainBlocks.remove(blk);
 		}
 		this.blocks.Clear();
 	}
