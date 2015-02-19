@@ -254,7 +254,7 @@ public class TestSMRanged: Enemy{
 			
 		}
 		
-		if(agent.patrolWP.Count > 0) agent.nav.destination = agent.patrolWP[waypointIndex].position;
+//		if(agent.patrolWP.Count > 0) agent.nav.destination = agent.patrolWP[waypointIndex].position;
 	}
 	
 	public bool canSeePlayer(GameObject p)

@@ -71,6 +71,7 @@ public class TestSM: Enemy{
 	{
 		base.Update ();
 		target = aggroT.getTarget ();
+		if(target != null) Debug.Log (target.name);
 		if (target && lastSeenPosition.HasValue && !canSeePlayer (target)) {
 			posTimer += Time.deltaTime;
 		} else if (target && canSeePlayer (target)){
@@ -262,12 +263,12 @@ public class TestSM: Enemy{
 
 		}
 
-		if(agent.patrolWP.Count > 0) agent.nav.destination = agent.patrolWP[waypointIndex].position;
+//		if(agent.patrolWP.Count > 0) agent.nav.destination = agent.patrolWP[waypointIndex].position;
 	}
 
 	public bool canSeePlayer(GameObject p)
 	{
-
+		Debug.Log ("tutturu");
 			// Check angle of forward direction vector against the vector of enemy position relative to player position
 			Vector3 direction = p.transform.position - transform.position;
 			float angle = Vector3.Angle (direction, transform.forward);
@@ -281,6 +282,7 @@ public class TestSM: Enemy{
 					if (hit.collider.gameObject == p) 
 					{
 						aggroT.add(p,1);
+					Debug.Log(p.name);
 						lastSeenPosition = p.transform.position;
 						alerted = true;
 						return true;

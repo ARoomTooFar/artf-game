@@ -8,18 +8,16 @@ public class Wall : MonoBehaviour {
 	public float disappear;
 	void Start(){
 		show = true;
-		disappear = 1f;
+		disappear = 3f;
 	}
 	void Awake () {
 		obs = GetComponent<NavMeshObstacle> ();
 		obs.carving = true;
-//		obs.height = transform.lossyScale.y;
-//		obs.radius = transform.lossyScale.z;
-		Debug.Log (obs.height + " " + obs.radius);
 	}
 	public void toggleShow(){
 		show = false;
 		renderer.enabled = false;
+		collider.enabled = false;
 		StopCoroutine("Wait");
 		StartCoroutine("Wait",disappear);
 	}
@@ -32,6 +30,7 @@ public class Wall : MonoBehaviour {
 			yield return 0;
 		}
 		show = true;
+		collider.enabled = true;
 		renderer.enabled = true;
 	}
 }
