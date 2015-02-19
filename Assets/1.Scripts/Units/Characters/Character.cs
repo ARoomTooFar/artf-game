@@ -51,6 +51,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	protected delegate void BuffDelegate(float strength);
 
+	public BuffDebuffSystem BDS;
+
 	// Serialized classes
 	public Stats stats;
 
@@ -167,6 +169,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	protected virtual void Awake() {
 		opposition = Type.GetType ("Player");
+		BDS = new BuffDebuffSystem(this);
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
@@ -355,7 +358,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	}
 	
 	//-------------------------------//
-	
+
+	/*
 	//-------------------------------//
 	// Slow Interface Implementation //
 	//-------------------------------//
@@ -388,6 +392,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	//-------------------------------//
 
+	*/
 
 	//-------------------------------//
 	// Stun Interface Implementation //

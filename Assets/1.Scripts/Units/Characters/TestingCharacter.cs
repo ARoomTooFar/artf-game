@@ -165,7 +165,9 @@ public class TestingCharacter : Character, IActionable<bool>, IFallable, IAttack
 	}
 	
 	//-------------------------------//
-	
+
+
+	/*
 	//-------------------------------//
 	// Slow Interface Implementation //
 	//-------------------------------//
@@ -198,7 +200,8 @@ public class TestingCharacter : Character, IActionable<bool>, IFallable, IAttack
 	
 	//-------------------------------//
 	
-	
+    */
+
 	//-------------------------------//
 	// Stun Interface Implementation //
 	//-------------------------------//

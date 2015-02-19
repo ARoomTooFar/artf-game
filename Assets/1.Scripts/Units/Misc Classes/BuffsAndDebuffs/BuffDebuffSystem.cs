@@ -51,6 +51,7 @@ public class BuffDebuffSystem {
 			buffsAndDebuffs[newBD.name] = list;
 		}
 		newBD.applyBD(affectedUnit);
+		affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemovalWrapper(ref newBD, duration));
 	}
 
 	// For adding buffs/debuffs that don't do anything if unit is already affected by an instance of it
@@ -62,6 +63,7 @@ public class BuffDebuffSystem {
 			list.Add(newBD);
 			buffsAndDebuffs[newBD.name] = list;
 			newBD.applyBD(affectedUnit);
+			affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemovalWrapper(ref newBD, duration));
 		}
 	}
 	
@@ -77,14 +79,28 @@ public class BuffDebuffSystem {
 			buffsAndDebuffs[newBD.name] = list;
 		}
 		newBD.applyBD(affectedUnit);
+		affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemovalWrapper(ref newBD, duration));
+	}
+
+	private IEnumerator timedRemovalWrapper(ref BuffsDebuffs bdToRemove, float duration) {
+		return timedRemoval (duration);
+		Debug.Log("Remove Buff");
+		rmvBuffDebuff(ref bdToRemove);
+	}
+
+	private IEnumerator timedRemoval(float duration) {
+		while (duration > 0.0f) {
+			duration -= Time.deltaTime;
+			yield return null;
+		}
 	}
 
 	//------------------------------------------------------//
 
 
-	//----------------------------------------------------------//
-	// Buffs/Debuffs that are removed by something else go here //
-	//----------------------------------------------------------//
+	//-----------------------------------------//
+	// Buffs/Debuffs that are removed manually //
+	//-----------------------------------------//
 
 	public void addBuffDebuff(ref BuffsDebuffs newBD) {
 		// 0 - Overwrites Existing, 1 - Does nothing if it exists already, 2 - Buffs/Debuffs that can stack together
@@ -146,9 +162,26 @@ public class BuffDebuffSystem {
 		newBD.applyBD(affectedUnit);
 	}
 
-	public void rmvBuffDebuff(ref BuffsDebuffs bdToRemove) {
-
-	}
-
 	//----------------------------------------------------------//
+
+	public void rmvBuffDebuff(ref BuffsDebuffs bdToRemove) {
+		List<BuffsDebuffs> list;
+		
+		if (buffsAndDebuffs.TryGetValue (bdToRemove.name, out list)) {
+			for (int i = 0; i < list.Count; i++) {
+				if (list[i] == bdToRemove) {
+					list[i].removeBD(affectedUnit);
+					list.RemoveAt(i);
+					Debug.Log ("Buff/Debuff " + bdToRemove.name + " removed.");
+					break;
+				}
+
+				if (i == list.Count - 1) {
+					Debug.LogWarning("Specific Buff/Debuff not found.");
+				}
+			}
+		} else {
+			Debug.LogWarning("No such buff/debuff with name " + bdToRemove.name + " exists.");
+		}
+	}
 }

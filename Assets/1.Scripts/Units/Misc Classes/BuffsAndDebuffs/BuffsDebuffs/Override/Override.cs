@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Override : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
+public class Override : BuffsDebuffs {
+	protected Override() {
+		bdType = 0;
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	public override void applyBD(Character unit) {
+		base.applyBD(unit);
+	}
 	
+	public override void removeBD() {
+		base.removeBD();
 	}
 }

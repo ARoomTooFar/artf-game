@@ -13,10 +13,11 @@ public class Speed : Stacking {
 	
 	public override void applyBD(Character unit) {
 		base.applyBD(unit);
-	
+		unit.stats.spdManip.setSpeedAmplification(spdPercent);
 	}
 	
 	public override void removeBD() {
 		base.removeBD();
+		affectedUnit.stats.spdManip.removeSpeedAmplification(spdPercent);
 	}
 }

@@ -9,9 +9,12 @@ public class Sprint : ToggleItem {
 	public float sprintAmplification;
 	private int baseSpeed;
 
+	private Speed buff;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
+		buff = new Speed(sprintAmplification);
 	}
 
 	protected override void setInitValues() {
@@ -36,7 +39,8 @@ public class Sprint : ToggleItem {
 	protected override IEnumerator bgnEffect() {
 		baseSpeed = user.stats.speed;
 
-		user.speed(sprintAmplification);
+		user.BDS.addBuffDebuff(ref buff);
+		// user.speed(sprintAmplification);
 
 		return base.bgnEffect();
 	}
@@ -46,7 +50,8 @@ public class Sprint : ToggleItem {
 	}
 
 	protected override void atvDeactivation() {
-		user.removeSpeed(sprintAmplification);
+		user.BDS.rmvBuffDebuff(ref buff);
+		// user.removeSpeed(sprintAmplification);
 
 		base.atvDeactivation();
 	}
