@@ -24,7 +24,7 @@ public class TerrainBlockInfo {
 	private static void loadBlockInfo(){
 		infoDictionary = new Dictionary<string, TerrainBlockInfo> ();
 		//load data
-		infoDictionary.Add ("defaultBlockID", new TerrainBlockInfo("defaultBlockID", true));
+		infoDictionary.Add ("Prefabs/floortile", new TerrainBlockInfo("Prefabs/floortile", true));
 		//return true;
 	}
 	

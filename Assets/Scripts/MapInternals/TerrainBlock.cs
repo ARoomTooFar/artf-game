@@ -91,6 +91,7 @@ public class TerrainBlock {
 		this.Orientation = dir;
 		this.Neighbors = new Dictionary<DIRECTION, TerrainBlock>();
 		this.GameObj = GameObjectResourcePool.getResource(blockID, pos, dir.toRotationVector());
+		Debug.Log(GameObj.transform.position);
 	}
 
 	/*
@@ -321,6 +322,16 @@ public class TerrainBlock {
 	public void rotate(bool goClockwise = true){
 		Orientation = Orientation.QuarterTurn(goClockwise);
 		GameObj.transform.eulerAngles = Orientation.toRotationVector();
+	}
+
+	public void remove(){
+		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
+		if(Scenery != null) {
+			MapData.SceneryBlocks.remove(Scenery);
+		}
+		if(Monster != null) {
+			MapData.MonsterBlocks.remove(Monster);
+		}
 	}
 	#endregion Manipulation
 }

@@ -14,6 +14,23 @@ public class ARTFRoomManager {
 	protected internal ARTFRoomManager(ARTFRoomManager rmMan) {
 		this.roomList = rmMan.roomList;
 	}
+	
+	public void clear() {
+		foreach(ARTFRoom rm in roomList) {
+			rm.remove();
+		}
+		roomList.Clear();
+	}
+
+	public string SaveString {
+		get {
+			string retVal = "rooms:";
+			foreach(ARTFRoom rm in roomList) {
+				retVal += rm.SaveString + " ";
+			}
+			return retVal + "\n";
+		}
+	}
 
 	#region ManipulationFunctions
 	#region Add

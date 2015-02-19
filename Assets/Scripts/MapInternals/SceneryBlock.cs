@@ -79,6 +79,10 @@ public class SceneryBlock {
 		Orientation = Orientation.QuarterTurn(goClockwise);
 		GameObj.transform.eulerAngles = Orientation.toRotationVector();
 	}
+
+	public void remove(){
+		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
+	}
 }
 
 

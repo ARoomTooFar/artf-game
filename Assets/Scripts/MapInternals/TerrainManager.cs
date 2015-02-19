@@ -17,6 +17,14 @@ public class TerrainManager {
 		dictionary = other.dictionary;
 	}
 
+	public void clear(){
+		foreach(List<TerrainBlock> lst in dictionary.Values){
+			foreach(TerrainBlock blk in lst){
+				blk.remove();
+			}
+		}
+	}
+
 	#region (un)linkNeighbors
 	/*
 	 * private bool linkNeighbors (TerrainBlock block)
@@ -118,11 +126,10 @@ public class TerrainManager {
 	}
 
 	public bool remove(TerrainBlock blk){
-		GameObjectResourcePool.returnResource(blk.BlockInfo.BlockID, blk.GameObj);
 		//unlink neighbors
 		unlinkNeighbors(blk);
-		MapData.Instance.SceneryBlocks.remove(blk.Scenery);
-		MapData.Instance.MonsterBlocks.remove(blk.Monster);
+
+		blk.remove();
 		//remove from list
 		return dictionary[blk.BlockInfo.BlockID].Remove(blk);
 	}
@@ -174,13 +181,13 @@ public class TerrainManager {
 		return null;
 	}
 
-	public string TerrainSaveString {
+	public string SaveString {
 		get {
 			string retVal = "";
 			string tempVal;
 			foreach(KeyValuePair<string, List<TerrainBlock>> kvPair in dictionary) {
 				tempVal = "";
-				tempVal += kvPair.Key + ": ";
+				tempVal += kvPair.Key + ":";
 				foreach(TerrainBlock blk in kvPair.Value) {
 					tempVal += blk.SaveString + " ";
 				}
@@ -188,5 +195,13 @@ public class TerrainManager {
 			}
 			return retVal;
 		}
+	}
+
+	public int numTiles() {
+		int retVal = 0;
+		foreach(List<TerrainBlock> val in dictionary.Values) {
+			retVal += val.Count;
+		}
+		return retVal;
 	}
 }

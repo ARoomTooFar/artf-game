@@ -28,10 +28,10 @@ public class ARTFRoomTests : MasterTest{
 	public void LinkTerrainTest(){
 		MapData.ClearData();
 		test_ARTFRoom test = new test_ARTFRoom(new Vector3(0, 0, 0), new Vector3(1, 0, 1));
-		Assert.AreEqual(0, test_MapData.Terrain.numTiles());
+		Assert.AreEqual(0, MapData.TerrainBlocks.numTiles());
 		test.linkTerrain();
 		Assert.AreEqual(4, test.Blocks.Count);
-		Assert.AreEqual(4, test_MapData.Terrain.numTiles());
+		Assert.AreEqual(4, MapData.TerrainBlocks.numTiles());
 		test.unlinkTerrain();
 		Assert.AreEqual(0, test.Blocks.Count);
 	}
@@ -41,13 +41,13 @@ public class ARTFRoomTests : MasterTest{
 		MapData.ClearData();
 		test_ARTFRoom test = new test_ARTFRoom(new Vector3(1, 0, 1), new Vector3(2, 0, 2));
 		test.linkTerrain();
-		Assert.IsNull(test_MapData.Terrain.find(new Vector3(4, 0, 3)));
+		Assert.IsNull(MapData.TerrainBlocks.find(new Vector3(4, 0, 3)));
 		float oLength = test.Length;
 		float oHeight = test.Height;
 		test.move(new Vector3(2, 0, 1));
 		Assert.AreEqual(new Vector3(3, 0, 2), test.LLCorner);
 		Assert.AreEqual(new Vector3(4, 0, 3), test.URCorner);
-		Assert.IsNotNull(test_MapData.Terrain.find(new Vector3(4, 0, 3)));
+		Assert.IsNotNull(MapData.TerrainBlocks.find(new Vector3(4, 0, 3)));
 		Assert.AreEqual(oLength, test.Length);
 		Assert.AreEqual(oHeight, test.Height);
 	}
@@ -57,14 +57,14 @@ public class ARTFRoomTests : MasterTest{
 		MapData.ClearData();
 		test_ARTFRoom test = new test_ARTFRoom(new Vector3(0, 0, 0), new Vector3(1, 0, 1));
 		test.linkTerrain();
-		Assert.IsNull(test_MapData.Terrain.find(new Vector3(2, 0, 2)));
+		Assert.IsNull(MapData.TerrainBlocks.find(new Vector3(2, 0, 2)));
 		test.resize(new Vector3(1, 0, 1), new Vector3(2, 0, 2));
 		Assert.AreEqual(new Vector3(0, 0, 0), test.LLCorner);
 		Assert.AreEqual(new Vector3(2, 0, 2), test.URCorner);
 		Assert.AreEqual(3, test.Length);
 		Assert.AreEqual(3, test.Height);
-		Assert.IsNotNull(test_MapData.Terrain.find(new Vector3(0, 0, 0)));
-		Assert.IsNotNull(test_MapData.Terrain.find(new Vector3(2, 0, 2)));
+		Assert.IsNotNull(MapData.TerrainBlocks.find(new Vector3(0, 0, 0)));
+		Assert.IsNotNull(MapData.TerrainBlocks.find(new Vector3(2, 0, 2)));
 	}
 
 	[Test]

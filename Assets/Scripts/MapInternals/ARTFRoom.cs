@@ -7,7 +7,7 @@ public partial class ARTFRoom {
 
 	#region PrivateVariables
 	protected List<TerrainBlock> blocks = new List<TerrainBlock>();
-	private static string defaultBlockID = "defaultBlockID";
+	private static string defaultBlockID = "Prefabs/floortile";
 	#endregion PrivateVariables
 
 	#region Properties
@@ -99,13 +99,13 @@ public partial class ARTFRoom {
 				//set a Vector3 to the correct position
 				pos.Set(i + LLCorner.x, 0, j + LLCorner.z);
 				//try to find an existing block at that coordinate
-				blk = MapData.Instance.TerrainBlocks.find(pos);
+				blk = MapData.TerrainBlocks.find(pos);
 				//if it doesn't exist
 				if(blk == null) {
 					//create a new one
 					blk = new TerrainBlock(defaultBlockID, pos, DIRECTION.North);
 					//and add it to the MapData
-					MapData.Instance.TerrainBlocks.add(blk);
+					MapData.TerrainBlocks.add(blk);
 				}
 				//link the block to the room
 				blocks.Add(blk);
@@ -152,7 +152,7 @@ public partial class ARTFRoom {
 			//if it is an edge block
 			if(isEdge(blk.Position)) {
 				//force it to re-identify its neighbors
-				MapData.Instance.TerrainBlocks.relinkNeighbors(blk);
+				MapData.TerrainBlocks.relinkNeighbors(blk);
 			}
 		}
 	}
@@ -184,7 +184,7 @@ public partial class ARTFRoom {
 		//remove blocks no longer in room
 		foreach(TerrainBlock blk in blocks) {
 			if(!inRoom(blk.Position)) {
-				MapData.Instance.TerrainBlocks.remove(blk);
+				MapData.TerrainBlocks.remove(blk);
 			}
 		}
 		//relink blocks to this room
@@ -198,7 +198,7 @@ public partial class ARTFRoom {
 	 */
 	public void remove(){
 		foreach(TerrainBlock blk in this.blocks){
-			MapData.Instance.TerrainBlocks.remove(blk);
+			MapData.TerrainBlocks.remove(blk);
 		}
 		this.blocks.Clear();
 	}

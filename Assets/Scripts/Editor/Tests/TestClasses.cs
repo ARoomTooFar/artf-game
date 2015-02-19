@@ -35,12 +35,6 @@ public class MasterTest {
 		}
 	}
 
-	protected internal class test_MapData : MapData{
-		public static test_TerrainManager Terrain {
-			get{ return new test_TerrainManager(MapData.Instance.TerrainBlocks); }
-		}
-	}
-
 	protected internal class test_ARTFRoomManager : ARTFRoomManager {
 		public test_ARTFRoomManager(){}
 		public test_ARTFRoomManager(ARTFRoomManager rm) : base(rm){}
