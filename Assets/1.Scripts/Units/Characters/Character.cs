@@ -359,7 +359,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	//-------------------------------//
 
-	/*
 	//-------------------------------//
 	// Slow Interface Implementation //
 	//-------------------------------//
@@ -392,7 +391,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	//-------------------------------//
 
-	*/
 
 	//-------------------------------//
 	// Stun Interface Implementation //

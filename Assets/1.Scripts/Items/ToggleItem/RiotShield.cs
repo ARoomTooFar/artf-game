@@ -7,12 +7,15 @@ public class RiotShield : ToggleItem {
 	
 	private float dmgReduction, userSlow;
 	private MeshRenderer meshRenderer;
-	
+
+	private BuffsDebuffs debuff;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
 		
 		meshRenderer = GetComponent<MeshRenderer>();
+		debuff = new Slow (userSlow);
 	}
 	
 	protected override void setInitValues() {
@@ -41,7 +44,8 @@ public class RiotShield : ToggleItem {
 		collider.enabled = true;
 		meshRenderer.enabled = true;
 		user.stats.dmgManip.setDamageReduction(1, dmgReduction);
-		user.slow (userSlow);
+		user.BDS.addBuffDebuff(ref debuff);
+		// user.slow (userSlow);
 		return base.bgnEffect();
 	}
 	
@@ -54,7 +58,8 @@ public class RiotShield : ToggleItem {
 		meshRenderer.enabled = false;
 
 		user.stats.dmgManip.removeDamageReduction(1, dmgReduction);
-		user.removeSlow (userSlow);
+		user.BDS.rmvBuffDebuff(ref debuff);
+		// user.removeSlow (userSlow);
 		base.atvDeactivation();
 	}
 

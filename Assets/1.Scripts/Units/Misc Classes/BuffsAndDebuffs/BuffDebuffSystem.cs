@@ -170,7 +170,7 @@ public class BuffDebuffSystem {
 		if (buffsAndDebuffs.TryGetValue (bdToRemove.name, out list)) {
 			for (int i = 0; i < list.Count; i++) {
 				if (list[i] == bdToRemove) {
-					list[i].removeBD(affectedUnit);
+					list[i].removeBD();
 					list.RemoveAt(i);
 					Debug.Log ("Buff/Debuff " + bdToRemove.name + " removed.");
 					break;

@@ -9,7 +9,7 @@ public class Sprint : ToggleItem {
 	public float sprintAmplification;
 	private int baseSpeed;
 
-	private Speed buff;
+	private BuffsDebuffs buff;
 
 	// Use this for initialization
 	protected override void Start () {

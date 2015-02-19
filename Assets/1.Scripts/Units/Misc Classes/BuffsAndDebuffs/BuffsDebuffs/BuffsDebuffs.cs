@@ -19,7 +19,7 @@ public class BuffsDebuffs {
 	protected int _bdType;
 	public int bdType {
 		get {
-			return bdType;
+			return _bdType;
 		}
 		protected set {
 			_bdType = value;
