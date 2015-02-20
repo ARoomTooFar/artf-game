@@ -20,14 +20,14 @@ public class BuffDebuffSystem {
 	// Functions that add and apply timed buffs/debuff go here //
 	//---------------------------------------------------------//
 	
-	public void addBuffDebuff(ref BuffsDebuffs newBD, float duration) {
+	public void addBuffDebuff(BuffsDebuffs newBD, float duration) {
 		// 1 - Does nothing if it exists already, 2 - Buffs/Debuffs that can stack together
 		switch (newBD.bdType) {
 			case 1: // If buff/debuff exists already, do nothing, else apply it on
-				addSingular(ref newBD, duration);
+				addSingular(newBD, duration);
 				break;
 			case 2: // If there is already an instance of this buff/debuff, add another to the list
-				addStacking(ref newBD, duration);
+				addStacking(newBD, duration);
 				break;
 			default:
 				Debug.LogWarning("Buff/Debuff has no appropriate type");
@@ -37,7 +37,7 @@ public class BuffDebuffSystem {
 
 	/*
 	// For adding buffs/debuffs that override existing ones if the new one is better
-	private void addOverride(ref BuffsDebuffs newBD, float duration) {
+	private void addOverride(BuffsDebuffs newBD, float duration) {
 		List<BuffsDebuffs> list;
 	
 		if (buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
@@ -50,11 +50,11 @@ public class BuffDebuffSystem {
 			buffsAndDebuffs[newBD.name] = list;
 		}
 		newBD.applyBD(affectedUnit);
-		affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemovalWrapper(ref newBD, duration));
+		affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemovalWrapper(newBD, duration));
 	}*/
 
 	// For adding buffs/debuffs that don't do anything if unit is already affected by an instance of it
-	private void addSingular(ref BuffsDebuffs newBD, float duration) {
+	private void addSingular(BuffsDebuffs newBD, float duration) {
 		List<BuffsDebuffs> list;
 
 		if (!buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
@@ -62,12 +62,13 @@ public class BuffDebuffSystem {
 			list.Add(newBD);
 			buffsAndDebuffs[newBD.name] = list;
 			newBD.applyBD(affectedUnit);
-			affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemovalWrapper(ref newBD, duration));
+			affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemoval(newBD, duration));
+			// affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemovalWrapper(newBD, duration));
 		}
 	}
 	
 	// For adding buffs/debuffs that can stack
-	private void addStacking(ref BuffsDebuffs newBD, float duration) {
+	private void addStacking(BuffsDebuffs newBD, float duration) {
 		List<BuffsDebuffs> list;
 		
 		if (buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
@@ -78,21 +79,24 @@ public class BuffDebuffSystem {
 			buffsAndDebuffs[newBD.name] = list;
 		}
 		newBD.applyBD(affectedUnit);
-		affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemovalWrapper(ref newBD, duration));
+		affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemoval(newBD, duration));
+		// affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemovalWrapper(newBD, duration));
 	}
 
-	private IEnumerator timedRemovalWrapper(ref BuffsDebuffs bdToRemove, float duration) {
+	/*
+	private IEnumerator timedRemovalWrapper(BuffsDebuffs bdToRemove, float duration) {
 		return timedRemoval (duration);
 		Debug.Log("Remove Buff");
-		rmvBuffDebuff(ref bdToRemove);
-	}
+		rmvBuffDebuff(bdToRemove);
+	}*/
 
-	private IEnumerator timedRemoval(float duration) {
-
+	private IEnumerator timedRemoval(BuffsDebuffs bdToRemove, float duration) {
 		while (duration > 0.0f) {
 			duration -= Time.deltaTime;
 			yield return null;
 		}
+		Debug.Log("Remove Buff");
+		rmvBuffDebuff(bdToRemove);
 	}
 
 	//------------------------------------------------------//
@@ -102,14 +106,14 @@ public class BuffDebuffSystem {
 	// Buffs/Debuffs that are removed manually //
 	//-----------------------------------------//
 
-	public void addBuffDebuff(ref BuffsDebuffs newBD) {
+	public void addBuffDebuff(BuffsDebuffs newBD) {
 		// 1 - Does nothing if it exists already, 2 - Buffs/Debuffs that can stack together
 		switch (newBD.bdType) {
 		case 1: // If buff/debuff exists already, do nothing, else apply it on
-			addSingular(ref newBD);
+			addSingular(newBD);
 			break;
 		case 2: // If there is already an instance of this buff/debuff, add another to the list
-			addStacking(ref newBD);
+			addStacking(newBD);
 			break;
 		default:
 			Debug.LogWarning("Buff/Debuff has no appropriate type");
@@ -119,7 +123,7 @@ public class BuffDebuffSystem {
 
 	/*
 	// For adding buffs/debuffs that override existing ones
-	private void addOverride(ref BuffsDebuffs newBD) {
+	private void addOverride(BuffsDebuffs newBD) {
 		List<BuffsDebuffs> list;
 		
 		if (buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
@@ -135,7 +139,7 @@ public class BuffDebuffSystem {
 	}*/
 	
 	// For adding buffs/debuffs that don't do anything if unit is already affected by an instance of it
-	private void addSingular(ref BuffsDebuffs newBD) {
+	private void addSingular(BuffsDebuffs newBD) {
 		List<BuffsDebuffs> list;
 		
 		if (!buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
@@ -147,7 +151,7 @@ public class BuffDebuffSystem {
 	}
 	
 	// For adding buffs/debuffs that can stack
-	private void addStacking(ref BuffsDebuffs newBD) {
+	private void addStacking(BuffsDebuffs newBD) {
 		List<BuffsDebuffs> list;
 		
 		if (buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
@@ -163,7 +167,7 @@ public class BuffDebuffSystem {
 	//----------------------------------------------------------//
 
 	// For general removal
-	public void rmvBuffDebuff(ref BuffsDebuffs bdToRemove) {
+	public void rmvBuffDebuff(BuffsDebuffs bdToRemove) {
 		List<BuffsDebuffs> list;
 
 		if (buffsAndDebuffs.TryGetValue (bdToRemove.name, out list)) {
@@ -189,7 +193,7 @@ public class BuffDebuffSystem {
 	}
 
 	// Purge removes the buff/debuff prematurely (Removes current coroutines affecting it)
-	public void purgeBuffDebuff(ref BuffsDebuffs bdToPurge) {
+	public void purgeBuffDebuff(BuffsDebuffs bdToPurge) {
 		List<BuffsDebuffs> list;
 
 		if (buffsAndDebuffs.TryGetValue (bdToPurge.name, out list)) {

@@ -3,18 +3,42 @@
 using UnityEngine;
 using System.Collections;
 
+public class Sprinting : Singular {
+	
+	private float spdPercent;
+	
+	public Sprinting(float speedValue) {
+		name = "Sprinting";
+		spdPercent = speedValue;
+	}
+	
+	public override void applyBD(Character unit) {
+		base.applyBD(unit);
+		unit.stats.spdManip.setSpeedAmplification(spdPercent);
+	}
+	
+	public override void removeBD(Character unit) {
+		base.removeBD(unit);
+		unit.stats.spdManip.removeSpeedAmplification(spdPercent);
+	}
+	
+	public override void purgeBD(Character unit) {
+		base.purgeBD (unit);
+	}
+}
+
 public class Sprint : ToggleItem {
 
 	[Range(1.5f, 3.0f)]
 	public float sprintAmplification;
 	private int baseSpeed;
 
-	private BuffsDebuffs buff;
+	private Sprinting buff;
 
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
-		buff = new Speed(sprintAmplification);
+		buff = new Sprinting(sprintAmplification);
 	}
 
 	protected override void setInitValues() {
@@ -39,7 +63,7 @@ public class Sprint : ToggleItem {
 	protected override IEnumerator bgnEffect() {
 		baseSpeed = user.stats.speed;
 
-		user.BDS.addBuffDebuff(ref buff);
+		user.BDS.addBuffDebuff(buff);
 		// user.speed(sprintAmplification);
 
 		return base.bgnEffect();
@@ -50,7 +74,7 @@ public class Sprint : ToggleItem {
 	}
 
 	protected override void atvDeactivation() {
-		user.BDS.rmvBuffDebuff(ref buff);
+		user.BDS.rmvBuffDebuff(buff);
 		// user.removeSpeed(sprintAmplification);
 
 		base.atvDeactivation();

@@ -25,11 +25,10 @@ public class Burning : Singular {
 	}
 	
 	private IEnumerator burnBabyBurn(Character unit, float duration) {
-		while (duration >= 0.0f) {
-			yield return new WaitForSeconds(1.0f);
-			Debug.Log ("Burned");
-			unit.damage(dmg);
+		while (duration > 0.0f) {
 			duration -= 1.0f;
+			yield return new WaitForSeconds(1.0f);
+			unit.damage(dmg);
 		}
 	}
 

@@ -3,12 +3,36 @@
 using UnityEngine;
 using System.Collections;
 
+public class RiotOrRiot : Singular {
+	
+	private float spdPercent;
+	
+	public RiotOrRiot(float speedValue) {
+		name = "Sprinting";
+		spdPercent = speedValue;
+	}
+	
+	public override void applyBD(Character unit) {
+		base.applyBD(unit);
+		unit.stats.spdManip.setSpeedAmplification(spdPercent);
+	}
+	
+	public override void removeBD(Character unit) {
+		base.removeBD(unit);
+		unit.stats.spdManip.removeSpeedAmplification(spdPercent);
+	}
+	
+	public override void purgeBD(Character unit) {
+		base.purgeBD (unit);
+	}
+}
+
 public class RiotShield : ToggleItem {
 	
 	private float dmgReduction, userSlow;
 	private MeshRenderer meshRenderer;
 
-	private BuffsDebuffs debuff;
+	private Slow debuff;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -44,7 +68,7 @@ public class RiotShield : ToggleItem {
 		collider.enabled = true;
 		meshRenderer.enabled = true;
 		user.stats.dmgManip.setDamageReduction(1, dmgReduction);
-		user.BDS.addBuffDebuff(ref debuff);
+		user.BDS.addBuffDebuff(debuff);
 		// user.slow (userSlow);
 		return base.bgnEffect();
 	}
@@ -58,7 +82,7 @@ public class RiotShield : ToggleItem {
 		meshRenderer.enabled = false;
 
 		user.stats.dmgManip.removeDamageReduction(1, dmgReduction);
-		user.BDS.rmvBuffDebuff(ref debuff);
+		user.BDS.rmvBuffDebuff(debuff);
 		// user.removeSlow (userSlow);
 		base.atvDeactivation();
 	}

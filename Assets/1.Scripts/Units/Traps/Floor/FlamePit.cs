@@ -4,7 +4,7 @@ using System.Collections;
 public class FlamePit : Traps {
 
 	// protected delegate void FireDelegate(Character enemy);
-	private BuffsDebuffs debuff;
+	private Burning debuff;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -30,7 +30,7 @@ public class FlamePit : Traps {
 	protected virtual void inFire(Character enemy) {
 		if (enemy && enemy.collider.bounds.Intersects(collider.bounds)) {
 			enemy.damage (damage);
-			enemy.BDS.addBuffDebuff(ref debuff, 4.0f);
+			enemy.BDS.addBuffDebuff(debuff, 4.0f);
 			StartCoroutine(fireTiming(enemy, 0.3f));
 		}
 	}
@@ -48,7 +48,7 @@ public class FlamePit : Traps {
 		Character enemy = other.GetComponent<Character>();
 		if (component != null && enemy != null) {
 			enemy.damage (damage);
-			enemy.BDS.addBuffDebuff(ref debuff, 4.0f);
+			enemy.BDS.addBuffDebuff(debuff, 4.0f);
 			StartCoroutine(fireTiming(enemy, 0.3f));
 		}
 	}

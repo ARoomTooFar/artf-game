@@ -10,7 +10,7 @@ public class Chainsaw : MeleeWeapons {
 	private bool dealDamage;
 	private float slowPercent;
 	
-	private BuffsDebuffs debuff;
+	private Slow debuff;
 
 	private List<Character> chained;
 	
@@ -125,10 +125,10 @@ public class Chainsaw : MeleeWeapons {
 		this.GetComponent<Collider>().enabled = false;
 		if (chained.Count > 0) {
 			foreach(Character meat in chained) {
-				meat.BDS.rmvBuffDebuff(ref debuff);
+				meat.BDS.rmvBuffDebuff(debuff);
 			}
 			chained.Clear();
-			user.BDS.rmvBuffDebuff(ref debuff);
+			user.BDS.rmvBuffDebuff(debuff);
 		}
 
 		user.animator.speed = 1.0f;
@@ -140,10 +140,10 @@ public class Chainsaw : MeleeWeapons {
 
 			if (user.animator.GetBool("Charging")) {
 				if (chained.Count == 0) {
-					user.BDS.addBuffDebuff(ref debuff);
+					user.BDS.addBuffDebuff(debuff);
 				}
 				chained.Add(enemy);
-				enemy.BDS.addBuffDebuff(ref debuff);
+				enemy.BDS.addBuffDebuff(debuff);
 			} else {
 				enemy.damage(stats.damage * 2, user);
 			}
@@ -156,11 +156,11 @@ public class Chainsaw : MeleeWeapons {
 		if (enemy != null) {
 			if (chained.Contains(enemy)) {
 				chained.Remove(enemy);
-				enemy.BDS.rmvBuffDebuff(ref debuff);
+				enemy.BDS.rmvBuffDebuff(debuff);
 			}
 			
 			if (chained.Count == 0 && user.animator.GetBool("Charging")) {
-				user.BDS.rmvBuffDebuff(ref debuff);
+				user.BDS.rmvBuffDebuff(debuff);
 			}
 		} 
 	}
