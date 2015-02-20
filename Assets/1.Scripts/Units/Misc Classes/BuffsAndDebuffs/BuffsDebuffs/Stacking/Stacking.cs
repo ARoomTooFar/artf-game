@@ -3,8 +3,10 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Stacking : BuffsDebuffs {
+
 	protected Stacking() {
 		bdType = 2;
 	}
@@ -13,7 +15,11 @@ public class Stacking : BuffsDebuffs {
 		base.applyBD(unit);
 	}
 	
-	public override void removeBD() {
-		base.removeBD();
+	public override void removeBD(Character unit) {
+		base.removeBD(unit);
+	}
+
+	public override void purgeBD(Character unit) {
+		base.purgeBD (unit);
 	}
 }

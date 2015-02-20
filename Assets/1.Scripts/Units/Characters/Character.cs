@@ -29,7 +29,7 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, ISlowable<float>, IStunable<float>, IForcible<float> {
+public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, IStunable<float>, IForcible<float> {
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -48,8 +48,16 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public bool invincible = false;
 
 	protected Type opposition;
+	
+	// Animation variables
+	public Animator animator;
+	public AnimatorStateInfo animSteInfo;
+	
+	// Swap these over to weapons in the future
+	public string weapTypeName;
+	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
 
-	protected delegate void BuffDelegate(float strength);
+	// protected delegate void BuffDelegate(float strength);
 
 	public BuffDebuffSystem BDS;
 
@@ -158,14 +166,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			selected = (selected + 1)%items.Count;
 		}
 	}
-
-	// Animation variables
-	public Animator animator;
-	public AnimatorStateInfo animSteInfo;
-	
-	// Swap these over to weapons in the future
-	public string weapTypeName;
-	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
 
 	protected virtual void Awake() {
 		opposition = Type.GetType ("Player");
@@ -359,6 +359,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	//-------------------------------//
 
+	/*
 	//-------------------------------//
 	// Slow Interface Implementation //
 	//-------------------------------//
@@ -390,7 +391,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	}
 
 	//-------------------------------//
-
+	*/
 
 	//-------------------------------//
 	// Stun Interface Implementation //
@@ -419,6 +420,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	//--------------------------------//
 
 
+	/*
 	//-----------------------------//
 	// Timing Event Implementation //
 	//-----------------------------//
@@ -432,5 +434,5 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			yield return null;
 		}
 		bd(strValue);
-	}
+	}*/
 }

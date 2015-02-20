@@ -15,7 +15,6 @@ public class RiotShield : ToggleItem {
 		base.Start();
 		
 		meshRenderer = GetComponent<MeshRenderer>();
-		debuff = new Slow (userSlow);
 	}
 	
 	protected override void setInitValues() {
@@ -25,6 +24,7 @@ public class RiotShield : ToggleItem {
 		maxDuration = 5;
 		dmgReduction = 0.9f;
 		userSlow = 0.75f;
+		debuff = new Slow (userSlow);
 	}
 	
 	// Update is called once per frame

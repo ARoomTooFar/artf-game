@@ -23,6 +23,7 @@ public class Enemy : Character, IStunable<float>, IForcible<float> {
 
 	protected override void Awake() {
 		opposition = Type.GetType ("Player");
+		BDS = new BuffDebuffSystem(this);
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;

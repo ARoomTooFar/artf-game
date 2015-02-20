@@ -5,17 +5,17 @@ using UnityEngine;
 using System.Collections;
 
 public class Burning : Singular {
-	/*
+
 	public Burning() {
 	}
 	
 	public override void applyBD(Character unit) {
 		base.applyBD(unit);
-		affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(burnBabyBurn());
+		unit.GetComponent<MonoBehaviour>().StartCoroutine(burnBabyBurn());
 	}
 	
-	public override void removeBD() {
-		base.removeBD();
+	public override void removeBD(Character unit) {
+		base.removeBD(unit);
 	}
 	
 	private IEnumerator burnBabyBurn() {
@@ -23,5 +23,8 @@ public class Burning : Singular {
 			yield return null;
 		}
 	}
-	*/
+
+	public override void purgeBD(Character unit) {
+		base.purgeBD (unit);
+	}
 }

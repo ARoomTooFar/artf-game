@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BuffsDebuffs {
 
-	protected Character affectedUnit;
+	// protected Character affectedUnit;
 
 	protected string _name;
 	public string name {
@@ -28,11 +28,17 @@ public class BuffsDebuffs {
 	
 	protected BuffsDebuffs() {
 	}
-	
+
+	/*
+	public virtual bool isBetter() {
+	}*/
+
 	public virtual void applyBD(Character unit) {
-		affectedUnit = unit;
 	}
 	
-	public virtual void removeBD() {
+	public virtual void removeBD(Character unit) {
+	}
+
+	public virtual void purgeBD(Character unit) {
 	}
 }

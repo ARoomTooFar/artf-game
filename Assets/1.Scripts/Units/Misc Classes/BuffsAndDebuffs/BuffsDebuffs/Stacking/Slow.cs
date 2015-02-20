@@ -8,6 +8,7 @@ public class Slow : Stacking {
 	private float spdPercent;
 	
 	public Slow(float speedValue) {
+		name = "Slow";
 		spdPercent = speedValue;
 	}
 	
@@ -16,8 +17,12 @@ public class Slow : Stacking {
 		unit.stats.spdManip.setSpeedReduction(spdPercent);
 	}
 	
-	public override void removeBD() {
-		base.removeBD();
-		affectedUnit.stats.spdManip.removeSpeedReduction(spdPercent);
+	public override void removeBD(Character unit) {
+		base.removeBD(unit);
+		unit.stats.spdManip.removeSpeedReduction(spdPercent);
+	}
+
+	public override void purgeBD(Character unit) {
+		base.purgeBD (unit);
 	}
 }

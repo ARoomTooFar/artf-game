@@ -37,12 +37,12 @@ public class BuffDebuffSystem {
 		}
 	}
 	
-	// For adding buffs/debuffs that override existing ones
+	// For adding buffs/debuffs that override existing ones if the new one is better
 	private void addOverride(ref BuffsDebuffs newBD, float duration) {
 		List<BuffsDebuffs> list;
 	
 		if (buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
-			list[0].removeBD();
+			list[0].removeBD(affectedUnit);
 			list.RemoveAt(0);
 			list.Add(newBD);
 		} else {
@@ -125,7 +125,7 @@ public class BuffDebuffSystem {
 		List<BuffsDebuffs> list;
 		
 		if (buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
-			list[0].removeBD();
+			list[0].removeBD(affectedUnit);
 			list.RemoveAt(0);
 			list.Add(newBD);
 		} else {
@@ -164,13 +164,14 @@ public class BuffDebuffSystem {
 
 	//----------------------------------------------------------//
 
+	// For general removal
 	public void rmvBuffDebuff(ref BuffsDebuffs bdToRemove) {
 		List<BuffsDebuffs> list;
-		
+
 		if (buffsAndDebuffs.TryGetValue (bdToRemove.name, out list)) {
 			for (int i = 0; i < list.Count; i++) {
 				if (list[i] == bdToRemove) {
-					list[i].removeBD();
+					list[i].removeBD(affectedUnit);
 					list.RemoveAt(i);
 					Debug.Log ("Buff/Debuff " + bdToRemove.name + " removed.");
 					break;
@@ -182,6 +183,38 @@ public class BuffDebuffSystem {
 			}
 		} else {
 			Debug.LogWarning("No such buff/debuff with name " + bdToRemove.name + " exists.");
+		}
+	}
+
+	// Purge removes the buff/debuff prematurely (Removes current coroutines affecting it)
+	public void purgeBuffDebuff(ref BuffsDebuffs bdToPurge) {
+		List<BuffsDebuffs> list;
+
+		if (buffsAndDebuffs.TryGetValue (bdToPurge.name, out list)) {
+			for (int i = 0; i < list.Count; i++) {
+				if (list[i] == bdToPurge) {
+					list[i].purgeBD(affectedUnit);
+					list.RemoveAt(i);
+					Debug.Log ("Buff/Debuff " + bdToPurge.name + " purged.");
+					break;
+				}
+				
+				if (i == list.Count - 1) {
+					Debug.LogWarning("Specific Buff/Debuff not found.");
+				}
+			}
+		} else {
+			Debug.LogWarning("No such buff/debuff with name " + bdToPurge.name + " exists.");
+		}
+	}
+
+	public void purgeAll() {
+		List<BuffsDebuffs> list;
+
+		foreach(KeyValuePair<string, List<BuffsDebuffs>> entry in buffsAndDebuffs) {
+			for (int i = 0; i < entry.Value.Count; i++) {
+				entry.Value[i].purgeBD(affectedUnit);
+			}
 		}
 	}
 }

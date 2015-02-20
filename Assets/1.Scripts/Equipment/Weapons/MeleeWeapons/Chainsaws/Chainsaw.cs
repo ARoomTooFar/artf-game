@@ -9,15 +9,14 @@ public class Chainsaw : MeleeWeapons {
 	public float lastDmgTime, curDuration, maxDuration;
 	private bool dealDamage;
 	private float slowPercent;
-
-	private List<Character> chained;
-
+	
 	private BuffsDebuffs debuff;
 
+	private List<Character> chained;
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
-		debuff = new Slow(slowPercent);
 	}
 	
 	// Used for setting sword stats for each equipment piece
@@ -40,6 +39,7 @@ public class Chainsaw : MeleeWeapons {
 		maxDuration = 5.0f;
 		curDuration = 0.0f;
 		slowPercent = 0.9f;
+		debuff = new Slow(slowPercent);
 		chained = new List<Character> ();
 	}
 
@@ -126,11 +126,9 @@ public class Chainsaw : MeleeWeapons {
 		if (chained.Count > 0) {
 			foreach(Character meat in chained) {
 				meat.BDS.rmvBuffDebuff(ref debuff);
-				// meat.removeSlow(slowPercent);
 			}
 			chained.Clear();
 			user.BDS.rmvBuffDebuff(ref debuff);
-			// user.removeSlow(slowPercent);
 		}
 
 		user.animator.speed = 1.0f;
@@ -143,11 +141,9 @@ public class Chainsaw : MeleeWeapons {
 			if (user.animator.GetBool("Charging")) {
 				if (chained.Count == 0) {
 					user.BDS.addBuffDebuff(ref debuff);
-					// user.slow (slowPercent);
 				}
 				chained.Add(enemy);
 				enemy.BDS.addBuffDebuff(ref debuff);
-				// enemy.slow (slowPercent);
 			} else {
 				enemy.damage(stats.damage * 2, user);
 			}
@@ -161,12 +157,10 @@ public class Chainsaw : MeleeWeapons {
 			if (chained.Contains(enemy)) {
 				chained.Remove(enemy);
 				enemy.BDS.rmvBuffDebuff(ref debuff);
-				// enemy.removeSlow (slowPercent);
 			}
 			
 			if (chained.Count == 0 && user.animator.GetBool("Charging")) {
 				user.BDS.rmvBuffDebuff(ref debuff);
-				// user.removeSlow (slowPercent);
 			}
 		} 
 	}

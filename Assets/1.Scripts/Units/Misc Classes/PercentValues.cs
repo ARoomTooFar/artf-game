@@ -24,6 +24,7 @@ public class PercentValues {
 
 	// Setting and Removing percent reductions from the list
 	public void setReduction(float redValue) {
+		Debug.Log (redValue);
 		if (redValue > 1.0f) {
 			Debug.LogWarning("Attempting to set a reduction greater than 1.0f. Setting reduction value of " + redValue + " to 1.0f.");
 			pntChanges.Add (-1.0f);
@@ -34,6 +35,8 @@ public class PercentValues {
 	}
 	
 	public void removeReduction(float redValue) {
+		Debug.Log (pntChanges.Count);
+		Debug.Log (redValue);
 		if (pntChanges.Contains (-redValue)) {
 			pntChanges.Remove (-redValue);
 			calculatePercent ();
