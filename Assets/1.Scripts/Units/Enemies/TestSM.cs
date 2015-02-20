@@ -86,7 +86,27 @@ public class TestSM: Enemy{
 		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
 		actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
 
+		//Speed updates from stats now, fix navigation to not overshoot like it does
+		nav.speed = stats.speed;
+
 		testStateMachine.Update ();
+	}
+
+	protected override void setInitValues() {
+		base.setInitValues();
+		//Testing with base 0-10 on stats with 10 being 100/cap%
+		stats.maxHealth = 40;
+		stats.health = stats.maxHealth;
+		stats.armor = 0;
+		stats.strength = 10;
+		stats.coordination=0;
+		stats.speed=10;
+		stats.luck=0;
+		inGrey = false;
+		greyDamage = 0;
+		testDmg = 0;
+		//testable = true;
+		
 	}
 
 	public override void damage(int dmgTaken, Character striker) {
@@ -199,6 +219,7 @@ public class TestSM: Enemy{
 		agent.alerted = true;
 		agent.animator.SetBool ("Moving", true);
 		agent.nav.destination = agent.giveTarget ().transform.position;
+		//if (inventory.items[4].curCoolDown <= 0) inventory.items[4].useItem();
 	}
 
 	public void Attack(Character a)
