@@ -29,9 +29,9 @@ public class UIHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 	public bool buttonIsSelected = false;
 
 	//holds the entire folder bar. for use with sliding it off and on screen
-	public RectTransform folderBar;
+	RectTransform folderBar;
 
-	public GameObject blankFolder;
+	GameObject blankFolder;
 
 	bool lerpingFolderClosed = false;
 	bool lerpingFolderOpen = false;
