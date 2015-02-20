@@ -6,21 +6,30 @@ using System.Collections;
 
 public class Burning : Singular {
 
-	public Burning() {
+	private int dmg;
+	private float dur;
+
+	public Burning(int damage, float duration) {
+		name = "Burn";
+		dmg = damage;
+		dur = duration;
 	}
 	
 	public override void applyBD(Character unit) {
 		base.applyBD(unit);
-		unit.GetComponent<MonoBehaviour>().StartCoroutine(burnBabyBurn());
+		unit.GetComponent<MonoBehaviour>().StartCoroutine(burnBabyBurn(unit, dur));
 	}
 	
 	public override void removeBD(Character unit) {
 		base.removeBD(unit);
 	}
 	
-	private IEnumerator burnBabyBurn() {
-		while (true) {
-			yield return null;
+	private IEnumerator burnBabyBurn(Character unit, float duration) {
+		while (duration >= 0.0f) {
+			yield return new WaitForSeconds(1.0f);
+			Debug.Log ("Burned");
+			unit.damage(dmg);
+			duration -= 1.0f;
 		}
 	}
 

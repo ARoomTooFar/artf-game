@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class BuffDebuffSystem {
 
+
 	private Character affectedUnit;
 	
 	private Dictionary<string, List<BuffsDebuffs>> buffsAndDebuffs;
@@ -20,11 +21,8 @@ public class BuffDebuffSystem {
 	//---------------------------------------------------------//
 	
 	public void addBuffDebuff(ref BuffsDebuffs newBD, float duration) {
-		// 0 - Overwrites Existing, 1 - Does nothing if it exists already, 2 - Buffs/Debuffs that can stack together
+		// 1 - Does nothing if it exists already, 2 - Buffs/Debuffs that can stack together
 		switch (newBD.bdType) {
-			case 0: // If an instance of this buff/debuff exists, overwrite it with new instance, else just apply it
-				addOverride(ref newBD, duration);
-				break;
 			case 1: // If buff/debuff exists already, do nothing, else apply it on
 				addSingular(ref newBD, duration);
 				break;
@@ -36,7 +34,8 @@ public class BuffDebuffSystem {
 				break;
 		}
 	}
-	
+
+	/*
 	// For adding buffs/debuffs that override existing ones if the new one is better
 	private void addOverride(ref BuffsDebuffs newBD, float duration) {
 		List<BuffsDebuffs> list;
@@ -52,12 +51,12 @@ public class BuffDebuffSystem {
 		}
 		newBD.applyBD(affectedUnit);
 		affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemovalWrapper(ref newBD, duration));
-	}
+	}*/
 
 	// For adding buffs/debuffs that don't do anything if unit is already affected by an instance of it
 	private void addSingular(ref BuffsDebuffs newBD, float duration) {
 		List<BuffsDebuffs> list;
-		
+
 		if (!buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
 			list = new List<BuffsDebuffs>();
 			list.Add(newBD);
@@ -89,6 +88,7 @@ public class BuffDebuffSystem {
 	}
 
 	private IEnumerator timedRemoval(float duration) {
+
 		while (duration > 0.0f) {
 			duration -= Time.deltaTime;
 			yield return null;
@@ -103,11 +103,8 @@ public class BuffDebuffSystem {
 	//-----------------------------------------//
 
 	public void addBuffDebuff(ref BuffsDebuffs newBD) {
-		// 0 - Overwrites Existing, 1 - Does nothing if it exists already, 2 - Buffs/Debuffs that can stack together
+		// 1 - Does nothing if it exists already, 2 - Buffs/Debuffs that can stack together
 		switch (newBD.bdType) {
-		case 0: // If an instance of this buff/debuff exists, overwrite it with new instance, else just apply it
-			addOverride(ref newBD);
-			break;
 		case 1: // If buff/debuff exists already, do nothing, else apply it on
 			addSingular(ref newBD);
 			break;
@@ -120,6 +117,7 @@ public class BuffDebuffSystem {
 		}
 	}
 
+	/*
 	// For adding buffs/debuffs that override existing ones
 	private void addOverride(ref BuffsDebuffs newBD) {
 		List<BuffsDebuffs> list;
@@ -134,7 +132,7 @@ public class BuffDebuffSystem {
 			buffsAndDebuffs[newBD.name] = list;
 		}
 		newBD.applyBD(affectedUnit);
-	}
+	}*/
 	
 	// For adding buffs/debuffs that don't do anything if unit is already affected by an instance of it
 	private void addSingular(ref BuffsDebuffs newBD) {
@@ -180,6 +178,10 @@ public class BuffDebuffSystem {
 				if (i == list.Count - 1) {
 					Debug.LogWarning("Specific Buff/Debuff not found.");
 				}
+			}
+
+			if (list.Count == 0) {
+				buffsAndDebuffs.Remove(bdToRemove.name);
 			}
 		} else {
 			Debug.LogWarning("No such buff/debuff with name " + bdToRemove.name + " exists.");
