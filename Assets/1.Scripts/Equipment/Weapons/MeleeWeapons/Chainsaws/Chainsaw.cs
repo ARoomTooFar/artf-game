@@ -4,13 +4,37 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+public class Dismember : Stacking {
+	
+	private float spdPercent, redPercent;
+	
+	public Dismember(float speedValue) {
+		name = "Dismember";
+		spdPercent = speedValue;
+	}
+	
+	public override void applyBD(Character unit, GameObject source) {
+		base.applyBD(unit, source);
+		unit.stats.spdManip.setSpeedReduction(spdPercent);
+	}
+	
+	public override void removeBD(Character unit, GameObject source) {
+		base.removeBD(unit, source);
+		unit.stats.spdManip.removeSpeedReduction(spdPercent);
+	}
+	
+	public override void purgeBD(Character unit, GameObject source) {
+		base.purgeBD (unit, source);
+	}
+}
+
 public class Chainsaw : MeleeWeapons {
 	
 	public float lastDmgTime, curDuration, maxDuration;
 	private bool dealDamage;
 	private float slowPercent;
 	
-	private Slow debuff;
+	private Dismember debuff;
 
 	private List<Character> chained;
 	
@@ -39,7 +63,7 @@ public class Chainsaw : MeleeWeapons {
 		maxDuration = 5.0f;
 		curDuration = 0.0f;
 		slowPercent = 0.9f;
-		debuff = new Slow(slowPercent);
+		debuff = new Dismember(slowPercent);
 		chained = new List<Character> ();
 	}
 
@@ -125,10 +149,10 @@ public class Chainsaw : MeleeWeapons {
 		this.GetComponent<Collider>().enabled = false;
 		if (chained.Count > 0) {
 			foreach(Character meat in chained) {
-				meat.BDS.rmvBuffDebuff(debuff);
+				meat.BDS.rmvBuffDebuff(debuff, user.gameObject);
 			}
 			chained.Clear();
-			user.BDS.rmvBuffDebuff(debuff);
+			user.BDS.rmvBuffDebuff(debuff, user.gameObject);
 		}
 
 		user.animator.speed = 1.0f;
@@ -140,10 +164,10 @@ public class Chainsaw : MeleeWeapons {
 
 			if (user.animator.GetBool("Charging")) {
 				if (chained.Count == 0) {
-					user.BDS.addBuffDebuff(debuff);
+					user.BDS.addBuffDebuff(debuff, user.gameObject);
 				}
 				chained.Add(enemy);
-				enemy.BDS.addBuffDebuff(debuff);
+				enemy.BDS.addBuffDebuff(debuff, user.gameObject);
 			} else {
 				enemy.damage(stats.damage * 2, user);
 			}
@@ -156,11 +180,11 @@ public class Chainsaw : MeleeWeapons {
 		if (enemy != null) {
 			if (chained.Contains(enemy)) {
 				chained.Remove(enemy);
-				enemy.BDS.rmvBuffDebuff(debuff);
+				enemy.BDS.rmvBuffDebuff(debuff, user.gameObject);
 			}
 			
 			if (chained.Count == 0 && user.animator.GetBool("Charging")) {
-				user.BDS.rmvBuffDebuff(debuff);
+				user.BDS.rmvBuffDebuff(debuff, user.gameObject);
 			}
 		} 
 	}

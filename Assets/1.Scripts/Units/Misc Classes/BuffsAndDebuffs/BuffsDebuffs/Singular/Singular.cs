@@ -9,15 +9,15 @@ public class Singular : BuffsDebuffs {
 		bdType = 1;
 	}
 	
-	public override void applyBD(Character unit) {
-		base.applyBD(unit);
+	public override void applyBD(Character unit, GameObject source) {
+		base.applyBD(unit, source);
 	}
 	
-	public override void removeBD(Character unit) {
-		base.removeBD(unit);
+	public override void removeBD(Character unit, GameObject source) {
+		base.removeBD(unit, source);
 	}
 
-	public override void purgeBD(Character unit) {
-		base.purgeBD (unit);
+	public override void purgeBD(Character unit, GameObject source) {
+		base.purgeBD (unit, source);
 	}
 }

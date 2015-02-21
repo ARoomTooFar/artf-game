@@ -15,7 +15,7 @@ public class BuffsDebuffs {
 		}
 	}
 	
-	// 0 - Overwrites Existing, 1 - Does nothing if it exists already, 2 - Buffs/Debuffs that can stack together
+	// 1 - Does nothing if it exists already, 2 - Buffs/Debuffs that can stack together
 	protected int _bdType;
 	public int bdType {
 		get {
@@ -29,16 +29,12 @@ public class BuffsDebuffs {
 	protected BuffsDebuffs() {
 	}
 
-	/*
-	public virtual bool isBetter() {
-	}*/
-
-	public virtual void applyBD(Character unit) {
+	public virtual void applyBD(Character unit, GameObject source) {
 	}
 	
-	public virtual void removeBD(Character unit) {
+	public virtual void removeBD(Character unit, GameObject source) {
 	}
 
-	public virtual void purgeBD(Character unit) {
+	public virtual void purgeBD(Character unit, GameObject source) {
 	}
 }

@@ -12,18 +12,18 @@ public class Sprinting : Singular {
 		spdPercent = speedValue;
 	}
 	
-	public override void applyBD(Character unit) {
-		base.applyBD(unit);
+	public override void applyBD(Character unit, GameObject source) {
+		base.applyBD(unit, source);
 		unit.stats.spdManip.setSpeedAmplification(spdPercent);
 	}
 	
-	public override void removeBD(Character unit) {
-		base.removeBD(unit);
+	public override void removeBD(Character unit, GameObject source) {
+		base.removeBD(unit, source);
 		unit.stats.spdManip.removeSpeedAmplification(spdPercent);
 	}
 	
-	public override void purgeBD(Character unit) {
-		base.purgeBD (unit);
+	public override void purgeBD(Character unit, GameObject source) {
+		base.purgeBD (unit, source);
 	}
 }
 
@@ -63,7 +63,7 @@ public class Sprint : ToggleItem {
 	protected override IEnumerator bgnEffect() {
 		baseSpeed = user.stats.speed;
 
-		user.BDS.addBuffDebuff(buff);
+		user.BDS.addBuffDebuff(buff, user.gameObject);
 		// user.speed(sprintAmplification);
 
 		return base.bgnEffect();
@@ -74,7 +74,7 @@ public class Sprint : ToggleItem {
 	}
 
 	protected override void atvDeactivation() {
-		user.BDS.rmvBuffDebuff(buff);
+		user.BDS.rmvBuffDebuff(buff, user.gameObject);
 		// user.removeSpeed(sprintAmplification);
 
 		base.atvDeactivation();

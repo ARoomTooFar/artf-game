@@ -1,10 +1,10 @@
 // Stun Interface
 // For units that can be stunned
-// In the future, it may also be for units that can't be stunned and counter with something
 
 using UnityEngine;
 using System.Collections;
 
-public interface IStunable<D> {
-	void stun(D stunDuration); // Falling code goes here
+public interface IStunable {
+	bool stun(); // Stuns unit causing them to be unable to act, return whether is was successful or not
+	void removeStun();
 }

@@ -29,7 +29,7 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, IStunable<float>, IForcible<float> {
+public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, IStunable, IForcible<float> {
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -397,10 +397,13 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	// Stun Interface Implementation //
 	//-------------------------------//
 	
-	public virtual void stun(float stunDuration) {
-		print ("Stunned for " + stunDuration + " seconds");
+	public virtual bool stun() {
+		return true;
 	}
-	
+
+	public virtual void removeStun() {
+	}
+
 	//-------------------------------//
 
 
@@ -410,11 +413,11 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	// The duration are essentiall y stun, expand on these later
 	public virtual void pull(float pullDuration) {
-		stun(pullDuration);
+		stun();
 	}
 	
 	public virtual void push(float pushDuration) {
-		stun(pushDuration);
+		stun();
 	}
 	
 	//--------------------------------//
