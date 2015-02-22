@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 7cff5aad50d9c4ae2830ef06afcfe23e
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - ramp: {fileID: 2800000, guid: fefc6813ed34d4fad819fcf0f35ded02, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

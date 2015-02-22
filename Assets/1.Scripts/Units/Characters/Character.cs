@@ -8,7 +8,7 @@ using System;
 [System.Serializable]
 public class Stats{
 	//Base Stats
-	public int health, armor,maxHealth;
+	public int health, armor,maxHealth,rezCount;
 	public int strength, coordination, speed, luck;
 	public bool isDead;
 	/*
@@ -352,6 +352,20 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	//     ie: Removing actions, player from camera etc
 	public virtual void die() {
 		stats.isDead = true;
+	}
+	
+	public virtual void rez(){
+		stats.isDead = false;
+		stats.health = stats.maxHealth/(2+2*stats.rezCount);
+		stats.rezCount++;
+	}
+	public virtual void heal(int healTaken){
+		if(stats.health < stats.maxHealth){
+			stats.health+=healTaken;
+			if(stats.health > stats.maxHealth){
+				stats.health = stats.maxHealth;
+			}
+		}
 	}
 	
 	//-------------------------------//

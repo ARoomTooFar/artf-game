@@ -21,6 +21,8 @@ public class Player : Character, IMoveable {
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
 	public GameObject currDoor;
+	public GameObject expDeath;
+	
 	public UIActive UI;
 	//public LifeBar hpBar, greyBar;
 	//public AmmoBar ammoBar;
@@ -116,10 +118,10 @@ public class Player : Character, IMoveable {
 	public override void actionCommands() {
 		// Invokes an action/animation
 		if (actable) {
-			/*if(Input.GetKey("space")&&testable){
-				damage(testDmg);
+			if(Input.GetKey("space")&&testable){
+				damage(testDmg*10000);
 				testable = false;
-			}*/
+			}
 			if(Input.GetKeyDown(controls.attack)) {
 				if(currDoor!=null){
 					currDoor.GetComponent<Door>().toggleOpen();
@@ -245,6 +247,16 @@ public class Player : Character, IMoveable {
 
 	public override void die() {
 		base.die();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
+		eDeath.setInitValues(this, true);
+	}
+	
+	public override void heal(int healTaken){
+		base.heal(healTaken);
+	}
+	
+	public override void rez(){
+		base.rez();
 	}
 
 	//----------------------------------//
