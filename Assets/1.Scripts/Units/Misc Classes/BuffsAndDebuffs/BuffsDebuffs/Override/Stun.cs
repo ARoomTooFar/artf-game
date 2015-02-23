@@ -10,11 +10,6 @@ public class Stun : Override {
 		name = "Stun";
 	}
 
-	public override void purgeBD(Character unit, GameObject source) {
-		base.purgeBD (unit, source);
-		unit.removeStun();
-	}
-
 	protected override void bdEffects(BDData newData) {
 		base.bdEffects(newData);
 		newData.unit.stun();
@@ -22,5 +17,18 @@ public class Stun : Override {
 	
 	protected override void removeEffects (BDData oldData, GameObject source) {
 		base.removeEffects (oldData, source);
+		oldData.unit.removeStun();
+	}
+
+	public override void purgeBD(Character unit, GameObject source) {
+		base.purgeBD (unit, source);
+		unit.removeStun();
+	}
+
+	public override bool isBetter(BuffsDebuffs newBD, float newDuration, float timeLeft) {
+		if (newDuration > timeLeft) {
+			return true;
+		}
+		return false;
 	}
 }

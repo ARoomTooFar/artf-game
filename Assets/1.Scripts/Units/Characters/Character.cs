@@ -398,10 +398,13 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	//-------------------------------//
 	
 	public virtual bool stun() {
+		this.freeAnim = false;
+		this.rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
 		return true;
 	}
 
 	public virtual void removeStun() {
+		this.freeAnim = true;
 	}
 
 	//-------------------------------//

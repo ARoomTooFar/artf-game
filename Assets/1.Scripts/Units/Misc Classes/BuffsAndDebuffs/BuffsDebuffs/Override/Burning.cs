@@ -27,6 +27,7 @@ public class Burning : Override {
 	private IEnumerator burnBabyBurn(Character unit) {
 		while (true) {
 			unit.damage(dmg);
+
 			yield return new WaitForSeconds(1.0f);
 		}
 	}
