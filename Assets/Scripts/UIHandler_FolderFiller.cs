@@ -57,6 +57,7 @@ public class UIHandler_FolderFiller : MonoBehaviour {
 				newButt.transform.parent = itemList;
 				RectTransform buttRect = newButt.GetComponent("RectTransform") as RectTransform;
 
+				//to make first button show up at the right height
 				if(firstIter){
 					buttonY = -1 * buttRect.sizeDelta.y / 2;
 					firstIter = false;
