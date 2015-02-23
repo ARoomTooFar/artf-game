@@ -4,30 +4,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Dismember : Stacking {
-	
-	private float spdPercent, redPercent;
-	
-	public Dismember(float speedValue) {
-		name = "Dismember";
-		spdPercent = speedValue;
-	}
-
-	protected override void bdEffects(BDData newData) {
-		base.bdEffects(newData);
-		newData.unit.stats.spdManip.setSpeedReduction(spdPercent);
-	}
-	
-	protected override void removeEffects (BDData oldData, GameObject source) {
-		base.removeEffects (oldData, source);
-		oldData.unit.stats.spdManip.removeSpeedReduction(spdPercent);
-	}
-	
-	public override void purgeBD(Character unit, GameObject source) {
-		base.purgeBD (unit, source);
-	}
-}
-
 public class Chainsaw : MeleeWeapons {
 	
 	public float lastDmgTime, curDuration, maxDuration;
@@ -35,6 +11,30 @@ public class Chainsaw : MeleeWeapons {
 	private float slowPercent;
 	
 	private Dismember debuff;
+
+	protected class Dismember : Stacking {
+		
+		private float spdPercent, redPercent;
+		
+		public Dismember(float speedValue) {
+			name = "Dismember";
+			spdPercent = speedValue;
+		}
+		
+		protected override void bdEffects(BDData newData) {
+			base.bdEffects(newData);
+			newData.unit.stats.spdManip.setSpeedReduction(spdPercent);
+		}
+		
+		protected override void removeEffects (BDData oldData, GameObject source) {
+			base.removeEffects (oldData, source);
+			oldData.unit.stats.spdManip.removeSpeedReduction(spdPercent);
+		}
+		
+		public override void purgeBD(Character unit, GameObject source) {
+			base.purgeBD (unit, source);
+		}
+	}
 
 	private List<Character> chained;
 	

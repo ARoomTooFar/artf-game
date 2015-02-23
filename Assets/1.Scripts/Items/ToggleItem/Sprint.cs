@@ -3,30 +3,6 @@
 using UnityEngine;
 using System.Collections;
 
-public class Sprinting : Singular {
-	
-	private float spdPercent;
-	
-	public Sprinting(float speedValue) {
-		name = "Sprinting";
-		spdPercent = speedValue;
-	}
-	
-	protected override void bdEffects(BDData newData) {
-		base.bdEffects(newData);
-		newData.unit.stats.spdManip.setSpeedAmplification(spdPercent);
-	}
-	
-	protected override void removeEffects (BDData oldData, GameObject source) {
-		base.removeEffects (oldData, source);
-		oldData.unit.stats.spdManip.removeSpeedAmplification(spdPercent);
-	}
-	
-	public override void purgeBD(Character unit, GameObject source) {
-		base.purgeBD (unit, source);
-	}
-}
-
 public class Sprint : ToggleItem {
 
 	[Range(1.5f, 3.0f)]
@@ -34,6 +10,30 @@ public class Sprint : ToggleItem {
 	private int baseSpeed;
 
 	private Sprinting buff;
+
+	private class Sprinting : Singular {
+		
+		private float spdPercent;
+		
+		public Sprinting(float speedValue) {
+			name = "Sprinting";
+			spdPercent = speedValue;
+		}
+		
+		protected override void bdEffects(BDData newData) {
+			base.bdEffects(newData);
+			newData.unit.stats.spdManip.setSpeedAmplification(spdPercent);
+		}
+		
+		protected override void removeEffects (BDData oldData, GameObject source) {
+			base.removeEffects (oldData, source);
+			oldData.unit.stats.spdManip.removeSpeedAmplification(spdPercent);
+		}
+		
+		public override void purgeBD(Character unit, GameObject source) {
+			base.purgeBD (unit, source);
+		}
+	}
 
 	// Use this for initialization
 	protected override void Start () {

@@ -3,39 +3,39 @@
 using UnityEngine;
 using System.Collections;
 
-public class FreedomController : Singular {
-	
-	private float spdPercent, redPercent;
-	
-	public FreedomController(float speedValue, float reduxValue) {
-		name = "FreedomControl";
-		spdPercent = speedValue;
-		redPercent = reduxValue;
-	}
-
-	protected override void bdEffects(BDData newData) {
-		base.bdEffects(newData);
-		newData.unit.stats.dmgManip.setDamageReduction(1, redPercent);
-		newData.unit.stats.spdManip.setSpeedReduction(spdPercent);
-	}
-	
-	protected override void removeEffects (BDData oldData, GameObject source) {
-		base.removeEffects (oldData, source);
-		oldData.unit.stats.dmgManip.removeDamageReduction(1, redPercent);
-		oldData.unit.stats.spdManip.removeSpeedReduction(spdPercent);
-	}
-	
-	public override void purgeBD(Character unit, GameObject source) {
-		base.purgeBD (unit, source);
-	}
-}
-
 public class RiotShield : ToggleItem {
 	
 	private float dmgReduction, userSlow;
 	private MeshRenderer meshRenderer;
 
 	private FreedomController debuff;
+
+	private class FreedomController : Singular {
+		
+		private float spdPercent, redPercent;
+		
+		public FreedomController(float speedValue, float reduxValue) {
+			name = "FreedomControl";
+			spdPercent = speedValue;
+			redPercent = reduxValue;
+		}
+		
+		protected override void bdEffects(BDData newData) {
+			base.bdEffects(newData);
+			newData.unit.stats.dmgManip.setDamageReduction(1, redPercent);
+			newData.unit.stats.spdManip.setSpeedReduction(spdPercent);
+		}
+		
+		protected override void removeEffects (BDData oldData, GameObject source) {
+			base.removeEffects (oldData, source);
+			oldData.unit.stats.dmgManip.removeDamageReduction(1, redPercent);
+			oldData.unit.stats.spdManip.removeSpeedReduction(spdPercent);
+		}
+		
+		public override void purgeBD(Character unit, GameObject source) {
+			base.purgeBD (unit, source);
+		}
+	}
 
 	// Use this for initialization
 	protected override void Start () {

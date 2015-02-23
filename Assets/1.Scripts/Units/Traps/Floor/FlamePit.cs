@@ -22,7 +22,7 @@ public class FlamePit : Traps {
 		base.FixedUpdate();
 	}
 
-	// Update is called once per framea
+	// Update is called once per frame
 	protected override void Update () {
 		base.Update ();
 	}
