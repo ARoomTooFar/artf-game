@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Farts : MonoBehaviour
 {
-    const string SERVERURI = "http://localhost:8081"; //local server
-    //const string SERVERURI = "https://api-dot-artf-server.appspot.com"; //live server
+    //const string SERVERURI = "http://localhost:8081"; //local server
+    const string SERVERURI = "https://api-dot-artf-server.appspot.com"; //live server
     const string LEVELPATH = "/levels/";
     const float cancelTime = 10000f;
     delegate void CallbackDelegate(float strength);

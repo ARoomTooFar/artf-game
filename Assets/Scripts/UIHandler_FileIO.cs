@@ -57,7 +57,7 @@ public class UIHandler_FileIO : MonoBehaviour
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 
         // Download level example
-        WWW dlLvlReq = serv.getLvlWww("5785905063264256");
+        WWW dlLvlReq = serv.getLvlWww("5769015641243648");
         yield return dlLvlReq;
 
         // Use the downloaded level data
@@ -112,7 +112,7 @@ public class UIHandler_FileIO : MonoBehaviour
 			Debug.Log ("ItemClass.itemList is empty. Nothing to write.");
 
             // Update level example
-            lvlUpdate = serv.updateLvl("5785905063264256", "Updated Level Name Test 2", "456", "adfsdfasdfasf123", "jkl;jlkj;klj;");
+            lvlUpdate = serv.updateLvl("5769015641243648", "Level Nameamemame 2", "", "", "asdfasdfasdfasdf");
 		}
 		
 		//old playerprefs way
@@ -157,6 +157,7 @@ public class UIHandler_FileIO : MonoBehaviour
 	
 	public void loadFile ()
 	{
+        Debug.Log("Load disabled");
 	    /*
 		//		if (savedFiles.Count != 0) {
 		//			float y = -415f;
