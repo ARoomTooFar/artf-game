@@ -20,6 +20,7 @@ public class Player : Character, IMoveable {
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
+	public GameObject currDoor;
 	public UIActive UI;
 	//public LifeBar hpBar, greyBar;
 	//public AmmoBar ammoBar;
@@ -120,8 +121,13 @@ public class Player : Character, IMoveable {
 				testable = false;
 			}*/
 			if(Input.GetKeyDown(controls.attack)) {
+				if(currDoor!=null){
+					currDoor.GetComponent<Door>().toggleOpen();
+					currDoor = null;
+				}else{
 				animator.SetBool("Charging", true);
 				gear.weapon.initAttack();
+				}
 			} else if(Input.GetKeyDown (controls.secItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
@@ -310,6 +316,10 @@ public class Player : Character, IMoveable {
 		}
 		yield return 0;
 	}
-
+	private void OnTriggerStay(Collider other){
+		if(other.tag == "Door"){
+			currDoor = other.gameObject;
+		}
+	}
 	//----------------------------------//
 }
