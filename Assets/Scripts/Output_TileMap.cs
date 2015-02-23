@@ -58,7 +58,7 @@ public class Output_TileMap : MonoBehaviour
 		position.x = Mathf.RoundToInt (position.x / tileMap.tileSize);
 		position.z = Mathf.RoundToInt (position.z / tileMap.tileSize);
 		
-		//		Debug.Log (name + " at " + position);
+//		Debug.Log (name + " at " + position);
 		GameObject temp = Instantiate (Resources.Load (name), position, Quaternion.Euler (rotation)) as GameObject;
 		
 		//attempt at loading prefab with its default position. doesn't work.

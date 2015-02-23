@@ -31,7 +31,13 @@ public class UIHandler_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragH
 	public void setConnectedPrefab(string s){
 		connectedPrefab = s;
 		newTest = true;
-		Debug.Log (connectedPrefab);
+//		Debug.Log (connectedPrefab);
+	}
+
+	public void setButtonImage(string icon){
+		Image im = this.GetComponent("Image") as Image;
+		Sprite sp = Resources.Load <Sprite>("IconsUI/" + icon);
+		im.sprite = sp;
 	}
 
 	public void OnBeginDrag (PointerEventData data)
