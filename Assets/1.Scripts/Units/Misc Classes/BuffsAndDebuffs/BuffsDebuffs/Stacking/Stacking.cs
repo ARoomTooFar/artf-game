@@ -3,17 +3,23 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Stacking : BuffsDebuffs {
+
 	protected Stacking() {
 		bdType = 2;
 	}
-	
-	public override void applyBD(Character unit) {
-		base.applyBD(unit);
+
+	protected override void bdEffects(BDData newData) {
+		base.bdEffects(newData);
 	}
 	
-	public override void removeBD() {
-		base.removeBD();
+	protected override void removeEffects (BDData oldData, GameObject source) {
+		base.removeEffects (oldData, source);
+	}
+
+	public override void purgeBD(Character unit, GameObject source) {
+		base.purgeBD (unit, source);
 	}
 }

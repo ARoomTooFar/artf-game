@@ -48,6 +48,11 @@ public class Projectile : MonoBehaviour {
 			enemy.damage(damage, user);
 			particles.Stop();
 			Destroy(gameObject);
+		} else {
+			IDamageable<int, Traps> component2 = (IDamageable<int, Traps>) other.GetComponent (typeof(IDamageable<int, Traps>));
+			if (component2 != null) {
+				component2.damage(damage);
+			}
 		}
 	}
 }

@@ -5,7 +5,7 @@ using System.Collections;
 using System;
 
 
-public class Enemy : Character, IStunable<float>, IForcible<float> {
+public class Enemy : Character, IStunable, IForcible<float> {
 
 	//Damage variables
 	public bool inGrey;
@@ -23,6 +23,7 @@ public class Enemy : Character, IStunable<float>, IForcible<float> {
 
 	protected override void Awake() {
 		opposition = Type.GetType ("Player");
+		BDS = new BuffDebuffSystem(this);
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
@@ -112,18 +113,14 @@ public class Enemy : Character, IStunable<float>, IForcible<float> {
 		aggro = false;
 	}
 
-	// Change this for other units in the future, ie. Unit that can be stunned and those that can't
-	public override void stun(float stunDuration) {
-		print ("Stunned for " + stunDuration + " seconds");
-	}
 
 	// The duration are essentially stun, expand on these later
 	public override void pull(float pullDuration) {
-		stun(pullDuration);
+		stun();
 	}
 	
 	public override void push(float pushDuration) {
-		stun(pushDuration);
+		stun();
 	}
 
 

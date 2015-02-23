@@ -7,7 +7,36 @@ public class RiotShield : ToggleItem {
 	
 	private float dmgReduction, userSlow;
 	private MeshRenderer meshRenderer;
-	
+
+	private FreedomController debuff;
+
+	private class FreedomController : Singular {
+		
+		private float spdPercent, redPercent;
+		
+		public FreedomController(float speedValue, float reduxValue) {
+			name = "FreedomControl";
+			spdPercent = speedValue;
+			redPercent = reduxValue;
+		}
+		
+		protected override void bdEffects(BDData newData) {
+			base.bdEffects(newData);
+			newData.unit.stats.dmgManip.setDamageReduction(1, redPercent);
+			newData.unit.stats.spdManip.setSpeedReduction(spdPercent);
+		}
+		
+		protected override void removeEffects (BDData oldData, GameObject source) {
+			base.removeEffects (oldData, source);
+			oldData.unit.stats.dmgManip.removeDamageReduction(1, redPercent);
+			oldData.unit.stats.spdManip.removeSpeedReduction(spdPercent);
+		}
+		
+		public override void purgeBD(Character unit, GameObject source) {
+			base.purgeBD (unit, source);
+		}
+	}
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
@@ -22,6 +51,7 @@ public class RiotShield : ToggleItem {
 		maxDuration = 5;
 		dmgReduction = 0.9f;
 		userSlow = 0.75f;
+		debuff = new FreedomController (userSlow, dmgReduction);
 	}
 	
 	// Update is called once per frame
@@ -40,8 +70,7 @@ public class RiotShield : ToggleItem {
 	protected override IEnumerator bgnEffect() {
 		collider.enabled = true;
 		meshRenderer.enabled = true;
-		user.stats.dmgManip.setDamageReduction(1, dmgReduction);
-		user.slow (userSlow);
+		user.BDS.addBuffDebuff(debuff, user.gameObject);
 		return base.bgnEffect();
 	}
 	
@@ -52,9 +81,8 @@ public class RiotShield : ToggleItem {
 	protected override void atvDeactivation() {
 		collider.enabled = false;
 		meshRenderer.enabled = false;
-
-		user.stats.dmgManip.removeDamageReduction(1, dmgReduction);
-		user.removeSlow (userSlow);
+		
+		user.BDS.rmvBuffDebuff(debuff, user.gameObject);
 		base.atvDeactivation();
 	}
 
