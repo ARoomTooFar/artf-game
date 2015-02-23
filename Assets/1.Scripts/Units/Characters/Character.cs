@@ -355,9 +355,14 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	}
 	
 	public virtual void rez(){
-		stats.isDead = false;
-		stats.health = stats.maxHealth/(2+2*stats.rezCount);
-		stats.rezCount++;
+		Debug.Log("Dooby");
+		if(stats.isDead){
+			stats.isDead = false;
+			stats.health = stats.maxHealth/(2+2*stats.rezCount);
+			stats.rezCount++;
+		}else{
+			heal(stats.maxHealth/(2+2*stats.rezCount));
+		}
 	}
 	public virtual void heal(int healTaken){
 		if(stats.health < stats.maxHealth){
