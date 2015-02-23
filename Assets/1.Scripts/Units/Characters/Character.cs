@@ -29,7 +29,7 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, ISlowable<float>, IStunable<float>, IForcible<float> {
+public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, IStunable, IForcible<float> {
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -48,8 +48,18 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public bool invincible = false;
 
 	protected Type opposition;
+	
+	// Animation variables
+	public Animator animator;
+	public AnimatorStateInfo animSteInfo;
+	
+	// Swap these over to weapons in the future
+	public string weapTypeName;
+	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
 
-	protected delegate void BuffDelegate(float strength);
+	// protected delegate void BuffDelegate(float strength);
+
+	public BuffDebuffSystem BDS;
 
 	// Serialized classes
 	public Stats stats;
@@ -131,6 +141,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			keepItemActive = false;
 		}
 		
+		// Equip method for testing purposes
 		public void equipItems(Character player) {
 			items.Clear ();
 			items.AddRange(itemLocation.GetComponentsInChildren<Item>());
@@ -156,16 +167,9 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		}
 	}
 
-	// Animation variables
-	public Animator animator;
-	public AnimatorStateInfo animSteInfo;
-	
-	// Swap these over to weapons in the future
-	public string weapTypeName;
-	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
-
 	protected virtual void Awake() {
 		opposition = Type.GetType ("Player");
+		BDS = new BuffDebuffSystem(this);
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
@@ -354,7 +358,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	}
 	
 	//-------------------------------//
-	
+
+	/*
 	//-------------------------------//
 	// Slow Interface Implementation //
 	//-------------------------------//
@@ -386,16 +391,22 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	}
 
 	//-------------------------------//
-
+	*/
 
 	//-------------------------------//
 	// Stun Interface Implementation //
 	//-------------------------------//
 	
-	public virtual void stun(float stunDuration) {
-		print ("Stunned for " + stunDuration + " seconds");
+	public virtual bool stun() {
+		this.freeAnim = false;
+		this.rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
+		return true;
 	}
-	
+
+	public virtual void removeStun() {
+		this.freeAnim = true;
+	}
+
 	//-------------------------------//
 
 
@@ -405,16 +416,17 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	// The duration are essentiall y stun, expand on these later
 	public virtual void pull(float pullDuration) {
-		stun(pullDuration);
+		stun();
 	}
 	
 	public virtual void push(float pushDuration) {
-		stun(pushDuration);
+		stun();
 	}
 	
 	//--------------------------------//
 
 
+	/*
 	//-----------------------------//
 	// Timing Event Implementation //
 	//-----------------------------//
@@ -422,11 +434,11 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	// Used for buffs that are duration based
 	// Uses delegates to call function when over
 	// Will make virtual when neccessary
-	protected IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
+	protected virtual IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
 		while (duration > 0) {
 			duration -= Time.deltaTime;
 			yield return null;
 		}
 		bd(strValue);
-	}
+	}*/
 }

@@ -15,11 +15,11 @@ public class Hook : ChargeItem {
 	private bool hit;
 	private Vector3 facing;
 	private Character foe;
-	private Collider collider;
+	//private Collider collider;
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
-		collider = GetComponent<Collider>();
+		//collider = GetComponent<Collider>();
 		collider.enabled = false;
 	}
 	

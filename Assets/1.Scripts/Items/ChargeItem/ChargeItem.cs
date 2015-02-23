@@ -35,7 +35,7 @@ public class ChargeItem : Item {
 	// Called when character with an this item selected uses their item key
 	public override void useItem() {
 		base.useItem();
-		cdBar.active = 2;
+		cdBar.onState = 2;
 		cdBar.max = 3;
 		StartCoroutine(bgnCharge());
 	}
@@ -61,7 +61,7 @@ public class ChargeItem : Item {
 
 	protected override void animDone() {
 		curCoolDown = cooldown + (curChgTime * 3);
-		cdBar.active = 1;
+		cdBar.onState = 1;
 		cdBar.max = curCoolDown;
 		curChgTime = -1.0f;
 

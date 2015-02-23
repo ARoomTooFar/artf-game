@@ -51,7 +51,7 @@ public class Item : MonoBehaviour {
 			cdBar.current = curCoolDown;
 			yield return null;
 		}
-		cdBar.active = 0;
+		cdBar.onState = 3;
 		cdBar.max = 0;
 		cdBar.current = 0;
 	}

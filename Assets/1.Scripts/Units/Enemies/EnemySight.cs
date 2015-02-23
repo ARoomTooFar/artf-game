@@ -17,7 +17,7 @@ public class EnemySight: Enemy{
 	private GameObject target = null;
 
 	//Get players, navmesh and all colliders
-	void Awake ()
+	protected override void Awake ()
 	{
 		nav = GetComponent<NavMeshAgent> ();
 		col = GetComponent<SphereCollider> ();

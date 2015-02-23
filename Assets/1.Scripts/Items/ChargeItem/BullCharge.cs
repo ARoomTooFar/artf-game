@@ -27,13 +27,13 @@ public class BullCharge : ChargeItem {
 	private bool hitWall;
 	
 
-	private Collider collider;
+	//private Collider collider;
 
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
 
-		collider = GetComponent<Collider>();
+		//collider = GetComponent<Collider>();
 		collider.enabled = false;
 	}
 	
@@ -83,7 +83,7 @@ public class BullCharge : ChargeItem {
 		yield return StartCoroutine(chgTimeFunc(chgTime));
 		float tempStun = stunDuration * (hitWall ? 2 : 1);
 		foreach(Character ene in enemies) {
-			((IStunable<float>)ene.GetComponent(typeof(IStunable<float>))).stun(tempStun);
+			((IStunable)ene.GetComponent(typeof(IStunable))).stun();
 		}
 		yield return StartCoroutine(chgLagTime());
 
