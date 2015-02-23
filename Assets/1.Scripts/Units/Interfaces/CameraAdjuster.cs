@@ -89,7 +89,7 @@ public class CameraAdjuster : MonoBehaviour {
 		avgPZ = 0;
 		if(p1!=null){
 		if(!p1.isDead){
-		  seeable(p1);
+		  //seeable(p1);
 		  avgNum++;
 		  avgPX += p1.transform.position.x;
 		  avgPZ += p1.transform.position.z;
@@ -97,7 +97,7 @@ public class CameraAdjuster : MonoBehaviour {
 		}
 		if(p2!=null){
 		if(!p2.isDead){
-			seeable(p2);
+			//seeable(p2);
 		  avgNum++;
 		  avgPX += p2.transform.position.x;
 		  avgPZ += p2.transform.position.z;
@@ -105,7 +105,7 @@ public class CameraAdjuster : MonoBehaviour {
 		}
 		if(p3!=null){
 		if(!p3.isDead){
-			seeable(p3);
+			//seeable(p3);
 		  avgNum++;
 		  avgPX += p3.transform.position.x;
 		  avgPZ += p3.transform.position.z;
@@ -113,7 +113,7 @@ public class CameraAdjuster : MonoBehaviour {
 		}
 		if(p4!=null){
 		if(!p4.isDead){
-			seeable(p4);
+			//seeable(p4);
 		  avgNum++;
 		  avgPX += p4.transform.position.x;
 		  avgPZ += p4.transform.position.z;

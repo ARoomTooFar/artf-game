@@ -6,6 +6,7 @@ public class TestDummy : Enemy {
 
 	protected override void Awake() {
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
+		BDS = new BuffDebuffSystem(this);
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
 		isDead = false;

@@ -5,17 +5,43 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Chainsaw : MeleeWeapons {
-
+	
 	public float lastDmgTime, curDuration, maxDuration;
 	private bool dealDamage;
 	private float slowPercent;
+	
+	private Dismember debuff;
+
+	protected class Dismember : Stacking {
+		
+		private float spdPercent, redPercent;
+		
+		public Dismember(float speedValue) {
+			name = "Dismember";
+			spdPercent = speedValue;
+		}
+		
+		protected override void bdEffects(BDData newData) {
+			base.bdEffects(newData);
+			newData.unit.stats.spdManip.setSpeedReduction(spdPercent);
+		}
+		
+		protected override void removeEffects (BDData oldData, GameObject source) {
+			base.removeEffects (oldData, source);
+			oldData.unit.stats.spdManip.removeSpeedReduction(spdPercent);
+		}
+		
+		public override void purgeBD(Character unit, GameObject source) {
+			base.purgeBD (unit, source);
+		}
+	}
 
 	private List<Character> chained;
-
+	private List<GameObject> cropping;
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
-
 	}
 	
 	// Used for setting sword stats for each equipment piece
@@ -30,6 +56,7 @@ public class Chainsaw : MeleeWeapons {
 		stats.damage = (int)(1 + 0.1f * user.GetComponent<Character>().stats.strength);
 		
 		stats.maxChgTime = 3.0f;
+		stats.timeForChgAttack = 0.5f;
 		
 		stats.chgLevels = 0.5f;
 
@@ -37,7 +64,9 @@ public class Chainsaw : MeleeWeapons {
 		maxDuration = 5.0f;
 		curDuration = 0.0f;
 		slowPercent = 0.9f;
+		debuff = new Dismember(slowPercent);
 		chained = new List<Character> ();
+		cropping = new List<GameObject>();
 	}
 
 	// Move to a Coroutine during our great weapon pur-refactor
@@ -48,8 +77,6 @@ public class Chainsaw : MeleeWeapons {
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
-
-
 	}
 	
 	public override void initAttack() {
@@ -63,7 +90,7 @@ public class Chainsaw : MeleeWeapons {
 	// Chainsaw attacks in a unique way
 	protected override IEnumerator bgnCharge() {
 		if (user.animator.GetBool("Charging")) particles.Play();
-		while (user.animator.GetBool("Charging") && stats.curChgDuration < 0.5f) {
+		while (user.animator.GetBool("Charging") && stats.curChgDuration < stats.timeForChgAttack) {
 			stats.curChgDuration = Mathf.Clamp(stats.curChgDuration + Time.deltaTime, 0.0f, stats.maxChgTime);
 			stats.chgDamage = (int) (stats.curChgDuration/stats.chgLevels);
 			particles.startSpeed = stats.chgDamage;
@@ -106,6 +133,13 @@ public class Chainsaw : MeleeWeapons {
 				foreach(Character meat in chained) {
 					meat.damage(stats.damage, user);
 				}
+
+				foreach(GameObject crop in cropping) {
+					IDamageable<int, Traps> component = (IDamageable<int, Traps>) crop.GetComponent (typeof(IDamageable<int, Traps>));
+					if(component != null) {
+						component.damage(stats.damage);
+					}
+				}
 			}
 
 			yield return null;
@@ -124,11 +158,12 @@ public class Chainsaw : MeleeWeapons {
 		this.GetComponent<Collider>().enabled = false;
 		if (chained.Count > 0) {
 			foreach(Character meat in chained) {
-				meat.removeSlow(slowPercent);
+				meat.BDS.rmvBuffDebuff(debuff, user.gameObject);
 			}
 			chained.Clear();
-			user.removeSlow(slowPercent);
+			user.BDS.rmvBuffDebuff(debuff, user.gameObject);
 		}
+		cropping.Clear();
 
 		user.animator.speed = 1.0f;
 	}
@@ -139,15 +174,23 @@ public class Chainsaw : MeleeWeapons {
 
 			if (user.animator.GetBool("Charging")) {
 				if (chained.Count == 0) {
-					user.slow (slowPercent);
+					user.BDS.addBuffDebuff(debuff, user.gameObject);
 				}
 				chained.Add(enemy);
-				enemy.slow (slowPercent);
+				enemy.BDS.addBuffDebuff(debuff, user.gameObject);
 			} else {
 				enemy.damage(stats.damage * 2, user);
 			}
-
-		} 
+		} else {
+			IDamageable<int, Traps> component = (IDamageable<int, Traps>) other.GetComponent (typeof(IDamageable<int, Traps>));
+			if (component != null) {
+				if (user.animator.GetBool("Charging")) {
+					cropping.Add(other.gameObject);
+				} else {
+					component.damage(stats.damage * 2);
+				}
+			}
+		}
 	}
 	
 	void OnTriggerExit(Collider other) {
@@ -155,12 +198,19 @@ public class Chainsaw : MeleeWeapons {
 		if (enemy != null) {
 			if (chained.Contains(enemy)) {
 				chained.Remove(enemy);
-				enemy.removeSlow (slowPercent);
+				enemy.BDS.rmvBuffDebuff(debuff, user.gameObject);
 			}
 			
 			if (chained.Count == 0 && user.animator.GetBool("Charging")) {
-				user.removeSlow (slowPercent);
+				user.BDS.rmvBuffDebuff(debuff, user.gameObject);
 			}
-		} 
+		} else {
+			IDamageable<int, Traps> component = (IDamageable<int, Traps>) other.GetComponent (typeof(IDamageable<int, Traps>));
+			if (component != null) {
+				if (cropping.Contains (other.gameObject)) {
+					cropping.Remove(other.gameObject);
+				}
+			}
+		}
 	}
 }
