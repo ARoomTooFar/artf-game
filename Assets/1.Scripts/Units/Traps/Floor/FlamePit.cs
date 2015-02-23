@@ -15,7 +15,7 @@ public class FlamePit : Traps {
 		base.setInitValues ();
 
 		damage = 1;
-		debuff = new Burning (2, 4.0f);
+		debuff = new Burning (2);
 	}
 
 	protected override void FixedUpdate() {

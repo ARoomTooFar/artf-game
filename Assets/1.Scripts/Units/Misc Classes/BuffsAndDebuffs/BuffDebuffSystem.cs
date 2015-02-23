@@ -1,18 +1,32 @@
 // Buff and Debuff system that tracks on buff and debuffs on this unit
-//     In the future, seperation of Buffs and Debuffs may be neccessary if we have hostile purges
+//     In the future, seperation of Buffs and Debuffs may be neccessary if we have friendly/hostile purges
 
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class BuffDebuffSystem {
+
+	private class BD {
+		public BuffsDebuffs bd;
+		public float timeStart, maxDuration;
+		public CoroutineController duration;
+
+		public BD(BuffsDebuffs bd) {
+			this.bd = bd;
+		}
+
+		public float timeLeft() {
+			return maxDuration - (Time.time - timeStart);
+		}
+	}
+
 	private Character affectedUnit;
-	
-	private Dictionary<string, List<BuffsDebuffs>> buffsAndDebuffs;
+	private Dictionary<string, List<BD>> buffsAndDebuffs;
 
 	public BuffDebuffSystem(Character unit) {
 		affectedUnit = unit;
-		buffsAndDebuffs = new Dictionary<string, List<BuffsDebuffs>>();
+		buffsAndDebuffs = new Dictionary<string, List<BD>>();
 	}
 
 	//---------------------------------------------------------//
@@ -39,49 +53,59 @@ public class BuffDebuffSystem {
 
 	// For adding buffs/debuffs that override existing ones
 	private void addOverride(BuffsDebuffs newBD, GameObject source, float duration) {
-		List<BuffsDebuffs> list;
+		BD newBuffDebuff = new BD(newBD);
+		List<BD> list;
 		
 		if (buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
-			if ((list[0] as Override).overwrite(affectedUnit, source, newBD)) {
+			if ((list[0].bd as Override).isBetter(newBD, duration, list[0].timeLeft ())) { // Check if new (de)buff will be better than old one
+				list[0].duration.Stop();
+				list[0].bd.removeBD(affectedUnit, source);
 				list.RemoveAt(0);
-				list.Add(newBD);
-				affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemoval(newBD, source, duration));
+
+				list.Add(newBuffDebuff);
+				setBD(newBuffDebuff, source, duration);
 			}
 		} else {
-			list = new List<BuffsDebuffs>();
-			list.Add(newBD);
+			list = new List<BD>();
+			list.Add(newBuffDebuff);
 			buffsAndDebuffs[newBD.name] = list;
-			newBD.applyBD(affectedUnit, source);
-			affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemoval(newBD, source, duration));
+
+			setBD(newBuffDebuff, source, duration);
 		}
 	}
 
 	// For adding buffs/debuffs that don't do anything if unit is already affected by an instance of it
 	private void addSingular(BuffsDebuffs newBD, GameObject source, float duration) {
-		List<BuffsDebuffs> list;
-
-		if (!buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
-			list = new List<BuffsDebuffs>();
-			list.Add(newBD);
+		if (!buffsAndDebuffs.ContainsKey(newBD.name)) {
+			BD newBuffDebuff = new BD(newBD);
+			List<BD> list = new List<BD>();
+			list.Add(newBuffDebuff);
 			buffsAndDebuffs[newBD.name] = list;
-			newBD.applyBD(affectedUnit, source);
-			affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemoval(newBD, source, duration));
+			
+			setBD(newBuffDebuff, source, duration);
 		}
 	}
 	
 	// For adding buffs/debuffs that can stack
 	private void addStacking(BuffsDebuffs newBD, GameObject source, float duration) {
-		List<BuffsDebuffs> list;
+		BD newBuffDebuff = new BD(newBD);
+		List<BD> list;
 		
 		if (buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
-			list.Add (newBD);
+			list.Add (newBuffDebuff);
 		} else {
-			list = new List<BuffsDebuffs>();
-			list.Add(newBD);
+			list = new List<BD>();
+			list.Add(newBuffDebuff);
 			buffsAndDebuffs[newBD.name] = list;
 		}
-		newBD.applyBD(affectedUnit, source);
-		affectedUnit.GetComponent<MonoBehaviour>().StartCoroutine(timedRemoval(newBD, source, duration));
+		setBD(newBuffDebuff, source, duration);
+	}
+
+	private void setBD(BD newBD, GameObject source, float duration) {
+		newBD.bd.applyBD(affectedUnit, source);
+		newBD.maxDuration = duration;
+		newBD.timeStart = Time.time;
+		affectedUnit.StartCoroutineEx(timedRemoval(newBD.bd, source, duration), out newBD.duration);
 	}
 
 	private IEnumerator timedRemoval(BuffsDebuffs bdToRemove, GameObject source, float duration) {
@@ -119,57 +143,68 @@ public class BuffDebuffSystem {
 
 	// For adding buffs/debuffs that override existing ones
 	private void addOverride(BuffsDebuffs newBD, GameObject source) {
-		List<BuffsDebuffs> list;
+		BD newBuffDebuff = new BD(newBD);
+		List<BD> list;
 		
 		if (buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
-			if ((list[0] as Override).overwrite(affectedUnit, source, newBD)) {
+			if ((list[0].bd as Override).isBetter(newBD, 0.0f, 0.0f)) { // Check if new (de)buff will be better than old one
 				list.RemoveAt(0);
-				list.Add(newBD);
+				
+				list.Add(newBuffDebuff);
+				setBD(newBuffDebuff, source);
 			}
 		} else {
-			list = new List<BuffsDebuffs>();
-			list.Add(newBD);
+			list = new List<BD>();
+			list.Add(newBuffDebuff);
 			buffsAndDebuffs[newBD.name] = list;
-			newBD.applyBD(affectedUnit, source);
+			
+			setBD(newBuffDebuff, source);
 		}
 	}
 	
 	// For adding buffs/debuffs that don't do anything if unit is already affected by an instance of it
 	private void addSingular(BuffsDebuffs newBD, GameObject source) {
-		List<BuffsDebuffs> list;
-		
-		if (!buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
-			list = new List<BuffsDebuffs>();
-			list.Add(newBD);
+		if (!buffsAndDebuffs.ContainsKey(newBD.name)) {
+			BD newBuffDebuff = new BD(newBD);
+			List<BD> list = new List<BD>();
+			list.Add(newBuffDebuff);
 			buffsAndDebuffs[newBD.name] = list;
-			newBD.applyBD(affectedUnit, source);
+			
+			setBD(newBuffDebuff, source);
 		}
 	}
 	
 	// For adding buffs/debuffs that can stack
 	private void addStacking(BuffsDebuffs newBD, GameObject source) {
-		List<BuffsDebuffs> list;
+		BD newBuffDebuff = new BD(newBD);
+		List<BD> list;
 		
 		if (buffsAndDebuffs.TryGetValue (newBD.name, out list)) {
-			list.Add (newBD);
+			list.Add (newBuffDebuff);
 		} else {
-			list = new List<BuffsDebuffs>();
-			list.Add(newBD);
+			list = new List<BD>();
+			list.Add(newBuffDebuff);
 			buffsAndDebuffs[newBD.name] = list;
 		}
-		newBD.applyBD(affectedUnit, source);
+		setBD(newBuffDebuff, source);
+	}
+
+	private void setBD(BD newBD, GameObject source) {
+		newBD.bd.applyBD(affectedUnit, source);
+		newBD.maxDuration = 0;
+		newBD.timeStart = Time.time;
 	}
 
 	//----------------------------------------------------------//
 
 	// For general removal
 	public void rmvBuffDebuff(BuffsDebuffs bdToRemove, GameObject source) {
-		List<BuffsDebuffs> list;
+		List<BD> list;
 
 		if (buffsAndDebuffs.TryGetValue (bdToRemove.name, out list)) {
 			for (int i = 0; i < list.Count; i++) {
-				if (list[i] == bdToRemove) {
-					list[i].removeBD(affectedUnit, source);
+				if (list[i].bd == bdToRemove) {
+					list[i].bd.removeBD(affectedUnit, source);
 					list.RemoveAt(i);
 					break;
 				}
@@ -189,12 +224,12 @@ public class BuffDebuffSystem {
 
 	// Purge removes the buff/debuff prematurely (Removes current coroutines affecting it)
 	public void purgeBuffDebuff(BuffsDebuffs bdToPurge, GameObject source) {
-		List<BuffsDebuffs> list;
+		List<BD> list;
 
 		if (buffsAndDebuffs.TryGetValue (bdToPurge.name, out list)) {
 			for (int i = 0; i < list.Count; i++) {
-				if (list[i] == bdToPurge) {
-					list[i].purgeBD(affectedUnit, source);
+				if (list[i].bd == bdToPurge) {
+					list[i].bd.purgeBD(affectedUnit, source);
 					list.RemoveAt(i);
 					break;
 				}
@@ -212,9 +247,9 @@ public class BuffDebuffSystem {
 	public void purgeAll(GameObject source) {
 		List<BuffsDebuffs> list;
 
-		foreach(KeyValuePair<string, List<BuffsDebuffs>> entry in buffsAndDebuffs) {
+		foreach(KeyValuePair<string, List<BD>> entry in buffsAndDebuffs) {
 			for (int i = 0; i < entry.Value.Count; i++) {
-				entry.Value[i].purgeBD(affectedUnit, source);
+				entry.Value[i].bd.purgeBD(affectedUnit, source);
 			}
 		}
 	}

@@ -8,30 +8,22 @@ public class Override : BuffsDebuffs {
 	protected Override() {
 		bdType = 0;
 	}
-	
-	public override void applyBD(Character unit, GameObject source) {
-		base.applyBD(unit, source);
+
+	protected override void bdEffects(BDData newData) {
+		base.bdEffects(newData);
 	}
 	
-	public override void removeBD(Character unit, GameObject source) {
-		base.removeBD(unit, source);
+	protected override void removeEffects (BDData oldData, GameObject source) {
+		base.removeEffects (oldData, source);
 	}
 
 	public override void purgeBD(Character unit, GameObject source) {
 		base.purgeBD (unit, source);
 	}
 
-	public bool overwrite(Character unit, GameObject source, BuffsDebuffs newBD) {
-		if (isBetter(newBD)) {
-			this.removeBD(unit, source);
-			newBD.applyBD(unit, source);
-			return true;
-		}
-		return false;
-	}
-
 	// This method is meant to be overwritten by child classes to see which buff is better
-	private virtual bool isBetter(BuffsDebuffs newBD) {
+	//     * Start time is the Time.time when it started, lifeTime is how long it has been on the unit
+	public virtual bool isBetter(BuffsDebuffs newBD, float newDuration, float timeLeft) {
 		return true;
 	}
 }

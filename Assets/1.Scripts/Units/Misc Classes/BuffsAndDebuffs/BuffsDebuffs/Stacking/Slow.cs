@@ -11,15 +11,15 @@ public class Slow : Stacking {
 		name = "Slow";
 		spdPercent = speedValue;
 	}
-	
-	public override void applyBD(Character unit, GameObject source) {
-		base.applyBD(unit, source);
-		unit.stats.spdManip.setSpeedReduction(spdPercent);
+
+	protected override void bdEffects(BDData newData) {
+		base.bdEffects(newData);
+		newData.unit.stats.spdManip.setSpeedReduction(spdPercent);
 	}
 	
-	public override void removeBD(Character unit, GameObject source) {
-		base.removeBD(unit, source);
-		unit.stats.spdManip.removeSpeedReduction(spdPercent);
+	protected override void removeEffects (BDData oldData, GameObject source) {
+		base.removeEffects (oldData, source);
+		oldData.unit.stats.spdManip.removeSpeedReduction(spdPercent);
 	}
 
 	public override void purgeBD(Character unit, GameObject source) {
