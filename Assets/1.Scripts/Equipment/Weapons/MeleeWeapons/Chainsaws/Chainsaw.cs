@@ -37,6 +37,7 @@ public class Chainsaw : MeleeWeapons {
 	}
 
 	private List<Character> chained;
+	private List<GameObject> cropping;
 	
 	// Use this for initialization
 	protected override void Start () {
@@ -65,6 +66,7 @@ public class Chainsaw : MeleeWeapons {
 		slowPercent = 0.9f;
 		debuff = new Dismember(slowPercent);
 		chained = new List<Character> ();
+		cropping = new List<GameObject>();
 	}
 
 	// Move to a Coroutine during our great weapon pur-refactor
@@ -131,6 +133,13 @@ public class Chainsaw : MeleeWeapons {
 				foreach(Character meat in chained) {
 					meat.damage(stats.damage, user);
 				}
+
+				foreach(GameObject crop in cropping) {
+					IDamageable<int, Traps> component = (IDamageable<int, Traps>) crop.GetComponent (typeof(IDamageable<int, Traps>));
+					if(component != null) {
+						component.damage(stats.damage);
+					}
+				}
 			}
 
 			yield return null;
@@ -154,6 +163,7 @@ public class Chainsaw : MeleeWeapons {
 			chained.Clear();
 			user.BDS.rmvBuffDebuff(debuff, user.gameObject);
 		}
+		cropping.Clear();
 
 		user.animator.speed = 1.0f;
 	}
@@ -171,8 +181,16 @@ public class Chainsaw : MeleeWeapons {
 			} else {
 				enemy.damage(stats.damage * 2, user);
 			}
-
-		} 
+		} else {
+			IDamageable<int, Traps> component = (IDamageable<int, Traps>) other.GetComponent (typeof(IDamageable<int, Traps>));
+			if (component != null) {
+				if (user.animator.GetBool("Charging")) {
+					cropping.Add(other.gameObject);
+				} else {
+					component.damage(stats.damage * 2);
+				}
+			}
+		}
 	}
 	
 	void OnTriggerExit(Collider other) {
@@ -186,6 +204,13 @@ public class Chainsaw : MeleeWeapons {
 			if (chained.Count == 0 && user.animator.GetBool("Charging")) {
 				user.BDS.rmvBuffDebuff(debuff, user.gameObject);
 			}
-		} 
+		} else {
+			IDamageable<int, Traps> component = (IDamageable<int, Traps>) other.GetComponent (typeof(IDamageable<int, Traps>));
+			if (component != null) {
+				if (cropping.Contains (other.gameObject)) {
+					cropping.Remove(other.gameObject);
+				}
+			}
+		}
 	}
 }

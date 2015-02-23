@@ -31,6 +31,11 @@ public class MeleeWeapons : Weapons {
 		Character enemy = (Character) other.GetComponent(opposition);
 		if( component != null && enemy != null) {
 			onHit(enemy);
+		} else {
+			IDamageable<int, Traps> component2 = (IDamageable<int, Traps>) other.GetComponent (typeof(IDamageable<int, Traps>));
+			if (component2 != null) {
+				component2.damage(stats.damage + stats.chgDamage);
+			}
 		}
 	}
 }
