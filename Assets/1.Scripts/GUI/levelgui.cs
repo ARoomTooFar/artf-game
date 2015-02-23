@@ -93,10 +93,10 @@ public class levelgui : MonoBehaviour {
 				//Players can also assign a bait item to their dungeons here.
 				//All players ready up to moveToScene("chosenLevel");
 
-				//creates button to move between InventorySelect and LevelSelect
+				//creates button to move between InventorySelect to the choosen level that was set in the level select area.
 				if (GUI.Button (new Rect (30, 30, 150, 30), "Game Scene"))
 				{
-					moveToScene ("FirstPlayableSceneWithGS");
+					moveToScene (gamestate.Instance.getChosenLevel());
 				}
 				break;
 
@@ -164,7 +164,7 @@ public class levelgui : MonoBehaviour {
 	public void moveToSceneWC(string aScene)
 	{
 		//checks to see if all the players in the game are ready.
-		//	readyCheck ();
+		//readyCheck ();
 		//if all the players are ready move to the next scene.
 		if(gamestate.Instance.getPartyReady()){
 			moveToScene(aScene);
@@ -205,6 +205,11 @@ public class levelgui : MonoBehaviour {
 		bool ready = gamestate.Instance.getReady();
 		if (ready) 
 		{
+			if(ascene == "InventorySelect")
+			{
+				print ("Did ready check, zone goes to InventorySelect, trying to set choosen level...");
+				gamestate.Instance.getChosenLevel();
+			}
 			print ("The players are ready. Moving on.");
 
 			moveToScene(ascene);

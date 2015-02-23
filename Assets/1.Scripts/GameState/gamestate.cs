@@ -87,6 +87,16 @@ public class gamestate : MonoBehaviour {
 		activeLevel = newLevel;
 	}
 
+	//--------------------------------
+	//setChosenLevel()
+	//--------------------------------
+	//sets the chosen level
+	//--------------------------------
+	public void setChosenLevel(string ch)
+	{
+		chosenLevel = ch;
+	}
+
 
 	//--------------------------------
 	//addPlayer()
@@ -97,7 +107,7 @@ public class gamestate : MonoBehaviour {
 	{
 		//playerNumber - 1 because that will be off by 1.
 		print (gamestate.instance.players.Count);
-		// print ("player to be added is player" + playerNumber);
+		 print ("player to be added is player" + playerNumber);
 		//gamestate.instance.players.Insert((playerNumber - 1),newPlayer);
 		gamestate.instance.players [playerNumber - 1] = newPlayer;
 	}
@@ -433,7 +443,7 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	//getChosenLevel()
 	//--------------------------------
-	//returns the currently active level
+	//returns the chosen level as a string.
 	//--------------------------------
 	public string getChosenLevel()
 	{
@@ -686,5 +696,5 @@ public class gamestate : MonoBehaviour {
 		}
 		return gamestate.instance.partyReady;
 	}
-	
+
 }
