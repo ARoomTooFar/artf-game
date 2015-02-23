@@ -30,11 +30,12 @@ public class UIHandler_FileIO : MonoBehaviour
 	private Farts serv;
 	long levelId;
 	string levelTHING;
+    private WWW lvlUpdate; // WWW request to server for level updating
 	
 	//object in hierarchy that holds itemObjects
 	Transform itemObjects;
 	
-	void Start ()
+	IEnumerator Start ()
 	{
 		itemClass = new ItemClass ();
 //		savedFiles = new List<string>();
@@ -54,7 +55,23 @@ public class UIHandler_FileIO : MonoBehaviour
 //		data = GameObject.Find ("ItemObjects").GetComponent ("DataHandler_Items") as DataHandler_Items;
 		
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
-		
+
+        // Download level example
+        WWW dlLvlReq = serv.getLvlWww("5785905063264256");
+        yield return dlLvlReq;
+
+        // Use the downloaded level data
+        string dlLvlData = dlLvlReq.text;
+
+        // Check if level data is valid
+        if (serv.dataCheck(dlLvlData))
+        {
+            Debug.Log("DOWNLOAD SUCCEEDED: " + dlLvlData);
+        }
+        else
+        {
+            Debug.Log("ERROR: LEVEL DATA DOWNLOAD FAILED");
+        }
 	}
 	
 	public void saveFile ()
@@ -86,15 +103,16 @@ public class UIHandler_FileIO : MonoBehaviour
 			
 			//new 1/15 v3.0 server way
 			//levelTHING = serv.newLevel("stuff",  "34534567", "34563456", tmp, "32453245");
-			levelTHING = serv.updateLevel("6211504244260864",  "stuff", "34563456", tmp, "32453245");
-			Debug.Log(levelTHING);
-			
-			
+			//levelTHING = serv.updateLevel("6211504244260864",  "stuff", "34563456", tmp, "32453245");
+			//Debug.Log(levelTHING);
 			
 			//			string levelData = bf.Serialize (file, itemClass.getItemList ());
 			//			levelId = serv.newLevel(123, "Level Name", levelData);
 		} else if (itemClass.getItemList ().Count == 0) {
 			Debug.Log ("ItemClass.itemList is empty. Nothing to write.");
+
+            // Update level example
+            lvlUpdate = serv.updateLvl("5785905063264256", "Updated Level Name Test 2", "456", "adfsdfasdfasf123", "jkl;jlkj;klj;");
 		}
 		
 		//old playerprefs way
@@ -139,7 +157,7 @@ public class UIHandler_FileIO : MonoBehaviour
 	
 	public void loadFile ()
 	{
-		
+	    /*
 		//		if (savedFiles.Count != 0) {
 		//			float y = -415f;
 		//			foreach (string s in savedFiles) {
@@ -242,6 +260,7 @@ public class UIHandler_FileIO : MonoBehaviour
 		//		} else {
 		//			Debug.Log ("Nothing to load");
 		//		}
+        */
 	}
 	
 	public void wipeItemObjects ()
@@ -258,6 +277,22 @@ public class UIHandler_FileIO : MonoBehaviour
 	//	{
 	//		return itemObjects;
 	//	}
-	
+
+    void Update()
+    {
+        // Use the returned data from update level request's coroutine
+        if (lvlUpdate != null)
+        {
+            if (lvlUpdate.isDone && lvlUpdate.error == null)
+            {
+                Debug.Log("UPDATE SUCCEEDED: " + lvlUpdate.text);
+                lvlUpdate = null; // Reset lvlUpdate to null so it doesn't the Debug.Log doesn't spam the console every tick
+            }
+            else if (lvlUpdate.error != null)
+            {
+                Debug.Log("ERROR: LEVEL UPDATE FAILED");
+            }
+        }
+    }
 	
 }
