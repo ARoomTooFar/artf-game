@@ -18,35 +18,14 @@ public class UIHandler_FolderFiller : MonoBehaviour {
 	public GameObject[] itemButtons;
 	int numberOfItemButtons;
 
+
+
 	void Start () {
 		numberOfFolders = transform.childCount;
 		folders = new GameObject[numberOfFolders];
 
 		fillUpFolderArray();
-		createButtons();
-
-//		for (int i = 0; i < numberOfFolders; i++) {
-//			folders [i] = transform.GetChild (i).gameObject;
-//
-//			//get ItemList gameobject under this folder
-//			Transform itemList = folders [i].transform.Find("ScrollView/ItemList");
-//
-//			//FOR TESTING
-//			if(String.Equals(folders[i].name, "Folder_Trap")){
-//				//get prefabs we need for this folder
-//				UnityEngine.Object[] prefabs = Resources.LoadAll("Prefabs/Trap");
-//
-//				//setup each button
-//				for(int h = 0; h < itemList.childCount; h++){
-//					UIHandler_ItemButtons uih = itemList.GetChild(h).gameObject.AddComponent("UIHandler_ItemButtons") as UIHandler_ItemButtons;
-//					EventTrigger ev = itemList.GetChild(h).gameObject.AddComponent("EventTrigger") as EventTrigger;
-//					uih.setConnectedPrefab(folders[i].name.Substring(folders[i].name.IndexOf ('_') + 1) + "/" + prefabs[0].name);
-//
-//					//must eventually send in string
-//					uih.setButtonImage();
-//				}
-//			}
-//		}
+		setupButtons();
 
 	}
 
@@ -56,7 +35,8 @@ public class UIHandler_FolderFiller : MonoBehaviour {
 		}
 	}
 
-	void createButtons(){
+
+	void setupButtons(){
 		for (int i = 0; i < numberOfFolders; i++) {
 			//get folder type (Puzzle, Monster, etc.)
 			string folderType = folders[i].name.Substring(folders[i].name.IndexOf ('_') + 1);
@@ -66,6 +46,29 @@ public class UIHandler_FolderFiller : MonoBehaviour {
 
 			//get ItemList gameobject under this folder
 			Transform itemList = folders [i].transform.Find("ScrollView/ItemList");
+
+
+			//instantiate the amount of buttons we need in
+			//a vertical column
+			float buttonY = 0;
+			bool firstIter = true;
+			for(int j = 0; j < prefabs.Length; j++){
+				GameObject newButt = Instantiate (Resources.Load ("folderButton")) as GameObject;
+				newButt.transform.parent = itemList;
+				RectTransform buttRect = newButt.GetComponent("RectTransform") as RectTransform;
+
+				if(firstIter){
+					buttonY = -1 * buttRect.sizeDelta.y / 2;
+					firstIter = false;
+				}else{
+					buttonY -= buttRect.sizeDelta.y + 5;
+				}
+				buttRect.anchoredPosition = new Vector2(buttRect.sizeDelta.x / 2, buttonY);
+
+
+			}
+
+
 
 
 			int prefabCounter = 0;

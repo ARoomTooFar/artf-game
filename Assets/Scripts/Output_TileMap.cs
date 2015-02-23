@@ -92,8 +92,8 @@ public class Output_TileMap : MonoBehaviour
 		
 		foreach (Vector3 pos in st) {
 			Vector3 rot = new Vector3 (0f, 0f, 0f);
-			string floortile = "Prefabs/floortile";
-			string walltile = "Prefabs/walltile";
+			string floortile = "Prefabs/Rooms/floortile";
+			string walltile = "Prefabs/Rooms/walltile";
 			
 			//if we're on an edge of the selected box
 			if ((pos.x == firstCornerX || pos.x == secondCornerX

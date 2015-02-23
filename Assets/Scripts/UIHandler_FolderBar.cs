@@ -36,7 +36,7 @@ public class UIHandler_FolderBar : MonoBehaviour, IPointerClickHandler
 	bool lerpingFolderClosed = false;
 	bool lerpingFolderOpen = false;
 	float currentPosX = 0f;
-	float openPosX = -107.5f;
+	float openPosX = -38f;
 	float closePosX = 40f;
 	Vector3 currentPos;
 
