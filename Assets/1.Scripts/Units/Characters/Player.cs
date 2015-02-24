@@ -101,6 +101,7 @@ public class Player : Character, IMoveable {
 
 			freeAnim = !stunned && !knockedback;
 
+
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 			
@@ -188,7 +189,7 @@ public class Player : Character, IMoveable {
 	// Might separate commands into a protected function and just have a movement function
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
-		
+
 		if (actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing))) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
@@ -253,7 +254,7 @@ public class Player : Character, IMoveable {
 				
 				die();
 			}
-			// UI.hpBar.current = stats.health;
+			UI.hpBar.current = stats.health;
 		}
 	}
 

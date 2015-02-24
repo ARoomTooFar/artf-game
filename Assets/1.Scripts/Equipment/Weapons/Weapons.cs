@@ -150,14 +150,14 @@ public class Weapons : Equipment {
 
 	// Basic attack, a normal swing/stab/fire
 	protected virtual void basicAttack() {
-		print("Normal Attack; Power level:" + stats.chgDamage);
+		// print("Normal Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
 		StartCoroutine(atkFinish());
 	}
 
 	// Charged attack, something unique to the weapon type
 	protected virtual void chargedAttack() {
-		print("Charged Attack; Power level:" + stats.chgDamage);
+		// print("Charged Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", true);
 		StartCoroutine(atkFinish());
 	}

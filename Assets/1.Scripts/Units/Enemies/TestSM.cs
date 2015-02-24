@@ -58,7 +58,7 @@ public class TestSM: Enemy{
 
 		//Placeholder for more advanced aggro where target may change
 
-		target = players [1];
+		target = players [0];
 		lastTargetPosition = target.transform.position;
 
 		//State machine initialization
@@ -76,7 +76,7 @@ public class TestSM: Enemy{
 			return;
 		}
 		bool iseeyou = canSeePlayer (target);
-		if(target != null) Debug.Log (target.name);
+		// if(target != null) Debug.Log (target.name);
 		if (target && lastSeenPosition.HasValue && !iseeyou) {
 			posTimer += Time.deltaTime;
 		} else if (target && iseeyou){
@@ -309,7 +309,7 @@ public class TestSM: Enemy{
 					if (hit.collider.gameObject == p) 
 					{
 						aggroT.add(p,1);
-					Debug.Log(p.name);
+						// Debug.Log(p.name);
 						lastSeenPosition = p.transform.position;
 						alerted = true;
 						return true;
