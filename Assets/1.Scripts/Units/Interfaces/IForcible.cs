@@ -7,7 +7,9 @@
 using UnityEngine;
 using System.Collections;
 
-public interface IForcible<D> {
-	void pull(D pullDuration); // pull (eg Hookshot)
-	void push(D pushDuration); // push (eg something pushy)
+public interface IForcible<D, S> {
+	bool knockback(D direction, S speed);
+	void stabled();
+	void pull(S pullDuration); // pull (eg Hookshot)
+	void push(S pushDuration); // push (eg something pushy)
 }

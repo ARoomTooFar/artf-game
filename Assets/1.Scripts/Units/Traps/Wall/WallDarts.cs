@@ -6,6 +6,9 @@ public class WallDarts : Traps {
 
 	// In seconds
 	public int dartInterval;
+
+	private Knockback debuff;
+
 	protected float timeSinceLastFire;
 
 	protected List<Character> unitsInTrap;
@@ -18,6 +21,7 @@ public class WallDarts : Traps {
 		darts = GetComponent<ParticleSystem> ();
 		unitsInTrap = new List<Character>();
 		firing = true;
+		debuff = new Knockback();
 	}
 	
 	protected override void setInitValues() {
@@ -77,14 +81,21 @@ public class WallDarts : Traps {
 
 	void OnParticleCollision(GameObject other) {
 		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
+		IForcible<Vector3, float> component2 = (IForcible<Vector3, float>) other.GetComponent( typeof(IForcible<Vector3, float>) );
 		Character enemy = other.GetComponent<Character>();
 		if( component != null && enemy != null) {
 			enemy.damage(damage);
+
+			if (component2 != null) {
+				enemy.BDS.addBuffDebuff(debuff, this.transform.parent.gameObject, .5f);
+			}
 		}
 	}
 
 	void OnEnable() {
-		unitsInTrap.Clear();
+		if (unitsInTrap != null) {
+			unitsInTrap.Clear();
+		}
 		firing = true;
 	}
 }
