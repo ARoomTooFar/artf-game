@@ -24,7 +24,9 @@ public class Explosion : MonoBehaviour {
 			yield return 0;
 		}
 		if(charDeath){
-			Instantiate(grave,transform.position+grave.transform.position,transform.rotation);
+			Grave g = ((GameObject)Instantiate(grave, unit.transform.position, grave.transform.rotation)).GetComponent<Grave>();
+			g.setInitValues(unit);
+			//Instantiate(grave,transform.position+grave.transform.position,transform.rotation);
 		}
 	}
 }

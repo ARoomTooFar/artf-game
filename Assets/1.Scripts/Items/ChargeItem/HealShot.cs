@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HealShot : MonoBehaviour {
+public class HealShot : ChargeItem {
 
 	// Use this for initialization
 	void Start () {
@@ -10,6 +10,6 @@ public class HealShot : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 }
