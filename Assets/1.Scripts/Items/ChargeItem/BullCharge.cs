@@ -103,7 +103,7 @@ public class BullCharge : ChargeItem {
 			
 			foreach(Character ene in enemies) {
 				ene.transform.position = transform.position;
-				((IForcible<float>)ene.GetComponent(typeof(IForcible<float>))).push(0.1f);
+				((IForcible<Vector3, float>)ene.GetComponent(typeof(IForcible<Vector3, float>))).push(0.1f);
 			}
 
 			user.rigidbody.velocity = user.facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
@@ -127,7 +127,7 @@ public class BullCharge : ChargeItem {
 		// Will need a differentiation in the future(Or not if we want this)
 		//     I suggest having the users know what is there enemy and settign ti that way somehow
 		Character enemy = other.GetComponent<Character>();
-		IForcible<float> component = (IForcible<float>) other.GetComponent( typeof(IForcible<float>));
+		IForcible<Vector3, float> component = (IForcible<Vector3, float>) other.GetComponent( typeof(IForcible<Vector3, float>));
 		if(component != null && enemy != null) {
 			enemies.Add (enemy);
 		}

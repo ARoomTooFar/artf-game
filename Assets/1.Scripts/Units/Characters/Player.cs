@@ -98,6 +98,9 @@ public class Player : Character, IMoveable {
 			
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
 			animSteHash = animSteInfo.nameHash;
+
+			freeAnim = !stunned && !knockedback;
+
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 			
@@ -133,8 +136,8 @@ public class Player : Character, IMoveable {
 					currDoor.GetComponent<Door>().toggleOpen();
 					currDoor = null;
 				}else{
-				animator.SetBool("Charging", true);
-				gear.weapon.initAttack();
+					animator.SetBool("Charging", true);
+					gear.weapon.initAttack();
 				}
 			} else if(Input.GetKeyDown (controls.secItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
@@ -250,7 +253,7 @@ public class Player : Character, IMoveable {
 				
 				die();
 			}
-			UI.hpBar.current = stats.health;
+			// UI.hpBar.current = stats.health;
 		}
 	}
 

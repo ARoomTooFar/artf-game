@@ -29,7 +29,7 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, IStunable, IForcible<float> {
+public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, IStunable, IForcible<Vector3, float> {
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -40,7 +40,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
 
-	public bool freeAnim, attacking;
+	public bool freeAnim, attacking, stunned, knockedback;
 	public AudioClip hurt, victory, failure;
 
 	public bool testing; // Whether it takes gear in automatically or lets the gear loader to it
@@ -175,6 +175,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		facing = Vector3.forward;
 		isDead = false;
 		freeAnim = true;
+		stunned = knockedback = false;
 		setInitValues();
 	}
 
@@ -221,6 +222,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
 			animSteHash = animSteInfo.nameHash;
+			freeAnim = !stunned && !knockedback;
+
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 
@@ -417,13 +420,14 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	//-------------------------------//
 	
 	public virtual bool stun() {
-		this.freeAnim = false;
+		animator.SetBool("Charging", false);
+		this.stunned = true;
 		this.rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
 		return true;
 	}
 
 	public virtual void removeStun() {
-		this.freeAnim = true;
+		this.stunned = false;
 	}
 
 	//-------------------------------//
@@ -432,7 +436,19 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	//--------------------------------//
 	// Force Interface Implementation //
 	//--------------------------------//
-	
+
+	public virtual bool knockback(Vector3 direction, float speed) {
+		animator.SetBool("Charging", false);
+		this.knockedback = true;
+		this.rigidbody.velocity = direction.normalized * speed;
+		return true;
+	}
+
+	public virtual void stabled() {
+		this.rigidbody.velocity = Vector3.zero;
+		this.knockedback = false;
+	}
+
 	// The duration are essentiall y stun, expand on these later
 	public virtual void pull(float pullDuration) {
 		stun();

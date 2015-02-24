@@ -113,7 +113,7 @@ public class ForcePush : ChargeItem {
 			if (other.tag == "Wall" || rShield && rShield.user.facing.normalized + user.facing.normalized == Vector3.zero) {
 				hit = true;
 			}
-			IForcible<float> component = (IForcible<float>) other.GetComponent( typeof(IForcible<float>) );
+		IForcible<Vector3, float> component = (IForcible<Vector3,float>) other.GetComponent( typeof(IForcible<Vector3,float>) );
 			Character foe = other.GetComponent<Character>();
 			if( component != null && foe != null) {
 				foes.Add (foe);
