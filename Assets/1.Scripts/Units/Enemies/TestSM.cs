@@ -90,9 +90,6 @@ public class TestSM: Enemy{
 			target = null;
 		}
 
-		// animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-		// actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
-
 		//Speed updates from stats now, fix navigation to not overshoot like it does
 		nav.speed = stats.speed;
 

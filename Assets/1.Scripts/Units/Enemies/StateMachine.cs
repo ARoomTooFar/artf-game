@@ -92,7 +92,7 @@ public class Transition {
 
 
 //The state machine keeps track of the states
-public class StateMachine{
+public class StateMachine {
 	
 	public State initState;
 

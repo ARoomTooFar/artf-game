@@ -196,7 +196,7 @@ public class TestSMRanged: Enemy{
 	{
 		TestSMRanged agent = (TestSMRanged)a;
 		agent.alerted = true;
-		agent.animator.SetBool ("Moving", false);
+		// agent.animator.SetBool ("Moving", false);
 		agent.nav.destination = agent.transform.position;
 		if (!agent.canSeePlayer (agent.giveTarget()))
 			agent.transform.LookAt (agent.giveTarget().transform.position);
