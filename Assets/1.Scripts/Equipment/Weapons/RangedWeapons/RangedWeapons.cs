@@ -53,14 +53,14 @@ public class RangedWeapons : Weapons {
 	}
 
 	protected override void basicAttack() {
-		print("Normal Attack; Power level:" + stats.chgDamage);
+		// print("Normal Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
 		StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
 		StartCoroutine(atkFinish());
 	}
 
 	protected override void chargedAttack() {
-		print("Charged Attack; Power level:" + stats.chgDamage);
+		// print("Charged Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", true);
 		StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
 		StartCoroutine(atkFinish());

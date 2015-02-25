@@ -90,8 +90,8 @@ public class TestSM: Enemy{
 			target = null;
 		}
 
-		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-		actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+		// animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+		// actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
 
 		//Speed updates from stats now, fix navigation to not overshoot like it does
 		nav.speed = stats.speed;
@@ -238,10 +238,7 @@ public class TestSM: Enemy{
 		if (!agent.canSeePlayer (agent.giveTarget()))
 			agent.transform.LookAt (agent.giveTarget().transform.position);
 
-		if (agent.actable){
-		/*******************
-			//Should be causing damage, is only triggering attack animation
-		******************/
+		if (agent.actable && !attacking){
 			agent.gear.weapon.initAttack();
 		}
 	}

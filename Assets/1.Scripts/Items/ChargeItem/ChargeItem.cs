@@ -48,7 +48,7 @@ public class ChargeItem : Item {
 			cdBar.current = curChgTime + Time.deltaTime;
 			yield return null;
 		}
-		//cdBar.current = curChgTime;
+		cdBar.current = curChgTime;
 		deactivateItem();
 	}
 	

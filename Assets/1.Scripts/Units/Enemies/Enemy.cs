@@ -60,9 +60,11 @@ public class Enemy : Character, IStunable {
 	// Update is called once per frame
 	protected override void Update () {
 		if(!isDead) {
-				
+
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-			actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+			animSteHash = animSteInfo.nameHash;
+			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
+			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 				
 			if (!isGrounded) {
 				falling();

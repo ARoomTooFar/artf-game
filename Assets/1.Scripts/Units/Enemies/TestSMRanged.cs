@@ -77,8 +77,9 @@ public class TestSMRanged: Enemy{
 			lastSeenPosition = null;
 		}
 		
-		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-		actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+		// animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+		// actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+
 		lastTargetPosition = target.transform.position;
 		
 		testStateMachine.Update ();
@@ -199,11 +200,8 @@ public class TestSMRanged: Enemy{
 		agent.nav.destination = agent.transform.position;
 		if (!agent.canSeePlayer (agent.giveTarget()))
 			agent.transform.LookAt (agent.giveTarget().transform.position);
-		
-		if (agent.actable){
-			/*******************
-			//Should be causing damage, is only triggering attack animation
-		******************/
+
+		if (agent.actable && !agent.attacking){
 			agent.gear.weapon.initAttack();
 		}
 	}
@@ -287,7 +285,7 @@ public class TestSMRanged: Enemy{
 	void OnTriggerEnter(Collider other) {
 		if (!alerted) {
 			inPursuit = false;
-			Debug.Log("gaar");
+			// Debug.Log("gaar");
 			return;
 		}
 		

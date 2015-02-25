@@ -103,7 +103,7 @@ public class Player : Character, IMoveable {
 
 
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
-			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
+			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
 			
 			if (isGrounded) {
 				actionCommands ();
