@@ -13,7 +13,7 @@ public class Output_Camera : MonoBehaviour
 	static Camera OnTopCamera;
 
 	static float baseX = 43f;
-	static float baseY = 21f;
+	static float baseY = 15f;
 	static float baseZ = 2.5f;
 	static float minY = 5f;
 	static float maxY = 25f;
@@ -75,6 +75,7 @@ public class Output_Camera : MonoBehaviour
 		if (baseY > maxY) {
 			baseY = maxY;
 		}
+		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
 	}
 
 	Vector3 getCameraForward(){
@@ -83,42 +84,46 @@ public class Output_Camera : MonoBehaviour
 
 	public void moveForward ()
 	{
-		if (isTopDown) {
-			baseZ += .1f; 
-		} else {
+	//	if (isTopDown) {
+	//		baseZ += .1f; 
+	//		baseX -= .1f;
+	//	} else {
 			baseZ += .1f;
 			baseX -= .1f;
-		}
+	//	}
 	}
 
 	public void moveBackward ()
 	{
-		if (isTopDown) {
-			baseZ -= .1f;
-		} else {
+	//	if (isTopDown) {
+	//		baseZ -= .1f;
+	//		baseX += .1f;
+	//	} else {
 			baseZ -= .1f;
 			baseX += .1f;
-		}
+	//	}
 	}
 
 	public void moveLeft ()
 	{
-		if (isTopDown) {
-			baseX -= .1f;
-		} else {
+	//	if (isTopDown) {
+	//		baseX -= .1f;
+	//		baseZ -= .1f;
+	//	} else {
 			baseZ -= .1f;
 			baseX -= .1f;
-		}
+	//	}
 	}
 
 	public void moveRight ()
 	{
-		if (isTopDown) {
-			baseX += .1f;
-		} else {
+	//	if (isTopDown) {
+	//		baseX += .1f;
+	//		baseZ += .1f;
+	//	} else {
 			baseZ += .1f; 
 			baseX += .1f;
-		}
+		//}
 	}
 
 	public void zoomCamIn ()
