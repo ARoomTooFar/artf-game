@@ -13,26 +13,6 @@ public class LevelSelectionZone : MonoBehaviour {
 	//chosen level is what is used to send the players along to the gameplay scene that was specified
 	//in the level selection zone.
 	public string chosenLevel ;
-	
-	//Initialization Functions
-	//public static LevelSelectionZone Instance
-	//{
-	//	get
-	//	{
-	//		if(instance == null)
-	//		{
-	//			instance = new GameObject("LevelSelectionZone").AddComponent<LevelSelectionZone>();
-	//		}
-	//		return instance;
-	//	}
-	//}
-	
-	//Sets the instance to null when the application quits
-	public void OnApplicationQuit()
-	{
-		instance = null;
-	}
-
 
 	//-----------------------------------------
 	//OnTriggerEnter()
@@ -123,30 +103,46 @@ public class LevelSelectionZone : MonoBehaviour {
 				
 						case "Player1":
 							print ("player1 is in da zone");
-							gamestate.Instance.players [0].isReady = true;
+							gamestate.Instance.setPlayerReady(1);
 							gamestate.Instance.setChosenLevel(chosenLevel);
-							lgui.readyCheck(zoneGoesTo);
+							gamestate.Instance.addPlayerChoice(chosenLevel,1);
+							if(gamestate.Instance.comparePlayerChoice(chosenLevel))
+							{
+								lgui.readyCheck(zoneGoesTo);
+							} 
 							break;
 							
 						case "Player2":
 							print ("player2 is in da zone");
-							gamestate.Instance.players [1].isReady = true;
+							gamestate.Instance.setPlayerReady(2);
 							gamestate.Instance.setChosenLevel(chosenLevel);
-							lgui.readyCheck(zoneGoesTo);
+							gamestate.Instance.addPlayerChoice(chosenLevel,2);
+							if(gamestate.Instance.comparePlayerChoice(chosenLevel))
+							{
+								lgui.readyCheck(zoneGoesTo);
+							} 
 							break;
 							
 						case "Player3":
 							print ("player3 is in da zone");
-							gamestate.Instance.players [2].isReady = true;
+							gamestate.Instance.setPlayerReady(3);
 							gamestate.Instance.setChosenLevel(chosenLevel);	
-							lgui.readyCheck(zoneGoesTo);
+							gamestate.Instance.addPlayerChoice(chosenLevel,3);
+							if(gamestate.Instance.comparePlayerChoice(chosenLevel))
+							{
+								lgui.readyCheck(zoneGoesTo);
+							} 
 							break;
 							
 						case "Player4":
 							print ("player4 is in da zone");
-							gamestate.Instance.players [3].isReady = true;
+							gamestate.Instance.setPlayerReady(4);
 							gamestate.Instance.setChosenLevel(chosenLevel);	
-							lgui.readyCheck(zoneGoesTo);
+							gamestate.Instance.addPlayerChoice(chosenLevel,4);
+							if(gamestate.Instance.comparePlayerChoice(chosenLevel))
+							{
+								lgui.readyCheck(zoneGoesTo);
+							} 
 							break;
 							
 						default:
@@ -161,25 +157,25 @@ public class LevelSelectionZone : MonoBehaviour {
 						
 						case "Player1":
 							print ("player1 is in da zone");
-							gamestate.Instance.players [0].isReady = true;
+							gamestate.Instance.setPlayerReady(1);
 							lgui.readyCheck(zoneGoesTo);
 							break;
 							
 						case "Player2":
 							print ("player2 is in da zone");
-							gamestate.Instance.players [1].isReady = true;
+							gamestate.Instance.setPlayerReady(2);
 							lgui.readyCheck(zoneGoesTo);
 							break;
 							
 						case "Player3":
 							print ("player3 is in da zone");
-							gamestate.Instance.players [2].isReady = true;
+							gamestate.Instance.setPlayerReady(3);
 							lgui.readyCheck(zoneGoesTo);
 							break;
 							
 						case "Player4":
 							print ("player4 is in da zone");
-							gamestate.Instance.players [3].isReady = true;
+							gamestate.Instance.setPlayerReady(4);
 							lgui.readyCheck(zoneGoesTo);
 							break;
 							
@@ -269,26 +265,30 @@ public class LevelSelectionZone : MonoBehaviour {
 				
 					case "Player1":
 						print ("player1 is in da zone");
-						gamestate.Instance.players [0].isReady = false;
+						gamestate.Instance.setPlayerNotReady(1);
 						gamestate.Instance.setChosenLevel("");	
+						gamestate.Instance.addPlayerChoice("",1);
 						break;
 						
 					case "Player2":
 						print ("player2 is in da zone");
-						gamestate.Instance.players [1].isReady = false;
+						gamestate.Instance.setPlayerNotReady(2);
 						gamestate.Instance.setChosenLevel("");	
+						gamestate.Instance.addPlayerChoice("",2);
 						break;
 						
 					case "Player3":
 						print ("player3 is in da zone");
-						gamestate.Instance.players [2].isReady = false;
+						gamestate.Instance.setPlayerNotReady(3);
 						gamestate.Instance.setChosenLevel("");	
+						gamestate.Instance.addPlayerChoice("",3);
 						break;
 						
 					case "Player4":
 						print ("player4 is in da zone");
-						gamestate.Instance.players [3].isReady = false;
-						gamestate.Instance.setChosenLevel("");	
+						gamestate.Instance.setPlayerNotReady(4);
+						gamestate.Instance.setChosenLevel("");
+						gamestate.Instance.addPlayerChoice("",4);
 						break;
 						
 					default:
@@ -302,24 +302,23 @@ public class LevelSelectionZone : MonoBehaviour {
 				
 						case "Player1":
 							print ("player1 is in da zone");
-							gamestate.Instance.players [0].isReady = false;
-							
+							gamestate.Instance.setPlayerNotReady(1);							
 							break;
 							
 						case "Player2":
 							print ("player2 is in da zone");
-							gamestate.Instance.players [1].isReady = false;
+							gamestate.Instance.setPlayerNotReady(2);
 							
 							break;
 							
 						case "Player3":
 							print ("player3 is in da zone");
-							gamestate.Instance.players [2].isReady = false;
+							gamestate.Instance.setPlayerNotReady(3);
 							break;
 							
 						case "Player4":
 							print ("player4 is in da zone");
-							gamestate.Instance.players [3].isReady = false;
+							gamestate.Instance.setPlayerNotReady(4);
 							break;
 							
 						default:
