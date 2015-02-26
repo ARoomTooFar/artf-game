@@ -8,11 +8,10 @@ public class TestSwordEnemy: Enemy {
 	public bool alerted = false;
 	public float fov = 150f;
 	float lineofsight = 15f;
-	// float aggro_radius = 500f;
-	float attack_radius = 6.0f;
 	public Vector3? lastSeenPosition = null;
-	public bool inPursuit = false;
 	public int waypointIndex = 0;
+
+	protected float maxAtkRadius, minAtkRadius;
 
 	// Waypoints for patrolling
 	public List<Transform> patrolWP = new List<Transform>();
@@ -30,7 +29,6 @@ public class TestSwordEnemy: Enemy {
 	
 	// Variables for use in player detection
 	public GameObject target;
-	public Vector3 lastTargetPosition;
 	private GameObject[] players;
 
 	private float posTimer = 0f;
@@ -55,7 +53,6 @@ public class TestSwordEnemy: Enemy {
 		//Placeholder for more advanced aggro where target may change
 		// players = GameObject.FindGameObjectsWithTag ("Player");
 		// target = players [0];
-		// lastTargetPosition = target.transform.position;
 
 		aRange.opposition = this.opposition;
 
@@ -94,7 +91,7 @@ public class TestSwordEnemy: Enemy {
 	}
 	
 	// Initializes states, transitions and actions
-	public void initStates(){
+	protected virtual void initStates(){
 		
 		// Initialize all states
 		State rest = new State("rest");
@@ -186,6 +183,10 @@ public class TestSwordEnemy: Enemy {
 		stats.coordination=0;
 		stats.speed=9;
 		stats.luck=0;
+
+		this.minAtkRadius = 0.0f;
+		this.maxAtkRadius = 5.0f;
+
 		testDmg = 0;
 	}
 	
@@ -195,18 +196,29 @@ public class TestSwordEnemy: Enemy {
 	// Transition Functions //
 	//----------------------//
 
-	protected bool isResting(Character a) {
+	protected virtual bool isResting(Character a) {
 		TestSwordEnemy agent = (TestSwordEnemy)a;
 		return (agent.lastSeenPosition == null);
 	}
 
-	protected bool isApproaching(Character a) {
+	protected virtual bool isApproaching(Character a) {
 		nav.speed = stats.speed * stats.spdManip.speedPercent;
 		TestSwordEnemy agent = (TestSwordEnemy)a;
 
-		if (target == null) {
+		// If we don't have a target currently and aren't alerted, automatically assign anyone in range that we can see as our target
+		if (agent.target == null && !this.alerted) {
 			if (aRange.inRange.Count > 0) {
-				target = aRange.inRange[0].gameObject;
+				foreach(Character tars in aRange.inRange) {
+					if (this.canSeePlayer(tars.gameObject)) {
+						agent.alerted = true;
+						target = tars.gameObject;
+						break;
+					}
+				}
+
+				if (target == null) {
+					return false;
+				}
 			} else {
 				return false;
 			}
@@ -214,24 +226,28 @@ public class TestSwordEnemy: Enemy {
 
 		float distance = agent.distanceToPlayer(agent.target);
 
-		// if (distance < aggro_radius && distance >= attack_radius && (agent.canSeePlayer (agent.target) || agent.inPursuit)) {
-		if (distance >= attack_radius && (agent.canSeePlayer (agent.target) || agent.inPursuit) && !isInAtkAnimation(a)) {
-			agent.inPursuit = true;
-			agent.alerted = true;
+		if (distance >= this.maxAtkRadius && agent.canSeePlayer (agent.target) && !isInAtkAnimation(a)) {
+			// agent.alerted = true;
 			return true;
 		}
 		return false;
 	}
 
-	protected bool isAttacking(Character a) {
+	protected virtual bool isAttacking(Character a) {
 		TestSwordEnemy agent = (TestSwordEnemy)a;
 		float distance = agent.distanceToPlayer(agent.target);
-		return distance < attack_radius; // && distance > 5.5f;
+		return distance < this.maxAtkRadius && distance >= this.minAtkRadius;
 	}
 
-	protected bool isInAtkAnimation(Character a) {
+	protected virtual bool isInAtkAnimation(Character a) {
 		if (attacking || animSteHash == atkHashChgSwing || animSteHash == atkHashCharge) return true;
 		else return false;
+	}
+
+	protected virtual bool isSearching(Character a) {
+		TestSwordEnemy agent = (TestSwordEnemy)a;
+		return (agent.lastSeenPosition.HasValue) && !(agent.canSeePlayer (agent.target) && this.alerted);
+		
 	}
 
 	//---------------------//
@@ -241,13 +257,12 @@ public class TestSwordEnemy: Enemy {
 	// Action Functions //
 	//------------------//
 
-	protected void Rest(Character a) {
+	protected virtual void Rest(Character a) {
 		TestSwordEnemy agent = (TestSwordEnemy)a;
-		agent.inPursuit = false;
 		// Patrol (a);
 	}
 
-	protected void Patrol(Character a) {
+	protected virtual void Patrol(Character a) {
 		nav.speed = (stats.speed * stats.spdManip.speedPercent)/2;
 		TestSwordEnemy agent = (TestSwordEnemy)a;
 		agent.animator.SetBool ("Moving", true);
@@ -263,14 +278,14 @@ public class TestSwordEnemy: Enemy {
 		// if(agent.patrolWP.Count > 0) agent.nav.destination = agent.patrolWP[waypointIndex].position;
 	}
 
-	protected void Approach(Character a) {
+	protected virtual void Approach(Character a) {
 		TestSwordEnemy agent = (TestSwordEnemy)a;
 		this.facing = agent.target.transform.position - agent.transform.position;
 		this.facing.y = 0.0f;
 		this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 	}
 
-	protected void Attack(Character a) {
+	protected virtual void Attack(Character a) {
 		TestSwordEnemy agent = (TestSwordEnemy)a;
 
 		// agent.nav.destination = agent.transform.position;
@@ -281,7 +296,8 @@ public class TestSwordEnemy: Enemy {
 		}
 	}
 
-	protected void AtkAnimation(Character a) {
+	// We can have some logic here, but it's mostly so our unit is still during and attack animation
+	protected virtual void AtkAnimation(Character a) {
 	}
 
 	//------------------//
@@ -291,7 +307,7 @@ public class TestSwordEnemy: Enemy {
 	// Calculation Functions //
 	//-----------------------//
 
-	protected bool canSeePlayer(GameObject p) {
+	protected virtual bool canSeePlayer(GameObject p) {
 		// Check angle of forward direction vector against the vector of enemy position relative to player position
 		Vector3 direction = p.transform.position - transform.position;
 		float angle = Vector3.Angle(direction, this.facing);
@@ -302,7 +318,6 @@ public class TestSwordEnemy: Enemy {
 				
 				if (hit.collider.gameObject == p) {
 					aggroT.add(p,1);
-					// Debug.Log(p.name);
 					lastSeenPosition = p.transform.position;
 					alerted = true;
 					return true;
@@ -313,7 +328,7 @@ public class TestSwordEnemy: Enemy {
 		return false;
 	}
 
-	protected float distanceToPlayer(GameObject p) {
+	protected virtual float distanceToPlayer(GameObject p) {
 		if (p == null) return 0.0f;
 		Vector3 distance = p.transform.position - transform.position;
 		return distance.sqrMagnitude;
@@ -342,10 +357,6 @@ public class TestSwordEnemy: Enemy {
 	public bool Alerted(){
 		return alerted;
 	}
-	
-	public bool canFeel(){
-		return inPursuit;
-	}
 
 	
 	public bool isRetreating(Character a)
@@ -355,19 +366,11 @@ public class TestSwordEnemy: Enemy {
 		return distance <= 5.5f;
 	}
 	
-	public bool isSearching(Character a)
-	{
-		TestSwordEnemy agent = (TestSwordEnemy)a;
-		return (agent.giveLastSeenPos ().HasValue) && !(agent.canSeePlayer (agent.giveTarget()));
-		
-	}
-	
 	
 	//Improve search function to have multiple goals (scanning room, reaching last known position of target)
 	public void Search(Character a)
 	{
 		TestSwordEnemy agent = (TestSwordEnemy)a;
-		agent.inPursuit = true;
 		agent.alerted = true;
 		agent.animator.SetBool ("Moving", true);
 		agent.nav.destination = (Vector3)agent.giveLastSeenPos ();
@@ -378,7 +381,6 @@ public class TestSwordEnemy: Enemy {
 	public void Retreat(Character a)
 	{
 		TestSwordEnemy agent = (TestSwordEnemy)a;
-		agent.inPursuit = true;;
 		agent.alerted = true;
 		agent.animator.SetBool ("Moving", true);
 		agent.nav.speed = 5;
