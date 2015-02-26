@@ -235,7 +235,7 @@ public class Player : Character, IMoveable {
 		if (!invincible) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 		
-			print("UGH!" + dmgTaken);
+			// print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
 			
 			if (stats.health <= 0) {
