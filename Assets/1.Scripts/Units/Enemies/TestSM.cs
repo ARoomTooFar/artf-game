@@ -106,8 +106,6 @@ public class TestSM: Enemy{
 		stats.coordination=0;
 		stats.speed=10;
 		stats.luck=0;
-		inGrey = false;
-		greyDamage = 0;
 		testDmg = 0;
 		//testable = true;
 		

@@ -261,17 +261,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	// Animation helper functions
 	protected virtual void attackAnimation() {
-		// Should this also be in the weapons?
-	
-		/*
-		if (gear.weapon.stats.curChgAtkTime > 0) {
-			// Change once we get animations
-			if(animSteInfo.normalizedTime < gear.weapon.stats.colStart) animator.speed = gear.weapon.stats.atkSpeed;
-			else animator.speed = 0;
-			if (rigidbody.velocity != Vector3.zero) transform.localRotation = Quaternion.LookRotation(facing);
-		} else if (gear.weapon.stats.curChgAtkTime == -1) {
-			animator.speed = gear.weapon.stats.atkSpeed;
-		}*/
 	}
 
 	protected virtual void movementAnimation() {
@@ -381,40 +370,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	//-------------------------------//
 
-	/*
-	//-------------------------------//
-	// Slow Interface Implementation //
-	//-------------------------------//
-	//----------------------------------//
-	public virtual void slow(float slowStrength) {
-		stats.spdManip.setSpeedReduction(slowStrength);
-	}
-
-	public virtual void removeSlow(float slowStrength) {
-		stats.spdManip.removeSpeedReduction(slowStrength);
-	}
-
-	public virtual void slowForDuration(float slowStrength, float slowDuration) {
-		slow(slowStrength);
-		StartCoroutine(buffTiming(slowStrength, slowDuration, removeSlow));
-	}
-
-	public virtual void speed(float speedStrength) {
-		stats.spdManip.setSpeedAmplification(speedStrength);
-	}
-	
-	public virtual void removeSpeed(float speedStrength) {
-		stats.spdManip.removeSpeedAmplification(speedStrength);
-	}
-	
-	public virtual void speedForDuration(float speedStrength, float speedDuration) {
-		speed(speedStrength);
-		StartCoroutine(buffTiming(speedStrength, speedDuration, removeSpeed));
-	}
-
-	//-------------------------------//
-	*/
-
 	//-------------------------------//
 	// Stun Interface Implementation //
 	//-------------------------------//
@@ -460,20 +415,4 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	//--------------------------------//
 
-
-	/*
-	//-----------------------------//
-	// Timing Event Implementation //
-	//-----------------------------//
-
-	// Used for buffs that are duration based
-	// Uses delegates to call function when over
-	// Will make virtual when neccessary
-	protected virtual IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
-		while (duration > 0) {
-			duration -= Time.deltaTime;
-			yield return null;
-		}
-		bd(strValue);
-	}*/
 }

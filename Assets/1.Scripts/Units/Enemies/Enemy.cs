@@ -4,13 +4,10 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-
 public class Enemy : Character, IStunable {
 
 	//Damage variables
-	public bool inGrey;
 	public int testDmg;
-	public int greyDamage;
 	public bool testable;
 
 	//Aggro Variables
@@ -22,16 +19,8 @@ public class Enemy : Character, IStunable {
 	private EnemySight enemySight;
 
 	protected override void Awake() {
+		base.Awake();
 		opposition = Type.GetType ("Player");
-		BDS = new BuffDebuffSystem(this);
-		stats = new Stats(this.GetComponent<MonoBehaviour>());
-		animator = GetComponent<Animator>();
-		facing = Vector3.forward;
-		isDead = false;
-		gear.equipGear(this, opposition);
-		inventory.equipItems(this);
-		freeAnim = true;
-		setInitValues();
 	}
 
 	// Use this for initialization
@@ -48,10 +37,8 @@ public class Enemy : Character, IStunable {
 		stats.armor = 0;
 		stats.strength = 10;
 		stats.coordination=0;
-		stats.speed=5;
+		stats.speed=4;
 		stats.luck=0;
-		inGrey = false;
-		greyDamage = 0;
 		testDmg = 0;
 		testable = true;
 		setAnimHash ();
@@ -66,10 +53,6 @@ public class Enemy : Character, IStunable {
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 				
-			if (!isGrounded) {
-				falling();
-			}
-				
 
 
 			//If aggro'd, will chase, and if not attacked for 5 seconds, will deaggro
@@ -77,6 +60,12 @@ public class Enemy : Character, IStunable {
 			{
 				fAggro ();
 			}
+			}
+
+			if (isGrounded) {
+				movementAnimation();
+			} else {
+				falling();
 			}
 	}
 

@@ -8,21 +8,23 @@ public delegate void AIAction( Character agent );
 //State class holds array of transitions, and the method to access them
 public class State 
 {
-	private string id;
-
-	private AIAction action;
-	private AIAction exitAction;
-
-	private Character agent;
-
-	public string sId()
-	{
-		return id;
+	protected string _id;
+	public string id {
+		get{ return _id ;}
 	}
 
-	private List<Transition> transitions = new List<Transition>();
-	public List<Transition> getTransitions()
-	{
+	protected AIAction action;
+	protected AIAction exitAction;
+
+	protected Character agent;
+
+	protected List<Transition> transitions = new List<Transition>();
+
+	public State(string n){
+		_id = n;
+	}
+
+	public List<Transition> getTransitions() {
 		return transitions;
 	}
 
@@ -30,6 +32,10 @@ public class State
 		transitions.Add (t);
 	}
 
+	public void removeTransition(Transition t) {
+		if (transitions.Contains(t)) transitions.Remove(t);
+		else Debug.LogWarning ("State " + _id + " in unit " + agent.name + " does not contain a transition to " + t.targetState.id);
+	}
 
 	public void getAction()
 	{
@@ -52,28 +58,28 @@ public class State
 	{
 		exitAction = act;
 	}
-
-	public State(string n){
-		id = n;
-	}
 }
 
 //Transitions have unique condition and action classes that inherit from the corresponding interfaces
 //They have a target state, a condition, and an action. All of these also have methods to access them
 public class Transition {
 
-	private AICondTest condition;
-	private Character agent;
-	private State targetState;
+	protected AICondTest condition;
+	protected Character agent;
+
+	protected State _targetState;
+	public State targetState {
+		get {return _targetState;}
+	}
+
+	public Transition(State t)
+	{
+		_targetState = t;
+	}
 
 	public bool isTriggered()
 	{
 		return condition(agent);
-	}
-
-	public State getTargetState()
-	{
-		return targetState;
 	}
 
 	//Used to set the condition from outside this class
@@ -81,12 +87,6 @@ public class Transition {
 	{
 		condition = cond;
 		agent = a;
-		Debug.Log (cond);
-	}
-
-	public Transition(State t)
-	{
-		targetState = t;
 	}
 }
 
@@ -95,11 +95,16 @@ public class Transition {
 public class StateMachine {
 	
 	public State initState;
+	public Dictionary<string, State> states;
 
-	private State[] states;
+	// private State[] states;
 	private State currState;
 	private Transition triggeredTransition;
 
+
+	public StateMachine() {
+		states = new Dictionary<string, State>();
+	}
 
 	// Use this for initialization
 	public void Start()
@@ -127,7 +132,7 @@ public class StateMachine {
 
 		if (triggeredTransition != null) 
 		{
-			currState = triggeredTransition.getTargetState();
+			currState = triggeredTransition.targetState;
 
 		}
 
