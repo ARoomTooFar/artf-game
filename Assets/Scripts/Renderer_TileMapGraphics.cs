@@ -7,13 +7,15 @@ public class Renderer_TileMapGraphics : MonoBehaviour
 {
 	Input_TileMap input_tileMap;
 	public Material selectionMat; //material for selected tiles
+	public Material gridMat;
 	TileMap tileMap;
-//	HashSet<Vector3> selectedTiles;
+	GameObject tileMapGameObj;
 	
 	void Awake ()
 	{
 //		selectedTiles = new HashSet<Vector3> ();
 		tileMap = GameObject.Find ("TileMap").GetComponent("TileMap") as TileMap;
+		tileMapGameObj = GameObject.Find ("TileMap");
 		input_tileMap = GameObject.Find ("TileMap").GetComponent ("Input_TileMap") as Input_TileMap;
 	}
 
@@ -21,7 +23,7 @@ public class Renderer_TileMapGraphics : MonoBehaviour
 	void OnPostRender ()
 	{
 		selectTiles ();
-//		drawGrid ();
+		drawGrid ();
 	}
 	
 	/* select tiles using a list from the mouse manager */
@@ -44,7 +46,7 @@ public class Renderer_TileMapGraphics : MonoBehaviour
 	/* draw the grid lines */
 	void drawGrid(){
 		GL.Begin (GL.LINES);
-//		gridMat.SetPass (0);
+		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
 
 		/* get size of tile map */
@@ -54,21 +56,65 @@ public class Renderer_TileMapGraphics : MonoBehaviour
 			size_z = tileMap.grid_z;
 //		}
 
-		/* draw grid */
-		int count = 0;
+
+		//lower edge of tilemap bounding box
+		float xLowerBound = tileMapGameObj.collider.bounds.center.x - 
+			((tileMap.grid_x / 2) * tileMapGameObj.transform.localScale.x);
+
+		float zLowerBound = tileMapGameObj.collider.bounds.center.z - 
+			((tileMap.grid_z / 2) * tileMapGameObj.transform.localScale.z);
+
+
+		//upper edge of tilemap bounding box
+		float xUpperBound = tileMapGameObj.collider.bounds.center.x + 
+			((tileMap.grid_x / 2) * tileMapGameObj.transform.localScale.x);
+		
+		float zUpperBound = tileMapGameObj.collider.bounds.center.z + 
+			((tileMap.grid_z / 2) * tileMapGameObj.transform.localScale.z);
+
+
+		//length and width of tileMap
+		float tileMapSizeX = tileMap.grid_x * tileMapGameObj.transform.localScale.x;
+		float tileMapSizeZ = tileMap.grid_z * tileMapGameObj.transform.localScale.z;
+
+
+//		Debug.Log(tileMap.grid_z * tileMapGameObj.transform.localScale.z);
+
+		for (int z = 0; z < tileMapSizeZ; z++) {
+			GL.Vertex(new Vector3(Mathf.Floor()));
+		}
+
 		for (int z = 0; z < size_z; z++) {
-			if(count == 5){
-				
-			}
-			GL.Vertex (new Vector3 (0f, 0f, z));
-			GL.Vertex (new Vector3 (size_x, 0f, z));
+			GL.Vertex (new Vector3 (0f - 1, 0f, z + 0.5f));
+			GL.Vertex (new Vector3 (size_x - 1, 0f, z + 0.5f));
 		}
 		
 		for (int x = 0; x < size_x; x++) {
-			GL.Vertex (new Vector3 (x, 0f, 0f));
-			GL.Vertex (new Vector3 (x, 0f, size_z - 0f));
+			GL.Vertex (new Vector3 (x - 0.5f, 0f, 0f));
+			GL.Vertex (new Vector3 (x - 0.5f, 0f, size_z - 0f));
 		}
+
+
+
+		/* draw grid */
+//		int count = 0;
+//		for (int z = 0; z < size_z; z++) {
+//			GL.Vertex (new Vector3 (0f - 1, 0f, z + 0.5f));
+//			GL.Vertex (new Vector3 (size_x - 1, 0f, z + 0.5f));
+//		}
+//		
+//		for (int x = 0; x < size_x; x++) {
+//			GL.Vertex (new Vector3 (x - 0.5f, 0f, 0f));
+//			GL.Vertex (new Vector3 (x - 0.5f, 0f, size_z - 0f));
+//		}
 		
 		GL.End ();
 	}
 }
+
+//works
+//GL.Vertex (new Vector3 (0f - 1, 0f, z + 0.5f));
+//GL.Vertex (new Vector3 (size_x - 1, 0f, z + 0.5f));
+//
+//GL.Vertex (new Vector3 (x - 0.5f, 0f, 0f));
+//GL.Vertex (new Vector3 (x - 0.5f, 0f, size_z - 0f));
