@@ -1,6 +1,4 @@
-// Once hit with fire (Fire pit, flamethrower, etc) unit will be burning
-//     Small DOT on unit for a short time, 
-
+// Unit will be unable to act when stunned
 using UnityEngine;
 using System.Collections;
 

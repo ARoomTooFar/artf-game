@@ -5,7 +5,7 @@ using System.Collections;
 using System;
 
 
-public class Enemy : Character, IStunable, IForcible<float> {
+public class Enemy : Character, IStunable {
 
 	//Damage variables
 	public bool inGrey;

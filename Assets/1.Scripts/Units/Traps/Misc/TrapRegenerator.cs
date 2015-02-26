@@ -41,6 +41,10 @@ public class TrapRegenerator : MonoBehaviour, IDamageable<int, Traps> {
 			StartCoroutine(regen());
 		}
 	}
+	public void rez(){
+	}
+	public void heal(int d){
+	}
 
 	private void regenerate() {
 		trapEffects.SetActive(true);

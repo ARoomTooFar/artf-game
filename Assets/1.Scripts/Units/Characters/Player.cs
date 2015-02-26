@@ -21,6 +21,9 @@ public class Player : Character, IMoveable {
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
 	public GameObject currDoor;
+	public GameObject expDeath;
+	public Renderer[] rs;
+	
 	public UIActive UI;
 	//public LifeBar hpBar, greyBar;
 	//public AmmoBar ammoBar;
@@ -95,6 +98,9 @@ public class Player : Character, IMoveable {
 			
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
 			animSteHash = animSteInfo.nameHash;
+
+			freeAnim = !stunned && !knockedback;
+
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 			
@@ -115,18 +121,23 @@ public class Player : Character, IMoveable {
 	
 	public override void actionCommands() {
 		// Invokes an action/animation
-		if (actable) {
-			/*if(Input.GetKey("space")&&testable){
+		/*if(Input.GetKey("space")&&testable){
+				if(!stats.isDead){
 				damage(testDmg);
 				testable = false;
+				}else{
+					rez();
+					testable=false;
+				}
 			}*/
+		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
 				if(currDoor!=null){
 					currDoor.GetComponent<Door>().toggleOpen();
 					currDoor = null;
 				}else{
-				animator.SetBool("Charging", true);
-				gear.weapon.initAttack();
+					animator.SetBool("Charging", true);
+					gear.weapon.initAttack();
 				}
 			} else if(Input.GetKeyDown (controls.secItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
@@ -229,6 +240,7 @@ public class Player : Character, IMoveable {
 			if (stats.health <= 0) {
 				die();
 			}
+			UI.hpBar.current = stats.health;
 		}
 	}
 	
@@ -238,13 +250,36 @@ public class Player : Character, IMoveable {
 			stats.health -= greyTest(dmgTaken);
 
 			if (stats.health <= 0) {
+				
 				die();
 			}
+			// UI.hpBar.current = stats.health;
 		}
 	}
 
 	public override void die() {
 		base.die();
+		Renderer[] rs = GetComponentsInChildren<Renderer>();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
+		eDeath.setInitValues(this, true);
+		foreach (Renderer r in rs) {
+			r.enabled = false;
+		}
+	}
+	
+	public override void heal(int healTaken){
+		base.heal(healTaken);
+		UI.hpBar.current = stats.health;
+	}
+	
+	public override void rez(){
+		base.rez();
+		Renderer[] rs = GetComponentsInChildren<Renderer>();
+		foreach (Renderer r in rs) {
+			if(renderer.gameObject.tag != "Item")
+			r.enabled = true;
+		}
+		UI.hpBar.current = stats.health;
 	}
 
 	//----------------------------------//
@@ -309,6 +344,7 @@ public class Player : Character, IMoveable {
 			// print("Healed Grey and True");
 			stats.health++;
 			greyDamage--;
+			UI.hpBar.current = stats.health;
 			UI.greyBar.current = greyDamage+stats.health;
 			if(greyDamage > 0){
 				StartCoroutine("RegenWait");
