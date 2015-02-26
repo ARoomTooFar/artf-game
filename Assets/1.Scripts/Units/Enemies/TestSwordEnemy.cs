@@ -8,13 +8,16 @@ public class TestSwordEnemy: Enemy {
 	public bool alerted = false;
 	public float fov = 150f;
 	float lineofsight = 15f;
-	public Vector3? lastSeenPosition = null;
+
 	public int waypointIndex = 0;
 
 	protected float maxAtkRadius, minAtkRadius;
 
 	// Waypoints for patrolling
 	public List<Transform> patrolWP = new List<Transform>();
+
+	protected Vector3? searchPosition = null;
+	protected Vector3? lastSeenPosition = null;
 
 	// Nav Mesh Positions
 	public Vector3 resetpos;
@@ -98,6 +101,7 @@ public class TestSwordEnemy: Enemy {
 		State approach = new State("approach");
 		State attack = new State ("attack");
 		State atkAnimation = new State ("attackAnimation");
+		State search = new State ("search");
 
 
 		// Add all the states to the state machine
@@ -105,6 +109,7 @@ public class TestSwordEnemy: Enemy {
 		sM.states.Add (approach.id, approach);
 		sM.states.Add (attack.id, attack);
 		sM.states.Add (atkAnimation.id, atkAnimation);
+		sM.states.Add (search.id, search);
 
 
 		// Set initial state for the State Machine of this unit
@@ -116,6 +121,7 @@ public class TestSwordEnemy: Enemy {
 		Transition tApproach = new Transition (approach);
 		Transition tAttack = new Transition (attack);
 		Transition tAtkAnimation = new Transition(atkAnimation);
+		Transition tSearch = new Transition(search);
 
 
 		// Set conditions for the transitions
@@ -123,6 +129,7 @@ public class TestSwordEnemy: Enemy {
 		tRest.addCondition (isResting, this);
 		tAttack.addCondition (isAttacking, this);
 		tAtkAnimation.addCondition (isInAtkAnimation, this);
+		tSearch.addCondition (isSearching, this);
 
 
 		// Set actions for the states
@@ -130,17 +137,22 @@ public class TestSwordEnemy: Enemy {
 		approach.addAction (Approach, this);
 		attack.addAction (Attack, this);
 		atkAnimation.addAction (AtkAnimation, this);
+		search.addAction (Search, this);
 
 
 		// Set the transitions for the states
 		rest.addTransition (tApproach);
 		approach.addTransition (tAttack);
+		approach.addTransition (tSearch);
 		attack.addTransition (tAtkAnimation);
 		atkAnimation.addTransition (tApproach);
 		atkAnimation.addTransition (tAttack);
+		atkAnimation.addTransition (tSearch);
+		search.addTransition (tApproach);
+		search.addTransition (tAttack);
 		
 		/*
-		State search = new State ("search");
+
 		State retreat = new State ("retreat");
 
 
@@ -198,19 +210,18 @@ public class TestSwordEnemy: Enemy {
 
 	protected virtual bool isResting(Character a) {
 		TestSwordEnemy agent = (TestSwordEnemy)a;
-		return (agent.lastSeenPosition == null);
+		return (this.lastSeenPosition == null);
 	}
 
 	protected virtual bool isApproaching(Character a) {
 		nav.speed = stats.speed * stats.spdManip.speedPercent;
-		TestSwordEnemy agent = (TestSwordEnemy)a;
 
 		// If we don't have a target currently and aren't alerted, automatically assign anyone in range that we can see as our target
-		if (agent.target == null && !this.alerted) {
+		if (this.target == null) {// && !this.alerted) {
 			if (aRange.inRange.Count > 0) {
 				foreach(Character tars in aRange.inRange) {
 					if (this.canSeePlayer(tars.gameObject)) {
-						agent.alerted = true;
+						this.alerted = true;
 						target = tars.gameObject;
 						break;
 					}
@@ -224,9 +235,9 @@ public class TestSwordEnemy: Enemy {
 			}
 		}
 
-		float distance = agent.distanceToPlayer(agent.target);
+		float distance = this.distanceToPlayer(this.target);
 
-		if (distance >= this.maxAtkRadius && agent.canSeePlayer (agent.target) && !isInAtkAnimation(a)) {
+		if (distance >= this.maxAtkRadius && this.canSeePlayer (this.target) && !isInAtkAnimation(a)) {
 			// agent.alerted = true;
 			return true;
 		}
@@ -234,20 +245,19 @@ public class TestSwordEnemy: Enemy {
 	}
 
 	protected virtual bool isAttacking(Character a) {
-		TestSwordEnemy agent = (TestSwordEnemy)a;
-		float distance = agent.distanceToPlayer(agent.target);
-		return distance < this.maxAtkRadius && distance >= this.minAtkRadius;
+		if (this.target != null) {
+			float distance = this.distanceToPlayer(this.target);
+			return distance < this.maxAtkRadius && distance >= this.minAtkRadius;
+		}
+		return false;
 	}
 
 	protected virtual bool isInAtkAnimation(Character a) {
-		if (attacking || animSteHash == atkHashChgSwing || animSteHash == atkHashCharge) return true;
-		else return false;
+		return this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge;
 	}
 
 	protected virtual bool isSearching(Character a) {
-		TestSwordEnemy agent = (TestSwordEnemy)a;
-		return (agent.lastSeenPosition.HasValue) && !(agent.canSeePlayer (agent.target) && this.alerted);
-		
+		return (this.lastSeenPosition.HasValue) && !(this.canSeePlayer (this.target) && this.alerted);
 	}
 
 	//---------------------//
@@ -264,14 +274,13 @@ public class TestSwordEnemy: Enemy {
 
 	protected virtual void Patrol(Character a) {
 		nav.speed = (stats.speed * stats.spdManip.speedPercent)/2;
-		TestSwordEnemy agent = (TestSwordEnemy)a;
-		agent.animator.SetBool ("Moving", true);
+		this.animator.SetBool ("Moving", true);
 		
-		if (agent.nav.remainingDistance < agent.nav.stoppingDistance) {
-			if(agent.waypointIndex <= agent.patrolWP.Count - 1){
-				agent.waypointIndex++;
+		if (this.nav.remainingDistance < this.nav.stoppingDistance) {
+			if(this.waypointIndex <= this.patrolWP.Count - 1){
+				this.waypointIndex++;
 			}
-			else agent.waypointIndex = 0;
+			else this.waypointIndex = 0;
 			
 		}
 		
@@ -279,25 +288,32 @@ public class TestSwordEnemy: Enemy {
 	}
 
 	protected virtual void Approach(Character a) {
-		TestSwordEnemy agent = (TestSwordEnemy)a;
-		this.facing = agent.target.transform.position - agent.transform.position;
+		this.facing = this.target.transform.position - this.transform.position;
 		this.facing.y = 0.0f;
 		this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 	}
 
 	protected virtual void Attack(Character a) {
-		TestSwordEnemy agent = (TestSwordEnemy)a;
-
-		// agent.nav.destination = agent.transform.position;
-		// if (!agent.canSeePlayer (agent.target)) agent.transform.LookAt (agent.target.transform.position);
-
-		if (agent.actable && !attacking){
-			agent.gear.weapon.initAttack();
+		if (this.actable && !attacking){
+			this.gear.weapon.initAttack();
 		}
 	}
 
 	// We can have some logic here, but it's mostly so our unit is still during and attack animation
 	protected virtual void AtkAnimation(Character a) {
+	}
+	
+	protected virtual void Search(Character a) {
+		target = null;
+		if (this.lastSeenPosition.HasValue) {
+			this.facing = this.lastSeenPosition.Value - this.transform.position;
+			this.facing.y = 0.0f;
+			this.lastSeenPosition = null;
+		} else {
+			this.facing  = new Vector3(Random.value, 0.0f, Random.value);
+			this.facing.Normalize();
+			this.rigidbody.velocity = (this.facing.normalized * stats.speed * stats.spdManip.speedPercent)/2;
+		}
 	}
 
 	//------------------//
@@ -324,7 +340,7 @@ public class TestSwordEnemy: Enemy {
 				}
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -365,16 +381,7 @@ public class TestSwordEnemy: Enemy {
 		float distance = agent.distanceToPlayer(agent.giveTarget());
 		return distance <= 5.5f;
 	}
-	
-	
-	//Improve search function to have multiple goals (scanning room, reaching last known position of target)
-	public void Search(Character a)
-	{
-		TestSwordEnemy agent = (TestSwordEnemy)a;
-		agent.alerted = true;
-		agent.animator.SetBool ("Moving", true);
-		agent.nav.destination = (Vector3)agent.giveLastSeenPos ();
-	}
+
 	
 	
 	//Improve retreat AI
