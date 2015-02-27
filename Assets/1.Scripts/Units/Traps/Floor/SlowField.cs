@@ -12,7 +12,7 @@ public class SlowField : Traps {
 		private float spdPercent;
 		
 		public SlowingField(float speedValue) {
-			name = "FlowField";
+			name = "SlowField";
 			spdPercent = speedValue;
 		}
 		
