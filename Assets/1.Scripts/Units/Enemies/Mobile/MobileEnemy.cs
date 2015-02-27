@@ -8,6 +8,8 @@ public class MobileEnemy : NewEnemy {
 
 	protected Vector3 resetpos;
 
+	protected float tempTimer;
+
 	//-------------------//
 	// Primary Functions //
 	//-------------------//
@@ -52,6 +54,8 @@ public class MobileEnemy : NewEnemy {
 		State retreat = new State ("retreat");
 		State spacing = new State ("space");
 		State far = new State ("far");
+
+	//	State blankState = new State("blank"); // For testing purposes
 		
 		
 		// Add all the states to the state machine
@@ -89,7 +93,7 @@ public class MobileEnemy : NewEnemy {
 		tRetreat.addCondition (isRetreating, this);
 		tSpace.addCondition (isCreatingSpace, this);
 		tFar.addCondition (isFar, this);
-		
+
 		
 		// Set actions for the states
 		rest.addAction (Rest, this);
@@ -131,7 +135,7 @@ public class MobileEnemy : NewEnemy {
 	//----------------------//
 	
 	protected virtual bool isResting(Character a) {
-		return (this.lastSeenPosition == null && !this.alerted);
+		return this.lastSeenPosition == null && !this.alerted;
 	}
 	
 	protected virtual bool isApproaching(Character a) {
@@ -212,7 +216,19 @@ public class MobileEnemy : NewEnemy {
 	//------------------//
 	
 	protected virtual void Rest(Character a) {
-		this.resetpos = this.transform.position;
+		// this.resetpos = this.transform.position;
+		
+
+		if (!this.isApproaching(this) && tempTimer > 0.0f) {
+			tempTimer -= Time.deltaTime;
+		} else {
+			tempTimer = 0.5f;
+
+			this.resetpos = this.transform.position;
+			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
+			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		}
+
 	}
 	
 	protected virtual void Approach(Character a) {
@@ -236,7 +252,7 @@ public class MobileEnemy : NewEnemy {
 		if (this.lastSeenPosition.HasValue) {
 			this.facing = this.lastSeenPosition.Value - this.transform.position;
 			this.facing.y = 0.0f;
-			StartCoroutine(randomSearch(this.lastSeenPosition.Value));
+			StartCoroutine(searchForEnemy(this.lastSeenPosition.Value));
 			this.lastSeenPosition = null;
 		}
 	}
@@ -272,10 +288,8 @@ public class MobileEnemy : NewEnemy {
 			yield return null;
 		}
 	}
-	
-	protected virtual IEnumerator randomSearch(Vector3 lsp) {
-		yield return StartCoroutine(moveToPosition(lsp));
-		
+
+	protected IEnumerator randomSearch() {
 		float resetTimer = aggroTimer;
 		while(!this.isApproaching(this) && resetTimer > 0.0f) {
 			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
@@ -283,6 +297,22 @@ public class MobileEnemy : NewEnemy {
 			yield return new WaitForSeconds (0.5f);
 			resetTimer -= 0.5f;
 		}
+	}
+	
+	protected virtual IEnumerator searchForEnemy(Vector3 lsp) {
+		yield return StartCoroutine(moveToPosition(lsp));
+		
+		float resetTimer = aggroTimer;
+
+		yield return StartCoroutine(randomSearch());
+
+		/*
+		while(!this.isApproaching(this) && resetTimer > 0.0f) {
+			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
+			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			yield return new WaitForSeconds (0.5f);
+			resetTimer -= 0.5f;
+		}*/
 		if (this.target == null) alerted = false;
 	}
 	
