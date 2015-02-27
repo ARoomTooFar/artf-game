@@ -286,6 +286,7 @@ public class Player : Character, IMoveable {
 
 	// Grey Health functions
 	public virtual int greyTest(int damage){
+		/*
 		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){
 			stats.health = 0;
 			stats.isDead = true;
@@ -296,14 +297,14 @@ public class Player : Character, IMoveable {
 			greyDamage = stats.maxHealth - 1;
 			inGrey = true;
 			return 0;
-		}		
-		if(damage > (stats.maxHealth/20)){
+		}		*/
+		if(damage > (stats.maxHealth/5)){
 			//print("Got Here"+(stats.maxHealth/20)+":"+damage);
 			int tempDmg = greyDamage;
 			if(inGrey){
-				greyDamage = damage - stats.maxHealth/20;
+				greyDamage = damage - stats.maxHealth/5;
 				//print("Grey!:"+tempDmg);
-				inGrey = true;
+				//inGrey = true;
 				StopCoroutine("RegenWait");
 				if(inGrey &&!stats.isDead){
 					StartCoroutine("RegenWait");
@@ -312,7 +313,7 @@ public class Player : Character, IMoveable {
 				return damage + tempDmg;
 			}else{
 				inGrey = true;
-				greyDamage = damage - stats.maxHealth/20;
+				greyDamage = damage - stats.maxHealth/5;
 				//print("Grey!:"+(damage - stats.maxHealth/20));
 				//print("True!NGAT:"+stats.maxHealth/20);
 				StopCoroutine("RegenWait");
