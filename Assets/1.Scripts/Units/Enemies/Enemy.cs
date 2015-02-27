@@ -16,7 +16,8 @@ public class Enemy : Character, IStunable {
 	public float dmgTimer = 0f;
 	public bool aggro = false;
 
-	private EnemySight enemySight;
+	// private EnemySight enemySight;
+
 
 	protected override void Awake() {
 		base.Awake();
@@ -42,6 +43,9 @@ public class Enemy : Character, IStunable {
 		testDmg = 0;
 		testable = true;
 		setAnimHash ();
+	}
+
+	protected virtual void initStates() {
 	}
 	
 	// Update is called once per frame
@@ -84,10 +88,6 @@ public class Enemy : Character, IStunable {
 		base.damage(dmgTaken);
 	}
 
-	public override void falling(){
-
-	}
-
 	public virtual void fAggro(){
 		if (dmgTimer < 5f)
 		{
@@ -105,18 +105,6 @@ public class Enemy : Character, IStunable {
 	}
 
 
-	// The duration are essentially stun, expand on these later
-	public override void pull(float pullDuration) {
-		stun();
-	}
-	
-	public override void push(float pushDuration) {
-		stun();
-	}
 
 
-	/*//Use for other shit maybe
-	public virtual void OnTriggerEnter(Collider other) {
-		damage (1);
-	}*/
 }

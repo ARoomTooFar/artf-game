@@ -29,28 +29,6 @@ public class AggroRange : MonoBehaviour {
 		if (enemy != null) {
 			inRange.Add(enemy); 
 		}
-
-
-		/*
-		if (!TSE.alerted || !TSE.lastSeenPosition.HasValue) {
-			if(other.gameObject.GetComponent<Player>()){
-				if(TSE.canSeePlayer(other.gameObject)){
-					// awareness.radius = 10f;
-					return;
-				}
-			} else{
-				TSE.inPursuit = false;
-				TSE.target = null;
-				return;
-			}
-		}
-		
-		// awareness.radius = 10f;
-		
-		if(other.gameObject == TSE.target){
-			TSE.inPursuit = true;
-			TSE.lastSeenPosition = TSE.target.transform.position;
-		}*/
 	}
 
 	void OnTriggerExit(Collider other) {
