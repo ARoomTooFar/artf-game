@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 public class TestSwordEnemy: Enemy {
 
-	public bool alerted = false;
-	public float fov = 150f;
-	float lineofsight = 15f;
+	protected bool alerted = false;
+	protected float fov = 150f;
+	protected float lineofsight = 15f;
 
 	public int waypointIndex = 0;
 
@@ -18,10 +18,8 @@ public class TestSwordEnemy: Enemy {
 
 	protected Vector3? searchPosition = null;
 	protected Vector3? lastSeenPosition = null;
-
-	// Nav Mesh Positions
-	public Vector3 resetpos;
-	public Vector3 retreatPos;
+	
+	protected Vector3 resetpos;
 
 	public AggroRange aRange;
 
@@ -49,13 +47,8 @@ public class TestSwordEnemy: Enemy {
 		aggroT = new AggroTable();
 		nav = GetComponent<NavMeshAgent> ();
 
-		retreatPos = transform.position;
 		resetpos = transform.position;
 		patrolWP.Add (transform);
-		
-		//Placeholder for more advanced aggro where target may change
-		// players = GameObject.FindGameObjectsWithTag ("Player");
-		// target = players [0];
 
 		aRange.opposition = this.opposition;
 
@@ -73,20 +66,13 @@ public class TestSwordEnemy: Enemy {
 			sM.Update();
 			return;
 		}
+
+		/*
 		bool iseeyou = canSeePlayer (target);
 		if (target && lastSeenPosition.HasValue && !iseeyou) {
 			posTimer += Time.deltaTime;
 		} else if (target && iseeyou){
 			posTimer = 0f;
-		}
-
-		/*
-		if(posTimer > aggroTimer)
-		{
-			posTimer = 0f;
-			lastSeenPosition = null;
-			alerted = false;
-			target = null;
 		}*/
 		
 		//Speed updates from stats now, fix navigation to not overshoot like it does
@@ -104,6 +90,7 @@ public class TestSwordEnemy: Enemy {
 		State attack = new State ("attack");
 		State atkAnimation = new State ("attackAnimation");
 		State search = new State ("search");
+		State retreat = new State ("retreat");
 
 
 		// Add all the states to the state machine
@@ -112,6 +99,7 @@ public class TestSwordEnemy: Enemy {
 		sM.states.Add (attack.id, attack);
 		sM.states.Add (atkAnimation.id, atkAnimation);
 		sM.states.Add (search.id, search);
+		sM.states.Add (retreat.id, retreat);
 
 
 		// Set initial state for the State Machine of this unit
@@ -124,6 +112,7 @@ public class TestSwordEnemy: Enemy {
 		Transition tAttack = new Transition (attack);
 		Transition tAtkAnimation = new Transition(atkAnimation);
 		Transition tSearch = new Transition(search);
+		Transition tRetreat = new Transition (retreat);
 
 
 		// Set conditions for the transitions
@@ -132,6 +121,7 @@ public class TestSwordEnemy: Enemy {
 		tAttack.addCondition (isAttacking, this);
 		tAtkAnimation.addCondition (isInAtkAnimation, this);
 		tSearch.addCondition (isSearching, this);
+		tRetreat.addCondition (isRetreating, this);
 
 
 		// Set actions for the states
@@ -140,6 +130,7 @@ public class TestSwordEnemy: Enemy {
 		attack.addAction (Attack, this);
 		atkAnimation.addAction (AtkAnimation, this);
 		search.addAction (Search, this);
+		retreat.addAction (Retreat, this);
 
 
 		// Set the transitions for the states
@@ -152,40 +143,9 @@ public class TestSwordEnemy: Enemy {
 		atkAnimation.addTransition (tSearch);
 		search.addTransition (tApproach);
 		search.addTransition (tAttack);
-		search.addTransition (tRest);
-		
-		/*
-
-		State retreat = new State ("retreat");
-
-
-
-		Transition tRetreat = new Transition (retreat);
-		Transition tSearch = new Transition (search);
-
-
-
-		tRetreat.addCondition (isRetreating, this);
-		tSearch.addCondition (isSearching, this);
-
-
-
-		approach.addTransition (tSearch);
-
-		attack.addTransition (tRetreat);
-
-		attack.addTransition (tSearch);
+		search.addTransition (tRetreat);
 		retreat.addTransition (tRest);
-		retreat.addTransition (tAttack);
-		search.addTransition (tRest);
-		search.addTransition (tApproach);
-		search.addTransition (tAttack);
-
-
-		search.addAction (Search, this);
-
-		retreat.addAction (Retreat, this);
-		*/
+		retreat.addTransition (tApproach);
 	}
 
 	protected override void setInitValues() {
@@ -267,6 +227,11 @@ public class TestSwordEnemy: Enemy {
 		return this.lastSeenPosition.HasValue && !(this.canSeePlayer (this.target) && this.alerted) && !this.isInAtkAnimation(a);
 	}
 
+
+	protected virtual bool isRetreating(Character a) {
+		return this.target == null && !this.alerted;
+	}
+
 	//---------------------//
 
 
@@ -275,7 +240,7 @@ public class TestSwordEnemy: Enemy {
 	//------------------//
 
 	protected virtual void Rest(Character a) {
-		TestSwordEnemy agent = (TestSwordEnemy)a;
+		this.resetpos = this.transform.position;
 		// Patrol (a);
 	}
 
@@ -320,19 +285,31 @@ public class TestSwordEnemy: Enemy {
 		}
 	}
 
+	//Improve retreat AI
+	public void Retreat(Character a) {
+		// agent.nav.destination = agent.retreatPos;
+		this.facing = this.resetpos - this.transform.position;
+		StartCoroutine(moveToPosition(this.resetpos));
+	}
+
 	//------------------//
+
+
 
 
 	//-----------------------------//
 	// Coroutines for timing stuff //
 	//-----------------------------//
-	
-	protected virtual IEnumerator randomSearch(Vector3 lsp) {
-		while (!this.isApproaching(this) && this.distanceToVector3(lsp) > 0.5f) {
+
+	protected IEnumerator moveToPosition(Vector3 position) {
+		while (!this.isApproaching(this) && this.distanceToVector3(position) > 0.5f) {
 			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			yield return null;
 		}
-		
+	}
+
+	protected virtual IEnumerator randomSearch(Vector3 lsp) {
+		yield return StartCoroutine(moveToPosition(lsp));
 		
 		float resetTimer = aggroTimer;
 		while(!this.isApproaching(this) && resetTimer > 0.0f) {
@@ -384,25 +361,4 @@ public class TestSwordEnemy: Enemy {
 	}
 
 	//-----------------//
-
-	/*
-	public bool isRetreating(Character a)
-	{
-		TestSwordEnemy agent = (TestSwordEnemy)a;
-		float distance = agent.distanceToPlayer(agent.giveTarget());
-		return distance <= 5.5f;
-	}
-
-	
-	
-	//Improve retreat AI
-	public void Retreat(Character a)
-	{
-		TestSwordEnemy agent = (TestSwordEnemy)a;
-		agent.alerted = true;
-		agent.animator.SetBool ("Moving", true);
-		agent.nav.speed = 5;
-		agent.nav.destination = agent.retreatPos;
-	}*/
-
 }
