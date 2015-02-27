@@ -17,28 +17,29 @@ public class gamestate : MonoBehaviour {
 	private string activeLevel;			//This is the level the players are currently on.
 	public string chosenLevel; 		//This is the level the players have chosen to play while in level selection.
 
-	private string username1;			//This is the username for the first player
-	private string password1;			//This is the password for the first player
-
+	private string usernamePlaceholder;			//This is the username for the first player
+	private string passwordPlaceholder;			//This is the password for the first player
+	
 	public List<string> usernames = new List<string>();
 	public List<string> passwords = new List<string>();
+	public List<string>	playerChoice = new List<string>(); //this holds their chosen level.
 
-	private int numPlayers;				//This is the total number of player in the game
-	
-	//private bool p1ready;				//If the player is ready for the next scene
-	//private bool p2ready;
-	//private bool p3ready;
-	//private	bool p4ready;	
 	private bool partyReady;				//If all the players in the game are ready
 
+
 	public List<Player> players = new List<Player>();	//List of the Players in the game so stats can be checked in their player.cs class.
+
 
 	private Player player1;
 	private Player player2;
 	private Player player3;
 	private Player player4;
+
+	private CameraAdjuster cam;
+	private Loadgear gear;
 	
 	private string testUserName;
+	
 	//----------------------------------
 	//gameState()
 	//----------------------------------
@@ -61,7 +62,9 @@ public class gamestate : MonoBehaviour {
 	{
 		instance = null;
 	}
+	//-----------------------------------------------
 	//INITIALIZATION---------------------------------
+	//-----------------------------------------------
 
 	//---------------------------------
 	//startState()
@@ -74,10 +77,9 @@ public class gamestate : MonoBehaviour {
 	}
 
 	//------------------------------------------------
-
-
 	//MUTATOR-FUNCTIONS-------------------------------
-	
+	//------------------------------------------------
+
 	//--------------------------------
 	//setLevel()
 	//--------------------------------
@@ -89,52 +91,93 @@ public class gamestate : MonoBehaviour {
 		activeLevel = newLevel;
 	}
 
+	//--------------------------------
+	//setChosenLevel()
+	//--------------------------------
+	//sets the chosen level
+	//--------------------------------
+	public void setChosenLevel(string ch)
+	{
+		chosenLevel = ch;
+	}
+
 
 	//--------------------------------
 	//addPlayer()
 	//--------------------------------
-	//Adds a player to the list of players in the game
+	//Adds a player to the list of players at the index for the relavent player, ie player1 goes into players[0] and so on.
 	//--------------------------------
-	public void addPlayer(Player newPlayer)
+	public void addPlayer(Player newPlayer, int playerNumber)
 	{
+		//playerNumber - 1 because that will be off by 1.
+		print (gamestate.instance.players.Count);
+		print ("player to be added is player" + playerNumber);
+		//gamestate.instance.players.Insert((playerNumber - 1),newPlayer);
+		gamestate.instance.players [playerNumber - 1] = newPlayer;
+	}
 
-		gamestate.instance.players.Add(newPlayer);
+	//--------------------------------
+	//addUsername()
+	//--------------------------------
+	//Adds username to the usernames list at the index of the player number.
+	//--------------------------------
+	public void addUsername(string un, int plrnum)
+	{
+		gamestate.instance.usernames [plrnum - 1] = un;
+		print ("Added " + un + " to the username list");
+	}
+
+	//--------------------------------
+	//addPassword()
+	//--------------------------------
+	//Adds password to the passwords list at the index of the player number.
+	//--------------------------------
+	public void addPassword(string pw, int plrnum)
+	{
+		gamestate.instance.passwords [plrnum - 1] = pw;
+		print ("Added " + pw + " to the username list");
+	}
+
+	//--------------------------------
+	//addPlayerChoice()
+	//--------------------------------
+	//Adds password to the passwords list at the index of the player number.
+	//--------------------------------
+	public void addPlayerChoice(string level, int plrnum)
+	{
+		gamestate.instance.playerChoice[plrnum - 1] = level;
+		print ("Player "+ plrnum +" choice of level is" + level + ". Added to playerChoice List.");
 	}
 
 	//--------------------------------
 	//addTestPlayers()
 	//--------------------------------
 	//Adds a player to the game. There can only be 4 players in the game at a time. It will not let you add more than 4.
+	//takes in in playerNumber which tells where to put the player in the list.
 	//--------------------------------
-	public void addPlayerToList ()
+	public void addPlayerToList (int playerNumber)
 	{
-
-		player1 = GameObject.Find ("Player1").GetComponent <Player>();
-
-		switch (gamestate.instance.numPlayers)
+		gamestate.instance.players.Capacity = 4; //is sure to set the max capacity of the list to 4 (of by one perhaps?).
+		switch (playerNumber)
 		{
-		case 0:
-			player1 = GameObject.Find ("Player1").GetComponent <Player>();	
-			addPlayer(player1);
-			gamestate.instance.numPlayers++;
-			break;
-			
 		case 1:
-			player2 = GameObject.Find ("Player2").GetComponent <Player>();
-			addPlayer(player2);
-			gamestate.instance.numPlayers++;
+			player1 = GameObject.Find ("Player1").GetComponent <Player>();	
+			addPlayer(player1, playerNumber);
 			break;
 			
 		case 2:
-			player3 = GameObject.Find ("Player3").GetComponent <Player>();
-			addPlayer(player3);
-			gamestate.instance.numPlayers++;
+			player2 = GameObject.Find ("Player2").GetComponent <Player>();
+			addPlayer(player2, playerNumber);
 			break;
 			
 		case 3:
+			player3 = GameObject.Find ("Player3").GetComponent <Player>();
+			addPlayer(player3, playerNumber);
+			break;
+			
+		case 4:
 			player4 = GameObject.Find ("Player4").GetComponent <Player>();
-			addPlayer(player4);
-			gamestate.instance.numPlayers++;
+			addPlayer(player4, playerNumber);
 			break;
 		
 		default:
@@ -142,7 +185,7 @@ public class gamestate : MonoBehaviour {
 			break;
 		}
 
-		print ("There are " + gamestate.instance.players.Count + " Players in the Players List");
+		//print ("There are " + gamestate.instance.players.Count + " Players in the Players List");
 	}
 
 	//--------------------------------
@@ -151,35 +194,15 @@ public class gamestate : MonoBehaviour {
 	//gets the username from the UI. Takes in a string that comes from the UI, if it's null it won't assign it to the username variable.
 	//will assign un for whichever player is to log in next using the switch statement.
 	//--------------------------------
-	public void getUsername(string un)
+	public void getUsername(int playerNumber)
 	{
-		if (un == "")
+
+		if (usernamePlaceholder == "")
 		{
 			print ("Entered Username was empty, please re-enter.");
 		} else {
-			switch(gamestate.instance.numPlayers)
-			{
-			case 1:
-				gamestate.instance.username1 = un;
-				print("Player " + gamestate.instance.numPlayers + " Username is " + gamestate.instance.username1 + ".");
-				break;
-				
-			case 2:
-				print ("No username to place.");
-				break;
-				
-			case 3:
-				print ("No username to place.");
-				break;
-				
-			case 4:
-				print ("No username to place.");
-				break;
-				
-			default:
-				print ("All players acounted for.");
-				break;
-			}
+			gamestate.instance.usernames[playerNumber - 1] = usernamePlaceholder;
+			print("Player " + playerNumber + " Username is " + gamestate.instance.usernames[playerNumber - 1] + ".");	
 		}
 	}
 
@@ -191,37 +214,15 @@ public class gamestate : MonoBehaviour {
 	//gets the password from the UI. Takes in a string that comes from the UI, if it's null it won't assign it to the password variable.
 	//will assign the pw to the next player using the switch statement. 
 	//--------------------------------
-	public void getPassword(string pw)
+	public void getPassword(string pw, int playerNumber)
 	{
 		if (pw == "")
 		{
 			print ("Entered password was empty, please re-enter.");
 
 		} else {
-			switch(gamestate.instance.numPlayers)
-			{
-				
-			case 1:
-				gamestate.instance.username1 = pw;
-				print("Player " + gamestate.instance.numPlayers + " password is " + gamestate.instance.username1 + ".");
-				break;
-				
-			case 2:
-				print ("No username to place.");
-				break;
-				
-			case 3:
-				print ("No username to place.");
-				break;
-				
-			case 4:
-				print ("No username to place.");
-				break;
-				
-			default:
-				print ("All players acounted for.");
-				break;
-			}
+			gamestate.instance.passwords[playerNumber - 1] = pw;
+			print("Player " + playerNumber + " password is " + gamestate.instance.passwords[playerNumber - 1]+ ".");
 		}
 	}
 
@@ -231,46 +232,14 @@ public class gamestate : MonoBehaviour {
 	//Set's a player's status to be ready for the next scene
 	//--------------------------------
 
-	public void setPlayerReady(int playerNumber)
+	public void setPlayerReady(int plrnum)
 	{
-
-
-		if (gamestate.instance.players != null)
+		if(players[plrnum - 1] != null) 
 		{
-
-
-			switch (playerNumber)
-			{
-				case 1:
-					
-						gamestate.instance.players[0].isReady = true;
-					
-					break;
-
-				case 2:
-
-						gamestate.instance.players[1].isReady = true;
-				
-					break;
-
-				case 3:
-			
-						gamestate.instance.players[2].isReady = true;
-
-				break;
-
-				case 4:
-
-						gamestate.instance.players[3].isReady = true;
-				
-					break;
-			default:
-				break;
-			}
+			gamestate.instance.players[plrnum - 1].isReady = true;
 		} else {
-			print ("No players to set as ready.");
+			print ("Player at this index is null");
 		}
-
 	}
 
 	//--------------------------------
@@ -279,39 +248,14 @@ public class gamestate : MonoBehaviour {
 	//Set's a player's status to be ready for the next scene
 	//--------------------------------
 	
-	public void setPlayerNotReady(string playerNumber)
+	public void setPlayerNotReady(int plrnum)
 	{
-		
-		switch (playerNumber)
+		if(players[plrnum] != null) 
 		{
-			case "1":
-				gamestate.instance.players[0].isReady = false;
-				break;
-			
-			case "2":
-				gamestate.instance.players[1].isReady = false;
-				break;
-			
-			case "3":
-				gamestate.instance.players[2].isReady = false;
-				break;
-			
-			case "4":
-				gamestate.instance.players[3].isReady = false;
-				break;
-			case "all":
-				gamestate.instance.players[0].isReady = false;
-				gamestate.instance.players[1].isReady = false;
-				gamestate.instance.players[2].isReady = false;
-				gamestate.instance.players[3].isReady = false;
-			print ("reset all player ready values to false");
-			break;
-
-		default:
-			print ("Not a valit player number in Gamestate.Instance.setPlayerNotReady(string playerNumber)");
-			break;
+			gamestate.instance.players[plrnum].isReady = false;
+		} else {
+			print ("Player at this index is null");
 		}
-		
 	}
 
 
@@ -322,7 +266,6 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	public void setPartyReady()
 	{
-	
 		print ("the party is set to ready");
 		gamestate.instance.partyReady = true;
 	}
@@ -339,12 +282,99 @@ public class gamestate : MonoBehaviour {
 	}
 
 
+	//loginPlayer()
+	//--------------------------------
+	//Logs in the player using their information passed in from text feild GUI's. If sucessful it will add a player to the list in their
+	//proper position (player 1 is always at gamestate.instance.players[0], etc) it will then set their status to ready.
+	//If the login fails it will not add the player to the list and it will not make the player ready.
+	//Takes in int playerNumber which tells the GS where to place the logged in player in the players <list>.
+	//--------------------------------
+	public void loginPlayer(int playerNumber) 
+	{
+		print ("Tring to login the player");
+		//checks to see if the playerNumber is valid. if not says so.
+		if(playerNumber > 4 || playerNumber < 1) 
+		{
+			print ("Player number is not valid");
+		}
+		//if the login is successful (user name and password are both correct).
+		if(validateUNPW(playerNumber))
+		{
+			switch (playerNumber)
+			{
+			case 1: 
+				addPlayerToList(playerNumber);
+				gamestate.instance.setPlayerReady(playerNumber);
+				break;
+
+			case 2: 
+				addPlayerToList(playerNumber);
+				gamestate.instance.setPlayerReady(playerNumber);
+				break;
+
+			case 3: 
+				addPlayerToList(playerNumber);
+				gamestate.instance.setPlayerReady(playerNumber);
+				break;
+			
+			case 4: 
+				addPlayerToList(playerNumber);
+				gamestate.instance.setPlayerReady(playerNumber);
+				break;
+			
+			default:
+				print ("did not add or make player ready");
+				break;
+			}
+
+		} else {
+			print ("Failed to login, username or password was incorrect.");
+		}
+	}
 
 
 	//------------------------------------------------
-
 	//ACCESS-FUNCTIONS--------------------------------
+	//------------------------------------------------
 	
+	//--------------------------------
+	//validateUNPW()
+	//--------------------------------
+	//Validates the username and password with the game server. Takes in the player number, sends the username and password at
+	//that index of UN/PW arrays (two string inputs). If the username and passwords are correct the server will return player 
+	//for that player. This function takes that player data and attaches it to the player in the player 
+	//--------------------------------
+	public bool validateUNPW(int plrnum)
+	{
+		//THIS IS FOR TESTING and makes sure there are things in the list of usernames.
+		for(int i = 0; i < 4;i++)
+		{
+			usernames.Add("testUsername");
+			passwords.Add("testPassword");
+		}
+		//^is for testing
+
+		string playerData; //the login function on the web side returns the player data as a string.
+		string un = usernames [plrnum];
+		string pw = passwords [plrnum];
+
+		bool valid;
+
+		//IF this is null the validation was invalid, if sucessful this will be the playerdata.
+		//playerData = Webvalidation(un,pw); 
+		playerData = "hoopla";
+
+		if(playerData == "")
+		{
+			valid = false;
+		}else{
+			valid = true;
+			//this is where the playerdata is attached to the proper player class.
+		}
+
+		return valid;
+	}
+
 
 	//--------------------------------
 	//getLevel()
@@ -355,21 +385,17 @@ public class gamestate : MonoBehaviour {
 	{
 		return gamestate.instance.activeLevel;
 	}
-
-
-
+	
 	//--------------------------------
 	//getChosenLevel()
 	//--------------------------------
-	//returns the currently active level
+	//returns the chosen level as a string.
 	//--------------------------------
 	public string getChosenLevel()
 	{
 		return gamestate.instance.chosenLevel;
 	}
-
-
-
+	
 	//--------------------------------
 	//getVictory()
 	//--------------------------------
@@ -387,7 +413,7 @@ public class gamestate : MonoBehaviour {
 		foreach (Player plr in gamestate.instance.players) 
 		{
 			//if they are alive
-			if(!plr.isDead)
+			if(plr != null && !plr.isDead)
 			{
 				//checks to see if the player is at the end of the dungeon
 				if(plr.atEnd)
@@ -421,7 +447,7 @@ public class gamestate : MonoBehaviour {
 		//checks the player class for each player in list of active players in the game to see if they are ready.
 		foreach (Player plr in gamestate.instance.players) 
 		{
-			if(plr.isReady)
+			if(plr != null && plr.isReady)
 			{
 				ready++;
 			}
@@ -460,8 +486,8 @@ public class gamestate : MonoBehaviour {
 		
 		foreach (Player plr in gamestate.instance.players) 
 		{
-			//if they are alive
-			if(!plr.isDead)
+			//if they are alive and are in the list
+			if(plr != null && !plr.isDead)
 			{
 				//checks to see if the player is at the start of the dungeon
 				if(plr.atStart)
@@ -493,11 +519,11 @@ public class gamestate : MonoBehaviour {
 	{
 		
 		int dead = 0;
-		int numPlayers = gamestate.instance.players.Count;
+		int numPlayers = gamestate.instance.getNumPlayers();
 		//checks the player class for each player in list of active players in the game to see if they are alive.
 		foreach (Player plr in gamestate.instance.players) 
 		{
-			if(plr.isDead)
+			if(plr != null && plr.isDead)
 			{
 				dead++;
 			}
@@ -527,7 +553,7 @@ public class gamestate : MonoBehaviour {
 		//checks the player class for each player in list of active players in the game to see if they are alive.
 		foreach (Player plr in gamestate.instance.players) 
 		{
-			if(!plr.isDead)
+			if(plr != null && !plr.isDead)
 			{
 				alive++;
 			}
@@ -543,24 +569,32 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	//getNumPlayers()
 	//--------------------------------
-	//returns an int with the number of players.
+	//Checks the players <list> for players, when it finds one (not null) it adds that to the total. Returns an int with the total number of players.
 	//--------------------------------
 	public int getNumPlayers()
 	{
+		int numPlayers = 0;
 		//gets the number of players in the players list
-		int numPlayers = gamestate.instance.players.Count;
+		foreach (Player plr in gamestate.instance.players) 
+		{
+			if(plr != null)
+			{
+				numPlayers++;
+				print ("player is added to numPlayers");
+			} else {
+				//print("player index is null");
+			}
+		}
+
 		print ("There are " + numPlayers + "in the game");
 		return numPlayers;
 	}
-
-
-
+	
 	//--------------------------------
 	//getPlayerReadyStatus(int playernumber)
 	//--------------------------------
 	//Gets the players status for the next scene
 	//--------------------------------
-	
 	public bool getPlayerReadyStatus(int playerNumber)
 	{
 
@@ -603,5 +637,34 @@ public class gamestate : MonoBehaviour {
 		}
 		return gamestate.instance.partyReady;
 	}
-	
+
+	//--------------------------------
+	//comparePlayerChoice()
+	//--------------------------------
+	//compares all the player choices. If they are all the same it returns true, IF any of them are different
+	//it will return false. Takes in a string to compare against.
+	//--------------------------------
+	public bool comparePlayerChoice(string choice)
+	{
+		bool same = false; //if they are all the same.
+		int numSame = 0; //this should equal the number of players ingame for same to be true;
+		//starting the player choices with the target choice that
+		for(int i = 0; i < 4; i++)
+		{
+			if(playerChoice[i] == choice)
+			{
+				numSame ++;
+			}
+		}
+		if(numSame == getNumPlayers())
+		{
+			print("All player are made the same choice");
+			same = true;
+		} else {
+			print("Not all players made the same choice");
+		}
+		return same;
+	}
+
+
 }
