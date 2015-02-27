@@ -4,13 +4,10 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-
 public class Enemy : Character, IStunable {
 
 	//Damage variables
-	public bool inGrey;
 	public int testDmg;
-	public int greyDamage;
 	public bool testable;
 
 	//Aggro Variables
@@ -19,19 +16,12 @@ public class Enemy : Character, IStunable {
 	public float dmgTimer = 0f;
 	public bool aggro = false;
 
-	private EnemySight enemySight;
+	// private EnemySight enemySight;
+
 
 	protected override void Awake() {
+		base.Awake();
 		opposition = Type.GetType ("Player");
-		BDS = new BuffDebuffSystem(this);
-		stats = new Stats(this.GetComponent<MonoBehaviour>());
-		animator = GetComponent<Animator>();
-		facing = Vector3.forward;
-		isDead = false;
-		gear.equipGear(this, opposition);
-		inventory.equipItems(this);
-		freeAnim = true;
-		setInitValues();
 	}
 
 	// Use this for initialization
@@ -48,25 +38,24 @@ public class Enemy : Character, IStunable {
 		stats.armor = 0;
 		stats.strength = 10;
 		stats.coordination=0;
-		stats.speed=5;
+		stats.speed=4;
 		stats.luck=0;
-		inGrey = false;
-		greyDamage = 0;
 		testDmg = 0;
 		testable = true;
 		setAnimHash ();
+	}
+
+	protected virtual void initStates() {
 	}
 	
 	// Update is called once per frame
 	protected override void Update () {
 		if(!isDead) {
-				
+
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-			actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
-				
-			if (!isGrounded) {
-				falling();
-			}
+			animSteHash = animSteInfo.nameHash;
+			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
+			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 				
 
 
@@ -75,6 +64,12 @@ public class Enemy : Character, IStunable {
 			{
 				fAggro ();
 			}
+			}
+
+			if (isGrounded) {
+				movementAnimation();
+			} else {
+				falling();
 			}
 	}
 
@@ -91,10 +86,6 @@ public class Enemy : Character, IStunable {
 		}
 
 		base.damage(dmgTaken);
-	}
-
-	public override void falling(){
-
 	}
 
 	public virtual void fAggro(){
@@ -114,18 +105,6 @@ public class Enemy : Character, IStunable {
 	}
 
 
-	// The duration are essentially stun, expand on these later
-	public override void pull(float pullDuration) {
-		stun();
-	}
-	
-	public override void push(float pushDuration) {
-		stun();
-	}
 
 
-	/*//Use for other shit maybe
-	public virtual void OnTriggerEnter(Collider other) {
-		damage (1);
-	}*/
 }

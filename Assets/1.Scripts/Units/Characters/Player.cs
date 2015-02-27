@@ -101,8 +101,9 @@ public class Player : Character, IMoveable {
 
 			freeAnim = !stunned && !knockedback;
 
+
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
-			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
+			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
 			
 			if (isGrounded) {
 				actionCommands ();
@@ -188,7 +189,7 @@ public class Player : Character, IMoveable {
 	// Might separate commands into a protected function and just have a movement function
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
-		
+
 		if (actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing))) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
@@ -234,7 +235,7 @@ public class Player : Character, IMoveable {
 		if (!invincible) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 		
-			print("UGH!" + dmgTaken);
+			// print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
 			
 			if (stats.health <= 0) {
@@ -253,7 +254,7 @@ public class Player : Character, IMoveable {
 				
 				die();
 			}
-			// UI.hpBar.current = stats.health;
+			UI.hpBar.current = stats.health;
 		}
 	}
 

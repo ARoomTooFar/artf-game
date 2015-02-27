@@ -40,7 +40,7 @@ public class AggroTable
 
 	public void add(GameObject g1, int p1)
 	{
-		Debug.Log ("Adding " + g1 + " with prio " + p1);
+		// Debug.Log ("Adding " + g1 + " with prio " + p1);
 		AggroNode n = new AggroNode (g1, p1);
 
 		AggroNode runner = head;

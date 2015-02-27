@@ -18,7 +18,7 @@ public class TestSM: Enemy{
 	public Vector3 resetpos;
 	public Vector3 lastTargetPosition;
 	float aggro_radius = 500f;
-	float attack_radius = 8f;
+	float attack_radius = 8.5f;
 	float lineofsight = 15f;
 	SphereCollider awareness;
 
@@ -58,7 +58,7 @@ public class TestSM: Enemy{
 
 		//Placeholder for more advanced aggro where target may change
 
-		target = players [1];
+		target = players [0];
 		lastTargetPosition = target.transform.position;
 
 		//State machine initialization
@@ -71,22 +71,44 @@ public class TestSM: Enemy{
 	{
 		base.Update ();
 		target = aggroT.getTarget ();
-		if(target != null) Debug.Log (target.name);
-		if (target && lastSeenPosition.HasValue && !canSeePlayer (target)) {
+		if(target == null || !lastSeenPosition.HasValue){
+			testStateMachine.Update();
+			return;
+		}
+		bool iseeyou = canSeePlayer (target);
+		// if(target != null) Debug.Log (target.name);
+		if (target && lastSeenPosition.HasValue && !iseeyou) {
 			posTimer += Time.deltaTime;
-		} else if (target && canSeePlayer (target)){
+		} else if (target && iseeyou){
 			posTimer = 0f;
 		}
 		if(posTimer > aggroTimer)
 		{
 			posTimer = 0f;
 			lastSeenPosition = null;
+			alerted = false;
+			target = null;
 		}
 
-		animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-		actable = (animSteInfo.nameHash == runHash || animSteInfo.nameHash == idleHash) && freeAnim;
+		//Speed updates from stats now, fix navigation to not overshoot like it does
+		nav.speed = stats.speed;
 
 		testStateMachine.Update ();
+	}
+
+	protected override void setInitValues() {
+		base.setInitValues();
+		//Testing with base 0-10 on stats with 10 being 100/cap%
+		stats.maxHealth = 40;
+		stats.health = stats.maxHealth;
+		stats.armor = 0;
+		stats.strength = 10;
+		stats.coordination=0;
+		stats.speed=10;
+		stats.luck=0;
+		testDmg = 0;
+		//testable = true;
+		
 	}
 
 	public override void damage(int dmgTaken, Character striker) {
@@ -182,7 +204,7 @@ public class TestSM: Enemy{
 	{
 		TestSM agent = (TestSM)a;
 		float distance = agent.distanceToPlayer(agent.giveTarget());
-		return distance < 8.5f && distance > 5.5f;
+		return distance < attack_radius && distance > 5.5f;
 	}
 
 	public bool isSearching(Character a)
@@ -199,6 +221,7 @@ public class TestSM: Enemy{
 		agent.alerted = true;
 		agent.animator.SetBool ("Moving", true);
 		agent.nav.destination = agent.giveTarget ().transform.position;
+		//if (inventory.items[4].curCoolDown <= 0) inventory.items[4].useItem();
 	}
 
 	public void Attack(Character a)
@@ -210,10 +233,7 @@ public class TestSM: Enemy{
 		if (!agent.canSeePlayer (agent.giveTarget()))
 			agent.transform.LookAt (agent.giveTarget().transform.position);
 
-		if (agent.actable){
-		/*******************
-			//Should be causing damage, is only triggering attack animation
-		******************/
+		if (agent.actable && !attacking){
 			agent.gear.weapon.initAttack();
 		}
 	}
@@ -268,7 +288,6 @@ public class TestSM: Enemy{
 
 	public bool canSeePlayer(GameObject p)
 	{
-		Debug.Log ("tutturu");
 			// Check angle of forward direction vector against the vector of enemy position relative to player position
 			Vector3 direction = p.transform.position - transform.position;
 			float angle = Vector3.Angle (direction, transform.forward);
@@ -282,7 +301,7 @@ public class TestSM: Enemy{
 					if (hit.collider.gameObject == p) 
 					{
 						aggroT.add(p,1);
-					Debug.Log(p.name);
+						// Debug.Log(p.name);
 						lastSeenPosition = p.transform.position;
 						alerted = true;
 						return true;
@@ -296,14 +315,22 @@ public class TestSM: Enemy{
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if (!alerted) {
-			inPursuit = false;
-			Debug.Log("gaar");
-			return;
+		if (!alerted || !lastSeenPosition.HasValue) {
+			// Debug.Log(other.gameObject.GetComponent<Player>());
+			if(other.gameObject.GetComponent<Player>()){
+				if(canSeePlayer(other.gameObject)){
+					awareness.radius = 10f;
+					return;
+				}
+			} else{
+				inPursuit = false;
+				target = null;
+				return;
+			}
 		}
-
+		
 		awareness.radius = 10f;
-
+		
 		if(other.gameObject == target){
 			inPursuit = true;
 			lastSeenPosition = target.transform.position;
