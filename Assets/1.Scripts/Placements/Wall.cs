@@ -20,7 +20,7 @@ public class Wall : MonoBehaviour {
 		show = false;
 		stand.renderer.enabled = true;
 		renderer.enabled = false;
-		collider.enabled = false;
+		// collider.enabled = false;
 		//StopCoroutine("revWait");
 		StartCoroutine("revWait",disappear);
 		}
@@ -35,7 +35,7 @@ public class Wall : MonoBehaviour {
 		}
 		show = true;
 		stand.renderer.enabled = false;
-		collider.enabled = true;
+		// collider.enabled = true;
 		renderer.enabled = true;
 	}
 }

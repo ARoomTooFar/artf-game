@@ -79,13 +79,15 @@ public class TestSwordEnemy: Enemy {
 		} else if (target && iseeyou){
 			posTimer = 0f;
 		}
+
+		/*
 		if(posTimer > aggroTimer)
 		{
 			posTimer = 0f;
 			lastSeenPosition = null;
 			alerted = false;
 			target = null;
-		}
+		}*/
 		
 		//Speed updates from stats now, fix navigation to not overshoot like it does
 		nav.speed = stats.speed;
@@ -150,6 +152,7 @@ public class TestSwordEnemy: Enemy {
 		atkAnimation.addTransition (tSearch);
 		search.addTransition (tApproach);
 		search.addTransition (tAttack);
+		search.addTransition (tRest);
 		
 		/*
 
@@ -210,7 +213,7 @@ public class TestSwordEnemy: Enemy {
 
 	protected virtual bool isResting(Character a) {
 		TestSwordEnemy agent = (TestSwordEnemy)a;
-		return (this.lastSeenPosition == null);
+		return (this.lastSeenPosition == null && !this.alerted);
 	}
 
 	protected virtual bool isApproaching(Character a) {
@@ -253,11 +256,15 @@ public class TestSwordEnemy: Enemy {
 	}
 
 	protected virtual bool isInAtkAnimation(Character a) {
-		return this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge;
+		if (this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge) {
+			this.rigidbody.velocity = Vector3.zero;
+			return true;
+		}
+		return false;
 	}
 
 	protected virtual bool isSearching(Character a) {
-		return (this.lastSeenPosition.HasValue) && !(this.canSeePlayer (this.target) && this.alerted);
+		return this.lastSeenPosition.HasValue && !(this.canSeePlayer (this.target) && this.alerted) && !this.isInAtkAnimation(a);
 	}
 
 	//---------------------//
@@ -308,15 +315,36 @@ public class TestSwordEnemy: Enemy {
 		if (this.lastSeenPosition.HasValue) {
 			this.facing = this.lastSeenPosition.Value - this.transform.position;
 			this.facing.y = 0.0f;
+			StartCoroutine(randomSearch(this.lastSeenPosition.Value));
 			this.lastSeenPosition = null;
-		} else {
-			this.facing  = new Vector3(Random.value, 0.0f, Random.value);
-			this.facing.Normalize();
-			this.rigidbody.velocity = (this.facing.normalized * stats.speed * stats.spdManip.speedPercent)/2;
 		}
 	}
 
 	//------------------//
+
+
+	//-----------------------------//
+	// Coroutines for timing stuff //
+	//-----------------------------//
+	
+	protected virtual IEnumerator randomSearch(Vector3 lsp) {
+		while (!this.isApproaching(this) && this.distanceToVector3(lsp) > 0.5f) {
+			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			yield return null;
+		}
+		
+		
+		float resetTimer = aggroTimer;
+		while(!this.isApproaching(this) && resetTimer > 0.0f) {
+			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
+			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			yield return new WaitForSeconds (0.5f);
+			resetTimer -= 0.5f;
+		}
+		if (this.target == null) alerted = false;
+	}
+	
+	//-----------------------------//
 
 
 	//-----------------------//
@@ -344,37 +372,20 @@ public class TestSwordEnemy: Enemy {
 		return false;
 	}
 
-	protected virtual float distanceToPlayer(GameObject p) {
+	protected float distanceToPlayer(GameObject p) {
 		if (p == null) return 0.0f;
-		Vector3 distance = p.transform.position - transform.position;
+		Vector3 distance = p.transform.position - this.transform.position;
+		return distance.sqrMagnitude;
+	}
+
+	protected float distanceToVector3(Vector3 position) {
+		Vector3 distance = position - this.transform.position;
 		return distance.sqrMagnitude;
 	}
 
 	//-----------------//
 
-	//Public variables to tweak in inspector
-
 	/*
-	public float patrolSpeed = 2f;
-	public float approachSpeed = 5f;
-	public float reactionTime = 5f;			// Time buffer between player sighting and giving chase
-	public float patrolWaitTime = 1f;		// Time wait when reaching the patrol way point
-	
-	public AggroRange awareness;
-
-	
-	
-	public bool playerInSight = false;
-	
-	private StateMachine testStateMachine;*/
-
-	/*
-	
-	public bool Alerted(){
-		return alerted;
-	}
-
-	
 	public bool isRetreating(Character a)
 	{
 		TestSwordEnemy agent = (TestSwordEnemy)a;
@@ -392,25 +403,6 @@ public class TestSwordEnemy: Enemy {
 		agent.animator.SetBool ("Moving", true);
 		agent.nav.speed = 5;
 		agent.nav.destination = agent.retreatPos;
-	}
+	}*/
 
-
-	public override void damage(int dmgTaken, Character striker) {
-		base.damage(dmgTaken, striker);
-		aggroT.add (striker.gameObject, dmgTaken);
-	}
-
-	
-
-	
-	public Vector3? giveLastSeenPos()
-	{
-		return lastSeenPosition;
-	}
-	
-	public GameObject giveTarget()
-	{
-		return target;
-	}
-	*/
 }
