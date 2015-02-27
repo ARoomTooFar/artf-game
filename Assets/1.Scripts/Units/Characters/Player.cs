@@ -15,7 +15,7 @@ public class Controls {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : Character, IMoveable {
+public class Player : Character, IMoveable, IHealable<int>{
 	public bool inGrey;
 	public int testDmg;
 	public int greyDamage;
@@ -122,15 +122,15 @@ public class Player : Character, IMoveable {
 	
 	public override void actionCommands() {
 		// Invokes an action/animation
-		/*if(Input.GetKey("space")&&testable){
+		if(Input.GetKey("space")&&testable){
 				if(!stats.isDead){
 				damage(testDmg);
 				testable = false;
-				}else{
+				}/*else{
 					rez();
 					testable=false;
-				}
-			}*/
+				}*/
+			}
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack)) {
 				if(currDoor!=null){
@@ -249,7 +249,7 @@ public class Player : Character, IMoveable {
 		if (!invincible) {
 			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
-
+			UI.greyBar.current = greyDamage+stats.health;
 			if (stats.health <= 0) {
 				
 				die();
@@ -268,13 +268,28 @@ public class Player : Character, IMoveable {
 		}
 	}
 	
-	public override void heal(int healTaken){
-		base.heal(healTaken);
+	public virtual void heal(int healTaken){
+		if(stats.health < stats.maxHealth){
+			stats.health+=healTaken;
+			if(stats.health > stats.maxHealth){
+				stats.health = stats.maxHealth;
+			}
+		}//prior heal base
 		UI.hpBar.current = stats.health;
+		if(greyDamage > 0){
+			greyDamage--;
+			UI.greyBar.current = stats.health + greyDamage;
+		}
 	}
 	
-	public override void rez(){
-		base.rez();
+	public virtual void rez(){
+		if(stats.isDead){
+			stats.isDead = false;
+			stats.health = stats.maxHealth/(2+2*stats.rezCount);
+			stats.rezCount++;
+		}else{
+			heal(stats.maxHealth/(2+2*stats.rezCount));
+		}//if and else are the 'base' rez from prior
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		foreach (Renderer r in rs) {
 			if(renderer.gameObject.tag != "Item")
@@ -299,13 +314,12 @@ public class Player : Character, IMoveable {
 			inGrey = true;
 			return 0;
 		}		*/
-		if(damage > (stats.maxHealth/5)){
+		if((damage > (stats.maxHealth/5)) && !inGrey){
 			//print("Got Here"+(stats.maxHealth/20)+":"+damage);
 			int tempDmg = greyDamage;
 			if(inGrey){
 				greyDamage = damage - stats.maxHealth/5;
-				//print("Grey!:"+tempDmg);
-				//inGrey = true;
+				print("Grey!:"+tempDmg);
 				StopCoroutine("RegenWait");
 				if(inGrey &&!stats.isDead){
 					StartCoroutine("RegenWait");
@@ -324,10 +338,12 @@ public class Player : Character, IMoveable {
 				return damage;
 			}
 		}
-		if(inGrey){
+		else if(inGrey && !(damage > (stats.maxHealth/5))){
 			inGrey = false;
+			int tempDmg = greyDamage;
+			greyDamage = 0;
 			//print("True!WGBT:"+(damage + greyDamage));
-			return damage + greyDamage;
+			return damage + tempDmg;
 		}
 		else{
 			inGrey = false;
@@ -348,6 +364,9 @@ public class Player : Character, IMoveable {
 			greyDamage--;
 			UI.hpBar.current = stats.health;
 			UI.greyBar.current = greyDamage+stats.health;
+			if(greyDamage == 0){
+				inGrey = false;
+			}
 			if(greyDamage > 0){
 				StartCoroutine("RegenWait");
 			}
