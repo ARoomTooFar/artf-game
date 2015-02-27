@@ -35,7 +35,6 @@ public class Pistol : RangedWeapons {
 	}
 	
 	public override void initAttack() {
-		print ("attacks");
 		base.initAttack();
 	}
 

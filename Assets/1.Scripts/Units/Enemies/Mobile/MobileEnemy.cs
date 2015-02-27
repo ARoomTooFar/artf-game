@@ -50,6 +50,8 @@ public class MobileEnemy : NewEnemy {
 		State atkAnimation = new State ("attackAnimation");
 		State search = new State ("search");
 		State retreat = new State ("retreat");
+		State spacing = new State ("space");
+		State far = new State ("far");
 		
 		
 		// Add all the states to the state machine
@@ -59,6 +61,8 @@ public class MobileEnemy : NewEnemy {
 		sM.states.Add (atkAnimation.id, atkAnimation);
 		sM.states.Add (search.id, search);
 		sM.states.Add (retreat.id, retreat);
+		sM.states.Add (spacing.id, spacing);
+		sM.states.Add (far.id, far);
 		
 		
 		// Set initial state for the State Machine of this unit
@@ -72,6 +76,8 @@ public class MobileEnemy : NewEnemy {
 		Transition tAtkAnimation = new Transition(atkAnimation);
 		Transition tSearch = new Transition(search);
 		Transition tRetreat = new Transition (retreat);
+		Transition tSpace = new Transition (spacing);
+		Transition tFar = new Transition (far);
 		
 		
 		// Set conditions for the transitions
@@ -81,6 +87,8 @@ public class MobileEnemy : NewEnemy {
 		tAtkAnimation.addCondition (isInAtkAnimation, this);
 		tSearch.addCondition (isSearching, this);
 		tRetreat.addCondition (isRetreating, this);
+		tSpace.addCondition (isCreatingSpace, this);
+		tFar.addCondition (isFar, this);
 		
 		
 		// Set actions for the states
@@ -90,21 +98,30 @@ public class MobileEnemy : NewEnemy {
 		atkAnimation.addAction (AtkAnimation, this);
 		search.addAction (Search, this);
 		retreat.addAction (Retreat, this);
+		spacing.addAction (Spacing, this);
+		far.addAction (Far, this);
 		
 		
 		// Set the transitions for the states
 		rest.addTransition (tApproach);
 		approach.addTransition (tAttack);
 		approach.addTransition (tSearch);
+		approach.addTransition (tSpace);
 		attack.addTransition (tAtkAnimation);
 		atkAnimation.addTransition (tApproach);
 		atkAnimation.addTransition (tAttack);
 		atkAnimation.addTransition (tSearch);
+		atkAnimation.addTransition (tSpace);
 		search.addTransition (tApproach);
 		search.addTransition (tAttack);
 		search.addTransition (tRetreat);
+		search.addTransition (tSpace);
 		retreat.addTransition (tRest);
 		retreat.addTransition (tApproach);
+		spacing.addTransition (tFar);
+		far.addTransition (tApproach);
+		far.addTransition (tAttack);
+		far.addTransition (tSearch);
 	}
 	
 	//----------------------//
@@ -149,7 +166,7 @@ public class MobileEnemy : NewEnemy {
 	protected virtual bool isAttacking(Character a) {
 		if (this.target != null) {
 			float distance = this.distanceToPlayer(this.target);
-			return distance < this.maxAtkRadius && distance >= this.minAtkRadius;
+			return distance < this.maxAtkRadius && distance >= this.minAtkRadius && this.canSeePlayer(this.target);
 		}
 		return false;
 	}
@@ -169,6 +186,22 @@ public class MobileEnemy : NewEnemy {
 	
 	protected virtual bool isRetreating(Character a) {
 		return this.target == null && !this.alerted;
+	}
+
+	protected virtual bool isCreatingSpace(Character a) {
+		if (this.target != null && !this.isInAtkAnimation(a)) {
+			float distance = this.distanceToPlayer(this.target);
+			return distance < this.minAtkRadius && this.canSeePlayer(this.target);
+		}
+		return false;
+	}
+
+	protected virtual bool isFar (Character a) {
+		if (this.target != null) {
+			float distance = this.distanceToPlayer(this.target);
+			return distance > this.minAtkRadius;
+		}
+		return false;
 	}
 	
 	//---------------------//
@@ -209,10 +242,20 @@ public class MobileEnemy : NewEnemy {
 	}
 	
 	//Improve retreat AI
-	public void Retreat(Character a) {
+	protected virtual void Retreat(Character a) {
 		// agent.nav.destination = agent.retreatPos;
 		this.facing = this.resetpos - this.transform.position;
 		StartCoroutine(moveToPosition(this.resetpos));
+	}
+
+	protected virtual void Spacing(Character a) {
+		this.facing = (this.target.transform.position - this.transform.position) * -1;
+		this.facing.y = 0.0f;
+		this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+	}
+
+	protected virtual void Far (Character a) {
+		this.facing = this.facing * -1;
 	}
 	
 	//------------------//
