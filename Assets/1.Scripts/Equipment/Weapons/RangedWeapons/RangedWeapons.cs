@@ -7,7 +7,7 @@ using System.Collections;
 public class RangedWeapons : Weapons {
 
 	public GameObject projectile;
-
+    //public 
 	//for inaccuracy
 	protected Quaternion spray;
 	protected float variance;

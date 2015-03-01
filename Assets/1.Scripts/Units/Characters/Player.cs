@@ -268,6 +268,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 		}
 	}
 	
+    //---------------------------------//
+	
+	//---------------------------------//
+	// Heal Interface Implementation //
+	//---------------------------------//
 	public virtual void heal(int healTaken){
 		if(stats.health < stats.maxHealth){
 			stats.health+=healTaken;

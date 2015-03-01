@@ -6,7 +6,6 @@ public class HealRadius : MonoBehaviour {
 	public float baseSize;
 	public bool used;
 	private Healing buff;
-	//public Player
 	
 	void Start () {
 		decSpeed = .0025f;
@@ -15,10 +14,10 @@ public class HealRadius : MonoBehaviour {
 		//StartCoroutine("pulse",pulseTime);
 	}
 	void Awake(){
-		setInitValues();
+		setInitValues(4);
 	}
-	protected virtual void setInitValues(){
-		buff = new Healing(2);
+	protected virtual void setInitValues(int num){
+		buff = new Healing(num);
 	}
 	// Update is called once per frame
 	void Update () {
@@ -51,12 +50,14 @@ public class HealRadius : MonoBehaviour {
 		}
 		Character ally = other.GetComponent<Character>();
 		if (ally != null) {
+			decSpeed = decSpeed*2;
 			ally.BDS.addBuffDebuff(buff, this.gameObject);
 		}
 	}
 	void OnTriggerExit (Collider other) {
 		Character ally = other.GetComponent<Character>();
 		if (ally != null) {
+			decSpeed = decSpeed/2;
 			ally.BDS.rmvBuffDebuff(buff, this.gameObject);
 		}
 	}
