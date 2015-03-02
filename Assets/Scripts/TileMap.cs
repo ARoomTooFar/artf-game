@@ -12,19 +12,26 @@ public class TileMap : MonoBehaviour {
 	public int grid_z;
 
 	public float tileSize = 1.0f;
-	
-	// booleans for housekeeping
 
-	// Use this for initialization
+	Camera UICamera;
+
 	void Start () {
-		grid_x = 60;
-		grid_z = 60;
+		UICamera = GameObject.Find ("UICamera").camera;
+
+		grid_x = 20;
+		grid_z = 20;
 		buildMesh();
 	}
-
-	// Update is called once per frame
+	
 	void Update () {
 
+		//make tileMap object move around with camera, where
+		//camera is dead center of it
+		Vector3 camPos = UICamera.transform.position;
+		camPos.y = 0f;
+		camPos.x -= (grid_x / 2) * transform.localScale.x;
+		camPos.z -= (grid_z / 2) * transform.localScale.z;
+		transform.position = camPos;
 	}
 
 	// 

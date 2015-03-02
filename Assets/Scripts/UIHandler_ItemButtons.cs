@@ -13,6 +13,8 @@ public class UIHandler_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragH
 	GameObject draggedImageAnchor;
 	string itemToPlace;
 	Material matToMakeInvisible;
+	
+	string connectedPrefab = "";
 
 	
 	void Start () {
@@ -25,8 +27,15 @@ public class UIHandler_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragH
 		p.material = matToMakeInvisible;
 	}
 
-	void Update () {
-	
+	public void setConnectedPrefab(string s){
+		connectedPrefab = s;
+		Debug.Log (connectedPrefab);
+	}
+
+	public void setButtonImage(string icon){
+		Image im = this.GetComponent("Image") as Image;
+		Sprite sp = Resources.Load <Sprite>("IconsUI/" + icon);
+		im.sprite = sp;
 	}
 
 	public void OnBeginDrag (PointerEventData data)
@@ -47,9 +56,10 @@ public class UIHandler_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragH
 		p.sprite = thisImage.sprite;
 		p.material = matToMakeInvisible;
 
-		string g = "Prefabs/" + this.transform.gameObject.name;
-//		mouseControl.setSelectedItem (g);
-		input_tileMap.setSelectedItem(g);
+
+		string prefabLocation = "Prefabs/" + connectedPrefab;
+		input_tileMap.setSelectedItem(prefabLocation);
+
 
 		//make sure image anchor is way off screen, so it doesn't interfere
 		//with dragging of objects

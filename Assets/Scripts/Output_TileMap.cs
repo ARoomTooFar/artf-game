@@ -19,7 +19,7 @@ public class Output_TileMap : MonoBehaviour
 	Transform itemObjects;
 	TileMap tileMap;
 	static ItemClass itemClass = new ItemClass ();
-	GameObject groundGrid;
+//	GameObject groundGrid;
 
 	Dictionary<Vector3, List<GameObject>> wallDic;
 	
@@ -33,7 +33,7 @@ public class Output_TileMap : MonoBehaviour
 		tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 //		input_tileMap = this.gameObject.GetComponent ("Input_TileMap") as Input_TileMap;
-		groundGrid = GameObject.Find ("Ground");
+//		groundGrid = GameObject.Find ("Ground");
 	}
 	
 	void Update ()
@@ -45,12 +45,12 @@ public class Output_TileMap : MonoBehaviour
 	{
 		float gridz = tileMap.grid_z * 1.0f;
 		float gridx = tileMap.grid_x * 1.0f;
-		groundGrid.transform.localScale = new Vector3 (gridx, 0.03f, gridz);
-		groundGrid.transform.position = new Vector3 (gridx / 2f, 0f, gridz / 2f);
+//		groundGrid.transform.localScale = new Vector3 (gridx, 0.03f, gridz);
+//		groundGrid.transform.position = new Vector3 (gridx / 2f, 0f, gridz / 2f);
 		
 		//set the tiling of the grid texture to match the amount of tiles.
 		//set by the tile map
-		groundGrid.renderer.material.mainTextureScale = new Vector2 (tileMap.grid_x, tileMap.grid_z);
+//		groundGrid.renderer.material.mainTextureScale = new Vector2 (tileMap.grid_x, tileMap.grid_z);
 	}
 	
 	public GameObject instantiateItemObject (string name, Vector3 position, Vector3 rotation)
@@ -58,7 +58,7 @@ public class Output_TileMap : MonoBehaviour
 		position.x = Mathf.RoundToInt (position.x / tileMap.tileSize);
 		position.z = Mathf.RoundToInt (position.z / tileMap.tileSize);
 		
-		//		Debug.Log (name + " at " + position);
+//		Debug.Log (name + " at " + position);
 		GameObject temp = Instantiate (Resources.Load (name), position, Quaternion.Euler (rotation)) as GameObject;
 		
 		//attempt at loading prefab with its default position. doesn't work.
@@ -92,8 +92,8 @@ public class Output_TileMap : MonoBehaviour
 		
 		foreach (Vector3 pos in st) {
 			Vector3 rot = new Vector3 (0f, 0f, 0f);
-			string floortile = "Prefabs/floortile";
-			string walltile = "Prefabs/walltile";
+			string floortile = "Prefabs/Rooms/floortile";
+			string walltile = "Prefabs/Rooms/walltile";
 			
 			//if we're on an edge of the selected box
 			if ((pos.x == firstCornerX || pos.x == secondCornerX
@@ -104,6 +104,9 @@ public class Output_TileMap : MonoBehaviour
 					//instantiate a wall tile
 
 					GameObject newWallTile = instantiateItemObject (walltile, pos, rot);
+
+					//for video demo only:
+					instantiateItemObject (floortile, pos, rot);
 
 					//if on first corner
 //					if (pos.x == firstCornerX && pos.z == firstCornerZ){
@@ -133,25 +136,25 @@ public class Output_TileMap : MonoBehaviour
 			} else if (!itemClass.itemOnPlace (floortile, pos) && !itemClass.itemOnPlace(walltile, pos)) {
 				
 				//if there's a wall tile there
-//				if (itemClass.itemOnPlace (walltile, pos)) {
-//					
-//					//find item in itemList and remove it (the data entry for it)
-//					for (int i = 0; i < itemClass.getItemList().Count; i++) {
-//						if (itemClass.getItemList () [i].x == pos.x
-//						    && itemClass.getItemList () [i].z == pos.z
-//						    && itemClass.getItemList () [i].y == pos.y) {
-//							string s = itemClass.getItemList () [i].item;
-//							itemClass.getItemList ().Remove (itemClass.getItemList () [i]);
-//							
-//							//find list in itemObject list and remove it (the prefab for it)
-//							foreach (Transform child in itemObjects) {
-//								if (String.Equals (child.transform.name, s)) {
-//									GameObject.Destroy (child.gameObject);
-//								}
-//							}
-//						}
-//					}
-//				}
+				if (itemClass.itemOnPlace (walltile, pos)) {
+					
+					//find item in itemList and remove it (the data entry for it)
+					for (int i = 0; i < itemClass.getItemList().Count; i++) {
+						if (itemClass.getItemList () [i].x == pos.x
+						    && itemClass.getItemList () [i].z == pos.z
+						    && itemClass.getItemList () [i].y == pos.y) {
+							string s = itemClass.getItemList () [i].item;
+							itemClass.getItemList ().Remove (itemClass.getItemList () [i]);
+							
+							//find list in itemObject list and remove it (the prefab for it)
+							foreach (Transform child in itemObjects) {
+								if (String.Equals (child.transform.name, s)) {
+									GameObject.Destroy (child.gameObject);
+								}
+							}
+						}
+					}
+				}
 				instantiateItemObject (floortile, pos, rot);
 			}
 		}
