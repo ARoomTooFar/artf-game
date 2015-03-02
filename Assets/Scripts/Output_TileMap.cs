@@ -19,7 +19,7 @@ public class Output_TileMap : MonoBehaviour
 	Transform itemObjects;
 	TileMap tileMap;
 	static ItemClass itemClass = new ItemClass ();
-	GameObject groundGrid;
+//	GameObject groundGrid;
 
 	Dictionary<Vector3, List<GameObject>> wallDic;
 	
@@ -33,7 +33,7 @@ public class Output_TileMap : MonoBehaviour
 		tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 //		input_tileMap = this.gameObject.GetComponent ("Input_TileMap") as Input_TileMap;
-		groundGrid = GameObject.Find ("Ground");
+//		groundGrid = GameObject.Find ("Ground");
 	}
 	
 	void Update ()
@@ -45,12 +45,12 @@ public class Output_TileMap : MonoBehaviour
 	{
 		float gridz = tileMap.grid_z * 1.0f;
 		float gridx = tileMap.grid_x * 1.0f;
-		groundGrid.transform.localScale = new Vector3 (gridx, 0.03f, gridz);
-		groundGrid.transform.position = new Vector3 (gridx / 2f, 0f, gridz / 2f);
+//		groundGrid.transform.localScale = new Vector3 (gridx, 0.03f, gridz);
+//		groundGrid.transform.position = new Vector3 (gridx / 2f, 0f, gridz / 2f);
 		
 		//set the tiling of the grid texture to match the amount of tiles.
 		//set by the tile map
-		groundGrid.renderer.material.mainTextureScale = new Vector2 (tileMap.grid_x, tileMap.grid_z);
+//		groundGrid.renderer.material.mainTextureScale = new Vector2 (tileMap.grid_x, tileMap.grid_z);
 	}
 	
 	public GameObject instantiateItemObject (string name, Vector3 position, Vector3 rotation)

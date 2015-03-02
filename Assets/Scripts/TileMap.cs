@@ -18,8 +18,8 @@ public class TileMap : MonoBehaviour {
 	void Start () {
 		UICamera = GameObject.Find ("UICamera").camera;
 
-		grid_x = 100;
-		grid_z = 100;
+		grid_x = 20;
+		grid_z = 20;
 		buildMesh();
 	}
 	
