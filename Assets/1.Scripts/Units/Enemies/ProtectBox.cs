@@ -4,12 +4,13 @@ using System.Collections.Generic;
 
 public class ProtectBox
 {
-	//Corner x pos, corner x neg, corner y pos, corner y neg
+	public float range = 1.5f;
+
 	private Vector3 targetV;
 
-	public ProtectBox(GameObject ptarget)
+	public ProtectBox(Vector3 target)
 	{
-		targetV = ptarget.transform.position;
+		targetV = target;
 
 	}
 
@@ -36,16 +37,16 @@ public class ProtectBox
 		//First random is horizontal
 		//Second random is vertical
 
-		float xmin = targetV.x + ((firstR) * (5.0f));
-		float xmax = targetV.x + ((firstR) * (10.0f));
+		float xmin = targetV.x + ((firstR) * (range/2));
+		float xmax = targetV.x + ((firstR) * (range));
 
-		float zmin = targetV.z + ((secondR) * (5.0f));
-		float zmax = targetV.z + ((secondR) * (10.0f));
+		float zmin = targetV.z + ((secondR) * (range/2));
+		float zmax = targetV.z + ((secondR) * (range));
 
 		float x = Random.Range (xmin, xmax);
 		float z = Random.Range (zmin, zmax);
 
-		Vector3 targetPos = new Vector3 (x, targetV.y, z);
+		Vector3 targetPos = new Vector3 (x, 1.605f, z);
 		return targetPos;
 	}
 
