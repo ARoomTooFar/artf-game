@@ -39,7 +39,13 @@ public class gamestate : MonoBehaviour {
 	private Loadgear gear;
 	
 	private string testUserName;
-	
+
+    private Farts serv;
+
+    void Start() {
+        serv = gameObject.AddComponent<Farts>();
+    }
+
 	//----------------------------------
 	//gameState()
 	//----------------------------------
@@ -125,6 +131,7 @@ public class gamestate : MonoBehaviour {
 	{
 		gamestate.instance.usernames [plrnum - 1] = un;
 		print ("Added " + un + " to the username list");
+        print(gamestate.instance.usernames[plrnum - 1]);
 	}
 
 	//--------------------------------
@@ -346,23 +353,14 @@ public class gamestate : MonoBehaviour {
 	//--------------------------------
 	public bool validateUNPW(int plrnum)
 	{
-		//THIS IS FOR TESTING and makes sure there are things in the list of usernames.
-		for(int i = 0; i < 4;i++)
-		{
-			usernames.Add("testUsername");
-			passwords.Add("testPassword");
-		}
-		//^is for testing
-
 		string playerData; //the login function on the web side returns the player data as a string.
-		string un = usernames [plrnum];
-		string pw = passwords [plrnum];
+		string un = gamestate.instance.usernames [plrnum - 1];
+        string pw = gamestate.instance.passwords [plrnum - 1];
 
 		bool valid;
 
 		//IF this is null the validation was invalid, if sucessful this will be the playerdata.
-		//playerData = Webvalidation(un,pw); 
-		playerData = "hoopla";
+		playerData = serv.login(un,pw); 
 
 		if(playerData == "")
 		{
