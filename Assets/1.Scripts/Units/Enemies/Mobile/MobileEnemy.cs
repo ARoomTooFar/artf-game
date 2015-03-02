@@ -168,7 +168,7 @@ public class MobileEnemy : NewEnemy {
 	}
 	
 	protected virtual bool isAttacking(Character a) {
-		if (this.target != null) {
+		if (this.target != null && !this.isInAtkAnimation(a)) {
 			float distance = this.distanceToPlayer(this.target);
 			return distance < this.maxAtkRadius && distance >= this.minAtkRadius && this.canSeePlayer(this.target);
 		}
@@ -217,7 +217,6 @@ public class MobileEnemy : NewEnemy {
 	
 	protected virtual void Rest(Character a) {
 		// this.resetpos = this.transform.position;
-		
 
 		if (!this.isApproaching(this) && tempTimer > 0.0f) {
 			tempTimer -= Time.deltaTime;
@@ -239,12 +238,16 @@ public class MobileEnemy : NewEnemy {
 	
 	protected virtual void Attack(Character a) {
 		if (this.actable && !attacking){
+			this.facing = this.target.transform.position - this.transform.position;
+			this.facing.y = 0.0f;
+			transform.localRotation = Quaternion.LookRotation(facing);
 			this.gear.weapon.initAttack();
 		}
 	}
 	
 	// We can have some logic here, but it's mostly so our unit is still during and attack animation
 	protected virtual void AtkAnimation(Character a) {
+		this.rigidbody.velocity = Vector3.zero;
 	}
 	
 	protected virtual void Search(Character a) {
@@ -283,7 +286,7 @@ public class MobileEnemy : NewEnemy {
 	//-----------------------------//
 	
 	protected IEnumerator moveToPosition(Vector3 position) {
-		while (!this.isApproaching(this) && this.distanceToVector3(position) > 0.5f) {
+		while (!this.isApproaching(this) && this.distanceToVector3(position) > 0.5f && !this.isInAtkAnimation(this)) {
 			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			yield return null;
 		}
@@ -291,7 +294,7 @@ public class MobileEnemy : NewEnemy {
 
 	protected IEnumerator randomSearch() {
 		float resetTimer = aggroTimer;
-		while(!this.isApproaching(this) && resetTimer > 0.0f) {
+		while(!this.isApproaching(this) && resetTimer > 0.0f && !this.isInAtkAnimation(this)) {
 			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
 			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			yield return new WaitForSeconds (0.5f);
@@ -322,7 +325,30 @@ public class MobileEnemy : NewEnemy {
 	//-----------------------//
 	// Calculation Functions //
 	//-----------------------//
-	
+
+	protected override bool canSeePlayer(GameObject p) {
+		Vector3 direction = p.transform.position - transform.position;
+		float angle = Vector3.Angle(direction, this.facing);
+		
+
+		if (angle < fov) {
+			RaycastHit hit;
+
+			if (rigidbody.SweepTest(direction, out hit, this.distanceToVector3(p.collider.transform.position))) {
+				if (hit.collider.gameObject == p) {
+					aggroT.add(p,1);
+					lastSeenPosition = p.transform.position;
+					alerted = true;
+					return true;
+				}
+			}
+		}
+		
+		return false;
+
+
+	}
+
 	protected float distanceToVector3(Vector3 position) {
 		Vector3 distance = position - this.transform.position;
 		return distance.sqrMagnitude;
