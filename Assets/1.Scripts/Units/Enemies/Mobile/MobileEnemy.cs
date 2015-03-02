@@ -101,6 +101,7 @@ public class MobileEnemy : NewEnemy {
 		attack.addAction (Attack, this);
 		atkAnimation.addAction (AtkAnimation, this);
 		search.addAction (Search, this);
+		search.addExitAction (StopSearch);
 		retreat.addAction (Retreat, this);
 		spacing.addAction (Spacing, this);
 		far.addAction (Far, this);
@@ -255,9 +256,14 @@ public class MobileEnemy : NewEnemy {
 		if (this.lastSeenPosition.HasValue) {
 			this.facing = this.lastSeenPosition.Value - this.transform.position;
 			this.facing.y = 0.0f;
-			StartCoroutine(searchForEnemy(this.lastSeenPosition.Value));
+			// StartCoroutine(searchForEnemy(this.lastSeenPosition.Value));
+			StartCoroutine("searchForEnemy", this.lastSeenPosition.Value);
 			this.lastSeenPosition = null;
 		}
+	}
+
+	protected virtual void StopSearch(Character a) {
+		this.StopCoroutine("searchForEnemy");
 	}
 	
 	//Improve retreat AI
@@ -286,7 +292,7 @@ public class MobileEnemy : NewEnemy {
 	//-----------------------------//
 	
 	protected IEnumerator moveToPosition(Vector3 position) {
-		while (!this.isApproaching(this) && this.distanceToVector3(position) > 0.5f && !this.isInAtkAnimation(this)) {
+		while (!this.isApproaching(this) && this.distanceToVector3(position) > 0.1f && !this.isInAtkAnimation(this) && this.target == null) {
 			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			yield return null;
 		}
@@ -294,7 +300,7 @@ public class MobileEnemy : NewEnemy {
 
 	protected IEnumerator randomSearch() {
 		float resetTimer = aggroTimer;
-		while(!this.isApproaching(this) && resetTimer > 0.0f && !this.isInAtkAnimation(this)) {
+		while(!this.isApproaching(this) && resetTimer > 0.0f && !this.isInAtkAnimation(this) && this.target == null) {
 			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
 			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			yield return new WaitForSeconds (0.5f);
@@ -308,14 +314,6 @@ public class MobileEnemy : NewEnemy {
 		float resetTimer = aggroTimer;
 
 		yield return StartCoroutine(randomSearch());
-
-		/*
-		while(!this.isApproaching(this) && resetTimer > 0.0f) {
-			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
-			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
-			yield return new WaitForSeconds (0.5f);
-			resetTimer -= 0.5f;
-		}*/
 		if (this.target == null) alerted = false;
 	}
 	
