@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Prop : Wall, IDamageable<int, Character> {
 	public GameObject expDeath;
+	public int health;
 	// Use this for initialization
 	void Start () {
 	
@@ -13,17 +14,7 @@ public class Prop : Wall, IDamageable<int, Character> {
 	
 	}
 	public virtual void damage(int dmgTaken, Character striker) {
-		/*if (!invincible) {
-			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
-		
-			// print("UGH!" + dmgTaken);
-			stats.health -= greyTest(dmgTaken);
-			
-			if (stats.health <= 0) {
-				die();
-			}
-			UI.hpBar.current = stats.health;
-		}*/
+		//if(striker.ge
 	}
 	
 	public virtual void damage(int dmgTaken) {

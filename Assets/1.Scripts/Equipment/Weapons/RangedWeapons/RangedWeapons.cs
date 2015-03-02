@@ -7,7 +7,7 @@ using System.Collections;
 public class RangedWeapons : Weapons {
 
 	public GameObject projectile;
-    //public 
+    public BuffsDebuffs debuff;
 	//for inaccuracy
 	protected Quaternion spray;
 	protected float variance;
@@ -87,17 +87,24 @@ public class RangedWeapons : Weapons {
 			ammoBar.current = timer;
 			yield return 0;
 		}
-	}
-	protected virtual IEnumerator loadAmmo(){
-		if(ammoBar != null){
-			yield return StartCoroutine(loadWait(loadSpeed));
-			if(reload){
+		if(reload){
 				currAmmo = maxAmmo;
 				ammoBar.onState = 1;
 				ammoBar.max = maxAmmo;
 				ammoBar.current = currAmmo;
 				reload = false;
-			}
+		}
+	}
+	protected virtual IEnumerator loadAmmo(){
+		if(ammoBar != null){
+			yield return StartCoroutine(loadWait(loadSpeed));
+			/*if(reload){
+				currAmmo = maxAmmo;
+				ammoBar.onState = 1;
+				ammoBar.max = maxAmmo;
+				ammoBar.current = currAmmo;
+				reload = false;
+			}*/
 		}
         else{
 			yield return StartCoroutine(Wait(loadSpeed));
@@ -120,6 +127,6 @@ public class RangedWeapons : Weapons {
 
 	protected void fireProjectile() {
 		Projectile newBullet = ((GameObject)Instantiate(projectile, user.transform.position, spray)).GetComponent<Projectile>();
-		newBullet.setInitValues(user, opposition, particles.startSpeed);
+		newBullet.setInitValues(user, opposition, particles.startSpeed, false, null);
 	}
 }

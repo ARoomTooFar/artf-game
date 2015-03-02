@@ -307,10 +307,9 @@ public class Player : Character, IMoveable, IHealable<int>{
 
 	// Grey Health functions
 	public virtual int greyTest(int damage){
-		/*
 		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){
 			stats.health = 0;
-			stats.isDead = true;
+			die();
 			return 0;
 		}
 		if(((greyDamage + damage) >= stats.maxHealth) && stats.health == stats.maxHealth){
@@ -318,7 +317,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 			greyDamage = stats.maxHealth - 1;
 			inGrey = true;
 			return 0;
-		}		*/
+		}
 		if((damage > (stats.maxHealth/5)) && !inGrey){
 			//print("Got Here"+(stats.maxHealth/20)+":"+damage);
 			int tempDmg = greyDamage;
