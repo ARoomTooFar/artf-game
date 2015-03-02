@@ -4,6 +4,12 @@ using System.Collections.Generic;
 
 
 public class FodderNewAI: MobileEnemy {
+
+	protected ProtectBox pBox;
+
+	//-------------------//
+	// Primary Functions //
+	//-------------------//
 	
 	protected override void Awake () {
 		base.Awake ();
@@ -11,6 +17,7 @@ public class FodderNewAI: MobileEnemy {
 	
 	protected override void Start() {
 		base.Start ();
+		pBox = new ProtectBox (this.transform.position);
 	}
 	
 	protected override void Update() {
@@ -27,8 +34,8 @@ public class FodderNewAI: MobileEnemy {
 		stats.speed=7;
 		stats.luck=0;
 		
-		this.minAtkRadius = 20.0f;
-		this.maxAtkRadius = 100.0f;
+		this.minAtkRadius = 0.0f;
+		this.maxAtkRadius = 5.0f;
 	}
 
 	protected override void initStates() {
@@ -75,9 +82,46 @@ public class FodderNewAI: MobileEnemy {
 		// Set the transitions for the states
 		rest.addTransition (tApproach);
 		approach.addTransition (tAttack);
+		approach.addTransition (tRest);
 		attack.addTransition (tAtkAnimation);
-		attack.addTransition (tRest);
 		atkAnimation.addTransition (tApproach);
 		atkAnimation.addTransition (tAttack);
 	}
+
+	//----------------------//
+
+	//----------------------//
+	// Transition Functions //
+	//----------------------//
+	
+	protected override bool isResting(Character a) {
+		if(aRange.inRange.Count == 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	//----------------------//
+
+	//------------------//
+	// Action Functions //
+	//------------------//
+
+	protected override void Rest(Character a) {
+		if (isGrounded) {
+			this.resetpos.y = this.transform.position.y;
+			if (this.distanceToVector3(this.resetpos) <= 0.01f){
+				this.resetpos = pBox.getProtectV();
+				this.resetpos.y = this.transform.position.y;
+			}
+			this.facing = this.resetpos - this.transform.position;
+			this.facing.y = 0.0f;
+			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		}
+			
+
+
+	}
+
 }
