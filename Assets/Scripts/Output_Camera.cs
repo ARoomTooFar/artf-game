@@ -84,48 +84,44 @@ public class Output_Camera : MonoBehaviour
 	
 	public void moveForward ()
 	{
-		//	if (isTopDown) {
-		//		baseZ += .1f; 
-		//		baseX -= .1f;
-		//	} else {
+		// if (isTopDown) {
+		// baseZ += .1f;
+		// baseX -= .1f;
+		// } else {
 		baseZ += .1f;
 		baseX -= .1f;
-		//	}
+		// }
 	}
-	
 	public void moveBackward ()
 	{
-		//	if (isTopDown) {
-		//		baseZ -= .1f;
-		//		baseX += .1f;
-		//	} else {
+		// if (isTopDown) {
+		// baseZ -= .1f;
+		// baseX += .1f;
+		// } else {
 		baseZ -= .1f;
 		baseX += .1f;
-		//	}
+		// }
 	}
-	
 	public void moveLeft ()
 	{
-		//	if (isTopDown) {
-		//		baseX -= .1f;
-		//		baseZ -= .1f;
-		//	} else {
+		// if (isTopDown) {
+		// baseX -= .1f;
+		// baseZ -= .1f;
+		// } else {
 		baseZ -= .1f;
 		baseX -= .1f;
-		//	}
+		// }
 	}
-	
 	public void moveRight ()
 	{
-		//	if (isTopDown) {
-		//		baseX += .1f;
-		//		baseZ += .1f;
-		//	} else {
-		baseZ += .1f; 
+		// if (isTopDown) {
+		// baseX += .1f;
+		// baseZ += .1f;
+		// } else {
+		baseZ += .1f;
 		baseX += .1f;
 		//}
 	}
-	
 	public void zoomCamIn ()
 	{
 		baseY += zoomSpeed;
@@ -133,7 +129,6 @@ public class Output_Camera : MonoBehaviour
 			baseY = maxY;
 		}
 	}
-	
 	public void zoomCamOut ()
 	{
 		baseY -= zoomSpeed;
@@ -141,28 +136,23 @@ public class Output_Camera : MonoBehaviour
 			baseY = minY;
 		}
 	}
-	
 	public void changeToTopDown ()
 	{
 		setCameraRotation (new Vector3 (90, -45, 0));
 		isTopDown = true;
 	}
-	
 	public void changeToPerspective ()
 	{
 		UICamera.orthographic = false;
 		OnTopCamera.orthographic = false;
 		isTopDown = false;
-		
 		setCameraRotation (new Vector3 (45, -45, 0));
 	}
-	
 	public void changetoOrthographic ()
 	{
 		UICamera.orthographic = true;
 		OnTopCamera.orthographic = true;
 		isTopDown = false;
-		
 		setCameraRotation (new Vector3 (45, -45, 0));
 	}
 }

@@ -52,7 +52,7 @@ public class Input_Camera : MonoBehaviour {
 		checkForMouseClicks();
 
 		//doesn't move cam in proper direction right now
-//		checkForKeyPresses();
+		checkForKeyPresses();
 	}
 
 	void checkForMouseScrolling(){
