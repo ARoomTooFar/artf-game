@@ -8,6 +8,7 @@ public class Farts : MonoBehaviour
     const string LVLPATH = "/levels/";
     const string GAMEACCTPATH = "/gameaccount/";
     const float cancelTime = 50000f;
+    const float timeoutTime = 60f;
 
     // Checks if returned data is valid or not. Returns true if the data is valid, false otherwise.
     public bool dataCheck(string input)
@@ -142,16 +143,17 @@ public class Farts : MonoBehaviour
         WWW www = new WWW(SERVERURI + GAMEACCTPATH + "login", form);
         StartCoroutine(httpRequest(www));
 
-        while (www.isDone == false)
+        float timeStart = Time.realtimeSinceStartup;
+        Debug.Log("timeStart: " + timeStart);
+
+        while (!www.isDone)
         {
-            if (elapsedTime >= cancelTime)
+            if (Time.realtimeSinceStartup >= timeStart + timeoutTime)
             {
                 Debug.LogError("ERROR: Request timeout");
+                Debug.Log("timeEnd: " + Time.realtimeSinceStartup);
                 return "";
             }
-
-            elapsedTime += Time.deltaTime;
-            //Debug.Log("HTTP request time elapsed: " + elapsedTime);
         }
 
         return www.text;
