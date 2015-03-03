@@ -20,8 +20,8 @@ public class Wall : MonoBehaviour {
 		show = false;
 		stand.renderer.enabled = true;
 		renderer.enabled = false;
-		// collider.enabled = false;
-		//StopCoroutine("revWait");
+		 collider.enabled = false;
+		StopCoroutine("revWait");
 		StartCoroutine("revWait",disappear);
 		}
 	}
@@ -31,11 +31,15 @@ public class Wall : MonoBehaviour {
 	private IEnumerator revWait(float duration){
 		for (float timer = 0; timer < duration; timer += Time.deltaTime){
 			//testable = true;
+			if(timer > duration -1f){
+				show = true;
+				collider.enabled = true;
+			}
 			yield return 0;
 		}
-		show = true;
+		//show = true;
 		stand.renderer.enabled = false;
-		// collider.enabled = true;
+		 //collider.enabled = true;
 		renderer.enabled = true;
 	}
 }

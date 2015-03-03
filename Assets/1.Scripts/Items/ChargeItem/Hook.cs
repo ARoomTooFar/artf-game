@@ -13,6 +13,7 @@ public class Hook : ChargeItem {
 	[Range(0.5f, 3.0f)]
 	public float stunDuration;
 	private bool hit;
+	private bool check;
 	private Vector3 facing;
 	private Character foe;
 	//private Collider collider;
@@ -67,14 +68,14 @@ public class Hook : ChargeItem {
 	private IEnumerator chargeFunc(float chgTime) {
 		rigidbody.isKinematic = false;
 		collider.enabled = true;
-		yield return StartCoroutine(chgTimeFunc(chgTime));
+		yield return StartCoroutine("chgTimeFunc",(chgTime));
 		//float tempStun = stunDuration * (hitWall ? 2 : 1);
 		/*foreach(Character ene in enemies) {
 			((IStunable<float>)ene.GetComponent(typeof(IStunable<float>))).stun(tempStun);
 		}*/
 		
-		yield return StartCoroutine(retTimeFunc(chgTime));
-		yield return StartCoroutine(chgLagTime());
+		//yield return StartCoroutine("retTimeFunc",(chgTime));
+		yield return StartCoroutine("chgLagTime");
 
 		animDone();
 	}
@@ -83,29 +84,46 @@ public class Hook : ChargeItem {
 	
 	// Timer and velocity changing thing
 	private IEnumerator chgTimeFunc(float chgTime) {
-		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
-			rigidbody.velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
-			if(foe!=null){
-				foe.transform.position = transform.position;
+		float totalTime = chgTime*2;
+		float checkTime = 0;
+		for (float timer = 0; timer <= totalTime; timer += Time.deltaTime) {
+			if(timer <= totalTime/2){
+				rigidbody.velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
+				if(foe!=null){
+					foe.transform.position = transform.position;
+				}
+			}else if(timer > totalTime/2){
+				if(foe!=null){
+					foe.transform.position = transform.position;
+				}
+				rigidbody.velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;	
+			}
+			if(check){
+			   checkTime = (totalTime/2) - timer;
+			   timer = totalTime/2;
+			   timer += checkTime;
+			   check = false;
+			   checkTime = 0;
 			}
 			//((IForcible<float>)foe.GetComponent(typeof(IForcible<float>))).push(0.1f);
 			yield return 0;
 		}
 	}
+	/*
 	private IEnumerator retTimeFunc(float chgTime) {
 		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
 
 			/*if (!hit) {
 				rigidbody.velocity = Vector3.zero;
 				yield break;
-			}*/
+			}
 			if(foe!=null){
 				foe.transform.position = transform.position;
 			}
 			rigidbody.velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 			yield return 0;
 		}
-	}
+	}*/
 	
 	private IEnumerator chgLagTime() {
 		for (float timer = 0; timer < chgLag; timer += Time.deltaTime) {
@@ -119,11 +137,14 @@ public class Hook : ChargeItem {
 			RiotShield rShield = other.GetComponent<RiotShield>();
 			if (other.tag == "Wall" || rShield && rShield.user.facing.normalized + user.facing.normalized == Vector3.zero) {
 				hit = true;
+				check = true;
+				//StopCoroutine("chgTimeFunc");
 			}
 			IForcible<Vector3,float> component = (IForcible<Vector3,float>) other.GetComponent( typeof(IForcible<Vector3,float>) );
 			foe = other.GetComponent<Character>();
 			if( component != null && foe != null) {
 				hit = true;
+				check = true;
 				collider.enabled = false;
 			}
 		}

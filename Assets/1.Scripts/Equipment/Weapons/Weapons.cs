@@ -15,6 +15,8 @@ public class WeaponStats {
 
 	public int weapType;
 	public string weapTypeName;
+	public BuffsDebuffs debuff;
+	public float buffDuration;
 
 	//This will be used to implement abilities in the spread sheet since different weapons have different effects when charged up. 
 	//For now~ Using 1 as shoot a powerful singular shot, using 2 for a line of three shots (For gun, but base case 1 is same animation more powerful damage)

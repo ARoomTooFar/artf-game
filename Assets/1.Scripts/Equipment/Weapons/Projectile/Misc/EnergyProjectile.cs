@@ -19,7 +19,7 @@ public class EnergyProjectile : MonoBehaviour {
 		
 	}
 
-	public virtual void setInitValues(Character player, Type ene, int dmg) {
+	public virtual void setInitValues(Character player, Type ene, int dmg,bool effect,BuffsDebuffs hinder) {
 		user = player;
 		opposition = ene;
 

@@ -138,6 +138,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 					currDoor = null;
 				}else{
 					animator.SetBool("Charging", true);
+					//Debug.Log(luckCheck());
 					gear.weapon.initAttack();
 				}
 			} else if(Input.GetKeyDown (controls.secItem)) {
@@ -268,6 +269,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 		}
 	}
 	
+    //---------------------------------//
+	
+	//---------------------------------//
+	// Heal Interface Implementation //
+	//---------------------------------//
 	public virtual void heal(int healTaken){
 		if(stats.health < stats.maxHealth){
 			stats.health+=healTaken;
@@ -302,10 +308,9 @@ public class Player : Character, IMoveable, IHealable<int>{
 
 	// Grey Health functions
 	public virtual int greyTest(int damage){
-		/*
 		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){
 			stats.health = 0;
-			stats.isDead = true;
+			die();
 			return 0;
 		}
 		if(((greyDamage + damage) >= stats.maxHealth) && stats.health == stats.maxHealth){
@@ -313,7 +318,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 			greyDamage = stats.maxHealth - 1;
 			inGrey = true;
 			return 0;
-		}		*/
+		}
 		if((damage > (stats.maxHealth/5)) && !inGrey){
 			//print("Got Here"+(stats.maxHealth/20)+":"+damage);
 			int tempDmg = greyDamage;
