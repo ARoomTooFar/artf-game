@@ -7,7 +7,6 @@ using System.Collections;
 public class RangedWeapons : Weapons {
 
 	public GameObject projectile;
-    public BuffsDebuffs debuff;
 	//for inaccuracy
 	protected Quaternion spray;
 	protected float variance;
@@ -27,7 +26,6 @@ public class RangedWeapons : Weapons {
 	protected override void setInitValues() {
 		base.setInitValues();
 		reload = false;
-		
 	}
 
 	public override void collideOn() {
@@ -127,6 +125,6 @@ public class RangedWeapons : Weapons {
 
 	protected void fireProjectile() {
 		Projectile newBullet = ((GameObject)Instantiate(projectile, user.transform.position, spray)).GetComponent<Projectile>();
-		newBullet.setInitValues(user, opposition, particles.startSpeed, false, null);
+		newBullet.setInitValues(user, opposition, particles.startSpeed, user.luckCheck(), stats.debuff);
 	}
 }

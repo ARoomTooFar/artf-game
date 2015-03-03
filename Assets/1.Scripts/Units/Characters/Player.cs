@@ -138,6 +138,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 					currDoor = null;
 				}else{
 					animator.SetBool("Charging", true);
+					//Debug.Log(luckCheck());
 					gear.weapon.initAttack();
 				}
 			} else if(Input.GetKeyDown (controls.secItem)) {

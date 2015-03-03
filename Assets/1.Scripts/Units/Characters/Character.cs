@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+//using System.Random;
 
 [System.Serializable]
 public class Stats{
@@ -214,6 +215,16 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	protected virtual void FixedUpdate() {
 
 	}
+	public virtual bool luckCheck(){
+		int luckCap = 10;
+		float r = UnityEngine.Random.Range(0,luckCap);
+		//Debug.Log(r);
+		if(r < stats.luck){
+			//Debug.Log("Y");
+			return true;
+		}
+		return false;
+	}
 	
 	// Update is called once per frame
 	protected virtual void Update () {
@@ -252,6 +263,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	// Constant animation updates (Main loop for characters movement/actions)
 	public virtual void animationUpdate() {
 		if (attacking) {
+			if(luckCheck()){
+			}
 			attackAnimation();
 		} else {
 			movementAnimation();
