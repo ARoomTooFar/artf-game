@@ -39,7 +39,7 @@ public class UIHandler_FileIO : MonoBehaviour
 		
 
 		// Download level example
-		WWW dlLvlReq = serv.getLvlWww("levelID");
+		WWW dlLvlReq = serv.getLvlWww("5684666375864320");
 		yield return dlLvlReq;
 		
 		// Use the downloaded level data
@@ -59,7 +59,7 @@ public class UIHandler_FileIO : MonoBehaviour
 	
 	public void saveFile ()
 	{
-		lvlUpdate = serv.updateLvl("levelID", "gameaccountID", MapData.SaveString, "draftleveldata");
+		lvlUpdate = serv.updateLvl("5684666375864320", "gameaccountID", MapData.SaveString, "draftleveldata");
 	}
 	
 
