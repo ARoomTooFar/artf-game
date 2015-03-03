@@ -71,8 +71,12 @@ public class TerrainBlock {
 		get{ return Position.toCSV() + "," + Orientation.ToString();}
 	}
 
-	public bool Pathable{
-		get{ return BlockInfo.Pathable && (Scenery == null?true:Scenery.BlockInfo.Pathable); }
+	public bool Pathable {
+		get{ return BlockInfo.Pathable && (Scenery == null ? true : Scenery.Pathable); }
+	}
+
+	public bool Walkable {
+		get { return BlockInfo.Pathable && (Scenery == null ? true : Scenery.Walkable); }
 	}
 
 	public GameObject GameObj {
@@ -91,13 +95,13 @@ public class TerrainBlock {
 		this.Orientation = dir;
 		this.Neighbors = new Dictionary<DIRECTION, TerrainBlock>();
 		this.GameObj = GameObjectResourcePool.getResource(blockID, pos, dir.toRotationVector());
-		Debug.Log(GameObj.transform.position);
+		//Debug.Log(GameObj.transform.position);
 	}
 
 	/*
 	 * Deep Copy constructor
 	 */
-	public TerrainBlock(TerrainBlock original){
+	public TerrainBlock(TerrainBlock original) {
 		this.Neighbors = new Dictionary<DIRECTION, TerrainBlock>(original.Neighbors);
 		this.Scenery = original.Scenery;
 		this.Monster = original.Monster;
@@ -287,7 +291,7 @@ public class TerrainBlock {
 	 * 
 	 * moves the block and associated scenery and monster
 	 */
-	public void move(Vector3 offset){
+	public void move(Vector3 offset) {
 		if(this.Scenery != null && this.Scenery.Position.Equals(this.Position)) {
 			this.Scenery.move(offset);
 		}
@@ -301,15 +305,15 @@ public class TerrainBlock {
 
 	}
 
-	public bool changeType(string type){
+	public bool changeType(string type) {
 		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
 		GameObj = null;
 		TerrainBlockInfo nInf = TerrainBlockInfo.get(type);
 		if(!nInf.Pathable) {
-			if(this.Monster != null){
+			if(this.Monster != null) {
 				return false;
 			}
-			if(this.Scenery != null){
+			if(this.Scenery != null) {
 				return false;
 			}
 		}
@@ -319,12 +323,12 @@ public class TerrainBlock {
 		return true;
 	}
 
-	public void rotate(bool goClockwise = true){
+	public void rotate(bool goClockwise = true) {
 		Orientation = Orientation.QuarterTurn(goClockwise);
 		GameObj.transform.eulerAngles = Orientation.toRotationVector();
 	}
 
-	public void remove(){
+	public void remove() {
 		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
 		if(Scenery != null) {
 			MapData.SceneryBlocks.remove(Scenery);

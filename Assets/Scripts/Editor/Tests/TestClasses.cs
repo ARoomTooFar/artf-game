@@ -9,7 +9,7 @@ public class MasterTest {
 		}
 
 		public List<TerrainBlock> Blocks {
-			get{ return blocks; }
+			get{ return Blocks; }
 		}
 	}
 

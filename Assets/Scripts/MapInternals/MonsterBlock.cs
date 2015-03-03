@@ -10,9 +10,8 @@ using System.Collections.Generic;
 public class MonsterBlock {
 
 	#region Properties
-	public MonsterBlockInfo BlockInfo {
-		get;
-		private set;
+	public MonsterMonoBehavior BlockInfo {
+		get { return GameObj.GetComponent<MonsterMonoBehavior>(); }
 	}
 	
 	public Vector3 Position {
@@ -39,7 +38,6 @@ public class MonsterBlock {
 	 * Constructor
 	 */
 	public MonsterBlock (string blockID, Vector3 pos, DIRECTION dir) {
-		this.BlockInfo = MonsterBlockInfo.get (blockID);
 		this.Position = pos.Round ();
 		this.Orientation = dir;
 		this.GameObj = GameObjectResourcePool.getResource(blockID, pos, dir.toRotationVector());
