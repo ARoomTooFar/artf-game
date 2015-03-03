@@ -17,8 +17,8 @@ public class Output_ItemObject : MonoBehaviour {
 	}
 	
 	void Update () {
-		this.gameObject.transform.position = position;
-		this.gameObject.transform.eulerAngles = rotation;
+		//this.gameObject.transform.position = position;
+		//this.gameObject.transform.eulerAngles = rotation;
 	}
 	
 	
@@ -60,7 +60,7 @@ public class Output_ItemObject : MonoBehaviour {
 		rotation.z = 0f;
 		rotation.y += deg;
 		
-		itemClass.modifyItemList(getName(), getPosition(), rotation);
+//		itemClass.modifyItemList(getName(), getPosition(), rotation);
 		//		Debug.Log (getRotation());
 	}
 	

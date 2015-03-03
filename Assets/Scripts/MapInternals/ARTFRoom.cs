@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public partial class ARTFRoom {
 
 	#region PrivateVariables
-	private static string defaultBlockID = "Prefabs/floortile";
+	private static string defaultBlockID = "Prefabs/Rooms/floortile";
 	#endregion PrivateVariables
 
 	#region Properties

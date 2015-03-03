@@ -62,9 +62,8 @@ public class TerrainBlock {
 		private set;
 	}
 
-	public TerrainBlockInfo BlockInfo {
-		get;
-		private set;
+	public TerrainMonoBehavior BlockInfo {
+		get { return GameObj.GetComponent<TerrainMonoBehavior>(); }
 	}
 
 	public string SaveString {
@@ -90,7 +89,6 @@ public class TerrainBlock {
 	 * Constructor
 	 */
 	public TerrainBlock(string blockID, Vector3 pos, DIRECTION dir) {
-		this.BlockInfo = TerrainBlockInfo.get(blockID);
 		this.Position = pos.Round();
 		this.Orientation = dir;
 		this.Neighbors = new Dictionary<DIRECTION, TerrainBlock>();
@@ -108,7 +106,6 @@ public class TerrainBlock {
 		this.Room = original.Room;
 		this.Position = original.Position.Copy();
 		this.Orientation = original.Orientation;
-		this.BlockInfo = original.BlockInfo;
 	}
 	#endregion Constructors
 
@@ -308,17 +305,21 @@ public class TerrainBlock {
 	public bool changeType(string type) {
 		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
 		GameObj = null;
-		TerrainBlockInfo nInf = TerrainBlockInfo.get(type);
+
+		GameObject obj = GameObjectResourcePool.getResource(BlockInfo.BlockID, Position, Orientation.toRotationVector());
+
+		TerrainMonoBehavior nInf = obj.GetComponent<TerrainMonoBehavior>();
 		if(!nInf.Pathable) {
 			if(this.Monster != null) {
+				GameObjectResourcePool.returnResource(nInf.BlockID, obj);
 				return false;
 			}
 			if(this.Scenery != null) {
+				GameObjectResourcePool.returnResource(nInf.BlockID, obj);
 				return false;
 			}
 		}
-		this.BlockInfo = nInf;
-		GameObj = GameObjectResourcePool.getResource(BlockInfo.BlockID, Position, Orientation.toRotationVector());
+		GameObj = obj;
 
 		return true;
 	}

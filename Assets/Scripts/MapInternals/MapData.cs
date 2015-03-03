@@ -12,9 +12,9 @@ public static class MapData {
 	}
 
 	public static void ClearData(){
-		TerrainBlocks.clear();
 		SceneryBlocks.clear();
 		MonsterBlocks.clear();
+		TerrainBlocks.clear();
 		TheFarRooms.clear();
 	}
 
@@ -96,6 +96,33 @@ public static class MapData {
 		TerrainBlocks.rotate(pos, goClockwise);
 	}
 	#endregion TerrainManipulation
+
+	public static void addMonsterScenery(string type, Vector3 pos, DIRECTION dir){
+		GameObject obj = GameObjectResourcePool.getResource(type, pos, dir.toRotationVector());
+		SceneryMonoBehavior smb = obj.GetComponent<SceneryMonoBehavior>();
+		GameObjectResourcePool.returnResource(type, obj);
+		if(smb != null){
+			MapData.addScenery(type, pos, dir);
+		} else {
+			MapData.addMonster(type, pos, dir);
+		}
+	}
+
+	public static void moveMonsterScenery(GameObject obj, Vector3 pos, Vector3 offset){
+		if(obj.GetComponent<SceneryMonoBehavior>() != null){
+			MapData.moveScenery(pos, offset);
+		} else {
+			MapData.moveMonster(pos, offset);
+		}
+	}
+
+	public static void rotateMonsterScenery(GameObject obj, Vector3 pos, bool goClockwise = true){
+		if(obj.GetComponent<SceneryMonoBehavior>() != null){
+			MapData.rotateScenery(pos, goClockwise);
+		} else {
+			MapData.rotateMonster (pos, goClockwise);
+		}
+	}
 
 	#region Monsters
 	#region MonsterManipulation

@@ -85,9 +85,11 @@ public class SceneryManager {
 			return false;
 		}
 		//get the list for the block type
-		List<SceneryBlock> lst = dictionary[blk.BlockInfo.BlockID];
+		List<SceneryBlock> lst;
+		try{
+			lst = dictionary[blk.BlockInfo.BlockID];
+		} catch {
 		//create one if needed
-		if(lst == null) {
 			lst = new List<SceneryBlock>();
 			dictionary.Add(blk.BlockInfo.BlockID, lst);
 		}

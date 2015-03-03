@@ -29,12 +29,15 @@ public class MonsterManager {
 		//attempt to link the input to its neighbors
 		linkTerrain(blk);
 		//get the list for the block type
-		List<MonsterBlock> lst = dictionary[blk.BlockInfo.BlockID];
-		//create one if needed
-		if(lst == null) {
+		List<MonsterBlock> lst;
+		try{
+			lst = dictionary[blk.BlockInfo.BlockID];
+		} catch {
 			lst = new List<MonsterBlock>();
 			dictionary.Add(blk.BlockInfo.BlockID, lst);
 		}
+
+
 		//add the block to the list
 		lst.Add(blk);
 	}
@@ -71,7 +74,7 @@ public class MonsterManager {
 	
 	public void remove(MonsterBlock blk){
 		//unlink neighbors
-		unlinkTerrain(blk);
+		//unlinkTerrain(blk);
 		blk.remove();
 		//remove from list
 		dictionary[blk.BlockInfo.BlockID].Remove(blk);

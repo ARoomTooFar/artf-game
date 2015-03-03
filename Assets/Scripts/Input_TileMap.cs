@@ -50,7 +50,8 @@ public class Input_TileMap : MonoBehaviour
 				
 				Vector3 obj_pos = new Vector3 (x, 0f, z);
 				Vector3 obj_rot = new Vector3 (0f, 90f, 0f);
-				output_tileMap.instantiateItemObject (selectedItem, obj_pos, obj_rot);
+				//output_tileMap.instantiateItemObject (selectedItem, obj_pos, obj_rot);
+				MapData.addMonsterScenery (selectedItem, obj_pos, obj_rot.toDirection());
 				clearSelectedItem ();
 			} else {
 				/* check whether the ray hits an object or the tile map */

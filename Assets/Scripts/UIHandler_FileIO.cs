@@ -30,7 +30,7 @@ public class UIHandler_FileIO : MonoBehaviour
 	private Farts serv;
 	long levelId;
 	string levelTHING;
-    private WWW lvlUpdate; // WWW request to server for level updating
+	private WWW lvlUpdate; // WWW request to server for level updating
 	
 	//object in hierarchy that holds itemObjects
 	Transform itemObjects;
@@ -56,22 +56,19 @@ public class UIHandler_FileIO : MonoBehaviour
 		
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 
-        // Download level example
-        WWW dlLvlReq = serv.getLvlWww("5769015641243648");
-        yield return dlLvlReq;
+		// Download level example
+		WWW dlLvlReq = serv.getLvlWww ("5684666375864320");
+		yield return dlLvlReq;
 
-        // Use the downloaded level data
-        string dlLvlData = dlLvlReq.text;
+		// Use the downloaded level data
+		string dlLvlData = dlLvlReq.text;
 
-        // Check if level data is valid
-        if (serv.dataCheck(dlLvlData))
-        {
-            Debug.Log("DOWNLOAD SUCCEEDED: " + dlLvlData);
-        }
-        else
-        {
-            Debug.Log("ERROR: LEVEL DATA DOWNLOAD FAILED");
-        }
+		// Check if level data is valid
+		if (serv.dataCheck (dlLvlData)) {
+			Debug.Log ("DOWNLOAD SUCCEEDED: " + dlLvlData);
+		} else {
+			Debug.Log ("ERROR: LEVEL DATA DOWNLOAD FAILED");
+		}
 	}
 	
 	public void saveFile ()
@@ -79,20 +76,45 @@ public class UIHandler_FileIO : MonoBehaviour
 		
 		
 		//		BinaryFormatter bf = new BinaryFormatter ();
-		//		FileStream file = File.Create ("Assets/Resources/savedLevel.txt");
-		
-		if (itemClass.getItemList ().Count != 0) {
+				
+
+
+
+
+
+
+//		if (itemClass.getItemList ().Count != 0) {
 			//old playerprefs way
 			//		if (itemClass.getItemList ().Count != 0 && InputField_Save.text.Length != 0) {
 			//			bf.Serialize (file, itemClass.getItemList ());
 			//			File.WriteAllText("Assets/Resources/savedLevel.txt", bf.Serialize (file, itemClass.getItemList ()));
 			//			Debug.Log ("Items saved right now: " + itemClass.getItemList ().Count);
 			//			Debug.Log ("saving list " + itemClass.getItemList ().GetHashCode());
-			
+
+			//			FileStream file = File.Create ("Assets/Resources/savedLevel.txt");
+
+
+
+
+
+			/*
 			BinaryFormatter bf = new BinaryFormatter ();
 			MemoryStream stream = new MemoryStream (2048);
 			bf.Serialize (stream, itemClass.getItemList ());
-			string tmp = System.Convert.ToBase64String (stream.ToArray ());
+			string tmp = System.Convert.ToBase64String (stream.ToArray ());*/
+			string tmp = MapData.SaveString;
+			File.WriteAllText ("Assets/Resources/savedLevel.txt", tmp);
+
+
+
+
+
+
+
+
+
+
+//			lvlUpdate = serv.updateLvl("5684666375864320",  "", "", "asdfasdfasdfasdf");
 			
 			
 			//old playerprefs method of saving
@@ -108,12 +130,11 @@ public class UIHandler_FileIO : MonoBehaviour
 			
 			//			string levelData = bf.Serialize (file, itemClass.getItemList ());
 			//			levelId = serv.newLevel(123, "Level Name", levelData);
-		} else if (itemClass.getItemList ().Count == 0) {
-			Debug.Log ("ItemClass.itemList is empty. Nothing to write.");
+//		} else if (itemClass.getItemList ().Count == 0) {
+//			Debug.Log ("ItemClass.itemList is empty. Nothing to write.");
 
-            // Update level example
-            lvlUpdate = serv.updateLvl("5769015641243648", "Level Nameamemame 2", "", "", "asdfasdfasdfasdf");
-		}
+			// Update level example
+//		}
 		
 		//old playerprefs way
 		//		} else if (InputField_Save.text.Length == 0) {
@@ -129,36 +150,64 @@ public class UIHandler_FileIO : MonoBehaviour
 		//		}
 	}
 	
-	void buttonLoadFile(string s){
-		
-		Debug.Log ("loading: " + s);
-		
-		wipeItemObjects ();
-		itemClass.clearItemList ();
-		
-		BinaryFormatter bf = new BinaryFormatter ();
-		string tmp = PlayerPrefs.GetString (s);
-		MemoryStream memoryStream = new MemoryStream (System.Convert.FromBase64String (tmp));
-		List<ItemClass.ItemStruct> savedFile = (List<ItemClass.ItemStruct>)bf.Deserialize (memoryStream);
-		
-		for (int i = 0; i < savedFile.Count; i++) {
-			Vector3 pos = new Vector3 (savedFile [i].x, savedFile [i].y, savedFile [i].z);
-			Vector3 rot = new Vector3 (savedFile [i].xrot, savedFile [i].yrot, savedFile [i].zrot);
-			string name = savedFile [i].item.Substring (0, savedFile [i].item.IndexOf ('_'));
-			//				tileSelection.placeItems (name, pos);
-			output_tileMap.instantiateItemObject (name, pos, rot);
-		}
-		
-		Transform h = GameObject.Find("FilenameButtons").GetComponent("Transform") as Transform;
-		foreach (Transform child in h) {
-			GameObject.Destroy (child.gameObject);
-		}
-	}
+//	void buttonLoadFile (string s)
+//	{
+//		
+//		Debug.Log ("loading: " + s);
+//		
+//		wipeItemObjects ();
+//		itemClass.clearItemList ();
+//		
+//		BinaryFormatter bf = new BinaryFormatter ();
+//		string tmp = PlayerPrefs.GetString (s);
+//		MemoryStream memoryStream = new MemoryStream (System.Convert.FromBase64String (tmp));
+//		List<ItemClass.ItemStruct> savedFile = (List<ItemClass.ItemStruct>)bf.Deserialize (memoryStream);
+//		
+//		for (int i = 0; i < savedFile.Count; i++) {
+//			Vector3 pos = new Vector3 (savedFile [i].x, savedFile [i].y, savedFile [i].z);
+//			Vector3 rot = new Vector3 (savedFile [i].xrot, savedFile [i].yrot, savedFile [i].zrot);
+//			string name = savedFile [i].item.Substring (0, savedFile [i].item.IndexOf ('_'));
+//			//				tileSelection.placeItems (name, pos);
+//			output_tileMap.instantiateItemObject (name, pos, rot);
+//		}
+//		
+//		Transform h = GameObject.Find ("FilenameButtons").GetComponent ("Transform") as Transform;
+//		foreach (Transform child in h) {
+//			GameObject.Destroy (child.gameObject);
+//		}
+//	}
 	
 	public void loadFile ()
 	{
-        Debug.Log("Load disabled");
-	    /*
+		Debug.Log ("Load disabled");
+
+
+		if (File.Exists ("Assets/Resources/savedLevel.txt")) {
+
+//			wipeItemObjects ();
+//			itemClass.clearItemList ();
+			
+			
+//			BinaryFormatter bf = new BinaryFormatter ();
+			string tmp =System.IO.File.ReadAllText("Assets/Resources/savedLevel.txt");
+
+			MapDataParser.ParseSaveString(tmp);
+
+
+
+//			MemoryStream memoryStream = new MemoryStream (System.Convert.FromBase64String (tmp));
+//			List<ItemClass.ItemStruct> savedFile = (List<ItemClass.ItemStruct>)bf.Deserialize (memoryStream);
+
+//			for (int i = 0; i < savedFile.Count; i++) {
+//				Vector3 pos = new Vector3 (savedFile [i].x, savedFile [i].y, savedFile [i].z);
+//				Vector3 rot = new Vector3 (savedFile [i].xrot, savedFile [i].yrot, savedFile [i].zrot);
+//				string name = savedFile [i].item.Substring (0, savedFile [i].item.IndexOf ('_'));
+//				output_tileMap.instantiateItemObject (name, pos, rot);
+//			}
+		}
+
+
+		/*
 		//		if (savedFiles.Count != 0) {
 		//			float y = -415f;
 		//			foreach (string s in savedFiles) {
@@ -218,21 +267,18 @@ public class UIHandler_FileIO : MonoBehaviour
 		
 		
 		
-		//			BinaryFormatter bf = new BinaryFormatter ();
-		//			FileStream file = File.Open ("Assets/Resources/savedLevel.txt", FileMode.Open);
-		//			List<ItemClass.ItemStruct> savedFile = (List<ItemClass.ItemStruct>)bf.Deserialize (file);
-		//			file.Close ();
+
 		
 		
 		
 		//			Debug.Log ((List<ItemClass.ItemStruct>)bf.Deserialize);
-		for (int i = 0; i < savedFile.Count; i++) {
-			Vector3 pos = new Vector3 (savedFile [i].x, savedFile [i].y, savedFile [i].z);
-			Vector3 rot = new Vector3 (savedFile [i].xrot, savedFile [i].yrot, savedFile [i].zrot);
-			string name = savedFile [i].item.Substring (0, savedFile [i].item.IndexOf ('_'));
-			//				tileSelection.placeItems (name, pos);
-			output_tileMap.instantiateItemObject (name, pos, rot);
-		}
+//		for (int i = 0; i < savedFile.Count; i++) {
+//			Vector3 pos = new Vector3 (savedFile [i].x, savedFile [i].y, savedFile [i].z);
+//			Vector3 rot = new Vector3 (savedFile [i].xrot, savedFile [i].yrot, savedFile [i].zrot);
+//			string name = savedFile [i].item.Substring (0, savedFile [i].item.IndexOf ('_'));
+//			//				tileSelection.placeItems (name, pos);
+//			output_tileMap.instantiateItemObject (name, pos, rot);
+//		}
 		
 		
 		//old playerprefs way
@@ -269,7 +315,7 @@ public class UIHandler_FileIO : MonoBehaviour
 		foreach (Transform child in itemObjects) {
 			GameObject.Destroy (child.gameObject);
 		}
-		itemClass.resetNameCounter ();
+//		itemClass.resetNameCounter ();
 	}
 	
 	
@@ -279,21 +325,17 @@ public class UIHandler_FileIO : MonoBehaviour
 	//		return itemObjects;
 	//	}
 
-    void Update()
-    {
-        // Use the returned data from update level request's coroutine
-        if (lvlUpdate != null)
-        {
-            if (lvlUpdate.isDone && lvlUpdate.error == null)
-            {
-                Debug.Log("UPDATE SUCCEEDED: " + lvlUpdate.text);
-                lvlUpdate = null; // Reset lvlUpdate to null so it doesn't the Debug.Log doesn't spam the console every tick
-            }
-            else if (lvlUpdate.error != null)
-            {
-                Debug.Log("ERROR: LEVEL UPDATE FAILED");
-            }
-        }
-    }
+	void Update ()
+	{
+		// Use the returned data from update level request's coroutine
+		if (lvlUpdate != null) {
+			if (lvlUpdate.isDone && lvlUpdate.error == null) {
+				Debug.Log ("UPDATE SUCCEEDED: " + lvlUpdate.text);
+				lvlUpdate = null; // Reset lvlUpdate to null so it doesn't the Debug.Log doesn't spam the console every tick
+			} else if (lvlUpdate.error != null) {
+				Debug.Log ("ERROR: LEVEL UPDATE FAILED");
+			}
+		}
+	}
 	
 }

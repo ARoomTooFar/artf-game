@@ -64,6 +64,7 @@ public class Input_ItemObject : MonoBehaviour
 		bool cancellingMove = false;
 		bool outOfDeadZone = false;
 		bool copyCreated = false;
+		newp = this.gameObject.transform.position;
 
 		while (Input.GetMouseButton(0)) { 
 
@@ -118,8 +119,12 @@ public class Input_ItemObject : MonoBehaviour
 							Color trans = itemObjectCopy.gameObject.renderer.material.color;
 							trans.a = 0.5f;
 							itemObjectCopy.gameObject.renderer.material.SetColor ("_Color", trans);
-							copyOutput.changePosition (new Vector3 (x, output_itemObject.getPosition ().y, z));
-							copyOutput.changeOrientation (output_itemObject.getRotation ());
+//							Debug.Log(x + ", " + z);
+							itemObjectCopy.transform.position = new Vector3 (x, output_itemObject.getPosition ().y, z);
+							itemObjectCopy.transform.eulerAngles = output_itemObject.getRotation();
+
+							//copyOutput.changePosition (new Vector3 (x, output_itemObject.getPosition ().y, z));
+							//copyOutput.changeOrientation (output_itemObject.getRotation ());
 						}
 
 					}
@@ -136,8 +141,10 @@ public class Input_ItemObject : MonoBehaviour
 		if (cancellingMove == true) {
 
 		} else {
-			output_itemObject.changePosition (newp);
-			itemClass.modifyItemList (output_itemObject.getName (), output_itemObject.getPosition (), output_itemObject.getRotation ());
+			//output_itemObject.changePosition (newp);
+			Vector3 pos = this.gameObject.transform.position;
+			MapData.moveMonsterScenery(this.gameObject, pos, newp-pos);
+//			itemClass.modifyItemList (output_itemObject.getName (), output_itemObject.getPosition (), output_itemObject.getRotation ());
 		}
 
 		
