@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class MobileEnemy : NewEnemy {
 
 	protected Vector3 resetpos;
+	protected Vector3 targetDir;
 
 	protected float tempTimer;
 
@@ -264,6 +265,9 @@ public class MobileEnemy : NewEnemy {
 
 	protected virtual void StopSearch(Character a) {
 		this.StopCoroutine("searchForEnemy");
+		this.StopCoroutine("moveToPosition");
+		this.StopCoroutine ("moveToExpectedArea");
+		this.StopCoroutine("randomSearch");
 	}
 	
 	//Improve retreat AI
@@ -298,6 +302,16 @@ public class MobileEnemy : NewEnemy {
 		}
 	}
 
+	protected IEnumerator moveToExpectedArea() {
+		this.facing = this.targetDir;
+		float moveToTime = 0.5f;
+		while (!this.isApproaching(this) && this.distanceToVector3(this.targetDir) > 0.1f && !this.isInAtkAnimation(this) && this.target == null && moveToTime > 0.0f) {
+			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			moveToTime -= Time.deltaTime;
+			yield return null;
+		}
+	}
+
 	protected IEnumerator randomSearch() {
 		float resetTimer = aggroTimer;
 		while(!this.isApproaching(this) && resetTimer > 0.0f && !this.isInAtkAnimation(this) && this.target == null) {
@@ -309,11 +323,14 @@ public class MobileEnemy : NewEnemy {
 	}
 	
 	protected virtual IEnumerator searchForEnemy(Vector3 lsp) {
-		yield return StartCoroutine(moveToPosition(lsp));
-		
+		yield return StartCoroutine("moveToPosition", lsp);
+
+		yield return StartCoroutine ("moveToExpectedArea");
+
 		float resetTimer = aggroTimer;
 
-		yield return StartCoroutine(randomSearch());
+		yield return StartCoroutine("randomSearch");
+
 		if (this.target == null) alerted = false;
 	}
 	
@@ -335,8 +352,12 @@ public class MobileEnemy : NewEnemy {
 			if (rigidbody.SweepTest(direction, out hit, this.distanceToVector3(p.collider.transform.position))) {
 				if (hit.collider.gameObject == p) {
 					aggroT.add(p,1);
-					lastSeenPosition = p.transform.position;
-					alerted = true;
+					if (this.lastSeenPosition != null) {
+						this.targetDir = p.transform.position - this.lastSeenPosition.Value;
+						this.targetDir.Normalize();
+					}
+					this.lastSeenPosition = p.transform.position;
+					this.alerted = true;
 					return true;
 				}
 			}
