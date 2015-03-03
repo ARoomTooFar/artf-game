@@ -78,6 +78,7 @@ public class Output_TileMap : MonoBehaviour
 		
 		//old way
 		itemClass.addToItemList (temp.name, position, rotation);
+		MonsterBlock mb = new MonsterBlock(name, position, DIRECTION.East);
 		
 		//new way
 		//		itemClass.addItem (temp.name, position, rotation);
