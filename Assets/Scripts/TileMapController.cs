@@ -32,8 +32,8 @@ public class TileMapController : MonoBehaviour {
 	{
 		UICamera = GameObject.Find ("UICamera").camera;
 		
-		grid_x = 20;
-		grid_z = 20;
+		grid_x = 30;
+		grid_z = 30;
 		buildMesh();
 
 
@@ -46,6 +46,7 @@ public class TileMapController : MonoBehaviour {
 
 	void Awake ()
 	{
+
 		tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 	}

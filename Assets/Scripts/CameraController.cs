@@ -273,7 +273,7 @@ public class CameraController : MonoBehaviour {
 			GL.Vertex(new Vector3(Mathf.Floor(xLowerBound), 0f, z + 0.5f));
 			GL.Vertex(new Vector3(Mathf.Floor(xUpperBound), 0f, z + 0.5f));
 		}
-		for (int x = (int)Mathf.Floor(xLowerBound); x < (int)Mathf.Floor(xUpperBound); x++) {
+		for (int x = (int)Mathf.CeilToInt(xLowerBound); x < (int)Mathf.CeilToInt(xUpperBound); x++) {
 			GL.Vertex(new Vector3(x - 0.5f, 0f, Mathf.Floor(zLowerBound)));
 			GL.Vertex(new Vector3(x - 0.5f, 0f, Mathf.Floor(zUpperBound)));
 		}
