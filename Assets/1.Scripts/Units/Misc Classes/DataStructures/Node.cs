@@ -60,6 +60,10 @@ public class Node<T> {
 		}
 	}
 
+	public void clearNeighbors() {
+		this.edges.Clear ();
+	}
+
 	
 	// Functions that check if the edges of this node contains duplicates //
 	

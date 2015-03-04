@@ -1,57 +1,58 @@
-// Enemies that can move
+// An inherited Graph thatr is used for Vector 3 values
+//     Made specifically for pathing back to initial point
 
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-//-----------------------------//
-// Structs for our Graph Class //
-//-----------------------------//
+public class Vector3Graphs : Graphs<Node<Vector3>> {
+	
+	//-----------//
+	// Variables //
+	//-----------//
 
-public struct V3Node {
-	private struct V3Edge {
-		private float _length;
-		public float length {
-			get {return this._length;}
-			private set {this._length = value;}
-		}
-		
-		private V3Node _toNode;
-		public V3Node toNode {
-			get {return this._toNode;}
-			private set {this._toNode = value;}
-		}
-		
-		public V3Edge (float length, V3Node toNode) {
-			this.length = length;
-			this.toNode = toNode;
-		}
+	private Rigidbody unit;
+
+	//-----------//
+
+
+	//------------------//
+	// Public Functions //
+	//------------------//
+
+	public Vector3Graphs(Rigidbody unit) {
+		this.unit = unit;
+	}
+
+
+	// Overwritten functions
+	// Adds the new node with T value to our graph
+	public override Node<Vector3> addNode(Vector3 value) {
+		Node<Vector3> newNode = new Node<Vector3>(value);
+		this.findNeighbors (newNode);
+		allNodes.Add (newNode);
+		return newNode;
 	}
 	
-	private List<V3Edge> neighbors;
-	
-	private Vector3 _position;
-	public Vector3 position {
-		get {return this._position;}
-		private set {this._position = value;}
+	// Adds new node to our graph
+	public override void addNode (Node<Vector3> newNode) {
+		newNode.clearNeighbors ();
+		this.findNeighbors (newNode);
+		this.allNodes.Add (newNode);
 	}
+
+
+	// Vector3Graph functions
 	
-	
-	
-	public V3Node (Vector3 position) {
-		this.position = position;
-		this.neighbors = new List<V3Edge>();
-	}
-	
-	public void findNeighbors (List<V3Node> possibleNeighbors, Rigidbody unitToTest) {
+	protected void findNeighbors (Node<Vector3> newNode) {
 		RaycastHit[] hits;
 		Vector3 direction;
-		foreach (V3Node node in possibleNeighbors) {
-			direction = this.position - node.position;
+		foreach (Node<Vector3> node in this.allNodes) {
+			direction = newNode.value - node.value;
 			direction.y = 0.0f;
 			direction.Normalize ();
 			
-			hits = unitToTest.SweepTestAll(direction, Vector3.Distance(this.position, node.position));
+			hits = this.unit.SweepTestAll(direction, Vector3.Distance(newNode.value, node.value));
 			
 			for (int i = 0; i < hits.Length; ++i) {
 				if (hits[i].collider.tag == "Wall") break;
@@ -62,58 +63,6 @@ public struct V3Node {
 			}
 		}
 	}
-	
-	public void addNeighbor (V3Node newNeighbor) {
-		V3Edge newEdge = new V3Edge(Vector3.Distance(this.position, newNeighbor.position), newNeighbor);
-		this.neighbors.Add (newEdge);
-	}
-}
-
-//--------------------------------//
-
-
-
-public class Vector3Graphs {
-	
-	//-----------//
-	// Variables //
-	//-----------//
-
-	private List<V3Node> allNodes;
-
-	//-----------//
-
-
-	//------------------//
-	// Public Functions //
-	//------------------//
-
-	public Vector3Graphs() {
-		this.allNodes = new List<V3Node>();
-	}
-
-	// Adds the new position to our graph
-	public V3Node addNode(Vector3 position, Rigidbody unitToTest) {
-		V3Node newNode = new V3Node(position);
-		newNode.findNeighbors(allNodes, unitToTest);
-		allNodes.Add (newNode);
-		return newNode;
-	}
-
-	// Adds new position node to our graph
-	public void addNode (V3Node newNode, Rigidbody unitToTest) {
-		newNode.findNeighbors (allNodes, unitToTest);
-		allNodes.Add (newNode);
-	}
-	
-	// Finds the shortest path to the given node
-	public void findShortestPathTo(V3Node toNode) {
-		if (!this.allNodes.Contains(toNode)) Debug.LogWarning ("Specified V3Node does not exist in list");
-		else {
-
-		}
-	}
-
 
 	//------------------//
 

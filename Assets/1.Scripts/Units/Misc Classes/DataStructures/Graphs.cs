@@ -8,7 +8,7 @@ public class Graphs<T> {
 	// Variables //
 	//-----------//
 	
-	private List<Node<T>> allNodes;
+	protected List<Node<T>> allNodes;
 	
 	//-----------//
 	
@@ -32,31 +32,13 @@ public class Graphs<T> {
 	public virtual void addNode (Node<T> newNode) {
 		allNodes.Add (newNode);
 	}
-
-	/*
-	public void findNeighbors (List<V3Node> possibleNeighbors, Rigidbody unitToTest) {
-		RaycastHit[] hits;
-		Vector3 direction;
-		foreach (V3Node node in possibleNeighbors) {
-			direction = this.position - node.position;
-			direction.y = 0.0f;
-			direction.Normalize ();
-			
-			hits = unitToTest.SweepTestAll(direction, Vector3.Distance(this.position, node.position));
-			
-			for (int i = 0; i < hits.Length; ++i) {
-				if (hits[i].collider.tag == "Wall") break;
-				if (i == hits.Length) {
-					this.addNeighbor(node);
-					node.addNeighbor(this);
-				}
-			}
-		}
-	}*/
 	
+
+	// Pathfinding Stuff //
+
 	// Finds the shortest path to a node given starting and ending node using Dijstras
 	//     returns false if it fails
-	public bool findShortestPathTo(Node<T> toNode, Node<T> fromNode) {
+	public virtual bool findShortestPathTo(Node<T> toNode, Node<T> fromNode) {
 		if (!this.allNodes.Contains (toNode)) Debug.LogWarning ("Goal node with value " + toNode.value + " does not exist in graph");
 		else if (toNode.neighbors.Count == 0) Debug.LogWarning ("Goal node with value " + toNode.value + " does not have any paths conencted to it");
 		else if (!this.allNodes.Contains(fromNode)) Debug.LogWarning ("Source node with value " + fromNode.value + " does not exist in graph");
