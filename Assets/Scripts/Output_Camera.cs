@@ -60,8 +60,11 @@ public class Output_Camera : MonoBehaviour
 		UICamera.transform.position = pos;
 	}
 	
-	public void dragCamera ()
+	public Vector3 dragCamera (Vector3 oldPos, Vector3 delta)
 	{
+
+		delta = Input.mousePosition - oldPos;
+		dragSpeed = new Vector2(delta.x, delta.y);
 		dx = Input.GetAxis ("Mouse X") * dragSpeed.x;
 		dy = Input.GetAxis ("Mouse Y") * dragSpeed.y;
 		UICamera.transform.position -= UICamera.transform.right * dx + UICamera.transform.up * dy;
@@ -76,6 +79,7 @@ public class Output_Camera : MonoBehaviour
 			baseY = maxY;
 		}
 		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
+		return oldPos = Input.mousePosition;
 	}
 	
 	Vector3 getCameraForward(){

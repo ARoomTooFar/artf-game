@@ -11,6 +11,10 @@ public class Input_Camera : MonoBehaviour {
 
 	Output_Camera cameraControl;
 
+	static Camera UICamera;
+
+	Vector3 oldPos;
+
 	Button Button_TopDown;
 	Button Button_Perspective;
 	Button Button_Orthographic;
@@ -45,6 +49,10 @@ public class Input_Camera : MonoBehaviour {
 			cameraControl.cursorToHand (); });
 		Button_Pointer.onClick.AddListener (() => {
 			cameraControl.cursorToPointer ();});
+
+		UICamera = GameObject.Find ("UICamera").camera;
+
+		Vector3 oldPos = new Vector3();
 	}
 
 	void Update () {
@@ -65,8 +73,12 @@ public class Input_Camera : MonoBehaviour {
 	}
 
 	void checkForMouseClicks(){
+		Vector3 delta = new Vector3(); 
+		if (Input.GetMouseButtonDown(1)){
+			oldPos = Input.mousePosition;
+		}
 		if (Input.GetMouseButton (1)) {
-			cameraControl.dragCamera();
+			oldPos = cameraControl.dragCamera(oldPos, delta);
 		}
 	}
 
