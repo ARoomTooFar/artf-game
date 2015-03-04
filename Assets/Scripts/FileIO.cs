@@ -28,7 +28,7 @@ public class FileIO : MonoBehaviour
 	public Text txtDlLvl;
 	public Text txtUdLvl;
 	
-	IEnumerator Start ()
+	void Start ()
 	{
 		txtUdLvl.enabled = false;
 		
@@ -43,35 +43,42 @@ public class FileIO : MonoBehaviour
 		//			loadFile ();});
 		
 		serv = gameObject.AddComponent<Farts>();
-		
-		// Need to get the level ID from browser, but for now we're cheezin it
-		lvlId = "5684666375864320";
-		
-		// Download the level
-		WWW dlLvlReq = serv.getLvlWww(lvlId);
-		yield return dlLvlReq;
-		
-		// Use the downloaded level data
-		lvlData = dlLvlReq.text;
-		Debug.Log(lvlData);
-		if (serv.dataCheck(lvlData))
-		{
-			txtDlLvl.enabled = false;
-			MapDataParser.ParseSaveString(lvlData);
-			Debug.Log("LVL DL SUCCESS: " + lvlData);
-		}
-		else
-		{
-			txtDlLvl.text = "LVL DL ERROR: Level ID doesn't exist.";
-			Debug.Log("ERROR: Level download failed. " + lvlId + " doesn't exist.");
-		}
+
+        Application.ExternalCall("reqLvlId", "The game says hello!");
 	}
+
+    public void getLvlId(string inputLvlId)
+    {
+        lvlId = inputLvlId;
+        //lvlId = "5684666375864320"; // uncomment this line if you aren't running the level editor in the browser
+        WWW www = serv.getLvlWww(inputLvlId);
+        StartCoroutine(dlLvl(www));
+    }
+
+    public IEnumerator dlLvl(WWW www)
+    {
+        yield return www;
+
+        lvlData = www.text;
+        Debug.Log(lvlData);
+        if (serv.dataCheck(lvlData))
+        {
+            txtDlLvl.enabled = false;
+            MapDataParser.ParseSaveString(lvlData);
+            Debug.Log("LVL DL SUCCESS: " + lvlData);
+        }
+        else
+        {
+            txtDlLvl.text = "LVL DL ERROR: Level ID doesn't exist.";
+            Debug.Log("ERROR: Level download failed. " + lvlId + " doesn't exist.");
+        }
+    }
 	
 	public void saveFile ()
 	{
-		udLvlReq = serv.updateLvl("5684666375864320", "123", MapData.SaveString, "draftleveldataisbutts");
+		udLvlReq = serv.updateLvl(lvlId, "123", MapData.SaveString, "draftleveldataisbutts");
 		txtUdLvl.enabled = true;
-	}	
+	}
 	
 	void Update()
 	{
