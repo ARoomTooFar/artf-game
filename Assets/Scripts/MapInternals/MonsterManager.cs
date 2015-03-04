@@ -9,6 +9,14 @@ public class MonsterManager {
 	public MonsterManager() {
 	}
 
+	public void clear(){
+		foreach(List<MonsterBlock> lst in dictionary.Values){
+			foreach(MonsterBlock blk in lst){
+				blk.remove();
+			}
+		}
+	}
+
 	#region Manipulation
 	/*
 	 * public bool addBlock (MonsterBlock block)
@@ -21,12 +29,15 @@ public class MonsterManager {
 		//attempt to link the input to its neighbors
 		linkTerrain(blk);
 		//get the list for the block type
-		List<MonsterBlock> lst = dictionary[blk.BlockInfo.BlockID];
-		//create one if needed
-		if(lst == null) {
+		List<MonsterBlock> lst;
+		try{
+			lst = dictionary[blk.BlockInfo.BlockID];
+		} catch {
 			lst = new List<MonsterBlock>();
 			dictionary.Add(blk.BlockInfo.BlockID, lst);
 		}
+
+
 		//add the block to the list
 		lst.Add(blk);
 	}
@@ -62,9 +73,9 @@ public class MonsterManager {
 	}
 	
 	public void remove(MonsterBlock blk){
-		GameObjectResourcePool.returnResource(blk.BlockInfo.BlockID, blk.GameObj);
 		//unlink neighbors
-		unlinkTerrain(blk);
+		//unlinkTerrain(blk);
+		blk.remove();
 		//remove from list
 		dictionary[blk.BlockInfo.BlockID].Remove(blk);
 	}
@@ -80,7 +91,7 @@ public class MonsterManager {
 	 * Also links block as a neighbor to any adjacent blocks.
 	 */
 	private void linkTerrain(MonsterBlock blk) {
-		MapData.Instance.TerrainBlocks.find(blk.Position).addMonster(blk);
+		MapData.TerrainBlocks.find(blk.Position).addMonster(blk);
 	}
 
 	/*
@@ -90,7 +101,7 @@ public class MonsterManager {
 	 * 
 	 */
 	private void unlinkTerrain(MonsterBlock blk) {
-		TerrainBlock terBlk = MapData.Instance.TerrainBlocks.find(blk.Position);
+		TerrainBlock terBlk = MapData.TerrainBlocks.find(blk.Position);
 		if(terBlk.Monster.Equals(blk)){
 			terBlk.removeMonster();
 		}
@@ -121,7 +132,7 @@ public class MonsterManager {
 
 	#region Validation
 	public bool isAddValid(Vector3 pos){
-		TerrainBlock blk = MapData.Instance.TerrainBlocks.find(pos);
+		TerrainBlock blk = MapData.TerrainBlocks.find(pos);
 		if(blk == null) {
 			return false;
 		}
@@ -138,7 +149,7 @@ public class MonsterManager {
 			string tempVal;
 			foreach(KeyValuePair<string, List<MonsterBlock>> kvPair in dictionary) {
 				tempVal = "";
-				tempVal += kvPair.Key + ": ";
+				tempVal += kvPair.Key + ":";
 				foreach(MonsterBlock blk in kvPair.Value) {
 					tempVal += blk.SaveString + " ";
 				}

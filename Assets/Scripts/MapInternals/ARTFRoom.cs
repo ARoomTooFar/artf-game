@@ -6,11 +6,26 @@ using System.Collections.Generic;
 public partial class ARTFRoom {
 
 	#region PrivateVariables
-	protected List<TerrainBlock> blocks = new List<TerrainBlock>();
-	private string defaultBlockID = "defaultBlockID";
+	private static string defaultBlockID = "Prefabs/Rooms/floortile";
 	#endregion PrivateVariables
 
 	#region Properties
+
+	public List<TerrainBlock> Blocks {
+		get;
+		private set;
+	}
+
+	public List<ARTFRoom> LinkedRooms {
+		get;
+		private set;
+	}
+
+	public Dictionary<KeyValuePair<ARTFRoom, ARTFRoom>, List<Vector3>> RoomPaths {
+		get;
+		private set;
+	}
+
 	#region Corners
 	//Lower Left Corner
 	public Vector3 LLCorner {
@@ -32,6 +47,10 @@ public partial class ARTFRoom {
 	//Upper Right Corner
 	public Vector3 ULCorner {
 		get { return new Vector3(LLCorner.x, URCorner.y, URCorner.z); }
+	}
+
+	public Vector3 Center {
+		get { return (LLCorner + URCorner) / 2; }
 	}
 
 	public List<Vector3> Corners {
@@ -76,6 +95,8 @@ public partial class ARTFRoom {
 	public ARTFRoom(Vector3 pos1, Vector3 pos2) {
 		this.LLCorner = pos1.getMinVals(pos2);
 		this.URCorner = pos1.getMaxVals(pos2);
+		this.Blocks = new List<TerrainBlock>();
+		this.LinkedRooms = new List<ARTFRoom>();
 	}
 
 	#region (un)linkTerrain
@@ -99,19 +120,22 @@ public partial class ARTFRoom {
 				//set a Vector3 to the correct position
 				pos.Set(i + LLCorner.x, 0, j + LLCorner.z);
 				//try to find an existing block at that coordinate
-				blk = MapData.Instance.TerrainBlocks.find(pos);
+				blk = MapData.TerrainBlocks.find(pos);
 				//if it doesn't exist
 				if(blk == null) {
 					//create a new one
 					blk = new TerrainBlock(defaultBlockID, pos, DIRECTION.North);
 					//and add it to the MapData
-					MapData.Instance.TerrainBlocks.add(blk);
+					MapData.TerrainBlocks.add(blk);
 				}
 				//link the block to the room
-				blocks.Add(blk);
+				Blocks.Add(blk);
 				//and link the room to the block
 				blk.Room = this;
 			}
+		}
+		foreach(TerrainBlock blks in Blocks){
+			MapData.TerrainBlocks.relinkNeighbors(blks);
 		}
 	}
 
@@ -123,12 +147,12 @@ public partial class ARTFRoom {
 	 */
 	public void unlinkTerrain() {
 		//for each linked block
-		foreach(TerrainBlock blk in blocks) {
+		foreach(TerrainBlock blk in Blocks) {
 			//unlink the room from the block
 			blk.Room = null;
 		}
 		//remove all the links to terrain
-		blocks.Clear();
+		Blocks.Clear();
 	}
 	#endregion (un)linkTerrain
 
@@ -144,15 +168,15 @@ public partial class ARTFRoom {
 		LLCorner = LLCorner + offset;
 		URCorner = URCorner + offset;
 		//move each block by offset
-		foreach(TerrainBlock blk in blocks) {
+		foreach(TerrainBlock blk in Blocks) {
 			blk.move(offset);
 		}
 		//for each block
-		foreach(TerrainBlock blk in blocks) {
+		foreach(TerrainBlock blk in Blocks) {
 			//if it is an edge block
 			if(isEdge(blk.Position)) {
 				//force it to re-identify its neighbors
-				MapData.Instance.TerrainBlocks.relinkNeighbors(blk);
+				MapData.TerrainBlocks.relinkNeighbors(blk);
 			}
 		}
 	}
@@ -182,9 +206,9 @@ public partial class ARTFRoom {
 			URCorner += new Vector3(0, 0, offset.z);
 		}
 		//remove blocks no longer in room
-		foreach(TerrainBlock blk in blocks) {
+		foreach(TerrainBlock blk in Blocks) {
 			if(!inRoom(blk.Position)) {
-				MapData.Instance.TerrainBlocks.remove(blk.Position);
+				MapData.TerrainBlocks.remove(blk);
 			}
 		}
 		//relink blocks to this room
@@ -197,10 +221,10 @@ public partial class ARTFRoom {
 	 * Removes all linked blocks from MapData
 	 */
 	public void remove(){
-		foreach(TerrainBlock blk in this.blocks){
-			MapData.Instance.TerrainBlocks.remove(blk.Position);
+		foreach(TerrainBlock blk in this.Blocks){
+			MapData.TerrainBlocks.remove(blk);
 		}
-		this.blocks.Clear();
+		this.Blocks.Clear();
 	}
 	#endregion ManipulationFunctions
 

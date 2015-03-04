@@ -17,6 +17,14 @@ public class TerrainManager {
 		dictionary = other.dictionary;
 	}
 
+	public void clear(){
+		foreach(List<TerrainBlock> lst in dictionary.Values){
+			foreach(TerrainBlock blk in lst){
+				blk.remove();
+			}
+		}
+	}
+
 	#region (un)linkNeighbors
 	/*
 	 * private bool linkNeighbors (TerrainBlock block)
@@ -28,6 +36,26 @@ public class TerrainManager {
 	 * Returns false if a block already has a neighbor in that position.
 	 */
 	private bool linkNeighbors(TerrainBlock blk) {
+
+		foreach(TerrainBlock other in blk.Room.Blocks) {
+			//determine if the block is a neighbor of the input
+			DIRECTION dir = blk.isNeighbor(other);
+			//if not, move on to the next one
+			if(dir == DIRECTION.NonDirectional) {
+				continue;
+			}
+			//set the found block as a neighbor of the input
+			blk.addNeighbor(other, dir);
+			//try to set the input as a neighbor of the found block.
+			//if something goes wrong, stop the whole function.
+			if(!other.addNeighbor(blk, dir.Opposite())) {
+				return false;
+			}
+		}
+		return true;
+
+
+		/* OLD VERSION PLS IGNORE
 		//Go through every set of blocks
 		foreach(List<TerrainBlock> lst in dictionary.Values) {
 			//for each extant block
@@ -47,7 +75,7 @@ public class TerrainManager {
 				}
 			}
 		}
-		return true;
+		return true;*/
 	}
 
 	/*
@@ -81,12 +109,14 @@ public class TerrainManager {
 	 * Returns false if a block already seems to exist in its position.
 	 */
 	public bool add(TerrainBlock blk) {
+		/*
 		//attempt to link the input to its neighbors
 		if(!linkNeighbors(blk)) {
 			//if something goes wrong, 
 			unlinkNeighbors(blk);
 			return false;
 		}
+		*/
 		//get the list for the block type
 		List<TerrainBlock> lst;
 		try{
@@ -118,11 +148,10 @@ public class TerrainManager {
 	}
 
 	public bool remove(TerrainBlock blk){
-		GameObjectResourcePool.returnResource(blk.BlockInfo.BlockID, blk.GameObj);
 		//unlink neighbors
 		unlinkNeighbors(blk);
-		MapData.Instance.SceneryBlocks.remove(blk.Scenery);
-		MapData.Instance.MonsterBlocks.remove(blk.Monster);
+
+		blk.remove();
 		//remove from list
 		return dictionary[blk.BlockInfo.BlockID].Remove(blk);
 	}
@@ -174,13 +203,13 @@ public class TerrainManager {
 		return null;
 	}
 
-	public string TerrainSaveString {
+	public string SaveString {
 		get {
 			string retVal = "";
 			string tempVal;
 			foreach(KeyValuePair<string, List<TerrainBlock>> kvPair in dictionary) {
 				tempVal = "";
-				tempVal += kvPair.Key + ": ";
+				tempVal += kvPair.Key + ":";
 				foreach(TerrainBlock blk in kvPair.Value) {
 					tempVal += blk.SaveString + " ";
 				}
@@ -188,5 +217,13 @@ public class TerrainManager {
 			}
 			return retVal;
 		}
+	}
+
+	public int numTiles() {
+		int retVal = 0;
+		foreach(List<TerrainBlock> val in dictionary.Values) {
+			retVal += val.Count;
+		}
+		return retVal;
 	}
 }

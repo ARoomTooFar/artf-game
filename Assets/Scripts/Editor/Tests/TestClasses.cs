@@ -9,7 +9,7 @@ public class MasterTest {
 		}
 
 		public List<TerrainBlock> Blocks {
-			get{ return blocks; }
+			get{ return Blocks; }
 		}
 	}
 
@@ -32,12 +32,6 @@ public class MasterTest {
 				retVal += val.Count;
 			}
 			return retVal;
-		}
-	}
-
-	protected internal class test_MapData : MapData{
-		public static test_TerrainManager Terrain {
-			get{ return new test_TerrainManager(MapData.Instance.TerrainBlocks); }
 		}
 	}
 

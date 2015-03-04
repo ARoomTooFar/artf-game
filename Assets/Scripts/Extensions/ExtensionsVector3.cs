@@ -13,10 +13,9 @@ public static class ExtensionsVector3
 	 * returns a new Vector3 with x, y and z rounded to the nearest integer.
 	 */
 	public static Vector3 Round(this Vector3 vec){
-		Vector3 retVal = new Vector3 ();
-		retVal.x = Mathf.Round (vec.x);
-		retVal.y = Mathf.Round (vec.y);
-		retVal.z = Mathf.Round (vec.z);
+		Vector3 retVal = new Vector3(Mathf.Round (vec.x),
+		                             Mathf.Round (vec.y),
+		                             Mathf.Round (vec.z));
 		return retVal;
 	}
 
@@ -71,10 +70,9 @@ public static class ExtensionsVector3
 	 * Returns a new Vector3 with the smallest x, y, and z values of the input vectors
 	 */
 	public static Vector3 getMinVals(this Vector3 vec, Vector3 other){
-		Vector3 retVal = new Vector3();
-		retVal.x = Mathf.Min(vec.x, other.x);
-		retVal.y = Mathf.Min(vec.y, other.y);
-		retVal.z = Mathf.Min(vec.z, other.z);
+		Vector3 retVal = new Vector3(Mathf.Min(vec.x, other.x),
+		                             Mathf.Min(vec.y, other.y),
+		                             Mathf.Min(vec.z, other.z));
 		return retVal;
 	}
 
@@ -86,10 +84,9 @@ public static class ExtensionsVector3
 	 * Returns a new Vector3 with the largest x, y, and z values of the input vectors
 	 */
 	public static Vector3 getMaxVals(this Vector3 vec, Vector3 other){
-		Vector3 retVal = new Vector3();
-		retVal.x = Mathf.Max(vec.x, other.x);
-		retVal.y = Mathf.Max(vec.y, other.y);
-		retVal.z = Mathf.Max(vec.z, other.z);
+		Vector3 retVal = new Vector3(Mathf.Max(vec.x, other.x),
+		                             Mathf.Max(vec.y, other.y),
+		                             Mathf.Max(vec.z, other.z));
 		return retVal;
 	}
 
@@ -101,14 +98,20 @@ public static class ExtensionsVector3
 	 * Returns a new Vector3 with the same x/y/z as the input
 	 */
 	public static Vector3 Copy(this Vector3 vec){
-		Vector3 retVal = new Vector3();
-		retVal.Set(vec.x, vec.y, vec.z);
+		Vector3 retVal = new Vector3(vec.x, vec.y, vec.z);
 		return retVal;
 	}
 
+	/*
+	 * public static Vector3 toDirection(this Vector3 vec)
+	 * 
+	 * Extension method for Vector3
+	 * 
+	 * Returns the closest direction based on the y value of the Vector3
+	 */
 	public static DIRECTION toDirection(this Vector3 vec){
 		float val = vec.y;
-		val /= 360;
+		val %= 360;
 		val /= 45;
 		int intval = Mathf.RoundToInt(val);
 		switch(intval) {

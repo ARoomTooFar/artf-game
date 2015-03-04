@@ -2,121 +2,149 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MapData {
+public static class MapData {
 
-	#region PrivateVariables
-	protected static MapData instance;
-	#endregion PrivateVariables
-
-	protected MapData() {
+	static MapData() {
 		TerrainBlocks = new TerrainManager();
 		SceneryBlocks = new SceneryManager();
 		MonsterBlocks = new MonsterManager();
 		TheFarRooms = new ARTFRoomManager();
 	}
 
-	public static MapData Instance {
-		get {
-			if(instance == null) {
-				instance = new MapData();
-			}
-			return instance;
-		}
-	}
-
 	public static void ClearData(){
-		instance = null;
+		SceneryBlocks.clear();
+		MonsterBlocks.clear();
+		TerrainBlocks.clear();
+		TheFarRooms.clear();
 	}
 
-	public TerrainManager TerrainBlocks {
+	public static TerrainManager TerrainBlocks {
 		get;
 		private set;
 	}
 
-	public SceneryManager SceneryBlocks {
+	public static SceneryManager SceneryBlocks {
 		get;
 		private set;
 	}
 
-	public MonsterManager MonsterBlocks {
+	public static MonsterManager MonsterBlocks {
 		get;
 		private set;
 	}
 
-	public ARTFRoomManager TheFarRooms {
+	public static ARTFRoomManager TheFarRooms {
 		get;
 		private set;
 	}
 
-	public string getSaveString() {
-		return "";
+	public static string SaveString{
+		get{
+			string retVal = "MapData\n";
+			retVal += "Terrain\n";
+			retVal += TerrainBlocks.SaveString;
+			retVal += "Room\n";
+			retVal += TheFarRooms.SaveString;
+			retVal += "Scenery\n";
+			retVal += SceneryBlocks.SaveString;
+			retVal += "Monster\n";
+			retVal += MonsterBlocks.SaveString;
+			return retVal;
+		}
 	}
 
 	#region Rooms
 	#region RoomManipulation
-	public void addRoom(Vector3 pos1, Vector3 pos2){
+	public static void addRoom(Vector3 pos1, Vector3 pos2){
 		TheFarRooms.add(pos1, pos2);
 	}
 
-	public void moveRoom(Vector3 oldPos, Vector3 newPos){
+	public static void moveRoom(Vector3 oldPos, Vector3 newPos){
 		TheFarRooms.move(oldPos, newPos - oldPos);
 	}
 
-	public void resizeRoom(Vector3 oldCor, Vector3 newCor){
+	public static void resizeRoom(Vector3 oldCor, Vector3 newCor){
 		TheFarRooms.resize(oldCor, newCor);
 	}
 
-	public void removeRoom(Vector3 pos){
+	public static void removeRoom(Vector3 pos){
 		TheFarRooms.remove(pos);
 	}
 	#endregion RoomManipulation
 
 	#region RoomValidation
-	public bool isAddRoomValid(Vector3 pos1, Vector3 pos2){
+	public static bool isAddRoomValid(Vector3 pos1, Vector3 pos2){
 		return TheFarRooms.doAnyRoomsIntersect(new ARTFRoom(pos1, pos2));
 	}
 
-	public bool isMoveRoomValid(Vector3 oldPos, Vector3 newPos){
+	public static bool isMoveRoomValid(Vector3 oldPos, Vector3 newPos){
 		return TheFarRooms.isMoveValid(oldPos, newPos);
 	}
 
-	public bool isResizeRoomValid(Vector3 oldCor, Vector3 newCor){
+	public static bool isResizeRoomValid(Vector3 oldCor, Vector3 newCor){
 		return TheFarRooms.isResizeValid(oldCor, newCor);
 	}
 	#endregion RoomValidation
 	#endregion Rooms
 
 	#region TerrainManipulation
-	public void changeTerrainType(Vector3 pos, string type){
+	public static void changeTerrainType(Vector3 pos, string type){
 		TerrainBlocks.changeType(pos, type);
 	}
 
-	public void rotateTerrain(Vector3 pos, bool goClockwise = true){
+	public static void rotateTerrain(Vector3 pos, bool goClockwise = true){
 		TerrainBlocks.rotate(pos, goClockwise);
 	}
 	#endregion TerrainManipulation
 
+	public static void addMonsterScenery(string type, Vector3 pos, DIRECTION dir){
+		GameObject obj = GameObjectResourcePool.getResource(type, pos, dir.toRotationVector());
+		SceneryMonoBehavior smb = obj.GetComponent<SceneryMonoBehavior>();
+		GameObjectResourcePool.returnResource(type, obj);
+		if(smb != null){
+			MapData.addScenery(type, pos, dir);
+		} else {
+			MapData.addMonster(type, pos, dir);
+		}
+	}
+
+	public static void moveMonsterScenery(GameObject obj, Vector3 pos, Vector3 offset){
+		if(obj.GetComponent<SceneryMonoBehavior>() != null){
+			MapData.moveScenery(pos, offset);
+		} else {
+			MapData.moveMonster(pos, offset);
+		}
+	}
+
+	public static void rotateMonsterScenery(GameObject obj, Vector3 pos, bool goClockwise = true){
+		if(obj.GetComponent<SceneryMonoBehavior>() != null){
+			MapData.rotateScenery(pos, goClockwise);
+		} else {
+			MapData.rotateMonster (pos, goClockwise);
+		}
+	}
+
 	#region Monsters
 	#region MonsterManipulation
-	public void addMonster(string type, Vector3 pos, DIRECTION dir){
+	public static void addMonster(string type, Vector3 pos, DIRECTION dir){
 		MonsterBlocks.add(new MonsterBlock(type, pos, dir));
 	}
 
-	public void moveMonster(Vector3 pos, Vector3 offset){
+	public static void moveMonster(Vector3 pos, Vector3 offset){
 		MonsterBlocks.move(pos, offset);
 	}
 
-	public void rotateMonster(Vector3 pos, bool goClockwise = true){
+	public static void rotateMonster(Vector3 pos, bool goClockwise = true){
 		MonsterBlocks.rotate(pos, goClockwise);
 	}
 
-	public void removeMonster(Vector3 pos){
+	public static void removeMonster(Vector3 pos){
 		MonsterBlocks.remove(pos);
 	}
 	#endregion MonsterManipulation
 
 	#region MonsterValidation
-	public bool isAddMonsterValid(Vector3 pos){
+	public static bool isAddMonsterValid(Vector3 pos){
 		return MonsterBlocks.isAddValid(pos);
 	}
 	#endregion MonsterValidation
@@ -124,33 +152,33 @@ public class MapData {
 
 	#region Scenery
 	#region SceneryManipulation
-	public void addScenery(string type, Vector3 pos, DIRECTION dir){
+	public static void addScenery(string type, Vector3 pos, DIRECTION dir){
 		SceneryBlocks.add(new SceneryBlock(type, pos, dir));
 	}
 
-	public void moveScenery(Vector3 pos, Vector3 offset){
+	public static void moveScenery(Vector3 pos, Vector3 offset){
 		SceneryBlocks.move(pos, offset);
 	}
 
-	public void rotateScenery(Vector3 pos, bool goClockwise = true){
+	public static void rotateScenery(Vector3 pos, bool goClockwise = true){
 		SceneryBlocks.rotate(pos, goClockwise);
 	}
 
-	public void removeScenery(Vector3 pos){
+	public static void removeScenery(Vector3 pos){
 		SceneryBlocks.remove(pos);
 	}
 	#endregion SceneryManipulation
 
 	#region SceneryValidation
-	public bool isAddSceneryValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North){
+	public static bool isAddSceneryValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North){
 		return isAddSceneryValid(type, pos, dir);
 	}
 
-	public bool isMoveSceneryValid(Vector3 pos, Vector3 offset){
+	public static bool isMoveSceneryValid(Vector3 pos, Vector3 offset){
 		return SceneryBlocks.isMoveValid(pos, offset);
 	}
 
-	public bool isRotateSceneryValid(Vector3 pos, bool goClockwise = true){
+	public static bool isRotateSceneryValid(Vector3 pos, bool goClockwise = true){
 		return SceneryBlocks.isRotateValid(pos, goClockwise);
 	}
 	#endregion SceneryValidation
