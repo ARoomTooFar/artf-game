@@ -82,6 +82,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		if(stats.health <= 0){
 			
 			isDead = true;
+			UI.hpBar.current = 0;
 		} else {
 			if(UI!=null){
 				if(UI.onState){
@@ -191,7 +192,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 
-		if (actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing))) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
+		if (!stats.isDead&&actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing))) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -233,7 +234,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	//---------------------------------//
 	
 	public override void damage(int dmgTaken, Character striker) {
-		if (!invincible) {
+		if (!invincible&&!stats.isDead) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 		
 			// print("UGH!" + dmgTaken);
@@ -247,7 +248,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	}
 	
 	public override void damage(int dmgTaken) {
-		if (!invincible) {
+		if (!invincible&&!stats.isDead) {
 			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
 			UI.greyBar.current = greyDamage+stats.health;
@@ -260,7 +261,10 @@ public class Player : Character, IMoveable, IHealable<int>{
 	}
 
 	public override void die() {
+		Debug.Log("IsDead");
 		base.die();
+		stats.health = 0;
+		UI.hpBar.current = 0;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
@@ -381,6 +385,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 	private void OnTriggerStay(Collider other){
 		if(other.tag == "Door"){
 			currDoor = other.gameObject;
+		}
+	}
+	private void OnTriggerExit(Collider other){
+		if(other.tag == "Door"){
+			currDoor = null;
 		}
 	}
 	//----------------------------------//
