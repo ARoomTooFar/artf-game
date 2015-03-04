@@ -10,9 +10,9 @@ using System.Collections.Generic;
 public class SceneryBlock {
 
 	#region Properties
-	public SceneryBlockInfo BlockInfo {
-		get;
-		private set;
+
+	public SceneryMonoBehavior BlockInfo {
+		get { return GameObj.GetComponent<SceneryMonoBehavior>(); }
 	}
 
 	public Vector3 Position {
@@ -32,6 +32,14 @@ public class SceneryBlock {
 	public GameObject GameObj {
 		get;
 		private set;
+	}
+
+	public bool Pathable {
+		get { return BlockInfo.Pathable; }
+	}
+
+	public bool Walkable {
+		get { return BlockInfo.Walkable; }
 	}
 
 	/*
@@ -59,7 +67,6 @@ public class SceneryBlock {
 	 * Constructor
 	 */
 	public SceneryBlock (string blockID, Vector3 pos, DIRECTION dir) {
-		this.BlockInfo = SceneryBlockInfo.get (blockID);
 		this.Position = pos.Round ();
 		this.Orientation = dir;
 		this.GameObj = GameObjectResourcePool.getResource(blockID, pos, dir.toRotationVector());
@@ -78,6 +85,10 @@ public class SceneryBlock {
 	public void rotate(bool goClockwise = true){
 		Orientation = Orientation.QuarterTurn(goClockwise);
 		GameObj.transform.eulerAngles = Orientation.toRotationVector();
+	}
+
+	public void remove(){
+		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
 	}
 }
 

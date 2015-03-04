@@ -9,6 +9,15 @@ public class SceneryManager {
 	public SceneryManager() {
 	}
 
+	
+	public void clear(){
+		foreach(List<SceneryBlock> lst in dictionary.Values){
+			foreach(SceneryBlock blk in lst){
+				blk.remove();
+			}
+		}
+	}
+
 	#region (un)linkTerrain
 	/*
 	 * private bool linkTerrain (SceneryBlock block)
@@ -23,7 +32,7 @@ public class SceneryManager {
 		//for each coordinate this block occupies
 		foreach(Vector3 coordinate in blk.Coordinates) {
 			//get the terrain block in that position
-			terBlk = MapData.Instance.TerrainBlocks.find(coordinate);
+			terBlk = MapData.TerrainBlocks.find(coordinate);
 			//if there's no block there, this block is not placeable
 			if(terBlk == null) {
 				return false;
@@ -47,7 +56,7 @@ public class SceneryManager {
 		//for each coordinate this block occupies
 		foreach(Vector3 coordinate in blk.Coordinates) {
 			//get the terrain block in that position
-			terBlk = MapData.Instance.TerrainBlocks.find(coordinate);
+			terBlk = MapData.TerrainBlocks.find(coordinate);
 			//if there's no block then... what? continue anyways
 			if(terBlk == null) {
 				continue;
@@ -76,9 +85,11 @@ public class SceneryManager {
 			return false;
 		}
 		//get the list for the block type
-		List<SceneryBlock> lst = dictionary[blk.BlockInfo.BlockID];
+		List<SceneryBlock> lst;
+		try{
+			lst = dictionary[blk.BlockInfo.BlockID];
+		} catch {
 		//create one if needed
-		if(lst == null) {
 			lst = new List<SceneryBlock>();
 			dictionary.Add(blk.BlockInfo.BlockID, lst);
 		}
@@ -102,8 +113,8 @@ public class SceneryManager {
 	}
 
 	public void remove(SceneryBlock blk) {
-		GameObjectResourcePool.returnResource(blk.BlockInfo.BlockID, blk.GameObj);
 		unlinkTerrain(blk);
+		blk.remove();
 		dictionary[blk.BlockInfo.BlockID].Remove(blk);
 	}
 	#endregion Remove
@@ -197,7 +208,7 @@ public class SceneryManager {
 		TerrainBlock terBlk;
 		foreach(Vector3 coordinate in blk.Coordinates) {
 			//get the terrain block in that position
-			terBlk = MapData.Instance.TerrainBlocks.find(coordinate);
+			terBlk = MapData.TerrainBlocks.find(coordinate);
 			//if there's no block there, this block is not placeable
 			if(terBlk == null) {
 				return false;
@@ -211,13 +222,13 @@ public class SceneryManager {
 	#endregion isBlockValid
 	#endregion Validation
 	
-	public string ScenerySaveString {
+	public string SaveString {
 		get {
 			string retVal = "";
 			string tempVal;
 			foreach(KeyValuePair<string, List<SceneryBlock>> kvPair in dictionary) {
 				tempVal = "";
-				tempVal += kvPair.Key + ": ";
+				tempVal += kvPair.Key + ":";
 				foreach(SceneryBlock blk in kvPair.Value) {
 					tempVal += blk.SaveString + " ";
 				}

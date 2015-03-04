@@ -73,7 +73,8 @@ public class Input_ItemObjectUI : MonoBehaviour {
 
 		//rotate object button
 		Button_Rotate.onClick.AddListener (() => {
-			output_itemObject.rotate(90f); 
+			MapData.rotateMonsterScenery(this.transform.parent.gameObject, this.transform.parent.gameObject.transform.position);
+//			output_itemObject.rotate(90f); 
 		});
 
 		//X out

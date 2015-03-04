@@ -21,7 +21,7 @@ public class Input_Camera : MonoBehaviour {
 	
 	void Start () {
 //		cameraControl = new Output_Camera();
-		cameraControl = GameObject.Find("Output_Camera").GetComponent("Output_Camera") as Output_Camera;
+		cameraControl = GameObject.Find("UICamera").GetComponent("Output_Camera") as Output_Camera;
 
 		Button_TopDown = GameObject.Find ("Button_TopDown").GetComponent("Button") as Button;
 		Button_Perspective = GameObject.Find ("Button_Perspective").GetComponent("Button") as Button;
