@@ -49,6 +49,7 @@ public class UIHandler_FileIO : MonoBehaviour
 		if (serv.dataCheck(dlLvlData))
 		{
 			Debug.Log("DOWNLOAD SUCCEEDED: " + dlLvlData);
+			Debug.Log ("Level Data: " + dlLvlData);
 			MapDataParser.ParseSaveString(dlLvlData);
 		}
 		else
@@ -56,10 +57,11 @@ public class UIHandler_FileIO : MonoBehaviour
 			Debug.Log("ERROR: LEVEL DATA DOWNLOAD FAILED");
 		}
 	}
-	
+
 	public void saveFile ()
 	{
-		lvlUpdate = serv.updateLvl("5684666375864320", "gameaccountID", MapData.SaveString, "draftleveldata");
+		Debug.Log (MapData.SaveString);
+		lvlUpdate = serv.updateLvl("5684666375864320", "123123", MapData.SaveString, "draftleveldata");
 	}
 	
 
