@@ -360,10 +360,12 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	//     ie: Removing actions, player from camera etc
 	public virtual void die() {
 		stats.isDead = true;
+		actable = false;
+		freeAnim = false;
 	}
 	
 	public virtual void rez(){
-		Debug.Log("Dooby");
+		//Debug.Log("Dooby");
 		if(stats.isDead){
 			stats.isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
