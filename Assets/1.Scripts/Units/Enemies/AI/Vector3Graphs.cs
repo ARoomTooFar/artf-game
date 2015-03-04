@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Vector3Graphs : Graphs<Node<Vector3>> {
+public class Vector3Graphs : Graphs<Vector3> {
 	
 	//-----------//
 	// Variables //
@@ -27,7 +27,7 @@ public class Vector3Graphs : Graphs<Node<Vector3>> {
 
 	// Overwritten functions
 	// Adds the new node with T value to our graph
-	public override Node<Vector3> addNode(Vector3 value) {
+	public Node<Vector3> addNode(Vector3 value) {
 		Node<Vector3> newNode = new Node<Vector3>(value);
 		this.findNeighbors (newNode);
 		allNodes.Add (newNode);
@@ -35,7 +35,7 @@ public class Vector3Graphs : Graphs<Node<Vector3>> {
 	}
 	
 	// Adds new node to our graph
-	public override void addNode (Node<Vector3> newNode) {
+	public void addNode (Node<Vector3> newNode) {
 		newNode.clearNeighbors ();
 		this.findNeighbors (newNode);
 		this.allNodes.Add (newNode);
@@ -57,8 +57,8 @@ public class Vector3Graphs : Graphs<Node<Vector3>> {
 			for (int i = 0; i < hits.Length; ++i) {
 				if (hits[i].collider.tag == "Wall") break;
 				if (i == hits.Length) {
-					this.addNeighbor(node);
-					node.addNeighbor(this);
+					newNode.addNeighbor(node);
+					node.addNeighbor(newNode);
 				}
 			}
 		}

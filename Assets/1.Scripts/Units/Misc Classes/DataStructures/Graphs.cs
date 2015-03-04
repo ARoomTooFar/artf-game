@@ -32,7 +32,6 @@ public class Graphs<T> {
 	public virtual void addNode (Node<T> newNode) {
 		allNodes.Add (newNode);
 	}
-	
 
 	// Pathfinding Stuff //
 
