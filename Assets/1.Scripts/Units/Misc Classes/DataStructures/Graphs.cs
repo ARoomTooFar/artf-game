@@ -55,17 +55,24 @@ public class Graphs<T> {
 	}*/
 	
 	// Finds the shortest path to a node given starting and ending node using Dijstras
-	public List<Node<T>> findShortestPathTo(Node<T> toNode) {
-		if (!this.allNodes.Contains(toNode)) Debug.LogWarning ("Goal node with value " + toNode.value + " does not exist in graph");
-		else return this.Dijkstra(toNode);
-		return null;
+	//     returns false if it fails
+	public bool findShortestPathTo(Node<T> toNode, Node<T> fromNode) {
+		if (!this.allNodes.Contains (toNode)) Debug.LogWarning ("Goal node with value " + toNode.value + " does not exist in graph");
+		else if (toNode.neighbors.Count == 0) Debug.LogWarning ("Goal node with value " + toNode.value + " does not have any paths conencted to it");
+		else if (!this.allNodes.Contains(fromNode)) Debug.LogWarning ("Source node with value " + fromNode.value + " does not exist in graph");
+		else if (fromNode.neighbors.Count == 0) Debug.LogWarning ("Source node with value " + fromNode.value + " does not have any paths conencted to it");
+		else return this.Dijkstra(toNode, fromNode);
+		return false;
 	}
-	
-	protected List<Node<T>> Dijkstra(Node<T> toNode) {
+
+	// Dijkstra algorthm to find shortest path to a node from current node
+	//     Path is set within the node itself
+	//     returns false if it fails
+	protected bool Dijkstra(Node<T> toNode, Node<T> fromNode) {
 		toNode.distanceToSource = 0.0f;
 		toNode.nodeToSource = null;
 
-		Queue<Node<T>> queue = new Queue<Node<T>> ();
+		List<Node<T>> nodesToVisit = new List<Node<T>> ();
 
 		// Start create our queue
 		foreach(Node<T> vertex in this.allNodes) {
@@ -73,21 +80,39 @@ public class Graphs<T> {
 				vertex.distanceToSource = Mathf.Infinity;
 				vertex.nodeToSource = null;
 			}
-			queue.Enqueue(vertex);
+			nodesToVisit.Add(vertex);
 		}
 
-		Node<T> onNode;
-		onNode = queue.Peek();
+		float tempDist = 0.0f;
+		Node<T> onNode = nodesToVisit[0];
+		List<Edge<T>> neighbors;
 
 		// Primary loop for calculating path
-		while (queue.Count != 0) {
-			// Find current node with shortest path
-			foreach (Node<T> value in queue) {
+		while (nodesToVisit.Count > 0) {
+			// Find current node with shortest distance from goal node
+			foreach (Node<T> value in nodesToVisit) {
 				if (value.distanceToSource < onNode.distanceToSource) onNode = value;
 			}
 
-			foreach (
+			// We have found our shortest path to the source from our node
+			if (onNode.Equals(fromNode)) break;
+
+			nodesToVisit.Remove(onNode);
+			neighbors = onNode.neighbors;
+
+			foreach (Edge<T> edge in neighbors) {
+				tempDist = onNode.distanceToSource + edge.length;
+				if (tempDist < edge.toNode.distanceToSource) {
+					edge.toNode.distanceToSource = tempDist;
+					edge.toNode.nodeToSource = onNode;
+				}
+			}
 		}
+
+		if (onNode.Equals (fromNode)) return true;
+
+		Debug.LogWarning ("Could not find a path from source node with value " + fromNode.value + " to goal node with value " + toNode.value);
+		return false;
 	}
 
 	//------------------//

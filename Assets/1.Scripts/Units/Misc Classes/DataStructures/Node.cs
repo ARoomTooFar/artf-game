@@ -7,33 +7,7 @@ using System.Collections.Generic;
 //------------//
 
 public class Node<T> {
-	
-	//------------//
-	// Edge Class //
-	//------------//
-	
-	protected class Edge<T> {
-		public float _length;
-		public float length {
-			get {return this._length;}
-			protected set {this._length = value;}
-		}
-		
-		protected Node<T> _toNode;
-		public Node<T> toNode {
-			get {return this._toNode;}
-			protected set {this._toNode = value;}
-		}
-		
-		public Edge (float length, Node<T> toNode) {
-			this.length = length;
-			this.toNode = toNode;
-		}
-	}
-	
-	//----------//
-	
-	
+
 	//-----------//
 	// Variables //
 	//-----------//
@@ -42,6 +16,10 @@ public class Node<T> {
 	public Node<T> nodeToSource;
 
 	protected List<Edge<T>> edges;
+
+	public List<Edge<T>> neighbors {
+		get {return edges;}
+	}
 	
 	protected T _value;
 	public T value {
@@ -81,7 +59,7 @@ public class Node<T> {
 			this.edges.Add (newEdge);
 		}
 	}
-	
+
 	
 	// Functions that check if the edges of this node contains duplicates //
 	
