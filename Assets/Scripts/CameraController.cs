@@ -244,11 +244,7 @@ public class CameraController : MonoBehaviour {
 		GL.Begin (GL.LINES);
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
-		
-		/* get size of tile map */
-		int size_x = 0; int size_z = 0;
-		size_x = tilemapcont.grid_x;
-		size_z = tilemapcont.grid_z;
+
 		
 		
 		//lower edge of tilemap bounding box

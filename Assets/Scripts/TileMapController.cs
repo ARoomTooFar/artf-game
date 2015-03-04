@@ -28,9 +28,6 @@ public class TileMapController : MonoBehaviour {
 	string selectedItem = null;
 	GameObject currentObj;
 
-	
-	Dictionary<Vector3, List<GameObject>> wallDic;
-
 	void Start ()
 	{
 		UICamera = GameObject.Find ("UICamera").camera;
@@ -49,8 +46,6 @@ public class TileMapController : MonoBehaviour {
 
 	void Awake ()
 	{
-		wallDic = new Dictionary<Vector3, List<GameObject>>();
-		
 		tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
 		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 	}
@@ -58,19 +53,12 @@ public class TileMapController : MonoBehaviour {
 	void Update ()
 	{
 		RayToScene ();
-		adjustGroundGrid ();
 
 		Vector3 camPos = UICamera.transform.position;
 		camPos.y = 0f;
 		camPos.x -= (grid_x / 2) * transform.localScale.x;
 		camPos.z -= (grid_z / 2) * transform.localScale.z;
 		transform.position = camPos;
-	}
-
-	void adjustGroundGrid ()
-	{
-		float gridz = grid_z * 1.0f;
-		float gridx = grid_x * 1.0f;
 	}
 
 	public void fillInRoom (HashSet<Vector3> st, float firstCornerX, float firstCornerZ, float secondCornerX, float secondCornerZ){
