@@ -2,118 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-//------------//
-// Node Class //
-//------------//
-
-public class Node<T> {
-
-	//------------//
-	// Edge Class //
-	//------------//
-
-	protected class Edge<T> {
-		public float _length;
-		public float length {
-			get {return this._length;}
-			protected set {this._length = value;}
-		}
-		
-		protected Node<T> _toNode;
-		public Node<T> toNode {
-			get {return this._toNode;}
-			protected set {this._toNode = value;}
-		}
-		
-		public Edge (float length, Node<T> toNode) {
-			this.length = length;
-			this.toNode = toNode;
-		}
-	}
-
-	//----------//
-
-
-	//-----------//
-	// Variables //
-	//-----------//
-
-	protected List<Edge<T>> edges;
-
-	protected T _value;
-	public T value {
-		get {return this._value;}
-		protected set {this._value = value;}
-	}
-
-	//-------------//
-
-
-
-	//------------------//
-	// Public Functions //
-	//------------------//
-
-	public Node(T value) {
-		this.value = value;
-		this.edges = new List<Edge<T>>();
-	}
-
-	public void addNeighbor (Node<T> newNeighbor) {
-		if (this.IsInEdges(newNeighbor)) {
-			Debug.LogWarning ("Node with value " + newNeighbor.value + " already exists in graph");
-		} else {
-			Edge<T> newEdge = new Edge<T>(1, newNeighbor);
-			this.edges.Add (newEdge);
-		}
-	}
-
-	public void addNeightbor (Node<T> newNeighbor, float length) {
-		if (this.IsInEdges(newNeighbor, length)) {
-			Debug.LogWarning ("Node with value " + newNeighbor.value + " and length of " + length + " already exists in graph");
-		} else {
-			Edge<T> newEdge = new Edge<T>(length, newNeighbor);
-			this.edges.Add (newEdge);
-		}
-	}
-
-
-	// Functions that check if the edges of this node contains duplicates //
-
-	public bool IsInEdges(Node<T> node, float length) {
-		foreach (Edge<T> edge in edges) {
-			if (edge.toNode.value.Equals(node.value) && edge.length == length) return true;
-		}
-		return false;
-	}
-
-	public bool IsInEdges(Node<T> node) {
-		foreach (Edge<T> edge in edges) {
-			if (edge.toNode.value.Equals(node.value)) return true;
-		}
-		return false;
-	}
-
-	public bool IsInEdges(T value, float length) {
-		foreach (Edge<T> edge in edges) {
-			if (edge.toNode.value.Equals(value) && edge.length == length) return true;
-		}
-		return false;
-	}
-
-	public bool IsInEdges(T value) {
-		foreach (Edge<T> edge in edges) {
-			if (edge.toNode.value.Equals(value)) return true;
-		}
-		return false;
-	}
-
-	//---------------------------//
-}
-
-//-----------------//
-
-
 public class Graphs<T> {
 
 	//-----------//
@@ -166,14 +54,42 @@ public class Graphs<T> {
 		}
 	}*/
 	
-	// Finds the shortest path to the given node
-	public void findShortestPathTo(Node<T> toNode) {
-		if (!this.allNodes.Contains(toNode)) Debug.LogWarning ("Node with value " + toNode.value + " does not exist in list");
-		else {
-			
-		}
+	// Finds the shortest path to a node given starting and ending node using Dijstras
+	public List<Node<T>> findShortestPathTo(Node<T> toNode) {
+		if (!this.allNodes.Contains(toNode)) Debug.LogWarning ("Goal node with value " + toNode.value + " does not exist in graph");
+		else return this.Dijkstra(toNode);
+		return null;
 	}
 	
+	protected List<Node<T>> Dijkstra(Node<T> toNode) {
+		toNode.distanceToSource = 0.0f;
+		toNode.nodeToSource = null;
+
+		Queue<Node<T>> queue = new Queue<Node<T>> ();
+
+		// Start create our queue
+		foreach(Node<T> vertex in this.allNodes) {
+			if (vertex != toNode) {
+				vertex.distanceToSource = Mathf.Infinity;
+				vertex.nodeToSource = null;
+			}
+			queue.Enqueue(vertex);
+		}
+
+		Node<T> onNode;
+		onNode = queue.Peek();
+
+		// Primary loop for calculating path
+		while (queue.Count != 0) {
+			// Find current node with shortest path
+			foreach (Node<T> value in queue) {
+				if (value.distanceToSource < onNode.distanceToSource) onNode = value;
+			}
+
+			foreach (
+		}
+	}
+
 	//------------------//
 	
 	
