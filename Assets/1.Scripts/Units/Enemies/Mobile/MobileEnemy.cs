@@ -137,7 +137,7 @@ public class MobileEnemy : NewEnemy {
 	//----------------------//
 	
 	protected virtual bool isResting(Character a) {
-		return this.lastSeenPosition == null && !this.alerted;
+		return this.lastSeenPosition == null && !this.alerted && this.distanceToVector3(resetpos) < 0.5f;
 	}
 	
 	protected virtual bool isApproaching(Character a) {
