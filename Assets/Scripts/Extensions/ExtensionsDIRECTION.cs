@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -129,6 +130,27 @@ public static class ExtensionsDIRECTION {
 		}
 		val *= 45;
 		return new Vector3(0, Mathf.Round(val), 0);
+	}
+
+	public static DIRECTION getOrdinalFromCardinals(this DIRECTION dir1, DIRECTION dir2){
+		if(!dir1.isCardinal() || !dir2.isCardinal()) {
+			throw new UnityException("NonCardinal direction passed to getOrdinalFromCardinals");
+		}
+		if(dir1.Opposite().Equals(dir2)) {
+			throw new UnityException("Directions are opposite");
+		}
+		string dir1str = dir1.ToString();
+		string dir2str = dir2.ToString();
+
+		string dirstr = null;
+
+		if(dir1str.Length == 4) {
+			dirstr = dir2str + dir1str;
+		} else {
+			dirstr = dir1str + dir2str;
+		}
+
+		return (DIRECTION)Enum.Parse(typeof(DIRECTION), dirstr);
 	}
 }
 

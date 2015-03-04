@@ -47,6 +47,11 @@ public class TerrainBlock {
 		private set;
 	}
 
+	public GameObject Wall {
+		get;
+		set;
+	}
+
 	public ARTFRoom Room {
 		get;
 		set;

@@ -7,6 +7,7 @@ public partial class ARTFRoom {
 
 	#region PrivateVariables
 	private static string defaultBlockID = "Prefabs/Rooms/floortile";
+	private static string defaultWall = "Prefabs/Rooms/walltile";
 	#endregion PrivateVariables
 
 	#region Properties
@@ -80,7 +81,7 @@ public partial class ARTFRoom {
 	}
 
 	public float Length {
-		get { return 1+ URCorner.x - LLCorner.x; }
+		get { return 1 + URCorner.x - LLCorner.x; }
 	}
 	#endregion SquareProperties
 
@@ -132,9 +133,12 @@ public partial class ARTFRoom {
 				Blocks.Add(blk);
 				//and link the room to the block
 				blk.Room = this;
+				if(this.isEdge(blk.Position)) {
+					blk.Wall = GameObjectResourcePool.getResource(defaultWall, blk.Position, getWallSide(blk.Position).toRotationVector());
+				}
 			}
 		}
-		foreach(TerrainBlock blks in Blocks){
+		foreach(TerrainBlock blks in Blocks) {
 			MapData.TerrainBlocks.relinkNeighbors(blks);
 		}
 	}
@@ -150,6 +154,7 @@ public partial class ARTFRoom {
 		foreach(TerrainBlock blk in Blocks) {
 			//unlink the room from the block
 			blk.Room = null;
+			GameObjectResourcePool.returnResource(blk.Wall.GetComponent<SceneryMonoBehavior>().BlockID, blk.Wall);
 		}
 		//remove all the links to terrain
 		Blocks.Clear();
@@ -220,8 +225,8 @@ public partial class ARTFRoom {
 	 * 
 	 * Removes all linked blocks from MapData
 	 */
-	public void remove(){
-		foreach(TerrainBlock blk in this.Blocks){
+	public void remove() {
+		foreach(TerrainBlock blk in this.Blocks) {
 			MapData.TerrainBlocks.remove(blk);
 		}
 		this.Blocks.Clear();
@@ -263,6 +268,36 @@ public partial class ARTFRoom {
 			}
 		}
 		return false;
+	}
+
+	public DIRECTION getWallSide(Vector3 pos){
+		if(!isEdge(pos)) {
+			return DIRECTION.NonDirectional;
+		}
+		DIRECTION NSDir = DIRECTION.NonDirectional;
+		DIRECTION EWDir = DIRECTION.NonDirectional;
+
+		if(pos.x == LLCorner.x) {
+			EWDir = DIRECTION.West;
+		}
+		if(pos.x == URCorner.x) {
+			EWDir = DIRECTION.East;
+		}
+		if(pos.z == LLCorner.z) {
+			NSDir = DIRECTION.South;
+		}
+		if(pos.z == URCorner.z) {
+			NSDir = DIRECTION.North;
+		}
+		Debug.Log(LLCorner + ", " + URCorner + ", " + pos + ", " + NSDir.ToString() + ", " + EWDir.ToString());
+		if(EWDir.Equals(DIRECTION.NonDirectional)) {
+			return NSDir;
+		}
+		if(NSDir.Equals(DIRECTION.NonDirectional)) {
+			return EWDir;
+		}
+
+		return NSDir.getOrdinalFromCardinals(EWDir);
 	}
 
 	/*
