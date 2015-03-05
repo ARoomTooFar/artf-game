@@ -7,8 +7,7 @@ public class Farts : MonoBehaviour
     const string SERVERURI = "https://api-dot-artf-server.appspot.com"; //live server
     const string LVLPATH = "/levels/";
     const string GAMEACCTPATH = "/gameaccount/";
-    const float cancelTime = 50000f;
-    const float timeoutTime = 60f;
+    const float timeoutTime = 60f; //HTTP requests timeout after 1 minute
 
     // Checks if returned data is valid or not. Returns true if the data is valid, false otherwise.
     public bool dataCheck(string input)
@@ -41,19 +40,18 @@ public class Farts : MonoBehaviour
     public string getLvl(string levelId)
     {
         WWW www = new WWW(SERVERURI + LVLPATH + levelId);
-        float elapsedTime = 0.0f;
-
         StartCoroutine(httpRequest(www));
-        while (www.isDone == false)
+
+        float timeStart = Time.realtimeSinceStartup;
+
+        while (!www.isDone)
         {
-            if (elapsedTime >= cancelTime)
+            if (Time.realtimeSinceStartup >= timeStart + timeoutTime)
             {
                 Debug.LogError("ERROR: Request timeout");
                 return "";
             }
-
-            elapsedTime += Time.deltaTime;
-            //Debug.Log("HTTP request time elapsed: " + elapsedTime);
+            //Debug.Log("HTTP request time elapsed: " + (Time.realtimeSinceStartup - timeStart));
         }
 
         return www.text;
@@ -61,8 +59,6 @@ public class Farts : MonoBehaviour
 
     public string newLvl(string gameAcctId, string machId, string liveLvlData = "", string draftLvlData = "")
     {
-        float elapsedTime = 0.0f;
-
         WWWForm form = new WWWForm();
         form.AddField("game_acct_id", gameAcctId);
         form.AddField("mach_id", machId);
@@ -74,16 +70,16 @@ public class Farts : MonoBehaviour
         WWW www = new WWW(SERVERURI + LVLPATH, form);
         StartCoroutine(httpRequest(www));
 
-        while (www.isDone == false)
+        float timeStart = Time.realtimeSinceStartup;
+
+        while (!www.isDone)
         {
-            if (elapsedTime >= cancelTime)
+            if (Time.realtimeSinceStartup >= timeStart + timeoutTime)
             {
                 Debug.LogError("ERROR: Request timeout");
                 return "";
             }
-
-            elapsedTime += Time.deltaTime;
-            //Debug.Log("HTTP request time elapsed: " + elapsedTime);
+            //Debug.Log("HTTP request time elapsed: " + (Time.realtimeSinceStartup - timeStart));
         }
 
         return www.text;
@@ -108,8 +104,6 @@ public class Farts : MonoBehaviour
 
     public string delLvl(string lvlId)
     {
-        float elapsedTime = 0.0f;
-
         WWWForm form = new WWWForm();
         form.AddField("flag", "delete");
         form.AddField("level_id", lvlId);
@@ -117,16 +111,16 @@ public class Farts : MonoBehaviour
         WWW www = new WWW(SERVERURI + LVLPATH + lvlId, form);
         StartCoroutine(httpRequest(www));
 
-        while (www.isDone == false)
+        float timeStart = Time.realtimeSinceStartup;
+
+        while (!www.isDone)
         {
-            if (elapsedTime >= cancelTime)
+            if (Time.realtimeSinceStartup >= timeStart + timeoutTime)
             {
                 Debug.LogError("ERROR: Request timeout");
                 return "";
             }
-
-            elapsedTime += Time.deltaTime;
-            //Debug.Log("HTTP request time elapsed: " + elapsedTime);
+            //Debug.Log("HTTP request time elapsed: " + (Time.realtimeSinceStartup - timeStart));
         }
 
         return www.text;
@@ -134,8 +128,6 @@ public class Farts : MonoBehaviour
 
     public string login(string gameAcctName, string gameAcctPass)
     {
-        float elapsedTime = 0.0f;
-
         WWWForm form = new WWWForm();
         form.AddField("game_acct_name", gameAcctName);
         form.AddField("game_acct_password", gameAcctPass);
@@ -144,16 +136,15 @@ public class Farts : MonoBehaviour
         StartCoroutine(httpRequest(www));
 
         float timeStart = Time.realtimeSinceStartup;
-        Debug.Log("timeStart: " + timeStart);
 
         while (!www.isDone)
         {
             if (Time.realtimeSinceStartup >= timeStart + timeoutTime)
             {
                 Debug.LogError("ERROR: Request timeout");
-                Debug.Log("timeEnd: " + Time.realtimeSinceStartup);
                 return "";
             }
+            //Debug.Log("HTTP request time elapsed: " + (Time.realtimeSinceStartup - timeStart));
         }
 
         return www.text;
@@ -161,15 +152,17 @@ public class Farts : MonoBehaviour
 
     IEnumerator httpRequest(WWW www)
     {
+        //Debug.Log("COROUTINE WWW REQUEST START");
+
         yield return www;
 
-        if (www.error == null)
+        /*if (www.error == null)
         {
             Debug.Log("COROUTINE WWW SUCCESS: " + www.text);
         }
         else
         {
             Debug.Log("COROUTINE WWW ERROR: " + www.error);
-        }
+        }*/
     }
 }

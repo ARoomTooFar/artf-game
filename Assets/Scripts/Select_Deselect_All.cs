@@ -54,7 +54,7 @@ public class Select_Deselect_All : MonoBehaviour {
 			}
 			//Otherwise, execute the toggle
 			else{
-				child.gameObject.GetComponent<Output_ItemObjectUI>().toggleItemObjectUI();
+				child.gameObject.GetComponent<ItemObjectUI>().toggleItemObjectUI();
 			}
 		}
 	
@@ -75,9 +75,9 @@ public class Select_Deselect_All : MonoBehaviour {
 			//otherwise...
 			else{
 				//if the object is not already selected
-				if(!child.gameObject.GetComponent<Output_ItemObjectUI>().toggleItemObjectUI()){
+				if(!child.gameObject.GetComponent<ItemObjectUI>().toggleItemObjectUI()){
 					//select it
-					child.gameObject.GetComponent<Output_ItemObjectUI>().toggleItemObjectUI();
+					child.gameObject.GetComponent<ItemObjectUI>().toggleItemObjectUI();
 				}
 			}
 		}
@@ -96,9 +96,9 @@ public class Select_Deselect_All : MonoBehaviour {
 			//otherwise...
 			else{
 				//if the object is selected
-				if(child.gameObject.GetComponent<Output_ItemObjectUI>().toggleItemObjectUI()){
+				if(child.gameObject.GetComponent<ItemObjectUI>().toggleItemObjectUI()){
 					//deselect it
-					child.gameObject.GetComponent<Output_ItemObjectUI>().toggleItemObjectUI();
+					child.gameObject.GetComponent<ItemObjectUI>().toggleItemObjectUI();
 				}
 			}
 		}
