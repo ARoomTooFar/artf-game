@@ -179,7 +179,7 @@ public class MobileEnemy : NewEnemy {
 	
 	protected virtual bool isInAtkAnimation(Character a) {
 		if (this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge) {
-			this.rigidbody.velocity = Vector3.zero;
+			this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 			return true;
 		}
 		return false;
@@ -227,7 +227,7 @@ public class MobileEnemy : NewEnemy {
 
 			this.resetpos = this.transform.position;
 			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
-			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 		}
 
 	}
@@ -235,7 +235,7 @@ public class MobileEnemy : NewEnemy {
 	protected virtual void Approach(Character a) {
 		this.facing = this.target.transform.position - this.transform.position;
 		this.facing.y = 0.0f;
-		this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 	}
 	
 	protected virtual void Attack(Character a) {
@@ -249,7 +249,7 @@ public class MobileEnemy : NewEnemy {
 	
 	// We can have some logic here, but it's mostly so our unit is still during and attack animation
 	protected virtual void AtkAnimation(Character a) {
-		this.rigidbody.velocity = Vector3.zero;
+		this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 	}
 	
 	protected virtual void Search(Character a) {
@@ -280,7 +280,7 @@ public class MobileEnemy : NewEnemy {
 	protected virtual void Spacing(Character a) {
 		this.facing = (this.target.transform.position - this.transform.position) * -1;
 		this.facing.y = 0.0f;
-		this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 	}
 
 	protected virtual void Far (Character a) {
@@ -297,7 +297,7 @@ public class MobileEnemy : NewEnemy {
 	
 	protected IEnumerator moveToPosition(Vector3 position) {
 		while (!this.isApproaching(this) && this.distanceToVector3(position) > 0.1f && !this.isInAtkAnimation(this) && this.target == null) {
-			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			yield return null;
 		}
 	}
@@ -306,7 +306,7 @@ public class MobileEnemy : NewEnemy {
 		this.facing = this.targetDir;
 		float moveToTime = 0.5f;
 		while (!this.isApproaching(this) && this.distanceToVector3(this.targetDir) > 0.1f && !this.isInAtkAnimation(this) && this.target == null && moveToTime > 0.0f) {
-			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			moveToTime -= Time.deltaTime;
 			yield return null;
 		}
@@ -316,7 +316,7 @@ public class MobileEnemy : NewEnemy {
 		float resetTimer = aggroTimer;
 		while(!this.isApproaching(this) && resetTimer > 0.0f && !this.isInAtkAnimation(this) && this.target == null) {
 			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
-			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			yield return new WaitForSeconds (0.5f);
 			resetTimer -= 0.5f;
 		}
@@ -349,7 +349,7 @@ public class MobileEnemy : NewEnemy {
 		if (angle < fov) {
 			RaycastHit hit;
 
-			if (rigidbody.SweepTest(direction, out hit, this.distanceToVector3(p.collider.transform.position))) {
+			if (GetComponent<Rigidbody>().SweepTest(direction, out hit, this.distanceToVector3(p.GetComponent<Collider>().transform.position))) {
 				if (hit.collider.gameObject == p) {
 					aggroT.add(p,1);
 					if (this.lastSeenPosition != null) {

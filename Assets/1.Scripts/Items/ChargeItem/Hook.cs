@@ -21,7 +21,7 @@ public class Hook : ChargeItem {
 	protected override void Start () {
 		base.Start ();
 		//collider = GetComponent<Collider>();
-		collider.enabled = false;
+		GetComponent<Collider>().enabled = false;
 	}
 	
 	protected override void setInitValues() {
@@ -37,7 +37,7 @@ public class Hook : ChargeItem {
 
 		// user.animator.SetTrigger("Charging Charge"); Once we have the animation for it
 
-		renderer.enabled = true;
+		GetComponent<Renderer>().enabled = true;
 
 	}
 
@@ -56,18 +56,18 @@ public class Hook : ChargeItem {
 
 	protected override void animDone() {
 		user.freeAnim = true;
-		collider.enabled = false;
+		GetComponent<Collider>().enabled = false;
 		hit = false;
-		renderer.enabled = false;
-	    rigidbody.isKinematic = true;
+		GetComponent<Renderer>().enabled = false;
+	    GetComponent<Rigidbody>().isKinematic = true;
 		foe = null;
 		base.animDone ();
 	}
 	
 	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
 	private IEnumerator chargeFunc(float chgTime) {
-		rigidbody.isKinematic = false;
-		collider.enabled = true;
+		GetComponent<Rigidbody>().isKinematic = false;
+		GetComponent<Collider>().enabled = true;
 		yield return StartCoroutine("chgTimeFunc",(chgTime));
 		//float tempStun = stunDuration * (hitWall ? 2 : 1);
 		/*foreach(Character ene in enemies) {
@@ -88,7 +88,7 @@ public class Hook : ChargeItem {
 		float checkTime = 0;
 		for (float timer = 0; timer <= totalTime; timer += Time.deltaTime) {
 			if(timer <= totalTime/2){
-				rigidbody.velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
+				GetComponent<Rigidbody>().velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 				if(foe!=null){
 					foe.transform.position = transform.position;
 				}
@@ -96,7 +96,7 @@ public class Hook : ChargeItem {
 				if(foe!=null){
 					foe.transform.position = transform.position;
 				}
-				rigidbody.velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;	
+				GetComponent<Rigidbody>().velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;	
 			}
 			if(check){
 			   checkTime = (totalTime/2) - timer;
@@ -127,7 +127,7 @@ public class Hook : ChargeItem {
 	
 	private IEnumerator chgLagTime() {
 		for (float timer = 0; timer < chgLag; timer += Time.deltaTime) {
-			rigidbody.velocity = Vector3.zero;
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
 			yield return 0;
 		}
 	}
@@ -145,7 +145,7 @@ public class Hook : ChargeItem {
 			if( component != null && foe != null) {
 				hit = true;
 				check = true;
-				collider.enabled = false;
+				GetComponent<Collider>().enabled = false;
 			}
 		}
 		// Will need a differentiation in the future(Or not if we want this)

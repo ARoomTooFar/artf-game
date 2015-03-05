@@ -30,7 +30,7 @@ public class NetRadius : MonoBehaviour,IFallable {
 	void Update () {
 		isGrounded = Physics.Raycast (transform.position, -Vector3.up, 0.2f);
 		if(isGrounded){
-			rigidbody.velocity = Vector3.zero;
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
 			if(activated){
 				transform.localScale -= new Vector3(decSpeed,0,decSpeed);
 				if(transform.localScale.x < .5|| transform.localScale.z < .5){
@@ -60,7 +60,7 @@ public class NetRadius : MonoBehaviour,IFallable {
 		// fake gravity
 		// Animation make it so rigidbody gravity works oddly due to some gravity weight
 		// Seems like Unity Pro is needed to change that, so unless we get it, this will suffice 
-		rigidbody.velocity = new Vector3 (0.0f, -gravity, 0.0f);
+		GetComponent<Rigidbody>().velocity = new Vector3 (0.0f, -gravity, 0.0f);
 	}
 
 	//----------------------------------//

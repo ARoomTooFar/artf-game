@@ -117,7 +117,7 @@ public class FodderNewAI: MobileEnemy {
 			}
 			this.facing = this.resetpos - this.transform.position;
 			this.facing.y = 0.0f;
-			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 		}
 			
 

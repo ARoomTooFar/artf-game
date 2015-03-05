@@ -15,21 +15,21 @@ public class Door : Wall {
 		if(!open){
 			open = true;
 			show = false;
-			renderer.enabled = false;
-			stand.renderer.enabled = false;
-			if(collider.enabled && !collider.isTrigger){
+			GetComponent<Renderer>().enabled = false;
+			stand.GetComponent<Renderer>().enabled = false;
+			if(GetComponent<Collider>().enabled && !GetComponent<Collider>().isTrigger){
 				//stand.collider.enabled = false;
-				collider.enabled = false;
+				GetComponent<Collider>().enabled = false;
 			}
 		}
 		else{
 			open = false;
 			show = true;
-			renderer.enabled = true;
-			stand.renderer.enabled = true;
-			if(!collider.enabled && !collider.isTrigger){
+			GetComponent<Renderer>().enabled = true;
+			stand.GetComponent<Renderer>().enabled = true;
+			if(!GetComponent<Collider>().enabled && !GetComponent<Collider>().isTrigger){
 				
-				collider.enabled = true;
+				GetComponent<Collider>().enabled = true;
 			}
 		}
 		//StopCoroutine("revWait");
@@ -38,9 +38,9 @@ public class Door : Wall {
 	// Update is called once per frame
 	protected override void Update () {
 		if(open){
-			stand.collider.enabled = false;
+			stand.GetComponent<Collider>().enabled = false;
 		}else{
-			stand.collider.enabled = true;
+			stand.GetComponent<Collider>().enabled = true;
 		}
 	}
 }

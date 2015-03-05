@@ -68,7 +68,7 @@ public class RiotShield : ToggleItem {
 	}
 
 	protected override IEnumerator bgnEffect() {
-		collider.enabled = true;
+		GetComponent<Collider>().enabled = true;
 		meshRenderer.enabled = true;
 		user.BDS.addBuffDebuff(debuff, user.gameObject);
 		return base.bgnEffect();
@@ -79,7 +79,7 @@ public class RiotShield : ToggleItem {
 	}
 
 	protected override void atvDeactivation() {
-		collider.enabled = false;
+		GetComponent<Collider>().enabled = false;
 		meshRenderer.enabled = false;
 		
 		user.BDS.rmvBuffDebuff(debuff, user.gameObject);

@@ -278,7 +278,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	protected virtual void movementAnimation() {
 		// animator.speed = 1; // Change animation speed back for other animations
-		if (rigidbody.velocity != Vector3.zero) {
+		if (GetComponent<Rigidbody>().velocity != Vector3.zero) {
 			animator.SetBool("Moving", true);
 			transform.localRotation = Quaternion.LookRotation(facing);
 		} else {
@@ -295,7 +295,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		// fake gravity
 		// Animation make it so rigidbody gravity works oddly due to some gravity weight
 		// Seems like Unity Pro is needed to change that, so unless we get it, this will suffice 
-		rigidbody.velocity = new Vector3 (0.0f, -gravity, 0.0f);
+		GetComponent<Rigidbody>().velocity = new Vector3 (0.0f, -gravity, 0.0f);
 	}
 
 	//----------------------------------//
@@ -392,7 +392,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public virtual bool stun() {
 		animator.SetBool("Charging", false);
 		this.stunned = true;
-		this.rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
+		this.GetComponent<Rigidbody>().velocity = new Vector3 (0.0f, 0.0f, 0.0f);
 		return true;
 	}
 
@@ -410,12 +410,12 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public virtual bool knockback(Vector3 direction, float speed) {
 		animator.SetBool("Charging", false);
 		this.knockedback = true;
-		this.rigidbody.velocity = direction.normalized * speed;
+		this.GetComponent<Rigidbody>().velocity = direction.normalized * speed;
 		return true;
 	}
 
 	public virtual void stabled() {
-		this.rigidbody.velocity = Vector3.zero;
+		this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 		this.knockedback = false;
 	}
 
