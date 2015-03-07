@@ -20,12 +20,8 @@ public class Node<T> {
 	public List<Edge<T>> neighbors {
 		get {return edges;}
 	}
-	
-	protected T _value;
-	public T value {
-		get {return this._value;}
-		protected set {this._value = value;}
-	}
+
+	public T value;
 
 	//-------------//
 	
@@ -62,6 +58,12 @@ public class Node<T> {
 
 	public void clearNeighbors() {
 		this.edges.Clear ();
+	}
+
+	public void clearSelf() {
+		this.clearNeighbors();
+		this.distanceToSource = Mathf.Infinity;
+		this.nodeToSource = null;
 	}
 
 	

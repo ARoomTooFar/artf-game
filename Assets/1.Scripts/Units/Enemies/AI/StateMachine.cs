@@ -124,6 +124,7 @@ public class StateMachine {
 		{
 			if(t.isTriggered())
 			{
+				// Debug.Log (t.targetState.id);
 				triggeredTransition = t;
 				currState.onExit();
 				break;

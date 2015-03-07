@@ -41,7 +41,6 @@ public class Vector3Graphs : Graphs<Vector3> {
 		this.allNodes.Add (newNode);
 	}
 
-
 	// Vector3Graph functions
 	
 	protected void findNeighbors (Node<Vector3> newNode) {
@@ -56,9 +55,10 @@ public class Vector3Graphs : Graphs<Vector3> {
 			
 			for (int i = 0; i < hits.Length; ++i) {
 				if (hits[i].collider.tag == "Wall") break;
-				if (i == hits.Length) {
+				if (i == hits.Length - 1) {
 					newNode.addNeighbor(node);
 					node.addNeighbor(newNode);
+					Debug.Log("adding neighbor");
 				}
 			}
 		}
