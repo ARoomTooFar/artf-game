@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Frenzy : Override {
 
 	private float spd;
 	private float str;
 	private float def;
-	float threshold;
 	int level;
 
 	public Frenzy () {

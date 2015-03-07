@@ -33,14 +33,24 @@ public class AggroTable
 	private AggroNode head;
 	private AggroNode tail;
 	public bool testing = false;
+	private int totalAggro;
 
 	public AggroTable(){
 		head = new AggroNode (null, 0);
 	}
 
+	public int AllAggro(){
+		return totalAggro;
+	}
+
+	public void resetTotal(){
+		totalAggro = 0;
+	}
+
 	public void add(GameObject g1, int p1)
 	{
 		// Debug.Log ("Adding " + g1 + " with prio " + p1);
+		++totalAggro;
 		AggroNode n = new AggroNode (g1, p1);
 
 		AggroNode runner = head;
@@ -71,6 +81,7 @@ public class AggroTable
 
 
 	public void addR(AggroNode nAdd, AggroNode nOld){
+
 		if (nAdd.getPrio () > nOld.getPrio ()) 
 		{
 			if (nOld.l != null) 

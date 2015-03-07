@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Bushman : MobileEnemy {
 
 	bool inFrenzy;
 	float frenzy_counter;
 	float frenzy_growth;
+	List<int> tiers;
+
 	
 	protected override void Awake () {
 		base.Awake ();
@@ -13,6 +16,11 @@ public class Bushman : MobileEnemy {
 		frenzy_counter = 0;
 		frenzy_growth = 2;
 	}
+
+	public void setTiers(List<int> t){
+		tiers = t;
+	}
+
 	
 	protected override void Start() {
 		base.Start ();
@@ -20,6 +28,7 @@ public class Bushman : MobileEnemy {
 	
 	protected override void Update() {
 
+		base.Update ();
 	}
 	
 	protected override void setInitValues() {

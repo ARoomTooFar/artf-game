@@ -67,3 +67,10 @@ public class PercentValues {
 		PercentValue = tempValue;
 	}
 }
+
+public class StatsMultiplier{
+	public int health, armor,maxHealth,rezCount;
+	public int strength, coordination, speed, luck;
+
+	public int minAtkRadius, maxAtkRadius;
+}
