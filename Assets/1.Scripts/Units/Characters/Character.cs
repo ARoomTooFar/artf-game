@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+//using System.Random;
 
 [System.Serializable]
 public class Stats{
@@ -214,6 +215,16 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	protected virtual void FixedUpdate() {
 
 	}
+	public virtual bool luckCheck(){
+		int luckCap = 10;
+		float r = UnityEngine.Random.Range(0,luckCap);
+		//Debug.Log(r);
+		if(r < stats.luck){
+			//Debug.Log("Y");
+			return true;
+		}
+		return false;
+	}
 	
 	// Update is called once per frame
 	protected virtual void Update () {
@@ -252,6 +263,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	// Constant animation updates (Main loop for characters movement/actions)
 	public virtual void animationUpdate() {
 		if (attacking) {
+			if(luckCheck()){
+			}
 			attackAnimation();
 		} else {
 			movementAnimation();
@@ -265,7 +278,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	protected virtual void movementAnimation() {
 		// animator.speed = 1; // Change animation speed back for other animations
-		if (rigidbody.velocity != Vector3.zero) {
+		if (GetComponent<Rigidbody>().velocity != Vector3.zero) {
 			animator.SetBool("Moving", true);
 			transform.localRotation = Quaternion.LookRotation(facing);
 		} else {
@@ -282,7 +295,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		// fake gravity
 		// Animation make it so rigidbody gravity works oddly due to some gravity weight
 		// Seems like Unity Pro is needed to change that, so unless we get it, this will suffice 
-		rigidbody.velocity = new Vector3 (0.0f, -gravity, 0.0f);
+		GetComponent<Rigidbody>().velocity = new Vector3 (0.0f, -gravity, 0.0f);
 	}
 
 	//----------------------------------//
@@ -347,10 +360,12 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	//     ie: Removing actions, player from camera etc
 	public virtual void die() {
 		stats.isDead = true;
+		actable = false;
+		freeAnim = false;
 	}
 	
 	public virtual void rez(){
-		Debug.Log("Dooby");
+		//Debug.Log("Dooby");
 		if(stats.isDead){
 			stats.isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
@@ -377,7 +392,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public virtual bool stun() {
 		animator.SetBool("Charging", false);
 		this.stunned = true;
-		this.rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
+		this.GetComponent<Rigidbody>().velocity = new Vector3 (0.0f, 0.0f, 0.0f);
 		return true;
 	}
 
@@ -395,12 +410,12 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public virtual bool knockback(Vector3 direction, float speed) {
 		animator.SetBool("Charging", false);
 		this.knockedback = true;
-		this.rigidbody.velocity = direction.normalized * speed;
+		this.GetComponent<Rigidbody>().velocity = direction.normalized * speed;
 		return true;
 	}
 
 	public virtual void stabled() {
-		this.rigidbody.velocity = Vector3.zero;
+		this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 		this.knockedback = false;
 	}
 

@@ -7,6 +7,9 @@ using System.Collections.Generic;
 public class MobileEnemy : NewEnemy {
 
 	protected Vector3 resetpos;
+	protected Vector3 targetDir;
+
+	protected float tempTimer;
 
 	//-------------------//
 	// Primary Functions //
@@ -52,6 +55,8 @@ public class MobileEnemy : NewEnemy {
 		State retreat = new State ("retreat");
 		State spacing = new State ("space");
 		State far = new State ("far");
+
+	//	State blankState = new State("blank"); // For testing purposes
 		
 		
 		// Add all the states to the state machine
@@ -89,7 +94,7 @@ public class MobileEnemy : NewEnemy {
 		tRetreat.addCondition (isRetreating, this);
 		tSpace.addCondition (isCreatingSpace, this);
 		tFar.addCondition (isFar, this);
-		
+
 		
 		// Set actions for the states
 		rest.addAction (Rest, this);
@@ -97,6 +102,7 @@ public class MobileEnemy : NewEnemy {
 		attack.addAction (Attack, this);
 		atkAnimation.addAction (AtkAnimation, this);
 		search.addAction (Search, this);
+		search.addExitAction (StopSearch);
 		retreat.addAction (Retreat, this);
 		spacing.addAction (Spacing, this);
 		far.addAction (Far, this);
@@ -131,7 +137,7 @@ public class MobileEnemy : NewEnemy {
 	//----------------------//
 	
 	protected virtual bool isResting(Character a) {
-		return (this.lastSeenPosition == null && !this.alerted);
+		return this.lastSeenPosition == null && !this.alerted;
 	}
 	
 	protected virtual bool isApproaching(Character a) {
@@ -164,7 +170,7 @@ public class MobileEnemy : NewEnemy {
 	}
 	
 	protected virtual bool isAttacking(Character a) {
-		if (this.target != null) {
+		if (this.target != null && !this.isInAtkAnimation(a)) {
 			float distance = this.distanceToPlayer(this.target);
 			return distance < this.maxAtkRadius && distance >= this.minAtkRadius && this.canSeePlayer(this.target);
 		}
@@ -173,7 +179,7 @@ public class MobileEnemy : NewEnemy {
 	
 	protected virtual bool isInAtkAnimation(Character a) {
 		if (this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge) {
-			this.rigidbody.velocity = Vector3.zero;
+			this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 			return true;
 		}
 		return false;
@@ -212,23 +218,38 @@ public class MobileEnemy : NewEnemy {
 	//------------------//
 	
 	protected virtual void Rest(Character a) {
-		this.resetpos = this.transform.position;
+		// this.resetpos = this.transform.position;
+
+		if (!this.isApproaching(this) && tempTimer > 0.0f) {
+			tempTimer -= Time.deltaTime;
+		} else {
+			tempTimer = 0.5f;
+
+			this.resetpos = this.transform.position;
+			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
+			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		}
+
 	}
 	
 	protected virtual void Approach(Character a) {
 		this.facing = this.target.transform.position - this.transform.position;
 		this.facing.y = 0.0f;
-		this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 	}
 	
 	protected virtual void Attack(Character a) {
 		if (this.actable && !attacking){
+			this.facing = this.target.transform.position - this.transform.position;
+			this.facing.y = 0.0f;
+			transform.localRotation = Quaternion.LookRotation(facing);
 			this.gear.weapon.initAttack();
 		}
 	}
 	
 	// We can have some logic here, but it's mostly so our unit is still during and attack animation
 	protected virtual void AtkAnimation(Character a) {
+		this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 	}
 	
 	protected virtual void Search(Character a) {
@@ -236,9 +257,17 @@ public class MobileEnemy : NewEnemy {
 		if (this.lastSeenPosition.HasValue) {
 			this.facing = this.lastSeenPosition.Value - this.transform.position;
 			this.facing.y = 0.0f;
-			StartCoroutine(randomSearch(this.lastSeenPosition.Value));
+			// StartCoroutine(searchForEnemy(this.lastSeenPosition.Value));
+			StartCoroutine("searchForEnemy", this.lastSeenPosition.Value);
 			this.lastSeenPosition = null;
 		}
+	}
+
+	protected virtual void StopSearch(Character a) {
+		this.StopCoroutine("searchForEnemy");
+		this.StopCoroutine("moveToPosition");
+		this.StopCoroutine ("moveToExpectedArea");
+		this.StopCoroutine("randomSearch");
 	}
 	
 	//Improve retreat AI
@@ -251,7 +280,7 @@ public class MobileEnemy : NewEnemy {
 	protected virtual void Spacing(Character a) {
 		this.facing = (this.target.transform.position - this.transform.position) * -1;
 		this.facing.y = 0.0f;
-		this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 	}
 
 	protected virtual void Far (Character a) {
@@ -267,22 +296,41 @@ public class MobileEnemy : NewEnemy {
 	//-----------------------------//
 	
 	protected IEnumerator moveToPosition(Vector3 position) {
-		while (!this.isApproaching(this) && this.distanceToVector3(position) > 0.5f) {
-			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		while (!this.isApproaching(this) && this.distanceToVector3(position) > 0.1f && !this.isInAtkAnimation(this) && this.target == null) {
+			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			yield return null;
 		}
 	}
-	
-	protected virtual IEnumerator randomSearch(Vector3 lsp) {
-		yield return StartCoroutine(moveToPosition(lsp));
-		
+
+	protected IEnumerator moveToExpectedArea() {
+		this.facing = this.targetDir;
+		float moveToTime = 0.5f;
+		while (!this.isApproaching(this) && this.distanceToVector3(this.targetDir) > 0.1f && !this.isInAtkAnimation(this) && this.target == null && moveToTime > 0.0f) {
+			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			moveToTime -= Time.deltaTime;
+			yield return null;
+		}
+	}
+
+	protected IEnumerator randomSearch() {
 		float resetTimer = aggroTimer;
-		while(!this.isApproaching(this) && resetTimer > 0.0f) {
+		while(!this.isApproaching(this) && resetTimer > 0.0f && !this.isInAtkAnimation(this) && this.target == null) {
 			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
-			this.rigidbody.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			yield return new WaitForSeconds (0.5f);
 			resetTimer -= 0.5f;
 		}
+	}
+	
+	protected virtual IEnumerator searchForEnemy(Vector3 lsp) {
+		yield return StartCoroutine("moveToPosition", lsp);
+
+		yield return StartCoroutine ("moveToExpectedArea");
+
+		float resetTimer = aggroTimer;
+
+		yield return StartCoroutine("randomSearch");
+
 		if (this.target == null) alerted = false;
 	}
 	
@@ -292,7 +340,34 @@ public class MobileEnemy : NewEnemy {
 	//-----------------------//
 	// Calculation Functions //
 	//-----------------------//
-	
+
+	protected override bool canSeePlayer(GameObject p) {
+		Vector3 direction = p.transform.position - transform.position;
+		float angle = Vector3.Angle(direction, this.facing);
+		
+
+		if (angle < fov) {
+			RaycastHit hit;
+
+			if (GetComponent<Rigidbody>().SweepTest(direction, out hit, this.distanceToVector3(p.GetComponent<Collider>().transform.position))) {
+				if (hit.collider.gameObject == p) {
+					aggroT.add(p,1);
+					if (this.lastSeenPosition != null) {
+						this.targetDir = p.transform.position - this.lastSeenPosition.Value;
+						this.targetDir.Normalize();
+					}
+					this.lastSeenPosition = p.transform.position;
+					this.alerted = true;
+					return true;
+				}
+			}
+		}
+		
+		return false;
+
+
+	}
+
 	protected float distanceToVector3(Vector3 position) {
 		Vector3 distance = position - this.transform.position;
 		return distance.sqrMagnitude;

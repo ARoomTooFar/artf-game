@@ -39,7 +39,7 @@ public class CameraAdjuster : MonoBehaviour {
         if (Physics.Raycast(ray, out hit,distance*3/4))
 			Debug.DrawLine(transform.position,hit.point,Color.red);*/
           //  print("Hit something");
-	    if( Physics.Raycast(target.transform.position, dir, out hit, 1000, layerMask)){
+	    if( Physics.Raycast(target.transform.position-new Vector3(0,-1f,0), dir, out hit, 1000, layerMask)){
 			if(hit.collider.tag == "Wall" || hit.collider.tag == "Door" || hit.collider.tag == "Prop"){
 				hit.collider.gameObject.GetComponent<Wall>().toggleShow();
 				if(hit.collider.tag == "Door"){
@@ -47,7 +47,7 @@ public class CameraAdjuster : MonoBehaviour {
 				}
 				//Debug.Log(hit.collider.name+", "+hit.collider.tag);
 			}
-			//Debug.DrawLine(transform.position,target.transform.position,Color.red);
+			Debug.DrawLine(target.transform.position-new Vector3(0,-1f,0),transform.position,Color.red);
 		} else {
 			//Debug.Log(hit.collider.name+", "+hit.collider.tag);
 			//Debug.DrawLine(transform.position,target.transform.position,Color.blue);

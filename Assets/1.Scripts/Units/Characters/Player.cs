@@ -82,6 +82,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		if(stats.health <= 0){
 			
 			isDead = true;
+			UI.hpBar.current = 0;
 		} else {
 			if(UI!=null){
 				if(UI.onState){
@@ -138,6 +139,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 					currDoor = null;
 				}else{
 					animator.SetBool("Charging", true);
+					//Debug.Log(luckCheck());
 					gear.weapon.initAttack();
 				}
 			} else if(Input.GetKeyDown (controls.secItem)) {
@@ -190,7 +192,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 
-		if (actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing))) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
+		if (!stats.isDead&&actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing))) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -218,11 +220,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 				facing = newMoveDir;
 			}
 			
-			rigidbody.velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
+			GetComponent<Rigidbody>().velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
 		} else if (freeAnim){
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this
-			rigidbody.velocity = Vector3.zero;
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
 		}
 	}
 	//-------------------------------------//
@@ -232,7 +234,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	//---------------------------------//
 	
 	public override void damage(int dmgTaken, Character striker) {
-		if (!invincible) {
+		if (!invincible&&!stats.isDead) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 		
 			// print("UGH!" + dmgTaken);
@@ -246,7 +248,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	}
 	
 	public override void damage(int dmgTaken) {
-		if (!invincible) {
+		if (!invincible&&!stats.isDead) {
 			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
 			UI.greyBar.current = greyDamage+stats.health;
@@ -259,7 +261,10 @@ public class Player : Character, IMoveable, IHealable<int>{
 	}
 
 	public override void die() {
+		Debug.Log("IsDead");
 		base.die();
+		stats.health = 0;
+		UI.hpBar.current = 0;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
@@ -268,6 +273,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 		}
 	}
 	
+    //---------------------------------//
+	
+	//---------------------------------//
+	// Heal Interface Implementation //
+	//---------------------------------//
 	public virtual void heal(int healTaken){
 		if(stats.health < stats.maxHealth){
 			stats.health+=healTaken;
@@ -292,7 +302,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		}//if and else are the 'base' rez from prior
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		foreach (Renderer r in rs) {
-			if(renderer.gameObject.tag != "Item")
+			if(GetComponent<Renderer>().gameObject.tag != "Item")
 			r.enabled = true;
 		}
 		UI.hpBar.current = stats.health;
@@ -302,10 +312,9 @@ public class Player : Character, IMoveable, IHealable<int>{
 
 	// Grey Health functions
 	public virtual int greyTest(int damage){
-		/*
 		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){
 			stats.health = 0;
-			stats.isDead = true;
+			die();
 			return 0;
 		}
 		if(((greyDamage + damage) >= stats.maxHealth) && stats.health == stats.maxHealth){
@@ -313,7 +322,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 			greyDamage = stats.maxHealth - 1;
 			inGrey = true;
 			return 0;
-		}		*/
+		}
 		if((damage > (stats.maxHealth/5)) && !inGrey){
 			//print("Got Here"+(stats.maxHealth/20)+":"+damage);
 			int tempDmg = greyDamage;
@@ -376,6 +385,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 	private void OnTriggerStay(Collider other){
 		if(other.tag == "Door"){
 			currDoor = other.gameObject;
+		}
+	}
+	private void OnTriggerExit(Collider other){
+		if(other.tag == "Door"){
+			currDoor = null;
 		}
 	}
 	//----------------------------------//
