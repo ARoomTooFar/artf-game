@@ -16,7 +16,7 @@ public class NewEnemy : Character {
 	
 	protected StateMachine sM;
 	
-	protected float fov = 150f;
+	protected float fov = 100f;
 	protected float lineofsight = 15f;
 	protected float maxAtkRadius, minAtkRadius;
 	
@@ -93,6 +93,24 @@ public class NewEnemy : Character {
 	}
 	
 	protected virtual void initStates() {
+	}
+
+	// For subclasses that want to add transitions to existing states
+	protected void addTransitionToExisting(string stateId, Transition t) {
+		State tempState; // For getting States that already exist within the State Machine
+
+		if (this.sM.states.TryGetValue(stateId, out tempState)) {
+			tempState.addTransition(t);
+		}
+	}
+
+	// For subclasses that want to transition to old states from new states
+	protected void addTransitionToNew(string stateId, State s) {
+		Transition tempTransition; // For getting States that already exist within the State Machine
+
+		if (this.sM.transitions.TryGetValue(stateId, out tempTransition)) {
+			s.addTransition(tempTransition);
+		}
 	}
 
 	//-----------------------//
