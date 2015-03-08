@@ -18,7 +18,7 @@ public class Wall : MonoBehaviour {
 			show = false;
 			stand.GetComponent<Renderer>().enabled = true;
 			GetComponent<Renderer>().enabled = false;
-			// GetComponent<Collider>().enabled = false;
+			GetComponent<Collider>().enabled = false;
 			StopCoroutine("revWait");
 			StartCoroutine("revWait",disappear);
 		}
@@ -31,13 +31,13 @@ public class Wall : MonoBehaviour {
 			//testable = true;
 			if(timer > duration -1f){
 				show = true;
-				// GetComponent<Collider>().enabled = true;
+				GetComponent<Collider>().enabled = true;
 			}
 			yield return 0;
 		}
-		//show = true;
+		show = true;
 		stand.GetComponent<Renderer>().enabled = false;
-		 //collider.enabled = true;
+		//GetComponent<Collider>().enabled = true;
 		GetComponent<Renderer>().enabled = true;
 	}
 }

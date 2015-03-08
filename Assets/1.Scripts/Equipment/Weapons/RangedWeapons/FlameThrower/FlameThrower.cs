@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Pistol : RangedWeapons {
+public class FlameThrower : RangedWeapons {
 
-	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
 	}

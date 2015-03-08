@@ -25,9 +25,6 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public Renderer[] rs;
 	
 	public UIActive UI;
-	//public LifeBar hpBar, greyBar;
-	//public AmmoBar ammoBar;
-	//public List<CooldownBar> coolDowns = new List<CooldownBar>();
 	public Controls controls;
 
 	protected override void Awake() {
