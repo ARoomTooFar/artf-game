@@ -7,7 +7,8 @@ public class Bushman : MobileEnemy {
 	bool inFrenzy;
 	float frenzy_counter;
 	float frenzy_growth;
-	List<int> tiers;
+	List<StatsMultiplier> tiers;
+	int current_tier;
 
 	
 	protected override void Awake () {
@@ -15,9 +16,11 @@ public class Bushman : MobileEnemy {
 		inFrenzy = false;
 		frenzy_counter = 0;
 		frenzy_growth = 2;
+		tiers = new List<StatsMultiplier>();
+		current_tier = 0;
 	}
 
-	public void setTiers(List<int> t){
+	public void setTiers(List<StatsMultiplier> t){
 		tiers = t;
 	}
 

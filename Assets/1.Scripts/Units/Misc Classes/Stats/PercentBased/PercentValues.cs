@@ -74,3 +74,50 @@ public class StatsMultiplier{
 
 	public int minAtkRadius, maxAtkRadius;
 }
+
+public class PowerLevels{
+	private class PowerTier
+	{
+		public int powerCount;
+		public StatsMultiplier mult;
+	}
+
+	List<PowerTier> tiers;
+	int powvalue;
+	int currentTier;
+
+	PowerLevels(){
+		tiers = new List<PowerTier>();
+		powvalue = 0;
+		currentTier = -1;
+	}
+
+	public void addTier(StatsMultiplier statsbd, int powval){
+		PowerTier newtier = new PowerTier ();
+		newtier.powerCount = powval;
+		newtier.mult = statsbd;
+		tiers.Add (newtier);
+	}
+
+	public StatsMultiplier getStatsBD(){
+		return tiers[currentTier].mult;
+	}
+
+	public void Update(){
+		if (currentTier < tiers.Count){
+			if(powvalue > tiers [currentTier].powerCount){
+				currentTier++;
+			}
+		}
+
+		if (powvalue < tiers [currentTier].powerCount && currentTier > 0){
+			currentTier--;
+		}
+	}
+
+	public void resetTier(){
+		currentTier = 0;
+		powvalue = 0;
+	}
+
+}
