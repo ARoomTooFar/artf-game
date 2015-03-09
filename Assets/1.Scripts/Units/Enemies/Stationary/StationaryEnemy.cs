@@ -3,7 +3,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class StationaryEnemy : NewEnemy {
+public class StationaryEnemy : Enemy {
 
 	//-------------------//
 	// Primary Functions //

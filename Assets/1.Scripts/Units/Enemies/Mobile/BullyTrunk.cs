@@ -5,7 +5,64 @@ using System.Collections.Generic;
 
 public class BullyTrunk: MobileEnemy {
 
-	private BullCharge charge;
+	protected BullCharge charge;
+	protected RockHead rockHead;
+	protected RockArms rockArms;
+
+	protected float headReduction, sideReduction, headSlow, sideSlow;
+
+	protected class RockHead : Singular {
+		
+		private float spdPercent, redPercent;
+		
+		public RockHead(float speedValue, float reduxValue) {
+			name = "RockHead";
+			spdPercent = speedValue;
+			redPercent = reduxValue;
+		}
+		
+		protected override void bdEffects(BDData newData) {
+			base.bdEffects(newData);
+			newData.unit.stats.dmgManip.setDamageReduction(1, redPercent);
+			newData.unit.stats.spdManip.setSpeedReduction(spdPercent);
+		}
+		
+		protected override void removeEffects (BDData oldData, GameObject source) {
+			base.removeEffects (oldData, source);
+			oldData.unit.stats.dmgManip.removeDamageReduction(1, redPercent);
+			oldData.unit.stats.spdManip.removeSpeedReduction(spdPercent);
+		}
+		
+		public override void purgeBD(Character unit, GameObject source) {
+			base.purgeBD (unit, source);
+		}
+	}
+
+	protected class RockArms : Singular {
+		private float spdPercent, redPercent;
+
+		public RockArms(float speedValue, float reduxValue) {
+			name = "RockArms";
+			spdPercent = speedValue;
+			redPercent = reduxValue;
+		}
+		
+		protected override void bdEffects(BDData newData) {
+			base.bdEffects(newData);
+			newData.unit.stats.dmgManip.setDamageReduction(3, redPercent);
+			newData.unit.stats.spdManip.setSpeedReduction(spdPercent);
+		}
+		
+		protected override void removeEffects (BDData oldData, GameObject source) {
+			base.removeEffects (oldData, source);
+			oldData.unit.stats.dmgManip.removeDamageReduction(3, redPercent);
+			oldData.unit.stats.spdManip.removeSpeedReduction(spdPercent);
+		}
+		
+		public override void purgeBD(Character unit, GameObject source) {
+			base.purgeBD (unit, source);
+		}
+	}
 
 	protected override void Awake () {
 		base.Awake ();
@@ -15,6 +72,15 @@ public class BullyTrunk: MobileEnemy {
 		base.Start ();
 		charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
 		if (charge == null) Debug.LogWarning ("BullyTrunk does not have charge equipped");
+
+		headReduction = 0.8f;
+		sideReduction = 0.75f;
+		headSlow = 0.75f;
+		sideSlow = 0.5f;
+		this.rockHead = new RockHead (headSlow, headReduction);
+		this.rockArms = new RockArms (sideSlow, sideReduction);
+
+		this.BDS.addBuffDebuff (rockHead, this.gameObject);
 	}
 	
 	protected override void Update() {
@@ -93,6 +159,7 @@ public class BullyTrunk: MobileEnemy {
 		if (this.target != null && Vector3.Distance(this.transform.position, this.target.transform.position) > this.maxAtkRadius && this.charge.curCoolDown <= 0) {
 			this.inventory.keepItemActive = true;
 			inventory.items[inventory.selected].useItem();
+			this.lowerHead();
 			return true;
 		}
 		return false;
@@ -112,6 +179,7 @@ public class BullyTrunk: MobileEnemy {
 
 	//----------------------//
 
+
 	//-------------------//
 	// Actions Functions //
 	//-------------------//
@@ -119,7 +187,7 @@ public class BullyTrunk: MobileEnemy {
 	protected virtual void chargingCharge () {
 		this.facing = this.target.transform.position - this.transform.position;
 		this.facing.y = 0.0f;
-		this.GetComponent<Rigidbody>().velocity = (this.facing.normalized * stats.speed * stats.spdManip.speedPercent)/2;
+		this.GetComponent<Rigidbody>().velocity = (this.facing.normalized * stats.speed * stats.spdManip.speedPercent);
 		if (!this.canSeePlayer(this.target)) {
 			this.target = null;
 		}
@@ -132,8 +200,28 @@ public class BullyTrunk: MobileEnemy {
 	protected virtual void chargingIntoSucker () {
 		if (this.target != null) {
 			this.lastSeenPosition = this.target.transform.position;
+			this.lowerArms();
 		}
 	}
 
 	//-------------------//
+
+
+	//------------------//
+	// Helper Functions //
+	//------------------//
+
+	protected void lowerHead() {
+		this.BDS.rmvBuffDebuff (this.rockHead, this.gameObject);
+		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
+		print ("Rock head off");
+	}
+
+	protected void lowerArms() {
+		this.BDS.rmvBuffDebuff (this.rockArms, this.gameObject);
+		this.BDS.addBuffDebuff (this.rockHead, this.gameObject);
+		print ("Rock head on");
+	}
+
+	//------------------//
 }

@@ -35,8 +35,7 @@ public class State
 		else Debug.LogWarning ("State " + _id + " does not contain a transition to " + t.targetState.id);
 	}
 
-	public void getAction()
-	{
+	public void getAction() {
 		action();
 	}
 
@@ -46,13 +45,11 @@ public class State
 		}
 	}
 
-	public void addAction(AIAction act)
-	{
+	public void addAction(AIAction act) {
 		action = act;
 	}
 
-	public void addExitAction(AIAction act)
-	{
+	public void addExitAction(AIAction act) {
 		exitAction = act;
 	}
 }
@@ -68,19 +65,16 @@ public class Transition {
 		get {return _targetState;}
 	}
 
-	public Transition(State t)
-	{
+	public Transition(State t) {
 		_targetState = t;
 	}
 
-	public bool isTriggered()
-	{
+	public bool isTriggered() {
 		return condition();
 	}
 
 	//Used to set the condition from outside this class
-	public void addCondition(AICondTest cond)
-	{
+	public void addCondition(AICondTest cond) {
 		condition = cond;
 	}
 }
@@ -104,34 +98,28 @@ public class StateMachine {
 	}
 
 	// Use this for initialization
-	public void Start()
-	{
+	public void Start() {
 		currState = initState;
 	}
 	
 	// Update is called once per frame
-	public void Update () 
-	{
+	public void Update () {
 		triggeredTransition = null;
 
 		// Debug.Log (currState.sId());
 
 		List<Transition> transList = currState.getTransitions ();
-		foreach (Transition t in transList) 
-		{
-			if(t.isTriggered())
-			{
-				Debug.Log (t.targetState.id);
+		foreach (Transition t in transList) {
+			if(t.isTriggered()) {
+				// Debug.Log (t.targetState.id);
 				triggeredTransition = t;
 				currState.onExit();
 				break;
 			}
 		}
 
-		if (triggeredTransition != null) 
-		{
+		if (triggeredTransition != null) {
 			currState = triggeredTransition.targetState;
-
 		}
 
 		currState.getAction ();

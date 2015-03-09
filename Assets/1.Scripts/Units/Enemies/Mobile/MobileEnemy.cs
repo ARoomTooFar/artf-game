@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MobileEnemy : NewEnemy {
+public class MobileEnemy : Enemy {
 
 	protected Vector3 resetpos;
 	protected Vector3 targetDir;
