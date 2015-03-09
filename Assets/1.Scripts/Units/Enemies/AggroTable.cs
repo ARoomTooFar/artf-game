@@ -43,6 +43,10 @@ public class AggroTable
 		return totalAggro;
 	}
 
+	public void AggroUp(int valueAdd){
+		totalAggro += valueAdd;
+	}
+
 	public void resetTotal(){
 		totalAggro = 0;
 	}

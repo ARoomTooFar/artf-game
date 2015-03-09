@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Bushman : MobileEnemy {
-
+	
 	bool inFrenzy;
 	float frenzy_counter;
 	float frenzy_growth;
-	List<StatsMultiplier> tiers;
-	int current_tier;
+	PowerLevels tiers;
 
 	
 	protected override void Awake () {
@@ -16,12 +15,14 @@ public class Bushman : MobileEnemy {
 		inFrenzy = false;
 		frenzy_counter = 0;
 		frenzy_growth = 2;
-		tiers = new List<StatsMultiplier>();
-		current_tier = 0;
-	}
-
-	public void setTiers(List<StatsMultiplier> t){
-		tiers = t;
+		tiers = new PowerLevels ();
+		StatsMultiplier tier0 = new StatsMultiplier (); 
+		StatsMultiplier tier1 = new StatsMultiplier ();
+		StatsMultiplier tier2 = new StatsMultiplier ();
+		StatsMultiplier tier3 = new StatsMultiplier ();
+		StatsMultiplier tier4 = new StatsMultiplier ();
+		StatsMultiplier tier5 = new StatsMultiplier ();
+		StatsMultiplier tier6 = new StatsMultiplier ();
 	}
 
 	
@@ -30,7 +31,6 @@ public class Bushman : MobileEnemy {
 	}
 	
 	protected override void Update() {
-
 		base.Update ();
 	}
 	

@@ -21,11 +21,11 @@ public class Frenzy : Override {
 		spd = percent;
 	}
 
-	public void setStrBoost(float percent){
+	public void setDmgBoost(float percent){
 		str = percent;
 	}
 
-	public void setDefBoost(float percent){
+	public void setDmgReduction(float percent){
 		def = percent;
 	}
 

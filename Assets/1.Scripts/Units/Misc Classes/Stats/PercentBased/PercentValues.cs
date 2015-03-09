@@ -69,10 +69,11 @@ public class PercentValues {
 }
 
 public class StatsMultiplier{
-	public int health, armor,maxHealth,rezCount;
-	public int strength, coordination, speed, luck;
+	public float health, armor,maxHealth,rezCount;
+	public float strength, coordination, speed, luck;
 
 	public int minAtkRadius, maxAtkRadius;
+	public float dmgAmp, dmgRed;
 }
 
 public class PowerLevels{
@@ -86,7 +87,7 @@ public class PowerLevels{
 	int powvalue;
 	int currentTier;
 
-	PowerLevels(){
+	public PowerLevels(){
 		tiers = new List<PowerTier>();
 		powvalue = 0;
 		currentTier = -1;
