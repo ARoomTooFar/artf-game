@@ -8,7 +8,7 @@ public class FlameThrower : RangedWeapons {
 	}
 	protected override void setInitValues() {
 		base.setInitValues();
-		maxAmmo = 100;
+		maxAmmo = 99;
 		currAmmo = maxAmmo;
 		// Use sword animations for now
 		stats.weapType = 0;
@@ -20,7 +20,7 @@ public class FlameThrower : RangedWeapons {
 		// Bull Pattern L originally
 		//rifle(L,2) + pistol (L,1)
 		variance = 22f;
-		kick = 2f;
+		kick = 15f;
 		stats.debuff = new Burning(stats.damage);
 
 		spray = user.transform.rotation;
@@ -53,29 +53,29 @@ public class FlameThrower : RangedWeapons {
 
 		//High cap for basic is 12f variance, low cap for shotty is 22f
 			spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination)+user.transform.eulerAngles.y,(variance-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
-			for (int i = 0; i < count; i++) {
-				
 				StartCoroutine(makeSound(action,playSound,action.length));
-				yield return StartCoroutine(Wait(.02f));
 				fireFlame(true);
 				currAmmo--;
-				kick += 5f;
-				if(kick >= 40f){
-					kick = 5f;
-				}
 				if(currAmmo<=0){
 					reload = true;
 					StartCoroutine(loadAmmo());
 				}
-				spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
+				yield return StartCoroutine(Wait(.05f));
+				spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y-kick),spray.eulerAngles.z);
 				fireFlame(false);
 				currAmmo--;
 				if(currAmmo<=0){
 					reload = true;
 					StartCoroutine(loadAmmo());
 				}
-				kick +=5f;
+				spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+kick*2),spray.eulerAngles.z);
+				fireFlame(false);
+				currAmmo--;
+				if(currAmmo<=0){
+					reload = true;
+					StartCoroutine(loadAmmo());
+				}
+				kick = 15f;
 			}
-		}
 	}
 }

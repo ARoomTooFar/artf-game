@@ -124,9 +124,11 @@ public class RangedWeapons : Weapons {
 	}
 	protected void fireFlame(bool activated) {
 		Projectile newBullet = ((GameObject)Instantiate(projectile, user.transform.position, spray)).GetComponent<Projectile>();
-		newBullet.setInitValues(user, opposition, particles.startSpeed,true, stats.debuff);
+		newBullet.setInitValues(user, opposition, particles.startSpeed,activated, stats.debuff);
 		if(activated){
 			newBullet.damage = (int)particles.startSpeed;
+		}else{
+			//newBullet.duration = particles.startSpeed/2;
 		}
 	}
 	protected void fireProjectile() {

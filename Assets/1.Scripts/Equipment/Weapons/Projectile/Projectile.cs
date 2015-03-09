@@ -13,6 +13,7 @@ public class Projectile : MonoBehaviour {
 	public ParticleSystem particles;
 	public Transform target;
 	public BuffsDebuffs debuff;
+	public bool moving;
 
 	protected Type opposition;
 
@@ -23,7 +24,7 @@ public class Projectile : MonoBehaviour {
 	public virtual void setInitValues(Character player, Type ene, float partSpeed,bool effect,BuffsDebuffs hinder) {
 		user = player;
 		opposition = ene;
-
+		moving = true;
 		transform.Rotate(Vector3.right * 90);
 
 		damage = 1;
@@ -38,7 +39,9 @@ public class Projectile : MonoBehaviour {
 
 	// Update is called once per frame
 	protected virtual void Update() {
-		transform.position = Vector3.MoveTowards (transform.position, target.position, speed);
+		if(moving){
+			transform.position = Vector3.MoveTowards (transform.position, target.position, speed);
+		}
 	}
 	
 	protected virtual void onHit(Character enemy) {

@@ -10,6 +10,7 @@ public class Fire : Projectile {
 	public ParticleAnimator part1;
 	public ParticleAnimator part2;
 	public ParticleAnimator part3;
+	public bool falseStop;
 	//public ParticleCollisionEvent[] collisionEvents;
 	protected override void Start() {
 		base.Start();
@@ -22,7 +23,7 @@ public class Fire : Projectile {
 		opposition = ene;
 
 		transform.Rotate(Vector3.right * 90);
-
+		moving = true;
 		damage = 0;
 		speed = 0.1f;
 		castEffect = true;
@@ -31,13 +32,24 @@ public class Fire : Projectile {
 		if(duration < .5f){
 			duration = .5f;
 		}
+		falseStop = !effect;
 		subDuration = duration/5;
 		if(particles !=null){
 			particles.startSpeed = partSpeed;
 			particles.Play();
 		}
 		StartCoroutine(Wait(duration));
+		if(falseStop){
+			StartCoroutine(stopWait(duration/2));
+		}
 		StartCoroutine(growWait(subDuration));
+	}
+	private IEnumerator stopWait(float duration){
+		for (float timer = 0; timer < duration; timer += Time.deltaTime){
+			//testable = true;
+			yield return 0;
+		}
+		moving = false;
 	}
 	private IEnumerator Wait(float duration){
 		for (float timer = 0; timer < duration; timer += Time.deltaTime){
