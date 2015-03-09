@@ -31,7 +31,7 @@ public class CackleBranch: MobileEnemy {
 		stats.speed=7;
 		stats.luck=0;
 		
-		this.minAtkRadius = 20.0f;
+		this.minAtkRadius = 40.0f;
 		this.maxAtkRadius = 100.0f;
 	}
 
