@@ -8,20 +8,20 @@ public class FlameThrower : RangedWeapons {
 	}
 	protected override void setInitValues() {
 		base.setInitValues();
-		maxAmmo = 20;
+		maxAmmo = 100;
 		currAmmo = maxAmmo;
 		// Use sword animations for now
 		stats.weapType = 0;
 		stats.weapTypeName = "sword";
-		loadSpeed = 2.5f;
+		loadSpeed = 5f;
 		stats.atkSpeed = 2.0f;
 		stats.damage = 1;
 		stats.maxChgTime = 2.0f;
-		
 		// Bull Pattern L originally
 		//rifle(L,2) + pistol (L,1)
 		variance = 22f;
 		kick = 2f;
+		stats.debuff = new Burning(stats.damage);
 
 		spray = user.transform.rotation;
 		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(12f-user.stats.coordination)+user.transform.eulerAngles.y,(12f-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
@@ -36,6 +36,11 @@ public class FlameThrower : RangedWeapons {
 	public override void initAttack() {
 		base.initAttack();
 	}
+	/*protected void fireFlame() {
+		Projectile newBullet = ((GameObject)Instantiate(projectile, user.transform.position, spray)).GetComponent<Projectile>();
+		//Debug.Log(newBullet == null);
+		newBullet.setInitValues(user, opposition, stats.damage, user.luckCheck(), stats.debuff);
+	}*/
 
 	protected override IEnumerator Shoot(int count)
 	{
@@ -51,18 +56,25 @@ public class FlameThrower : RangedWeapons {
 			for (int i = 0; i < count; i++) {
 				
 				StartCoroutine(makeSound(action,playSound,action.length));
-				yield return StartCoroutine(Wait(.08f));
-				fireProjectile();
+				yield return StartCoroutine(Wait(.02f));
+				fireFlame(true);
 				currAmmo--;
+				kick += 5f;
+				if(kick >= 40f){
+					kick = 5f;
+				}
 				if(currAmmo<=0){
 					reload = true;
 					StartCoroutine(loadAmmo());
 				}
 				spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
-				kick += .2f;
-				if(kick >= 5f){
-					kick = 2f;
+				fireFlame(false);
+				currAmmo--;
+				if(currAmmo<=0){
+					reload = true;
+					StartCoroutine(loadAmmo());
 				}
+				kick +=5f;
 			}
 		}
 	}

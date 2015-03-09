@@ -122,7 +122,13 @@ public class RangedWeapons : Weapons {
 		}
 		user.animator.speed = 1.0f;
 	}
-
+	protected void fireFlame(bool activated) {
+		Projectile newBullet = ((GameObject)Instantiate(projectile, user.transform.position, spray)).GetComponent<Projectile>();
+		newBullet.setInitValues(user, opposition, particles.startSpeed,true, stats.debuff);
+		if(activated){
+			newBullet.damage = (int)particles.startSpeed;
+		}
+	}
 	protected void fireProjectile() {
 		Projectile newBullet = ((GameObject)Instantiate(projectile, user.transform.position, spray)).GetComponent<Projectile>();
 		newBullet.setInitValues(user, opposition, particles.startSpeed, user.luckCheck(), stats.debuff);

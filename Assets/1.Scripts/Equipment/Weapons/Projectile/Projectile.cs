@@ -9,7 +9,7 @@ public class Projectile : MonoBehaviour {
 	public int damage;
 	public float speed;
 	public bool castEffect;
-	private Character user;
+	public Character user;
 	public ParticleSystem particles;
 	public Transform target;
 	public BuffsDebuffs debuff;
@@ -30,8 +30,10 @@ public class Projectile : MonoBehaviour {
 		speed = 0.5f;
 		castEffect = effect;
 		debuff = hinder;
+		if(particles !=null){
 		particles.startSpeed = partSpeed;
 		particles.Play();
+		}
 	}
 
 	// Update is called once per frame
@@ -52,19 +54,25 @@ public class Projectile : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Wall") {
-			particles.Stop();
+			if(particles !=null){
+				particles.Stop();
+			}
 			Destroy(gameObject);
 		}
 		if (other.tag == "Prop") {
 			other.GetComponent<Prop>().damage(damage);
-			particles.Stop();
+			if(particles !=null){
+				particles.Stop();
+			}
 			Destroy(gameObject);
 		}
 		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
 		Character enemy = (Character) other.GetComponent(opposition);
 		if( component != null && enemy != null) {
 			onHit(enemy);
-			particles.Stop();
+			if(particles !=null){
+				particles.Stop();
+			}
 			Destroy(gameObject);
 		} else {
 			IDamageable<int, Traps> component2 = (IDamageable<int, Traps>) other.GetComponent (typeof(IDamageable<int, Traps>));
