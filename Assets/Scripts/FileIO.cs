@@ -24,12 +24,15 @@ public class FileIO : MonoBehaviour
 	private string lvlData = "";
 	private WWW udLvlReq = null; // WWW request to server for level updating
 	
-	public string lvlId = "0";
+	public string lvlId;
 	public Text txtDlLvl;
 	public Text txtUdLvl;
 	
 	void Start ()
 	{
+
+		
+		print(lvlId);
 		txtUdLvl.enabled = false;
 		
 		itemClass = new ItemClass ();
@@ -43,14 +46,16 @@ public class FileIO : MonoBehaviour
 		//			loadFile ();});
 		
 		serv = gameObject.AddComponent<Farts>();
-
+		#if UNITY_EDITOR
+		getLvlId("5684666375864320");
+		#endif
         Application.ExternalCall("reqLvlId", "The game says hello!");
 	}
 
-    public void getLvlId(string inputLvlId)
+	public void getLvlId(string inputLvlId)
     {
         lvlId = inputLvlId;
-        //lvlId = "5684666375864320"; // uncomment this line if you aren't running the level editor in the browser
+		//lvlId = "5684666375864320"; // uncomment this line if you aren't running the level editor in the browser
         WWW www = serv.getLvlWww(inputLvlId);
         StartCoroutine(dlLvl(www));
     }

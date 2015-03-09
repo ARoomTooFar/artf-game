@@ -5,33 +5,24 @@ using UnityEngine;
 
 public static class Pathfinder {
 
-	/*
-	public List<Vector3> getPath(Vector3 start, Vector3 end){
-
-	}
-
-	public List<Vector3> getWalkablePath(Vector3 start, Vector3 end){
-
-	}*/
-
-	public static  List<ARTFRoom> getRoomPath(ARTFRoom start, ARTFRoom end){
-		List<RoomNode> open = new List<RoomNode>();
-		List<RoomNode> closed = new List<RoomNode>();
-		open.Add(new RoomNode(start));
-
-		RoomNode current = null;
-
+	private static List<AbstractNode> getPath(AbstractNode start, AbstractNode end){
+		List<AbstractNode> open = new List<AbstractNode>();
+		List<AbstractNode> closed = new List<AbstractNode>();
+		open.Add(start);
+		
+		AbstractNode current = null;
+		
 		while(open.Count > 0) {
 			open.Sort((first, second) => first.CostSoFar.CompareTo(second.CostSoFar));
-
+			
 			current = open[0];
-
-			if(current.Room == end) {
+			
+			if(current.Equals(end)) {
 				break;
 			}
-
-			foreach(KeyValuePair<ARTFRoom, float> kvp in current.Connections) {
-				RoomNode endNode = new RoomNode(kvp.Key);
+			
+			foreach(KeyValuePair<AbstractNode, float> kvp in current.getConnections()) {
+				AbstractNode endNode = kvp.Key;
 				endNode.FromNode = current;
 				if(closed.Contains(endNode)) {
 					continue;
@@ -45,29 +36,63 @@ public static class Pathfinder {
 					}
 					continue;
 				}
-
+				
 				endNode.CostSoFar = endNodeCost;
 				open.Add(endNode);
 			}
-
+			
 			open.Remove(current);
 			closed.Add(current);
 		}
-
-		if(current.Room != end) {
+		
+		if(!current.Equals(end)) {
 			return null;
 		}
-
-		List<ARTFRoom> retVal = new List<ARTFRoom>();
-		while(current.Room != start) {
-			retVal.Add(current.Room);
+		
+		List<AbstractNode> retVal = new List<AbstractNode>();
+		while(current != start) {
+			retVal.Add(current);
 			current = current.FromNode;
 		}
+		retVal.Add(current);;
 		retVal.Reverse();
 		return retVal;
 	} 
 
-	private class RoomNode : IEquatable<RoomNode> {
+	public static List<ARTFRoom> getRoomPath(ARTFRoom start, ARTFRoom end){
+		List<AbstractNode> path = getPath(new RoomNode(start), new RoomNode(end));
+		List<ARTFRoom> retVal = new List<ARTFRoom>();
+		foreach(RoomNode node in path) {
+			retVal.Add(node.Room);
+		}
+		return retVal;
+	}
+
+	public static List<Vector3> getSingleRoomPath(Vector3 start, Vector3 end){
+		if(MapData.TheFarRooms.find(start) != MapData.TheFarRooms.find(end)) {
+			return null;
+		}
+
+		List<AbstractNode> path = getPath(new TileNode(MapData.TerrainBlocks.find(start)),
+		                                  new TileNode(MapData.TerrainBlocks.find(end)));
+		List<Vector3> retVal = new List<Vector3>();
+		foreach(TileNode node in path) {
+			retVal.Add(node.terBlock.Position);
+		}
+		return retVal;
+	}
+
+	private abstract class AbstractNode : IEquatable<AbstractNode> {
+		public float CostSoFar{ get; set; }
+
+		public AbstractNode FromNode { get; set; }
+
+		public abstract List<KeyValuePair<AbstractNode, float>> getConnections();
+
+		public abstract bool Equals(AbstractNode node);
+	}
+
+	private class RoomNode : AbstractNode, IEquatable<RoomNode> {
 		public RoomNode (ARTFRoom rm){
 			this.Room = rm;
 			CostSoFar = 0;
@@ -76,21 +101,58 @@ public static class Pathfinder {
 			get;
 			private set;
 		}
-		public float CostSoFar{ get; set; }
-
-		public RoomNode FromNode { get; set; }
 
 		public bool Equals(RoomNode rmn){
 			return this.Room.Equals(rmn.Room);
 		}
-		public List<KeyValuePair<ARTFRoom, float>> Connections {
-			get {
-				List<KeyValuePair<ARTFRoom, float>> retVal = new List<KeyValuePair<ARTFRoom, float>>();
-				foreach(ARTFRoom rm in this.Room.LinkedRooms) {
-					retVal.Add(new KeyValuePair<ARTFRoom, float>(rm, Vector3.Distance(rm.Center, Room.Center)));
-				}
-				return retVal;
+
+		public override List<KeyValuePair<AbstractNode, float>> getConnections() {
+			List<KeyValuePair<AbstractNode, float>> retVal = new List<KeyValuePair<AbstractNode, float>>();
+			foreach(ARTFRoom rm in this.Room.LinkedRooms.Values ) {
+				retVal.Add(new KeyValuePair<AbstractNode, float>(new RoomNode(rm), Vector3.Distance(rm.Center, Room.Center)));
 			}
+			return retVal;
+		}
+
+		public override bool Equals(AbstractNode node){
+			if(node is RoomNode) {
+				return this.Equals(node as RoomNode);
+			}
+			return false;
+		}
+	}
+
+	private class TileNode : AbstractNode, IEquatable<TileNode> {
+		public TileNode(TerrainBlock pos){
+			this.terBlock = pos;
+			CostSoFar = 0;
+		}
+
+		public TerrainBlock terBlock {
+			get;
+			private set;
+		}
+
+		public bool Equals(TileNode tln){
+			return this.terBlock.Position.Equals(tln.terBlock.Position);
+		}
+
+		public override bool Equals(AbstractNode node){
+			if(node is TileNode) {
+				return this.Equals(node as TileNode);
+			}
+			return false;
+		}
+
+		public override List<KeyValuePair<AbstractNode, float>> getConnections() {
+			List<KeyValuePair<AbstractNode, float>> retVal = new List<KeyValuePair<AbstractNode, float>>();
+			foreach(TerrainBlock blk in this.terBlock.Neighbors.Values) {
+				if(!blk.Walkable){
+					continue;
+				}
+				retVal.Add(new KeyValuePair<AbstractNode, float>(new TileNode(blk), Vector3.Distance(blk.Position, terBlock.Position)));
+			}
+			return retVal;
 		}
 	}
 }
