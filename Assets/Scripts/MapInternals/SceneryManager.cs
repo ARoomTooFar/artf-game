@@ -78,6 +78,16 @@ public class SceneryManager {
 	 * Returns false if a block already seems to exist in its position.
 	 */
 	public bool add(SceneryBlock blk) {
+		if(blk.BlockInfo.isDoor){
+			if(!MapData.TheFarRooms.find(blk.Position).isEdge(blk.Position)){
+				return false;
+			}
+			blk.rotate(MapData.TheFarRooms.find(blk.Position).getWallSide(blk.Position));
+			if(!blk.Orientation.isCardinal()){
+				return false;
+			}
+			MapData.TheFarRooms.find(blk.Position).Doors.Add(blk);
+		}
 		//attempt to link the scenery to the appropriate terrain
 		if(!linkTerrain(blk)) {
 			//if something goes wrong, 
@@ -95,6 +105,8 @@ public class SceneryManager {
 		}
 		//add the block to the list
 		lst.Add(blk);
+
+
 
 		return true;
 	}
@@ -114,6 +126,9 @@ public class SceneryManager {
 
 	public void remove(SceneryBlock blk) {
 		unlinkTerrain(blk);
+		if(blk.BlockInfo.isDoor){
+			MapData.TheFarRooms.find(blk.Position).Doors.Remove(blk);
+		}
 		blk.remove();
 		dictionary[blk.BlockInfo.BlockID].Remove(blk);
 	}

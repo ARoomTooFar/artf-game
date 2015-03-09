@@ -7,21 +7,28 @@ public partial class ARTFRoom {
 
 	#region PrivateVariables
 	private static string defaultBlockID = "Prefabs/Rooms/floortile";
-	private static string defaultWall = "Prefabs/Rooms/walltile";
+	private static string defaultWall = "Prefabs/Rooms/wallstoneend";
 	#endregion PrivateVariables
 
 	#region Properties
-
+	//A list of the TerrainBlocks contained within the room
 	public List<TerrainBlock> Blocks {
 		get;
 		private set;
 	}
 
-	public List<ARTFRoom> LinkedRooms {
+	//A list of the other rooms this room is linked to
+	public Dictionary<SceneryBlock, ARTFRoom> LinkedRooms {
 		get;
 		private set;
 	}
 
+	public List<SceneryBlock> Doors {
+		get;
+		private set;
+	}
+
+	//Stored paths to get from room A to room B
 	public Dictionary<KeyValuePair<ARTFRoom, ARTFRoom>, List<Vector3>> RoomPaths {
 		get;
 		private set;
@@ -50,10 +57,12 @@ public partial class ARTFRoom {
 		get { return new Vector3(LLCorner.x, URCorner.y, URCorner.z); }
 	}
 
+	//Center of the room. May be on the edge of two blocks in even sized rooms
 	public Vector3 Center {
 		get { return (LLCorner + URCorner) / 2; }
 	}
 
+	//A list of all four corners
 	public List<Vector3> Corners {
 		get {
 			List<Vector3> retVal = new List<Vector3>();
@@ -97,7 +106,8 @@ public partial class ARTFRoom {
 		this.LLCorner = pos1.getMinVals(pos2);
 		this.URCorner = pos1.getMaxVals(pos2);
 		this.Blocks = new List<TerrainBlock>();
-		this.LinkedRooms = new List<ARTFRoom>();
+		this.LinkedRooms = new Dictionary<SceneryBlock, ARTFRoom>();
+		this.Doors = new List<SceneryBlock>();
 	}
 
 	#region (un)linkTerrain
@@ -133,11 +143,13 @@ public partial class ARTFRoom {
 				Blocks.Add(blk);
 				//and link the room to the block
 				blk.Room = this;
+				//If the block is along the edge, give it a wall prefab
 				if(this.isEdge(blk.Position)) {
 					blk.Wall = GameObjectResourcePool.getResource(defaultWall, blk.Position, getWallSide(blk.Position).toRotationVector());
 				}
 			}
 		}
+		//For each block in the room, reevaluate its neighbor links
 		foreach(TerrainBlock blks in Blocks) {
 			MapData.TerrainBlocks.relinkNeighbors(blks);
 		}
@@ -154,12 +166,61 @@ public partial class ARTFRoom {
 		foreach(TerrainBlock blk in Blocks) {
 			//unlink the room from the block
 			blk.Room = null;
-			GameObjectResourcePool.returnResource(blk.Wall.GetComponent<SceneryMonoBehavior>().BlockID, blk.Wall);
+			//if the room has a wall, return it to the resource pool
+			if(blk.Wall != null) {
+				string blkid = blk.Wall.GetComponent<SceneryMonoBehavior>().BlockID;
+				GameObjectResourcePool.returnResource(blkid, blk.Wall);
+			}
 		}
 		//remove all the links to terrain
 		Blocks.Clear();
 	}
 	#endregion (un)linkTerrain
+
+	public void linkRoomsViaDoors(){
+		LinkedRooms.Clear();
+		RoomPaths.Clear();
+		foreach(SceneryBlock dr in Doors) {
+			Vector3 checkPos = getDoorCheckPosition(dr);
+			SceneryBlock scnBlk = null;
+			scnBlk = MapData.SceneryBlocks.find(checkPos);
+			if(scnBlk == null){
+				continue;
+			}
+			if(!scnBlk.BlockInfo.isDoor) {
+				continue;
+			}
+			if(scnBlk.Orientation != dr.Orientation.Opposite()){
+				continue;
+			}
+			LinkedRooms.Add(dr, MapData.TheFarRooms.find(checkPos));
+		}
+		foreach(KeyValuePair<SceneryBlock, ARTFRoom> kvp1 in LinkedRooms){
+			foreach(KeyValuePair<SceneryBlock, ARTFRoom> kvp2 in LinkedRooms){
+				RoomPaths.Add(new KeyValuePair<ARTFRoom, ARTFRoom>(kvp1.Value, kvp2.Value),
+				              Pathfinder.getSingleRoomPath(kvp1.Key.Position, kvp2.Key.Position));
+			}
+		}
+	}
+
+	public Vector3 getDoorCheckPosition(SceneryBlock dr){
+		Vector3 checkPos = dr.Position;
+		switch(dr.Orientation){
+		case DIRECTION.North:
+			checkPos.z += 1;
+			break;
+		case DIRECTION.South:
+			checkPos.z -= 1;
+			break;
+		case DIRECTION.East:
+			checkPos.x += 1;
+			break;
+		case DIRECTION.West:
+			checkPos.x -= 1;
+			break;
+		}
+		return checkPos;
+	}
 
 	#region ManipulationFunctions
 	/*
@@ -176,6 +237,7 @@ public partial class ARTFRoom {
 		foreach(TerrainBlock blk in Blocks) {
 			blk.move(offset);
 		}
+		/* Should be unnecessary. Blocks are now only linked within rooms
 		//for each block
 		foreach(TerrainBlock blk in Blocks) {
 			//if it is an edge block
@@ -183,11 +245,11 @@ public partial class ARTFRoom {
 				//force it to re-identify its neighbors
 				MapData.TerrainBlocks.relinkNeighbors(blk);
 			}
-		}
+		}*/
 	}
 
 	/*
-	 * public void resize(Vector3 oldCorner, Vector3 newCorner)
+	 * public void resize(Vector3 oldCor, Vector3 newCor)
 	 * 
 	 * Resizes a room by moving one corner to a new position
 	 */
@@ -270,7 +332,14 @@ public partial class ARTFRoom {
 		return false;
 	}
 
+	/*
+	 * public DIRECTION getWallSide(Vector3 pos)
+	 * 
+	 * Returns a direction corresponding to the which wall the position is in 
+	 * 
+	 */
 	public DIRECTION getWallSide(Vector3 pos){
+		//If not an edge, return non-directional
 		if(!isEdge(pos)) {
 			return DIRECTION.NonDirectional;
 		}
@@ -289,7 +358,7 @@ public partial class ARTFRoom {
 		if(pos.z == URCorner.z) {
 			NSDir = DIRECTION.North;
 		}
-		Debug.Log(LLCorner + ", " + URCorner + ", " + pos + ", " + NSDir.ToString() + ", " + EWDir.ToString());
+		//Debug.Log(LLCorner + ", " + URCorner + ", " + pos + ", " + NSDir.ToString() + ", " + EWDir.ToString());
 		if(EWDir.Equals(DIRECTION.NonDirectional)) {
 			return NSDir;
 		}
