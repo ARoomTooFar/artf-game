@@ -10,11 +10,11 @@ public class Frenzy : Override {
 	int level;
 
 	public Frenzy () {
-		level = 1;
+		level = 0;
 		name = "Frenzy";
-		spd = 100;
-		str = 100;
-		def = 100;
+		spd = 0f;
+		str = 0f;
+		def = 0f;
 	}
 
 	public void setSpeedBoost(float percent){
@@ -29,12 +29,10 @@ public class Frenzy : Override {
 		def = percent;
 	}
 
-	public void FrenzyUp(){
-
-	}
-
 	public void reset(){
-
+		spd = 0;
+		str = 0;
+		def = 0;
 	}
 
 	protected override void bdEffects(BDData newData){
