@@ -158,7 +158,8 @@ public class BullyTrunk: MobileEnemy {
 	protected virtual bool isTooFar () {
 		if (this.target != null && Vector3.Distance(this.transform.position, this.target.transform.position) > this.maxAtkRadius && this.charge.curCoolDown <= 0) {
 			this.inventory.keepItemActive = true;
-			inventory.items[inventory.selected].useItem();
+			// inventory.items[inventory.selected].useItem();
+			charge.useItem();
 			this.lowerHead();
 			return true;
 		}

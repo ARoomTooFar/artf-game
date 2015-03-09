@@ -46,13 +46,13 @@ public class DamageManipulation {
 
 		if (ARTFUtilities.isBehind (atkPos, unitFacing, unitPos)) {
 			ttlReduction *= backDamage.percentValue;
-			Debug.Log ("Back Damage");
+			// Debug.Log ("Back Damage");
 		} else if (ARTFUtilities.isOnSide (atkPos, unitFacing, unitPos)) {
 			ttlReduction *= sideDamage.percentValue;
-			Debug.Log ("Side Damage");
+			// Debug.Log ("Side Damage");
 		} else {
 			ttlReduction *= fntDamage.percentValue;
-			Debug.Log ("Front Damage");
+			// Debug.Log ("Front Damage");
 		}
 
 		/*

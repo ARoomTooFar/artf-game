@@ -216,7 +216,7 @@ public class MobileEnemy : Enemy {
 	}
 
 	protected virtual bool isFar () {
-		if (this.target != null) {
+		if (this.target != null && this.actable) {
 			float distance = this.distanceToPlayer(this.target);
 			return distance > this.minAtkRadius;
 		}
