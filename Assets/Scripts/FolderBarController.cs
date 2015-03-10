@@ -35,7 +35,7 @@ public class FolderBarController : MonoBehaviour {
 	bool lerpingFolderClosed = false;
 	bool lerpingFolderOpen = false;
 	float currentPosX = 0f;
-	float openPosX = -38f;
+	float openPosX = -48f;
 	float closePosX = 40f;
 	Vector3 currentPos;
 	
@@ -198,18 +198,23 @@ public class FolderBarController : MonoBehaviour {
 			bool firstIter = true;
 			for(int j = 0; j < prefabs.Length; j++){
 				GameObject newButt = Instantiate (Resources.Load ("folderButton")) as GameObject;
+
+
 				newButt.transform.SetParent(itemList);
+
+
 				RectTransform buttRect = newButt.GetComponent("RectTransform") as RectTransform;
+
 				
 				//to make first button show up at the right height
 				if(firstIter){
-					buttonY = -1 * buttRect.sizeDelta.y / 2;
+					buttonY = -1 * buttRect.sizeDelta.y / 2 - 10;
 					firstIter = false;
 				}else{
-					buttonY -= buttRect.sizeDelta.y + 5;
+					buttonY -= buttRect.sizeDelta.y + 10;
 				}
-				buttRect.anchoredPosition = new Vector2(buttRect.sizeDelta.x / 2, buttonY);
-				
+				buttRect.anchoredPosition = new Vector2(buttRect.sizeDelta.x / 2 - 5, buttonY);
+
 				
 			}
 			
@@ -224,12 +229,12 @@ public class FolderBarController : MonoBehaviour {
 				if(prefabCounter < prefabs.Length){
 					
 					//add script to button
-					Event_ItemButtons uih = itemList.GetChild(h).gameObject.AddComponent<Event_ItemButtons>() as Event_ItemButtons;
+//					Event_ItemButtons uih = itemList.GetChild(h).gameObject.AddComponent<Event_ItemButtons>() as Event_ItemButtons;
+					Event_ItemButtons uih = itemList.GetChild(h).gameObject.GetComponent("Event_ItemButtons") as Event_ItemButtons;
+
 					//set button's script to drop prefab
-					
 					uih.setConnectedPrefab(folderType + "/" + prefabs[prefabCounter].name);
-					
-					
+
 					//add event trigger to object
 					EventTrigger ev = itemList.GetChild(h).gameObject.AddComponent<EventTrigger>() as EventTrigger;
 					
