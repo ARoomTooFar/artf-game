@@ -18,8 +18,6 @@ public class FileIO : MonoBehaviour
 	public Button Button_Load = null;
 	BinaryWriter bin;
 	
-	static ItemClass itemClass;
-	
 	private Farts serv;
 	private string lvlData = "";
 	private WWW udLvlReq = null; // WWW request to server for level updating
@@ -34,8 +32,7 @@ public class FileIO : MonoBehaviour
 		
 		print(lvlId);
 		txtUdLvl.enabled = false;
-		
-		itemClass = new ItemClass ();
+
 		
 		output_tileMap = GameObject.Find ("TileMap").GetComponent ("Output_TileMap") as Output_TileMap;
 		

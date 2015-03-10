@@ -244,13 +244,7 @@ public class CameraController : MonoBehaviour {
 		GL.Begin (GL.LINES);
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
-		
-		/* get size of tile map */
-		int size_x = 0; int size_z = 0;
-		size_x = tilemapcont.grid_x;
-		size_z = tilemapcont.grid_z;
-		
-		
+
 		//lower edge of tilemap bounding box
 		float xLowerBound = tileMapGameObj.GetComponent<Collider>().bounds.center.x - 
 			((tilemapcont.grid_x / 2) * tileMapGameObj.transform.localScale.x);
@@ -277,7 +271,7 @@ public class CameraController : MonoBehaviour {
 			GL.Vertex(new Vector3(Mathf.Floor(xLowerBound), 0f, z + 0.5f));
 			GL.Vertex(new Vector3(Mathf.Floor(xUpperBound), 0f, z + 0.5f));
 		}
-		for (int x = (int)Mathf.Floor(xLowerBound); x < (int)Mathf.Floor(xUpperBound); x++) {
+		for (int x = (int)Mathf.CeilToInt(xLowerBound); x < (int)Mathf.CeilToInt(xUpperBound); x++) {
 			GL.Vertex(new Vector3(x - 0.5f, 0f, Mathf.Floor(zLowerBound)));
 			GL.Vertex(new Vector3(x - 0.5f, 0f, Mathf.Floor(zUpperBound)));
 		}
