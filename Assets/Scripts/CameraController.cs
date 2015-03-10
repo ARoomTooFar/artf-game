@@ -245,8 +245,6 @@ public class CameraController : MonoBehaviour {
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
 
-		
-		
 		//lower edge of tilemap bounding box
 		float xLowerBound = tileMapGameObj.collider.bounds.center.x - 
 			((tilemapcont.grid_x / 2) * tileMapGameObj.transform.localScale.x);
