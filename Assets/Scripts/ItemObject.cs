@@ -25,13 +25,13 @@ public class ItemObject : MonoBehaviour
 	
 	void Start ()
 	{
-		UICamera = GameObject.Find ("UICamera").camera;
+		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
 		
 		focusedShader = Shader.Find ("Transparent/Bumped Diffuse");
 		nonFocusedShader = Shader.Find ("Bumped Diffuse");
 		
-		this.gameObject.renderer.material.shader = nonFocusedShader;
+		this.gameObject.GetComponent<Renderer>().material.shader = nonFocusedShader;
 	}
 	
 	void Update ()
@@ -115,10 +115,10 @@ public class ItemObject : MonoBehaviour
 						if (copyCreated) {
 							//update the item object things
 							//shader has to be set in this loop, or transparency won't work
-							itemObjectCopy.gameObject.renderer.material.shader = focusedShader;
-							Color trans = itemObjectCopy.gameObject.renderer.material.color;
+							itemObjectCopy.gameObject.GetComponent<Renderer>().material.shader = focusedShader;
+							Color trans = itemObjectCopy.gameObject.GetComponent<Renderer>().material.color;
 							trans.a = 0.5f;
-							itemObjectCopy.gameObject.renderer.material.SetColor ("_Color", trans);
+							itemObjectCopy.gameObject.GetComponent<Renderer>().material.SetColor ("_Color", trans);
 							itemObjectCopy.transform.position = new Vector3 (x, getPosition ().y, z);
 							itemObjectCopy.transform.eulerAngles = getRotation();
 	

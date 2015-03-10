@@ -74,8 +74,8 @@ public class CameraController : MonoBehaviour {
 
 		dragSpeed = new Vector2 (3f, 3f);
 		
-		UICamera = GameObject.Find ("UICamera").camera;
-		OnTopCamera = GameObject.Find ("LayersOnTopOfEverythingCamera").camera;
+		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
+		OnTopCamera = GameObject.Find ("LayersOnTopOfEverythingCamera").GetComponent<Camera>();
 		
 		setCameraRotation (new Vector3 (45, -45, 0));
 		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
@@ -252,18 +252,18 @@ public class CameraController : MonoBehaviour {
 		
 		
 		//lower edge of tilemap bounding box
-		float xLowerBound = tileMapGameObj.collider.bounds.center.x - 
+		float xLowerBound = tileMapGameObj.GetComponent<Collider>().bounds.center.x - 
 			((tilemapcont.grid_x / 2) * tileMapGameObj.transform.localScale.x);
 		
-		float zLowerBound = tileMapGameObj.collider.bounds.center.z - 
+		float zLowerBound = tileMapGameObj.GetComponent<Collider>().bounds.center.z - 
 			((tilemapcont.grid_z / 2) * tileMapGameObj.transform.localScale.z);
 		
 		
 		//upper edge of tilemap bounding box
-		float xUpperBound = tileMapGameObj.collider.bounds.center.x + 
+		float xUpperBound = tileMapGameObj.GetComponent<Collider>().bounds.center.x + 
 			((tilemapcont.grid_x / 2) * tileMapGameObj.transform.localScale.x);
 		
-		float zUpperBound = tileMapGameObj.collider.bounds.center.z + 
+		float zUpperBound = tileMapGameObj.GetComponent<Collider>().bounds.center.z + 
 			((tilemapcont.grid_z / 2) * tileMapGameObj.transform.localScale.z);
 		
 		

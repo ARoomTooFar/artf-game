@@ -50,7 +50,7 @@ public class ItemObjectUI : MonoBehaviour
 		updateMonsterStatText ();
 		
 		itemObjectUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
-		UICamera = GameObject.Find("UICamera").camera;
+		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
 		itemObjectUICanvas.worldCamera = UICamera;
 		
 		//ui elements we need to toggle on click
@@ -75,7 +75,7 @@ public class ItemObjectUI : MonoBehaviour
 		
 		Button_X = transform.Find("Buttons/Button_X").GetComponent("Button") as Button;
 		
-		UICamera = GameObject.Find("UICamera").camera;
+		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
 
 		//Attack upgrade/downgrade listeners
 		Button_UpArrow_Attack.onClick.AddListener (() => {

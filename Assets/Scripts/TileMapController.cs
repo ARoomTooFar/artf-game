@@ -33,7 +33,7 @@ public class TileMapController : MonoBehaviour {
 
 	void Start ()
 	{
-		UICamera = GameObject.Find ("UICamera").camera;
+		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
 		
 		grid_x = 20;
 		grid_z = 20;
@@ -43,7 +43,7 @@ public class TileMapController : MonoBehaviour {
 		selectedTiles = new HashSet<Vector3> ();
 		shiftOrigin = new Vector3(0f, 0f, 0f);
 		
-		UICamera = GameObject.Find ("UICamera").camera;
+		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
 		tileMap = this.gameObject.GetComponent<TileMap> ();
 	}
 

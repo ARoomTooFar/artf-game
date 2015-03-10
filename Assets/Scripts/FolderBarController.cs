@@ -228,14 +228,14 @@ public class FolderBarController : MonoBehaviour {
 				if(prefabCounter < prefabs.Length){
 					
 					//add script to button
-					Event_ItemButtons uih = itemList.GetChild(h).gameObject.AddComponent("Event_ItemButtons") as Event_ItemButtons;
+					Event_ItemButtons uih = itemList.GetChild(h).gameObject.AddComponent<Event_ItemButtons>() as Event_ItemButtons;
 					//set button's script to drop prefab
 					
 					uih.setConnectedPrefab(folderType + "/" + prefabs[prefabCounter].name);
 					
 					
 					//add event trigger to object
-					EventTrigger ev = itemList.GetChild(h).gameObject.AddComponent("EventTrigger") as EventTrigger;
+					EventTrigger ev = itemList.GetChild(h).gameObject.AddComponent<EventTrigger>() as EventTrigger;
 					
 					//set icon
 					string prefabType = prefabs[prefabCounter].name.Substring(prefabs[prefabCounter].name.IndexOf ('_') + 1);
