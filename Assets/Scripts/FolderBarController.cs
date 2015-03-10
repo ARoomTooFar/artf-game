@@ -32,7 +32,7 @@ public class FolderBarController : MonoBehaviour {
 	//holds the entire folder bar. for use with sliding it off and on screen
 	public RectTransform folderBar;
 	
-	GameObject blankFolder;
+	//GameObject blankFolder;
 	
 	bool lerpingFolderClosed = false;
 	bool lerpingFolderOpen = false;
@@ -48,7 +48,7 @@ public class FolderBarController : MonoBehaviour {
 		
 		folderBar = GameObject.Find("FolderBar").GetComponent<RectTransform>();
 		
-		blankFolder = GameObject.Find("BlankFolder");
+		//blankFolder = GameObject.Find("BlankFolder");
 
 		buttonColor = new Color32(0, 147, 176, 255);
 
@@ -202,7 +202,8 @@ public class FolderBarController : MonoBehaviour {
 			bool firstIter = true;
 			for(int j = 0; j < prefabs.Length; j++){
 				GameObject newButt = Instantiate (Resources.Load ("folderButton")) as GameObject;
-				newButt.transform.parent = itemList;
+				//newButt.transform.parent = itemList;
+				newButt.transform.SetParent(itemList, false);
 				RectTransform buttRect = newButt.GetComponent("RectTransform") as RectTransform;
 				
 				//to make first button show up at the right height
@@ -235,8 +236,9 @@ public class FolderBarController : MonoBehaviour {
 					
 					
 					//add event trigger to object
-					EventTrigger ev = itemList.GetChild(h).gameObject.AddComponent<EventTrigger>() as EventTrigger;
-					
+					//EventTrigger ev = itemList.GetChild(h).gameObject.AddComponent<EventTrigger>() as EventTrigger;
+					itemList.GetChild(h).gameObject.AddComponent<EventTrigger>();
+
 					//set icon
 					string prefabType = prefabs[prefabCounter].name.Substring(prefabs[prefabCounter].name.IndexOf ('_') + 1);
 					uih.setButtonImage(prefabType);

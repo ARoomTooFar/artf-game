@@ -29,20 +29,21 @@ public class CameraController : MonoBehaviour {
 	static float maxY = 25f;
 	static Vector2 dragSpeed;
 	static float zoomSpeed = 2f;
-	static bool isTopDown = false;
+	//static bool isTopDown = false;
 	float dx;
 	float dy;
 	
 	public Material selectionMat; //material for selected tiles
 	public Material gridMat;
-	TileMap tileMap;
+	//TileMap tileMap;
+
 	GameObject tileMapGameObj;
 
 
 	void Awake ()
 	{
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
-		tileMap = GameObject.Find ("TileMap").GetComponent("TileMap") as TileMap;
+		//tileMap = GameObject.Find ("TileMap").GetComponent("TileMap") as TileMap;
 		tileMapGameObj = GameObject.Find ("TileMap");
 	}
 	
@@ -206,20 +207,20 @@ public class CameraController : MonoBehaviour {
 	public void changeToTopDown ()
 	{
 		setCameraRotation (new Vector3 (90, -45, 0));
-		isTopDown = true;
+		//isTopDown = true;
 	}
 	public void changeToPerspective ()
 	{
 		UICamera.orthographic = false;
 		OnTopCamera.orthographic = false;
-		isTopDown = false;
+		//isTopDown = false;
 		setCameraRotation (new Vector3 (45, -45, 0));
 	}
 	public void changetoOrthographic ()
 	{
 		UICamera.orthographic = true;
 		OnTopCamera.orthographic = true;
-		isTopDown = false;
+		//isTopDown = false;
 		setCameraRotation (new Vector3 (45, -45, 0));
 	}
 
@@ -246,9 +247,9 @@ public class CameraController : MonoBehaviour {
 		selectionMat.SetPass (0);
 		
 		/* get size of tile map */
-		int size_x = 0; int size_z = 0;
-		size_x = tilemapcont.grid_x;
-		size_z = tilemapcont.grid_z;
+		//int size_x = 0; int size_z = 0;
+		//size_x = tilemapcont.grid_x;
+		//size_z = tilemapcont.grid_z;
 		
 		
 		//lower edge of tilemap bounding box
@@ -268,8 +269,8 @@ public class CameraController : MonoBehaviour {
 		
 		
 		//length and width of tileMap
-		float tileMapSizeX = tilemapcont.grid_x * tileMapGameObj.transform.localScale.x;
-		float tileMapSizeZ = tilemapcont.grid_z * tileMapGameObj.transform.localScale.z;
+		//float tileMapSizeX = tilemapcont.grid_x * tileMapGameObj.transform.localScale.x;
+		//float tileMapSizeZ = tilemapcont.grid_z * tileMapGameObj.transform.localScale.z;
 		
 		
 		//draw grid over tilemap

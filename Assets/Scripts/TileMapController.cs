@@ -12,8 +12,8 @@ using System.Text;
 using System.Linq;
 
 public class TileMapController : MonoBehaviour {
-	Transform itemObjects;
-	TileMap tileMap;
+	//Transform itemObjects;
+	//TileMap tileMap;
 
 	public int grid_x;
 	public int grid_z;
@@ -29,7 +29,7 @@ public class TileMapController : MonoBehaviour {
 	GameObject currentObj;
 
 	
-	Dictionary<Vector3, List<GameObject>> wallDic;
+	//Dictionary<Vector3, List<GameObject>> wallDic;
 
 	void Start ()
 	{
@@ -44,15 +44,15 @@ public class TileMapController : MonoBehaviour {
 		shiftOrigin = new Vector3(0f, 0f, 0f);
 		
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
-		tileMap = this.gameObject.GetComponent<TileMap> ();
+		//tileMap = this.gameObject.GetComponent<TileMap> ();
 	}
 
 	void Awake ()
 	{
-		wallDic = new Dictionary<Vector3, List<GameObject>>();
+		//wallDic = new Dictionary<Vector3, List<GameObject>>();
 		
-		tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
-		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
+		//tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
+		//itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 	}
 	
 	void Update ()
@@ -69,8 +69,8 @@ public class TileMapController : MonoBehaviour {
 
 	void adjustGroundGrid ()
 	{
-		float gridz = grid_z * 1.0f;
-		float gridx = grid_x * 1.0f;
+		//float gridz = grid_z * 1.0f;
+		//float gridx = grid_x * 1.0f;
 	}
 
 	public void fillInRoom (HashSet<Vector3> st, float firstCornerX, float firstCornerZ, float secondCornerX, float secondCornerZ){

@@ -12,13 +12,13 @@ using System.Text;
 //This class listens to save/deploy/load buttons
 public class FileIO : MonoBehaviour
 {
-	Output_TileMap output_tileMap;
+	//Output_TileMap output_tileMap;
 	public Button Button_Save = null;
 	public Button Button_Deploy = null;
 	public Button Button_Load = null;
 	BinaryWriter bin;
 	
-	static ItemClass itemClass;
+	//static ItemClass itemClass;
 	
 	private Farts serv;
 	private string lvlData = "";
@@ -35,9 +35,9 @@ public class FileIO : MonoBehaviour
 		print(lvlId);
 		txtUdLvl.enabled = false;
 		
-		itemClass = new ItemClass ();
+		//itemClass = new ItemClass ();
 		
-		output_tileMap = GameObject.Find ("TileMap").GetComponent ("Output_TileMap") as Output_TileMap;
+		//output_tileMap = GameObject.Find ("TileMap").GetComponent ("Output_TileMap") as Output_TileMap;
 		
 		//loadingObj = gameObject.AddComponent<LoadingObj>();
 		Button_Save.onClick.AddListener (() => {
