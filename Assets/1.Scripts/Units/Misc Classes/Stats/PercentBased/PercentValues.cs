@@ -77,47 +77,56 @@ public class StatsMultiplier{
 }
 
 public class PowerLevels{
-	private class PowerTier
+	private class PowerStage
 	{
 		public int powerCount;
 		public StatsMultiplier mult;
 	}
 
-	List<PowerTier> tiers;
+	List<PowerStage> tiers;
 	int powvalue;
-	int currentTier;
+	int currentStage;
 
 	public PowerLevels(){
-		tiers = new List<PowerTier>();
+		tiers = new List<PowerStage>();
 		powvalue = 0;
-		currentTier = -1;
+		currentStage = -1;
 	}
 
-	public void addTier(StatsMultiplier statsbd, int powval){
-		PowerTier newtier = new PowerTier ();
+	public void addStage(StatsMultiplier statsbd, int powval){
+		if(currentStage == -1) currentStage = 0;
+		PowerStage newtier = new PowerStage ();
 		newtier.powerCount = powval;
 		newtier.mult = statsbd;
 		tiers.Add (newtier);
 	}
 
 	public StatsMultiplier getStatsBD(){
-		return tiers[currentTier].mult;
+		return tiers[currentStage].mult;
 	}
 
 	public void Update(){
-		if (currentTier < tiers.Count){
-			if(powvalue > tiers [currentTier].powerCount){
-				currentTier++;
+		if (currentStage < tiers.Count){
+			if(powvalue > tiers [currentStage].powerCount){
+				currentStage++;
 			}
 		}
 
-		if (powvalue < tiers [currentTier].powerCount && currentTier > 0){
-			currentTier--;
+		if (powvalue < tiers [currentStage].powerCount && currentStage > 0){
+			currentStage--;
 		}
 	}
 
-	public void resetTier(){
-		currentTier = 0;
+	public void updateRage(int gaar){
+		powvalue = gaar;
+	}
+
+	public void addRage(int gaaar){
+		powvalue += gaaar;
+	}
+
+	public void resetStage(){
+		currentStage = 0;
 		powvalue = 0;
 	}
 

@@ -54,7 +54,6 @@ public class AggroTable
 	public void add(GameObject g1, int p1)
 	{
 		// Debug.Log ("Adding " + g1 + " with prio " + p1);
-		++totalAggro;
 		AggroNode n = new AggroNode (g1, p1);
 
 		AggroNode runner = head;
@@ -78,7 +77,9 @@ public class AggroTable
 		if (head == null) {
 			head = n;
 			tail = n;
+			++totalAggro;
 		}else {
+			++totalAggro;
 			addR (n, head);
 		}
 	}
