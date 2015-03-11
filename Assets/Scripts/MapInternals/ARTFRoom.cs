@@ -29,7 +29,7 @@ public partial class ARTFRoom {
 	}
 
 	//Stored paths to get from room A to room B
-	public Dictionary<KeyValuePair<ARTFRoom, ARTFRoom>, List<Vector3>> RoomPaths {
+	public Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>> RoomPaths {
 		get;
 		private set;
 	}
@@ -145,7 +145,7 @@ public partial class ARTFRoom {
 				blk.Room = this;
 				//If the block is along the edge, give it a wall prefab
 				if(this.isEdge(blk.Position)) {
-					blk.Wall = GameObjectResourcePool.getResource(defaultWall, blk.Position, getWallSide(blk.Position).toRotationVector());
+					blk.addWall(new SceneryBlock(defaultWall, blk.Position, getWallSide(blk.Position)));
 				}
 			}
 		}
@@ -168,8 +168,7 @@ public partial class ARTFRoom {
 			blk.Room = null;
 			//if the room has a wall, return it to the resource pool
 			if(blk.Wall != null) {
-				string blkid = blk.Wall.GetComponent<SceneryMonoBehavior>().BlockID;
-				GameObjectResourcePool.returnResource(blkid, blk.Wall);
+				blk.removeWall();
 			}
 		}
 		//remove all the links to terrain
@@ -197,7 +196,7 @@ public partial class ARTFRoom {
 		}
 		foreach(KeyValuePair<SceneryBlock, ARTFRoom> kvp1 in LinkedRooms){
 			foreach(KeyValuePair<SceneryBlock, ARTFRoom> kvp2 in LinkedRooms){
-				RoomPaths.Add(new KeyValuePair<ARTFRoom, ARTFRoom>(kvp1.Value, kvp2.Value),
+				RoomPaths.Add(new KeyValuePair<Vector3, Vector3>(kvp1.Key.Position, kvp2.Key.Position),
 				              Pathfinder.getSingleRoomPath(kvp1.Key.Position, kvp2.Key.Position));
 			}
 		}

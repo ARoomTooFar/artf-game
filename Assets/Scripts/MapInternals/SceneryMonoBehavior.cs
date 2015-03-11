@@ -14,6 +14,8 @@ public class SceneryMonoBehavior : MonoBehaviour {
 
 	public bool isDoor;
 
+	public bool isWall;
+
 	public List<Vector3> LocalCoordinates(DIRECTION dir) {
 		List<Vector3> retVal = new List<Vector3>();
 		foreach(Vector3 vec in Coordinates) {

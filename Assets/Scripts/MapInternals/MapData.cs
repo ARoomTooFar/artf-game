@@ -127,10 +127,16 @@ public static class MapData {
 	#region Monsters
 	#region MonsterManipulation
 	public static void addMonster(string type, Vector3 pos, DIRECTION dir){
+		if(!isAddMonsterValid(pos)){
+			return;
+		}
 		MonsterBlocks.add(new MonsterBlock(type, pos, dir));
 	}
 
 	public static void moveMonster(Vector3 pos, Vector3 offset){
+		if(!isAddMonsterValid(pos + offset)){
+			return;
+		}
 		MonsterBlocks.move(pos, offset);
 	}
 
@@ -153,10 +159,16 @@ public static class MapData {
 	#region Scenery
 	#region SceneryManipulation
 	public static void addScenery(string type, Vector3 pos, DIRECTION dir){
+		if(!isAddSceneryValid(type, pos, dir)){
+			return;
+		}
 		SceneryBlocks.add(new SceneryBlock(type, pos, dir));
 	}
 
 	public static void moveScenery(Vector3 pos, Vector3 offset){
+		if(!isMoveSceneryValid(pos, offset)){
+			return;
+		}
 		SceneryBlocks.move(pos, offset);
 	}
 
@@ -171,7 +183,7 @@ public static class MapData {
 
 	#region SceneryValidation
 	public static bool isAddSceneryValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North){
-		return isAddSceneryValid(type, pos, dir);
+		return SceneryBlocks.isAddValid(type, pos, dir);
 	}
 
 	public static bool isMoveSceneryValid(Vector3 pos, Vector3 offset){

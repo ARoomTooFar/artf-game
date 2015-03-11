@@ -63,7 +63,7 @@ public class SceneryManager {
 			}
 			//if the block is linked to this piece of scenery, then unlink it
 			if(terBlk.Scenery.Equals(blk)) {
-				terBlk.removeScenery();
+				terBlk.unlinkScenery();
 			}
 		}
 	}
@@ -80,13 +80,18 @@ public class SceneryManager {
 	public bool add(SceneryBlock blk) {
 		if(blk.BlockInfo.isDoor){
 			if(!MapData.TheFarRooms.find(blk.Position).isEdge(blk.Position)){
+				blk.remove();
 				return false;
 			}
 			blk.rotate(MapData.TheFarRooms.find(blk.Position).getWallSide(blk.Position));
 			if(!blk.Orientation.isCardinal()){
+				blk.remove();
 				return false;
 			}
 			MapData.TheFarRooms.find(blk.Position).Doors.Add(blk);
+			foreach(Vector3 pos in blk.Coordinates){
+				MapData.TerrainBlocks.find(pos).removeWall();
+			}
 		}
 		//attempt to link the scenery to the appropriate terrain
 		if(!linkTerrain(blk)) {
@@ -105,8 +110,6 @@ public class SceneryManager {
 		}
 		//add the block to the list
 		lst.Add(blk);
-
-
 
 		return true;
 	}
@@ -199,6 +202,7 @@ public class SceneryManager {
 
 	#region isMoveValid
 	public bool isMoveValid(Vector3 pos, Vector3 offset) {
+		Debug.Log(pos);
 		return isMoveValid(find(pos), offset);
 	}
 
@@ -211,7 +215,10 @@ public class SceneryManager {
 	#endregion isMoveValid
 
 	public bool isAddValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North) {
-		return isBlockValid(new SceneryBlock(type, pos, dir));
+		SceneryBlock blk = new SceneryBlock(type, pos, dir);
+		bool retVal = isBlockValid(blk);
+		blk.remove();
+		return retVal;
 	}
 
 	#region isBlockValid

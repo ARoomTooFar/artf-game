@@ -47,9 +47,9 @@ public class TerrainBlock {
 		private set;
 	}
 
-	public GameObject Wall {
+	public SceneryBlock Wall {
 		get;
-		set;
+		private set;
 	}
 
 	public ARTFRoom Room {
@@ -249,7 +249,27 @@ public class TerrainBlock {
 	 * Unlinks the piece of scenery linked to this block
 	 */
 	public void removeScenery() {
+		this.Scenery.remove();
+		unlinkScenery();
+	}
+
+	public void unlinkScenery(){
 		this.Scenery = null;
+	}
+
+	public bool addWall(SceneryBlock scn) {
+		//return false if there is already scenery
+		if(this.Wall != null) {
+			return false;
+		}
+		
+		this.Wall = scn;
+		return true;
+	}
+
+	public void removeWall(){
+		this.Wall.remove();
+		this.Wall = null;
 	}
 	#endregion Scenery
 
