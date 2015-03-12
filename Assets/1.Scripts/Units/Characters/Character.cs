@@ -340,7 +340,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 		
 			stats.health -= dmgTaken;
-			print ("Fuck: " + dmgTaken + " Damage taken");
+			//print ("Fuck: " + dmgTaken + " Damage taken");
 
 			if (stats.health <= 0) {
 				die();
