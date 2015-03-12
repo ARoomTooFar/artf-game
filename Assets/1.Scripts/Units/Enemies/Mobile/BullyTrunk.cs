@@ -73,14 +73,15 @@ public class BullyTrunk: MobileEnemy {
 		charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
 		if (charge == null) Debug.LogWarning ("BullyTrunk does not have charge equipped");
 
-		headReduction = 0.8f;
-		sideReduction = 0.75f;
-		headSlow = 0.75f;
-		sideSlow = 0.5f;
+		headReduction = 0.9f;
+		sideReduction = 0.45f;
+		headSlow = 0.1f;
+		sideSlow = 0.7f;
 		this.rockHead = new RockHead (headSlow, headReduction);
 		this.rockArms = new RockArms (sideSlow, sideReduction);
 
-		this.BDS.addBuffDebuff (rockHead, this.gameObject);
+		this.BDS.addBuffDebuff (this.rockHead, this.gameObject);
+		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
 	}
 	
 	protected override void Update() {
@@ -158,9 +159,7 @@ public class BullyTrunk: MobileEnemy {
 	protected virtual bool isTooFar () {
 		if (this.target != null && Vector3.Distance(this.transform.position, this.target.transform.position) > this.maxAtkRadius && this.charge.curCoolDown <= 0) {
 			this.inventory.keepItemActive = true;
-			// inventory.items[inventory.selected].useItem();
 			charge.useItem();
-			this.lowerHead();
 			return true;
 		}
 		return false;
@@ -201,17 +200,34 @@ public class BullyTrunk: MobileEnemy {
 	protected virtual void chargingIntoSucker () {
 		if (this.target != null) {
 			this.lastSeenPosition = this.target.transform.position;
-			this.lowerArms();
+			// this.lowerArms();
+			StartCoroutine(this.shieldsDown ());
 		}
 	}
 
 	//-------------------//
 
 
+	//------------//
+	// Coroutines //
+	//------------//
+
+
+	protected virtual IEnumerator shieldsDown() {
+		this.BDS.rmvBuffDebuff (this.rockArms, this.gameObject);
+		yield return new WaitForSeconds(3.0f);
+		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
+	}
+
+
+	//------------//
+
+
 	//------------------//
 	// Helper Functions //
 	//------------------//
 
+	/*
 	protected void lowerHead() {
 		this.BDS.rmvBuffDebuff (this.rockHead, this.gameObject);
 		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
@@ -223,6 +239,7 @@ public class BullyTrunk: MobileEnemy {
 		this.BDS.addBuffDebuff (this.rockHead, this.gameObject);
 		print ("Rock head on");
 	}
+	*/
 
 	//------------------//
 }
