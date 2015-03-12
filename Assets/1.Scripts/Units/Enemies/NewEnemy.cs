@@ -134,8 +134,10 @@ public class NewEnemy : Character {
 	//-------------------------------//
 
 	public override void damage(int dmgTaken, Character striker) {
+		alerted = true;
 		base.damage(dmgTaken, striker);
-		print ("Fuck: " + dmgTaken + " Damage taken");
+		aggroT.add (striker.gameObject, 3);
+		print ("Fuck: " + dmgTaken + " Damage taken from " + striker.name  );
 	}
 	
 	public override void damage(int dmgTaken) {
@@ -144,7 +146,8 @@ public class NewEnemy : Character {
 			aggro = true;
 			dmgTimer = 0f;
 		}
-		
+		print ("Fuck: " + dmgTaken + " Damage taken");
+
 		base.damage(dmgTaken);
 	}
 

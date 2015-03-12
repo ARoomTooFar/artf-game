@@ -7,10 +7,8 @@ public class Frenzy : Override {
 	private float spd;
 	private float str;
 	private float def;
-	int level;
 
 	public Frenzy () {
-		level = 0;
 		name = "Frenzy";
 		spd = 0f;
 		str = 0f;

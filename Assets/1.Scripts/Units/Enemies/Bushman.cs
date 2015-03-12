@@ -4,12 +4,13 @@ using System.Collections.Generic;
 
 public class Bushman : MobileEnemy {
 	
-	bool inFrenzy;
-	float frenzy_counter;
-	float frenzy_growth;
-	PowerLevels powlvs;
-	Frenzy frenzy;
-	int tier;
+	private bool inFrenzy;
+	private float frenzy_counter;
+	private float frenzy_growth;
+	private PowerLevels powlvs;
+	private Frenzy frenzy;
+	private int tier;
+	private float health;
 
 	
 	protected override void Awake () {
@@ -34,6 +35,8 @@ public class Bushman : MobileEnemy {
 		powlvs.addStage(stage6, 60);
 		frenzy = new Frenzy ();
 		BDS.addBuffDebuff (frenzy, this.gameObject, 20);
+		setInitValues();
+		health = stats.health;
 	}
 
 	void setTier(int tier){
@@ -45,6 +48,11 @@ public class Bushman : MobileEnemy {
 	}
 	
 	protected override void Update() {
+		if(health > stats.health){
+			health = stats.health;
+			powlvs.addRage(Mathf.CeilToInt((float)(stats.maxHealth - stats.health)/stats.maxHealth * 80));
+		}
+//		Debug.Log (stats.health);
 		powlvs.Update();
 		base.Update ();
 	}

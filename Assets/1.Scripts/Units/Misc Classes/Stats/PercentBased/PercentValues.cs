@@ -123,6 +123,7 @@ public class PowerLevels{
 
 	public void addRage(int gaaar){
 		powvalue += gaaar;
+		Debug.Log (powvalue);
 	}
 
 	public void resetStage(){

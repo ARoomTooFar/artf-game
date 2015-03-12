@@ -117,7 +117,7 @@ public class StateMachine {
 	{
 		triggeredTransition = null;
 
-		// Debug.Log (currState.sId());
+//		Debug.Log (currState.id);
 
 		List<Transition> transList = currState.getTransitions ();
 		foreach (Transition t in transList) 

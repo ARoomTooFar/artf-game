@@ -12,6 +12,7 @@ public class Stats{
 	public int health, armor,maxHealth,rezCount;
 	public int strength, coordination, speed, luck;
 	public bool isDead;
+
 	/*
 	*Health: Health is the amount of damage a player can take before dying.
 	*Armor: Effects the amount of health that is lost when a player is hit with an attack, the higher the armor the less health is lost.

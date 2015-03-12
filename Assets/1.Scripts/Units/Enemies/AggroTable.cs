@@ -77,9 +77,7 @@ public class AggroTable
 		if (head == null) {
 			head = n;
 			tail = n;
-			++totalAggro;
 		}else {
-			++totalAggro;
 			addR (n, head);
 		}
 	}
