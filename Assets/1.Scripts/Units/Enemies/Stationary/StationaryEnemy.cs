@@ -3,7 +3,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class StationaryEnemy : NewEnemy {
+public class StationaryEnemy : Enemy {
 
 	//-------------------//
 	// Primary Functions //
@@ -64,22 +64,29 @@ public class StationaryEnemy : NewEnemy {
 		Transition tAttack = new Transition (attack);
 		Transition tAtkAnimation = new Transition(atkAnimation);
 		Transition tSearch = new Transition (search);
+
+		// Add all the transitions to the state machine
+		sM.transitions.Add (tRest.targetState.id, tRest);
+		sM.transitions.Add (tApproach.targetState.id, tApproach);
+		sM.transitions.Add (tAttack.targetState.id, tAttack);
+		sM.transitions.Add (tAtkAnimation.targetState.id, tAtkAnimation);
+		sM.transitions.Add (tSearch.targetState.id, tSearch);
 		
 		
 		// Set conditions for the transitions
-		tRest.addCondition (isResting, this);
-		tApproach.addCondition (isApproaching, this);
-		tAttack.addCondition (isAttacking, this);
-		tAtkAnimation.addCondition (isInAtkAnimation, this);
-		tSearch.addCondition (isSearching, this);
+		tRest.addCondition (isResting);
+		tApproach.addCondition (isApproaching);
+		tAttack.addCondition (isAttacking);
+		tAtkAnimation.addCondition (isInAtkAnimation);
+		tSearch.addCondition (isSearching);
 		
 		
 		// Set actions for the states
-		rest.addAction (Rest, this);
-		approach.addAction (Approach, this);
-		attack.addAction (Attack, this);
-		atkAnimation.addAction (AtkAnimation, this);
-		search.addAction (Search, this);
+		rest.addAction (Rest);
+		approach.addAction (Approach);
+		attack.addAction (Attack);
+		atkAnimation.addAction (AtkAnimation);
+		search.addAction (Search);
 		
 		
 		// Set the transitions for the states
@@ -101,11 +108,11 @@ public class StationaryEnemy : NewEnemy {
 	// Transition Functions //
 	//----------------------//
 
-	protected virtual bool isResting(Character a) {
+	protected virtual bool isResting() {
 		return (this.lastSeenPosition == null && !this.alerted);
 	}
 	
-	protected virtual bool isApproaching(Character a) {
+	protected virtual bool isApproaching() {
 		// If we don't have a target currently and aren't alerted, automatically assign anyone in range that we can see as our target
 		if (this.target == null) {
 			if (aRange.inRange.Count > 0) {
@@ -127,14 +134,14 @@ public class StationaryEnemy : NewEnemy {
 		
 		float distance = this.distanceToPlayer(this.target);
 		
-		if (distance >= this.maxAtkRadius && this.canSeePlayer (this.target) && !isInAtkAnimation(a)) {
+		if (distance >= this.maxAtkRadius && this.canSeePlayer (this.target) && !isInAtkAnimation()) {
 			// agent.alerted = true;
 			return true;
 		}
 		return false;
 	}
 
-	protected virtual bool isAttacking(Character a) {
+	protected virtual bool isAttacking() {
 		if (this.target != null) {
 			float distance = this.distanceToPlayer(this.target);
 			return distance < this.maxAtkRadius && distance >= this.minAtkRadius;
@@ -142,12 +149,12 @@ public class StationaryEnemy : NewEnemy {
 		return false;
 	}
 
-	protected virtual bool isInAtkAnimation(Character a) {
+	protected virtual bool isInAtkAnimation() {
 		return this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge;
 	}
 
-	protected virtual bool isSearching(Character a) {
-		return this.lastSeenPosition.HasValue && !(this.canSeePlayer (this.target) && this.alerted) && !this.isInAtkAnimation(a);
+	protected virtual bool isSearching() {
+		return this.lastSeenPosition.HasValue && !(this.canSeePlayer (this.target) && this.alerted) && !this.isInAtkAnimation();
 	}
 
 	//----------------------//
@@ -157,26 +164,26 @@ public class StationaryEnemy : NewEnemy {
 	// Action Functions //
 	//------------------//
 
-	protected virtual void Rest(Character a) {
+	protected virtual void Rest() {
 		// Idle
 	}
 
-	protected virtual void Approach(Character a) {
+	protected virtual void Approach() {
 		this.facing = this.target.transform.position - this.transform.position;
 		this.facing.y = 0.0f;
 	}
 
-	protected virtual void Attack(Character a) {
+	protected virtual void Attack() {
 		if (this.actable && !attacking){
 			this.gear.weapon.initAttack();
 		}
 	}
 
 	// We can have some logic here, but it's mostly so our unit is still during and attack animation
-	protected virtual void AtkAnimation(Character a) {
+	protected virtual void AtkAnimation() {
 	}
 
-	protected virtual void Search(Character a) {
+	protected virtual void Search() {
 		target = null;
 		if (this.lastSeenPosition.HasValue) {
 			this.facing = this.lastSeenPosition.Value - this.transform.position;
@@ -195,7 +202,7 @@ public class StationaryEnemy : NewEnemy {
 
 	protected virtual IEnumerator randomSearch() {
 		float resetTimer = aggroTimer;
-		while(!this.isApproaching(this) && resetTimer > 0.0f) {
+		while(!this.isApproaching() && resetTimer > 0.0f) {
 			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
 			yield return new WaitForSeconds (0.5f);
 			resetTimer -= 0.5f;

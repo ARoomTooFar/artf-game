@@ -66,17 +66,17 @@ public class FodderNewAI: MobileEnemy {
 		
 		
 		// Set conditions for the transitions
-		tApproach.addCondition(isApproaching, this);
-		tRest.addCondition (isResting, this);
-		tAttack.addCondition (isAttacking, this);
-		tAtkAnimation.addCondition (isInAtkAnimation, this);
+		tApproach.addCondition(isApproaching);
+		tRest.addCondition (isResting);
+		tAttack.addCondition (isAttacking);
+		tAtkAnimation.addCondition (isInAtkAnimation);
 		
 		
 		// Set actions for the states
-		rest.addAction (Rest, this);
-		approach.addAction (Approach, this);
-		attack.addAction (Attack, this);
-		atkAnimation.addAction (AtkAnimation, this);
+		rest.addAction (Rest);
+		approach.addAction (Approach);
+		attack.addAction (Attack);
+		atkAnimation.addAction (AtkAnimation);
 		
 		
 		// Set the transitions for the states
@@ -94,7 +94,7 @@ public class FodderNewAI: MobileEnemy {
 	// Transition Functions //
 	//----------------------//
 	
-	protected override bool isResting(Character a) {
+	protected override bool isResting() {
 		if(aRange.inRange.Count == 0){
 			return true;
 		}else{
@@ -108,7 +108,7 @@ public class FodderNewAI: MobileEnemy {
 	// Action Functions //
 	//------------------//
 
-	protected override void Rest(Character a) {
+	protected override void Rest() {
 		if (isGrounded) {
 			this.resetpos.y = this.transform.position.y;
 			if (this.distanceToVector3(this.resetpos) <= 0.01f){
