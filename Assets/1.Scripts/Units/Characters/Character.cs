@@ -130,11 +130,12 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		
 		public List<Item> items = new List<Item>();
 		
-		public void equipItems(Character player, GameObject[] abilities) {
+		public void equipItems(Character player, Type ene, GameObject[] abilities) {
 			foreach (GameObject item in abilities) {
 				Item newItem = (Instantiate(item) as GameObject).GetComponent<Item>();
 				newItem.transform.SetParent(itemLocation, false);
 				newItem.user = player;
+				newItem.opposition = ene;
 				items.Add(newItem);
 			}
 				
@@ -143,7 +144,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		}
 		
 		// Equip method for testing purposes
-		public void equipItems(Character player) {
+		public void equipItems(Character player, Type ene) {
 			items.Clear ();
 			items.AddRange(itemLocation.GetComponentsInChildren<Item>());
 
@@ -153,6 +154,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 			foreach (Item item in items) {
 				item.user = player;
+				item.opposition = ene;
 			}
 			
 			selected = 0;
@@ -184,7 +186,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	protected virtual void Start () {
 		if (testing) {
 			gear.equipGear(this, opposition);
-			inventory.equipItems(this);
+			inventory.equipItems(this, opposition);
 			setAnimHash();
 		}
 	}
@@ -194,8 +196,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	}
 
 	public virtual void equipTest(GameObject[] equip, GameObject[] abilities) {
-		gear.equipGear(this, opposition,equip);
-		inventory.equipItems(this, abilities);
+		gear.equipGear(this, opposition, equip);
+		inventory.equipItems(this, opposition, abilities);
 		setAnimHash();
 	}
 

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class BullyTrunk: MobileEnemy {
 
 	protected BullCharge charge;
+	protected BullyTrunkBlast blast;
 	protected RockHead rockHead;
 	protected RockArms rockArms;
 
@@ -73,10 +74,16 @@ public class BullyTrunk: MobileEnemy {
 		charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
 		if (charge == null) Debug.LogWarning ("BullyTrunk does not have charge equipped");
 
+		this.inventory.cycItems ();
+
+		blast = this.inventory.items[inventory.selected].GetComponent<BullyTrunkBlast>();
+		if (blast == null) Debug.LogWarning ("BullyTrunk does not have blast equipped");
+
+
 		headReduction = 0.9f;
 		sideReduction = 0.45f;
 		headSlow = 0.1f;
-		sideSlow = 0.7f;
+		sideSlow = 0.5f;
 		this.rockHead = new RockHead (headSlow, headReduction);
 		this.rockArms = new RockArms (sideSlow, sideReduction);
 
@@ -137,6 +144,7 @@ public class BullyTrunk: MobileEnemy {
 
 		// Sets exit actions for states
 		charging.addExitAction (this.doneCharge);
+		charge.addExitAction (this.chargeEnd);
 
 
 		// Set the transitions for the states
@@ -201,8 +209,12 @@ public class BullyTrunk: MobileEnemy {
 		if (this.target != null) {
 			this.lastSeenPosition = this.target.transform.position;
 			// this.lowerArms();
-			StartCoroutine(this.shieldsDown ());
 		}
+	}
+
+	protected virtual void chargeEnd() {
+		StartCoroutine(this.shieldsDown ());
+		this.blast.useItem();
 	}
 
 	//-------------------//

@@ -4,9 +4,9 @@
 using UnityEngine;
 using System.Collections;
 
-public class BullyTrunkShockwave : QuickItem {
+public class BullyTrunkBlast : QuickItem {
 
-	public GameObject leftShockwave, rightShockwave;
+	public GameObject shockwave;
 	
 	// Use this for initialization
 	protected override void Start () {
@@ -25,7 +25,6 @@ public class BullyTrunkShockwave : QuickItem {
 	public override void useItem() {
 		base.useItem ();
 		// user.animator.SetTrigger("Roll"); Once we have the animation for it
-		
 		this.unleashTheBeast ();
 		this.animDone ();
 	}
@@ -35,5 +34,10 @@ public class BullyTrunkShockwave : QuickItem {
 	}
 
 	private void unleashTheBeast() {
+		GameObject wave = (GameObject)Instantiate(shockwave, user.transform.position, user.transform.rotation);
+		wave.GetComponent<BullyTrunkShockwave>().setInitValues(user, opposition, 0, false, null);
+
+		wave = (GameObject)Instantiate(shockwave, user.transform.position, user.transform.rotation);
+		wave.GetComponent<BullyTrunkShockwave>().setInitValues(user, opposition, 0, true, null);
 	}
 }
