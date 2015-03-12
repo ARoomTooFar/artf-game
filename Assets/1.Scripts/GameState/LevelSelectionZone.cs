@@ -25,7 +25,7 @@ public class LevelSelectionZone : MonoBehaviour {
 
 
 		//this checks to see if the object colliding with the zone is a player
-		string t = other.collider.tag;
+		string t = other.GetComponent<Collider>().tag;
 
 		//if the zoneGoesTo the level select then the players must be back at the start so it will set that
 		//value in each players class equal to true.
@@ -195,7 +195,7 @@ public class LevelSelectionZone : MonoBehaviour {
 	//---------------------------------------
 	void OnTriggerExit(Collider other)
 	{
-		string t = other.collider.tag;
+		string t = other.GetComponent<Collider>().tag;
 		print ("the player left da zone");
 
 		if (zoneGoesTo == "LevelSelect") {

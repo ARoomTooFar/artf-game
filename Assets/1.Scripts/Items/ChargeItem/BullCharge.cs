@@ -25,6 +25,7 @@ public class BullCharge : ChargeItem {
 	public List<Character> enemies;
 	
 	private bool hitWall;
+	private Stun debuff;
 	
 
 	//private Collider collider;
@@ -34,7 +35,8 @@ public class BullCharge : ChargeItem {
 		base.Start();
 
 		//collider = GetComponent<Collider>();
-		collider.enabled = false;
+		GetComponent<Collider>().enabled = false;
+		debuff = new Stun();
 	}
 	
 	protected override void setInitValues() {
@@ -64,14 +66,14 @@ public class BullCharge : ChargeItem {
 	protected override void chgDone() {
 		// user.animator.SetTrigger("Charge Forward");
 		
-		collider.enabled = true;
+		GetComponent<Collider>().enabled = true;
 		user.freeAnim = false;
 		StartCoroutine(chargeFunc((chgDist + curChgTime) * 0.1f));
 	}
 
 	protected override void animDone() {
 		user.freeAnim = true;
-		collider.enabled = false;
+		GetComponent<Collider>().enabled = false;
 		hitWall = false;
 		enemies.Clear();
 
@@ -83,7 +85,9 @@ public class BullCharge : ChargeItem {
 		yield return StartCoroutine(chgTimeFunc(chgTime));
 		float tempStun = stunDuration * (hitWall ? 2 : 1);
 		foreach(Character ene in enemies) {
-			((IStunable)ene.GetComponent(typeof(IStunable))).stun();
+			// ((IStunable)ene.GetComponent(typeof(IStunable))).stun();
+
+			ene.BDS.addBuffDebuff(debuff, this.gameObject, tempStun);
 		}
 		yield return StartCoroutine(chgLagTime());
 
@@ -97,23 +101,24 @@ public class BullCharge : ChargeItem {
 		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
 
 			if (hitWall) {
-				user.rigidbody.velocity = Vector3.zero;
+				user.GetComponent<Rigidbody>().velocity = Vector3.zero;
 				yield break;
 			}
 			
 			foreach(Character ene in enemies) {
 				ene.transform.position = transform.position;
-				((IForcible<Vector3, float>)ene.GetComponent(typeof(IForcible<Vector3, float>))).push(0.1f);
+				ene.BDS.addBuffDebuff(debuff, this.gameObject, 0.1f);
+				// ((IForcible<Vector3, float>)ene.GetComponent(typeof(IForcible<Vector3, float>))).push(0.1f);
 			}
 
-			user.rigidbody.velocity = user.facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
+			user.GetComponent<Rigidbody>().velocity = user.facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 			yield return 0;
 		}
 	}
 	
 	private IEnumerator chgLagTime() {
 		for (float timer = 0; timer < chgLag; timer += Time.deltaTime) {
-			user.rigidbody.velocity = Vector3.zero;
+			user.GetComponent<Rigidbody>().velocity = Vector3.zero;
 			yield return 0;
 		}
 	}

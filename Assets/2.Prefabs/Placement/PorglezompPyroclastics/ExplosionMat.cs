@@ -11,18 +11,18 @@ public class ExplosionMat : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//string[] kw = renderer.sharedMaterial.shaderKeywords;
-		renderer.sharedMaterial = new Material(renderer.sharedMaterial);
+		GetComponent<Renderer>().sharedMaterial = new Material(GetComponent<Renderer>().sharedMaterial);
 		//renderer.sharedMaterial.shaderKeywords = kw;
-		renderer.sharedMaterial.SetTexture("_RampTex", ramp);
+		GetComponent<Renderer>().sharedMaterial.SetTexture("_RampTex", ramp);
 		doUpdate = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (doUpdate) {
-			renderer.sharedMaterial.SetVector("_SpherePos", transform.position);
+			GetComponent<Renderer>().sharedMaterial.SetVector("_SpherePos", transform.position);
 			float minscale = Mathf.Min(transform.lossyScale.x, Mathf.Min(transform.lossyScale.y, transform.lossyScale.z));
-			renderer.sharedMaterial.SetFloat("_Radius", minscale/2 - 2);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Radius", minscale/2 - 2);
 		}
 	}
 }

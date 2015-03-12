@@ -24,26 +24,52 @@ public class Graphs<T> {
 	// Adds the new node with T value to our graph
 	public virtual Node<T> addNode(T value) {
 		Node<T> newNode = new Node<T>(value);
-		allNodes.Add (newNode);
+		this.allNodes.Add (newNode);
 		return newNode;
 	}
 	
 	// Adds new node to our graph
 	public virtual void addNode (Node<T> newNode) {
-		allNodes.Add (newNode);
+		this.allNodes.Add (newNode);
 	}
+
+	public virtual void removeNode(Node<T> nodeToRemove) {
+		if (this.allNodes.Contains(nodeToRemove)) {
+			nodeToRemove.clearSelf();
+			allNodes.Remove(nodeToRemove);
+		} else {
+			Debug.LogWarning ("Attempting to remove node that does not exist");
+		}
+	}
+
+	public virtual void clearGraph() {
+		foreach (Node<T> node in allNodes) {
+			node.clearSelf();
+		}
+
+		allNodes.Clear();
+	}
+
+
 
 	// Pathfinding Stuff //
 
 	// Finds the shortest path to a node given starting and ending node using Dijstras
 	//     returns false if it fails
-	public virtual bool findShortestPathTo(Node<T> toNode, Node<T> fromNode) {
+	public virtual List<T> findShortestPathTo(Node<T> toNode, Node<T> fromNode) {
+		List<T> path = new List<T>();
 		if (!this.allNodes.Contains (toNode)) Debug.LogWarning ("Goal node with value " + toNode.value + " does not exist in graph");
 		else if (toNode.neighbors.Count == 0) Debug.LogWarning ("Goal node with value " + toNode.value + " does not have any paths conencted to it");
 		else if (!this.allNodes.Contains(fromNode)) Debug.LogWarning ("Source node with value " + fromNode.value + " does not exist in graph");
 		else if (fromNode.neighbors.Count == 0) Debug.LogWarning ("Source node with value " + fromNode.value + " does not have any paths conencted to it");
-		else return this.Dijkstra(toNode, fromNode);
-		return false;
+		else if(this.Dijkstra(toNode, fromNode)) {
+			Node<T> iter = fromNode;
+			while(iter != toNode) {
+				path.Add(iter.value);
+			}
+			path.Add(toNode.value);
+		}
+		return path;
 	}
 
 	// Dijkstra algorthm to find shortest path to a node from current node

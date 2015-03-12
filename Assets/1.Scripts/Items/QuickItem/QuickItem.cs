@@ -36,8 +36,10 @@ public class QuickItem : Item {
 	}
 
 	protected override void animDone() {
-		cdBar.onState = 1;
-		cdBar.max = curCoolDown;
+		if (cdBar != null) {
+			cdBar.onState = 1;
+			cdBar.max = curCoolDown;
+		}
 		base.animDone();
 	}
 }

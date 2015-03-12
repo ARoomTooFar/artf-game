@@ -9,6 +9,9 @@ public class NewEnemy : Character {
 	//Aggro Variables
 	public float dmgTimer = 0f;
 	public bool aggro = false;
+	
+	//Is this unit part of the hive mind?
+	public bool swarmBool = false;
 
 	
 	// Moved from my AI enemy - Francis
@@ -25,16 +28,27 @@ public class NewEnemy : Character {
 	protected GameObject target;
 	protected Vector3? lastSeenPosition = null;
 	protected AggroTable aggroT;
+	protected Rigidbody rigidbody;
 	
 	protected float aggroTimer = 7.0f;
+	
+	protected GameObject swarm;
 	
 	
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType ("Player");
+		this.rigidbody = this.GetComponent<Rigidbody>();
 		
 		facing = Vector3.back;
+		
+		//Uses swarm aggro table if this unit swarms
+		if(swarmBool){
+		aggroT = swarm.aggroTable;
+		}
+		else{
 		aggroT = new AggroTable();
+		}
 
 		aRange.opposition = this.opposition;
 		
@@ -42,6 +56,8 @@ public class NewEnemy : Character {
 		sM = new StateMachine ();
 		initStates ();
 		sM.Start ();
+		
+		swarm = GameObject.FindWithTag("Swarm");
 	}
 	
 	// Use this for initialization
@@ -136,6 +152,7 @@ public class NewEnemy : Character {
 	public override void damage(int dmgTaken, Character striker) {
 		base.damage(dmgTaken, striker);
 		print ("Fuck: " + dmgTaken + " Damage taken");
+		aggroT.add((GameObject) striker, dmgTaken);
 	}
 	
 	public override void damage(int dmgTaken) {

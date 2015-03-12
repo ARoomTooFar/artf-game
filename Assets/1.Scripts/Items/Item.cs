@@ -48,11 +48,15 @@ public class Item : MonoBehaviour {
 	// Change to virtual if it seems there are items that do things while it cools down
 	protected IEnumerator bgnCooldown() {
 		for(int i = 0; i <= curCoolDown; curCoolDown -= Time.deltaTime) {
-			cdBar.current = curCoolDown;
+			if (cdBar != null) {
+				cdBar.current = curCoolDown;
+			}
 			yield return null;
 		}
-		cdBar.onState = 3;
-		cdBar.max = 0;
-		cdBar.current = 0;
+		if (cdBar != null) {
+			cdBar.onState = 3;
+			cdBar.max = 0;
+			cdBar.current = 0;
+		}
 	}
 }

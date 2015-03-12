@@ -36,7 +36,7 @@ public class TrapRegenerator : MonoBehaviour, IDamageable<int, Traps> {
 		if (regenerable) {
 			trapEffects.SetActive(false);
 
-			this.collider.enabled = false;
+			this.GetComponent<Collider>().enabled = false;
 			
 			StartCoroutine(regen());
 		}
@@ -48,7 +48,7 @@ public class TrapRegenerator : MonoBehaviour, IDamageable<int, Traps> {
 
 	private void regenerate() {
 		trapEffects.SetActive(true);
-		this.collider.enabled = true;
+		this.GetComponent<Collider>().enabled = true;
 
 		health = maxHealth;
 	}

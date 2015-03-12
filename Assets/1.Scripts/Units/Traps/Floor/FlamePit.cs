@@ -28,7 +28,7 @@ public class FlamePit : Traps {
 	}
 
 	protected virtual void inFire(Character enemy) {
-		if (enemy && enemy.collider.bounds.Intersects(collider.bounds)) {
+		if (enemy && enemy.GetComponent<Collider>().bounds.Intersects(GetComponent<Collider>().bounds)) {
 			enemy.damage (damage);
 			enemy.BDS.addBuffDebuff(debuff, this.gameObject, 4.0f);
 			StartCoroutine(fireTiming(enemy, 0.3f));

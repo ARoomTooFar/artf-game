@@ -220,11 +220,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 				facing = newMoveDir;
 			}
 			
-			rigidbody.velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
+			GetComponent<Rigidbody>().velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
 		} else if (freeAnim){
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this
-			rigidbody.velocity = Vector3.zero;
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
 		}
 	}
 	//-------------------------------------//
@@ -302,7 +302,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		}//if and else are the 'base' rez from prior
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		foreach (Renderer r in rs) {
-			if(renderer.gameObject.tag != "Item")
+			if(GetComponent<Renderer>().gameObject.tag != "Item")
 			r.enabled = true;
 		}
 		UI.hpBar.current = stats.health;

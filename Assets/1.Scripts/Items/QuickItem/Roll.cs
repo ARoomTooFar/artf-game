@@ -55,7 +55,7 @@ public class Roll : QuickItem {
 	// Timer and velocity changing thing
 	private IEnumerator rollTimeFunc(float rollTime) {
 		for (float timer = 0; timer <= rollTime; timer += Time.deltaTime) {
-			user.rigidbody.velocity = user.facing.normalized * user.stats.speed * 1.5f * rollSpeed;
+			user.GetComponent<Rigidbody>().velocity = user.facing.normalized * user.stats.speed * 1.5f * rollSpeed;
 			if (timer < rollTime * iFrameTime) user.invincible = true;
 			else user.invincible = false;
 			yield return 0;
@@ -64,7 +64,7 @@ public class Roll : QuickItem {
 
 	private IEnumerator rollLagTime() {
 		for (float timer = 0; timer < iFrameTime/2; timer += Time.deltaTime) {
-			user.rigidbody.velocity = Vector3.zero;
+			user.GetComponent<Rigidbody>().velocity = Vector3.zero;
 			yield return 0;
 		}
 	}
