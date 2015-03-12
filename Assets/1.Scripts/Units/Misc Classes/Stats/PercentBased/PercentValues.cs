@@ -83,14 +83,33 @@ public class PowerLevels{
 		public StatsMultiplier mult;
 	}
 
-	List<PowerStage> tiers;
+	List<PowerStage> stages;
 	int powvalue;
 	int currentStage;
+	Character target;
+	Frenzy frenzy;
 
 	public PowerLevels(){
-		tiers = new List<PowerStage>();
+		stages = new List<PowerStage>();
 		powvalue = 0;
 		currentStage = -1;
+		frenzy = new Frenzy ();
+		frenzy.setDmgBoost (0);
+		frenzy.setDmgReduction (0);
+		frenzy.setSpeedBoost (0);
+		target.BDS.addBuffDebuff (frenzy, target.gameObject);
+	}
+
+	public PowerLevels(Character c){
+		stages = new List<PowerStage>();
+		powvalue = 0;
+		currentStage = -1;
+		target = c;
+		frenzy = new Frenzy ();
+		frenzy.setDmgBoost (0);
+		frenzy.setDmgReduction (0);
+		frenzy.setSpeedBoost (0);
+		target.BDS.addBuffDebuff (frenzy, target.gameObject);
 	}
 
 	public void addStage(StatsMultiplier statsbd, int powval){
@@ -98,23 +117,33 @@ public class PowerLevels{
 		PowerStage newtier = new PowerStage ();
 		newtier.powerCount = powval;
 		newtier.mult = statsbd;
-		tiers.Add (newtier);
+		stages.Add (newtier);
 	}
 
 	public StatsMultiplier getStatsBD(){
-		return tiers[currentStage].mult;
+		return stages[currentStage].mult;
 	}
 
 	public void Update(){
-		if (currentStage < tiers.Count){
-			if(powvalue > tiers [currentStage].powerCount){
+		if (currentStage < stages.Count){
+			if(powvalue > stages [currentStage].powerCount && currentStage < (stages.Count - 1)){
 				currentStage++;
+				ApplyRage();
 			}
+		} else if (powvalue < stages [currentStage].powerCount && currentStage > 0){
+			currentStage--;
+			ApplyRage();
 		}
 
-		if (powvalue < tiers [currentStage].powerCount && currentStage > 0){
-			currentStage--;
-		}
+//		Debug.Log (powvalue + " " + currentStage);
+	}
+
+	private void ApplyRage(){
+		target.BDS.rmvBuffDebuff(frenzy, target.gameObject);
+		frenzy.setDmgBoost (stages[currentStage].mult.dmgAmp);
+		frenzy.setDmgReduction (stages[currentStage].mult.dmgRed);
+		frenzy.setSpeedBoost (stages[currentStage].mult.speed);
+		target.BDS.addBuffDebuff (frenzy, target.gameObject);
 	}
 
 	public void updateRage(int gaar){

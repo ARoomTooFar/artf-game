@@ -11,14 +11,13 @@ public class Bushman : MobileEnemy {
 	private Frenzy frenzy;
 	private int tier;
 	private float health;
-
 	
 	protected override void Awake () {
 		base.Awake ();
 		inFrenzy = false;
 		frenzy_counter = 0;
 		frenzy_growth = 2;
-		powlvs = new PowerLevels ();
+		powlvs = new PowerLevels (this);
 		StatsMultiplier stage0 = new StatsMultiplier (); stage0.dmgAmp = 0f; stage0.dmgRed = 0f; stage0.speed = 0f;
 		StatsMultiplier stage1 = new StatsMultiplier (); stage1.dmgAmp = 0.2f; stage1.dmgRed = -0.1f; stage1.speed = 0.1f;
 		StatsMultiplier stage2 = new StatsMultiplier (); stage2.dmgAmp = 0.3f; stage2.dmgRed = -0.25f; stage2.speed = 0.2f;
@@ -33,8 +32,6 @@ public class Bushman : MobileEnemy {
 		powlvs.addStage(stage4, 36);
 		powlvs.addStage(stage5, 45);
 		powlvs.addStage(stage6, 60);
-		frenzy = new Frenzy ();
-		BDS.addBuffDebuff (frenzy, this.gameObject, 20);
 		setInitValues();
 		health = stats.health;
 	}
@@ -50,7 +47,7 @@ public class Bushman : MobileEnemy {
 	protected override void Update() {
 		if(health > stats.health){
 			health = stats.health;
-			powlvs.addRage(Mathf.CeilToInt((float)(stats.maxHealth - stats.health)/stats.maxHealth * 80));
+			powlvs.addRage(Mathf.CeilToInt((float)(stats.maxHealth - stats.health)/stats.maxHealth * 150));
 		}
 //		Debug.Log (stats.health);
 		powlvs.Update();
@@ -59,7 +56,7 @@ public class Bushman : MobileEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 140;
+		stats.maxHealth = 60;
 		stats.health = stats.maxHealth;
 		stats.armor = 0;
 		stats.strength = 10;
