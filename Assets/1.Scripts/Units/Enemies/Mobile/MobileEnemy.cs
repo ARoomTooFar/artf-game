@@ -273,7 +273,6 @@ public class MobileEnemy : Enemy {
 		if (this.lastSeenPosition.HasValue) {
 			this.facing = this.lastSeenPosition.Value - this.transform.position;
 			this.facing.y = 0.0f;
-			// StartCoroutine(searchForEnemy(this.lastSeenPosition.Value));
 			StartCoroutine("searchForEnemy", this.lastSeenPosition.Value);
 			this.lastSeenPosition = null;
 		}

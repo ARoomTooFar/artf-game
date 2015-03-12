@@ -67,6 +67,7 @@ public class RangedWeapons : Weapons {
 	protected virtual IEnumerator Shoot(int count) {
 		yield return 0;
 	}
+
 	public virtual void loadData(AmmoBar ammoB){
 		ammoBar = ammoB;
 		ammoBar.onState = 1;
