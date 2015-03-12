@@ -56,7 +56,7 @@ public class Projectile : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider other) {
-		if (other.tag == "Wall") {
+		if (other.tag == "Wall" || other.tag == "Door") {
 			if(particles !=null){
 				particles.Stop();
 			}
