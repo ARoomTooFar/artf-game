@@ -43,9 +43,9 @@ public class TargetCircle : MonoBehaviour {
 	//     If AI, they must call the move Circle function
 	public virtual void setValues(Character user) {
 		this.user = user;
-
 		this.rigidbody = this.GetComponent<Rigidbody> ();
 		this.moveable = true;
+
 		if (user.GetComponent<Player> () != null) {
 			this.controls = user.GetComponent<Player>().controls;
 		}
