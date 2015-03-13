@@ -53,6 +53,7 @@ public class Artillery : Weapons {
 	}
 
 	protected virtual void shoot() {
+		this.curCircle.moveable = false;
 		this.fireProjectile ();
 		StartCoroutine(atkFinish());
 	}
@@ -61,13 +62,11 @@ public class Artillery : Weapons {
 		while (user.animSteInfo.nameHash != user.atkHashEnd) {
 			yield return null;
 		}
-		// Destroy (this.curCircle.gameObject);
 		user.testControl = true;
 	}
 	
 	protected void fireProjectile() {
 		this.bullet = ((GameObject)Instantiate(projectile, user.transform.position, user.transform.rotation)).GetComponent<ArcingBomb>();
 		this.bullet.setInitValues(user, opposition, 30, false, null, this.curCircle.gameObject);
-		this.curCircle.moveable = false;
 	}
 }

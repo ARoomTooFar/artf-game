@@ -61,10 +61,27 @@ public class Bomb : MonoBehaviour {
 	//---------------------//
 
 	protected virtual void explode() {
+		// Create explosion while removing self
 		BombExplosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<BombExplosion>();
 		Destroy (this.gameObject);
+
+		// Variables for sight checking
+		RaycastHit[] hits;
+		bool inSight;
+
+		// For all targets that are within our collider at this point, check that they aren't behind a wall and hit them
 		foreach(Character suckers in this.targetsInRange) {
-			this.onHit(suckers);
+			inSight = true;
+			hits = Physics.RaycastAll(this.transform.position,
+			                          (suckers.transform.position - this.transform.position).normalized,
+			                          Vector3.Distance(this.transform.position, suckers.transform.position));
+
+			// Check for walls
+			foreach(RaycastHit hit in hits) {
+				if (hit.transform.tag == "Wall") inSight = false;
+			}
+
+			if (inSight) this.onHit(suckers); // Only hits units that aren't behind walls (Add in props and other obstacles in future)
 		}
 	}
 
