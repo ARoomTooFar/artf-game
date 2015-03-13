@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour {
 
 
 	static Camera UICamera;
-	static Camera OnTopCamera;
+	//static Camera OnTopCamera;
 	
 	static float baseX = 43f;
 	static float baseY = 15f;
@@ -28,7 +28,13 @@ public class CameraController : MonoBehaviour {
 	static float minY = 5f;
 	static float maxY = 25f;
 	static Vector2 dragSpeed;
-	static float zoomSpeed = 2f;
+	static float zoomSpeed = .5f;
+
+	static float orthoZoomSpeed = .5f;
+	static float maxOrthoSize = 20;
+	static float minOrthoSize = 2;
+
+	static Vector3 cameraRotation = new Vector3 (45, -45, 0);
 	//static bool isTopDown = false;
 	float dx;
 	float dy;
@@ -73,10 +79,10 @@ public class CameraController : MonoBehaviour {
 			cursorToPointer ();});
 
 
-		dragSpeed = new Vector2 (3f, 3f);
+		dragSpeed = new Vector2 (1f, 1f);
 		
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
-		OnTopCamera = GameObject.Find ("LayersOnTopOfEverythingCamera").GetComponent<Camera>();
+		//OnTopCamera = GameObject.Find ("LayersOnTopOfEverythingCamera").GetComponent<Camera>();
 		
 		setCameraRotation (new Vector3 (45, -45, 0));
 		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
@@ -172,56 +178,74 @@ public class CameraController : MonoBehaviour {
 	
 	public void moveForward ()
 	{
-		baseZ += .1f;
-		baseX -= .1f;
+		baseX += Mathf.Sin(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
+		baseZ += Mathf.Cos(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
+		//baseZ += .1f;
+		//baseX -= .1f;
 	}
 	public void moveBackward ()
 	{
-		baseZ -= .1f;
-		baseX += .1f;
+		baseX -= Mathf.Sin(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
+		baseZ -= Mathf.Cos(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
+		//baseZ -= .1f;
+		//baseX += .1f;
 	}
 	public void moveLeft ()
 	{
-		baseZ -= .1f;
-		baseX -= .1f;
+		baseX -= Mathf.Cos(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
+		baseZ += Mathf.Sin(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
+		//baseZ -= .1f;
+		//baseX -= .1f;
 	}
 	public void moveRight ()
 	{
-		baseZ += .1f;
-		baseX += .1f;
+		baseX += Mathf.Cos(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
+		baseZ -= Mathf.Sin(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
+		//baseZ += .1f;
+		//baseX += .1f;
 	}
 	public void zoomCamIn ()
 	{
-		baseY += zoomSpeed;
-		if (baseY > maxY) {
-			baseY = maxY;
+		if(UICamera.orthographic) {
+			UICamera.orthographicSize = Mathf.Min(maxOrthoSize, UICamera.orthographicSize + orthoZoomSpeed);
+		} else {
+			baseY += zoomSpeed;
+			if(baseY > maxY) {
+				baseY = maxY;
+			}
 		}
 	}
 	public void zoomCamOut ()
 	{
-		baseY -= zoomSpeed;
-		if (baseY < minY) {
-			baseY = minY;
+		if(UICamera.orthographic) {
+			UICamera.orthographicSize = Mathf.Max(minOrthoSize, UICamera.orthographicSize - orthoZoomSpeed);
+		} else {
+			baseY -= zoomSpeed;
+			if(baseY < minY) {
+				baseY = minY;
+			}
 		}
 	}
 	public void changeToTopDown ()
 	{
-		setCameraRotation (new Vector3 (90, -45, 0));
+		setCameraRotation (new Vector3 (90, 0, 0));
+		UICamera.orthographic = true;
+		//OnTopCamera.orthographic = true;
 		//isTopDown = true;
 	}
 	public void changeToPerspective ()
 	{
 		UICamera.orthographic = false;
-		OnTopCamera.orthographic = false;
+		//OnTopCamera.orthographic = false;
 		//isTopDown = false;
-		setCameraRotation (new Vector3 (45, -45, 0));
+		setCameraRotation (cameraRotation);
 	}
 	public void changetoOrthographic ()
 	{
 		UICamera.orthographic = true;
-		OnTopCamera.orthographic = true;
+		//OnTopCamera.orthographic = true;
 		//isTopDown = false;
-		setCameraRotation (new Vector3 (45, -45, 0));
+		setCameraRotation (cameraRotation);
 	}
 
 	/* select tiles using a list from the mouse manager */
