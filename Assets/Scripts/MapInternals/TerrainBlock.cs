@@ -4,26 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 /*
- * Enum for cardinal and ordinal directions
- * 
- * Directions opposite each other on a compass
- * are set to be negative values of each other to
- * make finding the opposite direction easier.
- * 
- */
-public enum DIRECTION : int {
-	NonDirectional = 0,
-	North = 1,
-	South = -(int)North,
-	East = 2,
-	West = -(int)East,
-	NorthEast = 3,
-	SouthWest = -(int)NorthEast,
-	SouthEast = 4,
-	NorthWest = -(int)SouthEast,
-};
-
-/*
  * Object to represent one tile/block/terrainspace/thing in the map
  * 
  * Contains links to neighboring blocks as well as the scenery and/or monster on the tile
