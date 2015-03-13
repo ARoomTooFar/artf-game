@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public delegate bool AICondTest( Character agent );
-public delegate void AIAction( Character agent );
+public delegate bool AICondTest();
+public delegate void AIAction();
 
 //State class holds array of transitions, and the method to access them
 public class State 
@@ -15,8 +15,6 @@ public class State
 
 	protected AIAction action;
 	protected AIAction exitAction;
-
-	protected Character agent;
 
 	protected List<Transition> transitions = new List<Transition>();
 
@@ -34,28 +32,24 @@ public class State
 
 	public void removeTransition(Transition t) {
 		if (transitions.Contains(t)) transitions.Remove(t);
-		else Debug.LogWarning ("State " + _id + " in unit " + agent.name + " does not contain a transition to " + t.targetState.id);
+		else Debug.LogWarning ("State " + _id + " does not contain a transition to " + t.targetState.id);
 	}
 
-	public void getAction()
-	{
-		action(agent);
+	public void getAction() {
+		action();
 	}
 
 	public void onExit(){
 		if(exitAction != null){
-			exitAction (agent);
+			exitAction ();
 		}
 	}
 
-	public void addAction(AIAction act, Character a)
-	{
+	public void addAction(AIAction act) {
 		action = act;
-		agent = a;
 	}
 
-	public void addExitAction(AIAction act)
-	{
+	public void addExitAction(AIAction act) {
 		exitAction = act;
 	}
 }
@@ -65,28 +59,23 @@ public class State
 public class Transition {
 
 	protected AICondTest condition;
-	protected Character agent;
 
 	protected State _targetState;
 	public State targetState {
 		get {return _targetState;}
 	}
 
-	public Transition(State t)
-	{
+	public Transition(State t) {
 		_targetState = t;
 	}
 
-	public bool isTriggered()
-	{
-		return condition(agent);
+	public bool isTriggered() {
+		return condition();
 	}
 
 	//Used to set the condition from outside this class
-	public void addCondition(AICondTest cond, Character a)
-	{
+	public void addCondition(AICondTest cond) {
 		condition = cond;
-		agent = a;
 	}
 }
 
@@ -96,6 +85,7 @@ public class StateMachine {
 	
 	public State initState;
 	public Dictionary<string, State> states;
+	public Dictionary<string, Transition> transitions;
 
 	// private State[] states;
 	private State currState;
@@ -104,26 +94,24 @@ public class StateMachine {
 
 	public StateMachine() {
 		states = new Dictionary<string, State>();
+		transitions = new Dictionary<string, Transition>();
 	}
 
 	// Use this for initialization
-	public void Start()
-	{
+	public void Start() {
 		currState = initState;
 	}
 	
 	// Update is called once per frame
-	public void Update () 
-	{
+	public void Update () {
 		triggeredTransition = null;
 
 		// Debug.Log (currState.sId());
 
 		List<Transition> transList = currState.getTransitions ();
-		foreach (Transition t in transList) 
-		{
-			if(t.isTriggered())
-			{
+
+		foreach (Transition t in transList) {
+			if(t.isTriggered()) {
 				// Debug.Log (t.targetState.id);
 				triggeredTransition = t;
 				currState.onExit();
@@ -131,10 +119,8 @@ public class StateMachine {
 			}
 		}
 
-		if (triggeredTransition != null) 
-		{
+		if (triggeredTransition != null) {
 			currState = triggeredTransition.targetState;
-
 		}
 
 		currState.getAction ();

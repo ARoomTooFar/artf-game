@@ -25,6 +25,7 @@ public class BullCharge : ChargeItem {
 	public List<Character> enemies;
 	
 	private bool hitWall;
+	private Stun debuff;
 	
 
 	//private Collider collider;
@@ -35,6 +36,7 @@ public class BullCharge : ChargeItem {
 
 		//collider = GetComponent<Collider>();
 		GetComponent<Collider>().enabled = false;
+		debuff = new Stun();
 	}
 	
 	protected override void setInitValues() {
@@ -83,7 +85,9 @@ public class BullCharge : ChargeItem {
 		yield return StartCoroutine(chgTimeFunc(chgTime));
 		float tempStun = stunDuration * (hitWall ? 2 : 1);
 		foreach(Character ene in enemies) {
-			((IStunable)ene.GetComponent(typeof(IStunable))).stun();
+			// ((IStunable)ene.GetComponent(typeof(IStunable))).stun();
+
+			ene.BDS.addBuffDebuff(debuff, this.gameObject, tempStun);
 		}
 		yield return StartCoroutine(chgLagTime());
 
@@ -103,7 +107,8 @@ public class BullCharge : ChargeItem {
 			
 			foreach(Character ene in enemies) {
 				ene.transform.position = transform.position;
-				((IForcible<Vector3, float>)ene.GetComponent(typeof(IForcible<Vector3, float>))).push(0.1f);
+				ene.BDS.addBuffDebuff(debuff, this.gameObject, 0.1f);
+				// ((IForcible<Vector3, float>)ene.GetComponent(typeof(IForcible<Vector3, float>))).push(0.1f);
 			}
 
 			user.GetComponent<Rigidbody>().velocity = user.facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
