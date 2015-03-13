@@ -3,6 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+/*
+ * Object to represent a room within the mapdata
+ */
 public partial class ARTFRoom {
 
 	#region PrivateVariables
@@ -23,12 +26,13 @@ public partial class ARTFRoom {
 		private set;
 	}
 
+	//A list of doors within the room
 	public List<SceneryBlock> Doors {
 		get;
 		private set;
 	}
 
-	//Stored paths to get from room A to room B
+	//Stored paths to get from point A to point B. Primarily for storing paths from one door to another
 	public Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>> RoomPaths {
 		get;
 		private set;
@@ -57,11 +61,6 @@ public partial class ARTFRoom {
 		get { return new Vector3(LLCorner.x, URCorner.y, URCorner.z); }
 	}
 
-	//Center of the room. May be on the edge of two blocks in even sized rooms
-	public Vector3 Center {
-		get { return (LLCorner + URCorner) / 2; }
-	}
-
 	//A list of all four corners
 	public List<Vector3> Corners {
 		get {
@@ -72,6 +71,11 @@ public partial class ARTFRoom {
 			retVal.Add(ULCorner);
 			return retVal;
 		}
+	}
+
+	//Center of the room. May be on the edge of two blocks in even sized rooms
+	public Vector3 Center {
+		get { return (LLCorner + URCorner) / 2; }
 	}
 	#endregion Corners
 
@@ -177,49 +181,59 @@ public partial class ARTFRoom {
 	}
 	#endregion (un)linkTerrain
 
-	public void linkRoomsViaDoors(){
+	/*
+	 * public void linkRoomsViaDoors()
+	 * 
+	 * uses Doors to create links to other rooms
+	 */
+	public void linkRoomsViaDoors() {
+		//clear the currently known links
 		LinkedRooms.Clear();
-		RoomPaths.Clear();
+		//for each door
 		foreach(SceneryBlock dr in Doors) {
+			//get the position where a linked door needs to be
 			Vector3 checkPos = getDoorCheckPosition(dr);
-			SceneryBlock scnBlk = null;
-			scnBlk = MapData.SceneryBlocks.find(checkPos);
-			if(scnBlk == null){
+			//grab the SceneryBlock at this position if it exists
+			SceneryBlock scnBlk = MapData.SceneryBlocks.find(checkPos);
+			//if there is no scenery block, move on
+			if(scnBlk == null) {
 				continue;
 			}
+			//if the block is not a door, move on
 			if(!scnBlk.BlockInfo.isDoor) {
 				continue;
 			}
-			if(scnBlk.Orientation != dr.Orientation.Opposite()){
+			//if the door is not facing the current door, move on
+			if(scnBlk.Orientation != dr.Orientation.Opposite()) {
 				continue;
 			}
+			//make the link
 			LinkedRooms.Add(dr, MapData.TheFarRooms.find(checkPos));
 		}
-		foreach(KeyValuePair<SceneryBlock, ARTFRoom> kvp1 in LinkedRooms){
-			foreach(KeyValuePair<SceneryBlock, ARTFRoom> kvp2 in LinkedRooms){
+		//after links are made, get the paths between them all
+		createRoomPaths();
+	}
+
+	/*
+	 * public void createRoomPaths()
+	 * 
+	 * gets the path between each door in the room
+	 */
+	public void createRoomPaths() {
+		//clear the currently stored path
+		RoomPaths.Clear();
+		//for each pair of doors
+		foreach(KeyValuePair<SceneryBlock, ARTFRoom> kvp1 in LinkedRooms) {
+			foreach(KeyValuePair<SceneryBlock, ARTFRoom> kvp2 in LinkedRooms) {
+				//find the path between the two and store it
 				RoomPaths.Add(new KeyValuePair<Vector3, Vector3>(kvp1.Key.Position, kvp2.Key.Position),
 				              Pathfinder.getSingleRoomPath(kvp1.Key.Position, kvp2.Key.Position));
 			}
 		}
 	}
 
-	public Vector3 getDoorCheckPosition(SceneryBlock dr){
-		Vector3 checkPos = dr.Position;
-		switch(dr.Orientation){
-		case DIRECTION.North:
-			checkPos.z += 1;
-			break;
-		case DIRECTION.South:
-			checkPos.z -= 1;
-			break;
-		case DIRECTION.East:
-			checkPos.x += 1;
-			break;
-		case DIRECTION.West:
-			checkPos.x -= 1;
-			break;
-		}
-		return checkPos;
+	public Vector3 getDoorCheckPosition(SceneryBlock dr) {
+		return dr.Position.moveinDir(dr.Orientation);
 	}
 
 	#region ManipulationFunctions
@@ -338,7 +352,7 @@ public partial class ARTFRoom {
 	 * Returns a direction corresponding to the which wall the position is in 
 	 * 
 	 */
-	public DIRECTION getWallSide(Vector3 pos){
+	public DIRECTION getWallSide(Vector3 pos) {
 		//If not an edge, return non-directional
 		if(!isEdge(pos)) {
 			return DIRECTION.NonDirectional;
@@ -358,7 +372,7 @@ public partial class ARTFRoom {
 		if(pos.z == URCorner.z) {
 			NSDir = DIRECTION.North;
 		}
-		//Debug.Log(LLCorner + ", " + URCorner + ", " + pos + ", " + NSDir.ToString() + ", " + EWDir.ToString());
+
 		if(EWDir.Equals(DIRECTION.NonDirectional)) {
 			return NSDir;
 		}
