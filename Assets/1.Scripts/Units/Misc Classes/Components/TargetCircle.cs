@@ -4,6 +4,14 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class TargetCircle : MonoBehaviour {
 
+	protected bool _moveable;
+	public bool moveable {
+		get {return _moveable;}
+		set {if (!value) this.rigidbody.velocity = Vector3.zero;
+			this._moveable = value;
+		}
+	}
+
 	protected Rigidbody rigidbody;
 
 	protected Character user;
@@ -16,10 +24,11 @@ public class TargetCircle : MonoBehaviour {
 
 	protected virtual void Start () {
 		this.rigidbody = this.GetComponent<Rigidbody> ();
+		this.moveable = true;
 	}
 
 	protected virtual void Update () {
-		if (this.controls != null) {
+		if (this.controls != null && this.moveable) {
 			this.moveCommands();
 		}
 	}
@@ -46,8 +55,10 @@ public class TargetCircle : MonoBehaviour {
 
 	// AI uses this to move circle
 	public virtual void moveCircle(Vector3 move) {
-		move.y = 0.0f;
-		this.rigidbody.velocity = move.normalized * this.speed;
+		if (this.moveable) {
+			move.y = 0.0f;
+			this.rigidbody.velocity = move.normalized * this.speed;
+		}
 	}
 
 	//-------------------//

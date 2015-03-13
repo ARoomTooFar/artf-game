@@ -8,6 +8,9 @@ using System;
 
 public class Bomb : MonoBehaviour {
 
+	// EXPLOSIONS!!!!!!!!!!
+	public GameObject expDeath;
+
 	// Variables
 	protected int damage;
 	protected bool castEffect;
@@ -23,7 +26,7 @@ public class Bomb : MonoBehaviour {
 
 	// Use this for initialization
 	protected virtual void Start() {
-
+		if (expDeath == null) Debug.LogWarning ("Explosion object not set in the inspector of a bomb");
 	}
 	
 	// Update is called once per frame
@@ -58,6 +61,8 @@ public class Bomb : MonoBehaviour {
 	//---------------------//
 
 	protected virtual void explode() {
+		BombExplosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<BombExplosion>();
+		Destroy (this.gameObject);
 		foreach(Character suckers in this.targetsInRange) {
 			this.onHit(suckers);
 		}
