@@ -2,9 +2,11 @@ using UnityEngine;
 using System.Collections;
 
 public class Artillery : Weapons {
+	public GameObject targetCircle;
+	protected TargetCircle curCircle;
 
 	public GameObject projectile;
-	protected Projectile bullet;
+	protected ArcingBomb bullet;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -35,43 +37,36 @@ public class Artillery : Weapons {
 	}
 	
 	protected override IEnumerator bgnCharge() {
-		while (user.animator.GetBool("Charging")) {
+		user.testControl = false;
+		curCircle = ((GameObject)Instantiate(targetCircle, new Vector3(user.transform.position.x, 0.55f, user.transform.position.z), user.transform.rotation)).GetComponent<TargetCircle>();
+		curCircle.setValues (this.user);
+		while (user.animator.GetBool("Charging") && stats.curChgDuration < stats.maxChgTime) {
 			stats.curChgDuration = Mathf.Clamp(stats.curChgDuration + Time.deltaTime, 0.0f, stats.maxChgTime);
 			yield return null;
 		}
+		user.animator.SetBool ("Charging", false);
 		attack ();
 	}
-	
+
 	protected override void attack() {
-		base.attack ();
-	}
-	
-	protected override void basicAttack() {
-		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
-		StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
-		StartCoroutine(atkFinish());
-	}
-	
-	protected override void chargedAttack() {
-		user.GetComponent<Character>().animator.SetBool("ChargedAttack", true);
-		StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
-		StartCoroutine(atkFinish());
+		this.shoot ();
 	}
 
-	protected virtual IEnumerator Shoot() {
-		yield return 0;
+	protected virtual void shoot() {
+		this.fireProjectile ();
+		StartCoroutine(atkFinish());
 	}
 
 	protected override IEnumerator atkFinish() {
 		while (user.animSteInfo.nameHash != user.atkHashEnd) {
 			yield return null;
 		}
-		particles.Stop();
-		user.animator.speed = 1.0f;
+		// Destroy (this.curCircle.gameObject);
+		user.testControl = true;
 	}
 	
 	protected void fireProjectile() {
-		Projectile newBullet = ((GameObject)Instantiate(projectile, user.transform.position, spray)).GetComponent<Projectile>();
-		newBullet.setInitValues(user, opposition, particles.startSpeed, user.luckCheck(), stats.debuff);
+		this.bullet = ((GameObject)Instantiate(projectile, user.transform.position, user.transform.rotation)).GetComponent<ArcingBomb>();
+		this.bullet.setInitValues(user, opposition, 30, false, null, this.curCircle.gameObject);
 	}
 }

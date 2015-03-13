@@ -32,6 +32,8 @@ public class Stats{
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, IStunable, IForcible<Vector3, float> {
 
+	public bool testControl;
+
 	public float gravity = 50.0f;
 	public bool isDead = false;
 	public bool isGrounded = false;
@@ -180,6 +182,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		freeAnim = true;
 		stunned = knockedback = false;
 		setInitValues();
+		this.testControl = true;
 	}
 
 	// Use this for initialization
