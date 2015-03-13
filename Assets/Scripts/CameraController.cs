@@ -45,6 +45,11 @@ public class CameraController : MonoBehaviour {
 
 	GameObject tileMapGameObj;
 
+	private Plane groundPlane = new Plane(Vector3.up, new Vector3());
+	private Vector3 prevMouse = new Vector3();
+	private bool prevMouseBool = false;
+	private Ray ray;
+
 
 	void Awake ()
 	{
@@ -98,6 +103,7 @@ public class CameraController : MonoBehaviour {
 	
 	void Update () {
 		checkForMouseScrolling();
+
 		checkForMouseClicks();
 		
 		//doesn't move cam in proper direction right now
@@ -116,8 +122,10 @@ public class CameraController : MonoBehaviour {
 	}
 	
 	void checkForMouseClicks(){
-		if (Input.GetMouseButton (1)) {
+		if(Input.GetMouseButton(1)) {
 			dragCamera();
+		} else {
+			prevMouseBool = false;
 		}
 	}
 	
@@ -156,6 +164,27 @@ public class CameraController : MonoBehaviour {
 	
 	public void dragCamera ()
 	{
+
+		Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
+		float distance = 0;
+		groundPlane.Raycast(ray, out distance);
+		Vector3 point = ray.GetPoint(distance).Round(1);
+
+		if(!prevMouseBool) {
+			prevMouse = point;
+			prevMouseBool = true;
+		}
+
+		Debug.Log(distance);
+		Vector3 offset = (prevMouse - point);
+		//Debug.Log(ray.origin.x);
+		baseX += offset.x;
+		baseZ += offset.z;
+
+		//setCameraPosition (new Vector3 (baseX, baseY, baseZ));
+
+
+		/*
 		dx = Input.GetAxis ("Mouse X") * dragSpeed.x;
 		dy = Input.GetAxis ("Mouse Y") * dragSpeed.y;
 		UICamera.transform.position -= UICamera.transform.right * dx + UICamera.transform.up * dy;
@@ -169,7 +198,7 @@ public class CameraController : MonoBehaviour {
 		if (baseY > maxY) {
 			baseY = maxY;
 		}
-		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
+		setCameraPosition (new Vector3 (baseX, baseY, baseZ));*/
 	}
 	
 	Vector3 getCameraForward(){
