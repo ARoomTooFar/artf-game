@@ -47,13 +47,13 @@ public class FileIO : MonoBehaviour
 		serv = gameObject.AddComponent<Farts>();
 
 		#if UNITY_EDITOR
-		getLvlId(dummyLvlId);
+		getIds(dummyLvlId);
 		#else
-        Application.ExternalCall("reqLvlId");
+        Application.ExternalCall("reqIds");
         #endif
 	}
 
-	public void getLvlId(string inputIds)
+	public void getIds(string inputIds)
     {
         #if UNITY_EDITOR
         WWW www = serv.getLvlWww(dummyLvlId);
