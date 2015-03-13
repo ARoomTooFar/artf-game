@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -12,10 +13,10 @@ public static class ExtensionsVector3
 	 * 
 	 * returns a new Vector3 with x, y and z rounded to the nearest integer.
 	 */
-	public static Vector3 Round(this Vector3 vec){
-		Vector3 retVal = new Vector3(Mathf.Round (vec.x),
-		                             Mathf.Round (vec.y),
-		                             Mathf.Round (vec.z));
+	public static Vector3 Round(this Vector3 vec, int decimals = 0){
+		Vector3 retVal = new Vector3((float)Math.Round (vec.x, decimals),
+		                             (float)Math.Round (vec.y, decimals),
+		                             (float)Math.Round (vec.z, decimals));
 		return retVal;
 	}
 
