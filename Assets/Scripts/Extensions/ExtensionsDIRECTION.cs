@@ -58,7 +58,7 @@ public static class ExtensionsDIRECTION {
 			return dir;
 		}
 
-		DIRECTION retVal = ((DIRECTION2)((int)dir.toDir2() + 2) % 8).toDir1();
+		DIRECTION retVal = ((DIRECTION2)(((int)(dir.toDir2()) + 2) % 8)).toDir1();
 
 		//if clockwise rotation, return, if counter clockwise, return the opposite direction
 		return goClockwise ? retVal : retVal.Opposite();
@@ -103,11 +103,11 @@ public static class ExtensionsDIRECTION {
 	}
 
 	public static DIRECTION2 toDir2(this DIRECTION dir){
-		return Enum.Parse(DIRECTION2, dir.ToString()) as DIRECTION2;
+		return (DIRECTION2)Enum.Parse(typeof(DIRECTION2), dir.ToString());
 	}
 
 	public static DIRECTION toDir1(this DIRECTION2 dir){
-		return Enum.Parse(DIRECTION, dir.ToString()) as DIRECTION;
+		return (DIRECTION)Enum.Parse(typeof(DIRECTION), dir.ToString());
 	}
 }
 
