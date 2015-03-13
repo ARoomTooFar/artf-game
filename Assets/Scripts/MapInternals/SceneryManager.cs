@@ -104,11 +104,11 @@ public class SceneryManager {
 		//get the list for the block type
 		List<SceneryBlock> lst;
 		try{
-			lst = dictionary[blk.BlockInfo.BlockID];
+			lst = dictionary[blk.BlockID];
 		} catch {
 		//create one if needed
 			lst = new List<SceneryBlock>();
-			dictionary.Add(blk.BlockInfo.BlockID, lst);
+			dictionary.Add(blk.BlockID, lst);
 		}
 		//add the block to the list
 		lst.Add(blk);
@@ -135,7 +135,7 @@ public class SceneryManager {
 			MapData.TheFarRooms.find(blk.Position).Doors.Remove(blk);
 		}
 		blk.remove();
-		dictionary[blk.BlockInfo.BlockID].Remove(blk);
+		dictionary[blk.BlockID].Remove(blk);
 	}
 	#endregion Remove
 

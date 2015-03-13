@@ -15,6 +15,10 @@ public class SceneryBlock {
 		get { return GameObj.GetComponent<SceneryMonoBehaviour>(); }
 	}
 
+	public string BlockID {
+		get { return GameObj.GetComponent<BlockMonoBehaviour>().BlockID; }
+	}
+
 	public Vector3 Position {
 		get;
 		private set;
@@ -93,7 +97,7 @@ public class SceneryBlock {
 	}
 
 	public void remove(){
-		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
+		GameObjectResourcePool.returnResource(BlockID, GameObj);
 	}
 }
 
