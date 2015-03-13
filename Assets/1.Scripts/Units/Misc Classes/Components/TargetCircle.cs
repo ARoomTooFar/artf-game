@@ -23,8 +23,6 @@ public class TargetCircle : MonoBehaviour {
 	//-------------------//
 
 	protected virtual void Start () {
-		this.rigidbody = this.GetComponent<Rigidbody> ();
-		this.moveable = true;
 	}
 
 	protected virtual void Update () {
@@ -46,6 +44,8 @@ public class TargetCircle : MonoBehaviour {
 	public virtual void setValues(Character user) {
 		this.user = user;
 
+		this.rigidbody = this.GetComponent<Rigidbody> ();
+		this.moveable = true;
 		if (user.GetComponent<Player> () != null) {
 			this.controls = user.GetComponent<Player>().controls;
 		}

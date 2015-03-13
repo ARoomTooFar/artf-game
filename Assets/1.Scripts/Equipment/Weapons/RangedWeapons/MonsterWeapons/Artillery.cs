@@ -53,7 +53,6 @@ public class Artillery : Weapons {
 	}
 
 	protected virtual void shoot() {
-		this.curCircle.moveable = false;
 		this.fireProjectile ();
 		StartCoroutine(atkFinish());
 	}
@@ -68,5 +67,6 @@ public class Artillery : Weapons {
 	protected void fireProjectile() {
 		this.bullet = ((GameObject)Instantiate(projectile, user.transform.position, user.transform.rotation)).GetComponent<ArcingBomb>();
 		this.bullet.setInitValues(user, opposition, 30, false, null, this.curCircle.gameObject);
+		this.curCircle.moveable = false;
 	}
 }
