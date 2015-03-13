@@ -108,6 +108,7 @@ public partial class ARTFRoom {
 		this.Blocks = new List<TerrainBlock>();
 		this.LinkedRooms = new Dictionary<SceneryBlock, ARTFRoom>();
 		this.Doors = new List<SceneryBlock>();
+		this.RoomPaths = new Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>>();
 	}
 
 	#region (un)linkTerrain

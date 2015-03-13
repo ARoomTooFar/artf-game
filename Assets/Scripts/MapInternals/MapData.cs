@@ -100,18 +100,24 @@ public static class MapData {
 	public static void addMonsterScenery(string type, Vector3 pos, DIRECTION dir){
 		GameObject obj = GameObjectResourcePool.getResource(type, pos, dir.toRotationVector());
 		SceneryMonoBehavior smb = obj.GetComponent<SceneryMonoBehavior>();
+		MonsterMonoBehavior mmb = obj.GetComponent<MonsterMonoBehavior>();
 		GameObjectResourcePool.returnResource(type, obj);
 		if(smb != null){
 			MapData.addScenery(type, pos, dir);
-		} else {
+		} 
+		if(mmb != null) {
 			MapData.addMonster(type, pos, dir);
 		}
 	}
 
 	public static void moveMonsterScenery(GameObject obj, Vector3 pos, Vector3 offset){
-		if(obj.GetComponent<SceneryMonoBehavior>() != null){
+		SceneryMonoBehavior smb = obj.GetComponent<SceneryMonoBehavior>();
+		MonsterMonoBehavior mmb = obj.GetComponent<MonsterMonoBehavior>();
+
+		if(smb != null){
 			MapData.moveScenery(pos, offset);
-		} else {
+		}
+		if(mmb != null) {
 			MapData.moveMonster(pos, offset);
 		}
 	}

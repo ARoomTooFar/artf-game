@@ -88,7 +88,9 @@ public class SceneryManager {
 				blk.remove();
 				return false;
 			}
+			Debug.Log(blk.Orientation);
 			MapData.TheFarRooms.find(blk.Position).Doors.Add(blk);
+			MapData.TheFarRooms.find(blk.Position).linkRoomsViaDoors();
 			foreach(Vector3 pos in blk.Coordinates){
 				MapData.TerrainBlocks.find(pos).removeWall();
 			}
@@ -216,6 +218,12 @@ public class SceneryManager {
 
 	public bool isAddValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North) {
 		SceneryBlock blk = new SceneryBlock(type, pos, dir);
+		if(blk.BlockInfo.isDoor) {
+			blk.rotate(MapData.TheFarRooms.find(pos).getWallSide(pos));
+			if(blk.Orientation == DIRECTION.NonDirectional){
+				return false;
+			}
+		}
 		bool retVal = isBlockValid(blk);
 		blk.remove();
 		return retVal;
