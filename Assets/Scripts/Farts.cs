@@ -6,13 +6,15 @@ public class Farts : MonoBehaviour
     //const string SERVERURI = "http://localhost:8081"; //local server
     const string SERVERURI = "https://api-dot-artf-server.appspot.com"; //live server
     const string LVLPATH = "/levels/";
-    const string GAMEACCTPATH = "/gameaccount/";
+    const string GAMEACCTPATH = "/gameaccounts/";
+    const string CHARPATH = "/characters/";
     const float timeoutTime = 60f; //HTTP requests timeout after 1 minute
 
     // Checks if returned data is valid or not. Returns true if the data is valid, false otherwise.
     public bool dataCheck(string input)
     {
         if (input == "") return false;
+        // need to also check if string contains "<html>" tag because Unity 5's networking code returns HTML when it downloads a 404
         return true;
     }
 
@@ -126,6 +128,31 @@ public class Farts : MonoBehaviour
         return www.text;
     }
 
+    public string register(string gameAcctName, string gameAcctPass, string charData)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("game_acct_name", gameAcctName);
+        form.AddField("game_acct_password", gameAcctPass);
+        form.AddField("char_data", charData);
+
+        WWW www = new WWW(SERVERURI + GAMEACCTPATH + "register", form);
+        StartCoroutine(httpRequest(www));
+
+        float timeStart = Time.realtimeSinceStartup;
+
+        while (!www.isDone)
+        {
+            if (Time.realtimeSinceStartup >= timeStart + timeoutTime)
+            {
+                Debug.LogError("ERROR: Request timeout");
+                return "";
+            }
+            //Debug.Log("HTTP request time elapsed: " + (Time.realtimeSinceStartup - timeStart));
+        }
+
+        return www.text;
+    }
+
     public string login(string gameAcctName, string gameAcctPass)
     {
         WWWForm form = new WWWForm();
@@ -133,6 +160,50 @@ public class Farts : MonoBehaviour
         form.AddField("game_acct_password", gameAcctPass);
 
         WWW www = new WWW(SERVERURI + GAMEACCTPATH + "login", form);
+        StartCoroutine(httpRequest(www));
+
+        float timeStart = Time.realtimeSinceStartup;
+
+        while (!www.isDone)
+        {
+            if (Time.realtimeSinceStartup >= timeStart + timeoutTime)
+            {
+                Debug.LogError("ERROR: Request timeout");
+                return "";
+            }
+            //Debug.Log("HTTP request time elapsed: " + (Time.realtimeSinceStartup - timeStart));
+        }
+
+        return www.text;
+    }
+
+    public string getChar(string charId)
+    {
+        WWW www = new WWW(SERVERURI + CHARPATH + charId);
+        StartCoroutine(httpRequest(www));
+
+        float timeStart = Time.realtimeSinceStartup;
+
+        while (!www.isDone)
+        {
+            if (Time.realtimeSinceStartup >= timeStart + timeoutTime)
+            {
+                Debug.LogError("ERROR: Request timeout");
+                return "";
+            }
+            //Debug.Log("HTTP request time elapsed: " + (Time.realtimeSinceStartup - timeStart));
+        }
+
+        return www.text;
+    }
+
+    public string updateChar(string charId, string charData)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("char_id", charId);
+        form.AddField("char_data", charData);
+
+        WWW www = new WWW(SERVERURI + CHARPATH + charId, form);
         StartCoroutine(httpRequest(www));
 
         float timeStart = Time.realtimeSinceStartup;

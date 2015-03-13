@@ -32,8 +32,6 @@ public class FolderBarController : MonoBehaviour {
 	//holds the entire folder bar. for use with sliding it off and on screen
 	public RectTransform folderBar;
 	
-	//GameObject blankFolder;
-	
 	bool lerpingFolderClosed = false;
 	bool lerpingFolderOpen = false;
 	float currentPosX = 0f;
@@ -47,8 +45,6 @@ public class FolderBarController : MonoBehaviour {
 	{
 		
 		folderBar = GameObject.Find("FolderBar").GetComponent<RectTransform>();
-		
-		//blankFolder = GameObject.Find("BlankFolder");
 
 		buttonColor = new Color32(0, 147, 176, 255);
 
@@ -202,8 +198,7 @@ public class FolderBarController : MonoBehaviour {
 			bool firstIter = true;
 			for(int j = 0; j < prefabs.Length; j++){
 				GameObject newButt = Instantiate (Resources.Load ("folderButton")) as GameObject;
-				//newButt.transform.parent = itemList;
-				newButt.transform.SetParent(itemList, false);
+				newButt.transform.SetParent(itemList);
 				RectTransform buttRect = newButt.GetComponent("RectTransform") as RectTransform;
 				
 				//to make first button show up at the right height
