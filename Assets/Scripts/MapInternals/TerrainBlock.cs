@@ -47,8 +47,8 @@ public class TerrainBlock {
 		private set;
 	}
 
-	public TerrainMonoBehavior BlockInfo {
-		get { return GameObj.GetComponent<TerrainMonoBehavior>(); }
+	public TerrainMonoBehaviour BlockInfo {
+		get { return GameObj.GetComponent<TerrainMonoBehaviour>(); }
 	}
 
 	public string SaveString {
@@ -313,7 +313,7 @@ public class TerrainBlock {
 
 		GameObject obj = GameObjectResourcePool.getResource(BlockInfo.BlockID, Position, Orientation.toRotationVector());
 
-		TerrainMonoBehavior nInf = obj.GetComponent<TerrainMonoBehavior>();
+		TerrainMonoBehaviour nInf = obj.GetComponent<TerrainMonoBehaviour>();
 		if(!nInf.Pathable) {
 			if(this.Monster != null) {
 				GameObjectResourcePool.returnResource(nInf.BlockID, obj);

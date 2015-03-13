@@ -11,8 +11,8 @@ public class SceneryBlock {
 
 	#region Properties
 
-	public SceneryMonoBehavior BlockInfo {
-		get { return GameObj.GetComponent<SceneryMonoBehavior>(); }
+	public SceneryMonoBehaviour BlockInfo {
+		get { return GameObj.GetComponent<SceneryMonoBehaviour>(); }
 	}
 
 	public Vector3 Position {

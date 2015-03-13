@@ -99,8 +99,8 @@ public static class MapData {
 
 	public static void addMonsterScenery(string type, Vector3 pos, DIRECTION dir){
 		GameObject obj = GameObjectResourcePool.getResource(type, pos, dir.toRotationVector());
-		SceneryMonoBehavior smb = obj.GetComponent<SceneryMonoBehavior>();
-		MonsterMonoBehavior mmb = obj.GetComponent<MonsterMonoBehavior>();
+		SceneryMonoBehaviour smb = obj.GetComponent<SceneryMonoBehaviour>();
+		MonsterMonoBehaviour mmb = obj.GetComponent<MonsterMonoBehaviour>();
 		GameObjectResourcePool.returnResource(type, obj);
 		if(smb != null){
 			MapData.addScenery(type, pos, dir);
@@ -111,8 +111,8 @@ public static class MapData {
 	}
 
 	public static void moveMonsterScenery(GameObject obj, Vector3 pos, Vector3 offset){
-		SceneryMonoBehavior smb = obj.GetComponent<SceneryMonoBehavior>();
-		MonsterMonoBehavior mmb = obj.GetComponent<MonsterMonoBehavior>();
+		SceneryMonoBehaviour smb = obj.GetComponent<SceneryMonoBehaviour>();
+		MonsterMonoBehaviour mmb = obj.GetComponent<MonsterMonoBehaviour>();
 
 		if(smb != null){
 			MapData.moveScenery(pos, offset);
@@ -123,7 +123,7 @@ public static class MapData {
 	}
 
 	public static void rotateMonsterScenery(GameObject obj, Vector3 pos, bool goClockwise = true){
-		if(obj.GetComponent<SceneryMonoBehavior>() != null){
+		if(obj.GetComponent<SceneryMonoBehaviour>() != null){
 			MapData.rotateScenery(pos, goClockwise);
 		} else {
 			MapData.rotateMonster (pos, goClockwise);

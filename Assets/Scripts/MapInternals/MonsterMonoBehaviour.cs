@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MonsterMonoBehavior : MonoBehaviour {
+public class MonsterMonoBehaviour : MonoBehaviour {
 
 	public string BlockID;
 }
