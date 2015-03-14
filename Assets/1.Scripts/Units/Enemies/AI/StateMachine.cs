@@ -106,7 +106,7 @@ public class StateMachine {
 	public void Update () {
 		triggeredTransition = null;
 
-		// Debug.Log (currState.sId());
+//		Debug.Log (currState.id);
 
 		List<Transition> transList = currState.getTransitions ();
 

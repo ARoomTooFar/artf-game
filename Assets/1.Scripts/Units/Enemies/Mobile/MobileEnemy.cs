@@ -26,6 +26,7 @@ public class MobileEnemy : Enemy {
 	}
 	
 	protected override void Update() {
+		//Debug.Log (stats.health);
 		base.Update ();
 	}
 	
@@ -196,7 +197,7 @@ public class MobileEnemy : Enemy {
 		}
 		return false;
 	}
-	
+
 	protected virtual bool isSearching() {
 		if (this.target == null || (this.lastSeenPosition.HasValue && !(this.canSeePlayer (this.target) && this.alerted) && !this.isInAtkAnimation()) && this.actable) {
 			return true;

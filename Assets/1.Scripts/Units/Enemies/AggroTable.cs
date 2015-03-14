@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class AggroNode 
@@ -7,7 +7,7 @@ public class AggroNode
 	private int p;
 	public AggroNode l;
 	public AggroNode r;
-
+	
 	public AggroNode(GameObject g1, int p1)
 	{
 		g = g1;
@@ -33,16 +33,16 @@ public class AggroTable
 	private AggroNode head;
 	private AggroNode tail;
 	public bool testing = false;
-
+	
 	public AggroTable(){
 		head = new AggroNode (null, 0);
 	}
-
+	
 	public void add(GameObject g1, int p1)
 	{
 		// Debug.Log ("Adding " + g1 + " with prio " + p1);
 		AggroNode n = new AggroNode (g1, p1);
-
+		
 		AggroNode runner = head;
 		while (runner != null)
 		{
@@ -60,7 +60,7 @@ public class AggroTable
 				}
 			}
 		}
-
+		
 		if (head == null) {
 			head = n;
 			tail = n;
@@ -68,8 +68,8 @@ public class AggroTable
 			addR (n, head);
 		}
 	}
-
-
+	
+	
 	public void addR(AggroNode nAdd, AggroNode nOld){
 		if (nAdd.getPrio () > nOld.getPrio ()) 
 		{
@@ -96,7 +96,7 @@ public class AggroTable
 			addR (nAdd, nOld.r);
 		}
 	}
-
+	
 	public void deleteNode(AggroNode del)
 	{
 		if (testing)
@@ -133,8 +133,8 @@ public class AggroTable
 		}
 		del = null;
 	}
-
-
+	
+	
 	public void deletePlayer(GameObject del)
 	{
 		AggroNode runner = head;
@@ -148,17 +148,17 @@ public class AggroTable
 			}
 		}
 	}
-
+	
 	public GameObject getTarget()
 	{
 		return head.getObj ();
 	}
-
+	
 	public int getVal()
 	{
 		return head.getPrio ();
 	}
-
+	
 	public void printOrder()
 	{
 		AggroNode runner = head;
