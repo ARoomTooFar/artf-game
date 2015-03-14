@@ -92,7 +92,7 @@ public class TargetCircle : MonoBehaviour {
 		}
 
 		//Joystick form
-		if(controls.joyUsed == 1){
+		if(controls.joyUsed){
 			newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
 		}
 			
