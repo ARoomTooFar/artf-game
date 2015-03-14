@@ -135,6 +135,7 @@ public class MobileEnemy : Enemy {
 		search.addTransition (tSpace);
 		retreat.addTransition (tRest);
 		retreat.addTransition (tApproach);
+		// spacing.addTransition (tApproach);
 		spacing.addTransition (tFar);
 		far.addTransition (tApproach);
 		far.addTransition (tAttack);
@@ -223,6 +224,9 @@ public class MobileEnemy : Enemy {
 			float distance = this.distanceToPlayer(this.target);
 			return distance > this.minAtkRadius;
 		}
+		if (this.target == null) {
+			return true;
+		}
 		return false;
 	}
 	
@@ -294,7 +298,7 @@ public class MobileEnemy : Enemy {
 	}
 
 	protected virtual void Spacing() {
-		this.facing = (this.target.transform.position - this.transform.position) * -1;
+		this.facing = (this.lastSeenPosition.Value - this.transform.position) * -1;
 		this.facing.y = 0.0f;
 		this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 	}

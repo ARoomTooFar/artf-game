@@ -3,9 +3,10 @@ using UnityEngine;
 using System.Collections;
 
 public class Stun : Override {
-	
+
 	public Stun() {
 		name = "Stun";
+		particleName = "StunnedParticles";
 	}
 
 	protected override void bdEffects(BDData newData) {

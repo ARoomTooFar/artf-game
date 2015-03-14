@@ -4,14 +4,33 @@ using System.Collections.Generic;
 
 public class BuffsDebuffs {
 
+	protected string _particleName;
+	protected string particleName {
+		get {return _particleName;}
+		set {
+			if (!string.IsNullOrEmpty (value)) {
+				_particleName = value;
+				this.particles = Resources.Load ("BDParticles/" + _particleName, typeof(GameObject)) as GameObject;
+
+				if (this.particles == null) {
+					Debug.LogWarning ("No particle object with name \"" + value + "\" found in Resource folder under BDParticles, check to make sure the name is correct and/or it is in the folder.");
+				}
+			}
+		}
+	}
+
+	protected GameObject particles;
+
 	protected class BDData {
 		public Character unit;
 		public GameObject source;
 		public CoroutineController controller;
+		public GameObject particles;
 
-		public BDData(Character unit, GameObject source) {
+		public BDData(Character unit, GameObject source, GameObject particles) {
 			this.unit = unit;
 			this.source = source;
+			this.particles = particles;
 		}
 	}
 
@@ -44,8 +63,15 @@ public class BuffsDebuffs {
 
 	public void applyBD(Character unit, GameObject source) {
 		List<BDData> list;
-		BDData newData = new BDData(unit, source);
 
+		GameObject newParticle = null;
+
+		if (particles != null) {
+			newParticle = Object.Instantiate (particles) as GameObject;
+			newParticle.transform.SetParent (unit.transform, false);
+		}
+
+		BDData newData = new BDData(unit, source, newParticle);
 		bdEffects(newData);
 
 		if (affectedUnits.TryGetValue (unit, out list)) {
@@ -81,6 +107,7 @@ public class BuffsDebuffs {
 	// What is stopped when buff/debuff is done/removed
 	//     * Mostly for stopping coroutines, but popping effects can also go in here
 	protected virtual void removeEffects(BDData oldData, GameObject source) {
+		if (oldData.particles != null) Object.Destroy (oldData.particles);
 	}
 
 	public virtual void purgeBD(Character unit, GameObject source) {

@@ -18,6 +18,7 @@ public class Chainsaw : MeleeWeapons {
 		
 		public Dismember(float speedValue) {
 			name = "Dismember";
+			particleName = "BloodParticles";
 			spdPercent = speedValue;
 		}
 		
@@ -161,8 +162,11 @@ public class Chainsaw : MeleeWeapons {
 				meat.BDS.rmvBuffDebuff(debuff, user.gameObject);
 			}
 			chained.Clear();
-			user.BDS.rmvBuffDebuff(debuff, user.gameObject);
+
 		}
+
+		user.BDS.rmvBuffDebuff(debuff, user.gameObject);
+
 		cropping.Clear();
 
 		user.animator.speed = 1.0f;
