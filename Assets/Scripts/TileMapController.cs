@@ -47,8 +47,8 @@ public class TileMapController : MonoBehaviour {
 	void Awake ()
 	{
 
-		tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
-		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
+		//tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
+		//itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 	}
 	
 	void Update ()

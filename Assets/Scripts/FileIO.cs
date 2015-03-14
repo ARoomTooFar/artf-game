@@ -36,7 +36,7 @@ public class FileIO : MonoBehaviour
 	{
 		txtUdLvl.enabled = false;
 
-		output_tileMap = GameObject.Find ("TileMap").GetComponent ("Output_TileMap") as Output_TileMap;
+		//output_tileMap = GameObject.Find ("TileMap").GetComponent ("Output_TileMap") as Output_TileMap;
 		
 		//loadingObj = gameObject.AddComponent<LoadingObj>();
 		Button_Save.onClick.AddListener (() => {
