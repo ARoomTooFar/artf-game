@@ -10,6 +10,10 @@ public class Enemy : Character {
 	public float dmgTimer = 0f;
 	public bool aggro = false;
 
+	//Is this unit part of the hive mind?
+	public bool swarmBool = false;
+	//Object which holds hivemind aggrotable
+	public Swarm swarm;
 	
 	// Moved from my AI enemy - Francis
 	public AggroRange aRange;
@@ -27,14 +31,23 @@ public class Enemy : Character {
 	protected AggroTable aggroT;
 	
 	protected float aggroTimer = 7.0f;
+
+	void OnEnable()
+	{
+		Player.OnDeath += playerDied;
+	}
 	
 	
+	void OnDisable()
+	{
+		Player.OnDeath -= playerDied;
+	}
+
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType ("Player");
 		
 		facing = Vector3.back;
-		aggroT = new AggroTable();
 
 		aRange.opposition = this.opposition;
 		
@@ -47,6 +60,14 @@ public class Enemy : Character {
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
+		
+		//Uses swarm aggro table if this unit swarms
+		if(swarmBool){
+			aggroT = swarm.aggroTable;
+		}
+		else{
+			aggroT = new AggroTable();
+		}
 	}
 
 	// Update is called once per frame
@@ -152,7 +173,14 @@ public class Enemy : Character {
 	//-------------------------------//
 
 	public override void damage(int dmgTaken, Character striker) {
-		base.damage(dmgTaken, striker);
+		base.damage(dmgTaken, striker);		
+
+		if (aggro == false) {
+			aggro = true;
+			dmgTimer = 0f;
+		}		
+
+		aggroT.add(striker.gameObject, dmgTaken);
 	}
 	
 	public override void damage(int dmgTaken) {
@@ -161,7 +189,7 @@ public class Enemy : Character {
 			aggro = true;
 			dmgTimer = 0f;
 		}
-		
+
 		base.damage(dmgTaken);
 	}
 
@@ -185,6 +213,13 @@ public class Enemy : Character {
 	public virtual void resetAggro(){
 		dmgTimer = 0f;
 		aggro = false;
+		target = null;
+	}
+
+	public virtual void playerDied(GameObject dead){
+		if (aggroT != null) {
+			aggroT.deletePlayer(dead);
+		}
 	}
 	
 	//---------------//
