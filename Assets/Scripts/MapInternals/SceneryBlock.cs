@@ -11,8 +11,12 @@ public class SceneryBlock {
 
 	#region Properties
 
-	public SceneryMonoBehavior BlockInfo {
-		get { return GameObj.GetComponent<SceneryMonoBehavior>(); }
+	public SceneryMonoBehaviour BlockInfo {
+		get { return GameObj.GetComponent<SceneryMonoBehaviour>(); }
+	}
+
+	public string BlockID {
+		get { return GameObj.GetComponent<BlockMonoBehaviour>().BlockID; }
 	}
 
 	public Vector3 Position {
@@ -93,7 +97,7 @@ public class SceneryBlock {
 	}
 
 	public void remove(){
-		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
+		GameObjectResourcePool.returnResource(BlockID, GameObj);
 	}
 }
 

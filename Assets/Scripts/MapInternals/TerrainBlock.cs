@@ -4,26 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 /*
- * Enum for cardinal and ordinal directions
- * 
- * Directions opposite each other on a compass
- * are set to be negative values of each other to
- * make finding the opposite direction easier.
- * 
- */
-public enum DIRECTION : int {
-	NonDirectional = 0,
-	North = 1,
-	South = -(int)North,
-	East = 2,
-	West = -(int)East,
-	NorthEast = 3,
-	SouthWest = -(int)NorthEast,
-	SouthEast = 4,
-	NorthWest = -(int)SouthEast,
-};
-
-/*
  * Object to represent one tile/block/terrainspace/thing in the map
  * 
  * Contains links to neighboring blocks as well as the scenery and/or monster on the tile
@@ -47,9 +27,9 @@ public class TerrainBlock {
 		private set;
 	}
 
-	public GameObject Wall {
+	public SceneryBlock Wall {
 		get;
-		set;
+		private set;
 	}
 
 	public ARTFRoom Room {
@@ -67,8 +47,8 @@ public class TerrainBlock {
 		private set;
 	}
 
-	public TerrainMonoBehavior BlockInfo {
-		get { return GameObj.GetComponent<TerrainMonoBehavior>(); }
+	public TerrainMonoBehaviour BlockInfo {
+		get { return GameObj.GetComponent<TerrainMonoBehaviour>(); }
 	}
 
 	public string SaveString {
@@ -249,7 +229,27 @@ public class TerrainBlock {
 	 * Unlinks the piece of scenery linked to this block
 	 */
 	public void removeScenery() {
+		this.Scenery.remove();
+		unlinkScenery();
+	}
+
+	public void unlinkScenery(){
 		this.Scenery = null;
+	}
+
+	public bool addWall(SceneryBlock scn) {
+		//return false if there is already scenery
+		if(this.Wall != null) {
+			return false;
+		}
+		
+		this.Wall = scn;
+		return true;
+	}
+
+	public void removeWall(){
+		this.Wall.remove();
+		this.Wall = null;
 	}
 	#endregion Scenery
 
@@ -313,7 +313,7 @@ public class TerrainBlock {
 
 		GameObject obj = GameObjectResourcePool.getResource(BlockInfo.BlockID, Position, Orientation.toRotationVector());
 
-		TerrainMonoBehavior nInf = obj.GetComponent<TerrainMonoBehavior>();
+		TerrainMonoBehaviour nInf = obj.GetComponent<TerrainMonoBehaviour>();
 		if(!nInf.Pathable) {
 			if(this.Monster != null) {
 				GameObjectResourcePool.returnResource(nInf.BlockID, obj);

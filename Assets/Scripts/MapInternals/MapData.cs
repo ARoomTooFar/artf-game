@@ -64,7 +64,9 @@ public static class MapData {
 	}
 
 	public static void resizeRoom(Vector3 oldCor, Vector3 newCor){
-		TheFarRooms.resize(oldCor, newCor);
+		if(isResizeRoomValid(oldCor, newCor)){
+			TheFarRooms.resize(oldCor, newCor);
+		}
 	}
 
 	public static void removeRoom(Vector3 pos){
@@ -99,25 +101,40 @@ public static class MapData {
 
 	public static void addMonsterScenery(string type, Vector3 pos, DIRECTION dir){
 		GameObject obj = GameObjectResourcePool.getResource(type, pos, dir.toRotationVector());
-		SceneryMonoBehavior smb = obj.GetComponent<SceneryMonoBehavior>();
+		SceneryMonoBehaviour smb = obj.GetComponent<SceneryMonoBehaviour>();
+		MonsterMonoBehaviour mmb = obj.GetComponent<MonsterMonoBehaviour>();
 		GameObjectResourcePool.returnResource(type, obj);
 		if(smb != null){
 			MapData.addScenery(type, pos, dir);
-		} else {
+		} 
+		if(mmb != null) {
 			MapData.addMonster(type, pos, dir);
 		}
 	}
 
 	public static void moveMonsterScenery(GameObject obj, Vector3 pos, Vector3 offset){
-		if(obj.GetComponent<SceneryMonoBehavior>() != null){
+		SceneryMonoBehaviour smb = obj.GetComponent<SceneryMonoBehaviour>();
+		MonsterMonoBehaviour mmb = obj.GetComponent<MonsterMonoBehaviour>();
+		WallCornerMonoBehaviour wmb = obj.GetComponent<WallCornerMonoBehaviour>();
+
+		Debug.Log("mMS");
+		Debug.Log(pos);
+
+		if(smb != null){
 			MapData.moveScenery(pos, offset);
-		} else {
+		}
+		if(mmb != null) {
 			MapData.moveMonster(pos, offset);
+		}
+		if(wmb != null) {
+			Debug.Log("resize");
+
+			MapData.resizeRoom(pos, pos+offset);
 		}
 	}
 
 	public static void rotateMonsterScenery(GameObject obj, Vector3 pos, bool goClockwise = true){
-		if(obj.GetComponent<SceneryMonoBehavior>() != null){
+		if(obj.GetComponent<SceneryMonoBehaviour>() != null){
 			MapData.rotateScenery(pos, goClockwise);
 		} else {
 			MapData.rotateMonster (pos, goClockwise);
@@ -127,10 +144,16 @@ public static class MapData {
 	#region Monsters
 	#region MonsterManipulation
 	public static void addMonster(string type, Vector3 pos, DIRECTION dir){
+		if(!isAddMonsterValid(pos)){
+			return;
+		}
 		MonsterBlocks.add(new MonsterBlock(type, pos, dir));
 	}
 
 	public static void moveMonster(Vector3 pos, Vector3 offset){
+		if(!isAddMonsterValid(pos + offset)){
+			return;
+		}
 		MonsterBlocks.move(pos, offset);
 	}
 
@@ -153,10 +176,16 @@ public static class MapData {
 	#region Scenery
 	#region SceneryManipulation
 	public static void addScenery(string type, Vector3 pos, DIRECTION dir){
+		if(!isAddSceneryValid(type, pos, dir)){
+			return;
+		}
 		SceneryBlocks.add(new SceneryBlock(type, pos, dir));
 	}
 
 	public static void moveScenery(Vector3 pos, Vector3 offset){
+		if(!isMoveSceneryValid(pos, offset)){
+			return;
+		}
 		SceneryBlocks.move(pos, offset);
 	}
 
@@ -171,7 +200,7 @@ public static class MapData {
 
 	#region SceneryValidation
 	public static bool isAddSceneryValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North){
-		return isAddSceneryValid(type, pos, dir);
+		return SceneryBlocks.isAddValid(type, pos, dir);
 	}
 
 	public static bool isMoveSceneryValid(Vector3 pos, Vector3 offset){

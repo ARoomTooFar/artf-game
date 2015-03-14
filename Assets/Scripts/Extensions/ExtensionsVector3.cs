@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -12,10 +13,10 @@ public static class ExtensionsVector3
 	 * 
 	 * returns a new Vector3 with x, y and z rounded to the nearest integer.
 	 */
-	public static Vector3 Round(this Vector3 vec){
-		Vector3 retVal = new Vector3(Mathf.Round (vec.x),
-		                             Mathf.Round (vec.y),
-		                             Mathf.Round (vec.z));
+	public static Vector3 Round(this Vector3 vec, int decimals = 0){
+		Vector3 retVal = new Vector3((float)Math.Round (vec.x, decimals),
+		                             (float)Math.Round (vec.y, decimals),
+		                             (float)Math.Round (vec.z, decimals));
 		return retVal;
 	}
 
@@ -114,26 +115,26 @@ public static class ExtensionsVector3
 		val %= 360;
 		val /= 45;
 		int intval = Mathf.RoundToInt(val);
-		switch(intval) {
-		case 0:
-			return DIRECTION.North;
-		case 1:
-			return DIRECTION.NorthEast;
-		case 2:
-			return DIRECTION.East;
-		case 3:
-			return DIRECTION.SouthEast;
-		case 4:
-			return DIRECTION.South;
-		case 5:
-			return DIRECTION.SouthWest;
-		case 6:
-			return DIRECTION.West;
-		case 7:
-			return DIRECTION.NorthWest;
-		default:
-			return DIRECTION.NonDirectional;
+
+		return ((DIRECTION2)intval).toDir1();
+	}
+
+	public static Vector3 moveinDir(this Vector3 vec, DIRECTION dir, int num = 1){
+		Vector3 retVal = vec.Copy();
+		string dirStr = dir.ToString();
+		if(dirStr.Contains("North")) {
+			retVal.z += num;
 		}
+		if(dirStr.Contains("South")) {
+			retVal.z -= num;
+		}
+		if(dirStr.Contains("East")) {
+			retVal.x += num;
+		}
+		if(dirStr.Contains("West")) {
+			retVal.x -= num;
+		}
+		return retVal;
 	}
 
 }

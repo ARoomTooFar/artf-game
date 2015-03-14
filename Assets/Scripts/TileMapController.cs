@@ -11,10 +11,17 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 
+<<<<<<< HEAD
 public class TileMapController : MonoBehaviour
 {
 	Transform itemObjects;
 	TileMap tileMap;
+=======
+public class TileMapController : MonoBehaviour {
+	//Transform itemObjects;
+	//TileMap tileMap;
+
+>>>>>>> master
 	public int grid_x;
 	public int grid_z;
 	public float tileSize = 1.0f;
@@ -48,15 +55,20 @@ public class TileMapController : MonoBehaviour
 		selectedTiles = new HashSet<Vector3> ();
 		shiftOrigin = new Vector3 (0f, 0f, 0f);
 		
+<<<<<<< HEAD
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera> ();
 		tileMap = this.gameObject.GetComponent<TileMap> ();
+=======
+		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
+		//tileMap = this.gameObject.GetComponent<TileMap> ();
+>>>>>>> master
 	}
 
 	void Awake ()
 	{
 
-		tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
-		itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
+		//tileMap = this.gameObject.GetComponent ("TileMap") as TileMap;
+		//itemObjects = GameObject.Find ("ItemObjects").GetComponent ("Transform") as Transform;
 	}
 	
 	void Update ()

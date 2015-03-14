@@ -236,8 +236,9 @@ public class FolderBarController : MonoBehaviour {
 					uih.setConnectedPrefab(folderType + "/" + prefabs[prefabCounter].name);
 
 					//add event trigger to object
-					EventTrigger ev = itemList.GetChild(h).gameObject.AddComponent<EventTrigger>() as EventTrigger;
-					
+					//EventTrigger ev = itemList.GetChild(h).gameObject.AddComponent<EventTrigger>() as EventTrigger;
+					itemList.GetChild(h).gameObject.AddComponent<EventTrigger>();
+
 					//set icon
 					string prefabType = prefabs[prefabCounter].name.Substring(prefabs[prefabCounter].name.IndexOf ('_') + 1);
 					uih.setButtonImage(prefabType);

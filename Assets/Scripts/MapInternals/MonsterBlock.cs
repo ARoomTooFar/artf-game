@@ -10,8 +10,8 @@ using System.Collections.Generic;
 public class MonsterBlock {
 
 	#region Properties
-	public MonsterMonoBehavior BlockInfo {
-		get { return GameObj.GetComponent<MonsterMonoBehavior>(); }
+	public MonsterMonoBehaviour BlockInfo {
+		get { return GameObj.GetComponent<MonsterMonoBehaviour>(); }
 	}
 	
 	public Vector3 Position {

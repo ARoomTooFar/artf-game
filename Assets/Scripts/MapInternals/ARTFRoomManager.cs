@@ -217,6 +217,10 @@ public class ARTFRoomManager {
 		rm.resize(newCor, oldCor);
 		return retVal;
 	}
+
+	public bool ResizeValid(ARTFRoom rm, Vector3 oldCor, Vector3 newCor){
+
+	}
 	#endregion Resize
 
 	#endregion Validation

@@ -53,39 +53,15 @@ public static class ExtensionsDIRECTION {
 	 * 
 	 */
 	public static DIRECTION QuarterTurn(this DIRECTION dir, bool goClockwise = true) {
-		DIRECTION val;
-
-		switch(dir) {
-		case DIRECTION.North:
-			val = DIRECTION.East;
-			break;
-		case DIRECTION.East:
-			val = DIRECTION.South;
-			break;
-		case DIRECTION.South:
-			val = DIRECTION.West;
-			break;
-		case DIRECTION.West:
-			val = DIRECTION.North;
-			break;
-		case DIRECTION.NorthEast:
-			val = DIRECTION.SouthEast;
-			break;
-		case DIRECTION.SouthEast:
-			val = DIRECTION.SouthWest;
-			break;
-		case DIRECTION.SouthWest:
-			val = DIRECTION.NorthWest;
-			break;
-		case DIRECTION.NorthWest:
-			val = DIRECTION.NorthEast;
-			break;
-		default:
-			val = DIRECTION.NonDirectional;
-			break;
+		//if dir is non-directional, return non-directional
+		if(dir == DIRECTION.NonDirectional) {
+			return dir;
 		}
 
-		return goClockwise ? val : val.Opposite();
+		DIRECTION retVal = ((DIRECTION2)(((int)(dir.toDir2()) + 2) % 8)).toDir1();
+
+		//if clockwise rotation, return, if counter clockwise, return the opposite direction
+		return goClockwise ? retVal : retVal.Opposite();
 	}
 
 	/*
@@ -97,36 +73,9 @@ public static class ExtensionsDIRECTION {
 	 * 
 	 */
 	public static Vector3 toRotationVector(this DIRECTION dir) {
-		float val = 0;
-		
-		switch(dir) {
-		case DIRECTION.North:
+		float val = (int)(dir.toDir2());
+		if(val < 0) {
 			val = 0;
-			break;
-		case DIRECTION.NorthEast:
-			val = 1;
-			break;
-		case DIRECTION.East:
-			val = 2;
-			break;
-		case DIRECTION.SouthEast:
-			val = 3;
-			break;
-		case DIRECTION.South:
-			val = 4;
-			break;
-		case DIRECTION.SouthWest:
-			val = 5;
-			break;
-		case DIRECTION.West:
-			val = 6;
-			break;
-		case DIRECTION.NorthWest:
-			val = 7;
-			break;
-		default:
-			val = 0;
-			break;
 		}
 		val *= 45;
 		return new Vector3(0, Mathf.Round(val), 0);
@@ -151,6 +100,14 @@ public static class ExtensionsDIRECTION {
 		}
 
 		return (DIRECTION)Enum.Parse(typeof(DIRECTION), dirstr);
+	}
+
+	public static DIRECTION2 toDir2(this DIRECTION dir){
+		return (DIRECTION2)Enum.Parse(typeof(DIRECTION2), dir.ToString());
+	}
+
+	public static DIRECTION toDir1(this DIRECTION2 dir){
+		return (DIRECTION)Enum.Parse(typeof(DIRECTION), dir.ToString());
 	}
 }
 

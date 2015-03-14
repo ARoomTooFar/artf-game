@@ -12,7 +12,7 @@ public class ItemObject : MonoBehaviour
 	static Camera UICamera;
 	bool inMouseCheck = false;
 	Vector3 initMousePos;
-	static ItemClass itemClass = new ItemClass ();
+	//static ItemClass itemClass = new ItemClass ();
 	TileMapController tilemapcont;
 	float mouseDeadZone = 10f;
 	Shader focusedShader;
@@ -21,7 +21,7 @@ public class ItemObject : MonoBehaviour
 
 	
 	Vector3 rotation;
-	Vector3 position;
+	//Vector3 position;
 	
 	void Start ()
 	{
@@ -138,7 +138,8 @@ public class ItemObject : MonoBehaviour
 		if (cancellingMove == true) {
 			
 		} else {
-			Vector3 pos = this.gameObject.transform.position;
+			Vector3 pos = this.gameObject.transform.root.position;
+
 			MapData.moveMonsterScenery(this.gameObject, pos, newp-pos);
 		}
 		
@@ -148,7 +149,7 @@ public class ItemObject : MonoBehaviour
 
 	
 	public void changePosition(Vector3 newPos){
-		position = newPos;
+		//position = newPos;
 	}
 	
 	public Vector3 getPosition(){
