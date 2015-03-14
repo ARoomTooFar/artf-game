@@ -56,33 +56,33 @@ public class Event_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragHandl
 	{
 		//if no other button is currently selected
 		if(selectedButtonID == -1){
-			clicked = true;
+//			clicked = true;
 
 
 
 			//set this button to the currently selected button
 			selectedButtonID = this.gameObject.GetInstanceID();
 
-			Debug.Log ("Clicked a button, selectedbuttonid: " + selectedButtonID);
-
-			//make new button to create a outline
-			bgButt = Instantiate (Resources.Load ("bgButton")) as GameObject;
-			bgButt.transform.SetParent(this.transform.parent);
-			RectTransform bgRect = bgButt.GetComponent("RectTransform") as RectTransform;
-
-			//get this RectTransform for this script's button
-			RectTransform thisRect = this.gameObject.GetComponent("RectTransform") as RectTransform;
-
-			//set the background button's position and scale
-			bgRect.anchoredPosition = new Vector2(thisRect.anchoredPosition.x - 5, thisRect.anchoredPosition.y - 5);
-			bgRect.sizeDelta = new Vector2(thisRect.sizeDelta.x + 10f, thisRect.sizeDelta.y + 10f);
-
-			//set the background button's color
-			Button bgButton = bgButt.GetComponent("Button") as Button;
-			bgButton.image.color = Color.yellow;
-
-			//make it so it's just an outline
-			bgButton.image.fillCenter = false;
+//			Debug.Log ("Clicked a button, selectedbuttonid: " + selectedButtonID);
+//
+//			//make new button to create a outline
+//			bgButt = Instantiate (Resources.Load ("bgButton")) as GameObject;
+//			bgButt.transform.SetParent(this.transform.parent);
+//			RectTransform bgRect = bgButt.GetComponent("RectTransform") as RectTransform;
+//
+//			//get this RectTransform for this script's button
+//			RectTransform thisRect = this.gameObject.GetComponent("RectTransform") as RectTransform;
+//
+//			//set the background button's position and scale
+//			bgRect.anchoredPosition = new Vector2(thisRect.anchoredPosition.x - 5, thisRect.anchoredPosition.y - 5);
+//			bgRect.sizeDelta = new Vector2(thisRect.sizeDelta.x + 10f, thisRect.sizeDelta.y + 10f);
+//
+//			//set the background button's color
+//			Button bgButton = bgButt.GetComponent("Button") as Button;
+//			bgButton.image.color = Color.yellow;
+//
+//			//make it so it's just an outline
+//			bgButton.image.fillCenter = false;
 		}
 
 	}

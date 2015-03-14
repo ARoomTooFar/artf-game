@@ -265,11 +265,14 @@ public class CameraController : MonoBehaviour {
 		float tileMapSizeX = tilemapcont.grid_x * tileMapGameObj.transform.localScale.x;
 		float tileMapSizeZ = tilemapcont.grid_z * tileMapGameObj.transform.localScale.z;
 		
-		
+		Color c = new Color(1f,1f,1f,0.01f) ;
+		selectionMat.SetColor("Main Color", c);
 		//draw grid over tilemap
 		for (int z = (int)Mathf.Floor(zLowerBound); z < (int)Mathf.Floor(zUpperBound); z++) {
+			GL.Color(c);
 			GL.Vertex(new Vector3(Mathf.Floor(xLowerBound), 0f, z + 0.5f));
 			GL.Vertex(new Vector3(Mathf.Floor(xUpperBound), 0f, z + 0.5f));
+
 		}
 		for (int x = (int)Mathf.CeilToInt(xLowerBound); x < (int)Mathf.CeilToInt(xUpperBound); x++) {
 			GL.Vertex(new Vector3(x - 0.5f, 0f, Mathf.Floor(zLowerBound)));
