@@ -138,7 +138,8 @@ public class ItemObject : MonoBehaviour
 		if (cancellingMove == true) {
 			
 		} else {
-			Vector3 pos = this.gameObject.transform.position;
+			Vector3 pos = this.gameObject.transform.root.position;
+
 			MapData.moveMonsterScenery(this.gameObject, pos, newp-pos);
 		}
 		

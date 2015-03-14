@@ -64,7 +64,9 @@ public static class MapData {
 	}
 
 	public static void resizeRoom(Vector3 oldCor, Vector3 newCor){
-		TheFarRooms.resize(oldCor, newCor);
+		if(isResizeRoomValid(oldCor, newCor)){
+			TheFarRooms.resize(oldCor, newCor);
+		}
 	}
 
 	public static void removeRoom(Vector3 pos){
@@ -113,12 +115,21 @@ public static class MapData {
 	public static void moveMonsterScenery(GameObject obj, Vector3 pos, Vector3 offset){
 		SceneryMonoBehaviour smb = obj.GetComponent<SceneryMonoBehaviour>();
 		MonsterMonoBehaviour mmb = obj.GetComponent<MonsterMonoBehaviour>();
+		WallCornerMonoBehaviour wmb = obj.GetComponent<WallCornerMonoBehaviour>();
+
+		Debug.Log("mMS");
+		Debug.Log(pos);
 
 		if(smb != null){
 			MapData.moveScenery(pos, offset);
 		}
 		if(mmb != null) {
 			MapData.moveMonster(pos, offset);
+		}
+		if(wmb != null) {
+			Debug.Log("resize");
+
+			MapData.resizeRoom(pos, pos+offset);
 		}
 	}
 

@@ -77,6 +77,18 @@ public partial class ARTFRoom {
 	public Vector3 Center {
 		get { return (LLCorner + URCorner) / 2; }
 	}
+
+	public GameObject LLMarker { get; private set; }
+	public GameObject URMarker { get; private set; }
+	public GameObject LRMarker { get; private set; }
+	public GameObject ULMarker { get; private set; }
+
+	public void updateMarkerPositions(){
+		LLMarker.transform.root.position = LLCorner;
+		URMarker.transform.root.position = URCorner;
+		LRMarker.transform.root.position = LRCorner;
+		ULMarker.transform.root.position = ULCorner;
+	}
 	#endregion Corners
 
 	#region SquareProperties
@@ -113,6 +125,11 @@ public partial class ARTFRoom {
 		this.LinkedRooms = new Dictionary<SceneryBlock, ARTFRoom>();
 		this.Doors = new List<SceneryBlock>();
 		this.RoomPaths = new Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>>();
+		this.URMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", URCorner, Vector3.zero);
+		this.LLMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LLCorner, Vector3.zero);
+		this.ULMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", ULCorner, Vector3.zero);
+		this.LRMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LRCorner, Vector3.zero);
+
 	}
 
 	#region (un)linkTerrain
@@ -294,6 +311,8 @@ public partial class ARTFRoom {
 		}
 		//relink blocks to this room
 		linkTerrain();
+
+		updateMarkerPositions();
 	}
 
 	/*
