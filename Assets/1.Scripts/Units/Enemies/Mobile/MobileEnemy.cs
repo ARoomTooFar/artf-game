@@ -145,35 +145,37 @@ public class MobileEnemy : Enemy {
 	//----------------------//
 	// Transition Functions //
 	//----------------------//
-	
+
 	protected virtual bool isResting() {
 		return this.lastSeenPosition == null && !this.alerted;
 	}
 	
 	protected virtual bool isApproaching() {
 		// If we don't have a target currently and aren't alerted, automatically assign anyone in range that we can see as our target
-		if (this.target == null) {// && !this.alerted) {
-			if (aRange.inRange.Count > 0) {
-				foreach(Character tars in aRange.inRange) {
-					if (this.canSeePlayer(tars.gameObject)) {
-						this.alerted = true;
-						target = tars.gameObject;
-						break;
+		if (this.actable) {
+			if (this.target == null) {// && !this.alerted) {
+				if (aRange.inRange.Count > 0) {
+					foreach(Character tars in aRange.inRange) {
+						if (this.canSeePlayer(tars.gameObject)) {
+							this.alerted = true;
+							target = tars.gameObject;
+							break;
+						}
 					}
-				}
-				
-				if (target == null) {
+					
+					if (target == null) {
+						return false;
+					}
+				} else {
 					return false;
 				}
-			} else {
-				return false;
 			}
-		}
-		
-		float distance = this.distanceToPlayer(this.target);
-		if (this.canSeePlayer (this.target) && !isInAtkAnimation()) {
-			// agent.alerted = true;
-			return true;
+			
+			float distance = this.distanceToPlayer(this.target);
+			if (this.canSeePlayer (this.target) && !isInAtkAnimation()) {
+				// agent.alerted = true;
+				return true;
+			}
 		}
 		return false;
 	}
@@ -196,7 +198,7 @@ public class MobileEnemy : Enemy {
 	}
 	
 	protected virtual bool isSearching() {
-		if (this.target == null || (this.lastSeenPosition.HasValue && !(this.canSeePlayer (this.target) && this.alerted) && !this.isInAtkAnimation())) {
+		if (this.target == null || (this.lastSeenPosition.HasValue && !(this.canSeePlayer (this.target) && this.alerted) && !this.isInAtkAnimation()) && this.actable) {
 			return true;
 		}
 		return false;
@@ -271,7 +273,6 @@ public class MobileEnemy : Enemy {
 		if (this.lastSeenPosition.HasValue) {
 			this.facing = this.lastSeenPosition.Value - this.transform.position;
 			this.facing.y = 0.0f;
-			// StartCoroutine(searchForEnemy(this.lastSeenPosition.Value));
 			StartCoroutine("searchForEnemy", this.lastSeenPosition.Value);
 			this.lastSeenPosition = null;
 		}

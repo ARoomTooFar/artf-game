@@ -59,12 +59,7 @@ public class Pistol : RangedWeapons {
 					reload = true;
 					StartCoroutine(loadAmmo());
 				}
-				if(stats.weapType == 1){
-					spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
-				}
-				if(stats.weapType == 2){
-					spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
-				}
+				spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
 				kick += .2f;
 				if(kick >= 5f){
 					kick = 2f;

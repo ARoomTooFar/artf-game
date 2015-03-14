@@ -20,7 +20,7 @@ public class Enemy : Character {
 	
 	protected StateMachine sM;
 	
-	protected float fov = 100f;
+	protected float fov = 150f;
 	protected float lineofsight = 15f;
 	protected float maxAtkRadius, minAtkRadius;
 	

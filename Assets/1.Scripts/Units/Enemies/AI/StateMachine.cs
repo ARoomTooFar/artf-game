@@ -109,6 +109,7 @@ public class StateMachine {
 		// Debug.Log (currState.sId());
 
 		List<Transition> transList = currState.getTransitions ();
+
 		foreach (Transition t in transList) {
 			if(t.isTriggered()) {
 				// Debug.Log (t.targetState.id);
