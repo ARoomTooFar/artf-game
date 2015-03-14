@@ -2,24 +2,31 @@
 using System.Collections;
 using UnityEngine.UI;
 
+// Handles all logic for the title screen.
 public class TitleHand : MonoBehaviour {
-    public GSManager gsManager;
-    public Button btnStartGame;
+    private GSManager gsManager;
+    private Button btnStartGame;
+    private GameObject loadingBG;
 
-	// Use this for initialization
 	void Start ()
     {
         gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
         btnStartGame = GameObject.Find("BtnStartGame").GetComponent<Button>();
+        loadingBG = GameObject.Find("LoadingBG");
 
-        btnStartGame.onClick.AddListener(() => {
-            test();
-        });
+        loadingBG.SetActive(false);  // hide LoadingBG. can't hide in inspector because Find() can't find hidden objects.
+
+        // add functions to be called when buttons are clicked
+        btnStartGame.onClick.AddListener(() =>
+            {
+                StartGame();
+            }
+        );
 	}
 
-    void test()
+    void StartGame()
     {
-        Debug.Log(gsManager.health);
-        Debug.Log(gsManager.experience);
+        loadingBG.SetActive(true);
+        gsManager.LoadScene(13);
     }
 }
