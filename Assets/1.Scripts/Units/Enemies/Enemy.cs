@@ -32,6 +32,17 @@ public class Enemy : Character {
 	
 	protected float aggroTimer = 7.0f;
 
+	void OnEnable()
+	{
+		Player.OnDeath += playerDied;
+	}
+	
+	
+	void OnDisable()
+	{
+		Player.OnDeath -= playerDied;
+	}
+
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType ("Player");
@@ -162,7 +173,13 @@ public class Enemy : Character {
 	//-------------------------------//
 
 	public override void damage(int dmgTaken, Character striker) {
-		base.damage(dmgTaken, striker);
+		base.damage(dmgTaken, striker);		
+
+		if (aggro == false) {
+			aggro = true;
+			dmgTimer = 0f;
+		}		
+
 		aggroT.add(striker.gameObject, dmgTaken);
 	}
 	
@@ -196,6 +213,13 @@ public class Enemy : Character {
 	public virtual void resetAggro(){
 		dmgTimer = 0f;
 		aggro = false;
+		target = null;
+	}
+
+	public virtual void playerDied(GameObject dead){
+		if (aggroT != null) {
+			aggroT.deletePlayer(dead);
+		}
 	}
 	
 	//---------------//
