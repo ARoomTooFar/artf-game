@@ -9,9 +9,9 @@ using System;
 [System.Serializable]
 public class Controls {
 	//First 7 are Keys, last 2 are joystick axis
-	public string up, down, left, right, attack, secItem, cycItem, hori, vert;
+	public string up, down, left, right, attack, secItem, cycItem, hori, vert, joyAttack, joySecItem, joyCycItem;
 	//0 for Joystick off, 1 for Joystick on and no keys
-	public int joyUsed;
+	public bool joyUsed;
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -130,7 +130,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 				}*/
 			}
 		if (actable) {
-			if(Input.GetKeyDown(controls.attack)) {
+			if(Input.GetKeyDown(controls.attack) || (controls.joyUsed && Input.GetButtonDown(controls.joyAttack))) {
 				if(currDoor!=null){
 					currDoor.GetComponent<Door>().toggleOpen();
 					currDoor = null;
@@ -139,7 +139,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 					//Debug.Log(luckCheck());
 					gear.weapon.initAttack();
 				}
-			} else if(Input.GetKeyDown (controls.secItem)) {
+			} else if(Input.GetKeyDown (controls.secItem) || (controls.joyUsed && Input.GetButtonDown(controls.joySecItem))) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
 					inventory.items[inventory.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
@@ -147,7 +147,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 					// Play sound for trying to use item on cooldown or items
 					print("Item on Cooldown");
 				}
-			} else if(Input.GetKeyDown (controls.cycItem)) {
+			} else if(Input.GetKeyDown (controls.cycItem) || (controls.joyUsed && Input.GetButtonDown(controls.joyCycItem))) {
 				inventory.cycItems();
 			}
 			// Continues with what is happening
@@ -207,7 +207,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 				newMoveDir += Vector3.right;
 			}
 			//Joystick form
-			if(controls.joyUsed == 1){
+			if(controls.joyUsed){
 				newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
 			}
 			
