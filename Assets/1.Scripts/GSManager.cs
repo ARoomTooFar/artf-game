@@ -6,7 +6,7 @@ public class GSManager : MonoBehaviour {
     public float experience;
 
 	void Start () {
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);  // don't destroy itself between scene loads
 	}
 	
     public void LoadScene (int scene)
