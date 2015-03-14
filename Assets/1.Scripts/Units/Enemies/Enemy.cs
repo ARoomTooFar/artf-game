@@ -26,7 +26,7 @@ public class Enemy : Character {
 	
 	// Variables for use in player detection
 	protected bool alerted = false;
-	protected GameObject target;
+	public GameObject target;
 	protected Vector3? lastSeenPosition = null;
 	protected AggroTable aggroT;
 	
@@ -207,6 +207,7 @@ public class Enemy : Character {
 		else if (dmgTimer >= 5f)
 		{
 			resetAggro ();
+			dmgTimer = 0f;
 		}
 	}
 	

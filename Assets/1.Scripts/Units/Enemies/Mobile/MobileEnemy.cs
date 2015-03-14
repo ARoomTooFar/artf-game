@@ -129,8 +129,8 @@ public class MobileEnemy : Enemy {
 		atkAnimation.addTransition (tAttack);
 		atkAnimation.addTransition (tSearch);
 		atkAnimation.addTransition (tSpace);
-		search.addTransition (tApproach);
 		search.addTransition (tAttack);
+		search.addTransition (tApproach);
 		search.addTransition (tRetreat);
 		search.addTransition (tSpace);
 		retreat.addTransition (tRest);
@@ -157,7 +157,7 @@ public class MobileEnemy : Enemy {
 			if (this.target == null) {// && !this.alerted) {
 				if (aRange.inRange.Count > 0) {
 					foreach(Character tars in aRange.inRange) {
-						if (this.canSeePlayer(tars.gameObject)) {
+						if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
 							this.alerted = true;
 							target = tars.gameObject;
 							break;
@@ -235,7 +235,7 @@ public class MobileEnemy : Enemy {
 	
 	protected virtual void Rest() {
 		// this.resetpos = this.transform.position;
-
+		this.StopSearch ();
 		if (!this.isApproaching() && tempTimer > 0.0f) {
 			tempTimer -= Time.deltaTime;
 		} else {
