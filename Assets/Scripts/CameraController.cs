@@ -99,6 +99,7 @@ public class CameraController : MonoBehaviour {
 	{
 		selectTiles ();
 		drawGrid ();
+		drawMouseSquare();
 	}
 	
 	void Update () {
@@ -174,8 +175,7 @@ public class CameraController : MonoBehaviour {
 			prevMouse = point;
 			prevMouseBool = true;
 		}
-		
-		Debug.Log(distance);
+
 		Vector3 offset = (prevMouse - point);
 		//Debug.Log(ray.origin.x);
 		baseX += offset.x;
@@ -291,6 +291,24 @@ public class CameraController : MonoBehaviour {
 			GL.Vertex (new Vector3 (origin.x + .5f, 0, origin.z - .5f));
 		}
 		GL.End ();
+	}
+
+	void drawMouseSquare(){
+		Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
+		float distance = 0;
+		groundPlane.Raycast(ray, out distance);
+		Vector3 point = ray.GetPoint(distance).Round();
+
+		GL.Begin (GL.QUADS);
+		gridMat.SetPass (0);
+		selectionMat.SetPass (0);
+
+		GL.Vertex(new Vector3(point.x-.5f, point.y, point.z-.5f));
+		GL.Vertex(new Vector3(point.x-.5f, point.y, point.z+.5f));
+		GL.Vertex(new Vector3(point.x+.5f, point.y, point.z+.5f));
+		GL.Vertex(new Vector3(point.x+.5f, point.y, point.z-.5f));
+
+		GL.End();
 	}
 	
 	/* draw the grid lines */
