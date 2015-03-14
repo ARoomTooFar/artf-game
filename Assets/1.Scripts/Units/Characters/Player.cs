@@ -240,7 +240,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 			if (stats.health <= 0) {
 				die();
 			}
-			UI.hpBar.current = stats.health;
+//			UI.hpBar.current = stats.health;
 		}
 	}
 	
