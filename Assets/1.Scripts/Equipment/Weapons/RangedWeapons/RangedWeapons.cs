@@ -67,6 +67,7 @@ public class RangedWeapons : Weapons {
 	protected virtual IEnumerator Shoot(int count) {
 		yield return 0;
 	}
+
 	public virtual void loadData(AmmoBar ammoB){
 		ammoBar = ammoB;
 		ammoBar.onState = 1;
@@ -122,7 +123,7 @@ public class RangedWeapons : Weapons {
 		}
 		user.animator.speed = 1.0f;
 	}
-
+	
 	protected void fireProjectile() {
 		Projectile newBullet = ((GameObject)Instantiate(projectile, user.transform.position, spray)).GetComponent<Projectile>();
 		newBullet.setInitValues(user, opposition, particles.startSpeed, user.luckCheck(), stats.debuff);

@@ -2,10 +2,12 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class Item : MonoBehaviour {
 
 	public Character user;
+	public Type opposition;
 
 	// protected float cooldown;
 

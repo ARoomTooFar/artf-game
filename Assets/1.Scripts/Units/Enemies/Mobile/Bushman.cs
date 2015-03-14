@@ -11,6 +11,7 @@ public class Bushman : MobileEnemy {
 	private Frenzy frenzy;
 	private int tier;
 	private float health;
+	GameObject expDeath;
 	
 	protected override void Awake () {
 		base.Awake ();
@@ -53,7 +54,20 @@ public class Bushman : MobileEnemy {
 		powlvs.Update();
 		base.Update ();
 	}
-	
+
+	/*
+	public override void die() {
+		Debug.Log("IsDead");
+		base.die();
+		stats.health = 0;
+		Renderer[] rs = GetComponentsInChildren<Renderer>();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
+		eDeath.setInitValues(this, true);
+		foreach (Renderer r in rs) {
+			r.enabled = false;
+		}
+	}*/
+
 	protected override void setInitValues() {
 		base.setInitValues();
 		stats.maxHealth = 60;
