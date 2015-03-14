@@ -4,14 +4,14 @@ using System.Collections;
 public class GSManager : MonoBehaviour {
     public float health;
     public float experience;
+    public int currScene;
 
-	// Use this for initialization
 	void Start () {
         DontDestroyOnLoad(gameObject);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public void LoadScene (int scene)
+    {
+        Application.LoadLevel(scene);
+    }
 }
