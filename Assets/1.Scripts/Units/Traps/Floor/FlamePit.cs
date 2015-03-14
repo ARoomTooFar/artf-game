@@ -4,7 +4,7 @@ using System.Collections;
 public class FlamePit : Traps {
 
 	// protected delegate void FireDelegate(Character enemy);
-	private Burning debuff;
+	public Burning debuff;
 
 	// Use this for initialization
 	protected override void Start () {
