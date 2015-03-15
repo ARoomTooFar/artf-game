@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 using System.Text;
 
 //This class listens to save/deploy/load buttons
-public class FileIO : MonoBehaviour
+public class FileIO1 : MonoBehaviour
 {
 	//Output_TileMap output_tileMap;
 	public Button Button_Save = null;
@@ -29,7 +29,7 @@ public class FileIO : MonoBehaviour
 
     #if UNITY_EDITOR
     private string dummyGameAcctId = "5750085036015616";
-	private string dummyLvlId = "6002404164108288";
+    private string dummyLvlId = "5715999101812736";
     #endif
 	
 	void Start ()

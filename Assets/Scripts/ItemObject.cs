@@ -81,6 +81,10 @@ public class ItemObject : MonoBehaviour
 				//so this code only happens once
 				copyCreated = true;
 			}
+
+			if(this.gameObject.name == "Cube") tilemapcont.iAmResizingRoomRightNow = true;
+			else tilemapcont.iAmResizingRoomRightNow = false;
+//			print (this.gameObject.name);
 			
 			//if user wants to cancel the drag
 			if (Input.GetKeyDown (KeyCode.Escape) || Input.GetMouseButton (1)) {
@@ -128,6 +132,8 @@ public class ItemObject : MonoBehaviour
 				}
 				
 			}
+
+
 			yield return null; 
 		}
 		

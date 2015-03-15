@@ -130,6 +130,7 @@ public static class MapData {
 			Debug.Log("resize");
 
 			MapData.resizeRoom(pos, pos+offset);
+//			MapData.removeRoom(pos);
 		}
 	}
 

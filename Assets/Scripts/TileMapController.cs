@@ -27,6 +27,7 @@ public class TileMapController : MonoBehaviour
 	bool placeRoomClicked = false;
 	float secondX;
 	float secondY;
+	public bool iAmResizingRoomRightNow;
 	
 	void Start ()
 	{
@@ -123,7 +124,7 @@ public class TileMapController : MonoBehaviour
 		//if user is holding down left mouse button, and dragging,
 		//we make a box of selected tile and have it resize as
 		//the mouse moves around
-		if (Input.GetMouseButton (0) && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
+		if (iAmResizingRoomRightNow == false && Input.GetMouseButton (0) && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
 			/*If no tiles have been selected ever, just select that tile */
 			if (shiftOrigin.x == 0f && shiftOrigin.y == 0f && shiftOrigin.z == 0f)
 				selectTile (new Vector3 (x, 0, z));
@@ -189,6 +190,8 @@ public class TileMapController : MonoBehaviour
 			secondX = Mathf.RoundToInt (xf / tileSize);
 			secondY = Mathf.RoundToInt (zf / tileSize);
 		}
+
+
 		
 		if(placeRoomClicked){
 			fillInRoom (selectedTiles, shiftOrigin.x, shiftOrigin.z, secondX, secondY);
