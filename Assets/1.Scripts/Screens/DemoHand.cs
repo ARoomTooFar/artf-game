@@ -12,14 +12,12 @@ public class DemoHand : MonoBehaviour {
 	{
 		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
 		btnInsertCoin = GameObject.Find("BtnInsertCoin").GetComponent<Button>();
+		mainCamera = GameObject.Find("CameraDemo");
 		
 		// hide LoadingBG. can't hide in inspector because Find() can't find hidden objects.
 		loadingBG = GameObject.Find("LoadingBG");
 		loadingBG.SetActive(false);
 
-		// 
-		mainCamera = GameObject.Find("CameraDemo");
-		
 		// add functions to be called when buttons are clicked
 		btnInsertCoin.onClick.AddListener(() =>
 			{
