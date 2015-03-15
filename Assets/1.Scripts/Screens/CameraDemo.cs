@@ -31,6 +31,54 @@ public class CameraDemo : MonoBehaviour {
 		btnLevel6.SetActive(false);
 		btnLevel7.SetActive(false);
 		btnLevel8.SetActive(false);
+
+		btnLevel1.GetComponent<Button>().onClick.AddListener(() =>
+			{
+				Debug.Log ("BtnLevel1 clicked");
+			}
+		);
+
+		btnLevel2.GetComponent<Button>().onClick.AddListener(() =>
+			{
+				Debug.Log ("BtnLevel2 clicked");
+			}
+		);
+
+		btnLevel3.GetComponent<Button>().onClick.AddListener(() =>
+			{
+				Debug.Log ("BtnLevel3 clicked");
+			}
+		);
+
+		btnLevel4.GetComponent<Button>().onClick.AddListener(() =>
+			{
+				Debug.Log ("BtnLevel4 clicked");
+			}
+		);
+
+		btnLevel5.GetComponent<Button>().onClick.AddListener(() =>
+			{
+				Debug.Log ("BtnLevel5 clicked");
+			}
+		);
+
+		btnLevel6.GetComponent<Button>().onClick.AddListener(() =>
+			{
+				Debug.Log ("BtnLevel6 clicked");
+			}
+		);
+
+		btnLevel7.GetComponent<Button>().onClick.AddListener(() =>
+			{
+				Debug.Log ("BtnLevel7 clicked");
+			}
+		);
+
+		btnLevel8.GetComponent<Button>().onClick.AddListener(() =>
+			{
+				Debug.Log ("BtnLevel8 clicked");
+			}
+		);
 	}
 	
 	void Update () {
