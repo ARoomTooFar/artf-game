@@ -3,7 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class CameraDemo : MonoBehaviour {
-	public bool moveTrigger = false;
+	private GSManager gsManager;
+	private Farts serv;
 	private GameObject btnLevel1;
 	private GameObject btnLevel2;
 	private GameObject btnLevel3;
@@ -12,8 +13,12 @@ public class CameraDemo : MonoBehaviour {
 	private GameObject btnLevel6;
 	private GameObject btnLevel7;
 	private GameObject btnLevel8;
+	public bool moveTrigger = false;
 
 	void Start () {
+		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		serv = gameObject.AddComponent<Farts>();
+
 		btnLevel1 = GameObject.Find("BtnLevel1");
 		btnLevel2 = GameObject.Find("BtnLevel2");
 		btnLevel3 = GameObject.Find("BtnLevel3");
@@ -35,6 +40,7 @@ public class CameraDemo : MonoBehaviour {
 		btnLevel1.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				Debug.Log ("BtnLevel1 clicked");
+				StartDl("5715999101812736");
 			}
 		);
 
@@ -71,12 +77,16 @@ public class CameraDemo : MonoBehaviour {
 		btnLevel7.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				Debug.Log ("BtnLevel7 clicked");
+				Debug.Log ("Move to new scene!");
+				gsManager.LoadScene(13);
 			}
 		);
 
 		btnLevel8.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				Debug.Log ("BtnLevel8 clicked");
+				Debug.Log ("Print level 1 data!");
+				Debug.Log (gsManager.level1Data);
 			}
 		);
 	}
@@ -100,5 +110,27 @@ public class CameraDemo : MonoBehaviour {
 
 	public void StartMove () {
 		moveTrigger = true;
+	}
+
+	public void StartDl (string levelId) {
+		WWW www = serv.getLvlWww(levelId);
+		StartCoroutine(dlLvl(www));
+	}
+
+	// should have 2nd parameter be a callback function
+	public IEnumerator dlLvl(WWW www)
+	{
+		yield return www;
+		
+		gsManager.level1Data = www.text;
+
+		if (serv.dataCheck(gsManager.level1Data))
+		{
+			Debug.Log("LVL DL SUCCESS: " + gsManager.level1Data);
+		}
+		else
+		{
+			Debug.Log("ERROR: Level download failed. Level ID doesn't exist.");
+		}
 	}
 }

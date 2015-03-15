@@ -20,6 +20,7 @@ public class TitleHand : MonoBehaviour {
         // add functions to be called when buttons are clicked
         btnStartGame.onClick.AddListener(() =>
             {
+				gsManager.level1Data = "topkek";
                 gsManager.LoadScene(13);
             }
         );
