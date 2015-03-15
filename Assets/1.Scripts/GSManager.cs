@@ -13,7 +13,8 @@ public class GSManager : MonoBehaviour {
 	public string level6Data = "level6Data";
 	public string level7Data = "level7Data";
 	public string level8Data = "level8Data";
-	
+
+    private Farts serv;
 	private GameObject loadingBG;
 	private Slider loadingBar;
 	private AsyncOperation loadProgress;
@@ -34,6 +35,7 @@ public class GSManager : MonoBehaviour {
 
 	void Start ()
 	{
+        serv = gameObject.AddComponent<Farts>();
 		loadingBG = GameObject.Find("LoadingBG");
 		loadingBar = GameObject.Find("LoadingBar").GetComponent<Slider>();
 	}
@@ -43,6 +45,20 @@ public class GSManager : MonoBehaviour {
 		loadingBG.SetActive(true);
 		StartCoroutine(LoadSceneAsync(scene));
 	}
+
+    public IEnumerator LoadLevel(string levelId)
+    {
+        loadingBG.SetActive(true);
+
+        WWW www = serv.getLvlWww(levelId);
+
+        yield return StartCoroutine(dlLevel(www));
+        yield return StartCoroutine(LoadSceneAsync(13));
+
+        // after loading is done, find new LoadingBG in new scene
+        loadingBG = GameObject.Find("LoadingBG");
+        loadingBG.SetActive(false);
+    }
 
 	IEnumerator LoadSceneAsync (int scene)
 	{
@@ -56,7 +72,22 @@ public class GSManager : MonoBehaviour {
 
 		// after loading is done, find new LoadingBG in new scene
 		loadingBG = GameObject.Find("LoadingBG");
-		loadingBar = GameObject.Find("LoadingBar").GetComponent<Slider>();
 		loadingBG.SetActive (false);
 	}
+
+    public IEnumerator dlLevel(WWW www)
+    {
+        yield return www;
+
+        gsManager.level1Data = www.text;
+
+        if (serv.dataCheck(gsManager.level1Data))
+        {
+            Debug.Log("LVL DL SUCCESS: " + gsManager.level1Data);
+        }
+        else
+        {
+            Debug.Log("ERROR: Level download failed. Level ID doesn't exist.");
+        }
+    }
 }
