@@ -6,6 +6,6 @@ public class BtnTest : MonoBehaviour {
 
 	public void TestDaBtn () {
         gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
-        Debug.Log(gsManager.health);
+        Debug.Log(gsManager.level1Data);
 	}
 }

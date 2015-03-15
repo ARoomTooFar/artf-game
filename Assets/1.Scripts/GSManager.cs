@@ -5,9 +5,15 @@ using UnityEngine.UI;
 public class GSManager : MonoBehaviour {
     // persistent data
     public static GSManager gsManager;
-    public float health;
-    public float experience;
-
+    public string level1Data = "level1Data";
+	public string level2Data = "level2Data";
+	public string level3Data = "level3Data";
+	public string level4Data = "level4Data";
+	public string level5Data = "level5Data";
+	public string level6Data = "level6Data";
+	public string level7Data = "level7Data";
+	public string level8Data = "level8Data";
+	
 	private GameObject loadingBG;
 	private Slider loadingBar;
 	private AsyncOperation loadProgress;
