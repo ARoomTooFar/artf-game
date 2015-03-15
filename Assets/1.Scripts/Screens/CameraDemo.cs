@@ -40,7 +40,8 @@ public class CameraDemo : MonoBehaviour {
 		btnLevel1.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				Debug.Log ("BtnLevel1 clicked");
-				StartDl("5715999101812736");
+				//StartDl("5715999101812736");
+                StartCoroutine(gsManager.LoadLevel("5715999101812736"));
 			}
 		);
 
