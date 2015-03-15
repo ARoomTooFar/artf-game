@@ -10,7 +10,8 @@ public class TitleHand : MonoBehaviour {
 
 	void Start ()
     {
-        gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		//<- this one   
+		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>(); 
         btnStartGame = GameObject.Find("BtnStartGame").GetComponent<Button>();
 
 		// hide LoadingBG. can't hide in inspector because Find() can't find hidden objects.
@@ -21,7 +22,8 @@ public class TitleHand : MonoBehaviour {
         btnStartGame.onClick.AddListener(() =>
             {
 				gsManager.level1Data = "topkek";
-                gsManager.LoadScene(13);
+				//<-- this one
+                gsManager.LoadScene(13); 
             }
         );
 	}

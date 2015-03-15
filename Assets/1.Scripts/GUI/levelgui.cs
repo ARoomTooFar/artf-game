@@ -159,8 +159,6 @@ public class levelgui : MonoBehaviour {
 	//-------------------------------
 	public void readyCheck(string ascene)
 	{	
-
-
 		//checks every player living player to see if they are in the victory zone, this victory property in the player class
 		//toggled by entering and exiting a zone in the exit portion of the the dungeon.
 		bool ready = gamestate.Instance.getReady();

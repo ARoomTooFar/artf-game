@@ -29,6 +29,7 @@ public class LevelSelectionZone : MonoBehaviour {
 
 		//if the zoneGoesTo the level select then the players must be back at the start so it will set that
 		//value in each players class equal to true.
+
 		if (zoneGoesTo == "LevelSelect") {
 						
 						switch (t) {
