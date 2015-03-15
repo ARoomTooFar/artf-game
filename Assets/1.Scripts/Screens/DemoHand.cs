@@ -6,6 +6,7 @@ public class DemoHand : MonoBehaviour {
 	private GSManager gsManager;
 	private Button btnInsertCoin;
 	private GameObject loadingBG;
+	private GameObject mainCamera;
 	
 	void Start ()
 	{
@@ -15,17 +16,15 @@ public class DemoHand : MonoBehaviour {
 		// hide LoadingBG. can't hide in inspector because Find() can't find hidden objects.
 		loadingBG = GameObject.Find("LoadingBG");
 		loadingBG.SetActive(false);
+
+		// 
+		mainCamera = GameObject.Find("CameraDemo");
 		
 		// add functions to be called when buttons are clicked
 		btnInsertCoin.onClick.AddListener(() =>
 			{
-				ZoomToLevelSelect ();
+				mainCamera.GetComponent<CameraDemo>().StartMove();
 			}
 		);
-	}
-
-	void ZoomToLevelSelect ()
-	{
-		Debug.Log ("hyeeeaaachaaaa");
 	}
 }
