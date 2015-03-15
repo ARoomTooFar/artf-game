@@ -77,6 +77,8 @@ public class CameraDemo : MonoBehaviour {
 		btnLevel7.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				Debug.Log ("BtnLevel7 clicked");
+				Debug.Log ("Move to new scene!");
+				gsManager.LoadScene(13);
 			}
 		);
 
