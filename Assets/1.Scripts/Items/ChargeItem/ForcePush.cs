@@ -20,7 +20,7 @@ public class ForcePush : ChargeItem {
 	protected override void Start () {
 		base.Start ();
 		//collider = GetComponent<Collider>();
-		collider.enabled = false;
+		GetComponent<Collider>().enabled = false;
 	}
 	
 	protected override void setInitValues() {
@@ -51,17 +51,17 @@ public class ForcePush : ChargeItem {
 
 	protected override void animDone() {
 		user.freeAnim = true;
-		collider.enabled = false;
+		GetComponent<Collider>().enabled = false;
 		hit = false;
-	    rigidbody.isKinematic = true;
+	    GetComponent<Rigidbody>().isKinematic = true;
 		foes.Clear();
 		base.animDone ();
 	}
 	
 	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
 	private IEnumerator chargeFunc(float chgTime) {
-		rigidbody.isKinematic = false;
-		collider.enabled = true;
+		GetComponent<Rigidbody>().isKinematic = false;
+		GetComponent<Collider>().enabled = true;
 		yield return StartCoroutine(chgTimeFunc(chgTime));
 		//float tempStun = stunDuration * (hitWall ? 2 : 1);
 		
@@ -76,10 +76,10 @@ public class ForcePush : ChargeItem {
 	// Timer and velocity changing thing
 	private IEnumerator chgTimeFunc(float chgTime) {
 		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
-			rigidbody.velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
+			GetComponent<Rigidbody>().velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 			transform.localScale += new Vector3(0.20f,0,0.20f);
 			foreach(Character foe in foes) {
-				foe.rigidbody.velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
+				foe.GetComponent<Rigidbody>().velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 			}
 			//((IForcible<float>)foe.GetComponent(typeof(IForcible<float>))).push(0.1f);
 			yield return 0;
@@ -88,13 +88,13 @@ public class ForcePush : ChargeItem {
 	private IEnumerator retTimeFunc(float chgTime) {
 		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
             transform.localScale -= new Vector3(0.20f,0,0.20f);
-			rigidbody.velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
+			GetComponent<Rigidbody>().velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 			/*if (!hit) {
 				rigidbody.velocity = Vector3.zero;
 				yield break;
 			}*/
 			foreach(Character foe in foes) {
-				foe.rigidbody.velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
+				foe.GetComponent<Rigidbody>().velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 				//((IForcible<float>)foe.GetComponent(typeof(IForcible<float>))).push(0.1f);
 			}
 			yield return 0;
@@ -103,7 +103,7 @@ public class ForcePush : ChargeItem {
 	
 	private IEnumerator chgLagTime() {
 		for (float timer = 0; timer < chgLag; timer += Time.deltaTime) {
-			rigidbody.velocity = Vector3.zero;
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
 			yield return 0;
 		}
 	}
@@ -113,7 +113,7 @@ public class ForcePush : ChargeItem {
 			if (other.tag == "Wall" || rShield && rShield.user.facing.normalized + user.facing.normalized == Vector3.zero) {
 				hit = true;
 			}
-			IForcible<float> component = (IForcible<float>) other.GetComponent( typeof(IForcible<float>) );
+		IForcible<Vector3, float> component = (IForcible<Vector3,float>) other.GetComponent( typeof(IForcible<Vector3,float>) );
 			Character foe = other.GetComponent<Character>();
 			if( component != null && foe != null) {
 				foes.Add (foe);

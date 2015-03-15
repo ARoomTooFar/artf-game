@@ -3,34 +3,41 @@ using System.Collections;
 
 public class Wall : MonoBehaviour {
 
-	public NavMeshObstacle obs;
 	public bool show;
 	public float disappear;
-	void Start(){
+	public GameObject stand;
+	protected virtual void Start(){
 		show = true;
 		disappear = 3f;
 	}
-	void Awake () {
-		obs = GetComponent<NavMeshObstacle> ();
-		obs.carving = true;
+	protected virtual void Awake () {
 	}
-	public void toggleShow(){
-		show = false;
-		renderer.enabled = false;
-		collider.enabled = false;
-		StopCoroutine("Wait");
-		StartCoroutine("Wait",disappear);
+
+	public virtual void toggleShow(){
+		if(show){
+			show = false;
+			stand.GetComponent<Renderer>().enabled = true;
+			GetComponent<Renderer>().enabled = false;
+			GetComponent<Collider>().enabled = false;
+			StopCoroutine("revWait");
+			StartCoroutine("revWait",disappear);
+		}
 	}
-	void Update(){
+	protected virtual void Update(){
 	
 	}
-	private IEnumerator Wait(float duration){
+	private IEnumerator revWait(float duration){
 		for (float timer = 0; timer < duration; timer += Time.deltaTime){
 			//testable = true;
+			if(timer > duration -1f){
+				show = true;
+				GetComponent<Collider>().enabled = true;
+			}
 			yield return 0;
 		}
 		show = true;
-		collider.enabled = true;
-		renderer.enabled = true;
+		stand.GetComponent<Renderer>().enabled = false;
+		//GetComponent<Collider>().enabled = true;
+		GetComponent<Renderer>().enabled = true;
 	}
 }

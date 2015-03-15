@@ -9,9 +9,36 @@ public class Sprint : ToggleItem {
 	public float sprintAmplification;
 	private int baseSpeed;
 
+	private Sprinting buff;
+
+	private class Sprinting : Singular {
+		
+		private float spdPercent;
+		
+		public Sprinting(float speedValue) {
+			name = "Sprinting";
+			spdPercent = speedValue;
+		}
+		
+		protected override void bdEffects(BDData newData) {
+			base.bdEffects(newData);
+			newData.unit.stats.spdManip.setSpeedAmplification(spdPercent);
+		}
+		
+		protected override void removeEffects (BDData oldData, GameObject source) {
+			base.removeEffects (oldData, source);
+			oldData.unit.stats.spdManip.removeSpeedAmplification(spdPercent);
+		}
+		
+		public override void purgeBD(Character unit, GameObject source) {
+			base.purgeBD (unit, source);
+		}
+	}
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
+		buff = new Sprinting(sprintAmplification);
 	}
 
 	protected override void setInitValues() {
@@ -36,7 +63,8 @@ public class Sprint : ToggleItem {
 	protected override IEnumerator bgnEffect() {
 		baseSpeed = user.stats.speed;
 
-		user.speed(sprintAmplification);
+		user.BDS.addBuffDebuff(buff, user.gameObject);
+		// user.speed(sprintAmplification);
 
 		return base.bgnEffect();
 	}
@@ -46,7 +74,8 @@ public class Sprint : ToggleItem {
 	}
 
 	protected override void atvDeactivation() {
-		user.removeSpeed(sprintAmplification);
+		user.BDS.rmvBuffDebuff(buff, user.gameObject);
+		// user.removeSpeed(sprintAmplification);
 
 		base.atvDeactivation();
 	}

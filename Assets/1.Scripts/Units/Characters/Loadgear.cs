@@ -14,10 +14,12 @@ public class Loadgear : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		for (int i = 0; i < players.Count; i++) {
-			loadFromText("P" + (i + 1).ToString());
-			players[i].equipTest(equipment.ToArray(), abilities.ToArray());
-			equipment.Clear();
-			abilities.Clear();
+			if(players[i] != null){
+				loadFromText("P" + (i + 1).ToString());
+				players[i].equipTest(equipment.ToArray(), abilities.ToArray());
+				equipment.Clear();
+				abilities.Clear();
+			}
 		}
 	}
 

@@ -12,7 +12,7 @@ public class TransformHandler_ObjectUIMovement : MonoBehaviour
 	void Start(){
 		//must set these fields programmatically, because when instantiating a prefab,
 		//these fields do not work if things are drag-and-dropped
-		cam = GameObject.Find("UICamera").camera;
+		cam = GameObject.Find("UICamera").GetComponent<Camera>();
 		objectUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
 		objectUICanvas.worldCamera = cam; //required in order for buttons on canvas to react to clicks
 	}

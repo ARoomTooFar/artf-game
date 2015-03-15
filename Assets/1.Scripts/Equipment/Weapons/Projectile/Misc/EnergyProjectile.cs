@@ -8,7 +8,7 @@ using System;
 public class EnergyProjectile : MonoBehaviour {
 	public int damage;
 	public float speed;
-	private Character user;
+	protected Character user;
 	public Transform target;
 	
 	protected Type opposition;
@@ -19,9 +19,9 @@ public class EnergyProjectile : MonoBehaviour {
 		
 	}
 
-	public virtual void setInitValues(Character player, Type ene, int dmg) {
-		user = player;
-		opposition = ene;
+	public virtual void setInitValues(Character user, Type opposition, int dmg, bool effect, BuffsDebuffs hinder) {
+		this.user = user;
+		this.opposition = opposition;
 
 		transform.Rotate(Vector3.up * 180);
 
@@ -30,21 +30,21 @@ public class EnergyProjectile : MonoBehaviour {
 		lifeTime = dmg/100.0f;
 		curLifeTime = 0.0f;
 	}
-	
+
 	// Update is called once per frame
 	protected virtual void Update() {
 		transform.position = Vector3.MoveTowards (transform.position, target.position, speed);
 
-		if (curLifeTime >= lifeTime) {
-			Destroy(gameObject);
+		if (this.curLifeTime >= this.lifeTime) {
+			Destroy(this.gameObject);
 		}
 
-		curLifeTime += Time.deltaTime;
+		this.curLifeTime += Time.deltaTime;
 	}
 	
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Wall") {
-			Destroy(gameObject);
+			Destroy(this.gameObject);
 		}
 		
 		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );

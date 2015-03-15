@@ -8,7 +8,11 @@ using System.Collections;
 public class ChargeItem : Item {
 
 	public float curChgTime;
-	protected float maxChgTime;
+	protected float _maxChgTime;
+	public float maxChgTime {
+		get {return _maxChgTime;}
+		protected set {_maxChgTime = value;}
+	}
 
 	// Use this for initialization
 	protected override void Start () {
@@ -35,8 +39,10 @@ public class ChargeItem : Item {
 	// Called when character with an this item selected uses their item key
 	public override void useItem() {
 		base.useItem();
-		cdBar.onState = 2;
-		cdBar.max = 3;
+		if (cdBar != null) {
+			cdBar.onState = 2;
+			cdBar.max = 3;
+		}
 		StartCoroutine(bgnCharge());
 	}
 
@@ -45,10 +51,10 @@ public class ChargeItem : Item {
 		curChgTime = 0.0f;
 		while (user.inventory.keepItemActive) {
 			curChgTime = Mathf.Clamp(curChgTime + Time.deltaTime, 0.0f, maxChgTime);
-			cdBar.current = curChgTime + Time.deltaTime;
+			if (cdBar != null) cdBar.current = curChgTime + Time.deltaTime;
 			yield return null;
 		}
-		//cdBar.current = curChgTime;
+		if (cdBar != null) cdBar.current = curChgTime;
 		deactivateItem();
 	}
 	
@@ -61,8 +67,10 @@ public class ChargeItem : Item {
 
 	protected override void animDone() {
 		curCoolDown = cooldown + (curChgTime * 3);
-		cdBar.onState = 1;
-		cdBar.max = curCoolDown;
+		if (cdBar != null) {
+			cdBar.onState = 1;
+			cdBar.max = curCoolDown;
+		}
 		curChgTime = -1.0f;
 
 		base.animDone ();

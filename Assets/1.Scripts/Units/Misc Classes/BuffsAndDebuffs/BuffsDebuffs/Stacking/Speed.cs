@@ -8,15 +8,21 @@ public class Speed : Stacking {
 	private float spdPercent;
 
 	public Speed(float speedValue) {
+		name = "Speed";
 		spdPercent = speedValue;
 	}
-	
-	public override void applyBD(Character unit) {
-		base.applyBD(unit);
-	
+
+	protected override void bdEffects(BDData newData) {
+		base.bdEffects(newData);
+		newData.unit.stats.spdManip.setSpeedAmplification(spdPercent);
 	}
 	
-	public override void removeBD() {
-		base.removeBD();
+	protected override void removeEffects (BDData oldData, GameObject source) {
+		base.removeEffects (oldData, source);
+		oldData.unit.stats.spdManip.removeSpeedAmplification(spdPercent);
+	}
+
+	public override void purgeBD(Character unit, GameObject source) {
+		base.purgeBD (unit, source);
 	}
 }

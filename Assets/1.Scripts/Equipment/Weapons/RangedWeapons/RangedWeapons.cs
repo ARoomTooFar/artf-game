@@ -7,7 +7,6 @@ using System.Collections;
 public class RangedWeapons : Weapons {
 
 	public GameObject projectile;
-
 	//for inaccuracy
 	protected Quaternion spray;
 	protected float variance;
@@ -27,7 +26,6 @@ public class RangedWeapons : Weapons {
 	protected override void setInitValues() {
 		base.setInitValues();
 		reload = false;
-		
 	}
 
 	public override void collideOn() {
@@ -53,14 +51,14 @@ public class RangedWeapons : Weapons {
 	}
 
 	protected override void basicAttack() {
-		print("Normal Attack; Power level:" + stats.chgDamage);
+		// print("Normal Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
 		StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
 		StartCoroutine(atkFinish());
 	}
 
 	protected override void chargedAttack() {
-		print("Charged Attack; Power level:" + stats.chgDamage);
+		// print("Charged Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", true);
 		StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
 		StartCoroutine(atkFinish());
@@ -69,6 +67,7 @@ public class RangedWeapons : Weapons {
 	protected virtual IEnumerator Shoot(int count) {
 		yield return 0;
 	}
+
 	public virtual void loadData(AmmoBar ammoB){
 		ammoBar = ammoB;
 		ammoBar.onState = 1;
@@ -87,17 +86,24 @@ public class RangedWeapons : Weapons {
 			ammoBar.current = timer;
 			yield return 0;
 		}
-	}
-	protected virtual IEnumerator loadAmmo(){
-		if(ammoBar != null){
-			yield return StartCoroutine(loadWait(loadSpeed));
-			if(reload){
+		if(reload){
 				currAmmo = maxAmmo;
 				ammoBar.onState = 1;
 				ammoBar.max = maxAmmo;
 				ammoBar.current = currAmmo;
 				reload = false;
-			}
+		}
+	}
+	protected virtual IEnumerator loadAmmo(){
+		if(ammoBar != null){
+			yield return StartCoroutine(loadWait(loadSpeed));
+			/*if(reload){
+				currAmmo = maxAmmo;
+				ammoBar.onState = 1;
+				ammoBar.max = maxAmmo;
+				ammoBar.current = currAmmo;
+				reload = false;
+			}*/
 		}
         else{
 			yield return StartCoroutine(Wait(loadSpeed));
@@ -117,9 +123,9 @@ public class RangedWeapons : Weapons {
 		}
 		user.animator.speed = 1.0f;
 	}
-
+	
 	protected void fireProjectile() {
 		Projectile newBullet = ((GameObject)Instantiate(projectile, user.transform.position, spray)).GetComponent<Projectile>();
-		newBullet.setInitValues(user, opposition, particles.startSpeed);
+		newBullet.setInitValues(user, opposition, particles.startSpeed, user.luckCheck(), stats.debuff);
 	}
 }

@@ -4,13 +4,15 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+//using System.Random;
 
 [System.Serializable]
 public class Stats{
 	//Base Stats
-	public int health, armor,maxHealth;
+	public int health, armor,maxHealth,rezCount;
 	public int strength, coordination, speed, luck;
 	public bool isDead;
+
 	/*
 	*Health: Health is the amount of damage a player can take before dying.
 	*Armor: Effects the amount of health that is lost when a player is hit with an attack, the higher the armor the less health is lost.
@@ -29,7 +31,9 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, ISlowable<float>, IStunable<float>, IForcible<float> {
+public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, IStunable, IForcible<Vector3, float> {
+
+	public bool testControl;
 
 	public float gravity = 50.0f;
 	public bool isDead = false;
@@ -40,7 +44,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
 
-	public bool freeAnim, attacking;
+	public bool freeAnim, attacking, stunned, knockedback;
 	public AudioClip hurt, victory, failure;
 
 	public bool testing; // Whether it takes gear in automatically or lets the gear loader to it
@@ -48,8 +52,18 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public bool invincible = false;
 
 	protected Type opposition;
+	
+	// Animation variables
+	public Animator animator;
+	public AnimatorStateInfo animSteInfo;
+	
+	// Swap these over to weapons in the future
+	public string weapTypeName;
+	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
 
-	protected delegate void BuffDelegate(float strength);
+	// protected delegate void BuffDelegate(float strength);
+
+	public BuffDebuffSystem BDS;
 
 	// Serialized classes
 	public Stats stats;
@@ -119,11 +133,12 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		
 		public List<Item> items = new List<Item>();
 		
-		public void equipItems(Character player, GameObject[] abilities) {
+		public void equipItems(Character player, Type ene, GameObject[] abilities) {
 			foreach (GameObject item in abilities) {
 				Item newItem = (Instantiate(item) as GameObject).GetComponent<Item>();
 				newItem.transform.SetParent(itemLocation, false);
 				newItem.user = player;
+				newItem.opposition = ene;
 				items.Add(newItem);
 			}
 				
@@ -132,7 +147,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		}
 		
 		// Equip method for testing purposes
-		public void equipItems(Character player) {
+		public void equipItems(Character player, Type ene) {
 			items.Clear ();
 			items.AddRange(itemLocation.GetComponentsInChildren<Item>());
 
@@ -142,6 +157,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 			foreach (Item item in items) {
 				item.user = player;
+				item.opposition = ene;
 			}
 			
 			selected = 0;
@@ -157,29 +173,24 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		}
 	}
 
-	// Animation variables
-	public Animator animator;
-	public AnimatorStateInfo animSteInfo;
-	
-	// Swap these over to weapons in the future
-	public string weapTypeName;
-	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
-
 	protected virtual void Awake() {
 		opposition = Type.GetType ("Player");
+		BDS = new BuffDebuffSystem(this);
 		stats = new Stats(this.GetComponent<MonoBehaviour>());
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
 		isDead = false;
 		freeAnim = true;
+		stunned = knockedback = false;
 		setInitValues();
+		this.testControl = true;
 	}
 
 	// Use this for initialization
 	protected virtual void Start () {
 		if (testing) {
 			gear.equipGear(this, opposition);
-			inventory.equipItems(this);
+			inventory.equipItems(this, opposition);
 			setAnimHash();
 		}
 	}
@@ -189,8 +200,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	}
 
 	public virtual void equipTest(GameObject[] equip, GameObject[] abilities) {
-		gear.equipGear(this, opposition,equip);
-		inventory.equipItems(this, abilities);
+		gear.equipGear(this, opposition, equip);
+		inventory.equipItems(this, opposition, abilities);
 		setAnimHash();
 	}
 
@@ -210,6 +221,16 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	protected virtual void FixedUpdate() {
 
 	}
+	public virtual bool luckCheck(){
+		int luckCap = 10;
+		float r = UnityEngine.Random.Range(0,luckCap);
+		//Debug.Log(r);
+		if(r < stats.luck){
+			//Debug.Log("Y");
+			return true;
+		}
+		return false;
+	}
 	
 	// Update is called once per frame
 	protected virtual void Update () {
@@ -218,6 +239,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
 			animSteHash = animSteInfo.nameHash;
+			freeAnim = !stunned && !knockedback;
+
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 
@@ -246,6 +269,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	// Constant animation updates (Main loop for characters movement/actions)
 	public virtual void animationUpdate() {
 		if (attacking) {
+			if(luckCheck()){
+			}
 			attackAnimation();
 		} else {
 			movementAnimation();
@@ -255,22 +280,11 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	// Animation helper functions
 	protected virtual void attackAnimation() {
-		// Should this also be in the weapons?
-	
-		/*
-		if (gear.weapon.stats.curChgAtkTime > 0) {
-			// Change once we get animations
-			if(animSteInfo.normalizedTime < gear.weapon.stats.colStart) animator.speed = gear.weapon.stats.atkSpeed;
-			else animator.speed = 0;
-			if (rigidbody.velocity != Vector3.zero) transform.localRotation = Quaternion.LookRotation(facing);
-		} else if (gear.weapon.stats.curChgAtkTime == -1) {
-			animator.speed = gear.weapon.stats.atkSpeed;
-		}*/
 	}
 
 	protected virtual void movementAnimation() {
 		// animator.speed = 1; // Change animation speed back for other animations
-		if (rigidbody.velocity != Vector3.zero) {
+		if (GetComponent<Rigidbody>().velocity != Vector3.zero && facing != Vector3.zero) {
 			animator.SetBool("Moving", true);
 			transform.localRotation = Quaternion.LookRotation(facing);
 		} else {
@@ -287,7 +301,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		// fake gravity
 		// Animation make it so rigidbody gravity works oddly due to some gravity weight
 		// Seems like Unity Pro is needed to change that, so unless we get it, this will suffice 
-		rigidbody.velocity = new Vector3 (0.0f, -gravity, 0.0f);
+		GetComponent<Rigidbody>().velocity = new Vector3 (0.0f, -gravity, 0.0f);
 	}
 
 	//----------------------------------//
@@ -328,10 +342,11 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	public virtual void damage(int dmgTaken, Character striker) {
 		if (!invincible) {
-			Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
+			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 		
 			stats.health -= dmgTaken;
-			
+			//print ("Fuck: " + dmgTaken + " Damage taken");
+
 			if (stats.health <= 0) {
 				die();
 			}
@@ -352,82 +367,74 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	//     ie: Removing actions, player from camera etc
 	public virtual void die() {
 		stats.isDead = true;
+		actable = false;
+		freeAnim = false;
+	}
+	
+	public virtual void rez(){
+		//Debug.Log("Dooby");
+		if(stats.isDead){
+			stats.isDead = false;
+			stats.health = stats.maxHealth/(2+2*stats.rezCount);
+			stats.rezCount++;
+		}else{
+			heal(stats.maxHealth/(2+2*stats.rezCount));
+		}
+	}
+	public virtual void heal(int healTaken){
+		if(stats.health < stats.maxHealth){
+			stats.health+=healTaken;
+			if(stats.health > stats.maxHealth){
+				stats.health = stats.maxHealth;
+			}
+		}
 	}
 	
 	//-------------------------------//
-	
-	//-------------------------------//
-	// Slow Interface Implementation //
-	//-------------------------------//
-	//----------------------------------//
-	public virtual void slow(float slowStrength) {
-		stats.spdManip.setSpeedReduction(slowStrength);
-	}
-
-	public virtual void removeSlow(float slowStrength) {
-		stats.spdManip.removeSpeedReduction(slowStrength);
-	}
-
-	public virtual void slowForDuration(float slowStrength, float slowDuration) {
-		slow(slowStrength);
-		StartCoroutine(buffTiming(slowStrength, slowDuration, removeSlow));
-	}
-
-	public virtual void speed(float speedStrength) {
-		stats.spdManip.setSpeedAmplification(speedStrength);
-	}
-	
-	public virtual void removeSpeed(float speedStrength) {
-		stats.spdManip.removeSpeedAmplification(speedStrength);
-	}
-	
-	public virtual void speedForDuration(float speedStrength, float speedDuration) {
-		speed(speedStrength);
-		StartCoroutine(buffTiming(speedStrength, speedDuration, removeSpeed));
-	}
-
-	//-------------------------------//
-
 
 	//-------------------------------//
 	// Stun Interface Implementation //
 	//-------------------------------//
 	
-	public virtual void stun(float stunDuration) {
-		print ("Stunned for " + stunDuration + " seconds");
+	public virtual bool stun() {
+		animator.SetBool("Charging", false);
+		this.stunned = true;
+		this.GetComponent<Rigidbody>().velocity = new Vector3 (0.0f, 0.0f, 0.0f);
+		return true;
 	}
-	
+
+	public virtual void removeStun() {
+		this.stunned = false;
+	}
+
 	//-------------------------------//
 
 
 	//--------------------------------//
 	// Force Interface Implementation //
 	//--------------------------------//
-	
+
+	public virtual bool knockback(Vector3 direction, float speed) {
+		animator.SetBool("Charging", false);
+		this.knockedback = true;
+		this.GetComponent<Rigidbody>().velocity = direction.normalized * speed;
+		return true;
+	}
+
+	public virtual void stabled() {
+		this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+		this.knockedback = false;
+	}
+
 	// The duration are essentiall y stun, expand on these later
 	public virtual void pull(float pullDuration) {
-		stun(pullDuration);
+		stun();
 	}
 	
 	public virtual void push(float pushDuration) {
-		stun(pushDuration);
+		stun();
 	}
 	
 	//--------------------------------//
 
-
-	//-----------------------------//
-	// Timing Event Implementation //
-	//-----------------------------//
-
-	// Used for buffs that are duration based
-	// Uses delegates to call function when over
-	// Will make virtual when neccessary
-	protected virtual IEnumerator buffTiming(float strValue, float duration, BuffDelegate bd) {
-		while (duration > 0) {
-			duration -= Time.deltaTime;
-			yield return null;
-		}
-		bd(strValue);
-	}
 }

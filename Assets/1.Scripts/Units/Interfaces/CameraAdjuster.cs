@@ -39,12 +39,15 @@ public class CameraAdjuster : MonoBehaviour {
         if (Physics.Raycast(ray, out hit,distance*3/4))
 			Debug.DrawLine(transform.position,hit.point,Color.red);*/
           //  print("Hit something");
-	    if( Physics.Raycast(target.transform.position, dir, out hit, 1000, layerMask)){
-			if(hit.collider.tag == "Wall"){
+	    if( Physics.Raycast(target.transform.position-new Vector3(0,-1f,0), dir, out hit, 1000, layerMask)){
+			if(hit.collider.tag == "Wall" || hit.collider.tag == "Door" || hit.collider.tag == "Prop"){
 				hit.collider.gameObject.GetComponent<Wall>().toggleShow();
-				Debug.Log(hit.collider.name+", "+hit.collider.tag);
+				if(hit.collider.tag == "Door"){
+					hit.collider.gameObject.GetComponent<Door>().toggleShow();
+				}
+				//Debug.Log(hit.collider.name+", "+hit.collider.tag);
 			}
-			Debug.DrawLine(transform.position,target.transform.position,Color.red);
+			Debug.DrawLine(target.transform.position-new Vector3(0,-1f,0),transform.position,Color.red);
 		} else {
 			//Debug.Log(hit.collider.name+", "+hit.collider.tag);
 			//Debug.DrawLine(transform.position,target.transform.position,Color.blue);
@@ -64,8 +67,13 @@ public class CameraAdjuster : MonoBehaviour {
 	void Update () {
 		//Check if they are far enough to need to stretch the distancing
 		if((p1 != null) || (p2 != null) || (p3 != null) || (p4 != null)){
-		scrollCheck();
+		//scrollCheck();
 		avgMake();
+		}
+		if((p1 != null && p2 !=null) || (p1 != null && p3 !=null) || (p1 != null && p4 !=null) ||
+     	   (p3 != null && p2 !=null) || (p4 != null && p2 !=null) || (p4 != null && p3 !=null)){
+		scrollCheck();
+		//avgMake();
 		}
 		//Same adjustment values for X and Z as start
 		baseX = baseY/2 + adjVal;

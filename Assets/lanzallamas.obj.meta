@@ -1,0 +1,122 @@
+fileFormatVersion: 2
+guid: 2196be93d2684f14889a61d0683510fa
+timeCreated: 1425767448
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: cube10_copy11_default2
+    100002: cube10_default2
+    100004: cube12_default2
+    100006: cube14_default2
+    100008: cube16_default2
+    100010: cube4_default2
+    100012: cylinder13_copy15_default2
+    100014: cylinder13_default2
+    100016: cylinder14_default2
+    100018: cylinder2_extract11_default2
+    100020: cylinder2_extract3_default2
+    100022: //RootNode
+    400000: cube10_copy11_default2
+    400002: cube10_default2
+    400004: cube12_default2
+    400006: cube14_default2
+    400008: cube16_default2
+    400010: cube4_default2
+    400012: cylinder13_copy15_default2
+    400014: cylinder13_default2
+    400016: cylinder14_default2
+    400018: cylinder2_extract11_default2
+    400020: cylinder2_extract3_default2
+    400022: //RootNode
+    2300000: cube10_copy11_default2
+    2300002: cube10_default2
+    2300004: cube12_default2
+    2300006: cube14_default2
+    2300008: cube16_default2
+    2300010: cube4_default2
+    2300012: cylinder13_copy15_default2
+    2300014: cylinder13_default2
+    2300016: cylinder14_default2
+    2300018: cylinder2_extract11_default2
+    2300020: cylinder2_extract3_default2
+    3300000: cube10_copy11_default2
+    3300002: cube10_default2
+    3300004: cube12_default2
+    3300006: cube14_default2
+    3300008: cube16_default2
+    3300010: cube4_default2
+    3300012: cylinder13_copy15_default2
+    3300014: cylinder13_default2
+    3300016: cylinder14_default2
+    3300018: cylinder2_extract11_default2
+    3300020: cylinder2_extract3_default2
+    4300000: cube10_copy11_default2
+    4300002: cube10_default2
+    4300004: cube12_default2
+    4300006: cube14_default2
+    4300008: cube16_default2
+    4300010: cube4_default2
+    4300012: cylinder13_copy15_default2
+    4300014: cylinder13_default2
+    4300016: cylinder14_default2
+    4300018: cylinder2_extract11_default2
+    4300020: cylinder2_extract3_default2
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,191 @@
+﻿// Parent scripts for enemy units
+
+using UnityEngine;
+using System.Collections;
+using System;
+
+public class NewEnemy : Character {
+
+	//Aggro Variables
+	public float dmgTimer = 0f;
+	public bool aggro = false;
+	
+	//Is this unit part of the hive mind?
+	public bool swarmBool = false;
+
+	
+	// Moved from my AI enemy - Francis
+	public AggroRange aRange;
+	
+	protected StateMachine sM;
+	
+	protected float fov = 150f;
+	protected float lineofsight = 15f;
+	protected float maxAtkRadius, minAtkRadius;
+	
+	// Variables for use in player detection
+	protected bool alerted = false;
+	protected GameObject target;
+	protected Vector3? lastSeenPosition = null;
+	protected AggroTable aggroT;
+	protected Rigidbody rigidbody;
+	
+	protected float aggroTimer = 7.0f;
+	
+	protected GameObject swarm;
+	
+	
+	protected override void Awake() {
+		base.Awake();
+		opposition = Type.GetType ("Player");
+		this.rigidbody = this.GetComponent<Rigidbody>();
+		
+		facing = Vector3.back;
+		
+		//Uses swarm aggro table if this unit swarms
+		if(swarmBool){
+		aggroT = swarm.aggroTable;
+		}
+		else{
+		aggroT = new AggroTable();
+		}
+
+		aRange.opposition = this.opposition;
+		
+		//State machine initialization
+		sM = new StateMachine ();
+		initStates ();
+		sM.Start ();
+		
+		swarm = GameObject.FindWithTag("Swarm");
+	}
+	
+	// Use this for initialization
+	protected override void Start () {
+		base.Start();
+	}
+
+	// Update is called once per frame
+	protected override void Update () {
+		if(!isDead) {
+			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
+
+			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+			animSteHash = animSteInfo.nameHash;
+			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
+			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
+			
+			
+			//If aggro'd, will chase, and if not attacked for 5 seconds, will deaggro
+			if (aggro == true) 
+			{
+				fAggro ();
+			}
+
+
+			if (isGrounded) {
+				movementAnimation();
+			} else {
+				falling();
+			}
+
+			if (target != null) target = aggroT.getTarget ();
+			
+			sM.Update ();
+		}
+	}
+
+	protected override void setInitValues() {
+		base.setInitValues();
+		//Testing with base 0-10 on stats with 10 being 100/cap%
+		stats.maxHealth = 40;
+		stats.health = stats.maxHealth;
+		stats.armor = 0;
+		stats.strength = 10;
+		stats.coordination=0;
+		stats.speed=4;
+		stats.luck=0;
+		setAnimHash ();
+	}
+	
+	protected virtual void initStates() {
+	}
+
+	//-----------------------//
+	// Calculation Functions //
+	//-----------------------//
+	
+	protected float distanceToPlayer(GameObject p) {
+		if (p == null) return 0.0f;
+		Vector3 distance = p.transform.position - this.transform.position;
+		return distance.sqrMagnitude;
+	}
+
+	protected virtual bool canSeePlayer(GameObject p) {
+		// Check angle of forward direction vector against the vector of enemy position relative to player position
+		Vector3 direction = p.transform.position - transform.position;
+		float angle = Vector3.Angle(direction, this.facing);
+		
+		if (angle < fov) {
+			RaycastHit hit;
+			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, lineofsight)) {
+				
+				if (hit.collider.gameObject == p) {
+					aggroT.add(p,1);
+					lastSeenPosition = p.transform.position;
+					alerted = true;
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	//----------------------//
+
+
+	//-------------------------------//
+	// Character Inherited Functions //
+	//-------------------------------//
+
+	public override void damage(int dmgTaken, Character striker) {
+		base.damage(dmgTaken, striker);
+		print ("Fuck: " + dmgTaken + " Damage taken");
+		aggroT.add((GameObject) striker, dmgTaken);
+	}
+	
+	public override void damage(int dmgTaken) {
+		//aggro is on and timer reset if attacked
+		if (aggro == false) {
+			aggro = true;
+			dmgTimer = 0f;
+		}
+		
+		base.damage(dmgTaken);
+	}
+
+	//-------------------------------//
+
+	//-----------------//
+	// Aggro Functions //
+	//-----------------//
+
+	public virtual void fAggro(){
+		if (dmgTimer < 5f)
+		{
+			dmgTimer += Time.deltaTime;
+		}
+		else if (dmgTimer >= 5f)
+		{
+			resetAggro ();
+		}
+	}
+	
+	public virtual void resetAggro(){
+		dmgTimer = 0f;
+		aggro = false;
+	}
+	
+	//---------------//
+}

@@ -15,6 +15,8 @@ public class WeaponStats {
 
 	public int weapType;
 	public string weapTypeName;
+	public BuffsDebuffs debuff;
+	public float buffDuration;
 
 	//This will be used to implement abilities in the spread sheet since different weapons have different effects when charged up. 
 	//For now~ Using 1 as shoot a powerful singular shot, using 2 for a line of three shots (For gun, but base case 1 is same animation more powerful damage)
@@ -150,14 +152,14 @@ public class Weapons : Equipment {
 
 	// Basic attack, a normal swing/stab/fire
 	protected virtual void basicAttack() {
-		print("Normal Attack; Power level:" + stats.chgDamage);
+		// print("Normal Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
 		StartCoroutine(atkFinish());
 	}
 
 	// Charged attack, something unique to the weapon type
 	protected virtual void chargedAttack() {
-		print("Charged Attack; Power level:" + stats.chgDamage);
+		// print("Charged Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", true);
 		StartCoroutine(atkFinish());
 	}

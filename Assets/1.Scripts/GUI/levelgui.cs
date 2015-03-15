@@ -19,29 +19,6 @@ public class levelgui : MonoBehaviour {
 	GameObject loadGear;
 	GameObject cameras;
 
-	//----------------------------------
-	//levelgui()
-	//----------------------------------
-	//Creates an instance of the gamestate as a gameobject if an instance does not exist
-	//----------------------------------
-	//public static levelgui Instance
-	//{
-	//	get
-	//	{
-	//		if(instance == null)
-	//		{
-	//			instance = new GameObject("levelgui").AddComponent<levelgui>();
-	//		}
-	//		return instance;
-	//	}	
-	//}
-	
-	//Sets the instance to null when the application quits
-	//public void OnApplicationQuit()
-	//{
-	//	instance = null;
-	//}
-
 	// Initialize scene
 	void Start () 
 	{
@@ -52,9 +29,10 @@ public class levelgui : MonoBehaviour {
 		//resets the spawn of the player in the new scene
 		for(int i = 0; i < gamestate.Instance.getNumPlayers(); i++)
 		{	
-			//gamestate.Instance.players[0] = GameObject.FindGameObjectWithTag("Player1");
-			gamestate.Instance.players[i].transform.position  = new Vector3(0,30,0);
-
+			if(gamestate.Instance.players[i] != null)
+			{
+				gamestate.Instance.players[i].transform.position  = new Vector3(0,50,0);	
+			}
 		}
 
 	}
@@ -69,66 +47,25 @@ public class levelgui : MonoBehaviour {
 		switch (levelName)
 		{
 			case "PlayerSelect":
-				
-				//Players must log in here, choosing a name that matches the list that is synced online.
-				//Players must provide a password that also syncs with a list online.
-				//Once these are both done add the player to the active list of players in this game session.
-
-				//If they don't have a character, make one with a random name.
-				//Let the player choose from a selection of staring items.
-				//Give the player a code they can use online to claim the character.
-				//Add to the player list (File) and sync with web.
-				//Add to the active player list for this session.
-				
-
-				//Set # of players. Add a player by pressing the "attack" button on appropriate control station.
-				//Ready after longin press "Attack" button.
-				
-				//If all the players in the game pass the ready check they it will set the party as all ready
-				//moveToScene ("LevelSelect");
-			
-
 				break;
-
 			case "LevelSelect":
-				
-				//Instantiate Players in the scene from the active player list.
-				//All players must trigger the dungoeon of their choice.
-				//Save this choice as chosenLevel
-
-				//When all have chosen the same dungeon moveToScene("InventorySelection");
-
-				//creates button to move between LevelSelect and InventorySelect
-				if (GUI.Button (new Rect (30, 30, 150, 30), "Inventory Select"))
-				{
-					moveToScene ("InventorySelect");
-				}
 				break;
-
 			case "InventorySelect":
 				//Players can choose a loadout (including an empty one) and modify it.
 				//Players can also assign a bait item to their dungeons here.
 				//All players ready up to moveToScene("chosenLevel");
-
-				//creates button to move between InventorySelect and LevelSelect
+				//creates button to move between InventorySelect to the choosen level that was set in the level select area.
 				if (GUI.Button (new Rect (30, 30, 150, 30), "Game Scene"))
 				{
-					moveToScene ("FirstPlayableScene");
+					moveToScene (gamestate.Instance.getChosenLevel());
 				}
 				break;
-
 			case "GameScene":
-
 				break;
-
 			case "RewardScene":
-
 				break;
-
 			case "GameOverScene":
-				
 				break;
-
 			case "Credits":
 				break;
 		}
@@ -143,22 +80,32 @@ public class levelgui : MonoBehaviour {
 	{
 		levelName = aScene;
 		gamestate.Instance.resetPartyReady(); //resets the ready up state.
-		gamestate.Instance.setPlayerNotReady("all"); //resets all player ready statuses to false.
+		for(int i = 0; i < 4; i++)
+		{
+			gamestate.Instance.setPlayerNotReady(i); //resets all player ready statuses to false.
+		}
 		print("moving to "+ aScene);
 		gamestate.Instance.setLevel(aScene);
 		foreach (Player plr in gamestate.Instance.players) { //preserves all the players in the List of player in the game
-			plr.atStart = false;
-			plr.atEnd = false;
-			plr.isReady = false;
-			DontDestroyOnLoad(plr);
+			if(plr != null)
+			{
+				plr.atStart = false;
+				plr.atEnd = false;
+				plr.isReady = false;
+				DontDestroyOnLoad(plr);
+			}
 		}
 		//resets the spawn of the player in the new scene
 		for(int i = 0; i < gamestate.Instance.getNumPlayers(); i++)
 		{	
-			gamestate.Instance.players[i].transform.position  = new Vector3(0,50,0);	
+			if(gamestate.Instance.players[i] != null)
+			{
+				gamestate.Instance.players[i].transform.position  = new Vector3(0,50,0);	
+			}
 		}
 		loadGear = GameObject.FindGameObjectWithTag("LoadGear");
 		cameras = GameObject.FindGameObjectWithTag("GameCameras");
+
 		DontDestroyOnLoad (loadGear);
 		DontDestroyOnLoad (cameras);
 		DontDestroyOnLoad (gamestate.Instance);
@@ -174,9 +121,10 @@ public class levelgui : MonoBehaviour {
 	public void moveToSceneWC(string aScene)
 	{
 		//checks to see if all the players in the game are ready.
-		//	readyCheck ();
+		//readyCheck ();
 		//if all the players are ready move to the next scene.
-		if(gamestate.Instance.getPartyReady()){
+		if(gamestate.Instance.getPartyReady())
+		{
 			moveToScene(aScene);
 		} else {
 			print ("Did not pass ready check, make sure everyone is ready");
@@ -192,7 +140,10 @@ public class levelgui : MonoBehaviour {
 	public void moveToSceneAndQuit()
 	{
 		gamestate.Instance.resetPartyReady ();
-		gamestate.Instance.setPlayerNotReady ("all");
+		for(int i = 0; i < 4; i++)
+		{
+			gamestate.Instance.setPlayerNotReady(i); //resets all player ready statuses to false.
+		}
 		print ("Quiting... Moving to title Screen");
 		gamestate.Instance.setLevel ("TitleScreen");
 		DestroyObject (gamestate.Instance);
@@ -215,8 +166,12 @@ public class levelgui : MonoBehaviour {
 		bool ready = gamestate.Instance.getReady();
 		if (ready) 
 		{
+			if(ascene == "InventorySelect")
+			{
+				print ("Did ready check, zone goes to InventorySelect, trying to set choosen level...");
+				gamestate.Instance.getChosenLevel();
+			}
 			print ("The players are ready. Moving on.");
-
 			moveToScene(ascene);
 		}else{
 			print ("The Players are not prepared...");
@@ -266,6 +221,7 @@ public class levelgui : MonoBehaviour {
 	//gameOverCheck()
 	//-------------------------------
 	//Checks to see if all the players in the game are dead, if so then it will move on to the game over scene.
+	//Use this function whenever a player is reduced to 0 life and they die.
 	//-------------------------------
 	public void gameOverCheck()
 	{
