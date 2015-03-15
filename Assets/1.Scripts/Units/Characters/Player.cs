@@ -9,33 +9,38 @@ using System;
 [System.Serializable]
 public class Controls {
 	//First 7 are Keys, last 2 are joystick axis
-	public string up, down, left, right, attack, secItem, cycItem, hori, vert, SI, CI, AT;
+	public string up, down, left, right, attack, secItem, cycItem, hori, vert, joyAttack, joySecItem, joyCycItem;
 	//0 for Joystick off, 1 for Joystick on and no keys
-	public int joyUsed;
+	public bool joyUsed;
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : Character, IMoveable {
+public class Player : Character, IMoveable, IHealable<int>{
 	public bool inGrey;
 	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
+	public GameObject currDoor;
+	public GameObject expDeath;
+	public Renderer[] rs;
+	
 	public UIActive UI;
-	//public LifeBar hpBar, greyBar;
-	//public AmmoBar ammoBar;
-	//public List<CooldownBar> coolDowns = new List<CooldownBar>();
 	public Controls controls;
-
+	
+	// Events for death
+	public delegate void DieBroadcast(GameObject dead);
+	public static event DieBroadcast OnDeath;
+	
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType("Enemy");
 	}
-
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
 	}
-
+	
 	protected override void setInitValues() {
 		base.setInitValues();
 		//Testing with base 0-10 on stats with 10 being 100/cap%
@@ -78,6 +83,7 @@ public class Player : Character, IMoveable {
 		if(stats.health <= 0){
 			
 			isDead = true;
+			UI.hpBar.current = 0;
 		} else {
 			if(UI!=null){
 				if(UI.onState){
@@ -94,8 +100,12 @@ public class Player : Character, IMoveable {
 			
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
 			animSteHash = animSteInfo.nameHash;
+			
+			freeAnim = !stunned && !knockedback;
+			
+			
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
-			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
+			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
 			
 			if (isGrounded) {
 				actionCommands ();
@@ -107,25 +117,33 @@ public class Player : Character, IMoveable {
 			animationUpdate ();
 		}
 	}
-
+	
 	//---------------------------------//
 	// Action interface implementation //
 	//---------------------------------//
 	
 	public override void actionCommands() {
 		// Invokes an action/animation
-		if (actable) {
-			/*if(Input.GetKey("space")&&testable){
+		if(Input.GetKey("space")&&testable){
+			if(!stats.isDead){
 				damage(testDmg);
 				testable = false;
-			}*/
-            if (Input.GetKeyDown(controls.attack) || Input.GetButtonUp(controls.AT))
-            {
-				animator.SetBool("Charging", true);
-				gear.weapon.initAttack();
-            }
-            else if (Input.GetKeyDown(controls.secItem) || Input.GetButtonDown(controls.SI))
-            {
+			}/*else{
+					rez();
+					testable=false;
+				}*/
+		}
+		if (actable) {
+			if(Input.GetKeyDown(controls.attack) || (controls.joyUsed && Input.GetButtonDown(controls.joyAttack))) {
+				if(currDoor!=null){
+					currDoor.GetComponent<Door>().toggleOpen();
+					currDoor = null;
+				}else{
+					animator.SetBool("Charging", true);
+					//Debug.Log(luckCheck());
+					gear.weapon.initAttack();
+				}
+			} else if(Input.GetKeyDown (controls.secItem) || (controls.joyUsed && Input.GetButtonDown(controls.joySecItem))) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
 					inventory.items[inventory.selected].useItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
@@ -133,9 +151,7 @@ public class Player : Character, IMoveable {
 					// Play sound for trying to use item on cooldown or items
 					print("Item on Cooldown");
 				}
-            }
-            else if (Input.GetKeyDown(controls.cycItem) || Input.GetButtonUp(controls.CI))
-            {
+			} else if(Input.GetKeyDown (controls.cycItem) || (controls.joyUsed && Input.GetButtonDown(controls.joyCycItem))) {
 				inventory.cycItems();
 			}
 			// Continues with what is happening
@@ -150,7 +166,7 @@ public class Player : Character, IMoveable {
 		}
 		
 		
-		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.SI))  {
+		if (Input.GetKeyUp (controls.secItem))  {
 			if (inventory.items.Count > 0) {
 				inventory.keepItemActive = false;
 				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
@@ -168,7 +184,7 @@ public class Player : Character, IMoveable {
 	}
 	
 	//-------------------------------------------//
-
+	
 	//-----------------------------------//
 	// Movement interface implementation //
 	//-----------------------------------//
@@ -177,7 +193,7 @@ public class Player : Character, IMoveable {
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 		
-		if (actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing))) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
+		if (!stats.isDead&&actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing) && this.testControl)) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
 				newMoveDir += Vector3.forward;
@@ -195,7 +211,7 @@ public class Player : Character, IMoveable {
 				newMoveDir += Vector3.right;
 			}
 			//Joystick form
-			if(controls.joyUsed == 1){
+			if(controls.joyUsed){
 				newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
 			}
 			
@@ -205,54 +221,104 @@ public class Player : Character, IMoveable {
 				facing = newMoveDir;
 			}
 			
-			rigidbody.velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
+			GetComponent<Rigidbody>().velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
 		} else if (freeAnim){
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this
-			rigidbody.velocity = Vector3.zero;
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
 		}
 	}
 	//-------------------------------------//
-
+	
 	//---------------------------------//
 	// Damage Interface Implementation //
 	//---------------------------------//
 	
 	public override void damage(int dmgTaken, Character striker) {
-		if (!invincible) {
+		if (!invincible&&!stats.isDead) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
-		
-			print("UGH!" + dmgTaken);
+			
+			// print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
 			
 			if (stats.health <= 0) {
 				die();
 			}
+			//			UI.hpBar.current = stats.health;
 		}
 	}
 	
 	public override void damage(int dmgTaken) {
-		if (!invincible) {
+		if (!invincible&&!stats.isDead) {
 			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
-
+			UI.greyBar.current = greyDamage+stats.health;
 			if (stats.health <= 0) {
+				
 				die();
 			}
+			UI.hpBar.current = stats.health;
 		}
 	}
-
+	
 	public override void die() {
+		Debug.Log("IsDead");
 		base.die();
+		if (OnDeath != null) {
+			OnDeath (this.gameObject);
+		}
+		stats.health = 0;
+		UI.hpBar.current = 0;
+		Renderer[] rs = GetComponentsInChildren<Renderer>();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
+		eDeath.setInitValues(this, true);
+		foreach (Renderer r in rs) {
+			r.enabled = false;
+		}
 	}
-
+	
+	//---------------------------------//
+	
+	//---------------------------------//
+	// Heal Interface Implementation //
+	//---------------------------------//
+	public virtual void heal(int healTaken){
+		if(stats.health < stats.maxHealth){
+			stats.health+=healTaken;
+			if(stats.health > stats.maxHealth){
+				stats.health = stats.maxHealth;
+			}
+		}//prior heal base
+		UI.hpBar.current = stats.health;
+		if(greyDamage > 0){
+			greyDamage--;
+			UI.greyBar.current = stats.health + greyDamage;
+		}
+	}
+	
+	public virtual void rez(){
+		if(stats.isDead){
+			stats.isDead = false;
+			stats.health = stats.maxHealth/(2+2*stats.rezCount);
+			stats.rezCount++;
+		}else{
+			heal(stats.maxHealth/(2+2*stats.rezCount));
+		}//if and else are the 'base' rez from prior
+		Renderer[] rs = GetComponentsInChildren<Renderer>();
+		foreach (Renderer r in rs) {
+			if(GetComponent<Renderer>().gameObject.tag != "Item")
+				r.enabled = true;
+		}
+		UI.hpBar.current = stats.health;
+	}
+	
 	//----------------------------------//
-
+	
 	// Grey Health functions
 	public virtual int greyTest(int damage){
 		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){
 			stats.health = 0;
-			stats.isDead = true;
+			die();
 			return 0;
 		}
 		if(((greyDamage + damage) >= stats.maxHealth) && stats.health == stats.maxHealth){
@@ -260,14 +326,13 @@ public class Player : Character, IMoveable {
 			greyDamage = stats.maxHealth - 1;
 			inGrey = true;
 			return 0;
-		}		
-		if(damage > (stats.maxHealth/20)){
+		}
+		if((damage > (stats.maxHealth/5)) && !inGrey){
 			//print("Got Here"+(stats.maxHealth/20)+":"+damage);
 			int tempDmg = greyDamage;
 			if(inGrey){
-				greyDamage = damage - stats.maxHealth/20;
-				//print("Grey!:"+tempDmg);
-				inGrey = true;
+				greyDamage = damage - stats.maxHealth/5;
+				print("Grey!:"+tempDmg);
 				StopCoroutine("RegenWait");
 				if(inGrey &&!stats.isDead){
 					StartCoroutine("RegenWait");
@@ -276,7 +341,7 @@ public class Player : Character, IMoveable {
 				return damage + tempDmg;
 			}else{
 				inGrey = true;
-				greyDamage = damage - stats.maxHealth/20;
+				greyDamage = damage - stats.maxHealth/5;
 				//print("Grey!:"+(damage - stats.maxHealth/20));
 				//print("True!NGAT:"+stats.maxHealth/20);
 				StopCoroutine("RegenWait");
@@ -286,10 +351,12 @@ public class Player : Character, IMoveable {
 				return damage;
 			}
 		}
-		if(inGrey){
+		else if(inGrey && !(damage > (stats.maxHealth/5))){
 			inGrey = false;
+			int tempDmg = greyDamage;
+			greyDamage = 0;
 			//print("True!WGBT:"+(damage + greyDamage));
-			return damage + greyDamage;
+			return damage + tempDmg;
 		}
 		else{
 			inGrey = false;
@@ -308,13 +375,26 @@ public class Player : Character, IMoveable {
 			// print("Healed Grey and True");
 			stats.health++;
 			greyDamage--;
+			UI.hpBar.current = stats.health;
 			UI.greyBar.current = greyDamage+stats.health;
+			if(greyDamage == 0){
+				inGrey = false;
+			}
 			if(greyDamage > 0){
 				StartCoroutine("RegenWait");
 			}
 		}
 		yield return 0;
 	}
-
+	private void OnTriggerStay(Collider other){
+		if(other.tag == "Door"){
+			currDoor = other.gameObject;
+		}
+	}
+	private void OnTriggerExit(Collider other){
+		if(other.tag == "Door"){
+			currDoor = null;
+		}
+	}
 	//----------------------------------//
 }

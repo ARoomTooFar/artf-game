@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 41ca7256d815f4b86aa6a8b52a8798ea
+guid: 145fa21253f9743339b5ad124812b515
 labels:
 - WhiteRabbiTsTudio
 - WhiteRabbiT
@@ -9,6 +9,8 @@ labels:
 - LowPoly
 - Low
 - Poly
+timeCreated: 1426428728
+licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:

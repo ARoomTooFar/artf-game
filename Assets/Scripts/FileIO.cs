@@ -15,7 +15,7 @@ public class FileIO : MonoBehaviour
 	//Output_TileMap output_tileMap;
 	public Button Button_Save = null;
 	public Button Button_Deploy = null;
-	public Button Button_Load = null;
+	public Button Button_LoadPlayable = null;
 	BinaryWriter bin;
 	
 	private Farts serv;
@@ -36,13 +36,12 @@ public class FileIO : MonoBehaviour
 	{
 		txtUdLvl.enabled = false;
 
-		//output_tileMap = GameObject.Find ("TileMap").GetComponent ("Output_TileMap") as Output_TileMap;
-		
-		//loadingObj = gameObject.AddComponent<LoadingObj>();
 		Button_Save.onClick.AddListener (() => {
 			saveFile (); });
-		//		Button_Load.onClick.AddListener (() => {
-		//			loadFile ();});
+
+		Button_LoadPlayable.onClick.AddListener (() => {
+			LoadPlayable (); });
+
 		
 		serv = gameObject.AddComponent<Farts>();
 
@@ -116,5 +115,15 @@ public class FileIO : MonoBehaviour
 				udLvlReq = null;
 			}
 		}
+	}
+
+	void LoadPlayable(){
+		ItemObject[] itemObs =  FindObjectsOfType(typeof(ItemObject)) as ItemObject[];
+		foreach(ItemObject io in itemObs){
+//			print (io.gameObject.name);
+			GameObject ob = io.gameObject;
+			DontDestroyOnLoad(ob);
+		}
+		Application.LoadLevel(1);
 	}
 }

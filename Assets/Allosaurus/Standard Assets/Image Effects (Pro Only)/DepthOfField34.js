@@ -108,11 +108,11 @@ class DepthOfField34 extends PostEffectsBase {
 	}
 
 	function OnEnable() {
-		camera.depthTextureMode |= DepthTextureMode.Depth;		
+		GetComponent.<UnityEngine.Camera>().depthTextureMode |= DepthTextureMode.Depth;		
 	}
 	
 	function FocalDistance01 (worldDist : float) : float {
-		return camera.WorldToViewportPoint((worldDist-camera.nearClipPlane) * camera.transform.forward + camera.transform.position).z / (camera.farClipPlane-camera.nearClipPlane);	
+		return GetComponent.<UnityEngine.Camera>().WorldToViewportPoint((worldDist-GetComponent.<UnityEngine.Camera>().nearClipPlane) * GetComponent.<UnityEngine.Camera>().transform.forward + GetComponent.<UnityEngine.Camera>().transform.position).z / (GetComponent.<UnityEngine.Camera>().farClipPlane-GetComponent.<UnityEngine.Camera>().nearClipPlane);	
 	}
 	
 	function GetDividerBasedOnQuality () {
@@ -155,18 +155,18 @@ class DepthOfField34 extends PostEffectsBase {
 		var bokehBlurAmplifier : float = bokeh ? BOKEH_EXTRA_BLUR : 1.0f;
 
 		var blurForeground : boolean = quality > Dof34QualitySetting.OnlyBackground;	
-		var focal01Size : float = focalSize / (camera.farClipPlane - camera.nearClipPlane);;
+		var focal01Size : float = focalSize / (GetComponent.<UnityEngine.Camera>().farClipPlane - GetComponent.<UnityEngine.Camera>().nearClipPlane);;
 
 		if (simpleTweakMode) {		
-			focalDistance01 = objectFocus ? (camera.WorldToViewportPoint (objectFocus.position)).z / (camera.farClipPlane) : FocalDistance01 (focalPoint);
+			focalDistance01 = objectFocus ? (GetComponent.<UnityEngine.Camera>().WorldToViewportPoint (objectFocus.position)).z / (GetComponent.<UnityEngine.Camera>().farClipPlane) : FocalDistance01 (focalPoint);
 			focalStartCurve = focalDistance01 * smoothness;
 			focalEndCurve = focalStartCurve;
-			blurForeground = blurForeground && (focalPoint > (camera.nearClipPlane + Mathf.Epsilon));
+			blurForeground = blurForeground && (focalPoint > (GetComponent.<UnityEngine.Camera>().nearClipPlane + Mathf.Epsilon));
 		} 
 		else {
 			if(objectFocus) {
-				var vpPoint = camera.WorldToViewportPoint (objectFocus.position);
-				vpPoint.z = (vpPoint.z) / (camera.farClipPlane);
+				var vpPoint = GetComponent.<UnityEngine.Camera>().WorldToViewportPoint (objectFocus.position);
+				vpPoint.z = (vpPoint.z) / (GetComponent.<UnityEngine.Camera>().farClipPlane);
 				focalDistance01 = vpPoint.z;			
 			} 
 			else 
@@ -174,7 +174,7 @@ class DepthOfField34 extends PostEffectsBase {
 			
 			focalStartCurve = focalZStartCurve;
 			focalEndCurve = focalZEndCurve;
-			blurForeground = blurForeground && (focalPoint > (camera.nearClipPlane + Mathf.Epsilon));				
+			blurForeground = blurForeground && (focalPoint > (GetComponent.<UnityEngine.Camera>().nearClipPlane + Mathf.Epsilon));				
 		}
 		
 		widthOverHeight = (1.0f * source.width) / (1.0f * source.height);

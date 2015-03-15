@@ -22,17 +22,17 @@ class CameraInfo extends MonoBehaviour {
 	}
 
 	function Update () {
-		if (currentDepthMode != camera.depthTextureMode)
-			camera.depthTextureMode = currentDepthMode;
-		if (currentRenderPath != camera.actualRenderingPath)
-			camera.renderingPath = currentRenderPath;
+		if (currentDepthMode != GetComponent.<UnityEngine.Camera>().depthTextureMode)
+			GetComponent.<UnityEngine.Camera>().depthTextureMode = currentDepthMode;
+		if (currentRenderPath != GetComponent.<UnityEngine.Camera>().actualRenderingPath)
+			GetComponent.<UnityEngine.Camera>().renderingPath = currentRenderPath;
 			
 		UpdateInfo ();
 	}
 	
 	function UpdateInfo () {
-		currentDepthMode = camera.depthTextureMode;
-		currentRenderPath = camera.actualRenderingPath;
+		currentDepthMode = GetComponent.<UnityEngine.Camera>().depthTextureMode;
+		currentRenderPath = GetComponent.<UnityEngine.Camera>().actualRenderingPath;
 		var fx : PostEffectsBase[] = gameObject.GetComponents.<PostEffectsBase> ();
 		var fxCount : int = 0;
 		for (var post : PostEffectsBase in fx) 

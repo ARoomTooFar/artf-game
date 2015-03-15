@@ -219,7 +219,7 @@ public class ARTFRoomManager {
 	}
 
 	public bool ResizeValid(ARTFRoom rm, Vector3 oldCor, Vector3 newCor){
-
+		return true;
 	}
 	#endregion Resize
 
