@@ -11,7 +11,11 @@
 	<key>CFBundleIconFile</key>
 	<string>PlayerIcon.icns</string>
 	<key>CFBundleIdentifier</key>
+<<<<<<< HEAD
 	<string>unity.DefaultCompany.ARTF_Gameplay_Prototype</string>
+=======
+	<string>unity.DefaultCompany.Level Edibutts</string>
+>>>>>>> levelloading/aaron-organize
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
