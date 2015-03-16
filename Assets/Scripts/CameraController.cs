@@ -32,6 +32,7 @@ public class CameraController : MonoBehaviour {
 	static float orthoZoomSpeed = .5f;
 	static float maxOrthoSize = 20;
 	static float minOrthoSize = 2;
+	static float currOrthoSize = 10;
 	
 	static Vector3 cameraRotation = new Vector3 (45, -45, 0);
 	
@@ -197,15 +198,21 @@ public class CameraController : MonoBehaviour {
 	public void zoomCamIn ()
 	{
 		if(currentCamera.orthographic) {
-			currentCamera.orthographicSize = Mathf.Min(maxOrthoSize, currentCamera.orthographicSize + orthoZoomSpeed);
+			currOrthoSize = Mathf.Min(maxOrthoSize, currOrthoSize + orthoZoomSpeed);
+			foreach (Camera cam in 	Camera.allCameras) {
+				cam.orthographicSize = currOrthoSize;
+			}
 		} else {
 			baseY = Mathf.Min (maxY, baseY + zoomSpeed);
 		}
 	}
 	public void zoomCamOut ()
 	{
+		currOrthoSize = Mathf.Max(minOrthoSize, currOrthoSize - orthoZoomSpeed);
 		if(currentCamera.orthographic) {
-			currentCamera.orthographicSize = Mathf.Max(minOrthoSize, currentCamera.orthographicSize - orthoZoomSpeed);
+			foreach (Camera cam in 	Camera.allCameras) {
+				cam.orthographicSize = currOrthoSize;
+			}
 		} else {
 			baseY = Mathf.Max (minY, baseY - zoomSpeed);
 		}
@@ -213,16 +220,23 @@ public class CameraController : MonoBehaviour {
 	public void changeToTopDown ()
 	{
 		setCameraRotation (new Vector3 (90, 0, 0));
-		currentCamera.orthographic = true;
+		foreach (Camera cam in 	Camera.allCameras) {
+			cam.orthographic = true;
+		}
+		//currentCamera.orthographic = true;
 	}
 	public void changeToPerspective ()
 	{
-		currentCamera.orthographic = false;
+		foreach (Camera cam in 	Camera.allCameras) {
+			cam.orthographic = false;
+		}
 		setCameraRotation (cameraRotation);
 	}
 	public void changetoOrthographic ()
 	{
-		currentCamera.orthographic = true;
+		foreach (Camera cam in 	Camera.allCameras) {
+			cam.orthographic = true;
+		}
 		setCameraRotation (cameraRotation);
 	}
 	
@@ -243,19 +257,86 @@ public class CameraController : MonoBehaviour {
 	}
 	
 	void drawMouseSquare(){
-		Ray ray = currentCamera.ScreenPointToRay(Input.mousePosition);
-		float distance = 0;
-		groundPlane.Raycast(ray, out distance);
-		Vector3 point = ray.GetPoint(distance).Round();
+
+		float squareWidth = .4f;
+		float cubeHeight = 6;
+
+		Ray ray = currentCamera.ScreenPointToRay (Input.mousePosition);
+		RaycastHit hitInfo;
+		Physics.Raycast (ray, out hitInfo, Mathf.Infinity);
+		Vector3 point;
+
+		if (hitInfo.collider == null) {
+			return;
+		}
+
+		if (hitInfo.collider.gameObject.name != "TileMap") {
+			point = hitInfo.transform.position.Round ();
+			//Debug.Log (point.toCSV());
+			point.y = 0;
+		} else {
+			ray = currentCamera.ScreenPointToRay(Input.mousePosition);
+			float distance = 0;
+			groundPlane.Raycast(ray, out distance);
+			point = ray.GetPoint(distance).Round();
+		}
+
+		if (point == null) {
+			return;
+		}
+
 		
 		GL.Begin (GL.QUADS);
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
+
+		Vector3 pLA = new Vector3 (point.x - squareWidth, point.y, point.z - squareWidth);
+		Vector3 pLB = new Vector3(point.x-squareWidth, point.y, point.z+squareWidth);
+		Vector3 pLC = new Vector3(point.x+squareWidth, point.y, point.z+squareWidth);
+		Vector3 pLD = new Vector3(point.x+squareWidth, point.y, point.z-squareWidth);
+
+		Vector3 pUA = new Vector3 (point.x - squareWidth, point.y + cubeHeight, point.z - squareWidth);
+		Vector3 pUB = new Vector3(point.x-squareWidth, point.y + cubeHeight, point.z+squareWidth);
+		Vector3 pUC = new Vector3(point.x+squareWidth, point.y + cubeHeight, point.z+squareWidth);
+		Vector3 pUD = new Vector3(point.x+squareWidth, point.y + cubeHeight, point.z-squareWidth);
+
+		GL.Vertex(pLA);
+		GL.Vertex(pLB);
+		GL.Vertex(pLC);
+		GL.Vertex(pLD);
+
+		GL.Vertex(pUA);
+		GL.Vertex(pUB);
+		GL.Vertex(pUC);
+		GL.Vertex(pUD);
 		
-		GL.Vertex(new Vector3(point.x-.5f, point.y, point.z-.5f));
-		GL.Vertex(new Vector3(point.x-.5f, point.y, point.z+.5f));
-		GL.Vertex(new Vector3(point.x+.5f, point.y, point.z+.5f));
-		GL.Vertex(new Vector3(point.x+.5f, point.y, point.z-.5f));
+		GL.Vertex(pUA);
+		GL.Vertex(pUB);
+		GL.Vertex(pUC);
+		GL.Vertex(pUD);
+
+
+		GL.Vertex(pLB);
+		GL.Vertex(pUB);
+		GL.Vertex(pUA);
+		GL.Vertex(pLA);
+
+		GL.Vertex(pLA);
+		GL.Vertex(pUA);
+		GL.Vertex(pUD);
+		GL.Vertex(pLD);
+
+		GL.Vertex(pLC);
+		GL.Vertex(pUC);
+		GL.Vertex(pUB);
+		GL.Vertex(pLB);
+		
+		GL.Vertex(pLD);
+		GL.Vertex(pUD);
+		GL.Vertex(pUC);
+		GL.Vertex(pLC);
+
+
 		
 		GL.End();
 	}
