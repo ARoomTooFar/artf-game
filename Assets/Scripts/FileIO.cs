@@ -29,7 +29,7 @@ public class FileIO : MonoBehaviour
 
     #if UNITY_EDITOR
     private string dummyGameAcctId = "5750085036015616";
-	private string dummyLvlId = "6002404164108288";
+	private string dummyLvlId = "6230858037985280";
     #endif
 	
 	void Start ()
@@ -77,6 +77,16 @@ public class FileIO : MonoBehaviour
             txtDlLvl.enabled = false;
             MapDataParser.ParseSaveString(lvlData);
             Debug.Log("LVL DL SUCCESS: " + lvlData);
+
+
+			ItemObject[] itemObs =  FindObjectsOfType(typeof(ItemObject)) as ItemObject[];
+			foreach(ItemObject io in itemObs){
+				//			print (io.gameObject.name);
+				GameObject ob = io.gameObject;
+				Destroy (io);
+
+//				Destroy(ob.GetComponent(ItemObject));
+			}
         }
         else
         {

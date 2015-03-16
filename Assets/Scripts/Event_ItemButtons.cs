@@ -179,6 +179,9 @@ public class Event_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragHandl
 
 	public void OnBeginDrag (PointerEventData data)
 	{
+
+		tilemapcont.suppressDragSelecting = true;
+
 		Image p = draggedImageAnchor.GetComponent ("Image") as Image;
 		p.sprite = thisImage.sprite;
 		p.material = null;
@@ -190,6 +193,7 @@ public class Event_ItemButtons : MonoBehaviour, IBeginDragHandler, IEndDragHandl
 
 	public void OnEndDrag (PointerEventData data)
 	{
+		tilemapcont.suppressDragSelecting = false;
 
 		Image p = draggedImageAnchor.GetComponent ("Image") as Image;
 		p.sprite = thisImage.sprite;

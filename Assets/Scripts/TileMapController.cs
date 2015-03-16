@@ -27,7 +27,7 @@ public class TileMapController : MonoBehaviour
 	bool placeRoomClicked = false;
 	float secondX;
 	float secondY;
-	public bool iAmResizingRoomRightNow;
+	public bool suppressDragSelecting;
 	
 	void Start ()
 	{
@@ -119,16 +119,16 @@ public class TileMapController : MonoBehaviour
 		int x = Mathf.RoundToInt (xf / tileSize);
 		int z = Mathf.RoundToInt (zf / tileSize);
 		
-		
+
 		
 		//if user is holding down left mouse button, and dragging,
 		//we make a box of selected tile and have it resize as
 		//the mouse moves around
-		if (iAmResizingRoomRightNow == false && Input.GetMouseButton (0) && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
+		if (suppressDragSelecting == false && Input.GetMouseButton (0) && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
 			/*If no tiles have been selected ever, just select that tile */
 			if (shiftOrigin.x == 0f && shiftOrigin.y == 0f && shiftOrigin.z == 0f)
 				selectTile (new Vector3 (x, 0, z));
-			
+
 			/*Deselect other tiles, then select all tiles between bounds */
 			else {
 				deselectAll ();
@@ -144,6 +144,8 @@ public class TileMapController : MonoBehaviour
 				secondX = Mathf.RoundToInt (xf / tileSize);
 				secondY = Mathf.RoundToInt (zf / tileSize);
 			}
+
+//			print("we draggin a box");
 		}
 		
 		//for selecting single tiles, and for shift-clicking to select a group of tiles

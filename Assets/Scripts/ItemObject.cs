@@ -82,8 +82,8 @@ public class ItemObject : MonoBehaviour
 				copyCreated = true;
 			}
 
-			if(this.gameObject.name == "Cube") tilemapcont.iAmResizingRoomRightNow = true;
-			else tilemapcont.iAmResizingRoomRightNow = false;
+			if(this.gameObject.name == "Cube") tilemapcont.suppressDragSelecting = true;
+			else tilemapcont.suppressDragSelecting = false;
 //			print (this.gameObject.name);
 			
 			//if user wants to cancel the drag
@@ -151,6 +151,8 @@ public class ItemObject : MonoBehaviour
 		
 		
 		inMouseCheck = false;
+
+		tilemapcont.suppressDragSelecting = false;
 	}
 
 	

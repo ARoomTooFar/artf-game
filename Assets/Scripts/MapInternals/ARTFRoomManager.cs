@@ -211,11 +211,12 @@ public class ARTFRoomManager {
 	 */
 	public bool isResizeValid(ARTFRoom rm, Vector3 oldCor, Vector3 newCor) {
 		//get a new room in the offset position
-		rm.resize(oldCor, newCor);
-		//check if the new room intersects
-		bool retVal = doAnyRoomsIntersect(rm);
-		rm.resize(newCor, oldCor);
-		return retVal;
+//		rm.resize(oldCor, newCor);
+//		//check if the new room intersects
+//		bool retVal = doAnyRoomsIntersect(rm);
+//		rm.resize(newCor, oldCor);
+//		return retVal;
+		return true;
 	}
 
 	public bool ResizeValid(ARTFRoom rm, Vector3 oldCor, Vector3 newCor){
