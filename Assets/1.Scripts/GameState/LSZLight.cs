@@ -46,8 +46,6 @@ public class LSZLight : MonoBehaviour {
 	//-----------------------------------------
 	void OnTriggerEnter(Collider other) 
 	{
-		levelgui lgui = GameObject.FindGameObjectWithTag ("levelgui").GetComponent<levelgui>();
-
 		//this checks to see if the object colliding with the zone is a player
 		string t = other.GetComponent<Collider>().tag;
 
