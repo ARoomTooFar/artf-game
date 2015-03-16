@@ -88,7 +88,7 @@ public class SceneryManager {
 				blk.remove();
 				return false;
 			}
-			Debug.Log(blk.Orientation);
+			//Debug.Log(blk.Orientation);
 			MapData.TheFarRooms.find(blk.Position).Doors.Add(blk);
 			MapData.TheFarRooms.find(blk.Position).linkRoomsViaDoors();
 			foreach(Vector3 pos in blk.Coordinates){
@@ -131,9 +131,10 @@ public class SceneryManager {
 
 	public void remove(SceneryBlock blk) {
 		unlinkTerrain(blk);
+		/*
 		if(blk.BlockInfo.isDoor){
 			MapData.TheFarRooms.find(blk.Position).Doors.Remove(blk);
-		}
+		}*/
 		blk.remove();
 		dictionary[blk.BlockID].Remove(blk);
 	}
