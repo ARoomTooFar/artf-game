@@ -37,6 +37,10 @@ public class LSZLight : MonoBehaviour {
 
 	}
 
+	//----------------------------------------------------------------------------------------
+	//Functions
+	//----------------------------------------------------------------------------------------
+
 
 	//-----------------------------------------
 	//OnTriggerEnter()
@@ -46,52 +50,14 @@ public class LSZLight : MonoBehaviour {
 	//-----------------------------------------
 	void OnTriggerEnter(Collider other) 
 	{
-		//this checks to see if the object colliding with the zone is a player
-		string t = other.GetComponent<Collider>().tag;
-
-		//when an object that is tagged as a player (1-4) it will set that player to ready
-		//do a ready check, and if that passes it will move on to the next scene.
-		switch (t) {
-				
-			case "Player1":
-				print ("player1 is in da zone");
-				player1.isReady = true;
-				if(readyCheck())
-				{
-					gsManager.LoadScene(13);
-				}
-				break;
-				
-			case "Player2":
-				print ("player2 is in da zone");
-				player2.isReady = true;
-				if(readyCheck())
-				{
-					gsManager.LoadScene(13);
-				}
-				break;
-				
-			case "Player3":
-				print ("player3 is in da zone");
-				player3.isReady = true;
-				if(readyCheck())
-				{
-					gsManager.LoadScene(13);
-				}
-				break;
-				
-			case "Player4":
-				print ("player4 is in da zone");
-				player4.isReady = true;
-				if(readyCheck())
-				{
-					gsManager.LoadScene(13);
-				}
-				break;
-				
-			default:
-				print ("Thing that entered was not a player.");
-				break;
+		//this gets the thing thats colliding
+		Player t = other.GetComponent<Player>();
+	
+		print ("player is in da zone");
+		t.isReady = true;
+		if(readyCheck())
+		{
+			gsManager.LoadScene(13);
 		}
 	}
 
@@ -102,37 +68,10 @@ public class LSZLight : MonoBehaviour {
 	//---------------------------------------
 	void OnTriggerExit(Collider other)
 	{
-		string t = other.GetComponent<Collider>().tag;
-		print ("the player left da zone");
-
-		//when an object that is tagged as a player (1-4) it will set that player to
-		//not ready.
-		switch (t) {
-				
-			case "Player1":
-				print ("player1 is outa da zone");
-				player1.isReady = false;							
-				break;
-				
-			case "Player2":
-				print ("player2 is outa da zone");
-				player1.isReady = false;
-				break;
-				
-			case "Player3":
-				print ("player3 is outa da zone");
-				player3.isReady = false;;
-				break;
-				
-			case "Player4":
-				print ("player4 is outa da zone");
-				player4.isReady = false;
-				break;
-				
-			default:
-				print ("Thing that exited was not a player.");
-				break;
-			}
+		//this gets the thing thats colliding
+		Player t = other.GetComponent<Player>();	
+		print ("player left in da zone");
+		t.isReady = false;
 		}
 
 	//-------------------------------
