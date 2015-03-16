@@ -85,19 +85,20 @@ public class TileMapController : MonoBehaviour
 		RaycastHit hitInfo;
 		
 		/* getting raycast info and logic */
-		if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity) && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
-			
+		//&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false
+		if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity) ) {
 			//selectedItem gets set by UIHandler_ItemButtons calling setSelectedItem()
 			//in this script. the !Input.GetMouseButton (0) check below will indicate
 			//that a drag has ended, and so we can drop the object on the map.
 			if (selectedItem != null && !Input.GetMouseButton (0)) {
-				int x = Mathf.RoundToInt (hitInfo.point.x / tileSize);
-				int z = Mathf.RoundToInt (hitInfo.point.z / tileSize);
+				int x = Mathf.RoundToInt (hitInfo.transform.position.x / tileSize);
+				int z = Mathf.RoundToInt (hitInfo.transform.position.z / tileSize);
 				
 				Vector3 obj_pos = new Vector3 (x, 0f, z);
 				Vector3 obj_rot = new Vector3 (0f, 90f, 0f);
 				//output_tileMap.instantiateItemObject (selectedItem, obj_pos, obj_rot);
 				MapData.addMonsterScenery (selectedItem, obj_pos, obj_rot.toDirection ());
+
 				clearSelectedItem ();
 			} else {
 				/* check whether the ray hits an object or the tile map */

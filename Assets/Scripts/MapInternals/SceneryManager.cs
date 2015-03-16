@@ -220,7 +220,11 @@ public class SceneryManager {
 	public bool isAddValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North) {
 		SceneryBlock blk = new SceneryBlock(type, pos, dir);
 		if(blk.BlockInfo.isDoor) {
-			blk.rotate(MapData.TheFarRooms.find(pos).getWallSide(pos));
+			try{
+				blk.rotate(MapData.TheFarRooms.find(pos).getWallSide(pos));
+			} catch {
+				return false;
+			}
 			if(blk.Orientation == DIRECTION.NonDirectional){
 				return false;
 			}
