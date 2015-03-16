@@ -41,7 +41,7 @@ public class CameraDemo : MonoBehaviour {
 			{
 				Debug.Log ("BtnLevel1 clicked");
 				//StartDl("5715999101812736");
-                StartCoroutine(gsManager.LoadLevel("5715999101812736"));
+                gsManager.LoadScene(1);
 			}
 		);
 
