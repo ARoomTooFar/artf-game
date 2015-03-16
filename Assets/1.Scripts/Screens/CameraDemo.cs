@@ -13,6 +13,7 @@ public class CameraDemo : MonoBehaviour {
 	private GameObject btnLevel6;
 	private GameObject btnLevel7;
 	private GameObject btnLevel8;
+    private bool revealLS = false;
 	public bool moveTrigger = false;
 
 	void Start () {
@@ -41,37 +42,43 @@ public class CameraDemo : MonoBehaviour {
 			{
 				Debug.Log ("BtnLevel1 clicked");
 				//StartDl("5715999101812736");
-                gsManager.LoadScene(1);
+                StartCoroutine(gsManager.LoadLevel("5715999101812736"));
+                HideAllButtons();
 			}
 		);
 
 		btnLevel2.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				Debug.Log ("BtnLevel2 clicked");
+                HideAllButtons();
 			}
 		);
 
 		btnLevel3.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				Debug.Log ("BtnLevel3 clicked");
+                HideAllButtons();
 			}
 		);
 
 		btnLevel4.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				Debug.Log ("BtnLevel4 clicked");
+                HideAllButtons();
 			}
 		);
 
 		btnLevel5.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				Debug.Log ("BtnLevel5 clicked");
+                HideAllButtons();
 			}
 		);
 
 		btnLevel6.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				Debug.Log ("BtnLevel6 clicked");
+                HideAllButtons();
 			}
 		);
 
@@ -79,7 +86,8 @@ public class CameraDemo : MonoBehaviour {
 			{
 				Debug.Log ("BtnLevel7 clicked");
 				Debug.Log ("Move to new scene!");
-				gsManager.LoadScene(1);
+				gsManager.LoadScene(13);
+                HideAllButtons();
 			}
 		);
 
@@ -88,6 +96,7 @@ public class CameraDemo : MonoBehaviour {
 				Debug.Log ("BtnLevel8 clicked");
 				Debug.Log ("Print level 1 data!");
 				Debug.Log (gsManager.level1Data);
+                HideAllButtons();
 			}
 		);
 	}
@@ -96,15 +105,8 @@ public class CameraDemo : MonoBehaviour {
 		if (moveTrigger) {
 			if (transform.position.z <= -116) {
 				transform.position = new Vector3 (transform.position.x, transform.position.y, transform.position.z + 0.2f);
-			} else if (transform.position.z > -117) {
-				btnLevel1.SetActive(true);
-				btnLevel2.SetActive(true);
-				btnLevel3.SetActive(true);
-				btnLevel4.SetActive(true);
-				btnLevel5.SetActive(true);
-				btnLevel6.SetActive(true);
-				btnLevel7.SetActive(true);
-				btnLevel8.SetActive(true);
+			} else if (transform.position.z > -117 && !revealLS) {
+                ShowAllButtons();
 			}
 		}
 	}
@@ -134,4 +136,29 @@ public class CameraDemo : MonoBehaviour {
 			Debug.Log("ERROR: Level download failed. Level ID doesn't exist.");
 		}
 	}
+
+    void ShowAllButtons()
+    {
+        revealLS = true;
+        btnLevel1.SetActive(true);
+        btnLevel2.SetActive(true);
+        btnLevel3.SetActive(true);
+        btnLevel4.SetActive(true);
+        btnLevel5.SetActive(true);
+        btnLevel6.SetActive(true);
+        btnLevel7.SetActive(true);
+        btnLevel8.SetActive(true);
+    }
+
+    void HideAllButtons()
+    {
+        btnLevel1.SetActive(false);
+        btnLevel2.SetActive(false);
+        btnLevel3.SetActive(false);
+        btnLevel4.SetActive(false);
+        btnLevel5.SetActive(false);
+        btnLevel6.SetActive(false);
+        btnLevel7.SetActive(false);
+        btnLevel8.SetActive(false);
+    }
 }
