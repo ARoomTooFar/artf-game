@@ -117,8 +117,8 @@ public static class MapData {
 		MonsterMonoBehaviour mmb = obj.GetComponent<MonsterMonoBehaviour>();
 		WallCornerMonoBehaviour wmb = obj.GetComponent<WallCornerMonoBehaviour>();
 
-		Debug.Log("mMS");
-		Debug.Log(pos);
+//		Debug.Log("mMS");
+//		Debug.Log(pos);
 
 		if(smb != null){
 			MapData.moveScenery(pos, offset);

@@ -79,14 +79,6 @@ public class FileIO : MonoBehaviour
             Debug.Log("LVL DL SUCCESS: " + lvlData);
 
 
-			ItemObject[] itemObs =  FindObjectsOfType(typeof(ItemObject)) as ItemObject[];
-			foreach(ItemObject io in itemObs){
-				//			print (io.gameObject.name);
-				GameObject ob = io.gameObject;
-				Destroy (io);
-
-//				Destroy(ob.GetComponent(ItemObject));
-			}
         }
         else
         {

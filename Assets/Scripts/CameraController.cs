@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour {
 	
 	
 	static Camera UICamera;
-	//static Camera OnTopCamera;
+	static Camera OnTopCamera;
 	
 	static float baseX = 43f;
 	static float baseY = 15f;
@@ -35,7 +35,7 @@ public class CameraController : MonoBehaviour {
 	static float minOrthoSize = 2;
 	
 	static Vector3 cameraRotation = new Vector3 (45, -45, 0);
-	//static bool isTopDown = false;
+	static bool isTopDown = false;
 	float dx;
 	float dy;
 	
@@ -87,7 +87,7 @@ public class CameraController : MonoBehaviour {
 		dragSpeed = new Vector2 (1f, 1f);
 		
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
-		//OnTopCamera = GameObject.Find ("LayersOnTopOfEverythingCamera").GetComponent<Camera>();
+		OnTopCamera = GameObject.Find ("LayersOnTopOfEverythingCamera").GetComponent<Camera>();
 		
 		setCameraRotation (new Vector3 (45, -45, 0));
 		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
@@ -114,11 +114,14 @@ public class CameraController : MonoBehaviour {
 	}
 	
 	void checkForMouseScrolling(){
+		//tile selection gets skewed if we zoom in/out while any camera is orthographic
+		if(isTopDown == false && UICamera.orthographic == false){
 		if (Input.GetAxis ("Mouse ScrollWheel") < 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
 			zoomCamIn ();
 		}
 		if (Input.GetAxis ("Mouse ScrollWheel") > 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
 			zoomCamOut ();
+		}
 		}
 	}
 	
@@ -259,21 +262,21 @@ public class CameraController : MonoBehaviour {
 	{
 		setCameraRotation (new Vector3 (90, 0, 0));
 		UICamera.orthographic = true;
-		//OnTopCamera.orthographic = true;
-		//isTopDown = true;
+		OnTopCamera.orthographic = true;
+		isTopDown = true;
 	}
 	public void changeToPerspective ()
 	{
 		UICamera.orthographic = false;
-		//OnTopCamera.orthographic = false;
-		//isTopDown = false;
+		OnTopCamera.orthographic = false;
+		isTopDown = false;
 		setCameraRotation (cameraRotation);
 	}
 	public void changetoOrthographic ()
 	{
 		UICamera.orthographic = true;
-		//OnTopCamera.orthographic = true;
-		//isTopDown = false;
+		OnTopCamera.orthographic = true;
+		isTopDown = false;
 		setCameraRotation (cameraRotation);
 	}
 	

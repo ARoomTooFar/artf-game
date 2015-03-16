@@ -82,6 +82,7 @@ public class ItemObject : MonoBehaviour
 				copyCreated = true;
 			}
 
+			//if we're selecting a room corner-mover thing
 			if(this.gameObject.name == "Cube") tilemapcont.suppressDragSelecting = true;
 			else tilemapcont.suppressDragSelecting = false;
 //			print (this.gameObject.name);
@@ -142,10 +143,11 @@ public class ItemObject : MonoBehaviour
 		
 		//if move was cancelled, we don't perform an update on the item object's position
 		if (cancellingMove == true) {
-			
+
 		} else {
 			Vector3 pos = this.gameObject.transform.root.position;
 
+//			print ("from: " + pos + " to: " + (newp - pos));
 			MapData.moveMonsterScenery(this.gameObject, pos, newp-pos);
 		}
 		

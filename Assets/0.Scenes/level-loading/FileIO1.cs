@@ -107,6 +107,13 @@ public class FileIO1 : MonoBehaviour
 				txtUdLvl.enabled = false;
 				Debug.Log("UPDATE SUCCEEDED: " + udLvlReq.text);
 				udLvlReq = null; // Reset lvlUpdate to null so it doesn't the Debug.Log doesn't spam the console every 
+
+				//destroy all ItemObject scripts on loaded objects
+				ItemObject[] itemObs =  FindObjectsOfType(typeof(ItemObject)) as ItemObject[];
+				foreach(ItemObject io in itemObs){
+					GameObject ob = io.gameObject;
+					Destroy (io);
+				}
 			}
 			else if (udLvlReq.error != null)
 			{
