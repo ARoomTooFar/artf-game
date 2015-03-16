@@ -19,15 +19,14 @@ public class CameraController : MonoBehaviour {
 	Button Button_Pointer; 
 	
 	
-	static Camera UICamera;
-	static Camera OnTopCamera;
+	static Camera currentCamera;
 	
 	static float baseX = 43f;
 	static float baseY = 15f;
 	static float baseZ = 2.5f;
+
 	static float minY = 5f;
 	static float maxY = 25f;
-	static Vector2 dragSpeed;
 	static float zoomSpeed = .5f;
 	
 	static float orthoZoomSpeed = .5f;
@@ -35,13 +34,9 @@ public class CameraController : MonoBehaviour {
 	static float minOrthoSize = 2;
 	
 	static Vector3 cameraRotation = new Vector3 (45, -45, 0);
-	static bool isTopDown = false;
-	float dx;
-	float dy;
 	
 	public Material selectionMat; //material for selected tiles
 	public Material gridMat;
-	//TileMap tileMap;
 	
 	GameObject tileMapGameObj;
 	
@@ -54,7 +49,6 @@ public class CameraController : MonoBehaviour {
 	void Awake ()
 	{
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
-		//tileMap = GameObject.Find ("TileMap").GetComponent("TileMap") as TileMap;
 		tileMapGameObj = GameObject.Find ("TileMap");
 	}
 	
@@ -83,11 +77,7 @@ public class CameraController : MonoBehaviour {
 		Button_Pointer.onClick.AddListener (() => {
 			cursorToPointer ();});
 		
-		
-		dragSpeed = new Vector2 (1f, 1f);
-		
-		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
-		OnTopCamera = GameObject.Find ("LayersOnTopOfEverythingCamera").GetComponent<Camera>();
+		currentCamera = this.gameObject.GetComponent<Camera> ();
 		
 		setCameraRotation (new Vector3 (45, -45, 0));
 		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
@@ -107,21 +97,17 @@ public class CameraController : MonoBehaviour {
 		
 		checkForMouseClicks();
 		
-		//doesn't move cam in proper direction right now
 		checkForKeyPresses();
 		
 		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
 	}
 	
 	void checkForMouseScrolling(){
-		//tile selection gets skewed if we zoom in/out while any camera is orthographic
-		if(isTopDown == false && UICamera.orthographic == false){
 		if (Input.GetAxis ("Mouse ScrollWheel") < 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
 			zoomCamIn ();
 		}
 		if (Input.GetAxis ("Mouse ScrollWheel") > 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
 			zoomCamOut ();
-		}
 		}
 	}
 	
@@ -158,18 +144,18 @@ public class CameraController : MonoBehaviour {
 	
 	void setCameraRotation (Vector3 rot)
 	{
-		UICamera.transform.rotation = Quaternion.Euler (rot);
+		currentCamera.transform.root.rotation = Quaternion.Euler (rot);
 	}
-	
+
 	void setCameraPosition (Vector3 pos)
 	{
-		UICamera.transform.position = pos;
+		currentCamera.transform.root.position = pos;
 	}
 	
 	public void dragCamera ()
 	{
 		
-		Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
+		Ray ray = currentCamera.ScreenPointToRay(Input.mousePosition);
 		float distance = 0;
 		groundPlane.Raycast(ray, out distance);
 		Vector3 point = ray.GetPoint(distance).Round(1);
@@ -178,105 +164,65 @@ public class CameraController : MonoBehaviour {
 			prevMouse = point;
 			prevMouseBool = true;
 		}
-
+		
 		Vector3 offset = (prevMouse - point);
-		//Debug.Log(ray.origin.x);
 		baseX += offset.x;
 		baseZ += offset.z;
-		
-		//setCameraPosition (new Vector3 (baseX, baseY, baseZ));
-		
-		
-		/*
-		dx = Input.GetAxis ("Mouse X") * dragSpeed.x;
-		dy = Input.GetAxis ("Mouse Y") * dragSpeed.y;
-		UICamera.transform.position -= UICamera.transform.right * dx + UICamera.transform.up * dy;
-		baseX = UICamera.transform.position.x;
-		baseZ = UICamera.transform.position.z;
-		
-		if (baseY < minY) {
-			baseY = minY;
-		}
-		
-		if (baseY > maxY) {
-			baseY = maxY;
-		}
-		setCameraPosition (new Vector3 (baseX, baseY, baseZ));*/
 	}
 	
 	Vector3 getCameraForward(){
-		return UICamera.transform.forward;
+		return currentCamera.transform.root.forward;
 	}
 	
 	public void moveForward ()
 	{
-		baseX += Mathf.Sin(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
-		baseZ += Mathf.Cos(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
-		//baseZ += .1f;
-		//baseX -= .1f;
+		baseX += Mathf.Sin(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		baseZ += Mathf.Cos(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
 	}
 	public void moveBackward ()
 	{
-		baseX -= Mathf.Sin(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
-		baseZ -= Mathf.Cos(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
-		//baseZ -= .1f;
-		//baseX += .1f;
+		baseX -= Mathf.Sin(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		baseZ -= Mathf.Cos(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
 	}
 	public void moveLeft ()
 	{
-		baseX -= Mathf.Cos(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
-		baseZ += Mathf.Sin(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
-		//baseZ -= .1f;
-		//baseX -= .1f;
+		baseX -= Mathf.Cos(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		baseZ += Mathf.Sin(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
 	}
 	public void moveRight ()
 	{
-		baseX += Mathf.Cos(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
-		baseZ -= Mathf.Sin(UICamera.transform.eulerAngles.y*Mathf.Deg2Rad);
-		//baseZ += .1f;
-		//baseX += .1f;
+		baseX += Mathf.Cos(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		baseZ -= Mathf.Sin(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
 	}
 	public void zoomCamIn ()
 	{
-		if(UICamera.orthographic) {
-			UICamera.orthographicSize = Mathf.Min(maxOrthoSize, UICamera.orthographicSize + orthoZoomSpeed);
+		if(currentCamera.orthographic) {
+			currentCamera.orthographicSize = Mathf.Min(maxOrthoSize, currentCamera.orthographicSize + orthoZoomSpeed);
 		} else {
-			baseY += zoomSpeed;
-			if(baseY > maxY) {
-				baseY = maxY;
-			}
+			baseY = Mathf.Min (maxY, baseY + zoomSpeed);
 		}
 	}
 	public void zoomCamOut ()
 	{
-		if(UICamera.orthographic) {
-			UICamera.orthographicSize = Mathf.Max(minOrthoSize, UICamera.orthographicSize - orthoZoomSpeed);
+		if(currentCamera.orthographic) {
+			currentCamera.orthographicSize = Mathf.Max(minOrthoSize, currentCamera.orthographicSize - orthoZoomSpeed);
 		} else {
-			baseY -= zoomSpeed;
-			if(baseY < minY) {
-				baseY = minY;
-			}
+			baseY = Mathf.Max (minY, baseY - zoomSpeed);
 		}
 	}
 	public void changeToTopDown ()
 	{
 		setCameraRotation (new Vector3 (90, 0, 0));
-		UICamera.orthographic = true;
-		OnTopCamera.orthographic = true;
-		isTopDown = true;
+		currentCamera.orthographic = true;
 	}
 	public void changeToPerspective ()
 	{
-		UICamera.orthographic = false;
-		OnTopCamera.orthographic = false;
-		isTopDown = false;
+		currentCamera.orthographic = false;
 		setCameraRotation (cameraRotation);
 	}
 	public void changetoOrthographic ()
 	{
-		UICamera.orthographic = true;
-		OnTopCamera.orthographic = true;
-		isTopDown = false;
+		currentCamera.orthographic = true;
 		setCameraRotation (cameraRotation);
 	}
 	
@@ -295,22 +241,22 @@ public class CameraController : MonoBehaviour {
 		}
 		GL.End ();
 	}
-
+	
 	void drawMouseSquare(){
-		Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
+		Ray ray = currentCamera.ScreenPointToRay(Input.mousePosition);
 		float distance = 0;
 		groundPlane.Raycast(ray, out distance);
 		Vector3 point = ray.GetPoint(distance).Round();
-
+		
 		GL.Begin (GL.QUADS);
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
-
+		
 		GL.Vertex(new Vector3(point.x-.5f, point.y, point.z-.5f));
 		GL.Vertex(new Vector3(point.x-.5f, point.y, point.z+.5f));
 		GL.Vertex(new Vector3(point.x+.5f, point.y, point.z+.5f));
 		GL.Vertex(new Vector3(point.x+.5f, point.y, point.z-.5f));
-
+		
 		GL.End();
 	}
 	
@@ -320,31 +266,20 @@ public class CameraController : MonoBehaviour {
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
 		
-		/* get size of tile map */
-		//int size_x = 0; int size_z = 0;
-		//size_x = tilemapcont.grid_x;
-		//size_z = tilemapcont.grid_z;
-		
-		
 		//lower edge of tilemap bounding box
 		float xLowerBound = tileMapGameObj.GetComponent<Collider>().bounds.center.x - 
-			((tilemapcont.grid_x / 2) * tileMapGameObj.transform.localScale.x);
+			((tilemapcont.grid_x / 2) * tileMapGameObj.transform.root.localScale.x);
 		
 		float zLowerBound = tileMapGameObj.GetComponent<Collider>().bounds.center.z - 
-			((tilemapcont.grid_z / 2) * tileMapGameObj.transform.localScale.z);
+			((tilemapcont.grid_z / 2) * tileMapGameObj.transform.root.localScale.z);
 		
 		
 		//upper edge of tilemap bounding box
 		float xUpperBound = tileMapGameObj.GetComponent<Collider>().bounds.center.x + 
-			((tilemapcont.grid_x / 2) * tileMapGameObj.transform.localScale.x);
+			((tilemapcont.grid_x / 2) * tileMapGameObj.transform.root.localScale.x);
 		
 		float zUpperBound = tileMapGameObj.GetComponent<Collider>().bounds.center.z + 
-			((tilemapcont.grid_z / 2) * tileMapGameObj.transform.localScale.z);
-		
-		
-		//length and width of tileMap
-		//float tileMapSizeX = tilemapcont.grid_x * tileMapGameObj.transform.localScale.x;
-		//float tileMapSizeZ = tilemapcont.grid_z * tileMapGameObj.transform.localScale.z;
+			((tilemapcont.grid_z / 2) * tileMapGameObj.transform.root.localScale.z);
 		
 		Color c = new Color(1f,1f,1f,0.01f) ;
 		selectionMat.SetColor("Main Color", c);
@@ -353,7 +288,7 @@ public class CameraController : MonoBehaviour {
 			GL.Color(c);
 			GL.Vertex(new Vector3(Mathf.Floor(xLowerBound), 0f, z + 0.5f));
 			GL.Vertex(new Vector3(Mathf.Floor(xUpperBound), 0f, z + 0.5f));
-
+			
 		}
 		for (int x = (int)Mathf.Floor(xLowerBound); x < (int)Mathf.Floor(xUpperBound); x++) {
 			GL.Vertex(new Vector3(x - 0.5f, 0f, Mathf.Floor(zLowerBound)));
