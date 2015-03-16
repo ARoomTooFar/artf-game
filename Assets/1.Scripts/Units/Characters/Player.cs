@@ -16,6 +16,7 @@ public class Controls {
 
 [RequireComponent(typeof(Rigidbody))]
 public class Player : Character, IMoveable, IHealable<int>{
+	public string nameTag;
 	public bool inGrey;
 	public int testDmg;
 	public int greyDamage;
