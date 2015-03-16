@@ -228,7 +228,7 @@ public partial class ARTFRoom {
 			LinkedRooms.Add(dr, MapData.TheFarRooms.find(checkPos));
 		}
 		//after links are made, get the paths between them all
-		createRoomPaths();
+		//createRoomPaths();
 	}
 
 	/*
@@ -242,6 +242,9 @@ public partial class ARTFRoom {
 		//for each pair of doors
 		foreach(KeyValuePair<SceneryBlock, ARTFRoom> kvp1 in LinkedRooms) {
 			foreach(KeyValuePair<SceneryBlock, ARTFRoom> kvp2 in LinkedRooms) {
+				if(kvp1.Key == kvp2.Key){
+					continue;
+				}
 				//find the path between the two and store it
 				RoomPaths.Add(new KeyValuePair<Vector3, Vector3>(kvp1.Key.Position, kvp2.Key.Position),
 				              Pathfinder.getSingleRoomPath(kvp1.Key.Position, kvp2.Key.Position));
@@ -308,6 +311,15 @@ public partial class ARTFRoom {
 			if(!inRoom(blk.Position)) {
 				MapData.TerrainBlocks.remove(blk);
 			}
+		}
+		List<SceneryBlock> remDoor = new List<SceneryBlock> ();
+		foreach (SceneryBlock door in Doors) {
+			if(!inRoom(door.Position)){
+				remDoor.Add(door);
+			}
+		}
+		foreach (SceneryBlock door in remDoor) {
+			Doors.Remove(door);
 		}
 		//relink blocks to this room
 		linkTerrain();
