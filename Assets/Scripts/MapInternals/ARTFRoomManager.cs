@@ -210,20 +210,47 @@ public class ARTFRoomManager {
 	 * any rooms already in the list if it is resized
 	 */
 	public bool isResizeValid(ARTFRoom rm, Vector3 oldCor, Vector3 newCor) {
-		//get a new room in the offset position
-//		rm.resize(oldCor, newCor);
-//		//check if the new room intersects
-//		bool retVal = doAnyRoomsIntersect(rm);
-//		rm.resize(newCor, oldCor);
-//		return retVal;
-		return true;
-	}
-
-	public bool ResizeValid(ARTFRoom rm, Vector3 oldCor, Vector3 newCor){
+		if (rm == null) {
+			return false;
+		}
+		Square testSquare = new Square (rm.LLCorner, rm.URCorner);
+		testSquare.resize (oldCor, newCor);
+		if (testSquare.LLCorner.x >= testSquare.URCorner.x) {
+			return false;
+		}
+		if (testSquare.LLCorner.z >= testSquare.URCorner.z) {
+			return false;
+		}
+		Square roomSquare;
+		foreach (ARTFRoom room in roomList) {
+			if(rm.LLCorner == room.LLCorner){
+				continue;
+			}
+			roomSquare = new Square(room.LLCorner, room.URCorner);
+			if(testSquare.Intersect(roomSquare)){
+				return false;
+			}
+		}
 		return true;
 	}
 	#endregion Resize
-
+	public bool isAddValid(Vector3 cor1, Vector3 cor2) {
+		Square testSquare = new Square (cor1, cor2);
+		if (testSquare.LLCorner.x >= testSquare.URCorner.x) {
+			return false;
+		}
+		if (testSquare.LLCorner.z >= testSquare.URCorner.z) {
+			return false;
+		}
+		Square roomSquare;
+		foreach (ARTFRoom room in roomList) {
+			roomSquare = new Square(room.LLCorner, room.URCorner);
+			if(testSquare.Intersect(roomSquare)){
+				return false;
+			}
+		}
+		return true;
+	}
 	#endregion Validation
 
 	/*

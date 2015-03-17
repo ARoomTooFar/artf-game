@@ -56,7 +56,9 @@ public static class MapData {
 	#region Rooms
 	#region RoomManipulation
 	public static void addRoom(Vector3 pos1, Vector3 pos2){
-		TheFarRooms.add(pos1, pos2);
+		if(isAddRoomValid(pos1, pos2)){
+			TheFarRooms.add(pos1, pos2);
+		}
 	}
 
 	public static void moveRoom(Vector3 oldPos, Vector3 newPos){
@@ -76,7 +78,7 @@ public static class MapData {
 
 	#region RoomValidation
 	public static bool isAddRoomValid(Vector3 pos1, Vector3 pos2){
-		return TheFarRooms.doAnyRoomsIntersect(new ARTFRoom(pos1, pos2));
+		return TheFarRooms.isAddValid (pos1, pos2);
 	}
 
 	public static bool isMoveRoomValid(Vector3 oldPos, Vector3 newPos){
