@@ -72,31 +72,33 @@ public class Enemy : Character {
 
 	// Update is called once per frame
 	protected override void Update () {
-		if(!isDead) {
+		if (!stats.isDead) {
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
-			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+			animSteInfo = animator.GetCurrentAnimatorStateInfo (0);
 			animSteHash = animSteInfo.nameHash;
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
-			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
+			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
 			
 			
 			//If aggro'd, will chase, and if not attacked for 5 seconds, will deaggro
-			if (aggro == true) 
-			{
+			if (aggro == true) {
 				fAggro ();
 			}
 
 
 			if (isGrounded) {
-				movementAnimation();
+				movementAnimation ();
 			} else {
-				falling();
+				falling ();
 			}
 
-			if (target != null) target = aggroT.getTarget ();
+			if (target != null)
+				target = aggroT.getTarget ();
 			
 			sM.Update ();
+		} else {
+			Destroy (gameObject);
 		}
 	}
 
