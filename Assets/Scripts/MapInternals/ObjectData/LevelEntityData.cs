@@ -1,12 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SceneryMonoBehaviour : BlockMonoBehaviour {
+public class LevelEntityData : BlockData {
 
 	public List<Vector3> Coordinates;
-
-	public bool isDoor;
 
 	public List<Vector3> LocalCoordinates(DIRECTION dir) {
 		List<Vector3> retVal = new List<Vector3>();

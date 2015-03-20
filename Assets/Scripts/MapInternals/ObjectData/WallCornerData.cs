@@ -2,6 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class WallCornerMonoBehaviour : BlockMonoBehaviour {
+public class WallCornerData : LevelEditorData {
 
 }

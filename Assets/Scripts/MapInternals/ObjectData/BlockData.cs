@@ -2,9 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class BlockMonoBehaviour : MonoBehaviour {
-	
-	public string BlockID;
+public class BlockData : LevelEditorData {
 
 	public bool Pathable;
 	

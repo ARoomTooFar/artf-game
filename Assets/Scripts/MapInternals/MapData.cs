@@ -103,8 +103,8 @@ public static class MapData {
 
 	public static void addMonsterScenery(string type, Vector3 pos, DIRECTION dir){
 		GameObject obj = GameObjectResourcePool.getResource(type, pos, dir.toRotationVector());
-		SceneryMonoBehaviour smb = obj.GetComponent<SceneryMonoBehaviour>();
-		MonsterMonoBehaviour mmb = obj.GetComponent<MonsterMonoBehaviour>();
+		SceneryData smb = obj.GetComponent<SceneryData>();
+		MonsterData mmb = obj.GetComponent<MonsterData>();
 		GameObjectResourcePool.returnResource(type, obj);
 		if(smb != null){
 			MapData.addScenery(type, pos, dir);
@@ -115,9 +115,9 @@ public static class MapData {
 	}
 
 	public static void moveMonsterScenery(GameObject obj, Vector3 pos, Vector3 offset){
-		SceneryMonoBehaviour smb = obj.GetComponent<SceneryMonoBehaviour>();
-		MonsterMonoBehaviour mmb = obj.GetComponent<MonsterMonoBehaviour>();
-		WallCornerMonoBehaviour wmb = obj.GetComponent<WallCornerMonoBehaviour>();
+		SceneryData smb = obj.GetComponent<SceneryData>();
+		MonsterData mmb = obj.GetComponent<MonsterData>();
+		WallCornerData wmb = obj.GetComponent<WallCornerData>();
 
 //		Debug.Log("mMS");
 //		Debug.Log(pos);
@@ -126,6 +126,7 @@ public static class MapData {
 			MapData.moveScenery(pos, offset);
 		}
 		if(mmb != null) {
+			Debug.Log ("move monster");
 			MapData.moveMonster(pos, offset);
 		}
 		if(wmb != null) {
@@ -137,7 +138,7 @@ public static class MapData {
 	}
 
 	public static void rotateMonsterScenery(GameObject obj, Vector3 pos, bool goClockwise = true){
-		if(obj.GetComponent<SceneryMonoBehaviour>() != null){
+		if(obj.GetComponent<SceneryData>() != null){
 			MapData.rotateScenery(pos, goClockwise);
 		} else {
 			MapData.rotateMonster (pos, goClockwise);
@@ -155,6 +156,7 @@ public static class MapData {
 
 	public static void moveMonster(Vector3 pos, Vector3 offset){
 		if(!isAddMonsterValid(pos + offset)){
+			Debug.Log ("invalid");
 			return;
 		}
 		MonsterBlocks.move(pos, offset);

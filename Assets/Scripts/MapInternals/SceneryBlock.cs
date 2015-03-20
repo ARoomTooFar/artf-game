@@ -11,12 +11,12 @@ public class SceneryBlock {
 
 	#region Properties
 
-	public SceneryMonoBehaviour BlockInfo {
-		get { return GameObj.GetComponent<SceneryMonoBehaviour>(); }
+	public SceneryData BlockInfo {
+		get { return GameObj.GetComponent<SceneryData>(); }
 	}
 
 	public string BlockID {
-		get { return GameObj.GetComponent<BlockMonoBehaviour>().BlockID; }
+		get { return BlockInfo.BlockID; }
 	}
 
 	public Vector3 Position {
