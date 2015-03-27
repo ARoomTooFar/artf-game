@@ -40,7 +40,7 @@ public class CameraAdjuster : MonoBehaviour {
 			Debug.DrawLine(transform.position,hit.point,Color.red);*/
           //  print("Hit something");
 	    if( Physics.Raycast(target.transform.position-new Vector3(0,-1f,0), dir, out hit, 1000, layerMask)){
-			if(hit.collider.tag == "Wall" || hit.collider.tag == "Door" || hit.collider.tag == "Prop"){
+			if(hit.collider.tag == "Wall" || hit.collider.tag == "Door" /*|| hit.collider.tag == "Prop"*/){
 				hit.collider.gameObject.GetComponent<Wall>().toggleShow();
 				if(hit.collider.tag == "Door"){
 					hit.collider.gameObject.GetComponent<Door>().toggleShow();
