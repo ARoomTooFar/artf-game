@@ -106,7 +106,7 @@ public class BullyTrunk: MobileEnemy {
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 5.0f;
+		this.maxAtkRadius = 3.0f;
 	}
 
 	protected override void initStates() {
@@ -156,6 +156,7 @@ public class BullyTrunk: MobileEnemy {
 
 		// Adds old transitiont to new States
 		this.addTransitionToNew("approach", charge);
+		this.addTransitionToNew("attack", charge);
 		this.addTransitionToNew("search", charge);
 	}
 
@@ -196,9 +197,11 @@ public class BullyTrunk: MobileEnemy {
 		this.facing = this.target.transform.position - this.transform.position;
 		this.facing.y = 0.0f;
 		this.GetComponent<Rigidbody>().velocity = (this.facing.normalized * stats.speed * stats.spdManip.speedPercent);
+		transform.localRotation = Quaternion.LookRotation(facing);
+		/*
 		if (!this.canSeePlayer(this.target)) {
 			this.target = null;
-		}
+		} */
 	}
 
 	protected virtual void doneCharge() {
@@ -208,7 +211,6 @@ public class BullyTrunk: MobileEnemy {
 	protected virtual void chargingIntoSucker () {
 		if (this.target != null) {
 			this.lastSeenPosition = this.target.transform.position;
-			// this.lowerArms();
 		}
 	}
 

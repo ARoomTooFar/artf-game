@@ -41,7 +41,7 @@ public class MobileEnemy : Enemy {
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 5.0f;
+		this.maxAtkRadius = 3.0f;
 	}
 	
 	// Initializes states, transitions and actions
@@ -184,7 +184,8 @@ public class MobileEnemy : Enemy {
 	
 	protected virtual bool isAttacking() {
 		if (this.target != null && !this.isInAtkAnimation()) {
-			float distance = this.distanceToPlayer(this.target);
+			//float distance = this.distanceToPlayer(this.target);
+			float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
 			//&& this.canSeePlayer(this.target)
 			return distance < this.maxAtkRadius && distance >= this.minAtkRadius;
 		}
@@ -363,6 +364,7 @@ public class MobileEnemy : Enemy {
 
 	protected override bool canSeePlayer(GameObject p) {
 		Vector3 direction = p.transform.position - transform.position;
+		direction.Normalize();
 		float angle = Vector3.Angle(direction, this.facing);
 		
 
@@ -388,7 +390,7 @@ public class MobileEnemy : Enemy {
 
 			RaycastHit[] hits;
 
-			hits = GetComponent<Rigidbody>().SweepTestAll(direction, Vector3.Distance(this.transform.position, p.transform.position) + 2);
+			hits = this.GetComponent<Rigidbody>().SweepTestAll(direction, Vector3.Distance(this.transform.position, p.transform.position) + 2);
 			
 			for (int i = 0; i < hits.Length; ++i) {
 				// print(hits[i].transform.name);
