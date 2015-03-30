@@ -1,11 +1,18 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class CableVine : StationaryEnemy {
 
+	public Stun stun;
+	public GenericDoT constrict;
+	bool inStealth;
+	HingeJoint tether;
+	Rigidbody joints;
+//	CableMaw MyMum;
+
 	// Use this for initialization
-	void Start () {
-	
+	protected void Awake () {
+		base.Awake();
 	}
 	
 	// Update is called once per frame
