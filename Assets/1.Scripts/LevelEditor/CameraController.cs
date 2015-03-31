@@ -54,6 +54,10 @@ public class CameraController : MonoBehaviour {
 	}
 	
 	void Start () {
+
+		// This should only ever be in the Level Editor, so I'm sticking a thing here to tell
+		// the resource pool thing to strip colliders from game objects.
+		GameObjectResourcePool.inLevelEditor = true;
 		
 		Button_TopDown = GameObject.Find ("Button_TopDown").GetComponent("Button") as Button;
 		Button_Perspective = GameObject.Find ("Button_Perspective").GetComponent("Button") as Button;
