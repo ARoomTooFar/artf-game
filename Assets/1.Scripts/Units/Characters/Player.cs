@@ -27,21 +27,21 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	public UIActive UI;
 	public Controls controls;
-
+	
 	// Events for death
 	public delegate void DieBroadcast(GameObject dead);
 	public static event DieBroadcast OnDeath;
-
+	
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType("Enemy");
 	}
-
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
 	}
-
+	
 	protected override void setInitValues() {
 		base.setInitValues();
 		//Testing with base 0-10 on stats with 10 being 100/cap%
@@ -101,10 +101,10 @@ public class Player : Character, IMoveable, IHealable<int>{
 			
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
 			animSteHash = animSteInfo.nameHash;
-
+			
 			freeAnim = !stunned && !knockedback;
-
-
+			
+			
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
 			
@@ -118,7 +118,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 			animationUpdate ();
 		}
 	}
-
+	
 	//---------------------------------//
 	// Action interface implementation //
 	//---------------------------------//
@@ -126,14 +126,14 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void actionCommands() {
 		// Invokes an action/animation
 		if(Input.GetKey("space")&&testable){
-				if(!stats.isDead){
+			if(!stats.isDead){
 				damage(testDmg);
 				testable = false;
-				}/*else{
+			}/*else{
 					rez();
 					testable=false;
 				}*/
-			}
+		}
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack) || (controls.joyUsed &&  Input.GetButtonDown(controls.joyAttack))) {
 				if(currDoor!=null){
@@ -185,7 +185,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	}
 	
 	//-------------------------------------------//
-
+	
 	//-----------------------------------//
 	// Movement interface implementation //
 	//-----------------------------------//
@@ -193,7 +193,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	// Might separate commands into a protected function and just have a movement function
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
-
+		
 		if (!stats.isDead&&actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing) && this.testControl)) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
 			if (Input.GetKey(controls.up)) {
@@ -230,7 +230,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		}
 	}
 	//-------------------------------------//
-
+	
 	//---------------------------------//
 	// Damage Interface Implementation //
 	//---------------------------------//
@@ -238,14 +238,14 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void damage(int dmgTaken, Character striker) {
 		if (!invincible&&!stats.isDead) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
-		
+			
 			// print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
 			
 			if (stats.health <= 0) {
 				die();
 			}
-//			UI.hpBar.current = stats.health;
+			//			UI.hpBar.current = stats.health;
 		}
 	}
 	
@@ -261,7 +261,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 			//UI.hpBar.current = stats.health;
 		}
 	}
-
+	
 	public override void die() {
 		Debug.Log("IsDead");
 		base.die();
@@ -278,7 +278,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		}
 	}
 	
-    //---------------------------------//
+	//---------------------------------//
 	
 	//---------------------------------//
 	// Heal Interface Implementation //
@@ -308,13 +308,13 @@ public class Player : Character, IMoveable, IHealable<int>{
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		foreach (Renderer r in rs) {
 			if(GetComponent<Renderer>().gameObject.tag != "Item")
-			r.enabled = true;
+				r.enabled = true;
 		}
 		//UI.hpBar.current = stats.health;
 	}
-
+	
 	//----------------------------------//
-
+	
 	// Grey Health functions
 	public virtual int greyTest(int damage){
 		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){

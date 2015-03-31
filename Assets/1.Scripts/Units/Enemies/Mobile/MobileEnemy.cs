@@ -10,7 +10,6 @@ public class MobileEnemy : Enemy {
 	protected Vector3 targetDir;
 
 	protected float tempTimer;
-
 	//-------------------//
 	// Primary Functions //
 	//-------------------//

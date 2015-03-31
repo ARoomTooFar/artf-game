@@ -1,0 +1,111 @@
+fileFormatVersion: 2
+guid: 44877e0d4ec3e4e34bfe4f67c625eec4
+timeCreated: 1426539422
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: belt
+    100002: GEO-eyes
+    100004: IshtarmaleA
+    100006: IshtarmaleA_MeshPart0
+    100008: IshtarmaleA_MeshPart1
+    100010: scabbard
+    100012: scabbard_001
+    100014: sword
+    100016: sword_001
+    100018: //RootNode
+    400000: belt
+    400002: GEO-eyes
+    400004: IshtarmaleA
+    400006: IshtarmaleA_MeshPart0
+    400008: IshtarmaleA_MeshPart1
+    400010: scabbard
+    400012: scabbard_001
+    400014: sword
+    400016: sword_001
+    400018: //RootNode
+    2300000: belt
+    2300002: GEO-eyes
+    2300004: IshtarmaleA_MeshPart0
+    2300006: IshtarmaleA_MeshPart1
+    2300008: scabbard
+    2300010: scabbard_001
+    2300012: sword
+    2300014: sword_001
+    3300000: belt
+    3300002: GEO-eyes
+    3300004: IshtarmaleA_MeshPart0
+    3300006: IshtarmaleA_MeshPart1
+    3300008: scabbard
+    3300010: scabbard_001
+    3300012: sword
+    3300014: sword_001
+    4300000: belt
+    4300002: sword_001
+    4300004: scabbard_001
+    4300006: sword
+    4300008: scabbard
+    4300010: IshtarmaleA_MeshPart0
+    4300012: IshtarmaleA_MeshPart1
+    4300014: GEO-eyes
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
