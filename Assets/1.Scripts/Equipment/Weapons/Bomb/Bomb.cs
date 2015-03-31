@@ -10,6 +10,7 @@ public class Bomb : MonoBehaviour {
 
 	// EXPLOSIONS!!!!!!!!!!
 	public GameObject expDeath;
+	public AoETargetting aoe;
 
 	// Variables
 	protected int damage;
@@ -18,7 +19,6 @@ public class Bomb : MonoBehaviour {
 	protected Type opposition;
 	protected Character user;
 
-	protected List<Character> targetsInRange;
 
 	//-------------------//
 	// Primary Functions //
@@ -39,8 +39,14 @@ public class Bomb : MonoBehaviour {
 		this.damage = damage;
 		this.castEffect = castEffect;
 		this.debuff = debuff;
-		
-		this.targetsInRange = new List<Character> ();
+
+		if (this.aoe == null) Debug.LogWarning ("AoE object not set in the inspector of a bomb");
+		else {
+			if (opposition == typeof(Enemy)) this.aoe.affectEnemies = true;
+			if (opposition == typeof(Player)) this.aoe.affectPlayers = true;
+		}
+
+		// this.targetsInRange = new List<Character> ();
 		if (this.castEffect && this.debuff == null) Debug.LogWarning ("Cast Effect set on bomb, but no debuff is given");
 	}
 
@@ -68,9 +74,9 @@ public class Bomb : MonoBehaviour {
 		// Variables for sight checking
 		RaycastHit[] hits;
 		bool inSight;
-
+		
 		// For all targets that are within our collider at this point, check that they aren't behind a wall and hit them
-		foreach(Character suckers in this.targetsInRange) {
+		foreach(Character suckers in this.aoe.unitsInRange) {//this.targetsInRange) {
 			inSight = true;
 			hits = Physics.RaycastAll(this.transform.position,
 			                          (suckers.transform.position - this.transform.position).normalized,
@@ -99,6 +105,8 @@ public class Bomb : MonoBehaviour {
 	// Triggers //
 	//----------//
 
+
+	/*
 	void OnTriggerEnter(Collider other) {
 		Character enemy = (Character) other.GetComponent(opposition);
 		if (enemy != null) {
@@ -111,7 +119,7 @@ public class Bomb : MonoBehaviour {
 		if (enemy != null) {
 			this.targetsInRange.Remove(enemy);
 		}
-	}
+	}*/
 
 	//--------------//
 }

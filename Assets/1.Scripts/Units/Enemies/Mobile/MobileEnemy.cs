@@ -156,8 +156,8 @@ public class MobileEnemy : Enemy {
 		// If we don't have a target currently and aren't alerted, automatically assign anyone in range that we can see as our target
 		if (this.actable) {
 			if (this.target == null) {// && !this.alerted) {
-				if (aRange.inRange.Count > 0) {
-					foreach(Character tars in aRange.inRange) {
+				if (aRange.unitsInRange.Count > 0) {
+					foreach(Character tars in aRange.unitsInRange) {
 						if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
 							this.alerted = true;
 							target = tars.gameObject;
@@ -184,8 +184,8 @@ public class MobileEnemy : Enemy {
 	
 	protected virtual bool isAttacking() {
 		if (this.target != null && !this.isInAtkAnimation()) {
-			//float distance = this.distanceToPlayer(this.target);
-			float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
+			float distance = this.distanceToPlayer(this.target);
+			//float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
 			//&& this.canSeePlayer(this.target)
 			return distance < this.maxAtkRadius && distance >= this.minAtkRadius;
 		}

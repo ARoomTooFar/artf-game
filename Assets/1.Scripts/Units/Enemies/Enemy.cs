@@ -16,7 +16,8 @@ public class Enemy : Character {
 	public Swarm swarm;
 	
 	// Moved from my AI enemy - Francis
-	public AggroRange aRange;
+	// public AggroRange aRange;
+	public AoETargetting aRange;
 	
 	protected StateMachine sM;
 	
@@ -49,7 +50,8 @@ public class Enemy : Character {
 		
 		facing = Vector3.back;
 
-		aRange.opposition = this.opposition;
+		// aRange.opposition = this.opposition;
+		aRange.affectPlayers = true;
 		
 		//State machine initialization
 		sM = new StateMachine ();
@@ -173,7 +175,7 @@ public class Enemy : Character {
 	//-------------------------------//
 
 	public override void damage(int dmgTaken, Character striker) {
-		base.damage(dmgTaken, striker);		
+		base.damage(dmgTaken, striker);
 
 		if (aggro == false) {
 			aggro = true;

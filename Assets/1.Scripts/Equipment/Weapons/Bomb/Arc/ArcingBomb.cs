@@ -5,6 +5,7 @@ using System;
 public class ArcingBomb : Bomb {	
 
 	protected float speed = 15.0f;
+	protected GameObject targetLocation;
 
 	//-------------------//
 	// Primary Functions //
@@ -27,8 +28,9 @@ public class ArcingBomb : Bomb {
 
 	public virtual void setInitValues(Character player, Type opposition, int damage, bool effect, BuffsDebuffs hinder, GameObject targetLocation) {
 		base.setInitValues(player, opposition, damage, effect, hinder);
+		this.targetLocation = targetLocation;
 		this.shoot (this.calculateTrajectory (targetLocation.transform.position));
-		StartCoroutine (reachedDestination (targetLocation));
+		// StartCoroutine (reachedDestination (targetLocation));
 	}
 
 	//-------------------//
@@ -40,6 +42,12 @@ public class ArcingBomb : Bomb {
 
 	protected virtual void shoot(Vector3 trajectory) {
 		this.GetComponent<Rigidbody> ().velocity = trajectory;
+	}
+
+	protected virtual void reachedDestination() {
+		Destroy (this.targetLocation);
+		this.targetLocation = null;
+		this.explode ();
 	}
 
 	//---------------------//
@@ -87,8 +95,6 @@ public class ArcingBomb : Bomb {
 		while (Vector3.Distance(this.transform.position, destination.transform.position) > 0.5f) {
 			yield return null;
 		}
-		Destroy (destination);
-		this.explode ();
 	}
 
 	//-----------//
@@ -105,4 +111,10 @@ public class ArcingBomb : Bomb {
 
 	//-------------//
 
+
+	void OnTriggerEnter(Collider other) {
+		if (this.targetLocation != null && other.gameObject == this.targetLocation) {
+			this.reachedDestination();
+		}
+	}
 }

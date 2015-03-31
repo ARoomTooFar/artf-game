@@ -34,9 +34,7 @@ public class AggroRange : MonoBehaviour {
 	void OnTriggerExit(Collider other) {
 		Character enemy = (Character) other.GetComponent(opposition);
 		if (enemy != null) {
-			if (inRange.Contains(enemy)) {
-				inRange.Remove(enemy);
-			}
+			inRange.Remove(enemy);
 		}
 	}
 }
