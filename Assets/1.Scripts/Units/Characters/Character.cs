@@ -284,7 +284,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	protected virtual void movementAnimation() {
 		// animator.speed = 1; // Change animation speed back for other animations
-		if (GetComponent<Rigidbody>().velocity != Vector3.zero) {
+		if (GetComponent<Rigidbody>().velocity != Vector3.zero && facing != Vector3.zero) {
 			animator.SetBool("Moving", true);
 			transform.localRotation = Quaternion.LookRotation(facing);
 		} else {

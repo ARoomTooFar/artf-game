@@ -9,10 +9,10 @@ public class Swarm : MonoBehaviour {
 
 	public AggroTable aggroTable;
 	public GameObject target;
+	public int priority;
 
 	// Use this for initialization
 	void Start () {
-	
 	}
 
 	void Awake () {
@@ -22,6 +22,7 @@ public class Swarm : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		target = aggroTable.getTarget ();
+		priority = aggroTable.getVal ();
 	}
 
 	protected virtual void swarmTarget(GameObject newTarget)

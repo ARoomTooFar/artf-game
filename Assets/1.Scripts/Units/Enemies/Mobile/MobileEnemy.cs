@@ -10,7 +10,6 @@ public class MobileEnemy : Enemy {
 	protected Vector3 targetDir;
 
 	protected float tempTimer;
-
 	//-------------------//
 	// Primary Functions //
 	//-------------------//
@@ -129,12 +128,13 @@ public class MobileEnemy : Enemy {
 		atkAnimation.addTransition (tAttack);
 		atkAnimation.addTransition (tSearch);
 		atkAnimation.addTransition (tSpace);
-		search.addTransition (tApproach);
 		search.addTransition (tAttack);
+		search.addTransition (tApproach);
 		search.addTransition (tRetreat);
 		search.addTransition (tSpace);
 		retreat.addTransition (tRest);
 		retreat.addTransition (tApproach);
+		// spacing.addTransition (tApproach);
 		spacing.addTransition (tFar);
 		far.addTransition (tApproach);
 		far.addTransition (tAttack);
@@ -157,7 +157,7 @@ public class MobileEnemy : Enemy {
 			if (this.target == null) {// && !this.alerted) {
 				if (aRange.inRange.Count > 0) {
 					foreach(Character tars in aRange.inRange) {
-						if (this.canSeePlayer(tars.gameObject)) {
+						if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
 							this.alerted = true;
 							target = tars.gameObject;
 							break;
@@ -223,6 +223,9 @@ public class MobileEnemy : Enemy {
 			float distance = this.distanceToPlayer(this.target);
 			return distance > this.minAtkRadius;
 		}
+		if (this.target == null) {
+			return true;
+		}
 		return false;
 	}
 	
@@ -235,7 +238,7 @@ public class MobileEnemy : Enemy {
 	
 	protected virtual void Rest() {
 		// this.resetpos = this.transform.position;
-
+		this.StopSearch ();
 		if (!this.isApproaching() && tempTimer > 0.0f) {
 			tempTimer -= Time.deltaTime;
 		} else {
@@ -294,7 +297,7 @@ public class MobileEnemy : Enemy {
 	}
 
 	protected virtual void Spacing() {
-		this.facing = (this.target.transform.position - this.transform.position) * -1;
+		this.facing = (this.lastSeenPosition.Value - this.transform.position) * -1;
 		this.facing.y = 0.0f;
 		this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 	}

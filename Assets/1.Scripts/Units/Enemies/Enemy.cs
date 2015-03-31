@@ -10,6 +10,10 @@ public class Enemy : Character {
 	public float dmgTimer = 0f;
 	public bool aggro = false;
 
+	//Is this unit part of the hive mind?
+	public bool swarmBool = false;
+	//Object which holds hivemind aggrotable
+	public Swarm swarm;
 	
 	// Moved from my AI enemy - Francis
 	public AggroRange aRange;
@@ -22,19 +26,28 @@ public class Enemy : Character {
 	
 	// Variables for use in player detection
 	protected bool alerted = false;
-	protected GameObject target;
+	public GameObject target;
 	protected Vector3? lastSeenPosition = null;
 	protected AggroTable aggroT;
 	
 	protected float aggroTimer = 7.0f;
+
+	void OnEnable()
+	{
+		Player.OnDeath += playerDied;
+	}
 	
 	
+	void OnDisable()
+	{
+		Player.OnDeath -= playerDied;
+	}
+
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType ("Player");
 		
 		facing = Vector3.back;
-		aggroT = new AggroTable();
 
 		aRange.opposition = this.opposition;
 		
@@ -47,35 +60,45 @@ public class Enemy : Character {
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
+		
+		//Uses swarm aggro table if this unit swarms
+		if(swarmBool){
+			aggroT = swarm.aggroTable;
+		}
+		else{
+			aggroT = new AggroTable();
+		}
 	}
 
 	// Update is called once per frame
 	protected override void Update () {
-		if(!isDead) {
+		if (!stats.isDead) {
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
-			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+			animSteInfo = animator.GetCurrentAnimatorStateInfo (0);
 			animSteHash = animSteInfo.nameHash;
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
-			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
+			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
 			
 			
 			//If aggro'd, will chase, and if not attacked for 5 seconds, will deaggro
-			if (aggro == true) 
-			{
+			if (aggro == true) {
 				fAggro ();
 			}
 
 
 			if (isGrounded) {
-				movementAnimation();
+				movementAnimation ();
 			} else {
-				falling();
+				falling ();
 			}
 
-			if (target != null) target = aggroT.getTarget ();
+			if (target != null)
+				target = aggroT.getTarget ();
 			
 			sM.Update ();
+		} else {
+			Destroy (gameObject);
 		}
 	}
 
@@ -152,7 +175,14 @@ public class Enemy : Character {
 	//-------------------------------//
 
 	public override void damage(int dmgTaken, Character striker) {
-		base.damage(dmgTaken, striker);
+		base.damage(dmgTaken, striker);		
+
+		if (aggro == false) {
+			aggro = true;
+			dmgTimer = 0f;
+		}		
+
+		aggroT.add(striker.gameObject, dmgTaken);
 	}
 	
 	public override void damage(int dmgTaken) {
@@ -161,7 +191,7 @@ public class Enemy : Character {
 			aggro = true;
 			dmgTimer = 0f;
 		}
-		
+
 		base.damage(dmgTaken);
 	}
 
@@ -179,12 +209,20 @@ public class Enemy : Character {
 		else if (dmgTimer >= 5f)
 		{
 			resetAggro ();
+			dmgTimer = 0f;
 		}
 	}
 	
 	public virtual void resetAggro(){
 		dmgTimer = 0f;
 		aggro = false;
+		target = null;
+	}
+
+	public virtual void playerDied(GameObject dead){
+		if (aggroT != null) {
+			aggroT.deletePlayer(dead);
+		}
 	}
 	
 	//---------------//
