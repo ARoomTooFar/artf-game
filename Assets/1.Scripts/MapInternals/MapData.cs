@@ -181,6 +181,7 @@ public static class MapData {
 	#region Scenery
 	#region SceneryManipulation
 	public static void addScenery(string type, Vector3 pos, DIRECTION dir){
+
 		if(!isAddSceneryValid(type, pos, dir)){
 			return;
 		}
