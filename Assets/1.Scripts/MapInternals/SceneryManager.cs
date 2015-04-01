@@ -88,9 +88,11 @@ public class SceneryManager {
 				blk.remove();
 				return false;
 			}
-			//Debug.Log(blk.Orientation);
+			Debug.Log(blk.Orientation);
 			MapData.TheFarRooms.find(blk.Position).Doors.Add(blk);
 			MapData.TheFarRooms.find(blk.Position).linkRoomsViaDoors();
+
+			//aaron - gets wall tiles that are replaced by door
 			foreach(Vector3 pos in blk.Coordinates){
 				MapData.TerrainBlocks.find(pos).removeWall();
 			}
@@ -102,6 +104,7 @@ public class SceneryManager {
 			return false;
 		}
 		//get the list for the block type
+//		Debug.Log(blk.BlockID);
 		List<SceneryBlock> lst;
 		try{
 			lst = dictionary[blk.BlockID];

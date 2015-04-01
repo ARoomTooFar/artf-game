@@ -45,6 +45,8 @@ public class CameraController : MonoBehaviour {
 	private Vector3 prevMouse = new Vector3();
 	private bool prevMouseBool = false;
 	private Ray ray;
+
+	bool drawTallBox = false;
 	
 	
 	void Awake ()
@@ -294,59 +296,62 @@ public class CameraController : MonoBehaviour {
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
 
-		Vector3 pLA = new Vector3 (point.x - squareWidth, point.y, point.z - squareWidth);
-		Vector3 pLB = new Vector3(point.x-squareWidth, point.y, point.z+squareWidth);
-		Vector3 pLC = new Vector3(point.x+squareWidth, point.y, point.z+squareWidth);
-		Vector3 pLD = new Vector3(point.x+squareWidth, point.y, point.z-squareWidth);
+		if (drawTallBox) {
+			Vector3 pLA = new Vector3 (point.x - squareWidth, point.y, point.z - squareWidth);
+			Vector3 pLB = new Vector3 (point.x - squareWidth, point.y, point.z + squareWidth);
+			Vector3 pLC = new Vector3 (point.x + squareWidth, point.y, point.z + squareWidth);
+			Vector3 pLD = new Vector3 (point.x + squareWidth, point.y, point.z - squareWidth);
 
-		Vector3 pUA = new Vector3 (point.x - squareWidth, point.y + cubeHeight, point.z - squareWidth);
-		Vector3 pUB = new Vector3(point.x-squareWidth, point.y + cubeHeight, point.z+squareWidth);
-		Vector3 pUC = new Vector3(point.x+squareWidth, point.y + cubeHeight, point.z+squareWidth);
-		Vector3 pUD = new Vector3(point.x+squareWidth, point.y + cubeHeight, point.z-squareWidth);
+			Vector3 pUA = new Vector3 (point.x - squareWidth, point.y + cubeHeight, point.z - squareWidth);
+			Vector3 pUB = new Vector3 (point.x - squareWidth, point.y + cubeHeight, point.z + squareWidth);
+			Vector3 pUC = new Vector3 (point.x + squareWidth, point.y + cubeHeight, point.z + squareWidth);
+			Vector3 pUD = new Vector3 (point.x + squareWidth, point.y + cubeHeight, point.z - squareWidth);
 
-		GL.Vertex(pLA);
-		GL.Vertex(pLB);
-		GL.Vertex(pLC);
-		GL.Vertex(pLD);
+			GL.Vertex (pLA);
+			GL.Vertex (pLB);
+			GL.Vertex (pLC);
+			GL.Vertex (pLD);
 
-		GL.Vertex(pUA);
-		GL.Vertex(pUB);
-		GL.Vertex(pUC);
-		GL.Vertex(pUD);
+			GL.Vertex (pUA);
+			GL.Vertex (pUB);
+			GL.Vertex (pUC);
+			GL.Vertex (pUD);
 		
-		GL.Vertex(pUA);
-		GL.Vertex(pUB);
-		GL.Vertex(pUC);
-		GL.Vertex(pUD);
+			GL.Vertex (pUA);
+			GL.Vertex (pUB);
+			GL.Vertex (pUC);
+			GL.Vertex (pUD);
 
 
-		GL.Vertex(pLB);
-		GL.Vertex(pUB);
-		GL.Vertex(pUA);
-		GL.Vertex(pLA);
+			GL.Vertex (pLB);
+			GL.Vertex (pUB);
+			GL.Vertex (pUA);
+			GL.Vertex (pLA);
 
-		GL.Vertex(pLA);
-		GL.Vertex(pUA);
-		GL.Vertex(pUD);
-		GL.Vertex(pLD);
+			GL.Vertex (pLA);
+			GL.Vertex (pUA);
+			GL.Vertex (pUD);
+			GL.Vertex (pLD);
 
-		GL.Vertex(pLC);
-		GL.Vertex(pUC);
-		GL.Vertex(pUB);
-		GL.Vertex(pLB);
+			GL.Vertex (pLC);
+			GL.Vertex (pUC);
+			GL.Vertex (pUB);
+			GL.Vertex (pLB);
 		
-		GL.Vertex(pLD);
-		GL.Vertex(pUD);
-		GL.Vertex(pUC);
-		GL.Vertex(pLC);
+			GL.Vertex (pLD);
+			GL.Vertex (pUD);
+			GL.Vertex (pUC);
+			GL.Vertex (pLC);
+		}
 
 
 		
-		GL.End();
+		GL.End ();
 	}
 	
 	/* draw the grid lines */
-	void drawGrid(){
+	void drawGrid ()
+	{
 		GL.Begin (GL.LINES);
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
