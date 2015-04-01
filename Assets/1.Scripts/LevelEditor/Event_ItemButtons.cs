@@ -133,6 +133,13 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 					int z = Mathf.RoundToInt (hitInfo.point.z / tilemapcont.tileSize);
 
 					Vector3 movePos = new Vector3 (x, 0f, z);
+
+					//snap door to an edge if it's near it
+					if(MapData.TheFarRooms.find(movePos) != null){
+						if((MapData.TheFarRooms.find(movePos).isCloseToEdge(movePos, 3f)))
+							movePos = MapData.TheFarRooms.find(movePos).getNearestEdgePosition(movePos);
+					}
+
 					itemObjectCopy.transform.position = movePos;
 
 					//if it's a door, set it to last wall rotation
@@ -143,7 +150,10 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 //					itemObjectCopy.transform.rotation = Quaternion.Euler(new Vector3(0f, 45f ,0f));
 						
 					//for final placement of object, after we break from this loop
-					newp = new Vector3 (x * 1.0f, 0f, z * 1.0f);
+//					newp = new Vector3 (x * 1.0f, 0f, z * 1.0f);
+					newp = movePos;
+
+
 
 					//if copy exists
 					if (copyCreated) {
