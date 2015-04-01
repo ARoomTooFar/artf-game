@@ -75,7 +75,7 @@ public class StunTrap : Traps {
 		if (this.aoe.unitsInRange.Count > 0) stunBlast ();
 	}
 
-	public void unitEntered() {
+	public void unitEntered(Character entered) {
 		stunBlast ();
 	}
 }

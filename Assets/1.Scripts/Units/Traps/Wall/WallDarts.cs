@@ -11,7 +11,8 @@ public class WallDarts : Traps {
 
 	protected float timeSinceLastFire;
 
-	protected List<Character> unitsInTrap;
+	// protected List<Character> unitsInTrap;
+	protected AoETargetting aoe;
 	protected ParticleSystem darts;
 	protected bool firing;
 	
@@ -19,7 +20,10 @@ public class WallDarts : Traps {
 	protected override void Start () {
 		base.Start ();
 		darts = GetComponent<ParticleSystem> ();
-		unitsInTrap = new List<Character>();
+		this.aoe = this.GetComponent<AoETargetting>();
+		this.aoe.affectEnemies = true;
+		this.aoe.affectPlayers = true;
+		// unitsInTrap = new List<Character>();
 		firing = true;
 		debuff = new Knockback();
 	}
@@ -57,9 +61,15 @@ public class WallDarts : Traps {
 			yield return null;
 		}
 		firing = true;
-		if (unitsInTrap.Count > 0) fireDarts ();
+		if (aoe.unitsInRange.Count > 0) fireDarts ();
 	}
 
+
+	public void unitEntered(Character entered) {
+		this.fireDarts();
+	}
+
+	/*
 	void OnTriggerEnter(Collider other) {
 		Character enemy = other.GetComponent<Character>();
 		
@@ -77,7 +87,7 @@ public class WallDarts : Traps {
 				unitsInTrap.Remove (enemy);
 			}
 		}
-	}
+	}*/
 
 	void OnParticleCollision(GameObject other) {
 		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
@@ -93,8 +103,8 @@ public class WallDarts : Traps {
 	}
 
 	void OnEnable() {
-		if (unitsInTrap != null) {
-			unitsInTrap.Clear();
+		if (aoe.unitsInRange != null) {
+			aoe.unitsInRange.Clear();
 		}
 		firing = true;
 	}
