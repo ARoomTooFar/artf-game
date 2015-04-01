@@ -31,7 +31,7 @@ public class ItemObject : MonoBehaviour
 		focusedShader = Shader.Find ("Transparent/Bumped Diffuse");
 		nonFocusedShader = Shader.Find ("Bumped Diffuse");
 		
-		this.gameObject.GetComponent<Renderer>().material.shader = nonFocusedShader;
+		this.gameObject.GetComponentInChildren<Renderer>().material.shader = nonFocusedShader;
 	}
 	
 	void Update ()
@@ -120,10 +120,17 @@ public class ItemObject : MonoBehaviour
 						if (copyCreated) {
 							//update the item object things
 							//shader has to be set in this loop, or transparency won't work
-							itemObjectCopy.gameObject.GetComponent<Renderer>().material.shader = focusedShader;
-							Color trans = itemObjectCopy.gameObject.GetComponent<Renderer>().material.color;
-							trans.a = 0.5f;
-							itemObjectCopy.gameObject.GetComponent<Renderer>().material.SetColor ("_Color", trans);
+							//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
+							foreach (Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()){
+								rend.material.shader = focusedShader;
+								Color trans = rend.material.color;
+								trans.a = .5f;
+								rend.material.color = trans;
+
+							}
+							//Color trans = itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.color;
+							//trans.a = 0.5f;
+							//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.SetColor ("_Color", trans);
 							itemObjectCopy.transform.position = new Vector3 (x, getPosition ().y, z);
 							itemObjectCopy.transform.eulerAngles = getRotation();
 	

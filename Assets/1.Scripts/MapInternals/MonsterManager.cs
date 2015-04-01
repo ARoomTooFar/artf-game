@@ -48,7 +48,9 @@ public class MonsterManager {
 	}
 	
 	public void move(MonsterBlock blk, Vector3 offset){
+		unlinkTerrain (blk);
 		blk.move(offset);
+		linkTerrain (blk);
 	}
 	#endregion Move
 
@@ -91,7 +93,7 @@ public class MonsterManager {
 	 * Also links block as a neighbor to any adjacent blocks.
 	 */
 	private void linkTerrain(MonsterBlock blk) {
-//		MapData.TerrainBlocks.find(blk.Position).addMonster(blk);
+		MapData.TerrainBlocks.find(blk.Position).addMonster(blk);
 	}
 
 	/*
