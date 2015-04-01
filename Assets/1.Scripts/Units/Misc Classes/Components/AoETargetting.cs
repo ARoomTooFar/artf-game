@@ -29,6 +29,7 @@ public class AoETargetting : MonoBehaviour {
 		}
 	}
 	
+	// Same as above, but for when stuff leave the area
 	void OnTriggerExit(Collider other) {
 		Character unit = other.GetComponent<Character>();
 		

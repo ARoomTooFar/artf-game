@@ -149,6 +149,8 @@ public class Enemy : Character {
 	}
 
 	protected virtual bool canSeePlayer(GameObject p) {
+		if (p == null) return false;
+	
 		// Check angle of forward direction vector against the vector of enemy position relative to player position
 		Vector3 direction = p.transform.position - transform.position;
 		float angle = Vector3.Angle(direction, this.facing);
@@ -167,6 +169,17 @@ public class Enemy : Character {
 		}
 		
 		return false;
+	}
+	
+	// Will change units facing to be towards their target. If new facing is zero it doesn't changes
+	protected virtual void getFacingTowardsTarget() {
+		Vector3 newFacing = Vector3.zero;
+
+		if (this.target != null) {
+			newFacing = this.target.transform.position - this.transform.position;
+			newFacing.y = 0.0f;
+			if (newFacing != Vector3.zero) this.facing = newFacing.normalized;
+		}
 	}
 	
 	//----------------------//

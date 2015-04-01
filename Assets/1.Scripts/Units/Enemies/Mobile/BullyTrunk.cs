@@ -12,6 +12,8 @@ public class BullyTrunk: MobileEnemy {
 
 	protected float headReduction, sideReduction, headSlow, sideSlow;
 
+
+	// The front and side versions of riot shield for the bully trunk (Differing values and directional effects
 	protected class RockHead : Singular {
 		
 		private float spdPercent, redPercent;
@@ -194,10 +196,9 @@ public class BullyTrunk: MobileEnemy {
 	//-------------------//
 
 	protected virtual void chargingCharge () {
-		this.facing = this.target.transform.position - this.transform.position;
-		this.facing.y = 0.0f;
+		this.getFacingTowardsTarget();
 		this.GetComponent<Rigidbody>().velocity = (this.facing.normalized * stats.speed * stats.spdManip.speedPercent);
-		transform.localRotation = Quaternion.LookRotation(facing);
+		this.transform.localRotation = Quaternion.LookRotation(facing);
 		/*
 		if (!this.canSeePlayer(this.target)) {
 			this.target = null;

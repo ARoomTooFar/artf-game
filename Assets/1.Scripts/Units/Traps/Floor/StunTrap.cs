@@ -51,7 +51,7 @@ public class StunTrap : Traps {
 			spike.transform.localPosition = Vector3.MoveTowards(spike.transform.localPosition, newPos, Time.deltaTime * 60);
 			yield return null;
 		}
-		foreach (Character suckers in this.aoe.unitsInRange) {//unitsInTrap) {
+		foreach (Character suckers in this.aoe.unitsInRange) {
 			suckers.BDS.addBuffDebuff(debuff, this.gameObject, 1.0f);
 		}
 		StartCoroutine(lower());

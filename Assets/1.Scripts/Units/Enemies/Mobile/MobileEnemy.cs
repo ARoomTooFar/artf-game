@@ -201,6 +201,7 @@ public class MobileEnemy : Enemy {
 
 	protected virtual bool isSearching() {
 		if (this.target == null || (this.lastSeenPosition.HasValue && !(this.canSeePlayer (this.target) && this.alerted) && !this.isInAtkAnimation()) && this.actable) {
+			print (this.canSeePlayer (this.target));
 			return true;
 		}
 		return false;
@@ -246,23 +247,23 @@ public class MobileEnemy : Enemy {
 			tempTimer = 0.5f;
 
 			this.resetpos = this.transform.position;
-			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
-			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.facing = Vector3.zero;
+			while (this.facing == Vector3.zero) this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
+			
+			this.GetComponent<Rigidbody>().velocity = this.facing * stats.speed * stats.spdManip.speedPercent;
 		}
 
 	}
 	
 	protected virtual void Approach() {
-		this.facing = this.target.transform.position - this.transform.position;
-		this.facing.y = 0.0f;
-		this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		this.getFacingTowardsTarget();
+		this.GetComponent<Rigidbody>().velocity = this.facing * stats.speed * stats.spdManip.speedPercent;
 	}
 
 	protected virtual void Attack() {
 		if (this.actable && !attacking){
-			this.facing = this.target.transform.position - this.transform.position;
-			this.facing.y = 0.0f;
-			transform.localRotation = Quaternion.LookRotation(facing);
+			this.getFacingTowardsTarget();
+			this.transform.localRotation = Quaternion.LookRotation(facing);
 			this.gear.weapon.initAttack();
 		}
 	}
@@ -361,6 +362,7 @@ public class MobileEnemy : Enemy {
 	// Calculation Functions //
 	//-----------------------//
 
+	/*
 	protected override bool canSeePlayer(GameObject p) {
 		Vector3 direction = p.transform.position - transform.position;
 		direction.Normalize();
@@ -384,7 +386,7 @@ public class MobileEnemy : Enemy {
 					this.alerted = true;
 					return true;
 				}
-			}*/
+			}
 
 
 			RaycastHit[] hits;
@@ -410,7 +412,7 @@ public class MobileEnemy : Enemy {
 		return false;
 
 
-	}
+	}*/
 
 	protected float distanceToVector3(Vector3 position) {
 		Vector3 distance = position - this.transform.position;
