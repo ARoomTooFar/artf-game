@@ -18,8 +18,12 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	public LayerMask draggingLayerMask;
 	bool clicked = false;
 	Shader translucentShader;
-	GameObject bgButt;
+	static GameObject bgButt;
+	static GameObject itemObjectCopy = null;
 	static int selectedButtonID = -1;
+	string placedItemName;
+	Vector3 placedItemPos;
+	Vector3 placedItemRot;
 	
 	void Start ()
 	{
@@ -44,12 +48,10 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			RaycastHit hit; 
 			
 			if (Physics.Raycast (ray, out hit, Mathf.Infinity) && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
-				
-				//check for tilemap so we don't try to drag it
-//				if (hit.collider.gameObject.name == "TileMap") {
+
 				clicked = false;
 				StartCoroutine (folderGhostDragging ());
-//				}
+
 			}
 		}
 	}
@@ -60,33 +62,36 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	 */
 	public void OnPointerClick (PointerEventData data)
 	{
-		//if no other button is currently selected
-		if (selectedButtonID == -1) {
-			clicked = true;
+		//deselect any other button that may be selected
+		if (selectedButtonID != -1 && selectedButtonID != this.gameObject.GetInstanceID ()) {
+			Destroy (bgButt);
+
+//			MapData.removeScenery (newp);
+		}
+		clicked = true;
 
 
-			//set this button to the currently selected button
-			selectedButtonID = this.gameObject.GetInstanceID ();
+		//set this button to the currently selected button
+		selectedButtonID = this.gameObject.GetInstanceID ();
 
 //			Debug.Log ("Clicked a button, selectedbuttonid: " + selectedButtonID);
 
-			//make new button to create a outline
-			bgButt = Instantiate (Resources.Load ("bgButton")) as GameObject;
-			bgButt.transform.SetParent (this.transform.parent);
-			RectTransform bgRect = bgButt.GetComponent ("RectTransform") as RectTransform;
+		//make new button to create a outline
+		bgButt = Instantiate (Resources.Load ("bgButton")) as GameObject;
+		bgButt.transform.SetParent (this.transform.parent);
+		RectTransform bgRect = bgButt.GetComponent ("RectTransform") as RectTransform;
 
-			//set it's position and scale
-			RectTransform thisRect = this.gameObject.GetComponent ("RectTransform") as RectTransform;
-			bgRect.anchoredPosition = new Vector2 (thisRect.anchoredPosition.x, thisRect.anchoredPosition.y);
-			bgRect.sizeDelta = new Vector2 (thisRect.sizeDelta.x + 10f, thisRect.sizeDelta.y + 10f);
+		//set its position and scale
+		RectTransform thisRect = this.gameObject.GetComponent ("RectTransform") as RectTransform;
+		bgRect.anchoredPosition = new Vector2 (thisRect.anchoredPosition.x, thisRect.anchoredPosition.y);
+		bgRect.sizeDelta = new Vector2 (thisRect.sizeDelta.x + 10f, thisRect.sizeDelta.y + 10f);
 
-			//set it's color
-			Button bgButton = bgButt.GetComponent ("Button") as Button;
-			bgButton.image.color = Color.yellow;
+		//set its color
+		Button bgButton = bgButt.GetComponent ("Button") as Button;
+		bgButton.image.color = Color.yellow;
 
-			//make it so it's just an outline
-			bgButton.image.fillCenter = false;
-		}
+		//make it so it's just an outline
+		bgButton.image.fillCenter = false;
 
 	}
 
@@ -95,7 +100,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		string prefabLocation = "Prefabs/" + connectedPrefab;
 
 		//for the ghost-duplicate
-		GameObject itemObjectCopy = null;
+		itemObjectCopy = null;
 		ItemObject copy = null;
 		
 		bool cancellingMove = false;
@@ -105,6 +110,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		Vector3 doorWallRot = new Vector3(0f, 0f, 0f);
 		
 		while (!Input.GetMouseButton(0)) { 
+
 			//if we haven't made a copy of the object yet
 			if (!copyCreated) {
 				//create copy of item object
@@ -132,44 +138,34 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 					int x = Mathf.RoundToInt (hitInfo.point.x / tilemapcont.tileSize);
 					int z = Mathf.RoundToInt (hitInfo.point.z / tilemapcont.tileSize);
 
+					//postion holder for inside this loop
 					Vector3 movePos = new Vector3 (x, 0f, z);
 
-					//snap door to an edge if it's near it
-					if(MapData.TheFarRooms.find(movePos) != null){
-						if((MapData.TheFarRooms.find(movePos).isCloseToEdge(movePos, 3f)))
-							movePos = MapData.TheFarRooms.find(movePos).getNearestEdgePosition(movePos);
-					}
-
-					itemObjectCopy.transform.position = movePos;
-
-					//if it's a door, set it to last wall rotation
-					if(doorRotated == true){
-						itemObjectCopy.transform.eulerAngles = doorWallRot;
-					}
-
-//					itemObjectCopy.transform.rotation = Quaternion.Euler(new Vector3(0f, 45f ,0f));
-						
 					//for final placement of object, after we break from this loop
-//					newp = new Vector3 (x * 1.0f, 0f, z * 1.0f);
 					newp = movePos;
-
-
 
 					//if copy exists
 					if (copyCreated) {
 
-						//if we got a door and it's on the edge of a room, set its new rotation
+						//if we got a door and it's on the edge of a room
 						if(itemObjectCopy.name == "doortile(Clone)" 
 						   && MapData.TheFarRooms.find(movePos) != null
-						   && MapData.TheFarRooms.find(movePos).isEdge(movePos)){
-							doorRotated = true;
-							doorWallRot = MapData.TheFarRooms.find(movePos).getWallSide(movePos).toRotationVector();;
+						   ){
+							//snap door to an edge if it's near it
+							if((MapData.TheFarRooms.find(movePos).isCloseToEdge(movePos, 3f)))
+								movePos = MapData.TheFarRooms.find(movePos).getNearestEdgePosition(movePos);
+
+							//set its new rotation
+							if(MapData.TheFarRooms.find(movePos).isEdge(movePos)){
+								doorRotated = true;
+								doorWallRot = MapData.TheFarRooms.find(movePos).getWallSide(movePos).toRotationVector();
+							}
+
 						}
 
 
 						//update the item object things
 						//shader has to be set in this loop, or transparency won't work
-
 						if (itemObjectCopy.gameObject.GetComponent<Renderer> () != null) {
 							itemObjectCopy.gameObject.GetComponent<Renderer> ().material.shader = translucentShader;
 							Color trans = itemObjectCopy.gameObject.GetComponent<Renderer> ().material.color;
@@ -177,6 +173,13 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 							itemObjectCopy.gameObject.GetComponent<Renderer> ().material.SetColor ("_Color", trans);
 						}
 					}
+
+					//if it's a door, set it to last wall rotation
+					if(doorRotated == true){
+						itemObjectCopy.transform.eulerAngles = doorWallRot;
+					}
+
+					itemObjectCopy.transform.position = movePos;
 				}
 			}
 			yield return null; 
@@ -184,19 +187,26 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		
 		//destroy the copy
 		Destroy (itemObjectCopy);
+		itemObjectCopy = null;
 		
 		//if move was cancelled, we don't perform an update on the item object's position
 		if (cancellingMove == true) {
 			Destroy (bgButt);
 			selectedButtonID = -1;
-//			Debug.Log ("Cancelled placing thing, selectedbuttonid: " + selectedButtonID);
 		} else {
 			Vector3 pos = newp;
 			Vector3 rot = new Vector3 (0f, 0f, 0f);
+
+			//don't place item if we've click a button
+			if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false
+			   )
 			MapData.addMonsterScenery (prefabLocation, pos, rot.toDirection ());
+//			placedItemName = prefabLocation;
+//			placedItemPos = pos;
+//			placedItemRot = rot;
+
 			Destroy (bgButt); //get rid of yellow selecting box around button
 			selectedButtonID = -1;
-//			Debug.Log ("Placed thing, selectedbuttonid: " + selectedButtonID);
 		}
 	}
 
