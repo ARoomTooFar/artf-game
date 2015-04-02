@@ -186,9 +186,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			yield return null; 
 		}
 		
-		//destroy the copy
-		Destroy (itemObjectCopy);
-		itemObjectCopy = null;
+
 		
 		//if move was cancelled, we don't perform an update on the item object's position
 		if (cancellingMove == true) {
@@ -200,11 +198,19 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 
 			//don't place item if we've click a button
 			if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false){
-				if ((MapData.TheFarRooms.find (pos).isCloseToEdge (pos, 3f))){
-					pos = MapData.TheFarRooms.find (pos).getNearestEdgePosition (pos);
+				SceneryData sdat = itemObjectCopy.GetComponent<SceneryData>();
+				if (sdat != null && sdat.isDoor){
+					ARTFRoom rm = MapData.TheFarRooms.find (pos);
+					if(rm != null && rm.isCloseToEdge(pos, 3f)){
+						pos = MapData.TheFarRooms.find (pos).getNearestEdgePosition (pos);
+					}
 				}
 				MapData.addMonsterScenery (prefabLocation, pos, rot.toDirection ());
 			}
+
+			//destroy the copy
+			Destroy (itemObjectCopy);
+			itemObjectCopy = null;
 //			placedItemName = prefabLocation;
 //			placedItemPos = pos;
 //			placedItemRot = rot;

@@ -115,26 +115,24 @@ public static class MapData {
 	}
 
 	public static void moveMonsterScenery(GameObject obj, Vector3 pos, Vector3 offset){
-		SceneryData smb = obj.GetComponent<SceneryData>();
-		MonsterData mmb = obj.GetComponent<MonsterData>();
-		WallCornerData wmb = obj.GetComponent<WallCornerData>();
+		BlockData data = obj.GetComponent<BlockData> ();
 
-//		Debug.Log("mMS");
-//		Debug.Log(pos);
+		if(data is WallCornerData) {
+			if(isResizeRoomValid(pos, pos+offset)){
+				TheFarRooms.resize(pos, pos+offset);
+			}
+			return;
+		}
 
-		if(smb != null){
+		if(data is SceneryData){
 			MapData.moveScenery(pos, offset);
+			return;
 		}
-		if(mmb != null) {
-			Debug.Log ("move monster");
+		if(data is MonsterData) {
 			MapData.moveMonster(pos, offset);
+			return;
 		}
-		if(wmb != null) {
-			Debug.Log("resize");
 
-			MapData.resizeRoom(pos, pos+offset);
-//			MapData.removeRoom(pos);
-		}
 	}
 
 	public static void rotateMonsterScenery(GameObject obj, Vector3 pos, bool goClockwise = true){
