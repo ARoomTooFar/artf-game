@@ -226,9 +226,11 @@ public class SceneryManager {
 			try{
 				blk.rotate(MapData.TheFarRooms.find(pos).getWallSide(pos));
 			} catch {
+				blk.remove();
 				return false;
 			}
 			if(blk.Orientation == DIRECTION.NonDirectional){
+				blk.remove();
 				return false;
 			}
 		}
