@@ -210,7 +210,7 @@ public class TileMapController : MonoBehaviour
 	
 	/* Add selected tile index to a list to be access by the camera script for rendering 
 	 * and update the last selected tile in case of shift click */
-	void selectTile (Vector3 add)
+	public void selectTile (Vector3 add)
 	{
 		selectedTiles.Add (add);
 		shiftOrigin = add;
@@ -223,7 +223,7 @@ public class TileMapController : MonoBehaviour
 	}
 	
 	/*deselects tile passed into function */
-	void deselect (Vector3 remove)
+	public void deselect (Vector3 remove)
 	{
 		selectedTiles.Remove (remove);
 	}
