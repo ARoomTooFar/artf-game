@@ -37,5 +37,9 @@ public class RoomNode : AbstractNode, IEquatable<RoomNode> {
 		}
 		return false;
 	}
+
+	public override string ToString(){
+		return Room.ToString();
+	}
 }
 
