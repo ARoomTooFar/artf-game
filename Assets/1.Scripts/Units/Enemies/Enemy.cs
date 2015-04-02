@@ -209,7 +209,7 @@ public class Enemy : Character {
 			dmgTimer = 0f;
 		}		
 
-		aggroT.add(striker.gameObject, dmgTaken);
+		// aggroT.add(striker.gameObject, dmgTaken); // This is causing the the AI to stop attacking and only approach and search for a target once they get damaged
 	}
 	
 	public override void damage(int dmgTaken) {
