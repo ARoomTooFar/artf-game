@@ -101,7 +101,7 @@ public class CameraController : MonoBehaviour {
 		selectTiles ();
 		drawGrid ();
 		drawMouseSquare();
-		drawBoxAroundFocusedObject();
+//		drawBoxAroundFocusedObject();
 	}
 	
 	void Update () {
