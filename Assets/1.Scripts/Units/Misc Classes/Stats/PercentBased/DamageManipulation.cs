@@ -4,7 +4,6 @@
 using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
 public class DamageManipulation {
 
 	// Each direction has their own objects
