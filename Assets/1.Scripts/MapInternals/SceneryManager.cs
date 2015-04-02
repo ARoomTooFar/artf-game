@@ -94,7 +94,7 @@ public class SceneryManager {
 
 			//aaron - gets wall tiles that are replaced by door
 			foreach(Vector3 pos in blk.Coordinates){
-				MapData.TerrainBlocks.find(pos).removeWall();
+				MapData.TerrainBlocks.find(pos).Wall.GameObj.SetActive(false);
 			}
 		}
 		//attempt to link the scenery to the appropriate terrain
@@ -133,11 +133,16 @@ public class SceneryManager {
 	}
 
 	public void remove(SceneryBlock blk) {
+		if(blk == null) {
+			return;
+		}
 		unlinkTerrain(blk);
-		/*
 		if(blk.BlockInfo.isDoor){
 			MapData.TheFarRooms.find(blk.Position).Doors.Remove(blk);
-		}*/
+			foreach(Vector3 pos in blk.Coordinates){
+				MapData.TerrainBlocks.find(pos).Wall.GameObj.SetActive(true);
+			}
+		}
 		blk.remove();
 		dictionary[blk.BlockID].Remove(blk);
 	}

@@ -145,17 +145,14 @@ public static class MapData {
 		}
 	}
 
-	public static void removeObject(GameObject obj, Vector3 pos) {
-		BlockData data = obj.GetComponent<BlockData>();
+	public static void removeObjects(HashSet<Vector3> set){
+		foreach(Vector3 vec in set) {
+			removeObject(vec);
+		}
+	}
 
-		if(data is SceneryData) {
-			SceneryBlocks.remove(pos);
-			return;
-		}
-		
-		if(data is MonsterData) {
-			MonsterBlocks.remove(pos);
-			return;
-		}
+	public static void removeObject(Vector3 pos) {
+		SceneryBlocks.remove(pos);
+		MonsterBlocks.remove(pos);
 	}
 }
