@@ -11,8 +11,6 @@ public abstract class AbstractNode : IEquatable<AbstractNode> {
 	
 	public abstract bool Equals(AbstractNode node);
 
-	public abstract string ToString();
-
 	public abstract Vector3 position();
 }
 

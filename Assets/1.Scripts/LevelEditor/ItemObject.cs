@@ -162,7 +162,6 @@ public class ItemObject : MonoBehaviour
 
 //			print ("from: " + pos + " to: " + (newp - pos));
 			MapData.dragObject(this.gameObject, pos, newp-pos);
-			Vector3 offset = newp-pos;
 			tilemapcont.deselect(pos);
 			tilemapcont.selectTile(newp);
 		}
