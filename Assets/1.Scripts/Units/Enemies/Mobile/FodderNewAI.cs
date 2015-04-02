@@ -40,52 +40,53 @@ public class FodderNewAI: MobileEnemy {
 
 	protected override void initStates() {
 		
+		base.initStates();
+		
 		// Initialize all states
-		State rest = new State("rest");
-		State approach = new State("approach");
-		State attack = new State ("attack");
-		State atkAnimation = new State ("attackAnimation");
+		State charging = new State("charging");
+		State charge = new State ("charge");
 		
 		
 		// Add all the states to the state machine
-		sM.states.Add (rest.id, rest);
-		sM.states.Add (approach.id, approach);
-		sM.states.Add (attack.id, attack);
-		sM.states.Add (atkAnimation.id, atkAnimation);
-		
-		
-		// Set initial state for the State Machine of this unit
-		sM.initState = rest;
+		sM.states.Add (charging.id, charging);
+		sM.states.Add (charge.id, charge);
 		
 		
 		// Initialize all transitions
-		Transition tRest = new Transition(rest);
-		Transition tApproach = new Transition (approach);
-		Transition tAttack = new Transition (attack);
-		Transition tAtkAnimation = new Transition(atkAnimation);
+		Transition tCharging = new Transition(charging);
+		Transition tCharge = new Transition(charge);
+		
+		
+		// Add all the transitions to the state machine
+		sM.transitions.Add (tCharging.targetState.id, tCharging);
+		sM.transitions.Add (tCharge.targetState.id, tCharge);
 		
 		
 		// Set conditions for the transitions
-		tApproach.addCondition(isApproaching);
-		tRest.addCondition (isResting);
-		tAttack.addCondition (isAttacking);
-		tAtkAnimation.addCondition (isInAtkAnimation);
+		tCharging.addCondition(this.isTooFar);
+		tCharge.addCondition (this.isWithinCharge);
 		
 		
 		// Set actions for the states
-		rest.addAction (Rest);
-		approach.addAction (Approach);
-		attack.addAction (Attack);
-		atkAnimation.addAction (AtkAnimation);
+		charging.addAction (this.chargingCharge);
+		charge.addAction (this.chargingIntoSucker);
+		
+		
+		// Sets exit actions for states
+		charging.addExitAction (this.doneCharge);
+		charge.addExitAction (this.chargeEnd);
 		
 		
 		// Set the transitions for the states
-		rest.addTransition (tApproach);
-		approach.addTransition (tAttack);
-		approach.addTransition (tRest);
-		attack.addTransition (tAtkAnimation);
-		atkAnimation.addTransition (tApproach);
-		atkAnimation.addTransition (tAttack);
+		charging.addTransition(tCharge);
+		
+		
+		// Adds transitions to old States
+		this.addTransitionToExisting("approach", tCharging);
+		
+		// Adds old transitiont to new States
+		this.addTransitionToNew("approach", charge);
+		this.addTransitionToNew("search", charge);
 	}
 
 	//----------------------//
