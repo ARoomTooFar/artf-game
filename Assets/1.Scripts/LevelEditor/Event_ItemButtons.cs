@@ -107,7 +107,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		bool copyCreated = false;
 		newp = new Vector3 (0f, 0f, 0f);
 		bool doorRotated = false;
-		Vector3 doorWallRot = new Vector3(0f, 0f, 0f);
+		Vector3 doorWallRot = new Vector3 (0f, 0f, 0f);
 		
 		while (!Input.GetMouseButton(0)) { 
 
@@ -148,17 +148,18 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 					if (copyCreated) {
 
 						//if we got a door and it's on the edge of a room
-						if(itemObjectCopy.name == "doortile(Clone)" 
-						   && MapData.TheFarRooms.find(movePos) != null
-						   ){
+						if (itemObjectCopy.GetComponent<SceneryData> () != null
+							&& itemObjectCopy.GetComponent<SceneryData> ().isDoor
+							&& MapData.TheFarRooms.find (movePos) != null
+						   ) {
 							//snap door to an edge if it's near it
-							if((MapData.TheFarRooms.find(movePos).isCloseToEdge(movePos, 3f)))
-								movePos = MapData.TheFarRooms.find(movePos).getNearestEdgePosition(movePos);
+							if ((MapData.TheFarRooms.find (movePos).isCloseToEdge (movePos, 3f)))
+								movePos = MapData.TheFarRooms.find (movePos).getNearestEdgePosition (movePos);
 
 							//set its new rotation
-							if(MapData.TheFarRooms.find(movePos).isEdge(movePos)){
+							if (MapData.TheFarRooms.find (movePos).isEdge (movePos)) {
 								doorRotated = true;
-								doorWallRot = MapData.TheFarRooms.find(movePos).getWallSide(movePos).toRotationVector();
+								doorWallRot = MapData.TheFarRooms.find (movePos).getWallSide (movePos).toRotationVector ();
 							}
 
 						}
@@ -175,7 +176,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 					}
 
 					//if it's a door, set it to last wall rotation
-					if(doorRotated == true){
+					if (doorRotated == true) {
 						itemObjectCopy.transform.eulerAngles = doorWallRot;
 					}
 
@@ -185,9 +186,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			yield return null; 
 		}
 		
-		//destroy the copy
-		Destroy (itemObjectCopy);
-		itemObjectCopy = null;
+
 		
 		//if move was cancelled, we don't perform an update on the item object's position
 		if (cancellingMove == true) {
@@ -198,9 +197,20 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			Vector3 rot = new Vector3 (0f, 0f, 0f);
 
 			//don't place item if we've click a button
-			if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false
-			   )
-			MapData.addMonsterScenery (prefabLocation, pos, rot.toDirection ());
+			if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false){
+				SceneryData sdat = itemObjectCopy.GetComponent<SceneryData>();
+				if (sdat != null && sdat.isDoor){
+					ARTFRoom rm = MapData.TheFarRooms.find (pos);
+					if(rm != null && rm.isCloseToEdge(pos, 3f)){
+						pos = MapData.TheFarRooms.find (pos).getNearestEdgePosition (pos);
+					}
+				}
+				MapData.addObject (prefabLocation, pos, rot.toDirection ());
+			}
+
+			//destroy the copy
+			Destroy (itemObjectCopy);
+			itemObjectCopy = null;
 //			placedItemName = prefabLocation;
 //			placedItemPos = pos;
 //			placedItemRot = rot;

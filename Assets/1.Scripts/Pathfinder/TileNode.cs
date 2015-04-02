@@ -30,9 +30,13 @@ public class TileNode : AbstractNode, IEquatable<TileNode> {
 			if(!blk.Walkable){
 				continue;
 			}
-			retVal.Add(new KeyValuePair<AbstractNode, float>(new TileNode(blk), Vector3.Distance(blk.Position, terBlock.Position)));
+			retVal.Add(new KeyValuePair<AbstractNode, float>(new TileNode(blk), Vector3.Distance(blk.Position, this.terBlock.Position)));
 		}
 		return retVal;
+	}
+
+	public override string ToString(){
+		return terBlock.Position.toCSV();
 	}
 }
 

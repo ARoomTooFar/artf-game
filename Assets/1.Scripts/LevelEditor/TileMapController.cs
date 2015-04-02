@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 using System.IO; 
@@ -97,7 +97,7 @@ public class TileMapController : MonoBehaviour
 				Vector3 obj_pos = new Vector3 (x, 0f, z);
 				Vector3 obj_rot = new Vector3 (0f, 90f, 0f);
 				//output_tileMap.instantiateItemObject (selectedItem, obj_pos, obj_rot);
-				MapData.addMonsterScenery (selectedItem, obj_pos, obj_rot.toDirection ());
+				MapData.addObject (selectedItem, obj_pos, obj_rot.toDirection ());
 
 				clearSelectedItem ();
 			} else {

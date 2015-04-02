@@ -208,7 +208,7 @@ public class SceneryManager {
 
 	#region isMoveValid
 	public bool isMoveValid(Vector3 pos, Vector3 offset) {
-		Debug.Log(pos);
+//		Debug.Log(pos);
 		return isMoveValid(find(pos), offset);
 	}
 
@@ -226,9 +226,11 @@ public class SceneryManager {
 			try{
 				blk.rotate(MapData.TheFarRooms.find(pos).getWallSide(pos));
 			} catch {
+				blk.remove();
 				return false;
 			}
 			if(blk.Orientation == DIRECTION.NonDirectional){
+				blk.remove();
 				return false;
 			}
 		}
