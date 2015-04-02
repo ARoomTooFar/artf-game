@@ -26,8 +26,8 @@ public class CameraController : MonoBehaviour {
 	static float maxY = 25f;
 	static float zoomSpeed = .5f;
 	
-	static float orthoZoomSpeed = .5f;
-	static float maxOrthoSize = 20;
+	static float orthoZoomSpeed = 2f;
+	static float maxOrthoSize = 30;
 	static float minOrthoSize = 2;
 	static float currOrthoSize = 10;
 	
@@ -129,14 +129,6 @@ public class CameraController : MonoBehaviour {
 		}
 	}
 
-	void moveCamera(Vector3 pos){
-		Vector3 vec = currentCamera.transform.position;
-		vec.x = vec.x + pos.x;
-		vec.y = vec.y + pos.y;
-		vec.z = vec.z + pos.z;
-		currentCamera.transform.position = vec;
-	}
-	
 	void checkForKeyPresses(){
 		if (Input.GetKey (KeyCode.UpArrow)) {
 			moveForward ();
@@ -213,7 +205,8 @@ public class CameraController : MonoBehaviour {
 		} else {
 			//baseY = Mathf.Min (maxY, baseY + zoomSpeed);
 			foreach (Camera cam in 	Camera.allCameras) {
-				moveCamera(-cam.transform.forward);
+				moveCameraForZooming(-cam.transform.forward);
+//				transform.position = Vector3.Lerp(startMarker.position, endMarker.position, fracJourney);
 			}
 		}
 	}
@@ -226,10 +219,38 @@ public class CameraController : MonoBehaviour {
 			}
 		} else {
 			foreach (Camera cam in 	Camera.allCameras) {
-				moveCamera(cam.transform.forward);
+				moveCameraForZooming(cam.transform.forward);
 			}
 		}
 	}
+
+	void moveCameraForZooming(Vector3 pos){
+		Vector3 vec = currentCamera.transform.position;
+		float speedFactor = (vec.y / 10f);
+		vec.x = vec.x + (pos.x * speedFactor);
+		vec.y = vec.y + (pos.y * speedFactor);
+		vec.z = vec.z + (pos.z * speedFactor);
+		currentCamera.transform.position = vec;
+		//		StopCoroutine(moveCam (vec));
+		//		StartCoroutine(moveCam (vec));
+	}
+
+	void moveCamera(Vector3 pos){
+		Vector3 vec = currentCamera.transform.position;
+		vec.x = vec.x + (pos.x);
+		vec.y = vec.y + (pos.y);
+		vec.z = vec.z + (pos.z);
+		currentCamera.transform.position = vec;
+	}
+
+	IEnumerator moveCam (Vector3 newPos)
+	{ 
+		while (currentCamera.transform.position != newPos) {
+			currentCamera.transform.position = Vector3.MoveTowards(currentCamera.transform.position, newPos, Time.deltaTime * 1f); 
+		}
+		yield return null;
+	}
+
 	public void changeToTopDown ()
 	{
 		setCameraRotation (new Vector3 (90, 0, 0));
