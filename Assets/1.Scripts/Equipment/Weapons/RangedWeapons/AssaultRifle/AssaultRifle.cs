@@ -37,7 +37,7 @@ public class AssaultRifle : RangedWeapons {
 	}
 	
 	protected override IEnumerator Shoot(int count) {
-		if(!reload){
+		if(!reload || !needReload){
 			if(count == 0){
 				count = 1;
 			}
@@ -48,7 +48,7 @@ public class AssaultRifle : RangedWeapons {
 				yield return StartCoroutine(Wait(.01f));
 				fireProjectile();
 				currAmmo--;
-				if(currAmmo<=0){
+				if(currAmmo<=0 && needReload){
 					reload = true;
 					StartCoroutine(loadAmmo());
 				}

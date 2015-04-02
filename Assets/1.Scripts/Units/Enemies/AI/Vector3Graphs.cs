@@ -27,7 +27,7 @@ public class Vector3Graphs : Graphs<Vector3> {
 
 	// Overwritten functions
 	// Adds the new node with T value to our graph
-	public Node<Vector3> addNode(Vector3 value) {
+	public override Node<Vector3> addNode(Vector3 value) {
 		Node<Vector3> newNode = new Node<Vector3>(value);
 		this.findNeighbors (newNode);
 		allNodes.Add (newNode);
@@ -35,7 +35,7 @@ public class Vector3Graphs : Graphs<Vector3> {
 	}
 	
 	// Adds new node to our graph
-	public void addNode (Node<Vector3> newNode) {
+	public override void addNode (Node<Vector3> newNode) {
 		newNode.clearNeighbors ();
 		this.findNeighbors (newNode);
 		this.allNodes.Add (newNode);

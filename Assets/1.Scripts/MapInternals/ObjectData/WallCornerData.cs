@@ -2,6 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class WallCornerData : LevelEditorData {
+public class WallCornerData : BlockData {
 
 }

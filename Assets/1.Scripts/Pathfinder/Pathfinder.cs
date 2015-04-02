@@ -6,6 +6,7 @@ using UnityEngine;
 public static class Pathfinder {
 
 	private static List<AbstractNode> DijkstraPathfinder(AbstractNode start, AbstractNode end){
+		Debug.Log("Pathfinder triggered");
 		List<AbstractNode> open = new List<AbstractNode>();
 		List<AbstractNode> closed = new List<AbstractNode>();
 		open.Add(start);
@@ -13,8 +14,9 @@ public static class Pathfinder {
 		AbstractNode current = null;
 		
 		while(open.Count > 0) {
-			open.Sort((first, second) => first.CostSoFar.CompareTo(second.CostSoFar));
-			
+			//open.Sort((first, second) => first.CostSoFar.CompareTo(second.CostSoFar));
+			open.Sort((first, second) => Vector3.Distance(first.position(), end.position()).CompareTo(Vector3.Distance(second.position(), end.position())));
+
 			current = open[0];
 			
 			if(current.Equals(end)) {

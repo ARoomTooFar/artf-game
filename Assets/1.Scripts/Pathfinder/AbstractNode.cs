@@ -10,5 +10,7 @@ public abstract class AbstractNode : IEquatable<AbstractNode> {
 	public abstract List<KeyValuePair<AbstractNode, float>> getConnections();
 	
 	public abstract bool Equals(AbstractNode node);
+
+	public abstract Vector3 position();
 }
 

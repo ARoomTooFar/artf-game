@@ -7,6 +7,8 @@ public class SlowField : Traps {
 
 	private SlowingField debuff;
 
+	// Slowing field specific debuff that slows units in range.
+	//     Singular buff, so that having overlapping traps won't make players move like CM
 	private class SlowingField : Singular {
 		
 		private float spdPercent;
@@ -53,6 +55,7 @@ public class SlowField : Traps {
 		base.Update ();
 	}
 	
+	// A simple enter
 	void OnTriggerEnter(Collider other) {
 		Character enemy = other.GetComponent<Character>();
 		if (enemy != null) {

@@ -5,12 +5,12 @@ public class Prop : Wall, IDamageable<int, Character> {
 	public GameObject expDeath;
 	public int health;
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
 	
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	protected override void Update () {
 	
 	}
 	public virtual void damage(int dmgTaken, Character striker) {

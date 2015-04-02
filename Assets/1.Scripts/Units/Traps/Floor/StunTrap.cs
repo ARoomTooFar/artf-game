@@ -5,10 +5,10 @@ using System.Collections.Generic;
 public class StunTrap : Traps {
 	
 	public GameObject spike;
+	protected AoETargetting aoe;
 	
 	protected float timeToReset;
 	protected Vector3 spikeInitial;
-	protected List<Character> unitsInTrap;
 	protected bool firing;
 
 	private Stun debuff;
@@ -20,8 +20,9 @@ public class StunTrap : Traps {
 		debuff = new Stun();
 
 		firing = true;
-		unitsInTrap = new List<Character>();
+		this.aoe = this.GetComponent<AoETargetting>();
 		spikeInitial = spike.transform.localPosition;
+		
 	}
 	
 	protected override void setInitValues() {
@@ -50,7 +51,7 @@ public class StunTrap : Traps {
 			spike.transform.localPosition = Vector3.MoveTowards(spike.transform.localPosition, newPos, Time.deltaTime * 60);
 			yield return null;
 		}
-		foreach (Character suckers in unitsInTrap) {
+		foreach (Character suckers in this.aoe.unitsInRange) {
 			suckers.BDS.addBuffDebuff(debuff, this.gameObject, 1.0f);
 		}
 		StartCoroutine(lower());
@@ -71,25 +72,10 @@ public class StunTrap : Traps {
 			yield return null;
 		}
 		firing = true;
-		if (unitsInTrap.Count > 0) stunBlast ();
+		if (this.aoe.unitsInRange.Count > 0) stunBlast ();
 	}
-	
-	void OnTriggerEnter(Collider other) {
-		Character enemy = other.GetComponent<Character>();
 
-		if (enemy != null) {
-			unitsInTrap.Add(enemy);
-		}
+	public void unitEntered(Character entered) {
 		stunBlast ();
-	}
-	
-	void OnTriggerExit(Collider other) {
-		Character enemy = other.GetComponent<Character>();
-		
-		if (enemy != null) {
-			if (unitsInTrap.Contains(enemy)) {
-				unitsInTrap.Remove (enemy);
-			}
-		}
 	}
 }

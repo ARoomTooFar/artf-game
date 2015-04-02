@@ -38,6 +38,7 @@ public class CameraController : MonoBehaviour {
 	
 	public Material selectionMat; //material for selected tiles
 	public Material gridMat;
+	public Material objectFocusMat;
 	
 	GameObject tileMapGameObj;
 	
@@ -45,6 +46,11 @@ public class CameraController : MonoBehaviour {
 	private Vector3 prevMouse = new Vector3();
 	private bool prevMouseBool = false;
 	private Ray ray;
+
+
+	bool drawTallBox = false;
+
+	public GameObject focusedObject;
 	
 	
 	void Awake ()
@@ -95,6 +101,7 @@ public class CameraController : MonoBehaviour {
 		selectTiles ();
 		drawGrid ();
 		drawMouseSquare();
+		drawBoxAroundFocusedObject();
 	}
 	
 	void Update () {
@@ -105,6 +112,8 @@ public class CameraController : MonoBehaviour {
 		checkForKeyPresses();
 		
 		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
+
+
 	}
 	
 	void checkForMouseScrolling(){
@@ -284,69 +293,68 @@ public class CameraController : MonoBehaviour {
 			groundPlane.Raycast(ray, out distance);
 			point = ray.GetPoint(distance).Round();
 		}
-
-		if (point == null) {
-			return;
-		}
-
 		
 		GL.Begin (GL.QUADS);
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
 
+
 		Vector3 pLA = new Vector3 (point.x - squareWidth, point.y, point.z - squareWidth);
-		Vector3 pLB = new Vector3(point.x-squareWidth, point.y, point.z+squareWidth);
-		Vector3 pLC = new Vector3(point.x+squareWidth, point.y, point.z+squareWidth);
-		Vector3 pLD = new Vector3(point.x+squareWidth, point.y, point.z-squareWidth);
+		Vector3 pLB = new Vector3 (point.x - squareWidth, point.y, point.z + squareWidth);
+		Vector3 pLC = new Vector3 (point.x + squareWidth, point.y, point.z + squareWidth);
+		Vector3 pLD = new Vector3 (point.x + squareWidth, point.y, point.z - squareWidth);
 
-		Vector3 pUA = new Vector3 (point.x - squareWidth, point.y + cubeHeight, point.z - squareWidth);
-		Vector3 pUB = new Vector3(point.x-squareWidth, point.y + cubeHeight, point.z+squareWidth);
-		Vector3 pUC = new Vector3(point.x+squareWidth, point.y + cubeHeight, point.z+squareWidth);
-		Vector3 pUD = new Vector3(point.x+squareWidth, point.y + cubeHeight, point.z-squareWidth);
+		GL.Vertex (pLA);
+		GL.Vertex (pLB);
+		GL.Vertex (pLC);
+		GL.Vertex (pLD);
 
-		GL.Vertex(pLA);
-		GL.Vertex(pLB);
-		GL.Vertex(pLC);
-		GL.Vertex(pLD);
+		if (drawTallBox) {
+			Vector3 pUA = new Vector3 (point.x - squareWidth, point.y + cubeHeight, point.z - squareWidth);
+			Vector3 pUB = new Vector3 (point.x - squareWidth, point.y + cubeHeight, point.z + squareWidth);
+			Vector3 pUC = new Vector3 (point.x + squareWidth, point.y + cubeHeight, point.z + squareWidth);
+			Vector3 pUD = new Vector3 (point.x + squareWidth, point.y + cubeHeight, point.z - squareWidth);
 
-		GL.Vertex(pUA);
-		GL.Vertex(pUB);
-		GL.Vertex(pUC);
-		GL.Vertex(pUD);
+			GL.Vertex (pUA);
+			GL.Vertex (pUB);
+			GL.Vertex (pUC);
+			GL.Vertex (pUD);
 		
-		GL.Vertex(pUA);
-		GL.Vertex(pUB);
-		GL.Vertex(pUC);
-		GL.Vertex(pUD);
+			GL.Vertex (pUA);
+			GL.Vertex (pUB);
+			GL.Vertex (pUC);
+			GL.Vertex (pUD);
 
 
-		GL.Vertex(pLB);
-		GL.Vertex(pUB);
-		GL.Vertex(pUA);
-		GL.Vertex(pLA);
+			GL.Vertex (pLB);
+			GL.Vertex (pUB);
+			GL.Vertex (pUA);
+			GL.Vertex (pLA);
 
-		GL.Vertex(pLA);
-		GL.Vertex(pUA);
-		GL.Vertex(pUD);
-		GL.Vertex(pLD);
+			GL.Vertex (pLA);
+			GL.Vertex (pUA);
+			GL.Vertex (pUD);
+			GL.Vertex (pLD);
 
-		GL.Vertex(pLC);
-		GL.Vertex(pUC);
-		GL.Vertex(pUB);
-		GL.Vertex(pLB);
+			GL.Vertex (pLC);
+			GL.Vertex (pUC);
+			GL.Vertex (pUB);
+			GL.Vertex (pLB);
 		
-		GL.Vertex(pLD);
-		GL.Vertex(pUD);
-		GL.Vertex(pUC);
-		GL.Vertex(pLC);
+			GL.Vertex (pLD);
+			GL.Vertex (pUD);
+			GL.Vertex (pUC);
+			GL.Vertex (pLC);
+		}
 
 
 		
-		GL.End();
+		GL.End ();
 	}
 	
 	/* draw the grid lines */
-	void drawGrid(){
+	void drawGrid ()
+	{
 		GL.Begin (GL.LINES);
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
@@ -382,6 +390,61 @@ public class CameraController : MonoBehaviour {
 		
 		
 		GL.End ();
+	}
+
+	public void drawBoxAroundFocusedObject ()
+	{
+		if (focusedObject != null) {
+
+			GameObject g = focusedObject;
+			Renderer rend = g.GetComponentInChildren<Renderer> ();
+			Bounds bound = rend.bounds;
+
+			Quaternion quat = g.transform.rotation;
+			Vector3 bc = g.transform.position + quat * (bound.center - g.transform.position);
+
+
+			Vector3 topFrontRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, 1, 1)); 
+			Vector3 topFrontLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, 1, 1)); 
+			Vector3 topBackLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, 1, -1));
+			Vector3 topBackRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, 1, -1)); 
+			Vector3 bottomFrontRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, -1, 1)); 
+			Vector3 bottomFrontLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, -1, 1)); 
+			Vector3 bottomBackLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, -1, -1));
+			Vector3 bottomBackRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, -1, -1)); 
+
+		
+			GL.Begin (GL.QUADS);
+			objectFocusMat.SetPass (0);
+
+			GL.Vertex (topFrontLeft);
+			GL.Vertex (topFrontRight);
+			GL.Vertex (topBackRight);
+			GL.Vertex (topBackLeft);
+		
+			GL.Vertex (topFrontLeft);
+			GL.Vertex (topFrontRight);
+			GL.Vertex (bottomFrontRight);
+			GL.Vertex (bottomFrontLeft);
+
+			GL.Vertex (topBackLeft);
+			GL.Vertex (topBackRight);
+			GL.Vertex (bottomBackRight);
+			GL.Vertex (bottomBackLeft);
+
+			GL.Vertex (topBackLeft);
+			GL.Vertex (topFrontLeft);
+			GL.Vertex (bottomFrontLeft);
+			GL.Vertex (bottomBackLeft);
+
+			GL.Vertex (topBackRight);
+			GL.Vertex (topFrontRight);
+			GL.Vertex (bottomFrontRight);
+			GL.Vertex (bottomBackRight);
+
+
+			GL.End ();
+		}
 	}
 }
 

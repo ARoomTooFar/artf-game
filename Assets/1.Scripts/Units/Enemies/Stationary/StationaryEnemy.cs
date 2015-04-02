@@ -115,8 +115,8 @@ public class StationaryEnemy : Enemy {
 	protected virtual bool isApproaching() {
 		// If we don't have a target currently and aren't alerted, automatically assign anyone in range that we can see as our target
 		if (this.target == null) {
-			if (aRange.inRange.Count > 0) {
-				foreach(Character tars in aRange.inRange) {
+			if (aRange.unitsInRange.Count > 0) {
+				foreach(Character tars in aRange.unitsInRange) {
 					if (this.canSeePlayer(tars.gameObject)) {
 						this.alerted = true;
 						target = tars.gameObject;

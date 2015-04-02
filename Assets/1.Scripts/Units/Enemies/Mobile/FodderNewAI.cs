@@ -96,7 +96,7 @@ public class FodderNewAI: MobileEnemy {
 	//----------------------//
 	
 	protected override bool isResting() {
-		if(aRange.inRange.Count == 0){
+		if(aRange.unitsInRange.Count == 0){
 			return true;
 		}else{
 			return false;

@@ -32,7 +32,7 @@ public class Immolation : FlamePit{
 		}
 	}
 
-	protected IEnumerator fireTiming(Character enemy, float duration) {
+	protected override IEnumerator fireTiming(Character enemy, float duration) {
 		while (duration > 0) {
 			duration -= Time.deltaTime;
 			yield return null;
