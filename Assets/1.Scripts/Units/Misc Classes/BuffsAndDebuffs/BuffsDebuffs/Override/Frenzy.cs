@@ -7,12 +7,15 @@ public class Frenzy : Override {
 	private float spd;
 	private float str;
 	private float def;
+	private float atkspd;
+	private float original_atkspeed;
 
 	public Frenzy () {
 		name = "Frenzy";
 		spd = 0f;
 		str = 0f;
 		def = 0f;
+		original_atkspeed = -1;
 	}
 
 	public void setSpeedBoost(float percent){
@@ -27,6 +30,10 @@ public class Frenzy : Override {
 		def = percent;
 	}
 
+	public void setAtkInc(float percent){
+
+	}
+
 	public void reset(){
 		spd = 0;
 		str = 0;
@@ -38,6 +45,7 @@ public class Frenzy : Override {
 		newData.unit.stats.dmgManip.setDamageReduction(0, def);
 		newData.unit.stats.spdManip.setSpeedAmplification(spd);
 		newData.unit.stats.dmgManip.setDamageAmplification(0, str);
+//		newData.unit.gear.weapon.stats.atkspdManip.setAmplification(atkspd);
 	}
 
 	protected override void removeEffects (BDData oldData, GameObject source) {
@@ -45,6 +53,7 @@ public class Frenzy : Override {
 		oldData.unit.stats.dmgManip.removeDamageReduction(0, def);
 		oldData.unit.stats.spdManip.removeSpeedAmplification(spd);
 		oldData.unit.stats.dmgManip.removeDamageAmplification(0, str);
+//		oldData.unit.gear.weapon.stats.atkspdManip.removeAmplification(atkspd);
 	}
 
 	public override void purgeBD(Character unit, GameObject source) {

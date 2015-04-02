@@ -12,6 +12,7 @@ public class DamageManipulation {
 	private PercentValues fntDamage;
 	private PercentValues backDamage;
 	private PercentValues sideDamage;
+//	private PercentValues atkSpd;
 
 	// Getters for the damage percents
 	public float generalDamagePercent {
@@ -27,15 +28,16 @@ public class DamageManipulation {
 		get{return sideDamage.percentValue;}
 	}
 
-	private MonoBehaviour subMono;
+//	private MonoBehaviour subMono;
 
-	public DamageManipulation(MonoBehaviour sM) {
+	public DamageManipulation() {
 		genDamage = new PercentValues();
 		fntDamage = new PercentValues();
 		backDamage = new PercentValues();
 		sideDamage = new PercentValues();
+//		atkSpd = new PercentValues ();
 
-		subMono = sM;
+//		subMono = sM;
 	}
 
 	// Gets the total % of the damage change
@@ -87,6 +89,11 @@ public class DamageManipulation {
 				break;
 		}
 	}
+
+	/*
+	public void setAtkSpdAmplification(float amp) {
+		atkSpd.setAmplification(amp);
+	}*/
 	
 	public void removeDamageAmplification(int dir, float amp) {
 		switch(dir) {

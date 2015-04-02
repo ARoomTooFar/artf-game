@@ -71,6 +71,7 @@ public class PercentValues {
 public class StatsMultiplier{
 	public float health, armor,maxHealth,rezCount;
 	public float strength, coordination, speed, luck;
+	public float atkSpeed;
 
 	public int minAtkRadius, maxAtkRadius;
 	public float dmgAmp, dmgRed;

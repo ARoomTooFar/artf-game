@@ -5,7 +5,7 @@ using System.Collections;
 public class TestDummy : Enemy {
 
 	protected override void Awake() {
-		stats = new Stats(this.GetComponent<MonoBehaviour>());
+		stats = new Stats();
 		BDS = new BuffDebuffSystem(this);
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
