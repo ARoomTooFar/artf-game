@@ -38,5 +38,9 @@ public class TileNode : AbstractNode, IEquatable<TileNode> {
 	public override string ToString(){
 		return terBlock.Position.toCSV();
 	}
+
+	public override Vector3 position(){
+		return terBlock.Position;
+	}
 }
 
