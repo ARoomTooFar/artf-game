@@ -25,7 +25,6 @@ public class MobileEnemy : Enemy {
 	}
 	
 	protected override void Update() {
-		//Debug.Log (stats.health);
 		base.Update ();
 	}
 	

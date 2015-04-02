@@ -91,6 +91,7 @@ public class Enemy : Character {
 
 			if (isGrounded) {
 				movementAnimation ();
+				sM.Update ();
 			} else {
 				falling ();
 			}
@@ -98,7 +99,7 @@ public class Enemy : Character {
 			if (target != null)
 				target = aggroT.getTarget ();
 			
-			sM.Update ();
+			
 		} else {
 			Destroy (gameObject);
 		}
@@ -135,6 +136,17 @@ public class Enemy : Character {
 
 		if (this.sM.transitions.TryGetValue(stateId, out tempTransition)) {
 			s.addTransition(tempTransition);
+		}
+	}
+	
+	protected void removeTransitionFromExisting(string stateId, string transitionStateId) {
+		Transition tempTransition;
+		State tempState;
+		
+		if (this.sM.transitions.TryGetValue(transitionStateId, out tempTransition)) {
+			if (this.sM.states.TryGetValue(stateId, out tempState)) {
+				tempState.removeTransition(tempTransition);
+			}
 		}
 	}
 

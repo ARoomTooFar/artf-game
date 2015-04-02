@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Artillery : Weapons {
 	public GameObject targetCircle;
-	protected TargetCircle curCircle;
+	public TargetCircle curCircle;
 
 	public GameObject projectile;
 	protected ArcingBomb bullet;
