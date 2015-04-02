@@ -208,7 +208,7 @@ public class SceneryManager {
 
 	#region isMoveValid
 	public bool isMoveValid(Vector3 pos, Vector3 offset) {
-		Debug.Log(pos);
+//		Debug.Log(pos);
 		return isMoveValid(find(pos), offset);
 	}
 
