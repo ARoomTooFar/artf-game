@@ -205,7 +205,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 						pos = MapData.TheFarRooms.find (pos).getNearestEdgePosition (pos);
 					}
 				}
-				MapData.addMonsterScenery (prefabLocation, pos, rot.toDirection ());
+				MapData.addObject (prefabLocation, pos, rot.toDirection ());
 			}
 
 			//destroy the copy
