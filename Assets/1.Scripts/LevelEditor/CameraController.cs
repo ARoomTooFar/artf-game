@@ -304,21 +304,21 @@ public class CameraController : MonoBehaviour {
 		selectionMat.SetPass (0);
 
 
-		if (drawTallBox) {
-			Vector3 pLA = new Vector3 (point.x - squareWidth, point.y, point.z - squareWidth);
-			Vector3 pLB = new Vector3 (point.x - squareWidth, point.y, point.z + squareWidth);
-			Vector3 pLC = new Vector3 (point.x + squareWidth, point.y, point.z + squareWidth);
-			Vector3 pLD = new Vector3 (point.x + squareWidth, point.y, point.z - squareWidth);
+		Vector3 pLA = new Vector3 (point.x - squareWidth, point.y, point.z - squareWidth);
+		Vector3 pLB = new Vector3 (point.x - squareWidth, point.y, point.z + squareWidth);
+		Vector3 pLC = new Vector3 (point.x + squareWidth, point.y, point.z + squareWidth);
+		Vector3 pLD = new Vector3 (point.x + squareWidth, point.y, point.z - squareWidth);
 
+		GL.Vertex (pLA);
+		GL.Vertex (pLB);
+		GL.Vertex (pLC);
+		GL.Vertex (pLD);
+
+		if (drawTallBox) {
 			Vector3 pUA = new Vector3 (point.x - squareWidth, point.y + cubeHeight, point.z - squareWidth);
 			Vector3 pUB = new Vector3 (point.x - squareWidth, point.y + cubeHeight, point.z + squareWidth);
 			Vector3 pUC = new Vector3 (point.x + squareWidth, point.y + cubeHeight, point.z + squareWidth);
 			Vector3 pUD = new Vector3 (point.x + squareWidth, point.y + cubeHeight, point.z - squareWidth);
-
-			GL.Vertex (pLA);
-			GL.Vertex (pLB);
-			GL.Vertex (pLC);
-			GL.Vertex (pLD);
 
 			GL.Vertex (pUA);
 			GL.Vertex (pUB);

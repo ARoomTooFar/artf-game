@@ -89,7 +89,7 @@ public class ItemObject : MonoBehaviour
 			}
 
 			//if we're selecting a room corner-mover thing
-			if(this.gameObject.name == "Cube") tilemapcont.suppressDragSelecting = true;
+			if(this.gameObject.name != "TileMap") tilemapcont.suppressDragSelecting = true;
 			else tilemapcont.suppressDragSelecting = false;
 //			print (this.gameObject.name);
 			
@@ -161,7 +161,7 @@ public class ItemObject : MonoBehaviour
 			Vector3 pos = this.gameObject.transform.root.position;
 
 //			print ("from: " + pos + " to: " + (newp - pos));
-			MapData.moveMonsterScenery(this.gameObject, pos, newp-pos);
+			MapData.dragObject(this.gameObject, pos, newp-pos);
 		}
 		
 		
