@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 public class Artilitree: MobileEnemy {
 	
-	// protected Roll roll;
 	// protected Stealth stealth;
 	
 	protected override void Awake () {
@@ -14,8 +13,6 @@ public class Artilitree: MobileEnemy {
 	
 	protected override void Start() {
 		base.Start ();
-		//this.roll = this.inventory.items[inventory.selected].GetComponent<Roll>();
-		//if (this.roll == null) Debug.LogWarning ("Artilitree does not have TreeRing equipped");
 	}
 	
 	protected override void Update() {

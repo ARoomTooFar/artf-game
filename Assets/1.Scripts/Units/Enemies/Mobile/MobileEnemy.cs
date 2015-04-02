@@ -172,7 +172,7 @@ public class MobileEnemy : Enemy {
 				}
 			}
 			
-			float distance = this.distanceToPlayer(this.target);
+			// float distance = this.distanceToPlayer(this.target);
 			if (this.canSeePlayer (this.target) && !isInAtkAnimation()) {
 				// agent.alerted = true;
 				return true;
@@ -201,7 +201,6 @@ public class MobileEnemy : Enemy {
 
 	protected virtual bool isSearching() {
 		if (this.target == null || (this.lastSeenPosition.HasValue && !(this.canSeePlayer (this.target) && this.alerted) && !this.isInAtkAnimation()) && this.actable) {
-			print (this.canSeePlayer (this.target));
 			return true;
 		}
 		return false;
@@ -348,7 +347,7 @@ public class MobileEnemy : Enemy {
 
 		yield return StartCoroutine ("moveToExpectedArea");
 
-		float resetTimer = aggroTimer;
+		// float resetTimer = aggroTimer;
 
 		yield return StartCoroutine("randomSearch");
 

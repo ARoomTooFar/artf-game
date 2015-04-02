@@ -25,8 +25,8 @@ public class Stats{
 	public SpeedManipulation spdManip;
 
 	public Stats(MonoBehaviour subMono) {
-		dmgManip = new DamageManipulation(subMono);
-		spdManip = new SpeedManipulation(subMono);
+		dmgManip = new DamageManipulation();
+		spdManip = new SpeedManipulation();
 	}
 }
 
