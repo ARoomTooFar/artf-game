@@ -402,8 +402,35 @@ public class CameraController : MonoBehaviour {
 		if (focusedObject != null) {
 
 			GameObject g = focusedObject;
-			Renderer rend = g.GetComponentInChildren<Renderer> ();
-			Bounds bound = rend.bounds;
+
+
+//			Renderer rend = g.GetComponentInChildren<Renderer> ();
+//			Mesh mes = g.GetComponentInChildren<MeshFilter> ().mesh;
+			Collider coll = g.GetComponentInChildren<Collider> ();
+
+//			foreach (Renderer rend in g.GetComponentsInChildren<Renderer>()){
+//				//rend.material.shader = focusedShader;
+//				Color trans = rend.material.color;
+//				trans.r = 1f;
+//				rend.material.color = trans;
+//				
+//			}
+			
+			Bounds bound = coll.bounds;
+
+			foreach (Collider c in g.GetComponentsInChildren<Collider> ())
+			{
+				bound.Encapsulate(c.bounds);
+			}
+//			foreach (Renderer r in g.GetComponentsInChildren<Renderer> ())
+//			{
+//				bound.Encapsulate(r.bounds);
+//			}
+//			foreach (MeshFilter fil in g.GetComponentsInChildren<MeshFilter>()){
+//				bound.Encapsulate(fil.mesh.bounds);
+//			}
+//			bound.center = g.transform.position;
+
 
 			Quaternion quat = g.transform.rotation;
 			Vector3 bc = g.transform.position + quat * (bound.center - g.transform.position);
