@@ -38,7 +38,7 @@ public class Shotgun : RangedWeapons {
 	}
 	
 	protected override IEnumerator Shoot(int count) {
-		if(!reload){
+		if(!reload || !needReload){
 			//High cap for shotty is 27f variance, low cap for shotty is 47f
 
 			StartCoroutine(makeSound(action,playSound,action.length));
@@ -47,7 +47,7 @@ public class Shotgun : RangedWeapons {
 				spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y,(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
 				fireProjectile();
 				currAmmo--;
-				if(currAmmo<=0){
+				if(currAmmo<=0 && needReload){
 					reload = true;
 					StartCoroutine(loadAmmo());
 				}

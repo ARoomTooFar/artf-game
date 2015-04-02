@@ -283,7 +283,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	//---------------------------------//
 	// Heal Interface Implementation //
 	//---------------------------------//
-	public virtual void heal(int healTaken){
+	public override void heal(int healTaken){
 		if(stats.health < stats.maxHealth){
 			stats.health+=healTaken;
 			if(stats.health > stats.maxHealth){
@@ -297,7 +297,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		}
 	}
 	
-	public virtual void rez(){
+	public override void rez(){
 		if(stats.isDead){
 			stats.isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);

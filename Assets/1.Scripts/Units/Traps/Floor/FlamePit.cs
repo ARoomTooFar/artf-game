@@ -35,7 +35,7 @@ public class FlamePit : Traps {
 		}
 	}
 
-	protected IEnumerator fireTiming(Character enemy, float duration) {
+	protected virtual IEnumerator fireTiming(Character enemy, float duration) {
 		while (duration > 0) {
 			duration -= Time.deltaTime;
 			yield return null;

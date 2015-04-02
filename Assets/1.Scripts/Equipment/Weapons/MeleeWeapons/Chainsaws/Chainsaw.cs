@@ -132,7 +132,11 @@ public class Chainsaw : MeleeWeapons {
 			if (Time.time - lastDmgTime >= 0.6f/stats.curChgDuration) {
 				lastDmgTime = Time.time;
 				foreach(Character meat in chained) {
-					meat.damage(stats.damage, user);
+					if (meat == null) {
+						continue;
+					} else {
+						meat.damage(stats.damage, user);
+					}
 				}
 
 				foreach(GameObject crop in cropping) {

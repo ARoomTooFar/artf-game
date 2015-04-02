@@ -101,7 +101,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 
 		//for the ghost-duplicate
 		itemObjectCopy = null;
-		ItemObject copy = null;
+		//ItemObject copy = null;
 		
 		bool cancellingMove = false;
 		bool copyCreated = false;
@@ -115,7 +115,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			if (!copyCreated) {
 				//create copy of item object
 				itemObjectCopy = Instantiate (Resources.Load (prefabLocation)) as GameObject;
-				copy = itemObjectCopy.GetComponent ("ItemObject") as ItemObject;
+				//copy = itemObjectCopy.GetComponent ("ItemObject") as ItemObject;
 				
 				//so this code only happens once
 				copyCreated = true;

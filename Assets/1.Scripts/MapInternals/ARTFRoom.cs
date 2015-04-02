@@ -228,7 +228,7 @@ public partial class ARTFRoom {
 			LinkedRooms.Add(dr, MapData.TheFarRooms.find(checkPos));
 		}
 		//after links are made, get the paths between them all
-		//createRoomPaths();
+		createRoomPaths();
 	}
 
 	/*

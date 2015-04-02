@@ -293,11 +293,6 @@ public class CameraController : MonoBehaviour {
 			groundPlane.Raycast(ray, out distance);
 			point = ray.GetPoint(distance).Round();
 		}
-
-		if (point == null) {
-			return;
-		}
-
 		
 		GL.Begin (GL.QUADS);
 		gridMat.SetPass (0);

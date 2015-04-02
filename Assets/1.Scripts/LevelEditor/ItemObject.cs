@@ -29,7 +29,7 @@ public class ItemObject : MonoBehaviour
 	{
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
-		camCont = GameObject.Find ("LayersOnTopOfEverythingCamera").GetComponent("CameraController") as CameraController;
+		camCont = GameObject.Find ("UICamera").GetComponent("CameraController") as CameraController;
 		
 		focusedShader = Shader.Find ("Transparent/Bumped Diffuse");
 		nonFocusedShader = Shader.Find ("Bumped Diffuse");
@@ -162,6 +162,8 @@ public class ItemObject : MonoBehaviour
 
 //			print ("from: " + pos + " to: " + (newp - pos));
 			MapData.dragObject(this.gameObject, pos, newp-pos);
+			tilemapcont.deselect(pos);
+			tilemapcont.selectTile(newp);
 		}
 		
 		

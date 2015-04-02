@@ -24,9 +24,9 @@ public class Stats{
 	public DamageManipulation dmgManip;
 	public SpeedManipulation spdManip;
 
-	public Stats(MonoBehaviour subMono) {
-		dmgManip = new DamageManipulation(subMono);
-		spdManip = new SpeedManipulation(subMono);
+	public Stats() {
+		dmgManip = new DamageManipulation();
+		spdManip = new SpeedManipulation();
 	}
 }
 
@@ -176,7 +176,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	protected virtual void Awake() {
 		opposition = Type.GetType ("Player");
 		BDS = new BuffDebuffSystem(this);
-		stats = new Stats(this.GetComponent<MonoBehaviour>());
+		stats = new Stats();
 		animator = GetComponent<Animator>();
 		facing = Vector3.forward;
 		isDead = false;

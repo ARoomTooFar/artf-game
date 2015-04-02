@@ -37,5 +37,13 @@ public class RoomNode : AbstractNode, IEquatable<RoomNode> {
 		}
 		return false;
 	}
+
+	public override string ToString(){
+		return Room.ToString();
+	}
+
+	public override Vector3 position(){
+		return Room.Center;
+	}
 }
 

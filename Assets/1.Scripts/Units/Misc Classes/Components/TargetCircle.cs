@@ -7,12 +7,12 @@ public class TargetCircle : MonoBehaviour {
 	protected bool _moveable;
 	public bool moveable {
 		get {return _moveable;}
-		set {if (!value) this.rigidbody.velocity = Vector3.zero;
+		set {if (!value) this.rb.velocity = Vector3.zero;
 			this._moveable = value;
 		}
 	}
 
-	protected Rigidbody rigidbody;
+	protected Rigidbody rb;
 
 	protected Character user;
 	protected Controls controls;
@@ -43,7 +43,7 @@ public class TargetCircle : MonoBehaviour {
 	//     If AI, they must call the move Circle function
 	public virtual void setValues(Character user) {
 		this.user = user;
-		this.rigidbody = this.GetComponent<Rigidbody> ();
+		this.rb = this.GetComponent<Rigidbody> ();
 		this.moveable = true;
 
 		if (user.GetComponent<Player> () != null) {
@@ -57,7 +57,7 @@ public class TargetCircle : MonoBehaviour {
 	public virtual void moveCircle(Vector3 move) {
 		if (this.moveable) {
 			move.y = 0.0f;
-			this.rigidbody.velocity = move.normalized * this.speed;
+			this.rb.velocity = move.normalized * this.speed;
 		}
 	}
 
@@ -96,7 +96,7 @@ public class TargetCircle : MonoBehaviour {
 			newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
 		}
 			
-		this.rigidbody.velocity = newMoveDir.normalized * this.speed;
+		this.rb.velocity = newMoveDir.normalized * this.speed;
 	}
 
 }

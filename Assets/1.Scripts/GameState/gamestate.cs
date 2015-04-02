@@ -600,23 +600,18 @@ public class gamestate : MonoBehaviour {
 		{
 		case 1:
 			return gamestate.instance.players[0].isReady;		
-			break;
 			
 		case 2:
 			return gamestate.instance.players[1].isReady;	
-			break;
 			
 		case 3:
 			return gamestate.instance.players[2].isReady;	
-			break;
 			
 		case 4:
 			return gamestate.instance.players[3].isReady;	
-			break;
 		
 		default:
 			return false;
-			break;
 		}
 	}
 
