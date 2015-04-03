@@ -51,6 +51,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	public bool invincible = false;
 
+	public Rigidbody rb;
 	protected Type opposition;
 	
 	// Animation variables
@@ -177,7 +178,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		opposition = Type.GetType ("Player");
 		BDS = new BuffDebuffSystem(this);
 		stats = new Stats();
-		animator = GetComponent<Animator>();
+		this.animator = GetComponent<Animator>();
+		this.rb = this.GetComponent<Rigidbody>();
 		facing = Vector3.forward;
 		isDead = false;
 		freeAnim = true;
@@ -284,7 +286,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	protected virtual void movementAnimation() {
 		// animator.speed = 1; // Change animation speed back for other animations
-		if (GetComponent<Rigidbody>().velocity != Vector3.zero && facing != Vector3.zero) {
+		if (this.rb.velocity != Vector3.zero && facing != Vector3.zero) {
 			animator.SetBool("Moving", true);
 		} else {
 			animator.SetBool("Moving", false);
@@ -301,7 +303,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		// fake gravity
 		// Animation make it so rigidbody gravity works oddly due to some gravity weight
 		// Seems like Unity Pro is needed to change that, so unless we get it, this will suffice 
-		GetComponent<Rigidbody>().velocity = new Vector3 (0.0f, -gravity, 0.0f);
+		this.rb.velocity = new Vector3 (0.0f, -gravity, 0.0f);
 	}
 
 	//----------------------------------//
@@ -399,7 +401,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public virtual bool stun() {
 		animator.SetBool("Charging", false);
 		this.stunned = true;
-		this.GetComponent<Rigidbody>().velocity = new Vector3 (0.0f, 0.0f, 0.0f);
+		this.rb.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
 		return true;
 	}
 
@@ -417,12 +419,12 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public virtual bool knockback(Vector3 direction, float speed) {
 		animator.SetBool("Charging", false);
 		this.knockedback = true;
-		this.GetComponent<Rigidbody>().velocity = direction.normalized * speed;
+		this.rb.velocity = direction.normalized * speed;
 		return true;
 	}
 
 	public virtual void stabled() {
-		this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+		this.rb.velocity = Vector3.zero;
 		this.knockedback = false;
 	}
 

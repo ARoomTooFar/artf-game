@@ -6,6 +6,8 @@ using System.Collections.Generic;
 public class Artilitree: MobileEnemy {
 	
 	// protected Stealth stealth;
+	
+	protected bool rooted, rooting;
 	protected TargetCircle curTCircle;
 	
 	protected override void Awake () {
@@ -14,6 +16,8 @@ public class Artilitree: MobileEnemy {
 	
 	protected override void Start() {
 		base.Start ();
+		this.rooted = false;
+		this.rooting = false;
 	}
 	
 	protected override void Update() {
@@ -39,10 +43,12 @@ public class Artilitree: MobileEnemy {
 		
 		// Initialize all states
 		State aquiringTarget = new State("aquiringTarget");
+		State rootSelf = new State("rootSelf");
 		
 		
 		// Add all the states to the state machine
 		sM.states.Add (aquiringTarget.id, aquiringTarget);
+		sM.states.Add (rootSelf.id, rootSelf);
 		
 		
 		// Initialize all transitions
@@ -86,7 +92,12 @@ public class Artilitree: MobileEnemy {
 	protected virtual bool isAquiringTarget() {
 		if (this.animator.GetBool ("Charging")) {
 			if (this.gear.weapon.GetComponent<Artillery>().curCircle != null) {
+				this.rooted = true;
 				this.curTCircle = this.gear.weapon.GetComponent<Artillery>().curCircle;
+				Vector3 direction = (this.target.transform.position - this.transform.position);
+				direction.y = 0.0f;
+				direction = direction.normalized * 3.0f;
+				this.curTCircle.transform.position = new Vector3(this.curTCircle.transform.position.x + direction.x, this.curTCircle.transform.position.y, this.curTCircle.transform.position.z + direction.z);
 				return true;
 			}
 		}
@@ -95,10 +106,14 @@ public class Artilitree: MobileEnemy {
 	
 	protected override bool isInAtkAnimation() {
 		if ((this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge) && !this.animator.GetBool("Charging")) {
-			this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+			this.rb.velocity = Vector3.zero;
 			return true;
 		}
 		return false;
+	}
+	
+	protected virtual bool isRooted() {
+		return this.rooted;
 	}
 	
 	//----------------------//
@@ -106,6 +121,9 @@ public class Artilitree: MobileEnemy {
 	//-------------------//
 	// Actions Functions //
 	//-------------------//
+	
+	protected virtual void RootSelf() {
+	}
 	
 	protected override void Attack() {
 		if (this.actable && !attacking && this.curTCircle == null){
@@ -117,7 +135,7 @@ public class Artilitree: MobileEnemy {
 	}
 	
 	protected virtual void AquireTarget() {
-		if (this.target != null && this.curTCircle != null && Vector3.Distance(this.curTCircle.transform.position, this.target.transform.position) > 1.5f) {
+		if (Vector3.Distance(this.transform.position, this.curTCircle.transform.position) > 3.0f && (this.target != null && this.curTCircle != null && Vector3.Distance(this.curTCircle.transform.position, this.target.transform.position) > 1.5f)) {
 			this.curTCircle.moveCircle(this.target.transform.position - this.curTCircle.transform.position);
 			this.getFacingTowardsTarget(); // Swap to facing target circle in future
 			this.transform.localRotation = Quaternion.LookRotation(facing);
@@ -127,5 +145,33 @@ public class Artilitree: MobileEnemy {
 		
 	}
 	
+	protected virtual void Rooted() {
+		this.rb.velocity = Vector3.zero;
+	}
+	
 	//-------------------//
+	
+	//------------//
+	// Coroutines //
+	//------------//
+	
+	protected virtual IEnumerator rootSelf(float time) {
+		this.rooting = true;
+		while (time > 0.0f) {
+			time -= Time.deltaTime;
+			yield return null;
+		}
+		this.rooted = true;
+		this.rooting = false;
+	}
+	
+	protected virtual IEnumerator unRoot(float time) {
+		while (time > 0.0f) {
+			time -= Time.deltaTime;
+			yield return null;
+		}
+		this.rooted = false;
+	}
+	
+	//------------//
 }
