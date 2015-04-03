@@ -101,6 +101,11 @@ public class PowerLevels{
 		target.BDS.addBuffDebuff (frenzy, target.gameObject);
 	}
 
+	/*
+	public int currentStage(){
+
+	}*/
+
 	public PowerLevels(Character c){
 		stages = new List<PowerStage>();
 		powvalue = 0;

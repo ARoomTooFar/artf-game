@@ -87,10 +87,8 @@ public class Bushman : MobileEnemy {
 		powlvs.addStage(stage4, 36);
 		powlvs.addStage(stage5, 45);
 		powlvs.addStage(stage6, 60);
-		setInitValues();
 		health = stats.health;
 
-		charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
 
 	}
 
@@ -100,6 +98,8 @@ public class Bushman : MobileEnemy {
 
 	protected override void Start() {
 		base.Start ();
+		charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
+		if (charge == null) Debug.LogWarning ("Bushmen does not have charge equipped");
 	}
 	
 	protected override void Update() {
