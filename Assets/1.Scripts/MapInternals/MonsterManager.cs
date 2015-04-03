@@ -75,6 +75,9 @@ public class MonsterManager {
 	}
 	
 	public void remove(MonsterBlock blk){
+		if(blk == null) {
+			return;
+		}
 		//unlink neighbors
 		//unlinkTerrain(blk);
 		blk.remove();
