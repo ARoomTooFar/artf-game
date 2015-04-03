@@ -120,8 +120,8 @@ public class MobileEnemy : Enemy {
 		// Set the transitions for the states
 		rest.addTransition (tApproach);
 		approach.addTransition (tAttack);
-		approach.addTransition (tSearch);
 		approach.addTransition (tSpace);
+		approach.addTransition (tSearch);
 		attack.addTransition (tAtkAnimation);
 		atkAnimation.addTransition (tApproach);
 		atkAnimation.addTransition (tAttack);
