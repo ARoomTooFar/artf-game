@@ -22,28 +22,17 @@ public class TileMapController : MonoBehaviour {
 	Vector3 shiftOrigin = new Vector3(-1, -1, -1);
 	string selectedItem = null;
 	GameObject currentObj;
-	Button Button_Room;
-	bool placeRoomClicked = false;
+	public bool placeRoomClicked = false;
 	float secondX;
 	float secondY;
 	public bool suppressDragSelecting;
 	Vector3 clickOrigin = new Vector3(-1, -1, -1);
 	
-	void Start() {
-		Button_Room = GameObject.Find("Button_Room").GetComponent("Button") as Button;
-		
-		Button_Room.onClick.AddListener(() => {
-			placeRoomClicked = true;
-			//			Debug.Log ("Button Clicked: " + placeRoomClicked);
-		});
-		
+	void Start() {	
 		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
-		
 		grid_x = 100;
 		grid_z = 100;
 		buildMesh();
-		
-		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
 	}
 	
 	void Awake() {
