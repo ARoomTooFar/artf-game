@@ -4,7 +4,6 @@
 using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
 public class DamageManipulation {
 
 	// Each direction has their own objects
@@ -28,7 +27,6 @@ public class DamageManipulation {
 		get{return sideDamage.percentValue;}
 	}
 
-//	private MonoBehaviour subMono;
 
 	public DamageManipulation() {
 		genDamage = new PercentValues();
@@ -36,8 +34,7 @@ public class DamageManipulation {
 		backDamage = new PercentValues();
 		sideDamage = new PercentValues();
 //		atkSpd = new PercentValues ();
-
-//		subMono = sM;
+		
 	}
 
 	// Gets the total % of the damage change

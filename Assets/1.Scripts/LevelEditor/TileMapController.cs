@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 using System.IO; 
@@ -97,7 +97,7 @@ public class TileMapController : MonoBehaviour
 				Vector3 obj_pos = new Vector3 (x, 0f, z);
 				Vector3 obj_rot = new Vector3 (0f, 90f, 0f);
 				//output_tileMap.instantiateItemObject (selectedItem, obj_pos, obj_rot);
-				MapData.addMonsterScenery (selectedItem, obj_pos, obj_rot.toDirection ());
+				MapData.addObject (selectedItem, obj_pos, obj_rot.toDirection ());
 
 				clearSelectedItem ();
 			} else {
@@ -210,7 +210,7 @@ public class TileMapController : MonoBehaviour
 	
 	/* Add selected tile index to a list to be access by the camera script for rendering 
 	 * and update the last selected tile in case of shift click */
-	void selectTile (Vector3 add)
+	public void selectTile (Vector3 add)
 	{
 		selectedTiles.Add (add);
 		shiftOrigin = add;
@@ -223,7 +223,7 @@ public class TileMapController : MonoBehaviour
 	}
 	
 	/*deselects tile passed into function */
-	void deselect (Vector3 remove)
+	public void deselect (Vector3 remove)
 	{
 		selectedTiles.Remove (remove);
 	}

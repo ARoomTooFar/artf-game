@@ -18,6 +18,8 @@ public class ItemObject : MonoBehaviour
 	Shader focusedShader;
 	Shader nonFocusedShader;
 	Vector3 newp;
+	static bool isFocus = true;
+	CameraController camCont;
 
 	
 	Vector3 rotation;
@@ -27,15 +29,17 @@ public class ItemObject : MonoBehaviour
 	{
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
+		camCont = GameObject.Find ("UICamera").GetComponent("CameraController") as CameraController;
 		
 		focusedShader = Shader.Find ("Transparent/Bumped Diffuse");
 		nonFocusedShader = Shader.Find ("Bumped Diffuse");
 		
-		this.gameObject.GetComponent<Renderer>().material.shader = nonFocusedShader;
+		this.gameObject.GetComponentInChildren<Renderer>().material.shader = nonFocusedShader;
 	}
 	
 	void Update ()
 	{
+
 		if (!Input.GetMouseButtonDown (0) || UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == true) 
 			return;
 		
@@ -55,8 +59,10 @@ public class ItemObject : MonoBehaviour
 				
 			}
 		}
+
+		camCont.focusedObject = this.gameObject;
 	}
-	
+
 	IEnumerator DragObject (float distance)
 	{ 
 		//for the ghost-duplicate
@@ -83,7 +89,7 @@ public class ItemObject : MonoBehaviour
 			}
 
 			//if we're selecting a room corner-mover thing
-			if(this.gameObject.name == "Cube") tilemapcont.suppressDragSelecting = true;
+			if(this.gameObject.name != "TileMap") tilemapcont.suppressDragSelecting = true;
 			else tilemapcont.suppressDragSelecting = false;
 //			print (this.gameObject.name);
 			
@@ -120,10 +126,17 @@ public class ItemObject : MonoBehaviour
 						if (copyCreated) {
 							//update the item object things
 							//shader has to be set in this loop, or transparency won't work
-							itemObjectCopy.gameObject.GetComponent<Renderer>().material.shader = focusedShader;
-							Color trans = itemObjectCopy.gameObject.GetComponent<Renderer>().material.color;
-							trans.a = 0.5f;
-							itemObjectCopy.gameObject.GetComponent<Renderer>().material.SetColor ("_Color", trans);
+							//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
+							foreach (Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()){
+								rend.material.shader = focusedShader;
+								Color trans = rend.material.color;
+								trans.a = .5f;
+								rend.material.color = trans;
+
+							}
+							//Color trans = itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.color;
+							//trans.a = 0.5f;
+							//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.SetColor ("_Color", trans);
 							itemObjectCopy.transform.position = new Vector3 (x, getPosition ().y, z);
 							itemObjectCopy.transform.eulerAngles = getRotation();
 	
@@ -148,7 +161,9 @@ public class ItemObject : MonoBehaviour
 			Vector3 pos = this.gameObject.transform.root.position;
 
 //			print ("from: " + pos + " to: " + (newp - pos));
-			MapData.moveMonsterScenery(this.gameObject, pos, newp-pos);
+			MapData.dragObject(this.gameObject, pos, newp-pos);
+			tilemapcont.deselect(pos);
+			tilemapcont.selectTile(newp);
 		}
 		
 		

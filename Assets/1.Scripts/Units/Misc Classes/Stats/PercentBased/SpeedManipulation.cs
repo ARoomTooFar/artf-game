@@ -4,14 +4,12 @@
 using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
 public class SpeedManipulation {
 
 	public float speedPercent {
 		get{return spdPercents.percentValue;}
 	}
 	private PercentValues spdPercents;
-//	private MonoBehaviour subMono;
 
 	public SpeedManipulation() {
 		spdPercents = new PercentValues();

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 using System.IO; 
@@ -97,7 +97,7 @@ public class ItemObjectUI : MonoBehaviour
 		
 		//rotate object button
 		Button_Rotate.onClick.AddListener (() => {
-			MapData.rotateMonsterScenery(this.transform.parent.gameObject, this.transform.parent.gameObject.transform.position);
+			MapData.rotateObject(this.transform.parent.gameObject, this.transform.parent.gameObject.transform.position);
 		});
 		
 		//X out

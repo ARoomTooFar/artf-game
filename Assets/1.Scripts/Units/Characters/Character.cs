@@ -286,10 +286,10 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		// animator.speed = 1; // Change animation speed back for other animations
 		if (GetComponent<Rigidbody>().velocity != Vector3.zero && facing != Vector3.zero) {
 			animator.SetBool("Moving", true);
-			transform.localRotation = Quaternion.LookRotation(facing);
 		} else {
 			animator.SetBool("Moving", false);
 		}
+		transform.localRotation = Quaternion.LookRotation(facing);
 	}
 
 

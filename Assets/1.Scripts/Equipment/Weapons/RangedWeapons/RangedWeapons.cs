@@ -17,6 +17,8 @@ public class RangedWeapons : Weapons {
 	protected bool reload;
 	public AmmoBar ammoBar;
 	protected Projectile bullet;
+	
+	protected bool needReload;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -26,6 +28,11 @@ public class RangedWeapons : Weapons {
 	protected override void setInitValues() {
 		base.setInitValues();
 		reload = false;
+		if (this.user.GetComponent<Enemy>()) {
+			needReload = false;
+		} else {
+			needReload = true;
+		}
 	}
 
 	public override void collideOn() {

@@ -40,7 +40,7 @@ public class Pistol : RangedWeapons {
 
 	protected override IEnumerator Shoot(int count)
 	{
-		if(!reload){
+		if(!reload || !needReload){
 			variance = 22f;
 
 			if(count == 0){
@@ -55,7 +55,7 @@ public class Pistol : RangedWeapons {
 				yield return StartCoroutine(Wait(.08f));
 				fireProjectile();
 				currAmmo--;
-				if(currAmmo<=0){
+				if(currAmmo<=0 && needReload){
 					reload = true;
 					StartCoroutine(loadAmmo());
 				}

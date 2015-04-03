@@ -25,7 +25,6 @@ public class MobileEnemy : Enemy {
 	}
 	
 	protected override void Update() {
-		//Debug.Log (stats.health);
 		base.Update ();
 	}
 	
@@ -40,7 +39,7 @@ public class MobileEnemy : Enemy {
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 5.0f;
+		this.maxAtkRadius = 3.0f;
 	}
 	
 	// Initializes states, transitions and actions
@@ -155,8 +154,8 @@ public class MobileEnemy : Enemy {
 		// If we don't have a target currently and aren't alerted, automatically assign anyone in range that we can see as our target
 		if (this.actable) {
 			if (this.target == null) {// && !this.alerted) {
-				if (aRange.inRange.Count > 0) {
-					foreach(Character tars in aRange.inRange) {
+				if (aRange.unitsInRange.Count > 0) {
+					foreach(Character tars in aRange.unitsInRange) {
 						if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
 							this.alerted = true;
 							target = tars.gameObject;
@@ -172,7 +171,7 @@ public class MobileEnemy : Enemy {
 				}
 			}
 			
-			float distance = this.distanceToPlayer(this.target);
+			// float distance = this.distanceToPlayer(this.target);
 			if (this.canSeePlayer (this.target) && !isInAtkAnimation()) {
 				// agent.alerted = true;
 				return true;
@@ -184,6 +183,7 @@ public class MobileEnemy : Enemy {
 	protected virtual bool isAttacking() {
 		if (this.target != null && !this.isInAtkAnimation()) {
 			float distance = this.distanceToPlayer(this.target);
+			//float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
 			//&& this.canSeePlayer(this.target)
 			return distance < this.maxAtkRadius && distance >= this.minAtkRadius;
 		}
@@ -245,23 +245,23 @@ public class MobileEnemy : Enemy {
 			tempTimer = 0.5f;
 
 			this.resetpos = this.transform.position;
-			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
-			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.facing = Vector3.zero;
+			while (this.facing == Vector3.zero) this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
+			
+			this.GetComponent<Rigidbody>().velocity = this.facing * stats.speed * stats.spdManip.speedPercent;
 		}
 
 	}
 	
 	protected virtual void Approach() {
-		this.facing = this.target.transform.position - this.transform.position;
-		this.facing.y = 0.0f;
-		this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		this.getFacingTowardsTarget();
+		this.GetComponent<Rigidbody>().velocity = this.facing * stats.speed * stats.spdManip.speedPercent;
 	}
 
 	protected virtual void Attack() {
 		if (this.actable && !attacking){
-			this.facing = this.target.transform.position - this.transform.position;
-			this.facing.y = 0.0f;
-			transform.localRotation = Quaternion.LookRotation(facing);
+			this.getFacingTowardsTarget();
+			this.transform.localRotation = Quaternion.LookRotation(facing);
 			this.gear.weapon.initAttack();
 		}
 	}
@@ -346,7 +346,7 @@ public class MobileEnemy : Enemy {
 
 		yield return StartCoroutine ("moveToExpectedArea");
 
-		float resetTimer = aggroTimer;
+		// float resetTimer = aggroTimer;
 
 		yield return StartCoroutine("randomSearch");
 
@@ -360,8 +360,10 @@ public class MobileEnemy : Enemy {
 	// Calculation Functions //
 	//-----------------------//
 
+	/*
 	protected override bool canSeePlayer(GameObject p) {
 		Vector3 direction = p.transform.position - transform.position;
+		direction.Normalize();
 		float angle = Vector3.Angle(direction, this.facing);
 		
 
@@ -382,12 +384,12 @@ public class MobileEnemy : Enemy {
 					this.alerted = true;
 					return true;
 				}
-			}*/
+			}
 
 
 			RaycastHit[] hits;
 
-			hits = GetComponent<Rigidbody>().SweepTestAll(direction, Vector3.Distance(this.transform.position, p.transform.position) + 2);
+			hits = this.GetComponent<Rigidbody>().SweepTestAll(direction, Vector3.Distance(this.transform.position, p.transform.position) + 2);
 			
 			for (int i = 0; i < hits.Length; ++i) {
 				// print(hits[i].transform.name);
@@ -408,7 +410,7 @@ public class MobileEnemy : Enemy {
 		return false;
 
 
-	}
+	}*/
 
 	protected float distanceToVector3(Vector3 position) {
 		Vector3 distance = position - this.transform.position;

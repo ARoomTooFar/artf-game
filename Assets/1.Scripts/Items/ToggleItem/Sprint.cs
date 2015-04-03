@@ -7,7 +7,7 @@ public class Sprint : ToggleItem {
 
 	[Range(1.5f, 3.0f)]
 	public float sprintAmplification;
-	private int baseSpeed;
+	//private int baseSpeed;
 
 	private Sprinting buff;
 
@@ -61,7 +61,7 @@ public class Sprint : ToggleItem {
 	}
 
 	protected override IEnumerator bgnEffect() {
-		baseSpeed = user.stats.speed;
+		//baseSpeed = user.stats.speed;
 
 		user.BDS.addBuffDebuff(buff, user.gameObject);
 		// user.speed(sprintAmplification);

@@ -245,7 +245,7 @@ public class BuffDebuffSystem {
 
 	// Purges all buffs/Debuffs on this unit
 	public void purgeAll(GameObject source) {
-		List<BuffsDebuffs> list;
+		//List<BuffsDebuffs> list;
 
 		foreach(KeyValuePair<string, List<BD>> entry in buffsAndDebuffs) {
 			for (int i = 0; i < entry.Value.Count; i++) {

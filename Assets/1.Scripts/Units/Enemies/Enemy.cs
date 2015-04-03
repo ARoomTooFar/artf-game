@@ -16,7 +16,8 @@ public class Enemy : Character {
 	public Swarm swarm;
 	
 	// Moved from my AI enemy - Francis
-	public AggroRange aRange;
+	// public AggroRange aRange;
+	public AoETargetting aRange;
 	
 	protected StateMachine sM;
 	
@@ -49,7 +50,8 @@ public class Enemy : Character {
 		
 		facing = Vector3.back;
 
-		aRange.opposition = this.opposition;
+		// aRange.opposition = this.opposition;
+		aRange.affectPlayers = true;
 		
 		//State machine initialization
 		sM = new StateMachine ();
@@ -89,6 +91,7 @@ public class Enemy : Character {
 
 			if (isGrounded) {
 				movementAnimation ();
+				sM.Update ();
 			} else {
 				falling ();
 			}
@@ -96,7 +99,7 @@ public class Enemy : Character {
 			if (target != null)
 				target = aggroT.getTarget ();
 			
-			sM.Update ();
+			
 		} else {
 			Destroy (gameObject);
 		}
@@ -135,6 +138,17 @@ public class Enemy : Character {
 			s.addTransition(tempTransition);
 		}
 	}
+	
+	protected void removeTransitionFromExisting(string stateId, string transitionStateId) {
+		Transition tempTransition;
+		State tempState;
+		
+		if (this.sM.transitions.TryGetValue(transitionStateId, out tempTransition)) {
+			if (this.sM.states.TryGetValue(stateId, out tempState)) {
+				tempState.removeTransition(tempTransition);
+			}
+		}
+	}
 
 	//-----------------------//
 	// Calculation Functions //
@@ -147,6 +161,8 @@ public class Enemy : Character {
 	}
 
 	protected virtual bool canSeePlayer(GameObject p) {
+		if (p == null) return false;
+	
 		// Check angle of forward direction vector against the vector of enemy position relative to player position
 		Vector3 direction = p.transform.position - transform.position;
 		float angle = Vector3.Angle(direction, this.facing);
@@ -167,6 +183,17 @@ public class Enemy : Character {
 		return false;
 	}
 	
+	// Will change units facing to be towards their target. If new facing is zero it doesn't changes
+	protected virtual void getFacingTowardsTarget() {
+		Vector3 newFacing = Vector3.zero;
+
+		if (this.target != null) {
+			newFacing = this.target.transform.position - this.transform.position;
+			newFacing.y = 0.0f;
+			if (newFacing != Vector3.zero) this.facing = newFacing.normalized;
+		}
+	}
+	
 	//----------------------//
 
 
@@ -175,7 +202,7 @@ public class Enemy : Character {
 	//-------------------------------//
 
 	public override void damage(int dmgTaken, Character striker) {
-		base.damage(dmgTaken, striker);		
+		base.damage(dmgTaken, striker);
 
 		if (aggro == false) {
 			aggro = true;
