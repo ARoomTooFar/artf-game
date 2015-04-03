@@ -36,22 +36,26 @@ public class UIButtonSetup : MonoBehaviour {
 
 		btn = GameObject.Find ("Button_ZoomOut").GetComponent("Button") as Button;
 		btn.onClick.AddListener (() => {
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().zoomCamOut ();});
+			GameObject.Find("UICamera").GetComponent<CameraMovement>().zoomCamIn ();});
 
 		btn = GameObject.Find ("Button_ZoomIn").GetComponent("Button") as Button;
 		btn.onClick.AddListener (() => {
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().zoomCamIn ();});
+			GameObject.Find("UICamera").GetComponent<CameraMovement>().zoomCamOut ();});
 
 		//Button_Hand = GameObject.Find ("Button_Hand").GetComponent("Button") as Button;
 		//Button_Pointer = GameObject.Find ("Button_Pointer").GetComponent("Button") as Button;
-		
 
+		Button Button_TileMode = GameObject.Find ("Button_TileMode").GetComponent("Button") as Button;
+		Button Button_RoomMode = GameObject.Find ("Button_RoomMode").GetComponent("Button") as Button;
 
+		Button_TileMode.onClick.AddListener (() => {
+			Mode.setTileMode();
+		});
 
+		Button_RoomMode.onClick.AddListener (() => {
+			Mode.setRoomMode();
+		});
 
-
-
+		Mode.setTileMode();
 	}
-
 }
-

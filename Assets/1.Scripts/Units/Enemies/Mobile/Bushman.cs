@@ -12,6 +12,60 @@ public class Bushman : MobileEnemy {
 	private int tier;
 	private float health;
 	GameObject expDeath;
+	protected Sprint sprint;
+	protected BullCharge charge;
+
+
+	// code stolen from Francis
+	protected override void initStates() {
+		base.initStates();
+		
+		// Initialize all states
+		State charging = new State("charging");
+		State charge = new State ("charge");
+		
+		
+		// Add all the states to the state machine
+		sM.states.Add (charging.id, charging);
+		sM.states.Add (charge.id, charge);
+		
+		
+		// Initialize all transitions
+		Transition tCharging = new Transition(charging);
+		Transition tCharge = new Transition(charge);
+		
+		
+		// Add all the transitions to the state machine
+		sM.transitions.Add (tCharging.targetState.id, tCharging);
+		sM.transitions.Add (tCharge.targetState.id, tCharge);
+		
+		
+		// Set conditions for the transitions
+		tCharging.addCondition(this.isTooFar);
+		tCharge.addCondition (this.isWithinCharge);
+		
+		
+		// Set actions for the states
+		charging.addAction (this.chargingCharge);
+		charge.addAction (this.chargingIntoSucker);
+		
+		
+		// Sets exit actions for states
+		charging.addExitAction (this.doneCharge);
+		charge.addExitAction (this.chargeEnd);
+		
+		
+		// Set the transitions for the states
+		charging.addTransition(tCharge);
+		
+		
+		// Adds transitions to old States
+		this.addTransitionToExisting("approach", tCharging);
+		
+		// Adds old transitiont to new States
+		this.addTransitionToNew("approach", charge);
+		this.addTransitionToNew("search", charge);
+	}
 	
 	protected override void Awake () {
 		base.Awake ();
@@ -33,8 +87,9 @@ public class Bushman : MobileEnemy {
 		powlvs.addStage(stage4, 36);
 		powlvs.addStage(stage5, 45);
 		powlvs.addStage(stage6, 60);
-		setInitValues();
 		health = stats.health;
+
+
 	}
 
 	void setTier(int tier){
@@ -43,6 +98,8 @@ public class Bushman : MobileEnemy {
 
 	protected override void Start() {
 		base.Start ();
+		charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
+		if (charge == null) Debug.LogWarning ("Bushmen does not have charge equipped");
 	}
 	
 	protected override void Update() {
@@ -68,6 +125,8 @@ public class Bushman : MobileEnemy {
 		}
 	}*/
 
+
+
 	protected override void setInitValues() {
 		base.setInitValues();
 		stats.maxHealth = 60;
@@ -82,20 +141,65 @@ public class Bushman : MobileEnemy {
 		this.maxAtkRadius = 5.0f;
 	}
 
-	/*
-	protected bool isFlared(){
-		return flared;
-	}*/
+	//----------------------//
+	// Transition Functions //
+	//----------------------//
+
+	protected virtual bool isTooFar () {
+		if (charge == null) Debug.LogWarning ("bushmannnnnnn does not have charge equipped");
+		if (this.target != null && Vector3.Distance(this.transform.position, this.target.transform.position) > this.maxAtkRadius && this.charge.curCoolDown <= 0) {
+			this.inventory.keepItemActive = true;
+			charge.useItem();
+			return true;
+		}
+		return false;
+	}
+	
+	protected virtual bool isWithinCharge () {
+		if (this.target == null) {
+			return true;
+		} else {
+			Vector3 tPos = this.target.transform.position;
+			if (Vector3.Distance(this.transform.position, tPos) <= this.charge.curChgTime * 3 || Vector3.Distance(this.transform.position, tPos) >= 15 || this.charge.curChgTime >= this.charge.maxChgTime) {
+				return true;
+			}
+			return false;
+		}
+	}
+
+
+	//-------------------//
+	// Actions Functions //
+	//-------------------//
+	
+	protected virtual void chargingCharge () {
+		this.facing = this.target.transform.position - this.transform.position;
+		this.facing.y = 0.0f;
+		this.GetComponent<Rigidbody>().velocity = (this.facing.normalized * stats.speed * stats.spdManip.speedPercent);
+		if (!this.canSeePlayer(this.target)) {
+			this.target = null;
+		}
+	}
+	
+	protected virtual void doneCharge() {
+		this.inventory.keepItemActive = false;
+	}
+	
+	protected virtual void chargingIntoSucker () {
+		if (this.target != null) {
+			this.lastSeenPosition = this.target.transform.position;
+			// this.lowerArms();
+		}
+	}
+	
+	protected virtual void chargeEnd() {
+//		this.blast.useItem();
+	}
 
 	protected bool isFrenzy(){
 		return inFrenzy;
 	}
-
-	/*
-	protected bool isFlared(Character a){
-		Bushman bushman = (Bushman) a;
-		return bushman.isFlared();
-	}*/
+	
 
 	protected bool isFrenzy(Character a){
 		Bushman bushman = (Bushman) a;

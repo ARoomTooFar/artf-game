@@ -25,6 +25,12 @@ public class WeaponStats {
 	public int chgDamage;
 	public float maxChgTime, chgLevels, curChgAtkTime, curChgDuration, timeForChgAttack, timeForSpecial;
 	public int specialAttackType;
+	
+	public PercentValues atkspdManip;
+	
+	public WeaponStats() {
+		atkspdManip = new PercentValues();
+	}
 }
 
 public class Weapons : Equipment {
@@ -109,7 +115,7 @@ public class Weapons : Equipment {
 	// Start by initiateing attack animation
 	public virtual void initAttack() {
 		user.animator.SetTrigger("Attack");
-		user.animator.speed = stats.atkSpeed; // Once we have it figured out, speed can be done by animation, unless we have atacking slowing abilities
+		user.animator.speed = stats.atkSpeed * stats.atkspdManip.percentValue; // Once we have it figured out, speed can be done by animation, unless we have atacking slowing abilities
 		StartCoroutine(bgnAttack());
 	}
 
