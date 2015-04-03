@@ -46,6 +46,7 @@ public class BullCharge : ChargeItem {
 		chgDist = 1;
 		maxChgTime = 3.0f;
 		hitWall = false;
+		print(this.opposition);
 	}
 	
 	// Update is called once per frame
