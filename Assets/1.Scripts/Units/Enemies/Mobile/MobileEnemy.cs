@@ -120,8 +120,8 @@ public class MobileEnemy : Enemy {
 		// Set the transitions for the states
 		rest.addTransition (tApproach);
 		approach.addTransition (tAttack);
-		approach.addTransition (tSearch);
 		approach.addTransition (tSpace);
+		approach.addTransition (tSearch);
 		attack.addTransition (tAtkAnimation);
 		atkAnimation.addTransition (tApproach);
 		atkAnimation.addTransition (tAttack);
@@ -192,7 +192,7 @@ public class MobileEnemy : Enemy {
 	
 	protected virtual bool isInAtkAnimation() {
 		if (this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge) {
-			this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+			this.rb.velocity = Vector3.zero;
 			return true;
 		}
 		return false;
@@ -248,14 +248,14 @@ public class MobileEnemy : Enemy {
 			this.facing = Vector3.zero;
 			while (this.facing == Vector3.zero) this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
 			
-			this.GetComponent<Rigidbody>().velocity = this.facing * stats.speed * stats.spdManip.speedPercent;
+			this.rb.velocity = this.facing * stats.speed * stats.spdManip.speedPercent;
 		}
 
 	}
 	
 	protected virtual void Approach() {
 		this.getFacingTowardsTarget();
-		this.GetComponent<Rigidbody>().velocity = this.facing * stats.speed * stats.spdManip.speedPercent;
+		this.rb.velocity = this.facing * stats.speed * stats.spdManip.speedPercent;
 	}
 
 	protected virtual void Attack() {
@@ -268,7 +268,7 @@ public class MobileEnemy : Enemy {
 	
 	// We can have some logic here, but it's mostly so our unit is still during and attack animation
 	protected virtual void AtkAnimation() {
-		this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+		this.rb.velocity = Vector3.zero;
 		this.isApproaching();
 	}
 	
@@ -299,7 +299,7 @@ public class MobileEnemy : Enemy {
 	protected virtual void Spacing() {
 		this.facing = (this.lastSeenPosition.Value - this.transform.position) * -1;
 		this.facing.y = 0.0f;
-		this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		this.rb.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 	}
 
 	protected virtual void Far () {
@@ -316,7 +316,7 @@ public class MobileEnemy : Enemy {
 	
 	protected IEnumerator moveToPosition(Vector3 position) {
 		while (!this.isApproaching() && this.distanceToVector3(position) > 0.1f && !this.isInAtkAnimation() && this.target == null) {
-			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.rb.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			yield return null;
 		}
 	}
@@ -325,7 +325,7 @@ public class MobileEnemy : Enemy {
 		this.facing = this.targetDir;
 		float moveToTime = 0.5f;
 		while (!this.isApproaching() && this.distanceToVector3(this.targetDir) > 0.1f && !this.isInAtkAnimation() && this.target == null && moveToTime > 0.0f) {
-			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.rb.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			moveToTime -= Time.deltaTime;
 			yield return null;
 		}
@@ -335,7 +335,7 @@ public class MobileEnemy : Enemy {
 		float resetTimer = aggroTimer;
 		while(!this.isApproaching() && resetTimer > 0.0f && !this.isInAtkAnimation() && this.target == null) {
 			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
-			this.GetComponent<Rigidbody>().velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.rb.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			yield return new WaitForSeconds (0.5f);
 			resetTimer -= 0.5f;
 		}
@@ -372,8 +372,8 @@ public class MobileEnemy : Enemy {
 			/*
 			RaycastHit hit;
 
-			// if (GetComponent<Rigidbody>().SweepTest(direction, out hit, this.distanceToVector3(p.GetComponent<Collider>().transform.position))) {
-			if (GetComponent<Rigidbody>().SweepTest(direction, out hit, Vector3.Distance(this.transform.position, p.GetComponent<Collider>().transform.position))) {
+			// if (this.rb.SweepTest(direction, out hit, this.distanceToVector3(p.GetComponent<Collider>().transform.position))) {
+			if (this.rb.SweepTest(direction, out hit, Vector3.Distance(this.transform.position, p.GetComponent<Collider>().transform.position))) {
 				if (hit.collider.gameObject == p) {
 					aggroT.add(p,1);
 					if (this.lastSeenPosition != null) {
@@ -389,7 +389,7 @@ public class MobileEnemy : Enemy {
 
 			RaycastHit[] hits;
 
-			hits = this.GetComponent<Rigidbody>().SweepTestAll(direction, Vector3.Distance(this.transform.position, p.transform.position) + 2);
+			hits = this.rb.SweepTestAll(direction, Vector3.Distance(this.transform.position, p.transform.position) + 2);
 			
 			for (int i = 0; i < hits.Length; ++i) {
 				// print(hits[i].transform.name);

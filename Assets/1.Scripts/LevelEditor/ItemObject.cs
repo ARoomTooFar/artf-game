@@ -60,7 +60,7 @@ public class ItemObject : MonoBehaviour
 			}
 		}
 
-		camCont.focusedObject = this.gameObject;
+//		camCont.focusedObject = this.gameObject;
 	}
 
 	IEnumerator DragObject (float distance)

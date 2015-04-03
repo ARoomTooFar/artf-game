@@ -20,17 +20,14 @@ public class CameraController : MonoBehaviour {
 	
 	
 	static Camera currentCamera;
-	
-	static float baseX = 43f;
-	static float baseY = 15f;
-	static float baseZ = 2.5f;
+
 
 	static float minY = 5f;
 	static float maxY = 25f;
 	static float zoomSpeed = .5f;
 	
-	static float orthoZoomSpeed = .5f;
-	static float maxOrthoSize = 20;
+	static float orthoZoomSpeed = 2f;
+	static float maxOrthoSize = 30;
 	static float minOrthoSize = 2;
 	static float currOrthoSize = 10;
 	
@@ -83,15 +80,18 @@ public class CameraController : MonoBehaviour {
 			changeToPerspective ();});
 		Button_Orthographic.onClick.AddListener (() => {
 			changetoOrthographic ();});
+		/*
 		Button_Hand.onClick.AddListener (() => {
 			cursorToHand (); });
 		Button_Pointer.onClick.AddListener (() => {
-			cursorToPointer ();});
+			cursorToPointer ();});*/
 		
 		currentCamera = this.gameObject.GetComponent<Camera> ();
+
+		currentCamera.transform.position = new Vector3(43f, 15f, 2.5f);
 		
 		setCameraRotation (new Vector3 (45, -45, 0));
-		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
+
 		
 		changeToPerspective ();
 	}
@@ -101,7 +101,7 @@ public class CameraController : MonoBehaviour {
 		selectTiles ();
 		drawGrid ();
 		drawMouseSquare();
-		drawBoxAroundFocusedObject();
+//		drawBoxAroundFocusedObject();
 	}
 	
 	void Update () {
@@ -110,10 +110,6 @@ public class CameraController : MonoBehaviour {
 		checkForMouseClicks();
 		
 		checkForKeyPresses();
-		
-		setCameraPosition (new Vector3 (baseX, baseY, baseZ));
-
-
 	}
 	
 	void checkForMouseScrolling(){
@@ -132,7 +128,7 @@ public class CameraController : MonoBehaviour {
 			prevMouseBool = false;
 		}
 	}
-	
+
 	void checkForKeyPresses(){
 		if (Input.GetKey (KeyCode.UpArrow)) {
 			moveForward ();
@@ -148,24 +144,11 @@ public class CameraController : MonoBehaviour {
 		}
 	}
 	
-	public void cursorToHand(){
-		
-	}
-	
-	public void cursorToPointer(){
-		
-	}
-	
 	void setCameraRotation (Vector3 rot)
 	{
-		currentCamera.transform.root.rotation = Quaternion.Euler (rot);
+		currentCamera.transform.root.rotation = Quaternion.Euler(rot);
 	}
 
-	void setCameraPosition (Vector3 pos)
-	{
-		currentCamera.transform.root.position = pos;
-	}
-	
 	public void dragCamera ()
 	{
 		
@@ -180,8 +163,8 @@ public class CameraController : MonoBehaviour {
 		}
 		
 		Vector3 offset = (prevMouse - point);
-		baseX += offset.x;
-		baseZ += offset.z;
+		moveCamera(offset);
+
 	}
 	
 	Vector3 getCameraForward(){
@@ -190,23 +173,27 @@ public class CameraController : MonoBehaviour {
 	
 	public void moveForward ()
 	{
-		baseX += Mathf.Sin(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
-		baseZ += Mathf.Cos(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		float x = Mathf.Sin(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		float z = Mathf.Cos(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		moveCamera(new Vector3(x, 0, z));
 	}
 	public void moveBackward ()
 	{
-		baseX -= Mathf.Sin(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
-		baseZ -= Mathf.Cos(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		float x = -Mathf.Sin(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		float z = -Mathf.Cos(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		moveCamera(new Vector3(x, 0, z));
 	}
 	public void moveLeft ()
 	{
-		baseX -= Mathf.Cos(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
-		baseZ += Mathf.Sin(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		float x = -Mathf.Cos(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		float z = Mathf.Sin(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		moveCamera(new Vector3(x, 0, z));
 	}
 	public void moveRight ()
 	{
-		baseX += Mathf.Cos(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
-		baseZ -= Mathf.Sin(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		float x = Mathf.Cos(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		float z = -Mathf.Sin(currentCamera.transform.root.eulerAngles.y*Mathf.Deg2Rad);
+		moveCamera(new Vector3(x, 0, z));
 	}
 	public void zoomCamIn ()
 	{
@@ -216,7 +203,11 @@ public class CameraController : MonoBehaviour {
 				cam.orthographicSize = currOrthoSize;
 			}
 		} else {
-			baseY = Mathf.Min (maxY, baseY + zoomSpeed);
+			//baseY = Mathf.Min (maxY, baseY + zoomSpeed);
+			foreach (Camera cam in 	Camera.allCameras) {
+				moveCameraForZooming(-cam.transform.forward);
+//				transform.position = Vector3.Lerp(startMarker.position, endMarker.position, fracJourney);
+			}
 		}
 	}
 	public void zoomCamOut ()
@@ -227,9 +218,39 @@ public class CameraController : MonoBehaviour {
 				cam.orthographicSize = currOrthoSize;
 			}
 		} else {
-			baseY = Mathf.Max (minY, baseY - zoomSpeed);
+			foreach (Camera cam in 	Camera.allCameras) {
+				moveCameraForZooming(cam.transform.forward);
+			}
 		}
 	}
+
+	void moveCameraForZooming(Vector3 pos){
+		Vector3 vec = currentCamera.transform.position;
+		float speedFactor = (vec.y / 10f);
+		vec.x = vec.x + (pos.x * speedFactor);
+		vec.y = vec.y + (pos.y * speedFactor);
+		vec.z = vec.z + (pos.z * speedFactor);
+		currentCamera.transform.position = vec;
+		//		StopCoroutine(moveCam (vec));
+		//		StartCoroutine(moveCam (vec));
+	}
+
+	void moveCamera(Vector3 pos){
+		Vector3 vec = currentCamera.transform.position;
+		vec.x = vec.x + (pos.x);
+		vec.y = vec.y + (pos.y);
+		vec.z = vec.z + (pos.z);
+		currentCamera.transform.position = vec;
+	}
+
+	IEnumerator moveCam (Vector3 newPos)
+	{ 
+		while (currentCamera.transform.position != newPos) {
+			currentCamera.transform.position = Vector3.MoveTowards(currentCamera.transform.position, newPos, Time.deltaTime * 1f); 
+		}
+		yield return null;
+	}
+
 	public void changeToTopDown ()
 	{
 		setCameraRotation (new Vector3 (90, 0, 0));
@@ -397,8 +418,35 @@ public class CameraController : MonoBehaviour {
 		if (focusedObject != null) {
 
 			GameObject g = focusedObject;
-			Renderer rend = g.GetComponentInChildren<Renderer> ();
-			Bounds bound = rend.bounds;
+
+
+//			Renderer rend = g.GetComponentInChildren<Renderer> ();
+//			Mesh mes = g.GetComponentInChildren<MeshFilter> ().mesh;
+			Collider coll = g.GetComponentInChildren<Collider> ();
+
+//			foreach (Renderer rend in g.GetComponentsInChildren<Renderer>()){
+//				//rend.material.shader = focusedShader;
+//				Color trans = rend.material.color;
+//				trans.r = 1f;
+//				rend.material.color = trans;
+//				
+//			}
+			
+			Bounds bound = coll.bounds;
+
+			foreach (Collider c in g.GetComponentsInChildren<Collider> ())
+			{
+				bound.Encapsulate(c.bounds);
+			}
+//			foreach (Renderer r in g.GetComponentsInChildren<Renderer> ())
+//			{
+//				bound.Encapsulate(r.bounds);
+//			}
+//			foreach (MeshFilter fil in g.GetComponentsInChildren<MeshFilter>()){
+//				bound.Encapsulate(fil.mesh.bounds);
+//			}
+//			bound.center = g.transform.position;
+
 
 			Quaternion quat = g.transform.rotation;
 			Vector3 bc = g.transform.position + quat * (bound.center - g.transform.position);

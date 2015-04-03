@@ -222,11 +222,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 				facing = newMoveDir;
 			}
 			
-			GetComponent<Rigidbody>().velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.rb.velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
 		} else if (freeAnim){
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this
-			GetComponent<Rigidbody>().velocity = Vector3.zero;
+			this.rb.velocity = Vector3.zero;
 		}
 	}
 	//-------------------------------------//
