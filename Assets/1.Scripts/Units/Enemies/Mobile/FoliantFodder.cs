@@ -82,7 +82,6 @@ public class FoliantFodder: MobileEnemy {
 			return true;
 		} else {
 			Vector3 tPos = this.target.transform.position;
-			print (this.roll.curCoolDown);
 			if (Vector3.Distance(this.transform.position, tPos) >= 10 &&  this.roll.curCoolDown <= 0) {
 				return true;
 			}
