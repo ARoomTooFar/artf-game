@@ -10,11 +10,9 @@ public class SpeedManipulation {
 		get{return spdPercents.percentValue;}
 	}
 	private PercentValues spdPercents;
-	// private MonoBehaviour subMono;
 
 	public SpeedManipulation() {
 		spdPercents = new PercentValues();
-		// subMono = sM;
 	}
 
 	public void setSpeedAmplification(float amp) {

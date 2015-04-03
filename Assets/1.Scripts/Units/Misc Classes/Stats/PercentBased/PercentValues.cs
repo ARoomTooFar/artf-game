@@ -71,6 +71,7 @@ public class PercentValues {
 public class StatsMultiplier{
 	public float health, armor,maxHealth,rezCount;
 	public float strength, coordination, speed, luck;
+	public float atkSpeed;
 
 	public int minAtkRadius, maxAtkRadius;
 	public float dmgAmp, dmgRed;
@@ -99,6 +100,11 @@ public class PowerLevels{
 		frenzy.setSpeedBoost (0);
 		target.BDS.addBuffDebuff (frenzy, target.gameObject);
 	}
+
+	/*
+	public int currentStage(){
+
+	}*/
 
 	public PowerLevels(Character c){
 		stages = new List<PowerStage>();
