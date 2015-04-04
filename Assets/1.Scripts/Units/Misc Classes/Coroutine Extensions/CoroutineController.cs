@@ -57,11 +57,13 @@ public class CoroutineController {
 	}
 	
 	public void Stop() {
-		if (_state != CoroutineState.Running  && _state != CoroutineState.Paused) {
-			throw new System.InvalidOperationException("Unable to stop coroutine in state: " + _state);
+		if (_state != CoroutineState.Finished) {
+			if (_state != CoroutineState.Running  && _state != CoroutineState.Paused) {
+				throw new System.InvalidOperationException("Unable to stop coroutine in state: " + _state);
+			}
+			
+			_state = CoroutineState.Finished;
 		}
-		
-		_state = CoroutineState.Finished;
 	}
 	
 	public void Pause() {

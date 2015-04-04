@@ -13,6 +13,7 @@ public class State
 		get{ return _id ;}
 	}
 
+	protected AIAction enterAction;
 	protected AIAction action;
 	protected AIAction exitAction;
 
@@ -35,6 +36,12 @@ public class State
 		else Debug.LogWarning ("State " + _id + " does not contain a transition to " + t.targetState.id);
 	}
 
+	public void onEnter() {
+		if (enterAction != null) {
+			enterAction();
+		}
+	}
+
 	public void getAction() {
 		action();
 	}
@@ -43,6 +50,10 @@ public class State
 		if(exitAction != null){
 			exitAction ();
 		}
+	}
+
+	public void addEnterAction(AIAction act) {
+		enterAction = act;
 	}
 
 	public void addAction(AIAction act) {
@@ -112,7 +123,7 @@ public class StateMachine {
 
 		foreach (Transition t in transList) {
 			if(t.isTriggered()) {
-				// Debug.Log (t.targetState.id);
+				Debug.Log (t.targetState.id);
 				triggeredTransition = t;
 				currState.onExit();
 				break;
@@ -121,6 +132,7 @@ public class StateMachine {
 
 		if (triggeredTransition != null) {
 			currState = triggeredTransition.targetState;
+			currState.onEnter ();
 		}
 
 		currState.getAction ();
