@@ -6,11 +6,12 @@ using System.Collections.Generic;
 public class Artilitree: MobileEnemy {
 
 	protected int rootTime;
-	public float timing;
+	protected float timing;
 	protected bool rooted, rooting, unrooting;
 	protected CoroutineController rootController;
 	protected Artillery artillery;
 	protected TargetCircle curTCircle;
+	protected RootRing roots;
 	
 	protected override void Awake () {
 		base.Awake ();
@@ -24,6 +25,9 @@ public class Artilitree: MobileEnemy {
 
 		this.artillery = this.gear.weapon.GetComponent<Artillery>();
 		if (this.artillery == null) print("Artilitree has no artillery equipped");
+
+		this.roots = this.inventory.items[inventory.selected].GetComponent<RootRing>();
+		if (this.roots == null) Debug.LogWarning ("Artilitree does not have root ring equipped");
 	}
 	
 	protected override void Update() {
@@ -42,7 +46,7 @@ public class Artilitree: MobileEnemy {
 
 		this.rootTime = 3;
 		this.timing = rootTime;
-		this.minAtkRadius = 40.0f;
+		this.minAtkRadius = 22.0f;
 		this.maxAtkRadius = 250.0f;
 	}
 	
@@ -299,6 +303,7 @@ public class Artilitree: MobileEnemy {
 
 	// Rooting Actions
 	protected virtual void EnterRooting() {
+		if (this.roots.curCoolDown <= 0) this.roots.useItem();
 		if (!this.rooted) this.timing = this.rootTime;
 		this.StartCoroutineEx(rootSelf(this.timing), out this.rootController);
 		this.rb.isKinematic = true;
