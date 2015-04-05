@@ -5,14 +5,7 @@ using UnityEngine.UI;
 public class GSManager : MonoBehaviour {
     // persistent data
     public static GSManager gsManager;
-    public string level1Data = "level1Data";
-	public string level2Data = "level2Data";
-	public string level3Data = "level3Data";
-	public string level4Data = "level4Data";
-	public string level5Data = "level5Data";
-	public string level6Data = "level6Data";
-	public string level7Data = "level7Data";
-	public string level8Data = "level8Data";
+    public string currLevelData = "";
 
     private Farts serv;
 	private GameObject loadingBG;
@@ -75,11 +68,11 @@ public class GSManager : MonoBehaviour {
 		
 		yield return www;
 		
-		level1Data = www.text;
+		currLevelData = www.text;
 		
-		if (serv.dataCheck(level1Data))
+		if (serv.dataCheck(currLevelData))
 		{
-			Debug.Log("LVL DL SUCCESS: " + level1Data);
+			Debug.Log("LVL DL SUCCESS: " + currLevelData);
 			yield return StartCoroutine(LoadSceneAsync(1));
 			
 			// after loading is done, find new LoadingBG in new scene
