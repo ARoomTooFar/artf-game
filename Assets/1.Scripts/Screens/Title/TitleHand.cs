@@ -14,6 +14,8 @@ public class TitleHand : MonoBehaviour {
     private GameObject btnLevel1;
 	private GameObject btnLevel2;
 	private GameObject btnLevel3;
+	private GameObject fieldLevelId;
+	private GameObject btnGoToLevel;
 
 	void Start ()
     {  
@@ -22,6 +24,8 @@ public class TitleHand : MonoBehaviour {
         btnLevel1 = GameObject.Find("BtnLevel1");
 		btnLevel2 = GameObject.Find("BtnLevel2");
 		btnLevel3 = GameObject.Find("BtnLevel3");
+		fieldLevelId = GameObject.Find ("FieldLevelId");
+		btnGoToLevel = GameObject.Find("BtnGoToLevel");
 
 		// hide LoadingBG. can't hide in inspector because Find() can't find hidden objects.
         loadingBG = GameObject.Find("LoadingBG");
@@ -57,17 +61,28 @@ public class TitleHand : MonoBehaviour {
 				gsManager.LoadLevel("4851447149625344");
 			}
 		);
+
+		btnGoToLevel.GetComponent<Button>().onClick.AddListener (() =>
+		    {
+				hideLevelSelect();
+				gsManager.LoadLevel (fieldLevelId.GetComponent<InputField> ().text);
+			}
+		);
 	}
 
 	void hideLevelSelect () {
 		btnLevel1.SetActive(false);
 		btnLevel2.SetActive(false);
 		btnLevel3.SetActive(false);
+		fieldLevelId.SetActive (false);
+		btnGoToLevel.SetActive (false);
 	}
 
 	void showLevelSelect () {
 		btnLevel1.SetActive(true);
 		btnLevel2.SetActive(true);
 		btnLevel3.SetActive(true);
+		fieldLevelId.SetActive (true);
+		btnGoToLevel.SetActive (true);
 	}
 }

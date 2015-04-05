@@ -62,8 +62,6 @@ public class GSManager : MonoBehaviour {
 
 	public IEnumerator DlLevel(string levelId)
 	{
-		Debug.Log ("started");
-		
 		WWW www = serv.getLvlWww(levelId);
 		
 		yield return www;
