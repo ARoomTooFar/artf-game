@@ -34,6 +34,9 @@ public class Blink : QuickItem {
 		float newDistance = blinkDistance;
 		Vector3 newPosition;
 
+		Vector3 subFacing = user.facing.normalized * 0.2f;
+		user.transform.position = new Vector3(user.transform.position.x - subFacing.x, user.transform.position.y, user.transform.position.z - subFacing.z);
+
 		// Check for obstacles in out way
 		if (user.GetComponent<Rigidbody>().SweepTest (user.facing, out hit, blinkDistance)) {
 			if (hit.transform.tag == "Wall") {
@@ -47,7 +50,8 @@ public class Blink : QuickItem {
 			newPosition = newPosition - user.facing.normalized * 0.1f;
 		}
 
-		user.GetComponent<Rigidbody>().MovePosition(newPosition);
+		user.transform.position = newPosition;
+		// user.GetComponent<Rigidbody>().MovePosition(newPosition);
 
 		animDone();
 	}
