@@ -45,17 +45,16 @@ public class UIButtonSetup : MonoBehaviour {
 		//Button_Hand = GameObject.Find ("Button_Hand").GetComponent("Button") as Button;
 		//Button_Pointer = GameObject.Find ("Button_Pointer").GetComponent("Button") as Button;
 
-		Button Button_TileMode = GameObject.Find ("Button_TileMode").GetComponent("Button") as Button;
-		Button Button_RoomMode = GameObject.Find ("Button_RoomMode").GetComponent("Button") as Button;
-
-		Button_TileMode.onClick.AddListener (() => {
+		btn = GameObject.Find ("Button_TileMode").GetComponent("Button") as Button;
+		btn.onClick.AddListener (() => {
 			Mode.setTileMode();
 		});
 
-		Button_RoomMode.onClick.AddListener (() => {
+		btn = GameObject.Find ("Button_RoomMode").GetComponent("Button") as Button;
+		btn.onClick.AddListener (() => {
 			Mode.setRoomMode();
 		});
 
-		Mode.setTileMode();
+		//Mode.setTileMode();
 	}
 }

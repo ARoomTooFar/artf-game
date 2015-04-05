@@ -26,6 +26,10 @@ public static class Mode
 
 		Button_RoomMode_Background.SetActive(true);
 		Button_TileMode_Background.SetActive(false);
+
+		foreach (ARTFRoom rm in MapData.TheFarRooms.roomList) {
+			rm.setMarkerActive(true);
+		}
 	}
 
 	public  static void setTileMode ()
@@ -35,6 +39,10 @@ public static class Mode
 
 		Button_RoomMode_Background.SetActive(false);
 		Button_TileMode_Background.SetActive(true);
+
+		foreach (ARTFRoom rm in MapData.TheFarRooms.roomList) {
+			rm.setMarkerActive(false);
+		}
 	}
 
 	public  static bool isTileMode ()
