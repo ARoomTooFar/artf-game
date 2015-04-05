@@ -89,6 +89,13 @@ public partial class ARTFRoom {
 		LRMarker.transform.root.position = LRCorner;
 		ULMarker.transform.root.position = ULCorner;
 	}
+
+	public void setMarkerActive(bool active){
+		LLMarker.SetActive (active);
+		URMarker.SetActive (active);
+		LRMarker.SetActive (active);
+		ULMarker.SetActive (active);
+	}
 	#endregion Corners
 
 	#region SquareProperties
