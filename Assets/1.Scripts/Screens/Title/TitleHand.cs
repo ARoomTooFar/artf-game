@@ -36,8 +36,8 @@ public class TitleHand : MonoBehaviour {
         btnLevel1.GetComponent<Button>().onClick.AddListener(() =>
             {
 				gsManager.level1Data = "topkek";
-                gsManager.LoadScene(1);
-            }
-        );
+				gsManager.LoadLevel("5713573250596864");
+			}
+		);
 	}
 }

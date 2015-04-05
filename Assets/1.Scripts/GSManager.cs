@@ -61,33 +61,34 @@ public class GSManager : MonoBehaviour {
 		loadingBG.SetActive (false);
 	}
 
-    public IEnumerator LoadLevel(string levelId)
-    {
-        loadingBG.SetActive(true);
+	public void LoadLevel (string levelId)
+	{
+		loadingBG.SetActive(true);
+		StartCoroutine(DlLevel(levelId));
+	}
 
-        WWW www = serv.getLvlWww(levelId);
-
-        yield return StartCoroutine(DlLevel(www));
-        yield return StartCoroutine(LoadSceneAsync(13));
-
-        // after loading is done, find new LoadingBG in new scene
-        loadingBG = GameObject.Find("LoadingBG");
-        loadingBG.SetActive(false);
-    }
-
-    public IEnumerator DlLevel(WWW www)
-    {
-        yield return www;
-
-        gsManager.level1Data = www.text;
-
-        if (serv.dataCheck(gsManager.level1Data))
-        {
-            Debug.Log("LVL DL SUCCESS: " + gsManager.level1Data);
-        }
-        else
-        {
-            Debug.Log("ERROR: Level download failed. Level ID doesn't exist.");
-        }
-    }
+	public IEnumerator DlLevel(string levelId)
+	{
+		Debug.Log ("started");
+		
+		WWW www = serv.getLvlWww(levelId);
+		
+		yield return www;
+		
+		level1Data = www.text;
+		
+		if (serv.dataCheck(level1Data))
+		{
+			Debug.Log("LVL DL SUCCESS: " + level1Data);
+			yield return StartCoroutine(LoadSceneAsync(1));
+			
+			// after loading is done, find new LoadingBG in new scene
+			loadingBG = GameObject.Find("LoadingBG");
+			loadingBG.SetActive(false);
+		}
+		else
+		{
+			Debug.Log("ERROR: Level download failed. Level ID doesn't exist.");
+		}
+	}
 }
