@@ -36,7 +36,7 @@ public class Artilitree: MobileEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 200;
+		stats.maxHealth = 1;
 		stats.health = stats.maxHealth;
 		stats.armor = 0;
 		stats.strength = 10;
@@ -223,7 +223,7 @@ public class Artilitree: MobileEnemy {
 	protected virtual bool isAquiringTarget() {
 		if (this.animator.GetBool ("Charging")) {
 			if (this.artillery.curCircle != null) {
-				this.curTCircle = this.gear.weapon.GetComponent<Artillery>().curCircle;
+				this.curTCircle = this.artillery.curCircle;
 				Vector3 direction = (this.target.transform.position - this.transform.position);
 				direction.y = 0.0f;
 				direction = direction.normalized * 4.0f;
@@ -353,7 +353,7 @@ public class Artilitree: MobileEnemy {
 		if (this.actable && !attacking){
 			this.getFacingTowardsTarget();
 			this.transform.localRotation = Quaternion.LookRotation(facing);
-			this.gear.weapon.initAttack();
+			this.artillery.initAttack();
 			animator.SetBool("Charging", true);
 		}
 	}
@@ -373,7 +373,13 @@ public class Artilitree: MobileEnemy {
 	}
 	
 	//-------------------//
-	
+
+
+	public override void die() {
+		this.artillery.initAttack();
+		StartCoroutine(waitTillDeath());
+	}
+
 	//------------//
 	// Coroutines //
 	//------------//
@@ -397,6 +403,13 @@ public class Artilitree: MobileEnemy {
 		// this.timing = this.rootTime;
 		this.unrooting = false;
 		this.rooted = false;
+	}
+
+	protected virtual IEnumerator waitTillDeath() {
+		while (this.artillery.curCircle == null) {
+			yield return null;
+		}
+		base.die ();
 	}
 	
 	//------------//
