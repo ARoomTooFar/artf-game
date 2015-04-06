@@ -135,6 +135,21 @@ public class MonsterManager {
 		return null;
 	}
 
+	public GameObject findGameObj(Vector3 pos) {
+		//for each type of block
+		foreach(KeyValuePair<string, List<MonsterBlock>> kvPair in dictionary) {
+			//check each block
+			foreach(MonsterBlock blk in kvPair.Value) {
+				//return block if position matches
+				if(blk.Position.Equals(pos)) {
+					return blk.GameObj;
+				}//otherwise continue to next
+			}
+		}
+		//return null if none found
+		return null;
+	}
+
 	#region Validation
 	public bool isAddValid(Vector3 pos){
 		TerrainBlock blk = MapData.TerrainBlocks.find(pos);
