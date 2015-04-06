@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Mirage : StationaryEnemy {
 
+	public int rank = 5;
+
 	protected List<MirageImage> images;
 	protected MarkOfDeath mark;
 	public Player deathTarget;
@@ -43,12 +45,12 @@ public class Mirage : StationaryEnemy {
 
 		this.blink = this.inventory.items[inventory.selected].GetComponent<MirageBlink>();
 		if (this.blink == null) Debug.LogWarning ("Mirage does not have MirageBlink equipped");
-		else this.blink.rank = 5; // Put in check later for Rank
+		else this.blink.rank = this.rank; // Put in check later for Rank
 	}
 
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 40;
+		stats.maxHealth = 20;
 		stats.health = stats.maxHealth;
 		stats.armor = 0;
 		stats.strength = 20;
@@ -147,22 +149,23 @@ public class Mirage : StationaryEnemy {
 	//---------------------//
 
 	public override void die() {
-		// StartCoroutine(waitTillDeath());
-		foreach (MirageImage im in this.blink.mirrors) {
-			Destroy(im.gameObject);
+		if (rank > 1) {
+			if (this.blink.mirrors.Count > 0) {
+				MirageImage imageToBe = this.blink.mirrors[(int)(Random.value * this.blink.mirrors.Count)];
+				this.rank--;
+				this.transform.position = imageToBe.transform.position;
+				imageToBe.die ();
+			}
+		} else {
+			foreach (MirageImage im in this.blink.mirrors) {
+				Destroy(im.gameObject);
+			}
+			this.deathTarget.BDS.rmvBuffDebuff(this.mark, this.gameObject);
+			base.die ();
 		}
-		this.deathTarget.BDS.rmvBuffDebuff(this.mark, this.gameObject);
-		base.die ();
-	}
 
-	/*
-	protected virtual IEnumerator waitTillDeath() {
-		while (this.blink.mirrors.Count > 0) {
-			Destroy(this.blink.mirrors[0]
-			yield return null;
-		}
-		base.die ();
-	}*/
+	}
+	
 
 	//---------------------//
 }
