@@ -57,7 +57,25 @@ public static class MapData {
 	#region RoomManipulation
 	public static void addRoom(Vector3 pos1, Vector3 pos2) {
 		if(TheFarRooms.isAddValid(pos1, pos2)) {
-			TheFarRooms.add(pos1, pos2);
+			TheFarRooms.add(pos1, pos2, false, false);
+		}
+	}
+
+	public static bool addStartRoom(Vector3 pos1, Vector3 pos2) {
+		if(TheFarRooms.isAddValid(pos1, pos2) && TheFarRooms.isStartOrEndRoomValid(pos1, pos2)) {
+			TheFarRooms.add(pos1, pos2, true, false);
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public static bool addEndRoom(Vector3 pos1, Vector3 pos2) {
+		if(TheFarRooms.isAddValid(pos1, pos2) && TheFarRooms.isStartOrEndRoomValid(pos1, pos2)) {
+			TheFarRooms.add(pos1, pos2, false, true);
+			return true;
+		}else{
+			return false;
 		}
 	}
 
@@ -155,4 +173,16 @@ public static class MapData {
 		SceneryBlocks.remove(pos);
 		MonsterBlocks.remove(pos);
 	}
+
+	public static HashSet<GameObject> getObjects(HashSet<Vector3> set){
+		HashSet<GameObject> obs = new HashSet<GameObject>();
+
+		foreach(Vector3 vec in set) {
+			obs.Add(SceneryBlocks.findGameObj(vec));
+			obs.Add(MonsterBlocks.findGameObj(vec));
+		}
+		return obs;
+
+	}
+	
 }

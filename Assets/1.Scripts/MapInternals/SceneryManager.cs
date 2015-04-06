@@ -131,7 +131,7 @@ public class SceneryManager {
 	public void remove(Vector3 pos) {
 		remove(find(pos));
 	}
-
+	
 	public void remove(SceneryBlock blk) {
 		if(blk == null) {
 			return;
@@ -147,6 +147,7 @@ public class SceneryManager {
 		dictionary[blk.BlockID].Remove(blk);
 	}
 	#endregion Remove
+
 
 	#region Move
 	public void move(Vector3 pos, Vector3 offset) {
@@ -190,6 +191,23 @@ public class SceneryManager {
 				//return block if position matches
 				if(blk.Position.Equals(intPosition)) {
 					return blk;
+				}//otherwise continue to next
+			}
+		}
+		//return null if none found
+		return null;
+	}
+
+	public GameObject findGameObj(Vector3 pos) {
+		//round position
+		Vector3 intPosition = pos.Round();
+		//for each type of block
+		foreach(KeyValuePair<string, List<SceneryBlock>> kvPair in dictionary) {
+			//check each block
+			foreach(SceneryBlock blk in kvPair.Value) {
+				//return block if position matches
+				if(blk.Position.Equals(intPosition)) {
+					return blk.GameObj;
 				}//otherwise continue to next
 			}
 		}

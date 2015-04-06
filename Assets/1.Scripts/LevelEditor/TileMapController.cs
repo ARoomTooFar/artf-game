@@ -19,12 +19,12 @@ public class TileMapController : MonoBehaviour {
 	Camera UICamera;
 	public HashSet<Vector3> selectedTiles = new HashSet<Vector3>();
 	Vector3 currTile;
-	Vector3 shiftOrigin = new Vector3(-1, -1, -1);
+	public Vector3 shiftOrigin = new Vector3(-1, -1, -1);
 	string selectedItem = null;
 	GameObject currentObj;
 	public bool placeRoomClicked = false;
-	float secondX;
-	float secondY;
+	public float secondX;
+	public float secondZ;
 	public bool suppressDragSelecting;
 	Vector3 clickOrigin = new Vector3(-1, -1, -1);
 	
@@ -52,6 +52,22 @@ public class TileMapController : MonoBehaviour {
 	
 	public void fillInRoom(HashSet<Vector3> st, float firstCornerX, float firstCornerZ, float secondCornerX, float secondCornerZ) {
 		MapData.addRoom(new Vector3(firstCornerX, 0, firstCornerZ), new Vector3(secondCornerX, 0, secondCornerZ));
+	}
+
+	public void fillInRoom() {
+		MapData.addRoom(new Vector3(shiftOrigin.x, 0, shiftOrigin.z), new Vector3(secondX, 0, secondZ));
+	}
+
+	public bool fillInStartRoom() {
+		return MapData.addStartRoom(new Vector3(shiftOrigin.x, 0, shiftOrigin.z), new Vector3(secondX, 0, secondZ));
+	}
+
+	public bool fillInEndRoom() {
+		return MapData.addEndRoom(new Vector3(shiftOrigin.x, 0, shiftOrigin.z), new Vector3(secondX, 0, secondZ));
+	}
+
+	public Vector3 getCenterOfSelectedArea(){
+		return (new Vector3(Mathf.Floor(shiftOrigin.x + secondX) / 2f, 0f , Mathf.Floor(shiftOrigin.z + secondZ) / 2f));
 	}
 	
 	void RayToScene() {
@@ -146,12 +162,13 @@ public class TileMapController : MonoBehaviour {
 			}
 			
 			secondX = Mathf.RoundToInt(xf / tileSize);
-			secondY = Mathf.RoundToInt(zf / tileSize);
+			secondZ = Mathf.RoundToInt(zf / tileSize);
 		}
 
 		//if user is holding down left mouse button, and dragging,
 		//we make a box of selected tile and have it resize as
 		//the mouse moves around
+//		Debug.Log("sfgsdfgs" + suppressDragSelecting);
 		if(clickOrigin != stgVector
 		   && suppressDragSelecting == false
 		   && Input.GetMouseButton(0)
@@ -174,7 +191,7 @@ public class TileMapController : MonoBehaviour {
 					}
 				}
 				secondX = Mathf.RoundToInt(xf / tileSize);
-				secondY = Mathf.RoundToInt(zf / tileSize);
+				secondZ = Mathf.RoundToInt(zf / tileSize);
 			}
 			
 			//			print("we draggin a box");
@@ -183,7 +200,8 @@ public class TileMapController : MonoBehaviour {
 
 		
 		if(placeRoomClicked) {
-			fillInRoom(selectedTiles, shiftOrigin.x, shiftOrigin.z, secondX, secondY);
+//			fillInRoom(selectedTiles, shiftOrigin.x, shiftOrigin.z, secondX, secondZ);
+			fillInRoom();
 			placeRoomClicked = false;
 		}
 		//if we've clicked room button, fill in selected area with a room

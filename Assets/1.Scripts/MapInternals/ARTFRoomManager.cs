@@ -39,8 +39,8 @@ public class ARTFRoomManager {
 	 * 
 	 * Adds a room with two corners at the given positions
 	 */
-	public void add(Vector3 pos1, Vector3 pos2) {
-		add(new ARTFRoom(pos1, pos2));
+	public void add(Vector3 pos1, Vector3 pos2, bool startRoom, bool endRoom) {
+		add(new ARTFRoom(pos1, pos2, startRoom, endRoom));
 	}
 
 	/*
@@ -251,6 +251,17 @@ public class ARTFRoomManager {
 		}
 		return true;
 	}
+
+	public bool isStartOrEndRoomValid(Vector3 cor1, Vector3 cor2){
+		float minSize = 5f;
+
+		if(Mathf.Abs(cor1.x - cor2.x) < minSize || Mathf.Abs(cor1.z - cor2.z) < minSize){
+			Debug.Log("Starting and ending rooms must be at least " + minSize + "x" + minSize + " in size");
+			return false;
+		}
+		return true;
+	}
+
 	#endregion Validation
 
 	/*
