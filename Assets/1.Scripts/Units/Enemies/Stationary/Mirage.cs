@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Mirage : StationaryEnemy {
 
+	protected List<MirageImage> images;
 	protected MarkOfDeath mark;
 	public Player deathTarget;
-	protected Blink blink;
+	protected MirageBlink blink;
 
 	// Mark of Death
 	protected class MarkOfDeath : Stacking {
@@ -39,9 +41,24 @@ public class Mirage : StationaryEnemy {
 	protected override void Start() {
 		base.Start ();
 
-		this.blink = this.inventory.items[inventory.selected].GetComponent<Blink>();
-		if (this.blink == null) Debug.LogWarning ("Mirage does not have blink equipped");
-		else this.blink.cooldown = 2.0f;
+		this.blink = this.inventory.items[inventory.selected].GetComponent<MirageBlink>();
+		if (this.blink == null) Debug.LogWarning ("Mirage does not have MirageBlink equipped");
+		else this.blink.rank = 5; // Put in check later for Rank
+	}
+
+	protected override void setInitValues() {
+		base.setInitValues();
+		stats.maxHealth = 40;
+		stats.health = stats.maxHealth;
+		stats.armor = 0;
+		stats.strength = 20;
+		stats.coordination=0;
+		stats.speed=4;
+		stats.luck=0;
+		setAnimHash ();
+		
+		this.minAtkRadius = 0.0f;
+		this.maxAtkRadius = 5.0f;
 	}
 
 	//-------------//
@@ -84,6 +101,8 @@ public class Mirage : StationaryEnemy {
 			if (distance < this.maxAtkRadius && distance >= this.minAtkRadius) {
 				this.facing = this.deathTarget.transform.position - this.transform.position;
 				this.facing.y = 0.0f;
+				this.transform.localRotation = Quaternion.LookRotation(facing);
+				return true;
 			}
 		}
 		return false;
@@ -105,7 +124,6 @@ public class Mirage : StationaryEnemy {
 
 		if (this.blink.curCoolDown <= 0) {
 			this.blink.useItem();
-			print("Blink");
 		}
 	}
 
@@ -122,6 +140,29 @@ public class Mirage : StationaryEnemy {
 			this.facing.y = 0.0f;
 		}
 	}
-
 	//----------//
+
+	//---------------------//
+	// Inherited Functions //
+	//---------------------//
+
+	public override void die() {
+		// StartCoroutine(waitTillDeath());
+		foreach (MirageImage im in this.blink.mirrors) {
+			Destroy(im.gameObject);
+		}
+		this.deathTarget.BDS.rmvBuffDebuff(this.mark, this.gameObject);
+		base.die ();
+	}
+
+	/*
+	protected virtual IEnumerator waitTillDeath() {
+		while (this.blink.mirrors.Count > 0) {
+			Destroy(this.blink.mirrors[0]
+			yield return null;
+		}
+		base.die ();
+	}*/
+
+	//---------------------//
 }

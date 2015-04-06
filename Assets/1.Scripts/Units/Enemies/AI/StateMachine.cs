@@ -123,7 +123,7 @@ public class StateMachine {
 
 		foreach (Transition t in transList) {
 			if(t.isTriggered()) {
-				Debug.Log (t.targetState.id);
+				// Debug.Log (t.targetState.id);
 				triggeredTransition = t;
 				currState.onExit();
 				break;
