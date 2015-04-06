@@ -52,7 +52,7 @@ public class StunTrap : Traps {
 			yield return null;
 		}
 		foreach (Character suckers in this.aoe.unitsInRange) {
-			suckers.BDS.addBuffDebuff(debuff, this.gameObject, 1.0f);
+			if (suckers != null) suckers.BDS.addBuffDebuff(debuff, this.gameObject, 1.0f);
 		}
 		StartCoroutine(lower());
 	}

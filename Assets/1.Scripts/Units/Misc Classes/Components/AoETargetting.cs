@@ -17,6 +17,17 @@ public class AoETargetting : MonoBehaviour {
 		unitsInRange = new List<Character>();
 	}
 
+	protected void cleanList() {
+		int count = 0;
+		while (count < unitsInRange.Count) {
+			if (unitsInRange[count] == null) {
+				unitsInRange.RemoveAt(count);
+				continue;
+			}
+			count++;
+		}
+		if (this.unitsInRange.Count == 0) this.CancelInvoke();
+	}
 
 	// Will send a message to current object and all parents that something entered for instant response (Look at Stun trap)
 	//     Take care not to have multiple parents with the unit entered method unless it is what you want
@@ -24,6 +35,7 @@ public class AoETargetting : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if ((affectPlayers && other.GetComponent<Player>() != null) || (affectEnemies && other.GetComponent<Enemy>() != null)) {
 			Character unit = other.GetComponent<Character>();
+			if (unitsInRange.Count == 0) this.InvokeRepeating("cleanList", 3.0f, 3.0f);
 			unitsInRange.Add(unit);
 			this.gameObject.SendMessageUpwards("unitEntered", unit, SendMessageOptions.DontRequireReceiver);
 		}
@@ -35,6 +47,7 @@ public class AoETargetting : MonoBehaviour {
 		
 		if (unit != null) {
 			unitsInRange.Remove (unit);
+			if (this.unitsInRange.Count == 0) this.CancelInvoke();
 			this.gameObject.SendMessageUpwards("unitLeft", unit, SendMessageOptions.DontRequireReceiver);
 		}
 	}

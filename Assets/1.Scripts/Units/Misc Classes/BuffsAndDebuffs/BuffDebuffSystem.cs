@@ -105,6 +105,7 @@ public class BuffDebuffSystem {
 		newBD.bd.applyBD(affectedUnit, source);
 		newBD.maxDuration = duration;
 		newBD.timeStart = Time.time;
+
 		affectedUnit.StartCoroutineEx(timedRemoval(newBD.bd, source, duration), out newBD.duration);
 	}
 

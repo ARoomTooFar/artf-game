@@ -121,19 +121,22 @@ public class Mirage : StationaryEnemy {
 	//---------//
 
 	protected override void Approach() {
-		this.facing = this.deathTarget.transform.position - this.transform.position;
-		this.facing.y = 0.0f;
 
-		if (this.blink.curCoolDown <= 0) {
-		//	if (Random.value < 0.5) {
-			do {
-				this.facing.x = Random.value * (this.facing.x == 0 ? (Random.value - 0.5f) : (Mathf.Abs(this.facing.x)/this.facing.x));
-				this.facing.z = Random.value * (this.facing.z == 0 ? (Random.value - 0.5f) : (Mathf.Abs(this.facing.z)/this.facing.z));
-				this.facing.Normalize();
-			} while (this.facing == Vector3.zero);
-		//	}
-			this.blink.useItem();
+		if (!this.stunned) {
+			this.facing = this.deathTarget.transform.position - this.transform.position;
+			this.facing.y = 0.0f;
+			
+			if (this.blink.curCoolDown <= 0) {
+				do {
+					this.facing.x = Random.value * (this.facing.x == 0 ? (Random.value - 0.5f) : (Mathf.Abs(this.facing.x)/this.facing.x));
+					this.facing.z = Random.value * (this.facing.z == 0 ? (Random.value - 0.5f) : (Mathf.Abs(this.facing.z)/this.facing.z));
+					this.facing.Normalize();
+				} while (this.facing == Vector3.zero);
+				
+				this.blink.useItem();
+			}
 		}
+
 	}
 
 	protected override void Search() {

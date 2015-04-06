@@ -10,6 +10,9 @@ public class MirageImage : Mirage, IDamageable<int, Character> {
 	public int hitsToKill;
 
 	protected override void Awake () {
+		this.animator = this.GetComponent<Animator>();
+		this.BDS = new BuffDebuffSystem(this);
+		this.rb = this.GetComponent<Rigidbody>();
 	}
 
 	// Use this for initialization
