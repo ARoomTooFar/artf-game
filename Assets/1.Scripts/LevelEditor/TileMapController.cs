@@ -168,6 +168,7 @@ public class TileMapController : MonoBehaviour {
 		//if user is holding down left mouse button, and dragging,
 		//we make a box of selected tile and have it resize as
 		//the mouse moves around
+//		Debug.Log("sfgsdfgs" + suppressDragSelecting);
 		if(clickOrigin != stgVector
 		   && suppressDragSelecting == false
 		   && Input.GetMouseButton(0)

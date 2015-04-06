@@ -173,4 +173,16 @@ public static class MapData {
 		SceneryBlocks.remove(pos);
 		MonsterBlocks.remove(pos);
 	}
+
+	public static HashSet<GameObject> getObjects(HashSet<Vector3> set){
+		HashSet<GameObject> obs = new HashSet<GameObject>();
+
+		foreach(Vector3 vec in set) {
+			obs.Add(SceneryBlocks.findGameObj(vec));
+			obs.Add(MonsterBlocks.findGameObj(vec));
+		}
+		return obs;
+
+	}
+	
 }

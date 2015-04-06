@@ -3,6 +3,7 @@ using System.Collections;
 
 public static class StartEndRoom{
 	static TileMapController tilemapcont;
+
 	public static bool startRoomPlaced = false;
 	public static bool endRoomPlaced = false;
 	public static Vector3 playerStartingLocation;

@@ -12,14 +12,13 @@ public class ItemObject : MonoBehaviour
 	static Camera UICamera;
 	bool inMouseCheck = false;
 	Vector3 initMousePos;
-	//static ItemClass itemClass = new ItemClass ();
 	TileMapController tilemapcont;
 	float mouseDeadZone = 10f;
 	Shader focusedShader;
 	Shader nonFocusedShader;
 	Vector3 newp;
 	static bool isFocus = true;
-	CameraController camCont;
+	CameraDraws camCont;
 
 	
 	Vector3 rotation;
@@ -29,7 +28,7 @@ public class ItemObject : MonoBehaviour
 	{
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
-		camCont = GameObject.Find ("UICamera").GetComponent("CameraController") as CameraController;
+		camCont = GameObject.Find ("UICamera").GetComponent("CameraDraws") as CameraDraws;
 		
 		focusedShader = Shader.Find ("Transparent/Bumped Diffuse");
 		nonFocusedShader = Shader.Find ("Bumped Diffuse");
@@ -55,16 +54,17 @@ public class ItemObject : MonoBehaviour
 					initMousePos = Input.mousePosition;
 					inMouseCheck = true;
 				}
+//				ObjectFocus.focusedObject = this.gameObject;
 				StartCoroutine (DragObject (hit.distance));
 				
 			}
 		}
 
-//		camCont.focusedObject = this.gameObject;
+
 	}
 
 	IEnumerator DragObject (float distance)
-	{ 
+	{
 		//for the ghost-duplicate
 		GameObject itemObjectCopy = null;
 		ItemObject copy = null;
@@ -91,7 +91,7 @@ public class ItemObject : MonoBehaviour
 			//if we're selecting a room corner-mover thing
 			if(this.gameObject.name != "TileMap") tilemapcont.suppressDragSelecting = true;
 			else tilemapcont.suppressDragSelecting = false;
-//			print (this.gameObject.name);
+//			print (tilemapcont.suppressDragSelecting);
 			
 			//if user wants to cancel the drag
 			if (Input.GetKeyDown (KeyCode.Escape) || Input.GetMouseButton (1)) {
@@ -150,6 +150,8 @@ public class ItemObject : MonoBehaviour
 
 			yield return null; 
 		}
+
+		tilemapcont.suppressDragSelecting = false;
 		
 		//destroy the copy
 		Destroy (itemObjectCopy);
@@ -166,10 +168,10 @@ public class ItemObject : MonoBehaviour
 			tilemapcont.selectTile(newp);
 		}
 		
-		
+
 		inMouseCheck = false;
 
-		tilemapcont.suppressDragSelecting = false;
+
 	}
 
 	
