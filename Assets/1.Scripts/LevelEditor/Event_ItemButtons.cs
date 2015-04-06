@@ -99,6 +99,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	{ 
 		string prefabLocation = "Prefabs/" + connectedPrefab;
 
+
 		//for the ghost-duplicate
 		itemObjectCopy = null;
 		//ItemObject copy = null;

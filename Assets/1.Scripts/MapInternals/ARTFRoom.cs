@@ -83,6 +83,9 @@ public partial class ARTFRoom {
 	public GameObject LRMarker { get; private set; }
 	public GameObject ULMarker { get; private set; }
 
+	public bool isStartRoom;
+	public bool isEndRoom;
+
 	public void updateMarkerPositions(){
 		LLMarker.transform.root.position = LLCorner;
 		URMarker.transform.root.position = URCorner;
@@ -125,7 +128,7 @@ public partial class ARTFRoom {
 	/*
 	 * Constructor
 	 */
-	public ARTFRoom(Vector3 pos1, Vector3 pos2) {
+	public ARTFRoom(Vector3 pos1, Vector3 pos2, bool startRoom, bool endRoom) {
 		this.LLCorner = pos1.getMinVals(pos2);
 		this.URCorner = pos1.getMaxVals(pos2);
 		this.Blocks = new List<TerrainBlock>();
@@ -137,6 +140,9 @@ public partial class ARTFRoom {
 		this.ULMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", ULCorner, Vector3.zero);
 		this.LRMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LRCorner, Vector3.zero);
 
+
+		this.isStartRoom = startRoom;
+		this.isEndRoom = endRoom;
 	}
 
 	#region (un)linkTerrain
