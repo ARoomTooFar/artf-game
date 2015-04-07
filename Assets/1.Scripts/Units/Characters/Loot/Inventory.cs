@@ -90,7 +90,7 @@ public class Inventory : MonoBehaviour {
 				spotCheckIn();
 				StartCoroutine(Wait(.15f));
 			}
-			if(Input.GetKeyDown(controls.attack) || (controls.joyUsed &&  Input.GetButtonDown(controls.joyAttack))) {
+			if(Input.GetKeyDown(controls.attack) || (controls.joyUsed &&  Input.GetButtonDown(controls.joyAttack)) &&!dupItem) {
 				ready = true;
 				actable = false;
 				recompileLine(lineNumber);
@@ -139,6 +139,8 @@ public class Inventory : MonoBehaviour {
 					spotNums[i] = 6;
 				}else if(itemsUsed[i] == "W7" || itemsUsed[i] == "C7" || itemsUsed[i] == "H7" || itemsUsed[i] == "I7"){
 					spotNums[i] = 7;
+				}else if(itemsUsed[i] == "W8" || itemsUsed[i] == "C8" || itemsUsed[i] == "H8" || itemsUsed[i] == "I8"){
+					spotNums[i] = 8;
 				}
 				if(i == 0){
 					iconSpots[i].GetComponent<Renderer>().material = iChest.weaponry[spotNums[i]];
@@ -215,7 +217,7 @@ public class Inventory : MonoBehaviour {
 		//temp = temp + "W8";//Was used to test adding a spot to the line
 		loadData[number] = temp;
 	}
-	private void recompileText(string text){//Requires P#
+	public void recompileText(string text){//Requires P#
 		//loadData[number] = text;
 		string temp = "";
 		for(int i = 0; i<loadData.Length-1; i++){
