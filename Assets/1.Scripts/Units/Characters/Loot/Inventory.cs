@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 
 public class Inventory : MonoBehaviour {
+	//For the fix (Ignore later)
 	public GameObject[] loadOuts;
 	public string[] loadData;//From Loadgear
 	public string[] loadLine;//Expansion
