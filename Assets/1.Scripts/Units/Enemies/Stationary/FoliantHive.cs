@@ -114,6 +114,7 @@ public class FoliantHive : StationaryEnemy {
 			nextUse = Time.time + spawnCD;
 			currentSpawn++;
 			print (currentSpawn);
+			//Instantiate(FoliantFodder,new Vector3(0,0,0),Quaternion.identity);
 		}
 	}
 
