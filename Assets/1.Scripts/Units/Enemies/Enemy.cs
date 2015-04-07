@@ -100,8 +100,6 @@ public class Enemy : Character {
 				target = aggroT.getTarget ();
 			
 			
-		} else {
-			Destroy (gameObject);
 		}
 	}
 
@@ -220,6 +218,11 @@ public class Enemy : Character {
 		}
 
 		base.damage(dmgTaken);
+	}
+
+	public override void die() {
+		base.die ();
+		Destroy (gameObject);
 	}
 
 	//-------------------------------//
