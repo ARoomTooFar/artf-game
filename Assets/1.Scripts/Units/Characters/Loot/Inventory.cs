@@ -11,19 +11,23 @@ public class Inventory : MonoBehaviour {
 	public Controls controls;
 	public bool on,actable,ready,dupItem;
 	public int playNumber, spotNumber, lineNumber, itemDuplicate; //1-4, 1-length of spot line, 1-6;
+	public IconChest iChest;
+	public int[] spotNums;
+	public GameObject[] iconSpots; //0 Weapon, 1 Chest, 2 Head, 3-5 Items
 	// Use this for initialization
 	void Start () {
-		itemsUsed = new string[3];
+		itemsUsed = new string[6];
 		actable = true;
 		on = true;
+		iChest = (IconChest) FindObjectOfType(typeof(IconChest));
 		lineNumber = 1; //Don't want player name
 		spotNumber = 0; 
 		loadFromText("P" + (playNumber).ToString());
 		//if(on){
 		loadFromSplit(lineNumber);
 		//}
-		dupLoad(lineNumber);
-		
+		loadOutBuild(lineNumber);
+		spotCheckIn();
 		//recompileLine(loadLine, lineNumber);
 		//recompileText("P" + (playNumber).ToString());
 	}
@@ -33,33 +37,44 @@ public class Inventory : MonoBehaviour {
 		if(actable&&on){
 			if (Input.GetKey(controls.up) &&!ready &&!dupItem) {
 				recompileLine(lineNumber);
+				spotNumber= 0;
 				lineNumber--;
 				if(lineNumber<1){//Boundary
 					lineNumber = 1;
 				}
 				loadFromSplit(lineNumber);
 				actable = false;
+				loadOutBuild(lineNumber);
+				spotCheckIn();
+				//spotCheckIn(lineNumber);
 				StartCoroutine(Wait(.25f));
 			}
 			//"Down" key assign pressed
 			if (Input.GetKey(controls.down)&&!ready &&!dupItem) {
 				recompileLine(lineNumber);
+				spotNumber= 0;
 				lineNumber++;
 				if(lineNumber>6){//Boundary
 					lineNumber = 6;
 				}
 				loadFromSplit(lineNumber);
 				actable = false;
+				loadOutBuild(lineNumber);
+				spotCheckIn();
+				//spotCheckIn(lineNumber);
 				StartCoroutine(Wait(.25f));
 			}
 			//"Left" key assign pressed
 			if (Input.GetKey(controls.left)&&!ready) {
+				//spotCheckIn();
 				spotNumber--;
 				if(spotNumber<0){
 					spotNumber = 0;
 				}
 				swapPartsInLine();
 				actable = false;
+				//loadOutBuild(lineNumber);
+				
 				StartCoroutine(Wait(.25f));
 			}
 			//"Right" key assign pressed
@@ -70,17 +85,27 @@ public class Inventory : MonoBehaviour {
 				}
 				swapPartsInLine();
 				actable = false;
+				//loadOutBuild(lineNumber);
+				spotCheckIn();
 				StartCoroutine(Wait(.25f));
 			}
 			if(Input.GetKeyDown(controls.attack) || (controls.joyUsed &&  Input.GetButtonDown(controls.joyAttack))) {
 				ready = true;
 				actable = false;
+				recompileLine(lineNumber);
+				loadFromSplit(lineNumber);
+				loadOutBuild(lineNumber);
+				spotCheckIn();
 				StartCoroutine(Wait(.25f));
 			}
 			if(Input.GetKeyDown (controls.secItem) || (controls.joyUsed && Input.GetButtonDown(controls.joySecItem))) {//Choose item to be in slot
 				if(ready){
 					ready = false;
 				}
+				recompileLine(lineNumber);
+				loadFromSplit(lineNumber);
+				loadOutBuild(lineNumber);
+				spotCheckIn();
 				actable = false;
 				StartCoroutine(Wait(.25f));
 			}
@@ -88,7 +113,41 @@ public class Inventory : MonoBehaviour {
 		if(actable&&!on){
 			if(Input.GetKeyDown(controls.attack) || (controls.joyUsed &&  Input.GetButtonDown(controls.joyAttack))) {
 				on = true;
+				spotCheckIn();
 				StartCoroutine(Wait(.25f));
+			}
+		}
+		
+	}
+	private void spotCheckIn(){
+		if(on){
+			for(int i = 0; i< itemsUsed.Length; i++){
+				if(itemsUsed[i] == "W0" || itemsUsed[i] == "C0" || itemsUsed[i] == "H0" || itemsUsed[i] == "I0"){
+					spotNums[i] = 0;
+				}else if(itemsUsed[i] == "W1" || itemsUsed[i] == "C1" || itemsUsed[i] == "H1" || itemsUsed[i] == "I1"){
+					spotNums[i] = 1;
+				}else if(itemsUsed[i] == "W2" || itemsUsed[i] == "C2" || itemsUsed[i] == "H2" || itemsUsed[i] == "I2"){
+					spotNums[i] = 2;
+				}else if(itemsUsed[i] == "W3" || itemsUsed[i] == "C3" || itemsUsed[i] == "H3" || itemsUsed[i] == "I3"){
+					spotNums[i] = 3;
+				}else if(itemsUsed[i] == "W4" || itemsUsed[i] == "C4" || itemsUsed[i] == "H4" || itemsUsed[i] == "I4"){
+					spotNums[i] = 4;
+				}else if(itemsUsed[i] == "W5" || itemsUsed[i] == "C5" || itemsUsed[i] == "H5" || itemsUsed[i] == "I5"){
+					spotNums[i] = 5;
+				}else if(itemsUsed[i] == "W6" || itemsUsed[i] == "C6" || itemsUsed[i] == "H6" || itemsUsed[i] == "I6"){
+					spotNums[i] = 6;
+				}else if(itemsUsed[i] == "W7" || itemsUsed[i] == "C7" || itemsUsed[i] == "H7" || itemsUsed[i] == "I7"){
+					spotNums[i] = 7;
+				}
+				if(i == 0){
+					iconSpots[i].GetComponent<Renderer>().material = iChest.weaponry[spotNums[i]];
+				}else if(i == 1){
+					iconSpots[i].GetComponent<Renderer>().material = iChest.armory[spotNums[i]];
+				}else if(i == 2){
+					iconSpots[i].GetComponent<Renderer>().material = iChest.hats[spotNums[i]];
+				}else if(i >= 3){
+					iconSpots[i].GetComponent<Renderer>().material = iChest.inventory[spotNums[i]];
+				}
 			}
 		}
 	}
@@ -101,16 +160,27 @@ public class Inventory : MonoBehaviour {
 		actable = true;
 		}
 	}
+	private void loadOutBuild(int num){
+		loadFromSplit(1);
+		itemsUsed[0] = loadLine[0];
+		loadFromSplit(2);
+		itemsUsed[1] = loadLine[0];
+		loadFromSplit(3);
+		itemsUsed[2] = loadLine[0];
+		dupLoad(num);
+	}
 	//Set the duplicates
 	private void dupLoad(int num){//Has to have loaded from text already
 		loadFromSplit(4);
-		itemsUsed[0] = loadLine[0];
+		itemsUsed[3] = loadLine[0];
 		loadFromSplit(5);
-		itemsUsed[1] = loadLine[0];
+		itemsUsed[4] = loadLine[0];
 		loadFromSplit(6);
-		itemsUsed[2] = loadLine[0];
-		if(itemsUsed[0] == itemsUsed[1] || itemsUsed[0] == itemsUsed[2] || itemsUsed[1] == itemsUsed[2]){
+		itemsUsed[5] = loadLine[0];
+		if(itemsUsed[3] == itemsUsed[4] || itemsUsed[3] == itemsUsed[5] || itemsUsed[4] == itemsUsed[5]){
 			dupItem = true;
+		}else{
+			dupItem = false;
 		}
 		loadFromSplit(num);
 	}
@@ -126,14 +196,14 @@ public class Inventory : MonoBehaviour {
 	private void swapPartsInLine(){//Takes spot number, moves it to front, makes spot number 
 		string temp = loadLine[0];
 		loadLine[0] = loadLine[spotNumber];
-		loadLine[spotNumber] = loadLine[0];
+		loadLine[spotNumber] = temp;
 	}
 	private void loadFromSplit(int number){//Requires number of line working on, 1-7
 		loadLine = loadData[number].Split('#');
 	}
 	private void recompileLine(int number){
 		string temp = "";
-		for(int i = 0; i<loadLine.Length-2; i++){
+		for(int i = 0; i<loadLine.Length-1; i++){
 			temp = temp + loadLine[i] + '#';
 		}
 		temp = temp + loadLine[loadLine.Length-1];
