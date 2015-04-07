@@ -270,7 +270,7 @@ public class MobileEnemy : Enemy {
 			this.gear.weapon.initAttack();
 		}
 		
-		print ("EnterAttack()");
+		//print ("EnterAttack()");
 	}
 
 	protected virtual void Attack() {
