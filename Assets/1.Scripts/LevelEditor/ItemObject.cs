@@ -38,7 +38,6 @@ public class ItemObject : MonoBehaviour
 	
 	void Update ()
 	{
-
 		if (!Input.GetMouseButtonDown (0) || UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == true) 
 			return;
 		
@@ -55,12 +54,9 @@ public class ItemObject : MonoBehaviour
 					inMouseCheck = true;
 				}
 //				ObjectFocus.focusedObject = this.gameObject;
-				StartCoroutine (DragObject (hit.distance));
-				
+				StartCoroutine (DragObject (hit.distance));	
 			}
 		}
-
-
 	}
 
 	IEnumerator DragObject (float distance)
@@ -71,33 +67,26 @@ public class ItemObject : MonoBehaviour
 		
 		bool cancellingMove = false;
 		bool outOfDeadZone = false;
-		bool copyCreated = false;
+		//bool copyCreated = false;
 		newp = this.gameObject.transform.position;
 		
 		while (Input.GetMouseButton(0)) { 
 			
 			//if mouse left deadzone, and we haven't made a copy of the object yet
-			if (outOfDeadZone && !copyCreated) {
+			if (outOfDeadZone && itemObjectCopy == null) {
 				//create copy of item object
-				itemObjectCopy = Instantiate (this.gameObject) as GameObject;
-				copy = itemObjectCopy.GetComponent ("ItemObject") as ItemObject;
-				copy.changePosition (getPosition ());
-				copy.changeOrientation (getRotation ());
-				
-				//so this code only happens once
-				copyCreated = true;
+				itemObjectCopy = Instantiate (this.gameObject, getPosition(), getRotation()) as GameObject;
 			}
 
 			//if we're selecting a room corner-mover thing
 			if(this.gameObject.name != "TileMap") tilemapcont.suppressDragSelecting = true;
 			else tilemapcont.suppressDragSelecting = false;
-//			print (tilemapcont.suppressDragSelecting);
 			
 			//if user wants to cancel the drag
 			if (Input.GetKeyDown (KeyCode.Escape) || Input.GetMouseButton (1)) {
 				Destroy (itemObjectCopy);
 				cancellingMove = true;
-				
+		
 				//break out of while loop
 				break;
 			}
@@ -123,7 +112,7 @@ public class ItemObject : MonoBehaviour
 						newp = new Vector3 (x * 1.0f, getPosition ().y, z * 1.0f);
 
 						//if copy exists
-						if (copyCreated) {
+						if (itemObjectCopy != null) {
 							//update the item object things
 							//shader has to be set in this loop, or transparency won't work
 							//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
@@ -138,16 +127,11 @@ public class ItemObject : MonoBehaviour
 							//trans.a = 0.5f;
 							//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.SetColor ("_Color", trans);
 							itemObjectCopy.transform.position = new Vector3 (x, getPosition ().y, z);
-							itemObjectCopy.transform.eulerAngles = getRotation();
-	
-						}
-						
+							itemObjectCopy.transform.rotation = getRotation();
+						}		
 					}
-				}
-				
+				}	
 			}
-
-
 			yield return null; 
 		}
 
@@ -157,34 +141,22 @@ public class ItemObject : MonoBehaviour
 		Destroy (itemObjectCopy);
 		
 		//if move was cancelled, we don't perform an update on the item object's position
-		if (cancellingMove == true) {
-
-		} else {
+		if (!cancellingMove) {
 			Vector3 pos = this.gameObject.transform.root.position;
 
-//			print ("from: " + pos + " to: " + (newp - pos));
 			MapData.dragObject(this.gameObject, pos, newp-pos);
 			tilemapcont.deselect(pos);
 			tilemapcont.selectTile(newp);
 		}
-		
-
 		inMouseCheck = false;
-
-
 	}
 
-	
-	public void changePosition(Vector3 newPos){
-		//position = newPos;
-	}
-	
 	public Vector3 getPosition(){
 		return this.gameObject.transform.position;
 	}
 
-	public Vector3 getRotation(){
-		return this.gameObject.transform.eulerAngles;
+	public Quaternion getRotation(){
+		return this.gameObject.transform.rotation;
 	}
 	
 	public void rotate(float deg){
@@ -192,11 +164,6 @@ public class ItemObject : MonoBehaviour
 		rotation.z = 0f;
 		rotation.y += deg;
 	}
-	
-	public void changeOrientation(Vector3 newRot){
-		rotation = newRot;
-	}
-	
 
 	public string getName(){
 		return this.gameObject.name;
