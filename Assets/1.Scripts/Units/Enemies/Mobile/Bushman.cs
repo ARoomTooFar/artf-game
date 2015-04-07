@@ -99,8 +99,7 @@ public class Bushman : MobileEnemy {
 
 
 		// Adds old transitiont to new States
-		this.addTransitionToNew("approach", charge);
-		this.addTransitionToNew("search", charge);
+		this.addTransitionToNew("free anim", charge);
 		this.addTransitionToNew("free anim", lunge);
 		this.addTransitionToNew ("approach", free_anim);
 		this.addTransitionToNew ("search", free_anim);
