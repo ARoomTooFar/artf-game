@@ -29,7 +29,7 @@ public class FileIO : MonoBehaviour
 
     #if UNITY_EDITOR
     private string dummyGameAcctId = "5750085036015616";
-	private string dummyLvlId = "6215736263442432";
+    private string dummyLvlId = "6215736263442432";
     #endif
 	
 	void Start ()
@@ -72,6 +72,7 @@ public class FileIO : MonoBehaviour
 
         lvlData = www.text;
         Debug.Log(lvlData);
+        Debug.Log(www.url);
         if (serv.dataCheck(lvlData))
         {
             txtDlLvl.enabled = false;
