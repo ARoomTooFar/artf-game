@@ -13,6 +13,9 @@ public partial class ARTFRoom {
 	private static string defaultWall = "Prefabs/Rooms/wallstoneend";
 	#endregion PrivateVariables
 
+	public bool isStartRoom = false;
+	public bool isEndRoom = false;
+
 	#region Properties
 	//A list of the TerrainBlocks contained within the room
 	public List<TerrainBlock> Blocks {
@@ -83,8 +86,7 @@ public partial class ARTFRoom {
 	public GameObject LRMarker { get; private set; }
 	public GameObject ULMarker { get; private set; }
 
-	public bool isStartRoom;
-	public bool isEndRoom;
+
 
 	public void updateMarkerPositions(){
 		LLMarker.transform.root.position = LLCorner;
@@ -128,7 +130,7 @@ public partial class ARTFRoom {
 	/*
 	 * Constructor
 	 */
-	public ARTFRoom(Vector3 pos1, Vector3 pos2, bool startRoom, bool endRoom) {
+	public ARTFRoom(Vector3 pos1, Vector3 pos2) {
 		this.LLCorner = pos1.getMinVals(pos2);
 		this.URCorner = pos1.getMaxVals(pos2);
 		this.Blocks = new List<TerrainBlock>();
@@ -139,10 +141,6 @@ public partial class ARTFRoom {
 		this.LLMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LLCorner, Vector3.zero);
 		this.ULMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", ULCorner, Vector3.zero);
 		this.LRMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LRCorner, Vector3.zero);
-
-
-		this.isStartRoom = startRoom;
-		this.isEndRoom = endRoom;
 	}
 
 	#region (un)linkTerrain
@@ -327,12 +325,13 @@ public partial class ARTFRoom {
 		}
 		List<SceneryBlock> remDoor = new List<SceneryBlock> ();
 		foreach (SceneryBlock door in Doors) {
-			if(!inRoom(door.Position)){
+			if(!isEdge(door.Position)){
 				remDoor.Add(door);
 			}
 		}
 		foreach (SceneryBlock door in remDoor) {
 			Doors.Remove(door);
+			MapData.SceneryBlocks.remove(door);
 		}
 		//relink blocks to this room
 		linkTerrain();

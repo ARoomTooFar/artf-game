@@ -137,10 +137,13 @@ public class SceneryManager {
 			return;
 		}
 		unlinkTerrain(blk);
-		if(blk.BlockInfo.isDoor){
-			MapData.TheFarRooms.find(blk.Position).Doors.Remove(blk);
-			foreach(Vector3 pos in blk.Coordinates){
-				MapData.TerrainBlocks.find(pos).Wall.GameObj.SetActive(true);
+		if(blk.BlockInfo.isDoor) {
+			ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
+			if(rm != null) {
+				rm.Doors.Remove(blk);
+				foreach(Vector3 pos in blk.Coordinates) {
+					MapData.TerrainBlocks.find(pos).Wall.GameObj.SetActive(true);
+				}
 			}
 		}
 		blk.remove();
