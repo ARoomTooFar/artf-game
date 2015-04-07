@@ -116,6 +116,16 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			if (!copyCreated) {
 				//create copy of item object
 				itemObjectCopy = Instantiate (Resources.Load (prefabLocation)) as GameObject;
+
+				//update the item object things
+				//shader has to be set in this loop, or transparency won't work
+				foreach (Renderer rend in itemObjectCopy.transform.root.gameObject.GetComponentsInChildren<Renderer>()){
+					rend.material.shader = translucentShader;
+					Color trans = rend.material.color;
+					trans.a = .5f;
+					rend.material.color = trans;
+				}
+
 				//copy = itemObjectCopy.GetComponent ("ItemObject") as ItemObject;
 				
 				//so this code only happens once
@@ -166,14 +176,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 						}
 
 
-						//update the item object things
-						//shader has to be set in this loop, or transparency won't work
-						if (itemObjectCopy.gameObject.GetComponent<Renderer> () != null) {
-							itemObjectCopy.gameObject.GetComponent<Renderer> ().material.shader = translucentShader;
-							Color trans = itemObjectCopy.gameObject.GetComponent<Renderer> ().material.color;
-							trans.a = 0.5f;
-							itemObjectCopy.gameObject.GetComponent<Renderer> ().material.SetColor ("_Color", trans);
-						}
+
 					}
 
 					//if it's a door, set it to last wall rotation
