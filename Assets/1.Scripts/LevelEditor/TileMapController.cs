@@ -19,14 +19,14 @@ public class TileMapController : MonoBehaviour {
 	Camera UICamera;
 	public HashSet<Vector3> selectedTiles = new HashSet<Vector3>();
 	Vector3 currTile;
-	public Vector3 shiftOrigin = new Vector3(-1, -1, -1);
+	public Vector3 shiftOrigin = Global.nullVector3;
 	string selectedItem = null;
 	GameObject currentObj;
 	public bool placeRoomClicked = false;
 	public float secondX;
 	public float secondZ;
 	public bool suppressDragSelecting;
-	Vector3 clickOrigin = new Vector3(-1, -1, -1);
+	Vector3 clickOrigin = Global.nullVector3;
 	
 	void Start() {	
 		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
@@ -48,10 +48,6 @@ public class TileMapController : MonoBehaviour {
 		camPos.x -= (grid_x / 2) * transform.localScale.x;
 		camPos.z -= (grid_z / 2) * transform.localScale.z;
 		transform.position = camPos;
-	}
-	
-	public void fillInRoom(HashSet<Vector3> st, float firstCornerX, float firstCornerZ, float secondCornerX, float secondCornerZ) {
-		MapData.addRoom(new Vector3(firstCornerX, 0, firstCornerZ), new Vector3(secondCornerX, 0, secondCornerZ));
 	}
 
 	public void fillInRoom() {
@@ -112,11 +108,11 @@ public class TileMapController : MonoBehaviour {
 
 		Vector3 stgVector = new Vector3(x, 0, z);
 		if(Input.GetMouseButton(0)) {
-			if(clickOrigin == new Vector3(-1, -1, -1)) {
+			if(clickOrigin == Global.nullVector3) {
 				clickOrigin = stgVector;
 			}
 		} else {
-			clickOrigin = new Vector3(-1, -1, -1);
+			clickOrigin = Global.nullVector3;
 		}
 
 		//for selecting single tiles, and for shift-clicking to select a group of tiles
@@ -138,7 +134,7 @@ public class TileMapController : MonoBehaviour {
 			//Shift functionality: selects all tiles between last selected tile, and shift clicked tile
 			else if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
 				//If no tiles have been selected ever, just select that tile
-				if(shiftOrigin == new Vector3(-1, -1, -1)) {
+				if(shiftOrigin == Global.nullVector3) {
 					selectTile(stgVector);
 				}
 				//Deselect other tiles, then select all tiles between bounds
@@ -174,7 +170,7 @@ public class TileMapController : MonoBehaviour {
 		   && Input.GetMouseButton(0)
 		   && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
 			//If no tiles have been selected ever, just select that tile
-			if(shiftOrigin == new Vector3(-1, -1, -1)) {
+			if(shiftOrigin == Global.nullVector3) {
 				selectTile(stgVector);
 			}
 			
@@ -200,7 +196,6 @@ public class TileMapController : MonoBehaviour {
 
 		
 		if(placeRoomClicked) {
-//			fillInRoom(selectedTiles, shiftOrigin.x, shiftOrigin.z, secondX, secondZ);
 			fillInRoom();
 			placeRoomClicked = false;
 		}
