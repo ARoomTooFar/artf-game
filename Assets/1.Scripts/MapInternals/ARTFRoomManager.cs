@@ -39,8 +39,8 @@ public class ARTFRoomManager {
 	 * 
 	 * Adds a room with two corners at the given positions
 	 */
-	public void add(Vector3 pos1, Vector3 pos2, bool startRoom, bool endRoom) {
-		add(new ARTFRoom(pos1, pos2, startRoom, endRoom));
+	public void add(Vector3 pos1, Vector3 pos2) {
+		add(new ARTFRoom(pos1, pos2));
 	}
 
 	/*
