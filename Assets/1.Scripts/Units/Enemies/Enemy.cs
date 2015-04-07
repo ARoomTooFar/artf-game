@@ -30,6 +30,7 @@ public class Enemy : Character {
 	public GameObject target;
 	protected Vector3? lastSeenPosition = null;
 	protected AggroTable aggroT;
+	protected bool targetchanged;
 	
 	protected float aggroTimer = 7.0f;
 
@@ -49,6 +50,7 @@ public class Enemy : Character {
 		opposition = Type.GetType ("Player");
 		
 		facing = Vector3.back;
+		targetchanged = false;
 
 		// aRange.opposition = this.opposition;
 		aRange.affectPlayers = true;
@@ -104,6 +106,7 @@ public class Enemy : Character {
 			Destroy (gameObject);
 		}
 	}
+
 
 	protected override void setInitValues() {
 		base.setInitValues();
