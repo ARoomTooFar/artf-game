@@ -282,6 +282,7 @@ public partial class ARTFRoom {
 		foreach(TerrainBlock blk in Blocks) {
 			blk.move(offset);
 		}
+		updateMarkerPositions();
 		/* Should be unnecessary. Blocks are now only linked within rooms
 		//for each block
 		foreach(TerrainBlock blk in Blocks) {
