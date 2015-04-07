@@ -33,9 +33,22 @@ public class AggroTable
 	private AggroNode head;
 	private AggroNode tail;
 	public bool testing = false;
+	bool switchingTarget = false;
 	
-	public AggroTable(){
+	public  AggroTable(){
 		head = new AggroNode (null, 0);
+	}
+
+	public GameObject topPrio(){
+		return this.head.getObj();
+	}
+
+	public bool changingAggro(){
+		if (switchingTarget) {
+			switchingTarget = false;
+			return true;
+		}
+		return false;
 	}
 	
 	public void add(GameObject g1, int p1)
@@ -80,6 +93,7 @@ public class AggroTable
 			else
 			{
 				head = nAdd;
+				switchingTarget = true;
 			}
 			nAdd.l = nOld.l;
 			nAdd.r = nOld;

@@ -2,7 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class Bushman : MobileEnemy {
+
+
+	private class BMFrenzyGrowth : StatsMultiplier {
+		
+		protected StatsMultiplier FrenzyGrowth(float dmgUp, float dmgRedUp, float spdUp, float currentGrowth) {
+			StatsMultiplier nextLv = new StatsMultiplier ();
+			nextLv.dmgAmp = dmgUp * currentGrowth;
+			nextLv.dmgRed = dmgRedUp * currentGrowth;
+			nextLv.speed = spdUp * currentGrowth;
+			return nextLv;
+		}
+	}
 	
 	private bool inFrenzy;
 	private float frenzy_counter;
@@ -14,40 +27,58 @@ public class Bushman : MobileEnemy {
 	GameObject expDeath;
 	protected Sprint sprint;
 	protected BullCharge charge;
+	protected Roll lungeAttack;
 
-
-	// code stolen from Francis
+	
 	protected override void initStates() {
 		base.initStates();
+
+		targetchanged = true;
 		
 		// Initialize all states
 		State charging = new State("charging");
 		State charge = new State ("charge");
+//		State targetSwitch = new State ("switch target");
+		State lunge = new State ("lunge");
+		State free_anim = new State ("free anim");
 		
 		
 		// Add all the states to the state machine
 		sM.states.Add (charging.id, charging);
 		sM.states.Add (charge.id, charge);
+//		sM.states.Add (targetSwitch.id, targetSwitch);
+		sM.states.Add (lunge.id, lunge);
+		sM.states.Add (free_anim.id, free_anim);
 		
 		
 		// Initialize all transitions
 		Transition tCharging = new Transition(charging);
 		Transition tCharge = new Transition(charge);
+//		Transition tTargetSwitch = new Transition (targetSwitch);
+		Transition tLunge = new Transition (lunge);
+		Transition tFreeAnim = new Transition (free_anim);
 		
 		
 		// Add all the transitions to the state machine
 		sM.transitions.Add (tCharging.targetState.id, tCharging);
 		sM.transitions.Add (tCharge.targetState.id, tCharge);
+//		sM.transitions.Add (tTargetSwitch.targetState.id, tTargetSwitch);
+		sM.transitions.Add (tLunge.targetState.id, tLunge);
+		sM.transitions.Add (tFreeAnim.targetState.id, tFreeAnim);
 		
 		
 		// Set conditions for the transitions
 		tCharging.addCondition(this.isTooFar);
 		tCharge.addCondition (this.isWithinCharge);
+		tLunge.addCondition (this.reAggro);
+		tFreeAnim.addCondition (this.freestate);
 		
 		
 		// Set actions for the states
 		charging.addAction (this.chargingCharge);
 		charge.addAction (this.chargingIntoSucker);
+		lunge.addAction (this.switchTarget);
+		free_anim.addAction (this.freeAction);
 		
 		
 		// Sets exit actions for states
@@ -61,10 +92,21 @@ public class Bushman : MobileEnemy {
 		
 		// Adds transitions to old States
 		this.addTransitionToExisting("approach", tCharging);
-		
+		this.addTransitionToExisting("approach", tLunge);
+		this.addTransitionToExisting("search", tLunge);
+		this.addTransitionToExisting("attackAnimation", tLunge);
+		this.addTransitionToExisting("space", tLunge);
+
+
 		// Adds old transitiont to new States
-		this.addTransitionToNew("approach", charge);
-		this.addTransitionToNew("search", charge);
+		this.addTransitionToNew("free anim", charge);
+		this.addTransitionToNew("free anim", lunge);
+		this.addTransitionToNew ("approach", free_anim);
+		this.addTransitionToNew ("search", free_anim);
+		this.addTransitionToNew ("attack", free_anim);
+		this.addTransitionToNew ("space", free_anim);
+		this.addTransitionToNew ("retreat", free_anim);
+
 	}
 	
 	protected override void Awake () {
@@ -72,21 +114,7 @@ public class Bushman : MobileEnemy {
 		inFrenzy = false;
 		frenzy_counter = 0;
 		frenzy_growth = 2;
-		powlvs = new PowerLevels (this);
-		StatsMultiplier stage0 = new StatsMultiplier (); stage0.dmgAmp = 0f; stage0.dmgRed = 0f; stage0.speed = 0f;
-		StatsMultiplier stage1 = new StatsMultiplier (); stage1.dmgAmp = 0.2f; stage1.dmgRed = -0.1f; stage1.speed = 0.1f;
-		StatsMultiplier stage2 = new StatsMultiplier (); stage2.dmgAmp = 0.3f; stage2.dmgRed = -0.25f; stage2.speed = 0.2f;
-		StatsMultiplier stage3 = new StatsMultiplier (); stage3.dmgAmp = 0.36f; stage3.dmgRed = -0.3f; stage3.speed = 0.25f;
-		StatsMultiplier stage4 = new StatsMultiplier (); stage4.dmgAmp = 0.5f; stage4.dmgRed = -0.35f; stage4.speed = 0.4f;
-		StatsMultiplier stage5 = new StatsMultiplier (); stage5.dmgAmp = 0.75f; stage5.dmgRed = -0.4f; stage5.speed = 0.6f;
-		StatsMultiplier stage6 = new StatsMultiplier (); stage6.dmgAmp = 1.0f; stage6.dmgRed = -0.8f; stage6.speed = 1.2f;
-		powlvs.addStage(stage0, 0);
-		powlvs.addStage(stage1, 10);
-		powlvs.addStage(stage2, 20);
-		powlvs.addStage(stage3, 25);
-		powlvs.addStage(stage4, 36);
-		powlvs.addStage(stage5, 45);
-		powlvs.addStage(stage6, 60);
+
 		health = stats.health;
 
 
@@ -99,7 +127,9 @@ public class Bushman : MobileEnemy {
 	protected override void Start() {
 		base.Start ();
 		charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
+		lungeAttack = this.inventory.items[++inventory.selected].GetComponent<Roll>();
 		if (charge == null) Debug.LogWarning ("Bushmen does not have charge equipped");
+		setFrenzy ();
 	}
 	
 	protected override void Update() {
@@ -123,7 +153,8 @@ public class Bushman : MobileEnemy {
 		foreach (Renderer r in rs) {
 			r.enabled = false;
 		}
-	}*/
+	} 
+	 */
 
 
 
@@ -139,6 +170,40 @@ public class Bushman : MobileEnemy {
 		
 		this.minAtkRadius = 0.0f;
 		this.maxAtkRadius = 5.0f;
+	}
+
+	protected void setFrenzy() {
+		powlvs = new PowerLevels (this);
+		StatsMultiplier stage0 = new StatsMultiplier (); stage0.dmgAmp = 0f; stage0.dmgRed = 0f; stage0.speed = 0f;
+		StatsMultiplier stage1 = new StatsMultiplier (); stage1.dmgAmp = 0.2f; stage1.dmgRed = -0.1f; stage1.speed = 0.1f;
+		StatsMultiplier stage2 = new StatsMultiplier (); stage2.dmgAmp = 0.3f; stage2.dmgRed = -0.25f; stage2.speed = 0.2f;
+		StatsMultiplier stage3 = new StatsMultiplier (); stage3.dmgAmp = 0.36f; stage3.dmgRed = -0.3f; stage3.speed = 0.25f;
+		StatsMultiplier stage4 = new StatsMultiplier (); stage4.dmgAmp = 0.5f; stage4.dmgRed = -0.35f; stage4.speed = 0.4f;
+		StatsMultiplier stage5 = new StatsMultiplier (); stage5.dmgAmp = 0.75f; stage5.dmgRed = -0.4f; stage5.speed = 0.6f;
+		StatsMultiplier stage6 = new StatsMultiplier (); stage6.dmgAmp = 1.0f; stage6.dmgRed = -0.8f; stage6.speed = 1.2f;
+		powlvs.addStage(stage0, 0);
+		powlvs.addStage(stage1, 10);
+		powlvs.addStage(stage2, 20);
+		powlvs.addStage(stage3, 25);
+		powlvs.addStage(stage4, 36);
+		powlvs.addStage(stage5, 45);
+		powlvs.addStage(stage6, 60);
+	}
+
+	/*
+	protected StatsMultiplier nextLvFrenzy (StatsMultiplier baseBoost, float atk, float def, float spd){
+		baseBoost.strength = baseBoost + 1 * atk;
+		baseBoost.armor = baseBoost + 1 * def;
+		baseBoost.speed = baseBoost + 1 * spd;
+	}*/
+
+	// all floats represent percent increase
+	protected StatsMultiplier FrenzyGrowth(float dmgUp, float dmgRedUp, float spdUp, float currentGrowth) {
+		StatsMultiplier nextLv = new StatsMultiplier ();
+		nextLv.dmgAmp = dmgUp * currentGrowth;
+		nextLv.dmgRed = dmgRedUp * currentGrowth;
+		nextLv.speed = spdUp * currentGrowth;
+		return nextLv;
 	}
 
 	//----------------------//
@@ -167,6 +232,13 @@ public class Bushman : MobileEnemy {
 		}
 	}
 
+	protected bool reAggro(){
+		return targetchanged;
+	}
+
+	protected bool freestate(){
+		return this.freeAnim;
+	}
 
 	//-------------------//
 	// Actions Functions //
@@ -180,6 +252,14 @@ public class Bushman : MobileEnemy {
 			this.target = null;
 		}
 	}
+
+	protected void freeAction() {
+
+	}
+
+	/*protected void LungeAttack(){
+
+	}*/
 	
 	protected virtual void doneCharge() {
 		this.inventory.keepItemActive = false;
@@ -194,6 +274,13 @@ public class Bushman : MobileEnemy {
 	
 	protected virtual void chargeEnd() {
 //		this.blast.useItem();
+	}
+
+	protected virtual void switchTarget() {
+		this.facing = this.target.transform.position - this.transform.position;
+		this.facing.y = 0.0f;
+		lungeAttack.useItem ();
+		targetchanged = false;
 	}
 
 	protected bool isFrenzy(){
