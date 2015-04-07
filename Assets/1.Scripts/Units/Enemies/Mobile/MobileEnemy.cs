@@ -183,7 +183,7 @@ public class MobileEnemy : Enemy {
 	}
 	
 	protected virtual bool isAttacking() {
-		if (this.target != null && !this.isInAtkAnimation()) {
+		if (this.target != null && !this.isInAtkAnimation() && this.actable) {
 			float distance = this.distanceToPlayer(this.target);
 			//float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
 			//&& this.canSeePlayer(this.target)
@@ -266,9 +266,12 @@ public class MobileEnemy : Enemy {
 			this.transform.localRotation = Quaternion.LookRotation(facing);
 			this.gear.weapon.initAttack();
 		}
+		
+		print ("EnterAttack()");
 	}
 
 	protected virtual void Attack() {
+		//print ("Attack()");
 	}
 	
 	// We can have some logic here, but it's mostly so our unit is still during and attack animation
