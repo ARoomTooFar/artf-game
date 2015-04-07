@@ -27,6 +27,7 @@ public class Bushman : MobileEnemy {
 		State charge = new State ("charge");
 //		State targetSwitch = new State ("switch target");
 		State lunge = new State ("lunge");
+		State free_anim = new State ("free anim");
 		
 		
 		// Add all the states to the state machine
@@ -34,6 +35,7 @@ public class Bushman : MobileEnemy {
 		sM.states.Add (charge.id, charge);
 //		sM.states.Add (targetSwitch.id, targetSwitch);
 		sM.states.Add (lunge.id, lunge);
+		sM.states.Add (free_anim.id, free_anim);
 		
 		
 		// Initialize all transitions
@@ -41,6 +43,7 @@ public class Bushman : MobileEnemy {
 		Transition tCharge = new Transition(charge);
 //		Transition tTargetSwitch = new Transition (targetSwitch);
 		Transition tLunge = new Transition (lunge);
+		Transition tFreeAnim = new Transition (free_anim);
 		
 		
 		// Add all the transitions to the state machine
@@ -48,18 +51,21 @@ public class Bushman : MobileEnemy {
 		sM.transitions.Add (tCharge.targetState.id, tCharge);
 //		sM.transitions.Add (tTargetSwitch.targetState.id, tTargetSwitch);
 		sM.transitions.Add (tLunge.targetState.id, tLunge);
+		sM.transitions.Add (tFreeAnim.targetState.id, tFreeAnim);
 		
 		
 		// Set conditions for the transitions
 		tCharging.addCondition(this.isTooFar);
 		tCharge.addCondition (this.isWithinCharge);
 		tLunge.addCondition (this.reAggro);
+		tFreeAnim.addCondition (this.freestate);
 		
 		
 		// Set actions for the states
 		charging.addAction (this.chargingCharge);
 		charge.addAction (this.chargingIntoSucker);
 		lunge.addAction (this.switchTarget);
+		free_anim.addAction (this.freeAction);
 		
 		
 		// Sets exit actions for states
@@ -75,18 +81,19 @@ public class Bushman : MobileEnemy {
 		this.addTransitionToExisting("approach", tCharging);
 		this.addTransitionToExisting("approach", tLunge);
 		this.addTransitionToExisting("search", tLunge);
-		this.addTransitionToExisting("attack", tLunge);
+		this.addTransitionToExisting("attackAnimation", tLunge);
 		this.addTransitionToExisting("space", tLunge);
 
 
 		// Adds old transitiont to new States
 		this.addTransitionToNew("approach", charge);
 		this.addTransitionToNew("search", charge);
-		this.addTransitionToNew ("approach", lunge);
-		this.addTransitionToNew ("search", lunge);
-		this.addTransitionToNew ("attack", lunge);
-		this.addTransitionToNew ("space", lunge);
-		this.addTransitionToNew ("retreat", lunge);
+		this.addTransitionToNew("free anim", lunge);
+		this.addTransitionToNew ("approach", free_anim);
+		this.addTransitionToNew ("search", free_anim);
+		this.addTransitionToNew ("attack", free_anim);
+		this.addTransitionToNew ("space", free_anim);
+		this.addTransitionToNew ("retreat", free_anim);
 
 	}
 	
@@ -201,6 +208,10 @@ public class Bushman : MobileEnemy {
 		return targetchanged;
 	}
 
+	protected bool freestate(){
+		return this.freeAnim;
+	}
+
 	//-------------------//
 	// Actions Functions //
 	//-------------------//
@@ -212,6 +223,10 @@ public class Bushman : MobileEnemy {
 		if (!this.canSeePlayer(this.target)) {
 			this.target = null;
 		}
+	}
+
+	protected void freeAction() {
+
 	}
 
 	/*protected void LungeAttack(){
