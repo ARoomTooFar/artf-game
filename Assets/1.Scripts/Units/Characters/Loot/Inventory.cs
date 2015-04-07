@@ -18,7 +18,7 @@ public class Inventory : MonoBehaviour {
 	void Start () {
 		itemsUsed = new string[6];
 		actable = true;
-		on = true;
+		//on = true;
 		iChest = (IconChest) FindObjectOfType(typeof(IconChest));
 		lineNumber = 1; //Don't want player name
 		spotNumber = 0; 
@@ -47,7 +47,7 @@ public class Inventory : MonoBehaviour {
 				loadOutBuild(lineNumber);
 				spotCheckIn();
 				//spotCheckIn(lineNumber);
-				StartCoroutine(Wait(.25f));
+				StartCoroutine(Wait(.15f));
 			}
 			//"Down" key assign pressed
 			if (Input.GetKey(controls.down)&&!ready &&!dupItem) {
@@ -62,7 +62,7 @@ public class Inventory : MonoBehaviour {
 				loadOutBuild(lineNumber);
 				spotCheckIn();
 				//spotCheckIn(lineNumber);
-				StartCoroutine(Wait(.25f));
+				StartCoroutine(Wait(.15f));
 			}
 			//"Left" key assign pressed
 			if (Input.GetKey(controls.left)&&!ready) {
@@ -74,8 +74,8 @@ public class Inventory : MonoBehaviour {
 				swapPartsInLine();
 				actable = false;
 				//loadOutBuild(lineNumber);
-				
-				StartCoroutine(Wait(.25f));
+				spotCheckIn();
+				StartCoroutine(Wait(.15f));
 			}
 			//"Right" key assign pressed
 			if (Input.GetKey(controls.right)&&!ready) {
@@ -87,7 +87,7 @@ public class Inventory : MonoBehaviour {
 				actable = false;
 				//loadOutBuild(lineNumber);
 				spotCheckIn();
-				StartCoroutine(Wait(.25f));
+				StartCoroutine(Wait(.15f));
 			}
 			if(Input.GetKeyDown(controls.attack) || (controls.joyUsed &&  Input.GetButtonDown(controls.joyAttack))) {
 				ready = true;
@@ -96,7 +96,7 @@ public class Inventory : MonoBehaviour {
 				loadFromSplit(lineNumber);
 				loadOutBuild(lineNumber);
 				spotCheckIn();
-				StartCoroutine(Wait(.25f));
+				StartCoroutine(Wait(.15f));
 			}
 			if(Input.GetKeyDown (controls.secItem) || (controls.joyUsed && Input.GetButtonDown(controls.joySecItem))) {//Choose item to be in slot
 				if(ready){
@@ -107,14 +107,14 @@ public class Inventory : MonoBehaviour {
 				loadOutBuild(lineNumber);
 				spotCheckIn();
 				actable = false;
-				StartCoroutine(Wait(.25f));
+				StartCoroutine(Wait(.15f));
 			}
 		}
 		if(actable&&!on){
 			if(Input.GetKeyDown(controls.attack) || (controls.joyUsed &&  Input.GetButtonDown(controls.joyAttack))) {
 				on = true;
 				spotCheckIn();
-				StartCoroutine(Wait(.25f));
+				StartCoroutine(Wait(.15f));
 			}
 		}
 		
@@ -148,6 +148,10 @@ public class Inventory : MonoBehaviour {
 				}else if(i >= 3){
 					iconSpots[i].GetComponent<Renderer>().material = iChest.inventory[spotNums[i]];
 				}
+			}
+		}else{
+			for(int i = 0; i< itemsUsed.Length; i++){
+				iconSpots[i].GetComponent<Renderer>().material = iChest.offState;
 			}
 		}
 	}
