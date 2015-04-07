@@ -8,9 +8,14 @@ public class StatsMultiplier{
 	public float health, armor,maxHealth,rezCount;
 	public float strength, coordination, speed, luck;
 	public float atkSpeed;
+
+	public float healthGrowth, armorGrowth, maxHealthGrowth,rezCountGrowth;
+	public float strengthGrowth, coordinationGrowth, speedGrowth, luckGrowth;
+	public float atkSpeedGrowth;
 	
 	public int minAtkRadius, maxAtkRadius;
 	public float dmgAmp, dmgRed;
+	public float dmgAmpGrowth, dmgRedGrowth;
 }
 
 public class PowerLevels{

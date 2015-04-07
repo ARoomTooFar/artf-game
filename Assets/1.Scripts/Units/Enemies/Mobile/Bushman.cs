@@ -2,7 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class Bushman : MobileEnemy {
+
+
+	private class BMFrenzyGrowth : StatsMultiplier {
+		
+		protected StatsMultiplier FrenzyGrowth(float dmgUp, float dmgRedUp, float spdUp, float currentGrowth) {
+			StatsMultiplier nextLv = new StatsMultiplier ();
+			nextLv.dmgAmp = dmgUp * currentGrowth;
+			nextLv.dmgRed = dmgRedUp * currentGrowth;
+			nextLv.speed = spdUp * currentGrowth;
+			return nextLv;
+		}
+	}
 	
 	private bool inFrenzy;
 	private float frenzy_counter;
@@ -176,6 +189,22 @@ public class Bushman : MobileEnemy {
 		powlvs.addStage(stage4, 36);
 		powlvs.addStage(stage5, 45);
 		powlvs.addStage(stage6, 60);
+	}
+
+	/*
+	protected StatsMultiplier nextLvFrenzy (StatsMultiplier baseBoost, float atk, float def, float spd){
+		baseBoost.strength = baseBoost + 1 * atk;
+		baseBoost.armor = baseBoost + 1 * def;
+		baseBoost.speed = baseBoost + 1 * spd;
+	}*/
+
+	// all floats represent percent increase
+	protected StatsMultiplier FrenzyGrowth(float dmgUp, float dmgRedUp, float spdUp, float currentGrowth) {
+		StatsMultiplier nextLv = new StatsMultiplier ();
+		nextLv.dmgAmp = dmgUp * currentGrowth;
+		nextLv.dmgRed = dmgRedUp * currentGrowth;
+		nextLv.speed = spdUp * currentGrowth;
+		return nextLv;
 	}
 
 	//----------------------//
