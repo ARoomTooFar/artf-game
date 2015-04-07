@@ -82,6 +82,11 @@ public class Bushman : MobileEnemy {
 		// Adds old transitiont to new States
 		this.addTransitionToNew("approach", charge);
 		this.addTransitionToNew("search", charge);
+		this.addTransitionToNew ("approach", lunge);
+		this.addTransitionToNew ("search", lunge);
+		this.addTransitionToNew ("attack", lunge);
+		this.addTransitionToNew ("space", lunge);
+		this.addTransitionToNew ("retreat", lunge);
 
 	}
 	
@@ -103,7 +108,7 @@ public class Bushman : MobileEnemy {
 	protected override void Start() {
 		base.Start ();
 		charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
-		lungeAttack = this.inventory.items[inventory.selected].GetComponent<Roll>();
+		lungeAttack = this.inventory.items[++inventory.selected].GetComponent<Roll>();
 		if (charge == null) Debug.LogWarning ("Bushmen does not have charge equipped");
 		setFrenzy ();
 	}
