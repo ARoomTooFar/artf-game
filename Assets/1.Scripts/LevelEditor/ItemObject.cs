@@ -38,10 +38,10 @@ public class ItemObject : MonoBehaviour
 		RaycastHit hit; 
 		
 		if (Physics.Raycast (ray, out hit, Mathf.Infinity)) {
-			
 			//check for tilemap so we don't try to drag it
 			if (hit.collider.gameObject.name != "TileMap" 
-			    && hit.collider.gameObject.GetInstanceID () == this.gameObject.GetInstanceID ()) {
+			    && hit.collider.transform.root.gameObject.GetInstanceID () == this.gameObject.GetInstanceID ()) {
+				Debug.Log(hit.collider.transform.root.gameObject.name);
 				if (inMouseCheck == false) {
 					initMousePos = Input.mousePosition;
 					inMouseCheck = true;
@@ -69,6 +69,16 @@ public class ItemObject : MonoBehaviour
 			if (outOfDeadZone && itemObjectCopy == null) {
 				//create copy of item object
 				itemObjectCopy = Instantiate (this.gameObject, getPosition(), getRotation()) as GameObject;
+				//update the item object things
+				//shader has to be set in this loop, or transparency won't work
+				//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
+				foreach (Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()){
+					rend.material.shader = focusedShader;
+					Color trans = rend.material.color;
+					trans.a = .5f;
+					rend.material.color = trans;
+					
+				}
 			}
 
 			//if we're selecting a room corner-mover thing
@@ -106,16 +116,7 @@ public class ItemObject : MonoBehaviour
 
 						//if copy exists
 						if (itemObjectCopy != null) {
-							//update the item object things
-							//shader has to be set in this loop, or transparency won't work
-							//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
-							foreach (Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()){
-								rend.material.shader = focusedShader;
-								Color trans = rend.material.color;
-								trans.a = .5f;
-								rend.material.color = trans;
 
-							}
 							//Color trans = itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.color;
 							//trans.a = 0.5f;
 							//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.SetColor ("_Color", trans);
