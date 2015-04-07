@@ -26,6 +26,9 @@ public class MobileEnemy : Enemy {
 	
 	protected override void Update() {
 		base.Update ();
+//		Debug.Log (sM.
+//		if (targetchanged) targetchanged = false;
+//		if (!this.isInAtkAnimation ()) targetchanged = aggroT.changingAggro ();
 	}
 	
 	protected override void setInitValues() {
