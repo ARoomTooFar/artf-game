@@ -17,18 +17,11 @@ public class ItemObject : MonoBehaviour
 	Shader focusedShader;
 	Shader nonFocusedShader;
 	Vector3 newp;
-	static bool isFocus = true;
-	CameraDraws camCont;
 
-	
-	Vector3 rotation;
-	//Vector3 position;
-	
 	void Start ()
 	{
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera>();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
-		camCont = GameObject.Find ("UICamera").GetComponent("CameraDraws") as CameraDraws;
 		
 		focusedShader = Shader.Find ("Transparent/Bumped Diffuse");
 		nonFocusedShader = Shader.Find ("Bumped Diffuse");
@@ -157,12 +150,6 @@ public class ItemObject : MonoBehaviour
 
 	public Quaternion getRotation(){
 		return this.gameObject.transform.rotation;
-	}
-	
-	public void rotate(float deg){
-		rotation.x = 0f;
-		rotation.z = 0f;
-		rotation.y += deg;
 	}
 
 	public string getName(){
