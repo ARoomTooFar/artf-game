@@ -242,19 +242,6 @@ public class BullyTrunk: MobileEnemy {
 	// Helper Functions //
 	//------------------//
 
-	/*
-	protected void lowerHead() {
-		this.BDS.rmvBuffDebuff (this.rockHead, this.gameObject);
-		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
-		print ("Rock head off");
-	}
-
-	protected void lowerArms() {
-		this.BDS.rmvBuffDebuff (this.rockArms, this.gameObject);
-		this.BDS.addBuffDebuff (this.rockHead, this.gameObject);
-		print ("Rock head on");
-	}
-	*/
 
 	//------------------//
 }

@@ -1,7 +1,7 @@
 1080NoScopeSuperferglicksbjeufbufjbFucker
-W1
+W0#W1#W2#W3#W4#W5#W6#W7
 C0
 H0
-I6
-I7
-I4
+I0#I1#I2#I3#I4#I5#I6#I7#I8
+I1#I0#I2#I3#I4#I5#I6#I7#I8
+I2#I1#I0#I3#I4#I5#I6#I7#I8

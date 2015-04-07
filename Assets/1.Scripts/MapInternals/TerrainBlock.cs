@@ -301,6 +301,9 @@ public class TerrainBlock {
 		if(this.Monster != null) {
 			this.Monster.move(offset);
 		}
+		if(this.Wall != null) {
+			this.Wall.move(offset);
+		}
 
 		Position += offset;
 		GameObj.transform.position = Position;

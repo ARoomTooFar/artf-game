@@ -31,7 +31,10 @@ public class Enemy : Character {
 	protected Vector3? lastSeenPosition = null;
 	protected AggroTable aggroT;
 	protected bool targetchanged;
-	
+
+
+	protected int layerMask = 1 << 9;
+
 	protected float aggroTimer = 7.0f;
 
 	void OnEnable()
@@ -86,9 +89,10 @@ public class Enemy : Character {
 			
 			
 			//If aggro'd, will chase, and if not attacked for 5 seconds, will deaggro
-			if (aggro == true) {
+			//If we want a deaggro function, change the if statement to require broken line of sight to target
+			/*if (aggro == true) {
 				fAggro ();
-			}
+			}*/
 
 
 			if (isGrounded) {
@@ -102,8 +106,6 @@ public class Enemy : Character {
 				target = aggroT.getTarget ();
 			
 			
-		} else {
-			Destroy (gameObject);
 		}
 	}
 
@@ -172,14 +174,17 @@ public class Enemy : Character {
 		
 		if (angle < fov) {
 			RaycastHit hit;
-			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, lineofsight)) {
-				
-				if (hit.collider.gameObject == p) {
-					aggroT.add(p,1);
-					lastSeenPosition = p.transform.position;
-					alerted = true;
-					return true;
-				}
+			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, lineofsight, layerMask)) {
+
+				return false;
+
+			}else{
+
+				aggroT.add(p,1);
+				lastSeenPosition = p.transform.position;
+				alerted = true;
+				return true;
+
 			}
 		}
 		
@@ -223,6 +228,11 @@ public class Enemy : Character {
 		}
 
 		base.damage(dmgTaken);
+	}
+
+	public override void die() {
+		base.die ();
+		Destroy (gameObject);
 	}
 
 	//-------------------------------//

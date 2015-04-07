@@ -23,6 +23,7 @@ public static class StartEndRoom{
 			startRoomPlaced = tilemapcont.fillInStartRoom();
 			if(startRoomPlaced){
 				playerStartingLocation = tilemapcont.getCenterOfSelectedArea();
+				GameObject g = GameObject.Instantiate(Resources.Load("Prefabs/PlayerStartingLocation"), playerStartingLocation, Quaternion.identity) as GameObject;
 				StartRoomCheckMark.SetActive(true);
 			}
 		}else{
@@ -35,6 +36,7 @@ public static class StartEndRoom{
 			endRoomPlaced = tilemapcont.fillInEndRoom();
 			if(endRoomPlaced){
 				dungeonEndingLocation = tilemapcont.getCenterOfSelectedArea();
+				GameObject g = GameObject.Instantiate(Resources.Load("Prefabs/EndingRoomLocation"), dungeonEndingLocation, Quaternion.identity) as GameObject;
 				EndRoomCheckMark.SetActive(true);
 			}
 		}else{

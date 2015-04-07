@@ -57,13 +57,14 @@ public static class MapData {
 	#region RoomManipulation
 	public static void addRoom(Vector3 pos1, Vector3 pos2) {
 		if(TheFarRooms.isAddValid(pos1, pos2)) {
-			TheFarRooms.add(pos1, pos2, false, false);
+			TheFarRooms.add(pos1, pos2);
 		}
 	}
 
 	public static bool addStartRoom(Vector3 pos1, Vector3 pos2) {
 		if(TheFarRooms.isAddValid(pos1, pos2) && TheFarRooms.isStartOrEndRoomValid(pos1, pos2)) {
-			TheFarRooms.add(pos1, pos2, true, false);
+			TheFarRooms.add(pos1, pos2);
+			TheFarRooms.find(pos1).isStartRoom = true;
 			return true;
 		}else{
 			return false;
@@ -72,7 +73,8 @@ public static class MapData {
 
 	public static bool addEndRoom(Vector3 pos1, Vector3 pos2) {
 		if(TheFarRooms.isAddValid(pos1, pos2) && TheFarRooms.isStartOrEndRoomValid(pos1, pos2)) {
-			TheFarRooms.add(pos1, pos2, false, true);
+			TheFarRooms.add(pos1, pos2);
+			TheFarRooms.find(pos1).isEndRoom = true;
 			return true;
 		}else{
 			return false;
