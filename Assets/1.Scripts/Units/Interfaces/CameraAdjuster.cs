@@ -6,6 +6,7 @@ public class CameraAdjuster : MonoBehaviour {
 	public Character p2;//
 	public Character p3;//
 	public Character p4;//
+	public int playerCount;
 	public int layerMask = 1 << 8;//Layer of walls
 	//Average X, Z (Pulled from Player Locations)
 	//Base X,Y,Z (To be adjusted by the multiplier Value)
@@ -26,6 +27,15 @@ public class CameraAdjuster : MonoBehaviour {
 		//Adjusted value points
 		baseX = baseY/2 + adjVal;
 		baseZ = -(baseY/2 + adjVal);
+		if(p1 != null){
+			playerCount +=1;
+		}if(p2 != null){
+			playerCount +=1;
+		}if(p3 != null){
+			playerCount +=1;
+		}if(p4 != null){
+			playerCount +=1;
+		}
 		//if(p1 != null || 
 		//Average the x's and z's for the target location of the camera's focus
 		//avgX = (p1.transform.position.x + p2.transform.position.x + p3.transform.position.x + p4.transform.position.x)/4 + baseX; // 

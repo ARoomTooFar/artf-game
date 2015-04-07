@@ -23,12 +23,14 @@ public class CameraDraws : MonoBehaviour {
 	
 	bool drawTallBox = false;
 	
-	public GameObject focusedObject;
+
+	Shader focusedShader;
 
 	void Start(){
 		currentCamera = this.gameObject.GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
 		tileMapGameObj = GameObject.Find ("TileMap");
+		focusedShader = Shader.Find ("Toon/Basic Outline");
 	}
 
 	void OnPostRender ()
@@ -36,7 +38,10 @@ public class CameraDraws : MonoBehaviour {
 		drawSelectedTiles ();
 		drawGrid ();
 		drawMouseSquare();
-		//		drawBoxAroundFocusedObject();
+
+
+		drawBoxAroundFocusedObject();
+
 	}	
 
 	/* select tiles using a list from the mouse manager */
@@ -164,14 +169,14 @@ public class CameraDraws : MonoBehaviour {
 		selectionMat.SetColor("Main Color", c);
 		//draw grid over tilemap
 		for (int z = (int)Mathf.Floor(zLowerBound); z < (int)Mathf.Floor(zUpperBound); z++) {
-			GL.Color(c);
-			GL.Vertex(new Vector3(Mathf.Floor(xLowerBound), 0f, z + 0.5f));
-			GL.Vertex(new Vector3(Mathf.Floor(xUpperBound), 0f, z + 0.5f));
+			GL.Color (c);
+			GL.Vertex (new Vector3 (Mathf.Floor (xLowerBound), 0f, z + 0.5f));
+			GL.Vertex (new Vector3 (Mathf.Floor (xUpperBound), 0f, z + 0.5f));
 			
 		}
 		for (int x = (int)Mathf.Floor(xLowerBound); x < (int)Mathf.Floor(xUpperBound); x++) {
-			GL.Vertex(new Vector3(x - 0.5f, 0f, Mathf.Floor(zLowerBound)));
-			GL.Vertex(new Vector3(x - 0.5f, 0f, Mathf.Floor(zUpperBound)));
+			GL.Vertex (new Vector3 (x - 0.5f, 0f, Mathf.Floor (zLowerBound)));
+			GL.Vertex (new Vector3 (x - 0.5f, 0f, Mathf.Floor (zUpperBound)));
 		}
 		
 		
@@ -180,83 +185,80 @@ public class CameraDraws : MonoBehaviour {
 	
 	public void drawBoxAroundFocusedObject ()
 	{
-		if (focusedObject != null) {
+		ObjectFocus.fillFocusedObjects();
+
+		foreach (GameObject obj in ObjectFocus.focusedObjects) {
+			if (obj != null) {
+
+				//Collider method
+				Collider coll = obj.GetComponentInChildren<Collider> ();
+				Bounds bound = coll.bounds;
+				foreach (Collider c in obj.GetComponentsInChildren<Collider> ()) {
+					bound.Encapsulate (c.bounds);
+				}
+
+				//Renderer method
+//				Renderer rend = obj.GetComponentInChildren<Renderer> ();
+//				Bounds bound = rend.bounds;
+//				foreach (Renderer r in obj.GetComponentsInChildren<Renderer> ())
+//				{
+//					bound.Encapsulate(r.bounds);
+//				}
 			
-			GameObject g = focusedObject;
+				//MeshFilter method
+//				Mesh mes = obj.GetComponentInChildren<MeshFilter> ().mesh;
+//				Bounds bound = mes.bounds;
+//				foreach (MeshFilter fil in obj.GetComponentsInChildren<MeshFilter>()){
+//					bound.Encapsulate(fil.mesh.bounds);
+//				}
+//				bound.center = obj.transform.position;
 			
 			
-			//			Renderer rend = g.GetComponentInChildren<Renderer> ();
-			//			Mesh mes = g.GetComponentInChildren<MeshFilter> ().mesh;
-			Collider coll = g.GetComponentInChildren<Collider> ();
+				Quaternion quat = obj.transform.rotation;
+				Vector3 bc = obj.transform.position + quat * (bound.center - obj.transform.position);
 			
-			//			foreach (Renderer rend in g.GetComponentsInChildren<Renderer>()){
-			//				//rend.material.shader = focusedShader;
-			//				Color trans = rend.material.color;
-			//				trans.r = 1f;
-			//				rend.material.color = trans;
-			//				
-			//			}
 			
-			Bounds bound = coll.bounds;
+				Vector3 topFrontRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, 1, 1)); 
+				Vector3 topFrontLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, 1, 1)); 
+				Vector3 topBackLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, 1, -1));
+				Vector3 topBackRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, 1, -1)); 
+				Vector3 bottomFrontRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, -1, 1)); 
+				Vector3 bottomFrontLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, -1, 1)); 
+				Vector3 bottomBackLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, -1, -1));
+				Vector3 bottomBackRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, -1, -1)); 
 			
-			foreach (Collider c in g.GetComponentsInChildren<Collider> ())
-			{
-				bound.Encapsulate(c.bounds);
+			
+				GL.Begin (GL.QUADS);
+				objectFocusMat.SetPass (0);
+			
+				GL.Vertex (topFrontLeft);
+				GL.Vertex (topFrontRight);
+				GL.Vertex (topBackRight);
+				GL.Vertex (topBackLeft);
+			
+				GL.Vertex (topFrontLeft);
+				GL.Vertex (topFrontRight);
+				GL.Vertex (bottomFrontRight);
+				GL.Vertex (bottomFrontLeft);
+			
+				GL.Vertex (topBackLeft);
+				GL.Vertex (topBackRight);
+				GL.Vertex (bottomBackRight);
+				GL.Vertex (bottomBackLeft);
+			
+				GL.Vertex (topBackLeft);
+				GL.Vertex (topFrontLeft);
+				GL.Vertex (bottomFrontLeft);
+				GL.Vertex (bottomBackLeft);
+			
+				GL.Vertex (topBackRight);
+				GL.Vertex (topFrontRight);
+				GL.Vertex (bottomFrontRight);
+				GL.Vertex (bottomBackRight);
+			
+			
+				GL.End ();
 			}
-			//			foreach (Renderer r in g.GetComponentsInChildren<Renderer> ())
-			//			{
-			//				bound.Encapsulate(r.bounds);
-			//			}
-			//			foreach (MeshFilter fil in g.GetComponentsInChildren<MeshFilter>()){
-			//				bound.Encapsulate(fil.mesh.bounds);
-			//			}
-			//			bound.center = g.transform.position;
-			
-			
-			Quaternion quat = g.transform.rotation;
-			Vector3 bc = g.transform.position + quat * (bound.center - g.transform.position);
-			
-			
-			Vector3 topFrontRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, 1, 1)); 
-			Vector3 topFrontLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, 1, 1)); 
-			Vector3 topBackLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, 1, -1));
-			Vector3 topBackRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, 1, -1)); 
-			Vector3 bottomFrontRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, -1, 1)); 
-			Vector3 bottomFrontLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, -1, 1)); 
-			Vector3 bottomBackLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, -1, -1));
-			Vector3 bottomBackRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, -1, -1)); 
-			
-			
-			GL.Begin (GL.QUADS);
-			objectFocusMat.SetPass (0);
-			
-			GL.Vertex (topFrontLeft);
-			GL.Vertex (topFrontRight);
-			GL.Vertex (topBackRight);
-			GL.Vertex (topBackLeft);
-			
-			GL.Vertex (topFrontLeft);
-			GL.Vertex (topFrontRight);
-			GL.Vertex (bottomFrontRight);
-			GL.Vertex (bottomFrontLeft);
-			
-			GL.Vertex (topBackLeft);
-			GL.Vertex (topBackRight);
-			GL.Vertex (bottomBackRight);
-			GL.Vertex (bottomBackLeft);
-			
-			GL.Vertex (topBackLeft);
-			GL.Vertex (topFrontLeft);
-			GL.Vertex (bottomFrontLeft);
-			GL.Vertex (bottomBackLeft);
-			
-			GL.Vertex (topBackRight);
-			GL.Vertex (topFrontRight);
-			GL.Vertex (bottomFrontRight);
-			GL.Vertex (bottomBackRight);
-			
-			
-			GL.End ();
 		}
 	}
 }

@@ -45,7 +45,8 @@ public class FileIO1 : MonoBehaviour
 		serv = gameObject.AddComponent<Farts> ();
 
 		#if UNITY_EDITOR
-		getIds(dummyLvlId);
+		lvlData = GameObject.Find("GSManager").GetComponent<GSManager>().currLevelData;
+		MapDataParser.ParseSaveString (lvlData);
 		#else
 		Application.ExternalCall ("reqIds");
 		#endif

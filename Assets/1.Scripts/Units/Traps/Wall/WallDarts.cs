@@ -20,9 +20,9 @@ public class WallDarts : Traps {
 	protected override void Start () {
 		base.Start ();
 		darts = GetComponent<ParticleSystem> ();
-		this.aoe = this.GetComponent<AoETargetting>();
-		this.aoe.affectEnemies = true;
-		this.aoe.affectPlayers = true;
+		aoe = GetComponent<AoETargetting>();
+		aoe.affectEnemies = true;
+		aoe.affectPlayers = true;
 		// unitsInTrap = new List<Character>();
 		firing = true;
 		debuff = new Knockback();

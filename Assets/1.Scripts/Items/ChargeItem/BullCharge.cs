@@ -46,6 +46,7 @@ public class BullCharge : ChargeItem {
 		chgDist = 1;
 		maxChgTime = 3.0f;
 		hitWall = false;
+		print(this.opposition);
 	}
 	
 	// Update is called once per frame
@@ -108,7 +109,6 @@ public class BullCharge : ChargeItem {
 			foreach(Character ene in enemies) {
 				ene.transform.position = transform.position;
 				ene.BDS.addBuffDebuff(debuff, this.gameObject, 0.1f);
-				// ((IForcible<Vector3, float>)ene.GetComponent(typeof(IForcible<Vector3, float>))).push(0.1f);
 			}
 
 			user.GetComponent<Rigidbody>().velocity = user.facing.normalized * user.stats.speed * 1.5f * chargeSpeed;

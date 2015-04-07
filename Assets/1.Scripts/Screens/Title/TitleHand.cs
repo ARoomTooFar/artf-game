@@ -5,26 +5,84 @@ using UnityEngine.UI;
 // Handles all logic for the title screen.
 public class TitleHand : MonoBehaviour {
     private GSManager gsManager;
-    private Button btnStartGame;
+    
+    /* TITLE SCREEN */
     private GameObject loadingBG;
+    private Button btnStartGame;
+
+    /* LEVEL SELECT */
+    private GameObject btnLevel1;
+	private GameObject btnLevel2;
+	private GameObject btnLevel3;
+	private GameObject fieldLevelId;
+	private GameObject btnGoToLevel;
 
 	void Start ()
-    {
-		//<- this one   
-		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>(); 
+    {  
+		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
         btnStartGame = GameObject.Find("BtnStartGame").GetComponent<Button>();
+        btnLevel1 = GameObject.Find("BtnLevel1");
+		btnLevel2 = GameObject.Find("BtnLevel2");
+		btnLevel3 = GameObject.Find("BtnLevel3");
+		fieldLevelId = GameObject.Find ("FieldLevelId");
+		btnGoToLevel = GameObject.Find("BtnGoToLevel");
 
 		// hide LoadingBG. can't hide in inspector because Find() can't find hidden objects.
         loadingBG = GameObject.Find("LoadingBG");
         loadingBG.SetActive(false);
 
+        // hide level select
+		hideLevelSelect ();
+
         // add functions to be called when buttons are clicked
         btnStartGame.onClick.AddListener(() =>
             {
-				gsManager.level1Data = "topkek";
-				//<-- this one
-                gsManager.LoadScene(13); 
+				showLevelSelect();
             }
         );
+
+        btnLevel1.GetComponent<Button>().onClick.AddListener(() =>
+            {
+				hideLevelSelect ();
+				gsManager.LoadLevel("5713573250596864");
+			}
+		);
+
+		btnLevel2.GetComponent<Button>().onClick.AddListener(() =>
+		    {
+				hideLevelSelect ();
+				gsManager.LoadLevel("4876504257265664");
+			}
+		);
+
+		btnLevel3.GetComponent<Button>().onClick.AddListener(() =>
+			{
+				hideLevelSelect ();
+				gsManager.LoadLevel("4851447149625344");
+			}
+		);
+
+		btnGoToLevel.GetComponent<Button>().onClick.AddListener (() =>
+		    {
+				hideLevelSelect();
+				gsManager.LoadLevel (fieldLevelId.GetComponent<InputField> ().text);
+			}
+		);
+	}
+
+	void hideLevelSelect () {
+		btnLevel1.SetActive(false);
+		btnLevel2.SetActive(false);
+		btnLevel3.SetActive(false);
+		fieldLevelId.SetActive (false);
+		btnGoToLevel.SetActive (false);
+	}
+
+	void showLevelSelect () {
+		btnLevel1.SetActive(true);
+		btnLevel2.SetActive(true);
+		btnLevel3.SetActive(true);
+		fieldLevelId.SetActive (true);
+		btnGoToLevel.SetActive (true);
 	}
 }

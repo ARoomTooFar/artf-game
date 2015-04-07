@@ -99,6 +99,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	{ 
 		string prefabLocation = "Prefabs/" + connectedPrefab;
 
+
 		//for the ghost-duplicate
 		itemObjectCopy = null;
 		//ItemObject copy = null;
@@ -218,6 +219,8 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			Destroy (bgButt); //get rid of yellow selecting box around button
 			selectedButtonID = -1;
 		}
+
+		tilemapcont.suppressDragSelecting = false;
 	}
 
 	public void setConnectedPrefab (string s)

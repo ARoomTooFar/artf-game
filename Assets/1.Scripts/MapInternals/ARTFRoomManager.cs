@@ -251,6 +251,17 @@ public class ARTFRoomManager {
 		}
 		return true;
 	}
+
+	public bool isStartOrEndRoomValid(Vector3 cor1, Vector3 cor2){
+		float minSize = 5f;
+
+		if(Mathf.Abs(cor1.x - cor2.x) < minSize || Mathf.Abs(cor1.z - cor2.z) < minSize){
+			Debug.Log("Starting and ending rooms must be at least " + minSize + "x" + minSize + " in size");
+			return false;
+		}
+		return true;
+	}
+
 	#endregion Validation
 
 	/*

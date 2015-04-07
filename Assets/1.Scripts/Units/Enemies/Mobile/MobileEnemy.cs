@@ -112,6 +112,8 @@ public class MobileEnemy : Enemy {
 		spacing.addAction (Spacing);
 		far.addAction (Far);
 
+		// Sets enter actions for states
+		attack.addEnterAction (this.EnterAttack);
 
 		// Sets exit actions for states
 		search.addExitAction (StopSearch);
@@ -258,12 +260,15 @@ public class MobileEnemy : Enemy {
 		this.rb.velocity = this.facing * stats.speed * stats.spdManip.speedPercent;
 	}
 
-	protected virtual void Attack() {
+	protected virtual void EnterAttack() {
 		if (this.actable && !attacking){
 			this.getFacingTowardsTarget();
 			this.transform.localRotation = Quaternion.LookRotation(facing);
 			this.gear.weapon.initAttack();
 		}
+	}
+
+	protected virtual void Attack() {
 	}
 	
 	// We can have some logic here, but it's mostly so our unit is still during and attack animation
