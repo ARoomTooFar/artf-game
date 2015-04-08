@@ -116,7 +116,8 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			if (!copyCreated) {
 				//create copy of item object
 				itemObjectCopy = Instantiate (Resources.Load (prefabLocation)) as GameObject;
-
+				itemObjectCopy.name = "Copy";
+				itemObjectCopy.GetComponent<ClickEvent>().enabled = false;
 				//update the item object things
 				//shader has to be set in this loop, or transparency won't work
 				foreach (Renderer rend in itemObjectCopy.transform.root.gameObject.GetComponentsInChildren<Renderer>()){
@@ -185,6 +186,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 					}
 
 					itemObjectCopy.transform.position = movePos;
+					itemObjectCopy.transform.rotation = Quaternion.identity;
 				}
 			}
 			yield return null; 
