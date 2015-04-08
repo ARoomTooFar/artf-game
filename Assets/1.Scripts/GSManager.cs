@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class GSManager : MonoBehaviour {
     // persistent data
     public static GSManager gsManager;
+	public string currLevelId = "";
     public string currLevelData = "";
 
     private Farts serv;
@@ -50,13 +51,13 @@ public class GSManager : MonoBehaviour {
 		}
 
 		// after loading is done, find new LoadingBG in new scene
-		loadingBG = GameObject.Find("LoadingBG");
-		loadingBG.SetActive (false);
+		//loadingBG = GameObject.Find("LoadingBG");
+		//loadingBG.SetActive (false);
 	}
 
 	public void LoadLevel (string levelId)
 	{
-		loadingBG.SetActive(true);
+		//loadingBG.SetActive(true);
 		StartCoroutine(DlLevel(levelId));
 	}
 
@@ -71,11 +72,11 @@ public class GSManager : MonoBehaviour {
 		if (serv.dataCheck(currLevelData))
 		{
 			Debug.Log("LVL DL SUCCESS: " + currLevelData);
-			yield return StartCoroutine(LoadSceneAsync(1));
+			yield return StartCoroutine(LoadSceneAsync(2));
 			
 			// after loading is done, find new LoadingBG in new scene
-			loadingBG = GameObject.Find("LoadingBG");
-			loadingBG.SetActive(false);
+			//loadingBG = GameObject.Find("LoadingBG");
+			//loadingBG.SetActive(false);
 		}
 		else
 		{
