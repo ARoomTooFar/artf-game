@@ -121,7 +121,7 @@ public class RangedWeapons : Weapons {
 	}
 
 	protected override IEnumerator atkFinish() {
-		while (user.animSteInfo.nameHash != user.atkHashEnd) {
+		while (user.animSteInfo.fullPathHash != user.atkHashEnd) {
 			yield return null;
 		}
 		particles.Stop();

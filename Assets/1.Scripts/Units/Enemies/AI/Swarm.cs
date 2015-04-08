@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class Swarm : MonoBehaviour {
 
 	private GameObject globalTarget;
-	private List<GameObject> minions = new List<GameObject>();
 
 	public AggroTable aggroTable;
 	public GameObject target;

@@ -28,7 +28,7 @@ public class Artillery : Weapons {
 	}
 	
 	protected override IEnumerator bgnAttack() {
-		while (user.animSteInfo.nameHash != user.atkHashCharge) {
+		while (user.animSteInfo.fullPathHash != user.atkHashCharge) {
 			yield return null;
 		}
 	
@@ -60,7 +60,7 @@ public class Artillery : Weapons {
 	}
 
 	protected override IEnumerator atkFinish() {
-		while (user.animSteInfo.nameHash != user.atkHashEnd) {
+		while (user.animSteInfo.fullPathHash != user.atkHashEnd) {
 			yield return null;
 		}
 		user.testControl = true;
