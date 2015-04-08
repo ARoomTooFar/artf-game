@@ -62,7 +62,6 @@ public class RoomDraggingObject : ClickEvent
 		
 		tilemapcont.suppressDragSelecting = false;
 		tilemapcont.deselect (getPosition());
-		Debug.Log(getPosition() + ", " + newp);
 		MapData.moveRoom(getPosition(), newp);
 		tilemapcont.selectTile (newp);
 	}
