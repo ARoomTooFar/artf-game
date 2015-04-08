@@ -25,6 +25,10 @@ public class DragableObject : ClickEvent
 		
 	public override IEnumerator onClick (Vector3 initPosition)
 	{
+		if(!Mode.isTileMode()) {
+			return false;
+		}
+
 		//for the ghost-duplicate
 		GameObject itemObjectCopy = null;
 		Vector3 newp = this.gameObject.transform.position;
