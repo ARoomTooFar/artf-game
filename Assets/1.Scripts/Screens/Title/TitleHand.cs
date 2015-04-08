@@ -45,7 +45,7 @@ public class TitleHand : MonoBehaviour {
             {
 				hideLevelSelect ();
                 gsManager.currLevelId = "5713573250596864";
-                gsManager.LoadScene(1);
+                gsManager.LoadScene("InventorySelector");
 			}
 		);
 
