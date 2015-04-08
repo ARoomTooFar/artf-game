@@ -76,8 +76,8 @@ public class UIControllerTestHand : MonoBehaviour {
         {
             menuMoved = true;
             --menuVertLoc;
-            if (menuVertLoc > (vertSize - 1))
-                menuVertLoc = 0;
+            if (menuVertLoc < 0)
+                menuVertLoc = vertSize - 1;
             //Debug.Log(menuVertLoc);
         }
     }
@@ -88,8 +88,8 @@ public class UIControllerTestHand : MonoBehaviour {
         {
             menuMoved = true;
             ++menuVertLoc;
-            if (menuVertLoc < 0)
-                menuVertLoc = vertSize - 1;
+            if (menuVertLoc > (vertSize - 1))
+                menuVertLoc = 0;
             //Debug.Log(menuVertLoc);
         }
     }
