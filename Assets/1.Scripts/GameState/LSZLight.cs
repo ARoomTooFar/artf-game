@@ -57,7 +57,7 @@ public class LSZLight : MonoBehaviour {
 		t.isReady = true;
 		if(readyCheck())
 		{
-			gsManager.LoadScene(13);
+			//gsManager.LoadScene(13);
 		}
 	}
 
