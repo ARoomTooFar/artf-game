@@ -5,6 +5,7 @@ using System;
 public class ArcingBomb : Bomb {	
 
 	protected float speed = 15.0f;
+	protected float angle = 45.0f;
 	protected GameObject targetLocation;
 
 	//-------------------//
@@ -58,6 +59,7 @@ public class ArcingBomb : Bomb {
 	//-----------------------//
 
 	protected virtual Vector3 calculateTrajectory(Vector3 location) {
+
 		// Calculates distance from source to target. removes height from calculation
 		location.y = 0.0f;
 		Vector3 temp = this.transform.position;
@@ -70,8 +72,14 @@ public class ArcingBomb : Bomb {
 			zDir = (location.z - temp.z) / Mathf.Abs (location.z - temp.z);
 		} 
 
+		//*
+
 		// Angle of elevation
 		float angle = Mathf.Asin ((9.81f * dist) / (this.speed * this.speed)) / 2.0f;
+		
+		//*/
+
+		//*
 
 		// Calculates angle between x and z
 		Vector3 direction = location - temp;
@@ -80,6 +88,7 @@ public class ArcingBomb : Bomb {
 		// What speed to disburse between x and z after calculating speed for y
 		float speedOverLand = Mathf.Sin (angle) * this.speed;
 		return new Vector3(speedOverLand * Mathf.Cos (newAngle), this.speed * Mathf.Cos(angle), zDir * speedOverLand * Mathf.Sin (newAngle));
+		//*/
 	}
 
 	//-----------------------//
