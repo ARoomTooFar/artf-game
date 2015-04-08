@@ -31,7 +31,6 @@ public class AggroNode
 public class AggroTable 
 {
 	private AggroNode head;
-	private AggroNode tail;
 	public bool testing = false;
 	bool switchingTarget = false;
 	
@@ -76,7 +75,6 @@ public class AggroTable
 		
 		if (head == null) {
 			head = n;
-			tail = n;
 		}else {
 			addR (n, head);
 		}
@@ -103,7 +101,6 @@ public class AggroTable
 		{
 			nOld.r = nAdd;
 			nAdd.l = nOld;
-			tail = nAdd;
 		} 
 		else 
 		{
@@ -124,12 +121,6 @@ public class AggroTable
 		else if (del.l == null) 
 		{
 			head = del.r;
-			//If new head is null, so is tail
-			//If new head does not point to anything, tail is head
-			if(head == null || head.r == null)
-			{
-				tail = head;
-			}
 		}
 		//Case node is in middle, not head nor tail
 		else if (del.r != null)
@@ -143,7 +134,6 @@ public class AggroTable
 		else
 		{
 			del.l.r = null;
-			tail = del.l;
 		}
 		del = null;
 	}

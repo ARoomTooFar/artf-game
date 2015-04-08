@@ -8,7 +8,6 @@ public class RoomDraggingObject : ClickEvent
 	Camera UICamera;
 	TileMapController tilemapcont;
 	float mouseDeadZone = 10f;
-	Shader focusedShader;
 	Shader nonFocusedShader;
 
 	void Start ()
@@ -16,8 +15,6 @@ public class RoomDraggingObject : ClickEvent
 		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent ("TileMapController") as TileMapController;
-		
-		focusedShader = Shader.Find ("Transparent/Bumped Diffuse");
 		nonFocusedShader = Shader.Find ("Bumped Diffuse");
 		
 		this.gameObject.GetComponentInChildren<Renderer> ().material.shader = nonFocusedShader;

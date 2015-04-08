@@ -17,7 +17,7 @@ public class gamestate : MonoBehaviour {
 	private string activeLevel;			//This is the level the players are currently on.
 	public string chosenLevel; 		//This is the level the players have chosen to play while in level selection.
 
-	private string usernamePlaceholder;			//This is the username for the first player
+	private string usernamePlaceholder = "";			//This is the username for the first player
 	private string passwordPlaceholder;			//This is the password for the first player
 	
 	public List<string> usernames = new List<string>();

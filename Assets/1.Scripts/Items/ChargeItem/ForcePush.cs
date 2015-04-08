@@ -12,7 +12,6 @@ public class ForcePush : ChargeItem {
 
 	[Range(0.5f, 3.0f)]
 	public float stunDuration;
-	private bool hit;
 	private Vector3 facing;
 	public List<Character> foes;
 	//private Collider collider;
@@ -29,7 +28,6 @@ public class ForcePush : ChargeItem {
 		cooldown = 5.0f;
 		chgDist = 1;
 		maxChgTime = 3.0f;
-		hit = false;
 	}
 	public override void useItem() {
 		base.useItem ();
@@ -52,7 +50,6 @@ public class ForcePush : ChargeItem {
 	protected override void animDone() {
 		user.freeAnim = true;
 		GetComponent<Collider>().enabled = false;
-		hit = false;
 	    GetComponent<Rigidbody>().isKinematic = true;
 		foes.Clear();
 		base.animDone ();
@@ -111,7 +108,6 @@ public class ForcePush : ChargeItem {
 	void OnTriggerEnter (Collider other) {
 			RiotShield rShield = other.GetComponent<RiotShield>();
 			if (other.tag == "Wall" || rShield && rShield.user.facing.normalized + user.facing.normalized == Vector3.zero) {
-				hit = true;
 			}
 		IForcible<Vector3, float> component = (IForcible<Vector3,float>) other.GetComponent( typeof(IForcible<Vector3,float>) );
 			Character foe = other.GetComponent<Character>();

@@ -5,7 +5,6 @@ public class CameraRaycast : MonoBehaviour {
 
 	public LayerMask draggingLayerMask;
 	static Camera UICamera;
-	TileMapController tilemapcont;
 	Ray ray;
 	RaycastHit hit; 
 
@@ -13,7 +12,6 @@ public class CameraRaycast : MonoBehaviour {
 	void Start() {
 		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = this.gameObject.GetComponent<Camera>();
-		tilemapcont = GameObject.Find("TileMap").GetComponent("TileMapController") as TileMapController;
 	}
 	
 	// Update is called once per frame

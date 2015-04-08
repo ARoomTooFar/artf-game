@@ -121,7 +121,7 @@ public class Weapons : Equipment {
 
 	// Once we get into the charge animation, we set our chg data and start the next co routine
 	protected virtual IEnumerator bgnAttack() {
-		while (user.animSteInfo.nameHash != user.atkHashCharge) {
+		while (user.animSteInfo.fullPathHash != user.atkHashCharge) {
 			yield return null;
 		}
 
@@ -173,7 +173,7 @@ public class Weapons : Equipment {
 	// When our attack swing finishes, remove colliders, particles, and other stuff
 	//     * Consider one more co routine after to check for when our animation is completely done
 	protected virtual IEnumerator atkFinish() {
-		while (user.animSteInfo.nameHash != user.atkHashEnd) {
+		while (user.animSteInfo.fullPathHash != user.atkHashEnd) {
 			yield return null;
 		}
 		

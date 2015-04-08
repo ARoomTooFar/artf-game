@@ -1,4 +1,4 @@
-﻿// Parent script for player controlled characters
+// Parent script for player controlled characters
 
 using UnityEngine;
 using System.Collections;
@@ -213,11 +213,11 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		runHash = Animator.StringToHash ("Base Layer.run");
 		
 		// atkHash = Animator.StringToHash ("Base Layer.attack");
-		atkHashStart = Animator.StringToHash (weapTypeName + "." + weapTypeName + "Start");
-		atkHashCharge = Animator.StringToHash (weapTypeName + "." + weapTypeName + "Charge");
-		atkHashSwing = Animator.StringToHash (weapTypeName + "." + weapTypeName + "Swing");
-		atkHashChgSwing = Animator.StringToHash (weapTypeName + "." + weapTypeName + "ChargedSwing");
-		atkHashEnd = Animator.StringToHash (weapTypeName + "." + weapTypeName + "End");
+		atkHashStart = Animator.StringToHash ("Base Layer.Attacks." + weapTypeName + "." + weapTypeName + "Start");
+		atkHashCharge = Animator.StringToHash ("Base Layer.Attacks." + weapTypeName + "." + weapTypeName + "Charge");
+		atkHashSwing = Animator.StringToHash ("Base Layer.Attacks." + weapTypeName + "." + weapTypeName + "Swing");
+		atkHashChgSwing = Animator.StringToHash ("Base Layer.Attacks." + weapTypeName + "." + weapTypeName + "ChargedSwing");
+		atkHashEnd = Animator.StringToHash ("Base Layer.Attacks." + weapTypeName + "." + weapTypeName + "End");
 	}
 	
 	protected virtual void FixedUpdate() {
@@ -240,7 +240,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-			animSteHash = animSteInfo.nameHash;
+			animSteHash = animSteInfo.fullPathHash;
 			freeAnim = !stunned && !knockedback;
 
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
@@ -251,7 +251,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			} else {
 				falling();
 			}
-
 			animationUpdate ();
 		}
 	}

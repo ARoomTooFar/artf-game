@@ -80,7 +80,7 @@ public class FileIO1 : MonoBehaviour
 			//destroy all ItemObject scripts on loaded objects
 			ItemObject[] itemObs = FindObjectsOfType (typeof(ItemObject)) as ItemObject[];
 			foreach (ItemObject io in itemObs) {
-				GameObject ob = io.gameObject;
+				//GameObject ob = io.gameObject;
 				Destroy (io);
 			}
 
