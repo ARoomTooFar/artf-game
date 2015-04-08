@@ -8,6 +8,8 @@ public class FoliantHive : StationaryEnemy {
 
 	protected int currentSpawn;
 	protected float nextUse;
+	protected ShootFodderBall shootFodderBall;
+	protected TargetCircle curTCircle;
 
 	protected override void Awake () {
 		base.Awake ();
@@ -17,6 +19,10 @@ public class FoliantHive : StationaryEnemy {
 		base.Start ();
 		currentSpawn = 0;
 		nextUse = Time.time + spawnCD;
+
+		this.shootFodderBall = this.inventory.items[inventory.selected].GetComponent<ShootFodderBall>();
+		if (this.shootFodderBall == null) print("Foliant Hive has no spawner detected");
+
 	}
 
 	protected override void Update() {
@@ -113,8 +119,7 @@ public class FoliantHive : StationaryEnemy {
 		if (canSpawn()) {
 			nextUse = Time.time + spawnCD;
 			currentSpawn++;
-			print (currentSpawn);
-			//Instantiate(FoliantFodder,new Vector3(0,0,0),Quaternion.identity);
+			shootFodderBall.useItem();
 		}
 	}
 
