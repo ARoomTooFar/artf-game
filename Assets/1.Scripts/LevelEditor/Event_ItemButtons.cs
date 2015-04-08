@@ -9,7 +9,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 {
 	TileMapController tilemapcont;
 	static Camera UICamera;
-	Image thisImage;
+	//Image thisImage;
 	GameObject draggedImageAnchor;
 	string itemToPlace;
 	Material matToMakeInvisible;
@@ -30,7 +30,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent ("TileMapController") as TileMapController;
-		thisImage = this.GetComponent ("Image") as Image;
+		//thisImage = this.GetComponent ("Image") as Image;
 		draggedImageAnchor = GameObject.Find ("DraggedImageAnchor");
 		Image p = draggedImageAnchor.GetComponent ("Image") as Image;
 		matToMakeInvisible = Resources.Load ("Textures/basecolor") as Material;

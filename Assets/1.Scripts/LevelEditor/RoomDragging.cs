@@ -56,7 +56,6 @@ public class RoomDragging : MonoBehaviour
 	{
 		//for the ghost-duplicate
 		GameObject itemObjectCopy = null;
-		ItemObject copy = null;
 		
 		bool cancellingMove = false;
 		bool outOfDeadZone = false;

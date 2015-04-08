@@ -12,7 +12,6 @@ using System.Text;
 using System.Linq;
 
 public class TileMapController : MonoBehaviour {
-	Transform itemObjects;
 	public int grid_x;
 	public int grid_z;
 	public float tileSize = 1.0f;
@@ -34,12 +33,7 @@ public class TileMapController : MonoBehaviour {
 		grid_z = 100;
 		buildMesh();
 	}
-	
-	void Awake() {
 
-		itemObjects = GameObject.Find("ItemObjects").GetComponent("Transform") as Transform;
-	}
-	
 	void Update() {
 		RayToScene();
 		

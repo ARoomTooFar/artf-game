@@ -22,15 +22,11 @@ public class CameraDraws : MonoBehaviour {
 	private Ray ray;
 	
 	bool drawTallBox = false;
-	
-
-	Shader focusedShader;
 
 	void Start(){
 		currentCamera = this.gameObject.GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
 		tileMapGameObj = GameObject.Find ("TileMap");
-		focusedShader = Shader.Find ("Toon/Basic Outline");
 	}
 
 	void OnPostRender ()
