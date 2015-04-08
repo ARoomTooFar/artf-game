@@ -9,7 +9,7 @@ public class UIControllerTestHand : MonoBehaviour {
     private int menuVertLoc = 0;
     private int menuHoriLoc = 0;
     private bool menuMoved = false;
-    private int vertSize = 2;
+    private int vertSize = 3;
     private int horiSize = 3;
 
 	// Use this for initialization
@@ -17,14 +17,19 @@ public class UIControllerTestHand : MonoBehaviour {
         menu = new Button[vertSize, horiSize];
 
         // top row
-        menu[0, 0] = GameObject.Find("Btn1").GetComponent<Button>();
-        menu[0, 1] = GameObject.Find("Btn3").GetComponent<Button>();
-        menu[0, 2] = GameObject.Find("Btn5").GetComponent<Button>();
+        menu[0, 0] = GameObject.Find("BtnABC").GetComponent<Button>();
+        menu[0, 1] = GameObject.Find("BtnDEF").GetComponent<Button>();
+        menu[0, 2] = GameObject.Find("BtnGHI").GetComponent<Button>();
+
+        // middle row
+        menu[1, 0] = GameObject.Find("BtnJKL").GetComponent<Button>();
+        menu[1, 1] = GameObject.Find("BtnMNO").GetComponent<Button>();
+        menu[1, 2] = GameObject.Find("BtnPQRS").GetComponent<Button>();
 
         // bottom row
-        menu[1, 0] = GameObject.Find("Btn2").GetComponent<Button>();
-        menu[1, 1] = GameObject.Find("Btn4").GetComponent<Button>();
-        menu[1, 2] = GameObject.Find("Btn6").GetComponent<Button>();
+        menu[2, 0] = GameObject.Find("BtnTUV").GetComponent<Button>();
+        menu[2, 1] = GameObject.Find("BtnWXYZ").GetComponent<Button>();
+        menu[2, 2] = GameObject.Find("BtnNum").GetComponent<Button>();
 
         menu[0, 0].onClick.AddListener(() =>
         {
@@ -65,11 +70,12 @@ public class UIControllerTestHand : MonoBehaviour {
         menu[0, 0].Select();
 	}
 
-    void stickUp () {
+    void stickUp ()
+    {
         if (menuMoved == false)
         {
             menuMoved = true;
-            ++menuVertLoc;
+            --menuVertLoc;
             if (menuVertLoc > (vertSize - 1))
                 menuVertLoc = 0;
             //Debug.Log(menuVertLoc);
@@ -81,9 +87,9 @@ public class UIControllerTestHand : MonoBehaviour {
         if (menuMoved == false)
         {
             menuMoved = true;
-            --menuVertLoc;
+            ++menuVertLoc;
             if (menuVertLoc < 0)
-                menuVertLoc = 1;
+                menuVertLoc = vertSize - 1;
             //Debug.Log(menuVertLoc);
         }
     }
@@ -107,7 +113,7 @@ public class UIControllerTestHand : MonoBehaviour {
             menuMoved = true;
             --menuHoriLoc;
             if (menuHoriLoc < 0)
-                menuHoriLoc = 1;
+                menuHoriLoc = horiSize - 1;
             //Debug.Log(menuHoriLoc);
         }
     }
@@ -120,6 +126,8 @@ public class UIControllerTestHand : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        //Debug.Log(Input.GetAxisRaw(controls.vert));
+
         if (Input.GetAxisRaw(controls.vert) > 0) {
             stickUp();
             menu[menuVertLoc, menuHoriLoc].Select();
@@ -140,6 +148,7 @@ public class UIControllerTestHand : MonoBehaviour {
             menu[menuVertLoc, menuHoriLoc].Select();
         }
 
+        // prevent inputting stick controls every frame by requiring player to set stick to neutral to move again
         if (Input.GetAxisRaw(controls.vert) == 0 && Input.GetAxisRaw(controls.hori) == 0)
         {
             stickNeutral();
