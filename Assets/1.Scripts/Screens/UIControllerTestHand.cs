@@ -9,18 +9,22 @@ public class UIControllerTestHand : MonoBehaviour {
     private int menuVertLoc = 0;
     private int menuHoriLoc = 0;
     private bool menuMoved = false;
+    private int vertSize = 2;
+    private int horiSize = 3;
 
 	// Use this for initialization
 	void Start () {
-        menu = new Button[2, 2];
+        menu = new Button[vertSize, horiSize];
 
         // top row
         menu[0, 0] = GameObject.Find("Btn1").GetComponent<Button>();
         menu[0, 1] = GameObject.Find("Btn3").GetComponent<Button>();
+        menu[0, 2] = GameObject.Find("Btn5").GetComponent<Button>();
 
         // bottom row
         menu[1, 0] = GameObject.Find("Btn2").GetComponent<Button>();
         menu[1, 1] = GameObject.Find("Btn4").GetComponent<Button>();
+        menu[1, 2] = GameObject.Find("Btn6").GetComponent<Button>();
 
         menu[0, 0].onClick.AddListener(() =>
         {
@@ -46,6 +50,18 @@ public class UIControllerTestHand : MonoBehaviour {
         }
         );
 
+        menu[0, 2].onClick.AddListener(() =>
+        {
+            Debug.Log("Btn5 pressed");
+        }
+        );
+
+        menu[1, 2].onClick.AddListener(() =>
+        {
+            Debug.Log("Btn6 pressed");
+        }
+        );
+
         menu[0, 0].Select();
 	}
 
@@ -54,9 +70,9 @@ public class UIControllerTestHand : MonoBehaviour {
         {
             menuMoved = true;
             ++menuVertLoc;
-            if (menuVertLoc > 1)
+            if (menuVertLoc > (vertSize - 1))
                 menuVertLoc = 0;
-            Debug.Log(menuVertLoc);
+            //Debug.Log(menuVertLoc);
         }
     }
 
@@ -68,7 +84,7 @@ public class UIControllerTestHand : MonoBehaviour {
             --menuVertLoc;
             if (menuVertLoc < 0)
                 menuVertLoc = 1;
-            Debug.Log(menuVertLoc);
+            //Debug.Log(menuVertLoc);
         }
     }
 
@@ -78,9 +94,9 @@ public class UIControllerTestHand : MonoBehaviour {
         {
             menuMoved = true;
             ++menuHoriLoc;
-            if (menuHoriLoc > 1)
+            if (menuHoriLoc > (horiSize - 1))
                 menuHoriLoc = 0;
-            Debug.Log(menuHoriLoc);
+            //Debug.Log(menuHoriLoc);
         }
     }
 
@@ -92,7 +108,7 @@ public class UIControllerTestHand : MonoBehaviour {
             --menuHoriLoc;
             if (menuHoriLoc < 0)
                 menuHoriLoc = 1;
-            Debug.Log(menuHoriLoc);
+            //Debug.Log(menuHoriLoc);
         }
     }
 
@@ -107,7 +123,6 @@ public class UIControllerTestHand : MonoBehaviour {
         if (Input.GetAxisRaw(controls.vert) > 0) {
             stickUp();
             menu[menuVertLoc, menuHoriLoc].Select();
-            
         }
         else if (Input.GetAxisRaw(controls.vert) < 0) {
             stickDown();
@@ -118,7 +133,6 @@ public class UIControllerTestHand : MonoBehaviour {
         {
             stickRight();
             menu[menuVertLoc, menuHoriLoc].Select();
-
         }
         else if (Input.GetAxisRaw(controls.hori) < 0)
         {
