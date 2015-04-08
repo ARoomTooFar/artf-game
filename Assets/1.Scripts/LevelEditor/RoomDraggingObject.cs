@@ -2,10 +2,9 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-public class DragableObject : ClickEvent
+public class RoomDraggingObject : ClickEvent
 {
-
-	public LayerMask draggingLayerMask = LayerMask.GetMask ("Walls");
+	public LayerMask draggingLayerMask;
 	Camera UICamera;
 	TileMapController tilemapcont;
 	float mouseDeadZone = 10f;
@@ -14,6 +13,7 @@ public class DragableObject : ClickEvent
 
 	void Start ()
 	{
+		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent ("TileMapController") as TileMapController;
 		
@@ -25,19 +25,17 @@ public class DragableObject : ClickEvent
 		
 	public override IEnumerator onClick (Vector3 initPosition)
 	{
-		if(!Mode.isTileMode()) {
+		if(!Mode.isRoomMode()) {
 			return false;
 		}
 
 		//for the ghost-duplicate
-		GameObject itemObjectCopy = null;
 		Vector3 newp = this.gameObject.transform.position;
 		tilemapcont.suppressDragSelecting = true;
 		while (Input.GetMouseButton(0)) { 
 			//if user wants to cancel the drag
 			if (Input.GetKeyDown (KeyCode.Escape) || Input.GetMouseButton (1)) {
 				Debug.Log ("Cancel");
-				Destroy (itemObjectCopy);
 				return false;
 			}
 			
@@ -54,24 +52,6 @@ public class DragableObject : ClickEvent
 				if (Math.Abs (mouseChange.x) > mouseDeadZone 
 					|| Math.Abs (mouseChange.y) > mouseDeadZone 
 					|| Math.Abs (mouseChange.z) > mouseDeadZone) {
-						
-					if (itemObjectCopy == null) {
-						//create copy of item object
-						itemObjectCopy = Instantiate (this.gameObject, getPosition (), getRotation ()) as GameObject;
-
-						//update the item object things
-						//shader has to be set in this loop, or transparency won't work
-						//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
-						foreach (Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
-							rend.material.shader = focusedShader;
-							Color trans = rend.material.color;
-							trans.a = .5f;
-							rend.material.color = trans;
-						}
-					} else {
-						itemObjectCopy.transform.position = new Vector3 (x, getPosition ().y, z);
-						itemObjectCopy.transform.rotation = getRotation ();
-					}
 
 					//for now y-pos remains as prefab's default.
 					newp = new Vector3 (x * 1.0f, getPosition ().y, z * 1.0f);
@@ -81,11 +61,8 @@ public class DragableObject : ClickEvent
 		}
 		
 		tilemapcont.suppressDragSelecting = false;
-		
-		//destroy the copy
-		Destroy (itemObjectCopy);
 		tilemapcont.deselect (getPosition());
-		MapData.dragObject (this.gameObject, getPosition(), newp - getPosition());
+		MapData.moveRoom(getPosition(), newp);
 		tilemapcont.selectTile (newp);
 	}
 

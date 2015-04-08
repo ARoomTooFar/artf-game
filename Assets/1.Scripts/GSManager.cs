@@ -34,15 +34,15 @@ public class GSManager : MonoBehaviour {
 		loadingBar = GameObject.Find("LoadingBar").GetComponent<Slider>();
 	}
 
-	public void LoadScene (int scene)
+	public void LoadScene (string sceneName)
 	{
 		loadingBG.SetActive(true);
-		StartCoroutine(LoadSceneAsync(scene));
+		StartCoroutine(LoadSceneAsync(sceneName));
 	}
 
-	IEnumerator LoadSceneAsync (int scene)
+	IEnumerator LoadSceneAsync (string sceneName)
 	{
-		loadProgress = Application.LoadLevelAsync(scene);
+		loadProgress = Application.LoadLevelAsync(sceneName);
 		
 		while (!loadProgress.isDone)
 		{
@@ -72,7 +72,7 @@ public class GSManager : MonoBehaviour {
 		if (serv.dataCheck(currLevelData))
 		{
 			Debug.Log("LVL DL SUCCESS: " + currLevelData);
-			yield return StartCoroutine(LoadSceneAsync(2));
+			yield return StartCoroutine(LoadSceneAsync("MondayPresentation"));
 			
 			// after loading is done, find new LoadingBG in new scene
 			//loadingBG = GameObject.Find("LoadingBG");

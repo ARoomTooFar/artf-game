@@ -186,7 +186,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 					}
 
 					itemObjectCopy.transform.position = movePos;
-					itemObjectCopy.transform.rotation = Quaternion.identity;
 				}
 			}
 			yield return null; 

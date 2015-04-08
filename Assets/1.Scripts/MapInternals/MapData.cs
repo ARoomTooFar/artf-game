@@ -54,7 +54,6 @@ public static class MapData {
 	}
 
 	#region Rooms
-	#region RoomManipulation
 	public static void addRoom(Vector3 pos1, Vector3 pos2) {
 		if(TheFarRooms.isAddValid(pos1, pos2)) {
 			TheFarRooms.add(pos1, pos2);
@@ -82,16 +81,13 @@ public static class MapData {
 	}
 
 	public static void moveRoom(Vector3 oldPos, Vector3 newPos) {
-		TheFarRooms.move(oldPos, newPos - oldPos);
+		if(TheFarRooms.isMoveValid(oldPos, newPos)){
+			TheFarRooms.move(oldPos, newPos - oldPos);
+		}
 	}
 
 	public static void removeRoom(Vector3 pos) {
 		TheFarRooms.remove(pos);
-	}
-	#endregion RoomManipulation
-
-	public static bool isMoveRoomValid(Vector3 oldPos, Vector3 newPos) {
-		return TheFarRooms.isMoveValid(oldPos, newPos);
 	}
 	#endregion Rooms
 
