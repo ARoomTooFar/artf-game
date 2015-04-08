@@ -5,6 +5,12 @@ using UnityEngine.UI;
 public class UIControllerTestHand : MonoBehaviour {
     public Controls controls;
 
+    private InputField fieldCharName;
+    private string tmpCharName;
+    private float pressTime;
+    private string currBtn = "";
+    private string prevBtn = "";
+
     private Button[,] menu;
     private int menuVertLoc = 0;
     private int menuHoriLoc = 0;
@@ -14,6 +20,8 @@ public class UIControllerTestHand : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        fieldCharName = GameObject.Find("FieldCharName").GetComponent<InputField>();
+
         menu = new Button[vertSize, horiSize];
 
         // top row
@@ -21,49 +29,97 @@ public class UIControllerTestHand : MonoBehaviour {
         menu[0, 1] = GameObject.Find("BtnDEF").GetComponent<Button>();
         menu[0, 2] = GameObject.Find("BtnGHI").GetComponent<Button>();
 
+        menu[0, 0].onClick.AddListener(() =>
+        {
+            currBtn = "ABC";
+
+            if (currBtn != prevBtn)
+            {
+                pressTime = Time.time;
+                tmpCharName = fieldCharName.text;
+                fieldCharName.text = tmpCharName + "a";
+            }
+            else
+            {
+                if ((Time.time - pressTime) < 3.0)
+                {
+                    fieldCharName.text = tmpCharName + "b";
+                    pressTime = Time.time;
+                }
+                else
+                {
+                    pressTime = Time.time;
+                    tmpCharName = fieldCharName.text;
+                    fieldCharName.text = tmpCharName + "a";
+                }
+            }
+
+            prevBtn = "ABC";
+        }
+        );
+
+        menu[0, 1].onClick.AddListener(() =>
+        {
+            Debug.Log("DEF");
+            fieldCharName.text += "d";
+        }
+        );
+
+        menu[0, 2].onClick.AddListener(() =>
+        {
+            Debug.Log("GHI");
+            fieldCharName.text += "g";
+        }
+        );
+
         // middle row
         menu[1, 0] = GameObject.Find("BtnJKL").GetComponent<Button>();
         menu[1, 1] = GameObject.Find("BtnMNO").GetComponent<Button>();
         menu[1, 2] = GameObject.Find("BtnPQRS").GetComponent<Button>();
+
+        menu[1, 0].onClick.AddListener(() =>
+        {
+            Debug.Log("JKL");
+            fieldCharName.text += "j";
+        }
+        );
+
+        menu[1, 1].onClick.AddListener(() =>
+        {
+            Debug.Log("MNO");
+            fieldCharName.text += "m";
+        }
+        );
+
+        menu[1, 2].onClick.AddListener(() =>
+        {
+            Debug.Log("PQRS");
+            fieldCharName.text += "p";
+        }
+        );
 
         // bottom row
         menu[2, 0] = GameObject.Find("BtnTUV").GetComponent<Button>();
         menu[2, 1] = GameObject.Find("BtnWXYZ").GetComponent<Button>();
         menu[2, 2] = GameObject.Find("BtnNum").GetComponent<Button>();
 
-        menu[0, 0].onClick.AddListener(() =>
+        menu[2, 0].onClick.AddListener(() =>
         {
-            Debug.Log("Btn1 pressed");
+            Debug.Log("TUV");
+            fieldCharName.text += "t";
         }
         );
 
-        menu[0, 1].onClick.AddListener(() =>
+        menu[2, 1].onClick.AddListener(() =>
         {
-            Debug.Log("Btn3 pressed");
+            Debug.Log("WXYZ");
+            fieldCharName.text += "w";
         }
         );
 
-        menu[1, 0].onClick.AddListener(() =>
+        menu[2, 2].onClick.AddListener(() =>
         {
-            Debug.Log("Btn2 pressed");
-        }
-        );
-
-        menu[1, 1].onClick.AddListener(() =>
-        {
-            Debug.Log("Btn4 pressed");
-        }
-        );
-
-        menu[0, 2].onClick.AddListener(() =>
-        {
-            Debug.Log("Btn5 pressed");
-        }
-        );
-
-        menu[1, 2].onClick.AddListener(() =>
-        {
-            Debug.Log("Btn6 pressed");
+            Debug.Log("Num");
         }
         );
 
@@ -127,6 +183,7 @@ public class UIControllerTestHand : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Debug.Log(Input.GetAxisRaw(controls.vert));
+        //Debug.Log(Time.time);
 
         if (Input.GetAxisRaw(controls.vert) > 0) {
             stickUp();
