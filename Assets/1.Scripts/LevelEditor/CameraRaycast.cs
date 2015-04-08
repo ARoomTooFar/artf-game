@@ -13,34 +13,29 @@ public class CameraRaycast : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start ()
-	{
-		UICamera = this.gameObject.GetComponent<Camera> ();
-		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
+	void Start() {
+		draggingLayerMask = LayerMask.GetMask("Walls");
+		UICamera = this.gameObject.GetComponent<Camera>();
+		tilemapcont = GameObject.Find("TileMap").GetComponent("TileMapController") as TileMapController;
 		
-		focusedShader = Shader.Find ("Transparent/Bumped Diffuse");
-		nonFocusedShader = Shader.Find ("Bumped Diffuse");
+		focusedShader = Shader.Find("Transparent/Bumped Diffuse");
+		nonFocusedShader = Shader.Find("Bumped Diffuse");
 	}
 	
 	// Update is called once per frame
-	void Update ()
-	{
-		if (!Input.GetMouseButtonDown (0) || UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == true) 
+	void Update() {
+		if(!Input.GetMouseButtonDown(0) || UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == true) 
 			return;
 		
-		Ray ray = UICamera.ScreenPointToRay (Input.mousePosition);
+		Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit; 
 		
-		if (Physics.Raycast (ray, out hit, Mathf.Infinity)) {
-			//check for tilemap so we don't try to drag it
-			if (hit.collider.gameObject.name != "TileMap") {
-				ClickEvent drag = hit.collider.transform.root.GetComponentInChildren<ClickEvent>();
-				if(drag == null || !drag.enabled){
-					return;
-				}
-				Debug.Log(hit.collider.gameObject.name);
-				StartCoroutine (drag.onClick (Input.mousePosition));	
+		if(Physics.Raycast(ray, out hit, Mathf.Infinity, ~draggingLayerMask)) {
+			ClickEvent drag = hit.collider.transform.root.GetComponentInChildren<ClickEvent>();
+			if(drag == null || !drag.enabled) {
+				return;
 			}
+			StartCoroutine(drag.onClick(Input.mousePosition));	
 		}
 	}
 }
