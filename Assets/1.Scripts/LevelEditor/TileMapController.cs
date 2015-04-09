@@ -36,12 +36,19 @@ public class TileMapController : MonoBehaviour {
 
 	void Update() {
 		RayToScene();
-		
-		Vector3 camPos = UICamera.transform.position;
-		camPos.y = 0f;
-		camPos.x -= (grid_x / 2) * transform.localScale.x;
-		camPos.z -= (grid_z / 2) * transform.localScale.z;
-		transform.position = camPos;
+		Plane ground = new Plane(Vector3.up, Vector3.zero);
+		Ray ray = new Ray();
+		ray.origin = UICamera.transform.position;
+		ray.direction = UICamera.transform.forward;
+		float distance;
+		Vector3 camFocus;
+		if(ground.Raycast(ray, out distance)) {
+			camFocus = ray.GetPoint(distance).Round(1);
+			camFocus.x -= (grid_x / 2) * transform.localScale.x;
+			camFocus.z -= (grid_z / 2) * transform.localScale.z;
+			transform.position = camFocus;
+		}
+
 	}
 
 	public void fillInRoom() {
