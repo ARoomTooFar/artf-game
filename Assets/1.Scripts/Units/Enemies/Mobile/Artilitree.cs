@@ -409,4 +409,11 @@ public class Artilitree: MobileEnemy {
 	}
 	
 	//------------//
+	
+	void OnCollisionEnter(Collision collision) {
+		print(collision.collider.name);
+		if (collision.collider.name == "Root(Clone)") { // Possibly change this if needed
+			collision.gameObject.GetComponent<Prop>().die ();
+		}
+	}
 }
