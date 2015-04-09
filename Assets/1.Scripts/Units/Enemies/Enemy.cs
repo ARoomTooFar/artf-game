@@ -17,9 +17,6 @@ public class Enemy : Character {
 	
 	public AoETargetting aRange;
 	
-	// Monster rank stuff
-	public MonsterUpgradeSystem MUS;
-	
 	protected StateMachine sM;
 	
 	protected float fov = 150f;
