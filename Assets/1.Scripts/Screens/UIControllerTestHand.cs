@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UIControllerTestHand : MonoBehaviour {
     public Controls controls;
@@ -17,6 +18,7 @@ public class UIControllerTestHand : MonoBehaviour {
     private bool menuMoved = false;
     private int vertSize = 3;
     private int horiSize = 3;
+    private int arrLoc = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -31,28 +33,39 @@ public class UIControllerTestHand : MonoBehaviour {
 
         menu[0, 0].onClick.AddListener(() =>
         {
+            char[] chars = new char[3];
+            chars[0] = 'A';
+            chars[1] = 'B';
+            chars[2] = 'C';
+
             currBtn = "ABC";
 
             if (currBtn != prevBtn)
             {
                 pressTime = Time.time;
+                arrLoc = 0;
                 tmpCharName = fieldCharName.text;
-                fieldCharName.text = tmpCharName + "a";
+                fieldCharName.text = tmpCharName + chars[arrLoc];
             }
             else
             {
                 if ((Time.time - pressTime) < 3.0)
                 {
-                    fieldCharName.text = tmpCharName + "b";
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
                     pressTime = Time.time;
                 }
                 else
                 {
                     pressTime = Time.time;
+                    arrLoc = 0;
                     tmpCharName = fieldCharName.text;
-                    fieldCharName.text = tmpCharName + "a";
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
                 }
             }
+
+            ++arrLoc;
+            if (arrLoc >= 3)
+                arrLoc = 0;
 
             prevBtn = "ABC";
         }
@@ -60,15 +73,81 @@ public class UIControllerTestHand : MonoBehaviour {
 
         menu[0, 1].onClick.AddListener(() =>
         {
-            Debug.Log("DEF");
-            fieldCharName.text += "d";
+            char[] chars = new char[3];
+            chars[0] = 'D';
+            chars[1] = 'E';
+            chars[2] = 'F';
+
+            currBtn = "DEF";
+
+            if (currBtn != prevBtn)
+            {
+                pressTime = Time.time;
+                arrLoc = 0;
+                tmpCharName = fieldCharName.text;
+                fieldCharName.text = tmpCharName + chars[arrLoc];
+            }
+            else
+            {
+                if ((Time.time - pressTime) < 3.0)
+                {
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                    pressTime = Time.time;
+                }
+                else
+                {
+                    pressTime = Time.time;
+                    arrLoc = 0;
+                    tmpCharName = fieldCharName.text;
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                }
+            }
+
+            ++arrLoc;
+            if (arrLoc >= 3)
+                arrLoc = 0;
+
+            prevBtn = "DEF";
         }
         );
 
         menu[0, 2].onClick.AddListener(() =>
         {
-            Debug.Log("GHI");
-            fieldCharName.text += "g";
+            char[] chars = new char[3];
+            chars[0] = 'G';
+            chars[1] = 'H';
+            chars[2] = 'I';
+
+            currBtn = "GHI";
+
+            if (currBtn != prevBtn)
+            {
+                pressTime = Time.time;
+                arrLoc = 0;
+                tmpCharName = fieldCharName.text;
+                fieldCharName.text = tmpCharName + chars[arrLoc];
+            }
+            else
+            {
+                if ((Time.time - pressTime) < 3.0)
+                {
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                    pressTime = Time.time;
+                }
+                else
+                {
+                    pressTime = Time.time;
+                    arrLoc = 0;
+                    tmpCharName = fieldCharName.text;
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                }
+            }
+
+            ++arrLoc;
+            if (arrLoc >= 3)
+                arrLoc = 0;
+
+            prevBtn = "GHI";
         }
         );
 
@@ -134,6 +213,8 @@ public class UIControllerTestHand : MonoBehaviour {
             --menuVertLoc;
             if (menuVertLoc < 0)
                 menuVertLoc = vertSize - 1;
+            prevBtn = "";
+            arrLoc = 0;
             //Debug.Log(menuVertLoc);
         }
     }
@@ -146,6 +227,8 @@ public class UIControllerTestHand : MonoBehaviour {
             ++menuVertLoc;
             if (menuVertLoc > (vertSize - 1))
                 menuVertLoc = 0;
+            prevBtn = "";
+            arrLoc = 0;
             //Debug.Log(menuVertLoc);
         }
     }
@@ -158,6 +241,8 @@ public class UIControllerTestHand : MonoBehaviour {
             ++menuHoriLoc;
             if (menuHoriLoc > (horiSize - 1))
                 menuHoriLoc = 0;
+            prevBtn = "";
+            arrLoc = 0;
             //Debug.Log(menuHoriLoc);
         }
     }
@@ -170,6 +255,8 @@ public class UIControllerTestHand : MonoBehaviour {
             --menuHoriLoc;
             if (menuHoriLoc < 0)
                 menuHoriLoc = horiSize - 1;
+            prevBtn = "";
+            arrLoc = 0;
             //Debug.Log(menuHoriLoc);
         }
     }
@@ -209,6 +296,16 @@ public class UIControllerTestHand : MonoBehaviour {
         if (Input.GetAxisRaw(controls.vert) == 0 && Input.GetAxisRaw(controls.hori) == 0)
         {
             stickNeutral();
+        }
+
+        if (Input.GetButtonUp(controls.joySecItem))
+        {
+            if (fieldCharName.text.Length > 0)
+            {
+                fieldCharName.text = fieldCharName.text.Remove(fieldCharName.text.Length - 1);
+                arrLoc = 0;
+                prevBtn = "";
+            }
         }
 	}
 }
