@@ -9,28 +9,20 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 {
 	TileMapController tilemapcont;
 	static Camera UICamera;
-	//Image thisImage;
 	GameObject draggedImageAnchor;
-	string itemToPlace;
 	Material matToMakeInvisible;
 	string connectedPrefab = "";
 	Vector3 newp;
 	public LayerMask draggingLayerMask;
-	bool clicked = false;
 	Shader translucentShader;
-	static GameObject bgButt;
+	static GameObject buttonBG;
+	static int selectedButtonID;
 	static GameObject itemObjectCopy = null;
-	static int selectedButtonID = -1;
-	string placedItemName;
-	Vector3 placedItemPos;
-	Vector3 placedItemRot;
 	
 	void Start ()
 	{
-
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent ("TileMapController") as TileMapController;
-		//thisImage = this.GetComponent ("Image") as Image;
 		draggedImageAnchor = GameObject.Find ("DraggedImageAnchor");
 		Image p = draggedImageAnchor.GetComponent ("Image") as Image;
 		matToMakeInvisible = Resources.Load ("Textures/basecolor") as Material;
@@ -41,58 +33,46 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 
 	void Update ()
 	{
-//		Debug.Log(clicked);
-		//if this button has been clicked, enter the ghost-dragging phase
-		if (clicked && selectedButtonID == this.gameObject.GetInstanceID ()) {
+		if (selectedButtonID == this.gameObject.GetInstanceID ()) {
 			Ray ray = UICamera.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit; 
 			
-			if (Physics.Raycast (ray, out hit, Mathf.Infinity) && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
-
-				clicked = false;
+			if (Physics.Raycast (ray, out hit, Mathf.Infinity)/* && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false*/) {
+				selectedButtonID = -1;
 				StartCoroutine (folderGhostDragging ());
-
 			}
 		}
 	}
 
-	/*
-	 * This begins the click-to-drag functionality for buttons in folders.
-	 *
-	 */
+	//when this button is clicked
 	public void OnPointerClick (PointerEventData data)
 	{
-		//deselect any other button that may be selected
-		if (selectedButtonID != -1 && selectedButtonID != this.gameObject.GetInstanceID ()) {
-			Destroy (bgButt);
-
-//			MapData.removeScenery (newp);
+		if (selectedButtonID != this.gameObject.GetInstanceID()){
+			selectedButtonID = this.gameObject.GetInstanceID();
+			selectButton(this.gameObject);
 		}
-		clicked = true;
+	}
 
-
-		//set this button to the currently selected button
-		selectedButtonID = this.gameObject.GetInstanceID ();
-
-//			Debug.Log ("Clicked a button, selectedbuttonid: " + selectedButtonID);
-
-		//make new button to create a outline
-		bgButt = Instantiate (Resources.Load ("bgButton")) as GameObject;
-		bgButt.transform.SetParent (this.transform.parent);
-		RectTransform bgRect = bgButt.GetComponent ("RectTransform") as RectTransform;
-
-		//set its position and scale
-		RectTransform thisRect = this.gameObject.GetComponent ("RectTransform") as RectTransform;
+	public void selectButton(GameObject butt){
+		Destroy(buttonBG);
+		
+		//get bgButton from resources and child it to the itemList we're in
+		buttonBG = Instantiate (Resources.Load ("bgButton")) as GameObject;
+		buttonBG.transform.SetParent (butt.transform.parent);
+		RectTransform bgRect = buttonBG.GetComponent ("RectTransform") as RectTransform;
+		
+		//set its position and scale to be slightly bigger than the button
+		RectTransform thisRect = butt.GetComponent ("RectTransform") as RectTransform;
 		bgRect.anchoredPosition = new Vector2 (thisRect.anchoredPosition.x, thisRect.anchoredPosition.y);
-		bgRect.sizeDelta = new Vector2 (thisRect.sizeDelta.x + 10f, thisRect.sizeDelta.y + 10f);
-
+		bgRect.sizeDelta = new Vector2 (thisRect.sizeDelta.x, thisRect.sizeDelta.y);
+		
+		
 		//set its color
-		Button bgButton = bgButt.GetComponent ("Button") as Button;
-		bgButton.image.color = Color.yellow;
-
+		Button buttonOfBG = buttonBG.GetComponent ("Button") as Button;
+		buttonOfBG.image.color = Color.yellow;
+		
 		//make it so it's just an outline
-		bgButton.image.fillCenter = false;
-
+		buttonOfBG.image.fillCenter = false;
 	}
 
 	IEnumerator folderGhostDragging ()
@@ -102,7 +82,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 
 		//for the ghost-duplicate
 		itemObjectCopy = null;
-		//ItemObject copy = null;
 		
 		bool cancellingMove = false;
 		bool copyCreated = false;
@@ -195,9 +174,11 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		
 		//if move was cancelled, we don't perform an update on the item object's position
 		if (cancellingMove == true) {
-			Destroy (bgButt);
+			Destroy (buttonBG);
+//			destroyButtonBG();
 			selectedButtonID = -1;
 		} else {
+
 			Vector3 pos = newp;
 			Vector3 rot = new Vector3 (0f, 0f, 0f);
 
@@ -216,12 +197,11 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			//destroy the copy
 			Destroy (itemObjectCopy);
 			itemObjectCopy = null;
-//			placedItemName = prefabLocation;
-//			placedItemPos = pos;
-//			placedItemRot = rot;
 
-			Destroy (bgButt); //get rid of yellow selecting box around button
+			Destroy (buttonBG);
+//			destroyButtonBG();
 			selectedButtonID = -1;
+		
 		}
 
 		tilemapcont.suppressDragSelecting = false;
@@ -239,6 +219,9 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		im.sprite = sp;
 	}
 
+
+
+	//below: bunch of stuff from when buttons were dragged from folders
 
 //	public void OnBeginDrag (PointerEventData data)
 //	{
@@ -274,14 +257,14 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 //		anchorRect.anchoredPosition = new Vector2 (-22f, -100f);
 //	}
 
-	IEnumerator dragIt ()
-	{ 
-		while (Input.GetMouseButton(0)) {
-			draggedImageAnchor.transform.position = Input.mousePosition;
-
-			yield return null; 
-		}
-
-		
-	}
+//	IEnumerator dragIt ()
+//	{ 
+//		while (Input.GetMouseButton(0)) {
+//			draggedImageAnchor.transform.position = Input.mousePosition;
+//
+//			yield return null; 
+//		}
+//
+//		
+//	}
 }

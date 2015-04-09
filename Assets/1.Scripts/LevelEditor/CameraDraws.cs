@@ -10,7 +10,7 @@ using System.Text;
 public class CameraDraws : MonoBehaviour {
 	TileMapController tilemapcont;
 
-	private Camera currentCamera;
+	private Camera cam;
 
 	public Material selectionMat; //material for selected tiles
 	public Material gridMat;
@@ -24,7 +24,7 @@ public class CameraDraws : MonoBehaviour {
 	bool drawTallBox = false;
 
 	void Start(){
-		currentCamera = this.gameObject.GetComponent<Camera> ();
+		cam = this.gameObject.GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
 		tileMapGameObj = GameObject.Find ("TileMap");
 	}
@@ -34,8 +34,6 @@ public class CameraDraws : MonoBehaviour {
 		drawSelectedTiles ();
 		drawGrid ();
 		drawMouseSquare();
-
-
 		drawBoxAroundFocusedObject();
 
 	}	
@@ -61,7 +59,7 @@ public class CameraDraws : MonoBehaviour {
 		float squareWidth = .4f;
 		float cubeHeight = 6;
 		
-		Ray ray = currentCamera.ScreenPointToRay (Input.mousePosition);
+		Ray ray = cam.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hitInfo;
 		Physics.Raycast (ray, out hitInfo, Mathf.Infinity);
 		Vector3 point;
@@ -75,7 +73,7 @@ public class CameraDraws : MonoBehaviour {
 			//Debug.Log (point.toCSV());
 			point.y = 0;
 		} else {
-			ray = currentCamera.ScreenPointToRay(Input.mousePosition);
+			ray = cam.ScreenPointToRay(Input.mousePosition);
 			float distance = 0;
 			groundPlane.Raycast(ray, out distance);
 			point = ray.GetPoint(distance).Round();
@@ -106,12 +104,6 @@ public class CameraDraws : MonoBehaviour {
 			GL.Vertex (pUB);
 			GL.Vertex (pUC);
 			GL.Vertex (pUD);
-			
-			GL.Vertex (pUA);
-			GL.Vertex (pUB);
-			GL.Vertex (pUC);
-			GL.Vertex (pUD);
-			
 			
 			GL.Vertex (pLB);
 			GL.Vertex (pUB);
@@ -185,13 +177,30 @@ public class CameraDraws : MonoBehaviour {
 
 		foreach (GameObject obj in ObjectFocus.focusedObjects) {
 			if (obj != null) {
+				Bounds bound = new Bounds();
+				int i = 0;
+				foreach(Renderer rend in obj.GetComponentsInChildren<Renderer>()){
+					if(rend is ParticleSystemRenderer){
+						continue;
+					}
 
-				//Collider method
-				Collider coll = obj.GetComponentInChildren<Collider> ();
-				Bounds bound = coll.bounds;
-				foreach (Collider c in obj.GetComponentsInChildren<Collider> ()) {
-					bound.Encapsulate (c.bounds);
+					if(!rend.enabled){
+						continue;
+					}
+					bound.center = bound.center+rend.bounds.center;
+					i++;
 				}
+				bound.center = bound.center/i;
+				foreach(Renderer rend in obj.GetComponentsInChildren<Renderer>()){
+					if(rend is ParticleSystemRenderer){
+						continue;
+					}
+					if(!rend.enabled){
+						continue;
+					}
+					bound.Encapsulate(rend.bounds);
+				}
+				//bound.center = obj.transform.position;
 
 				//Renderer method
 //				Renderer rend = obj.GetComponentInChildren<Renderer> ();
@@ -208,12 +217,12 @@ public class CameraDraws : MonoBehaviour {
 //					bound.Encapsulate(fil.mesh.bounds);
 //				}
 //				bound.center = obj.transform.position;
-			
-			
-				Quaternion quat = obj.transform.rotation;
+
+				//Quaternion quat = obj.transform.rotation;
+				Quaternion quat = Quaternion.identity;
 				Vector3 bc = obj.transform.position + quat * (bound.center - obj.transform.position);
 			
-			
+				/*
 				Vector3 topFrontRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, 1, 1)); 
 				Vector3 topFrontLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, 1, 1)); 
 				Vector3 topBackLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, 1, -1));
@@ -221,37 +230,50 @@ public class CameraDraws : MonoBehaviour {
 				Vector3 bottomFrontRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, -1, 1)); 
 				Vector3 bottomFrontLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, -1, 1)); 
 				Vector3 bottomBackLeft = bc + quat * Vector3.Scale (bound.extents, new Vector3 (-1, -1, -1));
-				Vector3 bottomBackRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, -1, -1)); 
-			
-			
+				Vector3 bottomBackRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, -1, -1));*/
+
+				Vector3 bottomBackLeft = bound.center + Vector3.Scale (bound.extents, new Vector3 (-1, -1, -1));
+				Vector3 bottomFrontLeft = bound.center + Vector3.Scale (bound.extents, new Vector3 (-1, -1, 1));
+				Vector3 bottomFrontRight = bound.center + Vector3.Scale (bound.extents, new Vector3 (1, -1, 1)); 
+				Vector3 bottomBackRight = bound.center + Vector3.Scale (bound.extents, new Vector3 (1, -1, -1));
+
+				Vector3 topBackLeft = bound.center + Vector3.Scale (bound.extents, new Vector3 (-1, 1, -1));
+				Vector3 topFrontLeft = bound.center + Vector3.Scale (bound.extents, new Vector3 (-1, 1, 1));
+				Vector3 topFrontRight = bound.center + Vector3.Scale (bound.extents, new Vector3 (1, 1, 1)); 
+				Vector3 topBackRight = bound.center + Vector3.Scale (bound.extents, new Vector3 (1, 1, -1)); 
+
 				GL.Begin (GL.QUADS);
 				objectFocusMat.SetPass (0);
-			
+
+				GL.Vertex(bottomBackLeft);
+				GL.Vertex(bottomFrontLeft);
+				GL.Vertex(bottomFrontRight);
+				GL.Vertex(bottomBackRight);
+
+				GL.Vertex (topBackLeft);
 				GL.Vertex (topFrontLeft);
 				GL.Vertex (topFrontRight);
 				GL.Vertex (topBackRight);
-				GL.Vertex (topBackLeft);
-			
-				GL.Vertex (topFrontLeft);
-				GL.Vertex (topFrontRight);
-				GL.Vertex (bottomFrontRight);
+				
 				GL.Vertex (bottomFrontLeft);
-			
+				GL.Vertex (topFrontLeft);
+				GL.Vertex (topBackLeft);
+				GL.Vertex (bottomBackLeft);
+				
+				GL.Vertex (bottomBackLeft);
 				GL.Vertex (topBackLeft);
 				GL.Vertex (topBackRight);
 				GL.Vertex (bottomBackRight);
-				GL.Vertex (bottomBackLeft);
-			
-				GL.Vertex (topBackLeft);
+				
+				GL.Vertex (bottomFrontRight);
+				GL.Vertex (topFrontRight);
 				GL.Vertex (topFrontLeft);
 				GL.Vertex (bottomFrontLeft);
-				GL.Vertex (bottomBackLeft);
-			
+				
+				GL.Vertex (bottomBackRight);
 				GL.Vertex (topBackRight);
 				GL.Vertex (topFrontRight);
 				GL.Vertex (bottomFrontRight);
-				GL.Vertex (bottomBackRight);
-			
 			
 				GL.End ();
 			}

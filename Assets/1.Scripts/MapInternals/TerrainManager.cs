@@ -53,29 +53,6 @@ public class TerrainManager {
 			}
 		}
 		return true;
-
-
-		/* OLD VERSION PLS IGNORE
-		//Go through every set of blocks
-		foreach(List<TerrainBlock> lst in dictionary.Values) {
-			//for each extant block
-			foreach(TerrainBlock other in lst) {
-				//determine if the block is a neighbor of the input
-				DIRECTION dir = blk.isNeighbor(other);
-				//if not, move on to the next one
-				if(dir == DIRECTION.NonDirectional) {
-					continue;
-				}
-				//set the found block as a neighbor of the input
-				blk.addNeighbor(other, dir);
-				//try to set the input as a neighbor of the found block.
-				//if something goes wrong, stop the whole function.
-				if(!other.addNeighbor(blk, dir.Opposite())) {
-					return false;
-				}
-			}
-		}
-		return true;*/
 	}
 
 	/*
@@ -217,13 +194,5 @@ public class TerrainManager {
 			}
 			return retVal;
 		}
-	}
-
-	public int numTiles() {
-		int retVal = 0;
-		foreach(List<TerrainBlock> val in dictionary.Values) {
-			retVal += val.Count;
-		}
-		return retVal;
 	}
 }
