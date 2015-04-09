@@ -5,22 +5,18 @@ using System.Collections;
 public class DragableObject : ClickEvent
 {
 
-	public LayerMask draggingLayerMask = LayerMask.GetMask ("Walls");
+	public LayerMask draggingLayerMask;
 	Camera UICamera;
 	TileMapController tilemapcont;
-	float mouseDeadZone = 10f;
 	Shader focusedShader;
-	Shader nonFocusedShader;
 
 	void Start ()
 	{
+		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent ("TileMapController") as TileMapController;
 		
 		focusedShader = Shader.Find ("Transparent/Bumped Diffuse");
-		nonFocusedShader = Shader.Find ("Bumped Diffuse");
-		
-		this.gameObject.GetComponentInChildren<Renderer> ().material.shader = nonFocusedShader;
 	}
 		
 	public override IEnumerator onClick (Vector3 initPosition)
@@ -36,7 +32,6 @@ public class DragableObject : ClickEvent
 		while (Input.GetMouseButton(0)) { 
 			//if user wants to cancel the drag
 			if (Input.GetKeyDown (KeyCode.Escape) || Input.GetMouseButton (1)) {
-				Debug.Log ("Cancel");
 				Destroy (itemObjectCopy);
 				return false;
 			}
@@ -51,9 +46,9 @@ public class DragableObject : ClickEvent
 				int z = Mathf.RoundToInt (hitInfo.point.z / tilemapcont.tileSize);
 					
 				//if mouse left deadzone
-				if (Math.Abs (mouseChange.x) > mouseDeadZone 
-					|| Math.Abs (mouseChange.y) > mouseDeadZone 
-					|| Math.Abs (mouseChange.z) > mouseDeadZone) {
+				if (Math.Abs (mouseChange.x) > Global.mouseDeadZone 
+					|| Math.Abs (mouseChange.y) > Global.mouseDeadZone 
+					|| Math.Abs (mouseChange.z) > Global.mouseDeadZone) {
 						
 					if (itemObjectCopy == null) {
 						//create copy of item object
