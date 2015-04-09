@@ -15,8 +15,12 @@ public class Enemy : Character {
 	//Object which holds hivemind aggrotable
 	public Swarm swarm;
 	
-	// Moved from my AI enemy - Francis
-	// public AggroRange aRange;
+	// Rank of enemy unit
+	protected int _rank;
+	public int rank {
+		get{return this._rank;}
+	}
+	
 	public AoETargetting aRange;
 	
 	protected StateMachine sM;
