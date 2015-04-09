@@ -232,7 +232,14 @@ public class Enemy : Character {
 
 	public override void die() {
 		base.die ();
-		Destroy (gameObject);
+		stats.health = 0;
+		//UI.hpBar.current = 0;
+		Renderer[] rs = GetComponentsInChildren<Renderer>();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
+		eDeath.setInitValues(this, true,drop);
+		foreach (Renderer r in rs) {
+			r.enabled = false;
+		}
 	}
 
 	//-------------------------------//

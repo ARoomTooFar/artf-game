@@ -50,9 +50,11 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public bool testing; // Whether it takes gear in automatically or lets the gear loader to it
 
 	public bool invincible = false;
-
+	public GameObject drop;
 	public Rigidbody rb;
 	protected Type opposition;
+	public Renderer[] rs;
+	public GameObject expDeath;
 	
 	// Animation variables
 	public Animator animator;

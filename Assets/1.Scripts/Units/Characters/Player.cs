@@ -22,8 +22,6 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
 	public GameObject currDoor;
-	public GameObject expDeath;
-	public Renderer[] rs;
 	
 	public UIActive UI;
 	public Controls controls;
@@ -272,7 +270,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		//UI.hpBar.current = 0;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
-		eDeath.setInitValues(this, true);
+		eDeath.setInitValues(this, true,drop);
 		foreach (Renderer r in rs) {
 			r.enabled = false;
 		}
