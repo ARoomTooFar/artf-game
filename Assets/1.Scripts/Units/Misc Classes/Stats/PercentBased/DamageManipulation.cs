@@ -43,10 +43,10 @@ public class DamageManipulation {
 		
 		float ttlReduction = genDamage.percentValue;
 
-		if (ARTFUtilities.isBehind (atkPos, unitFacing, unitPos)) {
+		if (ARTFUtilities.IsBehind (atkPos, unitFacing, unitPos)) {
 			ttlReduction *= backDamage.percentValue;
 			// Debug.Log ("Back Damage");
-		} else if (ARTFUtilities.isOnSide (atkPos, unitFacing, unitPos)) {
+		} else if (ARTFUtilities.IsOnSide (atkPos, unitFacing, unitPos)) {
 			ttlReduction *= sideDamage.percentValue;
 			// Debug.Log ("Side Damage");
 		} else {

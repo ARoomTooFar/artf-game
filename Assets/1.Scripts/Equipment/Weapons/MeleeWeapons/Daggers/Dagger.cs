@@ -1,4 +1,4 @@
-﻿// Dagger class, put into the head for now
+// Dagger class, put into the head for now
 
 using UnityEngine;
 using System.Collections;
@@ -43,7 +43,7 @@ public class Dagger : MeleeWeapons {
 	}
 
 	protected override void onHit(Character enemy) {
-		if (ARTFUtilities.isBehind(user.transform.position, enemy.facing, enemy.transform.position)) {
+		if (ARTFUtilities.IsBehind(user.transform.position, enemy.facing, enemy.transform.position)) {
 			enemy.damage((int)((stats.damage + stats.chgDamage) * 1.5f), user);
 		} else {
 			enemy.damage(stats.damage + stats.chgDamage, user);
