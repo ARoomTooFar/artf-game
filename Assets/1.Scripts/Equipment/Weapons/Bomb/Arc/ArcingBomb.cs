@@ -64,9 +64,8 @@ public class ArcingBomb : Bomb {
 
 	//-------------//
 
-
 	void OnTriggerEnter(Collider other) {
-		if (this.targetLocation != null && other.gameObject == this.targetLocation) {
+		if ((this.targetLocation != null && other.gameObject == this.targetLocation) || other.tag == "Wall") {
 			this.reachedDestination();
 		}
 	}

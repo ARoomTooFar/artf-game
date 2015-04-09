@@ -32,6 +32,8 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public delegate void DieBroadcast(GameObject dead);
 	public static event DieBroadcast OnDeath;
 	
+	public MonsterUpgradeSystem MUS;
+	
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType("Enemy");
@@ -40,6 +42,8 @@ public class Player : Character, IMoveable, IHealable<int>{
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
+		
+		this.MUS = new MonsterUpgradeSystem(2, 100);
 	}
 	
 	protected override void setInitValues() {

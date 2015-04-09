@@ -18,6 +18,7 @@ public static class ARTFUtilities {
 		}
 	}
 
+
 	// Like is behind, but for the side
 	public static bool IsOnSide(Transform pos, Vector3 tarFacing, Vector3 tarPosition) {
 		return IsOnSide (pos.position, tarFacing, tarPosition);
@@ -32,6 +33,7 @@ public static class ARTFUtilities {
 			return false;
 		}
 	}
+	
 	
 	// Calculates a trajectory for a parabolic motion given start and end location and an angle
 	//     Angle is from y direction to forward direction not the starting angle from the ground
@@ -65,6 +67,7 @@ public static class ARTFUtilities {
 		float speedOverLand = Mathf.Sin (angle) * speed;
 		return new Vector3(speedOverLand * Mathf.Cos (newAngle), speed * Mathf.Cos(angle), zDir * speedOverLand * Mathf.Sin (newAngle));
 	}
+	
 	
 	
 	// Calculates a trajectory for a parabolic motion given start and end location and a speed
