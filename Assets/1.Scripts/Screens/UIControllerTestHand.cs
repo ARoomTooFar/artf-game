@@ -158,22 +158,122 @@ public class UIControllerTestHand : MonoBehaviour {
 
         menu[1, 0].onClick.AddListener(() =>
         {
-            Debug.Log("JKL");
-            fieldCharName.text += "j";
+            char[] chars = new char[3];
+            chars[0] = 'J';
+            chars[1] = 'K';
+            chars[2] = 'L';
+
+            currBtn = "JKL";
+
+            if (currBtn != prevBtn)
+            {
+                pressTime = Time.time;
+                arrLoc = 0;
+                tmpCharName = fieldCharName.text;
+                fieldCharName.text = tmpCharName + chars[arrLoc];
+            }
+            else
+            {
+                if ((Time.time - pressTime) < 3.0)
+                {
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                    pressTime = Time.time;
+                }
+                else
+                {
+                    pressTime = Time.time;
+                    arrLoc = 0;
+                    tmpCharName = fieldCharName.text;
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                }
+            }
+
+            ++arrLoc;
+            if (arrLoc >= 3)
+                arrLoc = 0;
+
+            prevBtn = "JKL";
         }
         );
 
         menu[1, 1].onClick.AddListener(() =>
         {
-            Debug.Log("MNO");
-            fieldCharName.text += "m";
+            char[] chars = new char[3];
+            chars[0] = 'M';
+            chars[1] = 'N';
+            chars[2] = 'O';
+
+            currBtn = "MNO";
+
+            if (currBtn != prevBtn)
+            {
+                pressTime = Time.time;
+                arrLoc = 0;
+                tmpCharName = fieldCharName.text;
+                fieldCharName.text = tmpCharName + chars[arrLoc];
+            }
+            else
+            {
+                if ((Time.time - pressTime) < 3.0)
+                {
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                    pressTime = Time.time;
+                }
+                else
+                {
+                    pressTime = Time.time;
+                    arrLoc = 0;
+                    tmpCharName = fieldCharName.text;
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                }
+            }
+
+            ++arrLoc;
+            if (arrLoc >= 3)
+                arrLoc = 0;
+
+            prevBtn = "MNO";
         }
         );
 
         menu[1, 2].onClick.AddListener(() =>
         {
-            Debug.Log("PQRS");
-            fieldCharName.text += "p";
+            char[] chars = new char[4];
+            chars[0] = 'P';
+            chars[1] = 'Q';
+            chars[2] = 'R';
+            chars[3] = 'S';
+
+            currBtn = "PQRS";
+
+            if (currBtn != prevBtn)
+            {
+                pressTime = Time.time;
+                arrLoc = 0;
+                tmpCharName = fieldCharName.text;
+                fieldCharName.text = tmpCharName + chars[arrLoc];
+            }
+            else
+            {
+                if ((Time.time - pressTime) < 3.0)
+                {
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                    pressTime = Time.time;
+                }
+                else
+                {
+                    pressTime = Time.time;
+                    arrLoc = 0;
+                    tmpCharName = fieldCharName.text;
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                }
+            }
+
+            ++arrLoc;
+            if (arrLoc >= 4)
+                arrLoc = 0;
+
+            prevBtn = "PQRS";
         }
         );
 
@@ -184,15 +284,82 @@ public class UIControllerTestHand : MonoBehaviour {
 
         menu[2, 0].onClick.AddListener(() =>
         {
-            Debug.Log("TUV");
-            fieldCharName.text += "t";
+            char[] chars = new char[3];
+            chars[0] = 'T';
+            chars[1] = 'U';
+            chars[2] = 'V';
+
+            currBtn = "TUV";
+
+            if (currBtn != prevBtn)
+            {
+                pressTime = Time.time;
+                arrLoc = 0;
+                tmpCharName = fieldCharName.text;
+                fieldCharName.text = tmpCharName + chars[arrLoc];
+            }
+            else
+            {
+                if ((Time.time - pressTime) < 3.0)
+                {
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                    pressTime = Time.time;
+                }
+                else
+                {
+                    pressTime = Time.time;
+                    arrLoc = 0;
+                    tmpCharName = fieldCharName.text;
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                }
+            }
+
+            ++arrLoc;
+            if (arrLoc >= 3)
+                arrLoc = 0;
+
+            prevBtn = "TUV";
         }
         );
 
         menu[2, 1].onClick.AddListener(() =>
         {
-            Debug.Log("WXYZ");
-            fieldCharName.text += "w";
+            char[] chars = new char[4];
+            chars[0] = 'W';
+            chars[1] = 'X';
+            chars[2] = 'Y';
+            chars[3] = 'Z';
+
+            currBtn = "WXYZ";
+
+            if (currBtn != prevBtn)
+            {
+                pressTime = Time.time;
+                arrLoc = 0;
+                tmpCharName = fieldCharName.text;
+                fieldCharName.text = tmpCharName + chars[arrLoc];
+            }
+            else
+            {
+                if ((Time.time - pressTime) < 3.0)
+                {
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                    pressTime = Time.time;
+                }
+                else
+                {
+                    pressTime = Time.time;
+                    arrLoc = 0;
+                    tmpCharName = fieldCharName.text;
+                    fieldCharName.text = tmpCharName + chars[arrLoc];
+                }
+            }
+
+            ++arrLoc;
+            if (arrLoc >= 4)
+                arrLoc = 0;
+
+            prevBtn = "WXYZ";
         }
         );
 
