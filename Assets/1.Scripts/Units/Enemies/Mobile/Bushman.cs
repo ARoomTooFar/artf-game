@@ -18,11 +18,8 @@ public class Bushman : MobileEnemy {
 	}
 	
 	private bool inFrenzy;
-	private float frenzy_counter;
-	private float frenzy_growth;
 	private PowerLevels powlvs;
 	private Frenzy frenzy;
-	private int tier;
 	private float health;
 	GameObject expDeath;
 	protected Sprint sprint;
@@ -112,16 +109,9 @@ public class Bushman : MobileEnemy {
 	protected override void Awake () {
 		base.Awake ();
 		inFrenzy = false;
-		frenzy_counter = 0;
-		frenzy_growth = 2;
-
 		health = stats.health;
 
 
-	}
-
-	void setTier(int tier){
-		this.tier = tier;
 	}
 
 	protected override void Start() {

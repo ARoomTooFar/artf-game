@@ -98,7 +98,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 			
 			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-			animSteHash = animSteInfo.nameHash;
+			animSteHash = animSteInfo.fullPathHash;
 			
 			freeAnim = !stunned && !knockedback;
 			

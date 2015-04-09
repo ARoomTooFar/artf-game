@@ -28,7 +28,7 @@ public class Artillery : Weapons {
 	}
 	
 	protected override IEnumerator bgnAttack() {
-		while (user.animSteInfo.nameHash != user.atkHashCharge) {
+		while (user.animSteInfo.fullPathHash != user.atkHashCharge) {
 			yield return null;
 		}
 	
@@ -38,7 +38,9 @@ public class Artillery : Weapons {
 	
 	protected override IEnumerator bgnCharge() {
 		user.testControl = false;
-		curCircle = ((GameObject)Instantiate(targetCircle, new Vector3(user.transform.position.x, 0.55f, user.transform.position.z), user.transform.rotation)).GetComponent<TargetCircle>();
+		Vector3 direction = user.facing.normalized * 4.0f;
+		// this.curTCircle.transform.position = new Vector3(this.curTCircle.transform.position.x + direction.x, this.curTCircle.transform.position.y, this.curTCircle.transform.position.z + direction.z);
+		curCircle = ((GameObject)Instantiate(targetCircle, new Vector3(user.transform.position.x + direction.x, 0.55f, user.transform.position.z + direction.z), user.transform.rotation)).GetComponent<TargetCircle>();
 		curCircle.setValues (this.user);
 		while (user.animator.GetBool("Charging") && stats.curChgDuration < stats.maxChgTime) {
 			stats.curChgDuration = Mathf.Clamp(stats.curChgDuration + Time.deltaTime, 0.0f, stats.maxChgTime);
@@ -58,7 +60,7 @@ public class Artillery : Weapons {
 	}
 
 	protected override IEnumerator atkFinish() {
-		while (user.animSteInfo.nameHash != user.atkHashEnd) {
+		while (user.animSteInfo.fullPathHash != user.atkHashEnd) {
 			yield return null;
 		}
 		user.testControl = true;

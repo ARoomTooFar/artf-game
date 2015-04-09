@@ -8,14 +8,12 @@ public class Frenzy : Override {
 	private float str;
 	private float def;
 	private float atkspd;
-	private float original_atkspeed;
 
 	public Frenzy () {
 		name = "Frenzy";
 		spd = 0f;
 		str = 0f;
 		def = 0f;
-		original_atkspeed = -1;
 	}
 
 	public void setSpeedBoost(float percent){

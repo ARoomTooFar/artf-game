@@ -14,7 +14,6 @@ public class levelgui : MonoBehaviour {
 
 	private static gamestate instance;	
 	private string levelName;
-	private string newName = "Player Name";
 
 	GameObject loadGear;
 	GameObject cameras;

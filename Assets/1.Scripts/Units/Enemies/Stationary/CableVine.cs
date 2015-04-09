@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CableVine : StationaryEnemy {
 
-	public Stun stun;
+	public Stun stunObj;
 	public GenericDoT constrict;
 	bool inStealth;
 	HingeJoint tether;
@@ -11,12 +11,12 @@ public class CableVine : StationaryEnemy {
 //	CableMaw MyMum;
 
 	// Use this for initialization
-	protected void Awake () {
+	protected override void Awake () {
 		base.Awake();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	protected override void Update () {
 	
 	}
 }
