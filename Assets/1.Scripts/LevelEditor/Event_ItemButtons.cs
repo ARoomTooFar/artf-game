@@ -18,9 +18,17 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	static GameObject buttonBG;
 	static int selectedButtonID;
 	static GameObject itemObjectCopy = null;
+	public Text amountText;
+	public int amount;
+	public string itemType;
 	
 	void Start ()
 	{
+
+		amountText = this.transform.Find("AmountText").gameObject.GetComponent("Text") as Text;
+		amount = (Money.money / Money.getPrice(itemType));
+		amountText.text = amount.ToString();
+
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent ("TileMapController") as TileMapController;
 		draggedImageAnchor = GameObject.Find ("DraggedImageAnchor");
@@ -33,11 +41,16 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 
 	void Update ()
 	{
+
+		amountText.text = (Money.money / Money.getPrice(itemType)).ToString();
+
+
 		if (selectedButtonID == this.gameObject.GetInstanceID ()) {
 			Ray ray = UICamera.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit; 
 			
-			if (Physics.Raycast (ray, out hit, Mathf.Infinity)/* && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false*/) {
+			if (Physics.Raycast (ray, out hit, Mathf.Infinity)/* 
+			&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false*/) {
 				selectedButtonID = -1;
 				StartCoroutine (folderGhostDragging ());
 			}
@@ -191,6 +204,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 						pos = MapData.TheFarRooms.find (pos).getNearestEdgePosition (pos);
 					}
 				}
+				Money.buy(itemType);
 				MapData.addObject (prefabLocation, pos, rot.toDirection ());
 			}
 
