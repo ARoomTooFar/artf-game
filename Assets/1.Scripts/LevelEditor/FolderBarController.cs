@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class FolderBarController : MonoBehaviour {
 //	public GameObject[] folders;
@@ -43,7 +44,9 @@ public class FolderBarController : MonoBehaviour {
 	
 	void Start ()
 	{
-		
+		Money.moneyDisplay = GameObject.Find ("Shop").GetComponentInChildren<Text> () as Text;
+		Money.updateMoneyDisplay();
+
 		folderBar = GameObject.Find("FolderBar").GetComponent<RectTransform>();
 
 		buttonColor = new Color32(0, 147, 176, 255);
@@ -242,7 +245,11 @@ public class FolderBarController : MonoBehaviour {
 					//set icon
 					string prefabType = prefabs[prefabCounter].name.Substring(prefabs[prefabCounter].name.IndexOf ('_') + 1);
 					uih.setButtonImage(prefabType);
+
 					
+					//set it's type name, for buying/selling
+					uih.itemType = prefabType;
+
 					prefabCounter++;
 				}else{
 					
