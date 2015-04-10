@@ -18,7 +18,7 @@ public class CameraDraws : MonoBehaviour {
 	
 	GameObject tileMapGameObj;
 
-	private Plane groundPlane = new Plane(Vector3.up, new Vector3());
+	private Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 	private Ray ray;
 	
 	bool drawTallBox = false;
@@ -134,37 +134,33 @@ public class CameraDraws : MonoBehaviour {
 	/* draw the grid lines */
 	void drawGrid ()
 	{
+		Camera UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
+		Plane ground = new Plane(Vector3.up, Vector3.zero);
+		Ray ray = new Ray();
+		ray.origin = UICamera.transform.position;
+		ray.direction = UICamera.transform.forward;
+		float distance;
+		Vector3 camFocus = Vector3.zero;
+		if(ground.Raycast(ray, out distance)) {
+			camFocus = ray.GetPoint(distance).Round();
+		}
+
 		GL.Begin (GL.LINES);
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
 		
-		//lower edge of tilemap bounding box
-		float xLowerBound = tileMapGameObj.GetComponent<Collider>().bounds.center.x - 
-			((tilemapcont.grid_x / 2) * tileMapGameObj.transform.root.localScale.x);
-		
-		float zLowerBound = tileMapGameObj.GetComponent<Collider>().bounds.center.z - 
-			((tilemapcont.grid_z / 2) * tileMapGameObj.transform.root.localScale.z);
-		
-		
-		//upper edge of tilemap bounding box
-		float xUpperBound = tileMapGameObj.GetComponent<Collider>().bounds.center.x + 
-			((tilemapcont.grid_x / 2) * tileMapGameObj.transform.root.localScale.x);
-		
-		float zUpperBound = tileMapGameObj.GetComponent<Collider>().bounds.center.z + 
-			((tilemapcont.grid_z / 2) * tileMapGameObj.transform.root.localScale.z);
-		
 		Color c = new Color(1f,1f,1f,0.01f) ;
 		selectionMat.SetColor("Main Color", c);
 		//draw grid over tilemap
-		for (int z = (int)Mathf.Floor(zLowerBound); z < (int)Mathf.Floor(zUpperBound); z++) {
-			GL.Color (c);
-			GL.Vertex (new Vector3 (Mathf.Floor (xLowerBound), 0f, z + 0.5f));
-			GL.Vertex (new Vector3 (Mathf.Floor (xUpperBound), 0f, z + 0.5f));
-			
+		for (int i = Mathf.RoundToInt(camFocus.x) - (Global.grid_x/2); i < Mathf.RoundToInt(camFocus.x) + (Global.grid_x/2); i++ ) {
+			GL.Color(c);
+			GL.Vertex (new Vector3 (i-.5f , 0f, camFocus.z + (Global.grid_z/2) + 0.5f));
+			GL.Vertex (new Vector3 (i-.5f, 0f, camFocus.z - (Global.grid_z/2) + 0.5f));
 		}
-		for (int x = (int)Mathf.Floor(xLowerBound); x < (int)Mathf.Floor(xUpperBound); x++) {
-			GL.Vertex (new Vector3 (x - 0.5f, 0f, Mathf.Floor (zLowerBound)));
-			GL.Vertex (new Vector3 (x - 0.5f, 0f, Mathf.Floor (zUpperBound)));
+		for (int i = Mathf.RoundToInt(camFocus.z) - (Global.grid_z/2); i < Mathf.RoundToInt(camFocus.z) + (Global.grid_z/2); i++ ) {
+			GL.Color(c);
+			GL.Vertex (new Vector3 (camFocus.x + (Global.grid_x/2)-.5f , 0f, i + 0.5f));
+			GL.Vertex (new Vector3 (camFocus.x - (Global.grid_x/2)-.5f, 0f, i + 0.5f));
 		}
 		
 		

@@ -112,11 +112,17 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 				itemObjectCopy.GetComponent<ClickEvent>().enabled = false;
 				//update the item object things
 				//shader has to be set in this loop, or transparency won't work
-				foreach (Renderer rend in itemObjectCopy.transform.root.gameObject.GetComponentsInChildren<Renderer>()){
-					rend.material.shader = translucentShader;
-					Color trans = rend.material.color;
-					trans.a = .5f;
-					rend.material.color = trans;
+				Color trans;
+				//update the item object things
+				//shader has to be set in this loop, or transparency won't work
+				//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
+				foreach (Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
+					foreach(Material mat in rend.materials){
+						mat.shader = translucentShader;
+						trans = mat.color;
+						trans.a = .5f;
+						mat.color = trans;
+					}
 				}
 
 				//copy = itemObjectCopy.GetComponent ("ItemObject") as ItemObject;

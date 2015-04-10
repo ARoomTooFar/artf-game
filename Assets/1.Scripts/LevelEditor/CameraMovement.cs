@@ -12,7 +12,7 @@ public class CameraMovement : MonoBehaviour {
 	static float orthoZoomSpeed = 2f;
 	static float maxOrthoSize = 30;
 	static float minOrthoSize = 2;
-	private Plane groundPlane = new Plane(Vector3.up, new Vector3());
+	private Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 	private Vector3 prevMouse = Global.nullVector3;
 	private Ray ray;
 
