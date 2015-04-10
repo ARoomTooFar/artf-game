@@ -26,7 +26,7 @@ public class NewEnemy : Character {
 	// Variables for use in player detection
 	protected bool alerted = false;
 	public GameObject target;
-	protected Vector3? lastSeenPosition = null;
+	public Vector3? lastSeenPosition = null;
 	protected AggroTable aggroT;
 	protected bool targetchanged;
 	
@@ -103,13 +103,14 @@ public class NewEnemy : Character {
 					this.animator.SetBool("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
 					// this.animator.SetFloat("DistanceToTarget", distanceToPlayer(this.target));
 				} else {
-					target = null;
+					this.animator.SetBool ("Target", false);
 				}
 			} else {
 				if (aRange.unitsInRange.Count > 0) {
 					foreach(Character tars in aRange.unitsInRange) {
 						if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
 							this.alerted = true;
+							this.animator.SetBool("Alerted", true);
 							target = tars.gameObject;
 							this.animator.SetBool("Target", true);
 							break;
@@ -147,14 +148,14 @@ public class NewEnemy : Character {
 	
 	public virtual bool canSeePlayer(GameObject p) {
 		if (p == null) {
-			this.animator.SetBool("CanSeeTarget", true);
+			this.animator.SetBool("CanSeeTarget", false);
 			return false;
 		}
 		
 		// Check angle of forward direction vector against the vector of enemy position relative to player position
 		Vector3 direction = p.transform.position - transform.position;
 		float angle = Vector3.Angle(direction, this.facing);
-		
+
 		if (angle < fov) {
 			RaycastHit hit;
 			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, lineofsight, layerMask)) {
@@ -163,7 +164,9 @@ public class NewEnemy : Character {
 			} else {
 				aggroT.add(p,1);
 				lastSeenPosition = p.transform.position;
+				this.animator.SetBool ("HasLastSeenPosition", true);
 				alerted = true;
+				this.animator.SetBool("Alerted", true);
 				this.animator.SetBool("CanSeeTarget", true);
 				return true;
 				
@@ -240,6 +243,7 @@ public class NewEnemy : Character {
 		dmgTimer = 0f;
 		aggro = false;
 		target = null;
+		this.animator.SetBool ("Target", false);
 	}
 	
 	public virtual void playerDied(GameObject dead){

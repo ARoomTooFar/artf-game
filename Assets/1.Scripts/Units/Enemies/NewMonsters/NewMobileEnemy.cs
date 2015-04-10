@@ -8,6 +8,7 @@ public class NewMobileEnemy : NewEnemy {
 	
 	public Vector3 resetpos;
 	public Vector3 targetDir;
+	public CoroutineController searchController, searchStateController;
 
 	//-------------------//
 	// Primary Functions //
@@ -25,11 +26,14 @@ public class NewMobileEnemy : NewEnemy {
 		foreach(EnemyBehaviour behaviour in this.animator.GetBehaviours<EnemyBehaviour>()) {
 			behaviour.unit = this;
 		}
-
 	}
 	
 	protected override void Update() {
 		base.Update ();
+
+		if (this.target != null && this.target.GetComponent<Player>() != null) {
+			this.targetDir = this.target.GetComponent<Player>().facing;
+		}
 	}
 	
 	protected override void setInitValues() {
@@ -64,6 +68,7 @@ public class NewMobileEnemy : NewEnemy {
 					foreach(Character tars in aRange.unitsInRange) {
 						if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
 							this.alerted = true;
+							this.animator.SetBool("Alerted", true);
 							target = tars.gameObject;
 							break;
 						}
@@ -170,16 +175,22 @@ public class NewMobileEnemy : NewEnemy {
 		if (this.lastSeenPosition.HasValue) {
 			this.facing = this.lastSeenPosition.Value - this.transform.position;
 			this.facing.y = 0.0f;
-			StartCoroutine("searchForEnemy", this.lastSeenPosition.Value);
+			this.StartCoroutineEx(searchForEnemy(this.lastSeenPosition.Value), out this.searchController);
+			// StartCoroutine("searchForEnemy", this.lastSeenPosition.Value);
 			this.lastSeenPosition = null;
+			this.animator.SetBool ("HasLastSeenPosition", false);
 		}
 	}
 	
-	protected virtual void StopSearch() {
+	public virtual void StopSearch() {
+		this.searchController.Stop ();
+		this.searchStateController.Stop ();
+		/*
 		this.StopCoroutine("searchForEnemy");
 		this.StopCoroutine("moveToPosition");
 		this.StopCoroutine("moveToExpectedArea");
 		this.StopCoroutine("randomSearch");
+		*/
 	}
 	
 	//Improve retreat AI
@@ -208,13 +219,15 @@ public class NewMobileEnemy : NewEnemy {
 	//-----------------------------//
 	
 	protected IEnumerator moveToPosition(Vector3 position) {
-		while (!this.isApproaching() && this.distanceToVector3(position) > 0.1f && !this.isInAtkAnimation() && this.target == null) {
+		print("MovingToPos");
+		while (!this.isApproaching() && this.distanceToVector3(position) > 0.25f && !this.isInAtkAnimation() && this.target == null) {
 			this.rb.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
 			yield return null;
 		}
 	}
 	
 	protected IEnumerator moveToExpectedArea() {
+		print("MovingToExpected");
 		this.facing = this.targetDir;
 		float moveToTime = 0.5f;
 		while (!this.isApproaching() && this.distanceToVector3(this.targetDir) > 0.1f && !this.isInAtkAnimation() && this.target == null && moveToTime > 0.0f) {
@@ -225,6 +238,7 @@ public class NewMobileEnemy : NewEnemy {
 	}
 	
 	protected IEnumerator randomSearch() {
+		print("RandomSearch");
 		float resetTimer = aggroTimer;
 		while(!this.isApproaching() && resetTimer > 0.0f && !this.isInAtkAnimation() && this.target == null) {
 			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
@@ -234,7 +248,13 @@ public class NewMobileEnemy : NewEnemy {
 		}
 	}
 	
-	protected virtual IEnumerator searchForEnemy(Vector3 lsp) {
+	public virtual IEnumerator searchForEnemy(Vector3 lsp) {
+		yield return this.StartCoroutineEx(moveToPosition(lsp), out this.searchStateController);
+		yield return this.StartCoroutineEx(moveToExpectedArea(), out this.searchStateController);
+		yield return this.StartCoroutineEx(randomSearch(), out this.searchStateController);
+
+
+		/*
 		yield return StartCoroutine("moveToPosition", lsp);
 		
 		yield return StartCoroutine ("moveToExpectedArea");
@@ -242,8 +262,12 @@ public class NewMobileEnemy : NewEnemy {
 		// float resetTimer = aggroTimer;
 		
 		yield return StartCoroutine("randomSearch");
+		*/
 		
-		if (this.target == null) alerted = false;
+		if (this.target == null) {
+			alerted = false;
+			this.animator.SetBool("Alerted", false);
+		}
 	}
 	
 	//-----------------------------//
