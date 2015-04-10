@@ -6,7 +6,7 @@ public class MonsterData : LevelEntityData {
 	public int tier {get; protected set;}
 	
 	// Base cost of monster which is multiplied by the rank of monster+1
-	public int baseCost;
+
 	public int cost {
 		get {return this.baseCost * (this.tier + 1);} // Test formula for now
 	}
