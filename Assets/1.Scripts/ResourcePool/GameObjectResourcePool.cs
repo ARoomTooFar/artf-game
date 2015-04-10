@@ -14,7 +14,7 @@ public static class GameObjectResourcePool
 
 	static GameObjectResourcePool ()
 	{
-		Growth = 5;
+		Growth = 1;
 	}
 
 	public static GameObject getResource (string type, Vector3 pos, Vector3 dir)
@@ -43,6 +43,9 @@ public static class GameObjectResourcePool
 			GameObject newThing = getNewInstance (type);
 			if (inLevelEditor) {
 				foreach (Collider col in newThing.GetComponents<Collider>()) {
+					if(col is MeshCollider && !(col as MeshCollider).convex){
+						continue;
+					}
 					col.isTrigger = true;
 				}
 				foreach (Rigidbody rig in newThing.GetComponents<Rigidbody>()) {
