@@ -10,6 +10,7 @@ public partial class ARTFRoom {
 
 	#region PrivateVariables
 	private static string defaultBlockID = "Prefabs/Rooms/floortile";
+	private static string defaultFloor = "Prefabs/Floors/IndustrialFloor1";
 	private static string defaultWall = "Prefabs/Rooms/wallstoneend";
 	#endregion PrivateVariables
 
@@ -19,6 +20,11 @@ public partial class ARTFRoom {
 	#region Properties
 	//A list of the TerrainBlocks contained within the room
 	public List<TerrainBlock> Blocks {
+		get;
+		private set;
+	}
+
+	public GameObject Floor {
 		get;
 		private set;
 	}
@@ -134,6 +140,15 @@ public partial class ARTFRoom {
 		this.LLCorner = pos1.getMinVals(pos2);
 		this.URCorner = pos1.getMaxVals(pos2);
 		this.Blocks = new List<TerrainBlock>();
+
+		this.Floor = GameObjectResourcePool.getResource(defaultFloor, this.LLCorner, Vector3.zero);
+		Vector3 p = this.Floor.transform.position;
+		this.Floor.transform.position = new Vector3(p.x - .5f, 0, p.z - .5f);
+		Vector3 scale = this.Floor.transform.localScale;
+		scale.x = this.Length;
+		scale.z = this.Height;
+		this.Floor.transform.localScale = scale;
+
 		this.LinkedRooms = new Dictionary<SceneryBlock, ARTFRoom>();
 		this.Doors = new List<SceneryBlock>();
 		this.RoomPaths = new Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>>();
