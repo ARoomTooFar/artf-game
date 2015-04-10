@@ -104,21 +104,21 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			if (weapon) {
 				weapon.equip (player, ene);
 			} else {
-				Debug.LogWarning(player.gameObject.name + " does not have a weapon in the weapon slot.");
+				// Debug.LogWarning(player.gameObject.name + " does not have a weapon in the weapon slot.");
 			}
 
 			helmet = headLocation.GetComponentInChildren<Helmet>();
 			if (helmet) {
 				helmet.equip (player);
 			} else {
-				Debug.LogWarning(player.gameObject.name + " does not have a helmet in the helmet slot.");
+				// Debug.LogWarning(player.gameObject.name + " does not have a helmet in the helmet slot.");
 			}
 
 			chest = chestLocation.GetComponentInChildren<Chest>();
 			if (chest) {
 				chest.equip (player);
 			} else {
-				Debug.LogWarning(player.gameObject.name + " does not have armor in the armor slot.");
+				//Debug.LogWarning(player.gameObject.name + " does not have armor in the armor slot.");
 			}
 		}
 	}

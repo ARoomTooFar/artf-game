@@ -15,8 +15,6 @@ public class Enemy : Character {
 	//Object which holds hivemind aggrotable
 	public Swarm swarm;
 	
-	// Moved from my AI enemy - Francis
-	// public AggroRange aRange;
 	public AoETargetting aRange;
 	
 	protected StateMachine sM;

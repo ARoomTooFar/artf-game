@@ -7,17 +7,12 @@ public class RoomDraggingObject : ClickEvent
 	public LayerMask draggingLayerMask;
 	Camera UICamera;
 	TileMapController tilemapcont;
-	float mouseDeadZone = 10f;
-	Shader nonFocusedShader;
 
 	void Start ()
 	{
 		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent ("TileMapController") as TileMapController;
-		nonFocusedShader = Shader.Find ("Bumped Diffuse");
-		
-		this.gameObject.GetComponentInChildren<Renderer> ().material.shader = nonFocusedShader;
 	}
 		
 	public override IEnumerator onClick (Vector3 initPosition)
@@ -46,9 +41,9 @@ public class RoomDraggingObject : ClickEvent
 				int z = Mathf.RoundToInt (hitInfo.point.z / tilemapcont.tileSize);
 					
 				//if mouse left deadzone
-				if (Math.Abs (mouseChange.x) > mouseDeadZone 
-					|| Math.Abs (mouseChange.y) > mouseDeadZone 
-					|| Math.Abs (mouseChange.z) > mouseDeadZone) {
+				if (Math.Abs (mouseChange.x) > Global.mouseDeadZone 
+					|| Math.Abs (mouseChange.y) > Global.mouseDeadZone 
+					|| Math.Abs (mouseChange.z) > Global.mouseDeadZone) {
 
 					//for now y-pos remains as prefab's default.
 					newp = new Vector3 (x * 1.0f, getPosition ().y, z * 1.0f);

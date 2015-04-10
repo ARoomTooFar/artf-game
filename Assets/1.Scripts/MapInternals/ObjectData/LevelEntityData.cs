@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class LevelEntityData : BlockData {
 
+	public int baseCost;
+
 	public List<Vector3> Coordinates;
 
 	public List<Vector3> LocalCoordinates(DIRECTION dir) {
