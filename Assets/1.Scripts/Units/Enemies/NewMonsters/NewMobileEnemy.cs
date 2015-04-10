@@ -142,23 +142,6 @@ public class NewMobileEnemy : NewEnemy {
 	// Action Functions //
 	//------------------//
 	
-	protected virtual void Rest() {
-		// this.resetpos = this.transform.position;
-		this.StopSearch ();
-		if (!this.isApproaching()) { // && tempTimer > 0.0f) {
-			// tempTimer -= Time.deltaTime;
-		} else {
-			// tempTimer = 0.5f;
-			
-			this.resetpos = this.transform.position;
-			this.facing = Vector3.zero;
-			while (this.facing == Vector3.zero) this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
-			
-			this.rb.velocity = this.facing * stats.speed * stats.spdManip.speedPercent;
-		}
-		
-	}
-	
 	protected virtual void Approach() {
 		this.getFacingTowardsTarget();
 		this.rb.velocity = this.facing * stats.speed * stats.spdManip.speedPercent;
@@ -170,8 +153,6 @@ public class NewMobileEnemy : NewEnemy {
 			this.transform.localRotation = Quaternion.LookRotation(facing);
 			this.gear.weapon.initAttack();
 		}
-		
-		//print ("EnterAttack()");
 	}
 	
 	protected virtual void Attack() {

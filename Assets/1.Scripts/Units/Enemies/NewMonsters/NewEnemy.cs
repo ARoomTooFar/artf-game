@@ -78,7 +78,9 @@ public class NewEnemy : Character {
 			animSteInfo = animator.GetCurrentAnimatorStateInfo (0);
 			animSteHash = animSteInfo.fullPathHash;
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
+			this.animator.SetBool("Actable", this.actable);
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
+			this.animator.SetBool("IsInAttackAnimation", this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge);
 			
 			
 			//If aggro'd, will chase, and if not attacked for 5 seconds, will deaggro
@@ -94,10 +96,27 @@ public class NewEnemy : Character {
 				falling ();
 			}
 			
-			if (target != null)
+			if (target != null) {
 				target = aggroT.getTarget ();
-			
-			
+				if (this.canSeePlayer(target)) {
+					float distance = distanceToPlayer(this.target);
+					this.animator.SetBool("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
+					// this.animator.SetFloat("DistanceToTarget", distanceToPlayer(this.target));
+				} else {
+					target = null;
+				}
+			} else {
+				if (aRange.unitsInRange.Count > 0) {
+					foreach(Character tars in aRange.unitsInRange) {
+						if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
+							this.alerted = true;
+							target = tars.gameObject;
+							this.animator.SetBool("Target", true);
+							break;
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -126,8 +145,11 @@ public class NewEnemy : Character {
 		return distance.sqrMagnitude;
 	}
 	
-	protected virtual bool canSeePlayer(GameObject p) {
-		if (p == null) return false;
+	public virtual bool canSeePlayer(GameObject p) {
+		if (p == null) {
+			this.animator.SetBool("CanSeeTarget", true);
+			return false;
+		}
 		
 		// Check angle of forward direction vector against the vector of enemy position relative to player position
 		Vector3 direction = p.transform.position - transform.position;
@@ -136,24 +158,24 @@ public class NewEnemy : Character {
 		if (angle < fov) {
 			RaycastHit hit;
 			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, lineofsight, layerMask)) {
-				
+				this.animator.SetBool("CanSeeTarget", false);
 				return false;
-				
-			}else{
-				
+			} else {
 				aggroT.add(p,1);
 				lastSeenPosition = p.transform.position;
 				alerted = true;
+				this.animator.SetBool("CanSeeTarget", true);
 				return true;
 				
 			}
 		}
-		
+		this.animator.SetBool("CanSeeTarget", false);
 		return false;
 	}
 	
 	// Will change units facing to be towards their target. If new facing is zero it doesn't changes
-	protected virtual void getFacingTowardsTarget() {
+	//     Move to ultilties if we find more uses for this outside of AI
+	public virtual void getFacingTowardsTarget() {
 		Vector3 newFacing = Vector3.zero;
 		
 		if (this.target != null) {

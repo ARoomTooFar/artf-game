@@ -1,3 +1,6 @@
+// Rest state of enemies, atm it imitates their random search state
+//     Once pathfinding is in, this can be when they reach the end of a patrol path or just the patrol path
+
 using UnityEngine;
 
 public class Rest : EnemyBehaviour {
@@ -19,8 +22,6 @@ public class Rest : EnemyBehaviour {
 			chgSrcDirTimer -= Time.deltaTime;
 		} else {
 			chgSrcDirTimer = 0.5f;
-
-			Debug.Log(this.GetInstanceID());
 
 			this.unit.resetpos = this.unit.transform.position;
 			do {
