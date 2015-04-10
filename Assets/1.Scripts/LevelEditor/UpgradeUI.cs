@@ -17,7 +17,7 @@ public class UpgradeUI : MonoBehaviour
 	Text Text_Health;
 	Text Text_Armor;
 	
-	Camera UICamera;
+	public Camera UICamera;
 	Canvas UpgradeUICanvas;
 	
 	GameObject buttons;
@@ -50,7 +50,7 @@ public class UpgradeUI : MonoBehaviour
 		updateMonsterStatText ();
 		
 		UpgradeUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
-		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
+		UICamera = GameObject.Find("UpgradeUICamera").GetComponent<Camera>();
 		UpgradeUICanvas.worldCamera = UICamera;
 		
 		//ui elements we need to toggle on click
@@ -74,8 +74,7 @@ public class UpgradeUI : MonoBehaviour
 		Button_Rotate = transform.Find("Buttons/Button_Rotate").GetComponent("Button") as Button;
 		
 		Button_X = transform.Find("Buttons/Button_X").GetComponent("Button") as Button;
-		
-		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
+
 
 		//Attack upgrade/downgrade listeners
 		Button_UpArrow_Attack.onClick.AddListener (() => {
