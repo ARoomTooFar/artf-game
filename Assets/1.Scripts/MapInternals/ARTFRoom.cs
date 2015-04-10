@@ -143,7 +143,7 @@ public partial class ARTFRoom {
 
 		this.Floor = GameObjectResourcePool.getResource(defaultFloor, this.LLCorner, Vector3.zero);
 		Vector3 p = this.Floor.transform.position;
-		this.Floor.transform.position = new Vector3(p.x - .5f, 0, p.z - .5f);
+		this.Floor.transform.position = new Vector3(p.x - .5f, -.01f, p.z - .5f);
 		Vector3 scale = this.Floor.transform.localScale;
 		scale.x = this.Length;
 		scale.z = this.Height;

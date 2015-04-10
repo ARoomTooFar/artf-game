@@ -6,9 +6,9 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-public class ItemObjectUI : MonoBehaviour
+public class UpgradeUI : MonoBehaviour
 {
-	ItemObject itemob;
+	GameObject parent;
 	
 	int attack = 1;
 	int health = 1;
@@ -18,7 +18,7 @@ public class ItemObjectUI : MonoBehaviour
 	Text Text_Armor;
 	
 	Camera UICamera;
-	Canvas itemObjectUICanvas;
+	Canvas UpgradeUICanvas;
 	
 	GameObject buttons;
 	GameObject text;
@@ -42,16 +42,16 @@ public class ItemObjectUI : MonoBehaviour
 	
 	void Start ()
 	{
-		itemob = transform.parent.GetComponent("ItemObject") as ItemObject;
+		parent = transform.parent.gameObject;
 		
 		Text_Attack = transform.Find("Text/Text_Attack").GetComponent("Text") as Text;
 		Text_Health = transform.Find("Text/Text_Health").GetComponent("Text") as Text;
 		Text_Armor = transform.Find("Text/Text_Armor").GetComponent("Text") as Text;
 		updateMonsterStatText ();
 		
-		itemObjectUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
+		UpgradeUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
 		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
-		itemObjectUICanvas.worldCamera = UICamera;
+		UpgradeUICanvas.worldCamera = UICamera;
 		
 		//ui elements we need to toggle on click
 		buttons = transform.Find("Buttons").gameObject;
@@ -102,7 +102,7 @@ public class ItemObjectUI : MonoBehaviour
 		
 		//X out
 		Button_X.onClick.AddListener (() => {
-			toggleItemObjectUI(); 
+			toggleUpgradeUI(); 
 		});
 		
 	}
@@ -120,7 +120,7 @@ public class ItemObjectUI : MonoBehaviour
 		//this checks if the object this script applies to was clicked
 		if (Input.GetMouseButtonDown (0)) {
 			Physics.Raycast(UICamera.ScreenPointToRay(Input.mousePosition), out hit);
-			if (hit.collider && (hit.collider.gameObject.GetInstanceID() == itemob.getGameObject().GetInstanceID())){
+			if (hit.collider && (hit.collider.gameObject.GetInstanceID() == parent.gameObject.GetInstanceID())){
 				rayHit = true;
 				mouseStartPos = Input.mousePosition;
 			}
@@ -133,7 +133,7 @@ public class ItemObjectUI : MonoBehaviour
 			
 			//if the offset is not zero, then a drag happened
 			if (Math.Abs(offset.x) == 0){
-				toggleItemObjectUI();
+				toggleUpgradeUI();
 			}
 			rayHit = false;
 		}
@@ -141,12 +141,13 @@ public class ItemObjectUI : MonoBehaviour
 	
 	void faceUIToCamera(){
 		Vector3 p = new Vector3();
-		
-		p = itemob.getPosition();
-		itemObjectUICanvas.transform.position = p; 
+
+		p = parent.transform.position;
+//		p = itemob.getPosition();
+		UpgradeUICanvas.transform.position = p; 
 		
 		p = UICamera.transform.rotation.eulerAngles;
-		itemObjectUICanvas.transform.rotation = Quaternion.Euler(p);
+		UpgradeUICanvas.transform.rotation = Quaternion.Euler(p);
 		
 	}
 	
@@ -216,7 +217,7 @@ public class ItemObjectUI : MonoBehaviour
 		Text_Armor.text = "Armor: " + armor.ToString ();
 	}
 	
-	public bool toggleItemObjectUI(){
+	public bool toggleUpgradeUI(){
 		buttons.SetActive(!buttons.activeSelf);
 		text.SetActive(!text.activeSelf);
 		
