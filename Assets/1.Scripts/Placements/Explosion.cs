@@ -5,18 +5,22 @@ public class Explosion : MonoBehaviour {
 	public float lifetime;
 	public bool charDeath;
 	public GameObject grave;
+	public GameObject lootDrop;
 	public Character unit;
 	protected Quaternion spray;
 	protected float variance;
+	protected Transform localTarget;
 	//protected 
 	// Use this for initialization
 	void Start () {
 		variance = 45f;
+		localTarget = this.transform;
 		spray = Quaternion.Euler(new Vector3(unit.transform.eulerAngles.x,Random.Range(-variance+unit.transform.eulerAngles.y,variance+unit.transform.eulerAngles.y),unit.transform.eulerAngles.z));
+		
 		lifetime = 2f;
 		StartCoroutine(Wait(lifetime-.25f));
 	}
-	public void setInitValues(Character p, bool state, GameObject drop){
+	public void setInitValues(Character p, bool state){
 		unit = p;
 		charDeath = state;
 	}
@@ -27,6 +31,10 @@ public class Explosion : MonoBehaviour {
 	public void lootBoom(){
 		if(unit.drop !=null){
 			for(int i = 0; i<4; i++){//Four is replaceable
+				localTarget.position = Vector3.MoveTowards(transform.position, localTarget.position+localTarget.transform.forward*10, 999999);
+				lootDrop = (GameObject) Instantiate(unit.drop, localTarget.position, localTarget.rotation);
+				this.shoot (this.transform.AngledArcTrajectory(localTarget.transform.position, angle));
+				localTarget.rotation = spray;
 			}
 		}
 	}
@@ -38,8 +46,13 @@ public class Explosion : MonoBehaviour {
 			if(unit.GetType() == typeof(Player)){
 				Grave g = ((GameObject)Instantiate(grave, unit.transform.position, grave.transform.rotation)).GetComponent<Grave>();
 				g.setInitValues((Player)unit);
+				lootBoom();
 			}
 			//Instantiate(grave,transform.position+grave.transform.position,transform.rotation);
 		}
+	}
+
+	protected virtual void shoot(Vector3 trajectory) {
+		this.GetComponent<Rigidbody> ().velocity = trajectory;
 	}
 }

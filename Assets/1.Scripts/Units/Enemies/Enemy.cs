@@ -240,7 +240,7 @@ public class Enemy : Character {
 		//UI.hpBar.current = 0;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
-		eDeath.setInitValues(this, true,drop);
+		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
 			r.enabled = false;
 		}
