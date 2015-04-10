@@ -97,11 +97,11 @@ public class TerrainManager {
 		//get the list for the block type
 		List<TerrainBlock> lst;
 		try{
-			lst = dictionary[blk.BlockInfo.BlockID];
+			lst = dictionary[blk.BlockID];
 		} catch (Exception){
 			//create one if needed
 			lst = new List<TerrainBlock>();
-			dictionary.Add(blk.BlockInfo.BlockID, lst);
+			dictionary.Add(blk.BlockID, lst);
 		}
 		
 		
@@ -130,7 +130,7 @@ public class TerrainManager {
 
 		blk.remove();
 		//remove from list
-		return dictionary[blk.BlockInfo.BlockID].Remove(blk);
+		return dictionary[blk.BlockID].Remove(blk);
 	}
 	#endregion Remove
 

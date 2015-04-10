@@ -242,7 +242,10 @@ public class TileMapController : MonoBehaviour {
 		/* number of vertices in each x z rows and the total number of vertices */
 		int vx = grid_x - 1;
 		int vz = grid_z - 1;
-		//		int vert_total = vx * vz;
+
+		/* number of vertices in each x z rows and the total number of vertices */
+		//int vx = 1;
+		//int vz = 1; 
 		
 		/* Initialization */
 		Vector3[] vertices = new Vector3[4];
@@ -258,9 +261,9 @@ public class TileMapController : MonoBehaviour {
 		/* Arrange the vertices in counterclockwise order to produce the correct normal, used for raycasting and rendering
 		 backface culling */
 		triangles[0] = 0;
-		triangles[2] = 1;
 		triangles[1] = 2;
-		
+		triangles[2] = 1;
+
 		triangles[3] = 1;
 		triangles[4] = 2;
 		triangles[5] = 3;
@@ -271,10 +274,17 @@ public class TileMapController : MonoBehaviour {
 		
 		/* create mesh */
 		Mesh mesh = new Mesh();
-		
+
 		mesh.vertices = vertices;
 		mesh.triangles = triangles;
 		mesh.normals = normals;
+
+		Vector2[] uvs = new Vector2[vertices.Length];
+		
+		for (int i=0; i < uvs.Length; i++) {
+			uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
+		}
+		mesh.uv = uvs;
 		
 		MeshFilter mesh_filter = GetComponent<MeshFilter>();
 		MeshCollider mesh_collider = GetComponent<MeshCollider>();
