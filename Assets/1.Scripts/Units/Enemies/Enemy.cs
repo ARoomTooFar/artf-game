@@ -57,7 +57,7 @@ public class Enemy : Character {
 		aRange.affectPlayers = true;
 		
 		//State machine initialization
-		if (testing && this.GetComponent<UnityBehaviourBullyTrunk>() != null) {
+		if (testing) {
 			sM = new StateMachine ();
 			initStates ();
 			sM.Start ();
@@ -97,7 +97,7 @@ public class Enemy : Character {
 
 			if (isGrounded) {
 				movementAnimation ();
-				if (this.GetComponent<UnityBehaviourBullyTrunk>() == null) sM.Update ();
+				sM.Update ();
 			} else {
 				falling ();
 			}

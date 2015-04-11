@@ -21,10 +21,6 @@ public class NewSwordEnemy : NewMobileEnemy {
 	
 	protected override void Update() {
 		base.Update ();
-		
-		if (this.target != null && this.target.GetComponent<Player>() != null) {
-			this.targetDir = this.target.GetComponent<Player>().facing;
-		}
 	}
 	
 	protected override void setInitValues() {
