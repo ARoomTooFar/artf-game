@@ -18,7 +18,7 @@ public class Rest : EnemyBehaviour {
 
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		// this.unit.StopSearch ();
-		if (!unit.isApproaching() && chgSrcDirTimer > 0.0f) {
+		if (chgSrcDirTimer > 0.0f) {
 			chgSrcDirTimer -= Time.deltaTime;
 		} else {
 			chgSrcDirTimer = 0.5f;

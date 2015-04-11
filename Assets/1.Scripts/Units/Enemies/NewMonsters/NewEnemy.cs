@@ -95,24 +95,25 @@ public class NewEnemy : Character {
 			} else {
 				falling ();
 			}
-			
+
 			if (target != null) {
 				target = aggroT.getTarget ();
 				if (this.canSeePlayer(target)) {
-					float distance = distanceToPlayer(this.target);
-					this.animator.SetBool("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
+					float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
+					this.animator.SetBool ("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
 					// this.animator.SetFloat("DistanceToTarget", distanceToPlayer(this.target));
 				} else {
+					this.target = null;
 					this.animator.SetBool ("Target", false);
 				}
 			} else {
 				if (aRange.unitsInRange.Count > 0) {
 					foreach(Character tars in aRange.unitsInRange) {
 						if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
-							this.alerted = true;
-							this.animator.SetBool("Alerted", true);
 							target = tars.gameObject;
 							this.animator.SetBool("Target", true);
+							this.alerted = true;
+							this.animator.SetBool("Alerted", true);
 							break;
 						}
 					}
@@ -139,12 +140,6 @@ public class NewEnemy : Character {
 	//-----------------------//
 	// Calculation Functions //
 	//-----------------------//
-	
-	protected float distanceToPlayer(GameObject p) {
-		if (p == null) return 0.0f;
-		Vector3 distance = p.transform.position - this.transform.position;
-		return distance.sqrMagnitude;
-	}
 	
 	public virtual bool canSeePlayer(GameObject p) {
 		if (p == null) {

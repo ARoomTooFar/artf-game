@@ -5,7 +5,8 @@ using UnityEngine;
 public class Search : EnemyBehaviour {
 	// This will be called when the animator first transitions to this state.
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		unit.target = null;
+		this.unit.target = null;
+		animator.SetBool ("Target", false);
 		if (this.unit.lastSeenPosition.HasValue) {
 			this.unit.facing = this.unit.lastSeenPosition.Value - this.unit.transform.position;
 			this.unit.facing.y = 0.0f;
