@@ -18,16 +18,19 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	static GameObject buttonBG;
 	static int selectedButtonID;
 	static GameObject itemObjectCopy = null;
-	public Text amountText;
-	public int amount;
+	Text amountText;
+	public int price;
+	Text priceText;
 	public string itemType;
 	
 	void Start ()
 	{
 
 		amountText = this.transform.Find("AmountText").gameObject.GetComponent("Text") as Text;
-		amount = (Money.money / Money.getPrice(itemType));
-		amountText.text = amount.ToString();
+//		amountText.text = (Money.money / Money.getPrice(itemType)).ToString();
+
+		priceText = this.transform.Find("PriceText").gameObject.GetComponent("Text") as Text;
+//		priceText.text = (Money.getPrice(itemType)).ToString();
 
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent ("TileMapController") as TileMapController;
@@ -42,8 +45,9 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	void Update ()
 	{
 
-		amountText.text = (Money.money / Money.getPrice(itemType)).ToString();
-
+		amountText.text = "x" + (Money.money / price).ToString();
+//		priceText.text = "$" + (Money.getPrice(itemType)).ToString();
+		priceText.text = "$" + price;
 
 		if (selectedButtonID == this.gameObject.GetInstanceID ()) {
 			Ray ray = UICamera.ScreenPointToRay (Input.mousePosition);
