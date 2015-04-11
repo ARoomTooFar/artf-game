@@ -92,7 +92,6 @@ public class Enemy : Character {
 				fAggro ();
 			}*/
 
-
 			if (isGrounded) {
 				movementAnimation ();
 				sM.Update ();

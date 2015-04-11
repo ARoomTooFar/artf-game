@@ -20,9 +20,20 @@ public class CableVine : StationaryEnemy {
 		stun = new Stun ();
 		constrict = new GenericDoT (10);
 	}
-	
-	// Update is called once per frame
-	protected override void Update () {
-	
+
+	protected override void setInitValues() {
+		base.setInitValues ();
 	}
+	
+	protected override void Update () {
+		base.Update ();
+	}
+
+	protected override void Attack ()
+	{
+//		base.Attack ();
+		target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject, 4.0f);
+		target.GetComponent<Player> ().BDS.addBuffDebuff (stun, this.gameObject, 4.0f);
+	}
+	
 }

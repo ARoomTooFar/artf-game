@@ -105,6 +105,7 @@ public class StateMachine {
 
 	public StateMachine() {
 		states = new Dictionary<string, State>();
+		Debug.Log ("SM created");
 		transitions = new Dictionary<string, Transition>();
 	}
 
@@ -117,7 +118,7 @@ public class StateMachine {
 	public void Update () {
 		triggeredTransition = null;
 
-//		Debug.Log (currState.id);
+		Debug.Log (currState.id);
 
 		List<Transition> transList = currState.getTransitions ();
 
