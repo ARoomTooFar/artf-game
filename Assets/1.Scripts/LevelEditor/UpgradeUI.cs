@@ -10,7 +10,8 @@ public class UpgradeUI : MonoBehaviour
 {
 	public GameObject parentObject;
 
-	int tier = 1;
+	int tier = 0;
+	int maxTier = 6;
 	Text Text_Tier;
 	Text Text_AttackPatterns;
 	
@@ -32,15 +33,11 @@ public class UpgradeUI : MonoBehaviour
 	
 	bool rayHit = false;
 
-//	RectTransform TierStats;
-	
 	void Start ()
 	{
-//		TierStats = GameObject.Find("TierStats").GetComponent<RectTransform>();
 
 		parentObject = transform.parent.gameObject;
 		Text_Tier = transform.Find("Text/Text_Tier").GetComponent("Text") as Text;
-//		Text_AttackPatterns = transform.Find("Text/Text_AttackPatterns").GetComponent("Text") as Text;
 		updateMonsterStatText ();
 		
 		UpgradeUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
@@ -84,13 +81,6 @@ public class UpgradeUI : MonoBehaviour
 		});
 		
 	}
-
-//	void buildTierStatsWindow(){
-//		TierStats.anchoredPosition = new Vector2(82f, 72f);
-//		GameObject titleTextObject = Instantiate (Resources.Load ("ObjectUI/StatTitle")) as GameObject;
-//		RectTransform r = titleTextObject.GetComponent<RectTransform>();
-//		r.anchoredPosition = new Vector2(82f, 72f);
-//	}
 	
 	//Update causes itemObjectUI flickering
 	//LateUpdate prevents it
@@ -98,10 +88,33 @@ public class UpgradeUI : MonoBehaviour
 		faceUIToCamera();
 	}
 
+	//turn tiers gray that aren't applied
+	//turn tiers green that are applied
+	void updateTiers(){
+		for (int i = tier; i <= maxTier; i++) {
+			foreach (Transform thing in tierStats.transform) {
+				if (thing.GetComponent<Text> () != null && thing.name != "Title" && thing.name.Contains ("Tier" + i.ToString ())) {
+					thing.GetComponent<Text> ().color = Color.gray;
+				}
+			}
+		}
+
+		for (int i = tier; i >= 0; i--) {
+
+			foreach (Transform thing in tierStats.transform) {
+				if (thing.name.Contains ("Tier" + i.ToString ())) {
+					thing.GetComponent<Text> ().color = Color.green;
+				} 
+			}
+		}
+	}
+
 	void Update(){
 		RaycastHit hit;
 
-		//keeps canvas stuck on world object
+		updateTiers();
+
+		//keeps canvas stuck on world object. for when canvas is in Screen Space - Overlay mode
 //		Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(FollowCamera, parentObject.transform.position);
 //		UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition = screenPoint;
 
@@ -131,7 +144,6 @@ public class UpgradeUI : MonoBehaviour
 		Vector3 p = new Vector3();
 
 		p = parentObject.transform.position;
-//		p = itemob.getPosition();
 		UpgradeUICanvas.transform.position = p; 
 		
 		p = UICamera.transform.rotation.eulerAngles;
@@ -144,14 +156,17 @@ public class UpgradeUI : MonoBehaviour
 	public void increaseTier ()
 	{
 		tier += 1;
+		if (tier >= maxTier) {
+			tier = maxTier;
+		}
 		updateMonsterStatText ();
 	}
 	
 	public void decreaseTier ()
 	{
 		tier -= 1;
-		if (tier <= 1) {
-			tier = 1;
+		if (tier <= 0) {
+			tier = 0;
 		}
 		updateMonsterStatText ();
 	}
@@ -162,7 +177,6 @@ public class UpgradeUI : MonoBehaviour
 	void updateMonsterStatText ()
 	{
 		Text_Tier.text = "Tier: " + tier.ToString ();
-//		Text_AttackPatterns.text = "Tier:\n get ";
 	}
 	
 	public bool toggleUpgradeUI(){

@@ -36,10 +36,10 @@ public class CameraMovement : MonoBehaviour {
 	}
 	
 	void checkForMouseScrolling() {
-		if(Input.GetAxis("Mouse ScrollWheel") < 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
+		if(Input.GetAxis("Mouse ScrollWheel") < 0 /*&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false*/) {
 			zoomCamIn();
 		}
-		if(Input.GetAxis("Mouse ScrollWheel") > 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
+		if(Input.GetAxis("Mouse ScrollWheel") > 0 /*&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false*/) {
 			zoomCamOut();
 		}
 	}
