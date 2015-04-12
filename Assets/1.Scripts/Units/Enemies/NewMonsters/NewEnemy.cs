@@ -21,7 +21,7 @@ public class NewEnemy : Character {
 	
 	protected float fov = 150f;
 	protected float lineofsight = 15f;
-	protected float maxAtkRadius, minAtkRadius;
+	public float maxAtkRadius, minAtkRadius;
 	
 	// Variables for use in player detection
 	protected bool alerted = false;
@@ -151,9 +151,11 @@ public class NewEnemy : Character {
 		Vector3 direction = p.transform.position - transform.position;
 		float angle = Vector3.Angle(direction, this.facing);
 
+		float dis = Vector3.Distance(this.transform.position, p.transform.position);
+
 		if (angle < fov) {
 			RaycastHit hit;
-			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, lineofsight, layerMask)) {
+			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, dis, layerMask)) {
 				this.animator.SetBool("CanSeeTarget", false);
 				return false;
 			} else {

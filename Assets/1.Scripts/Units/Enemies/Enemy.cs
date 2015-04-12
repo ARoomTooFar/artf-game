@@ -21,7 +21,7 @@ public class Enemy : Character {
 	
 	protected float fov = 150f;
 	protected float lineofsight = 15f;
-	protected float maxAtkRadius, minAtkRadius;
+	public float maxAtkRadius, minAtkRadius;
 	
 	// Variables for use in player detection
 	protected bool alerted = false;

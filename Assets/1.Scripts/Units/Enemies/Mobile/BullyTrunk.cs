@@ -224,7 +224,7 @@ public class BullyTrunk: MobileEnemy {
 	//------------//
 
 
-	protected virtual IEnumerator shieldsDown() {
+	public virtual IEnumerator shieldsDown() {
 		this.BDS.rmvBuffDebuff (this.rockArms, this.gameObject);
 		yield return new WaitForSeconds(3.0f);
 		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);

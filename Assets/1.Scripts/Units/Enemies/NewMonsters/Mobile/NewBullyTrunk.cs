@@ -82,9 +82,17 @@ public class NewBullyTrunk: NewMobileEnemy {
 		blast = this.inventory.items[inventory.selected].GetComponent<BullyTrunkBlast>();
 		if (blast == null) Debug.LogWarning ("BullyTrunk does not have blast equipped");
 
-		Charge chgBehaviour = this.animator.GetBehaviour<Charge>();
-		if (chgBehaviour != null) {
-			chgBehaviour.charge = this.charge;
+		foreach(Charge behaviour in this.animator.GetBehaviours<Charge>()) {
+			behaviour.charge = this.charge;
+		}
+
+		foreach(BullyApproach behaviour in this.animator.GetBehaviours<BullyApproach>()) {
+			behaviour.charge = this.charge;
+		}
+
+		foreach(Ram behaviour in this.animator.GetBehaviours<Ram>()) {
+			behaviour.charge = this.charge;
+			behaviour.blast = this.blast;
 		}
 		
 		headReduction = 0.9f;
@@ -134,7 +142,12 @@ public class NewBullyTrunk: NewMobileEnemy {
 	// Coroutines //
 	//------------//
 
-	
+	public virtual IEnumerator shieldsDown() {
+		this.BDS.rmvBuffDebuff (this.rockArms, this.gameObject);
+		yield return new WaitForSeconds(3.0f);
+		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
+	}
+
 	
 	//------------//
 	
