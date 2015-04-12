@@ -95,16 +95,15 @@ public class UpgradeUI : MonoBehaviour
 	//Update causes itemObjectUI flickering
 	//LateUpdate prevents it
 	void LateUpdate(){
-//		faceUIToCamera();
+		faceUIToCamera();
 	}
 
 	void Update(){
 		RaycastHit hit;
 
 		//keeps canvas stuck on world object
-		Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(FollowCamera, parentObject.transform.position);
-		UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition = screenPoint;
-		Debug.Log(screenPoint + " : " + UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition);
+//		Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(FollowCamera, parentObject.transform.position);
+//		UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition = screenPoint;
 
 		//this checks if the object this script applies to was clicked
 		if (Input.GetMouseButtonDown (0)) {
