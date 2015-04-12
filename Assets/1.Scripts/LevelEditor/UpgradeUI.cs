@@ -19,8 +19,7 @@ public class UpgradeUI : MonoBehaviour
 	public Camera FollowCamera;
 	public Canvas UpgradeUICanvas;
 	
-	GameObject buttons;
-	GameObject text;
+	GameObject lowerHalf;
 	GameObject tierStats;
 
 	Button Button_TierDown;
@@ -37,7 +36,7 @@ public class UpgradeUI : MonoBehaviour
 	{
 
 		parentObject = transform.parent.gameObject;
-		Text_Tier = transform.Find("Text/Text_Tier").GetComponent("Text") as Text;
+		Text_Tier = transform.Find("LowerHalf/Text_Tier").GetComponent("Text") as Text;
 		updateMonsterStatText ();
 		
 		UpgradeUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
@@ -46,28 +45,26 @@ public class UpgradeUI : MonoBehaviour
 		UpgradeUICanvas.worldCamera = UICamera;
 		
 		//ui elements we need to toggle on click
-		buttons = transform.Find("Buttons").gameObject;
-		text = transform.Find("Text").gameObject;
+		lowerHalf = transform.Find("LowerHalf").gameObject;
 		tierStats = transform.Find("TierStats").gameObject;
 		
 		//initialize UI to be invisible
-		buttons.SetActive(false);
-		text.SetActive(false);
+		lowerHalf.SetActive(false);
 		tierStats.SetActive(false);
 
 		mouseStartPos = new Vector3(0,0,0);
 
-		Button_TierUp = transform.Find("Buttons/Button_TierUp").GetComponent("Button") as Button;
-		Button_TierDown = transform.Find("Buttons/Button_TierDown").GetComponent("Button") as Button;
+		Button_TierUp = transform.Find("LowerHalf/Button_TierUp").GetComponent("Button") as Button;
+		Button_TierDown = transform.Find("LowerHalf/Button_TierDown").GetComponent("Button") as Button;
 		Button_TierUp.onClick.AddListener (() => {
 			increaseTier (); });
 		Button_TierDown.onClick.AddListener (() => {
 			decreaseTier (); }); 
 
 
-		Button_Rotate = transform.Find("Buttons/Button_Rotate").GetComponent("Button") as Button;
+		Button_Rotate = transform.Find("LowerHalf/Button_Rotate").GetComponent("Button") as Button;
 		
-		Button_X = transform.Find("Buttons/Button_X").GetComponent("Button") as Button;
+		Button_X = transform.Find("LowerHalf/Button_X").GetComponent("Button") as Button;
 
 	
 		//rotate object button
@@ -180,12 +177,11 @@ public class UpgradeUI : MonoBehaviour
 	}
 	
 	public bool toggleUpgradeUI(){
-		buttons.SetActive(!buttons.activeSelf);
-		text.SetActive(!text.activeSelf);
+		lowerHalf.SetActive(!lowerHalf.activeSelf);
 		tierStats.SetActive(!tierStats.activeSelf);
 		
 		//if already active return false, otherwise return true (used for select/deselect all)
-		if (!buttons.activeSelf)
+		if (!lowerHalf.activeSelf)
 			return false;
 		else 
 			return true;
