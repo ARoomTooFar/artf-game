@@ -228,6 +228,8 @@ public class Player : Character, IMoveable, IHealable<int>{
 			// If we trash the rigidbody later, we won't need this
 			this.rb.velocity = Vector3.zero;
 		}
+
+		//Debug.Log(this.rb.velocity.magnitude);
 	}
 	//-------------------------------------//
 	
