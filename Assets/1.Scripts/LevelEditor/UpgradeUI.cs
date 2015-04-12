@@ -10,6 +10,7 @@ public class UpgradeUI : MonoBehaviour
 {
 	public GameObject parentObject;
 
+
 	int tier = 0;
 	int maxTier = 6;
 	Text Text_Tier;
@@ -176,10 +177,23 @@ public class UpgradeUI : MonoBehaviour
 		Text_Tier.text = "Tier: " + tier.ToString ();
 	}
 	
+	//makes sure only one ObjectUI is active in the level editor
 	public bool toggleUpgradeUI(){
-		lowerHalf.SetActive(!lowerHalf.activeSelf);
-		tierStats.SetActive(!tierStats.activeSelf);
-		
+		if(Global.currentActiveObjectUI == null){
+			lowerHalf.SetActive(true);
+			tierStats.SetActive(true);
+			Global.currentActiveObjectUI = this.gameObject.GetComponent("UpgradeUI") as UpgradeUI;
+		}else if(Global.currentActiveObjectUI == this.gameObject.GetComponent("UpgradeUI") as UpgradeUI){
+			lowerHalf.SetActive(false);
+			tierStats.SetActive(false);
+			Global.currentActiveObjectUI = null;
+		}else{
+			Global.currentActiveObjectUI.toggleUpgradeUI();
+			lowerHalf.SetActive(true);
+			tierStats.SetActive(true);
+			Global.currentActiveObjectUI = this.gameObject.GetComponent("UpgradeUI") as UpgradeUI;
+		}
+
 		//if already active return false, otherwise return true (used for select/deselect all)
 		if (!lowerHalf.activeSelf)
 			return false;
