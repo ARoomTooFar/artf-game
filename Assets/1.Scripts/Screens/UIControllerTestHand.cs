@@ -20,6 +20,7 @@ public class UIControllerTestHand : MonoBehaviour {
     private int vertSize = 4;
     private int horiSize = 3;
     private int arrLoc = 0;
+    private int currPad = 1;
 
 	// Use this for initialization
 	void Start () {
@@ -519,12 +520,14 @@ public class UIControllerTestHand : MonoBehaviour {
                 {
                     btn.SetActive(false);
                 }
+
+                currPad = 1;
                 break;
             case 2:
                 Debug.Log("yeah");
                 break;
             case 3:
-                // lower pad
+                // num pad
                 foreach (GameObject btn in menu2)
                 {
                     btn.SetActive(true);
@@ -534,6 +537,8 @@ public class UIControllerTestHand : MonoBehaviour {
                 {
                     btn.SetActive(false);
                 }
+
+                currPad = 3;
                 break;
             default:
                 Debug.Log("padType is invalid.");
@@ -548,22 +553,81 @@ public class UIControllerTestHand : MonoBehaviour {
 
         if (Input.GetAxisRaw(controls.vert) > 0) {
             stickUp();
-            menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+            switch (currPad) {
+                case 1:
+                    menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                case 2:
+                    Debug.Log("yeah");
+                    break;
+                case 3:
+                    // num pad
+                    menu2[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                default:
+                    Debug.Log("currPad is invalid.");
+                    break;
+            }
         }
         else if (Input.GetAxisRaw(controls.vert) < 0) {
             stickDown();
-            menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+            switch (currPad)
+            {
+                case 1:
+                    menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                case 2:
+                    Debug.Log("yeah");
+                    break;
+                case 3:
+                    // num pad
+                    menu2[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                default:
+                    Debug.Log("currPad is invalid.");
+                    break;
+            }
         }
 
         if (Input.GetAxisRaw(controls.hori) > 0)
         {
             stickRight();
-            menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+            switch (currPad)
+            {
+                case 1:
+                    menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                case 2:
+                    Debug.Log("yeah");
+                    break;
+                case 3:
+                    // num pad
+                    menu2[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                default:
+                    Debug.Log("currPad is invalid.");
+                    break;
+            }
         }
         else if (Input.GetAxisRaw(controls.hori) < 0)
         {
             stickLeft();
-            menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+            switch (currPad)
+            {
+                case 1:
+                    menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                case 2:
+                    Debug.Log("yeah");
+                    break;
+                case 3:
+                    // num pad
+                    menu2[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                default:
+                    Debug.Log("currPad is invalid.");
+                    break;
+            }
         }
 
         // prevent inputting stick controls every frame by requiring player to set stick to neutral to move again
