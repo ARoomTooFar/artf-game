@@ -8,30 +8,22 @@ using System.Collections.Generic;
 
 public class UpgradeUI : MonoBehaviour
 {
-	GameObject parent;
-	
-	int attack = 1;
-	int health = 1;
-	int armor = 1;
-	Text Text_Attack;
-	Text Text_Health;
-	Text Text_Armor;
+	public GameObject parentObject;
+
+	int tier = 1;
+	Text Text_Tier;
+	Text Text_AttackPatterns;
 	
 	public Camera UICamera;
-	Canvas UpgradeUICanvas;
+	public Camera FollowCamera;
+	public Canvas UpgradeUICanvas;
 	
 	GameObject buttons;
 	GameObject text;
-	
-	Button Button_UpArrow_Attack;
-	Button Button_DownArrow_Attack;
-	
-	Button Button_UpArrow_Health;
-	Button Button_DownArrow_Health;
-	
-	Button Button_UpArrow_Armor;
-	Button Button_DownArrow_Armor;
-	
+	GameObject tierStats;
+
+	Button Button_TierDown;
+	Button Button_TierUp;
 	Button Button_Rotate;
 	
 	Button Button_X;
@@ -39,61 +31,48 @@ public class UpgradeUI : MonoBehaviour
 	Vector3 mouseStartPos;
 	
 	bool rayHit = false;
+
+//	RectTransform TierStats;
 	
 	void Start ()
 	{
-		parent = transform.parent.gameObject;
-		
-		Text_Attack = transform.Find("Text/Text_Attack").GetComponent("Text") as Text;
-		Text_Health = transform.Find("Text/Text_Health").GetComponent("Text") as Text;
-		Text_Armor = transform.Find("Text/Text_Armor").GetComponent("Text") as Text;
+//		TierStats = GameObject.Find("TierStats").GetComponent<RectTransform>();
+
+		parentObject = transform.parent.gameObject;
+		Text_Tier = transform.Find("Text/Text_Tier").GetComponent("Text") as Text;
+//		Text_AttackPatterns = transform.Find("Text/Text_AttackPatterns").GetComponent("Text") as Text;
 		updateMonsterStatText ();
 		
 		UpgradeUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
 		UICamera = GameObject.Find("UpgradeUICamera").GetComponent<Camera>();
+		FollowCamera = GameObject.Find("UICamera").GetComponent<Camera>();
 		UpgradeUICanvas.worldCamera = UICamera;
 		
 		//ui elements we need to toggle on click
 		buttons = transform.Find("Buttons").gameObject;
 		text = transform.Find("Text").gameObject;
+		tierStats = transform.Find("TierStats").gameObject;
 		
 		//initialize UI to be invisible
 		buttons.SetActive(false);
 		text.SetActive(false);
-
+		tierStats.SetActive(false);
 
 		mouseStartPos = new Vector3(0,0,0);
 
-		Button_UpArrow_Attack = transform.Find("Buttons/Button_UpArrow_Attack").GetComponent("Button") as Button;
-		Button_DownArrow_Attack = transform.Find("Buttons/Button_DownArrow_Attack").GetComponent("Button") as Button;
-		Button_UpArrow_Health = transform.Find("Buttons/Button_UpArrow_Health").GetComponent("Button") as Button;
-		Button_DownArrow_Health = transform.Find("Buttons/Button_DownArrow_Health").GetComponent("Button") as Button;
-		Button_UpArrow_Armor = transform.Find("Buttons/Button_UpArrow_Armor").GetComponent("Button") as Button;
-		Button_DownArrow_Armor = transform.Find("Buttons/Button_UpArrow_Attack").GetComponent("Button") as Button;
-		
+		Button_TierUp = transform.Find("Buttons/Button_TierUp").GetComponent("Button") as Button;
+		Button_TierDown = transform.Find("Buttons/Button_TierDown").GetComponent("Button") as Button;
+		Button_TierUp.onClick.AddListener (() => {
+			increaseTier (); });
+		Button_TierDown.onClick.AddListener (() => {
+			decreaseTier (); }); 
+
+
 		Button_Rotate = transform.Find("Buttons/Button_Rotate").GetComponent("Button") as Button;
 		
 		Button_X = transform.Find("Buttons/Button_X").GetComponent("Button") as Button;
 
-
-		//Attack upgrade/downgrade listeners
-		Button_UpArrow_Attack.onClick.AddListener (() => {
-			increaseAttack (); });
-		Button_DownArrow_Attack.onClick.AddListener (() => {
-			decreaseAttack (); }); 
-		
-		//Health upgrade/downgrade listeners
-		Button_UpArrow_Health.onClick.AddListener (() => {
-			increaseHealth (); });
-		Button_DownArrow_Health.onClick.AddListener (() => {
-			decreaseHealth (); });
-		
-		//Armor upgrade/downgrade listeners
-		Button_UpArrow_Armor.onClick.AddListener (() => {
-			increaseArmor (); });
-		Button_DownArrow_Armor.onClick.AddListener (() => {
-			decreaseArmor (); });
-		
+	
 		//rotate object button
 		Button_Rotate.onClick.AddListener (() => {
 			MapData.rotateObject(this.transform.parent.gameObject, this.transform.parent.gameObject.transform.position);
@@ -105,21 +84,32 @@ public class UpgradeUI : MonoBehaviour
 		});
 		
 	}
+
+//	void buildTierStatsWindow(){
+//		TierStats.anchoredPosition = new Vector2(82f, 72f);
+//		GameObject titleTextObject = Instantiate (Resources.Load ("ObjectUI/StatTitle")) as GameObject;
+//		RectTransform r = titleTextObject.GetComponent<RectTransform>();
+//		r.anchoredPosition = new Vector2(82f, 72f);
+//	}
 	
 	//Update causes itemObjectUI flickering
 	//LateUpdate prevents it
 	void LateUpdate(){
-		faceUIToCamera();
+//		faceUIToCamera();
 	}
 
 	void Update(){
 		RaycastHit hit;
-		
-		
+
+		//keeps canvas stuck on world object
+		Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(FollowCamera, parentObject.transform.position);
+		UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition = screenPoint;
+		Debug.Log(screenPoint + " : " + UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition);
+
 		//this checks if the object this script applies to was clicked
 		if (Input.GetMouseButtonDown (0)) {
 			Physics.Raycast(UICamera.ScreenPointToRay(Input.mousePosition), out hit);
-			if (hit.collider && (hit.collider.gameObject.GetInstanceID() == parent.gameObject.GetInstanceID())){
+			if (hit.collider && (hit.collider.gameObject.GetInstanceID() == parentObject.gameObject.GetInstanceID())){
 				rayHit = true;
 				mouseStartPos = Input.mousePosition;
 			}
@@ -141,7 +131,7 @@ public class UpgradeUI : MonoBehaviour
 	void faceUIToCamera(){
 		Vector3 p = new Vector3();
 
-		p = parent.transform.position;
+		p = parentObject.transform.position;
 //		p = itemob.getPosition();
 		UpgradeUICanvas.transform.position = p; 
 		
@@ -150,75 +140,36 @@ public class UpgradeUI : MonoBehaviour
 		
 	}
 	
-	
-	//
-	//Attack
-	//
-	public void increaseAttack ()
+
+
+	public void increaseTier ()
 	{
-		attack += 1;
+		tier += 1;
 		updateMonsterStatText ();
 	}
 	
-	public void decreaseAttack ()
+	public void decreaseTier ()
 	{
-		attack -= 1;
-		if (attack <= 1) {
-			attack = 1;
+		tier -= 1;
+		if (tier <= 1) {
+			tier = 1;
 		}
 		updateMonsterStatText ();
 	}
 	
-	
-	//
-	//Health
-	//
-	public void increaseHealth ()
-	{
-		health += 1;
-		updateMonsterStatText ();
-	}
-	
-	public void decreaseHealth ()
-	{
-		health -= 1;
-		if (health <= 1) {
-			health = 1;
-		}
-		updateMonsterStatText ();
-	}
-	
-	
-	//
-	//Armor
-	//
-	public void increaseArmor ()
-	{
-		armor += 1;
-		updateMonsterStatText ();
-	}
-	
-	public void decreaseArmor ()
-	{
-		armor -= 1;
-		if (armor <= 1) {
-			armor = 1;
-		}
-		updateMonsterStatText ();
-	}
-	
+
 	
 	//Update the monster stat text with the newly changed value
 	void updateMonsterStatText ()
 	{
-		Text_Attack.text = "Attack: " + attack.ToString ();
-		Text_Health.text = "Health: " + health.ToString ();
-		Text_Armor.text = "Armor: " + armor.ToString ();
+		Text_Tier.text = "Tier: " + tier.ToString ();
+//		Text_AttackPatterns.text = "Tier:\n get ";
 	}
 	
 	public bool toggleUpgradeUI(){
 		buttons.SetActive(!buttons.activeSelf);
 		text.SetActive(!text.activeSelf);
+		tierStats.SetActive(!tierStats.activeSelf);
 		
 		//if already active return false, otherwise return true (used for select/deselect all)
 		if (!buttons.activeSelf)
