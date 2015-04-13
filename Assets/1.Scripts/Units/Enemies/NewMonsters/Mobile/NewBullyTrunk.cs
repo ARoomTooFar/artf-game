@@ -74,36 +74,6 @@ public class NewBullyTrunk: NewMobileEnemy {
 	protected override void Start() {
 		base.Start ();
 
-		charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
-		if (charge == null) Debug.LogWarning ("BullyTrunk does not have charge equipped");
-		
-		this.inventory.cycItems ();
-		
-		blast = this.inventory.items[inventory.selected].GetComponent<BullyTrunkBlast>();
-		if (blast == null) Debug.LogWarning ("BullyTrunk does not have blast equipped");
-
-		foreach(Charge behaviour in this.animator.GetBehaviours<Charge>()) {
-			behaviour.charge = this.charge;
-		}
-
-		foreach(BullyApproach behaviour in this.animator.GetBehaviours<BullyApproach>()) {
-			behaviour.charge = this.charge;
-		}
-
-		foreach(Ram behaviour in this.animator.GetBehaviours<Ram>()) {
-			behaviour.charge = this.charge;
-			behaviour.blast = this.blast;
-		}
-		
-		headReduction = 0.9f;
-		sideReduction = 0.45f;
-		headSlow = 0.1f;
-		sideSlow = 0.5f;
-		this.rockHead = new RockHead (headSlow, headReduction);
-		this.rockArms = new RockArms (sideSlow, sideReduction);
-		
-		this.BDS.addBuffDebuff (this.rockHead, this.gameObject);
-		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
 	}
 	
 	protected override void Update() {
@@ -121,7 +91,51 @@ public class NewBullyTrunk: NewMobileEnemy {
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 3.0f;
+		this.maxAtkRadius = 2.0f;
+	}
+
+	public override void SetTierData(int tier) {
+		tier = 2;
+		base.SetTierData (tier);
+
+		this.stats.speed = tier < 3 ? 9 : 12;
+
+		if (tier > 0) {
+			charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
+			if (charge == null) Debug.LogWarning ("BullyTrunk does not have charge equipped");
+			
+			this.inventory.cycItems ();
+			
+			blast = this.inventory.items[inventory.selected].GetComponent<BullyTrunkBlast>();
+			if (blast == null) Debug.LogWarning ("BullyTrunk does not have blast equipped");
+			
+			foreach(Charge behaviour in this.animator.GetBehaviours<Charge>()) {
+				behaviour.charge = this.charge;
+			}
+			
+			foreach(BullyApproach behaviour in this.animator.GetBehaviours<BullyApproach>()) {
+				behaviour.charge = this.charge;
+			}
+			
+			foreach(Ram behaviour in this.animator.GetBehaviours<Ram>()) {
+				behaviour.charge = this.charge;
+				behaviour.blast = this.blast;
+			}
+
+			foreach(Pummel behaviour in this.animator.GetBehaviours<Pummel>()) {
+				behaviour.trunk = this.gear.weapon.GetComponent<MeleeWeapons>();
+			}
+
+			headReduction = 0.9f;
+			sideReduction = tier < 3 ? 0.45f : 0.9f;
+			headSlow = 0.1f;
+			sideSlow = 0.5f;
+			this.rockHead = new RockHead (headSlow, headReduction);
+			this.rockArms = new RockArms (sideSlow, sideReduction);
+			
+			this.BDS.addBuffDebuff (this.rockHead, this.gameObject);
+			this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
+		}
 	}
 	
 	//----------------------//

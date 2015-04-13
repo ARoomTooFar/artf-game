@@ -68,6 +68,10 @@ public class NewEnemy : Character {
 		else{
 			aggroT = new AggroTable();
 		}
+
+		if (this.testing) {
+			this.SetTierData(1);
+		}
 	}
 	
 	// Update is called once per frame
@@ -101,7 +105,6 @@ public class NewEnemy : Character {
 				if (this.canSeePlayer(target)) {
 					float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
 					this.animator.SetBool ("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
-					// this.animator.SetFloat("DistanceToTarget", distanceToPlayer(this.target));
 				} else {
 					this.target = null;
 					this.animator.SetBool ("Target", false);
@@ -135,7 +138,11 @@ public class NewEnemy : Character {
 		stats.luck=0;
 		setAnimHash ();
 	}
-	
+
+	public virtual void SetTierData(int tier) {
+		this.tier = tier;
+		this.animator.SetInteger("Tier", this.tier);
+	}
 
 	//-----------------------//
 	// Calculation Functions //
