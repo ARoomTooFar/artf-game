@@ -9,7 +9,7 @@ public class CableVine : StationaryEnemy {
 	HingeJoint tether;
 	Rigidbody joints;
 	protected Transform origin;
-	protected float pull_velocity = 12;
+	protected float pull_velocity = 0.1f;
 	Player pulltarget;
 //	CableMaw MyMum;
 
@@ -28,40 +28,30 @@ public class CableVine : StationaryEnemy {
 	}
 	
 	protected override void Update () {
-		/*
-		if(this.isApproaching()) {
-			pulltarget = target.GetComponent<Player>();
-		}
-
-		if (pulltarget != null)
-			Debug.Log (pulltarget.rb.velocity.magnitude);*/
-
 		base.Update ();
 	}
 
 	protected override void Approach() {
 		base.Approach ();
-		target.transform.position -= this.facing * 0.001f;
-/*		if (pulltarget == null){
-			Debug.Log ("target is null");
-		}
-		else {
-//			Debug.Log(pulltarget.rb.velocity);
-			pulltarget.rb.velocity += pullVector ();
-		//	Debug.Log (pulltarget.rb.velocity.magnitude);
-		}*/
+		target.transform.position = target.transform.position - pullVelocity();
+		target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject);
 	}
 
 	protected override void Attack ()
 	{
 //		base.Attack ();
-		target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject, 4.0f);
+		target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject);
 		target.GetComponent<Player> ().BDS.addBuffDebuff (stun, this.gameObject, 4.0f);
 	}
+	
+	private Vector3 pullVelocity(){
+		float time = this.facing.magnitude/pull_velocity;
+		Vector3 velocity = new Vector3 ();
+		velocity.x = this.facing.x / time;
+		velocity.y = this.facing.y / time;
+		velocity.z = this.facing.z / time;
+		return velocity;
 
-	/*
-	private Vector3 pullVector(){
-		return pulltarget.rb.velocity.normalized * pull_velocity * -1.0f;
-	}*/
+	}
 	
 }
