@@ -40,7 +40,7 @@ public class Blink : QuickItem {
 
 		// Check for obstacles in our way
 		if (Physics.Raycast(user.transform.position, user.facing, out hit, blinkDistance)) {
-			if (hit.transform.tag == "Wall") {
+			if (hit.transform.tag == "Wall" || hit.transform.tag == "Enemy") {
 				newDistance = hit.distance - 0.5f;
 			}
 		}
