@@ -27,6 +27,7 @@ public class BullCharge : ChargeItem {
 	private bool hitWall;
 	private Stun debuff;
 	
+	// public delegate 
 
 	//private Collider collider;
 

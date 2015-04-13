@@ -95,7 +95,7 @@ public class NewBullyTrunk: NewMobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 2;
+		tier = 3;
 		base.SetTierData (tier);
 
 		this.stats.speed = tier < 3 ? 9 : 12;
@@ -103,6 +103,8 @@ public class NewBullyTrunk: NewMobileEnemy {
 		if (tier > 0) {
 			charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
 			if (charge == null) Debug.LogWarning ("BullyTrunk does not have charge equipped");
+
+			this.charge.chargeSpeed = tier < 5 ? 3 : 4;
 			
 			this.inventory.cycItems ();
 			
@@ -128,8 +130,8 @@ public class NewBullyTrunk: NewMobileEnemy {
 
 			headReduction = 0.9f;
 			sideReduction = tier < 3 ? 0.45f : 0.9f;
-			headSlow = 0.1f;
-			sideSlow = 0.5f;
+			headSlow = tier < 6 ? 0.1f : 0.0f;
+			sideSlow = tier < 3 ? 0.5f : 0.25f;
 			this.rockHead = new RockHead (headSlow, headReduction);
 			this.rockArms = new RockArms (sideSlow, sideReduction);
 			

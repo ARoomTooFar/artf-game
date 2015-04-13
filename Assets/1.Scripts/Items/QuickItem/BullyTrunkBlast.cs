@@ -26,7 +26,7 @@ public class BullyTrunkBlast : QuickItem {
 		base.useItem ();
 		// user.animator.SetTrigger("Roll"); Once we have the animation for it
 		this.unleashTheBeast ();
-		this.animDone ();
+		this.animDone ();  
 	}
 	
 	protected override void animDone() {
@@ -34,7 +34,6 @@ public class BullyTrunkBlast : QuickItem {
 	}
 
 	private void unleashTheBeast() {
-
 		GameObject wave = (GameObject)Instantiate(shockwave, user.transform.position, user.transform.rotation);
 		wave.GetComponent<BullyTrunkShockwave>().setInitValues(user, opposition, 0, false, null);
 
