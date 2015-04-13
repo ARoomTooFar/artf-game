@@ -20,6 +20,7 @@ public class UIControllerTestHand : MonoBehaviour {
     private int vertSize = 4;
     private int horiSize = 3;
     private int arrLoc = 0;
+    private int currPad = 1;
 
 	// Use this for initialization
 	void Start () {
@@ -423,20 +424,152 @@ public class UIControllerTestHand : MonoBehaviour {
         menu2[0, 1] = GameObject.Find("BtnTwo");
         menu2[0, 2] = GameObject.Find("BtnThree");
 
+        menu2[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            currBtn = "1";
+
+            fieldCharName.text = fieldCharName.text + "1";
+            tmpCharName = fieldCharName.text;
+
+            prevBtn = "1";
+        }
+        );
+
+        menu2[0, 1].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            currBtn = "2";
+
+            fieldCharName.text = fieldCharName.text + "2";
+            tmpCharName = fieldCharName.text;
+
+            prevBtn = "2";
+        }
+        );
+
+        menu2[0, 2].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            currBtn = "3";
+
+            fieldCharName.text = fieldCharName.text + "3";
+            tmpCharName = fieldCharName.text;
+
+            prevBtn = "3";
+        }
+        );
+
         // row 2
         menu2[1, 0] = GameObject.Find("BtnFour");
         menu2[1, 1] = GameObject.Find("BtnFive");
         menu2[1, 2] = GameObject.Find("BtnSix");
+
+        menu2[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            currBtn = "4";
+
+            fieldCharName.text = fieldCharName.text + "4";
+            tmpCharName = fieldCharName.text;
+
+            prevBtn = "4";
+        }
+        );
+
+        menu2[1, 1].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            currBtn = "5";
+
+            fieldCharName.text = fieldCharName.text + "5";
+            tmpCharName = fieldCharName.text;
+
+            prevBtn = "5";
+        }
+        );
+
+        menu2[1, 2].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            currBtn = "6";
+
+            fieldCharName.text = fieldCharName.text + "6";
+            tmpCharName = fieldCharName.text;
+
+            prevBtn = "6";
+        }
+        );
 
         // row 3
         menu2[2, 0] = GameObject.Find("BtnSeven");
         menu2[2, 1] = GameObject.Find("BtnEight");
         menu2[2, 2] = GameObject.Find("BtnNine");
 
+        menu2[2, 0].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            currBtn = "7";
+
+            fieldCharName.text = fieldCharName.text + "7";
+            tmpCharName = fieldCharName.text;
+
+            prevBtn = "7";
+        }
+        );
+
+        menu2[2, 1].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            currBtn = "8";
+
+            fieldCharName.text = fieldCharName.text + "8";
+            tmpCharName = fieldCharName.text;
+
+            prevBtn = "8";
+        }
+        );
+
+        menu2[2, 2].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            currBtn = "9";
+
+            fieldCharName.text = fieldCharName.text + "9";
+            tmpCharName = fieldCharName.text;
+
+            prevBtn = "9";
+        }
+        );
+
         // row 4
         menu2[3, 0] = GameObject.Find("BtnSpace2");
         menu2[3, 1] = GameObject.Find("BtnZero");
         menu2[3, 2] = GameObject.Find("BtnSwap2");
+
+        menu2[3, 0].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            currBtn = " ";
+
+            fieldCharName.text = fieldCharName.text + " ";
+            tmpCharName = fieldCharName.text;
+
+            prevBtn = " ";
+        }
+        );
+
+        menu2[3, 1].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            currBtn = "0";
+
+            fieldCharName.text = fieldCharName.text + "0";
+            tmpCharName = fieldCharName.text;
+
+            prevBtn = "0";
+        }
+        );
+
+        menu2[3, 2].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            currBtn = "Swap";
+
+            showPad(1);
+            menu[3, 2].GetComponent<Button>().Select();
+
+            prevBtn = "Swap";
+        }
+        );
 
 
         showPad(1);
@@ -519,12 +652,14 @@ public class UIControllerTestHand : MonoBehaviour {
                 {
                     btn.SetActive(false);
                 }
+
+                currPad = 1;
                 break;
             case 2:
                 Debug.Log("yeah");
                 break;
             case 3:
-                // lower pad
+                // num pad
                 foreach (GameObject btn in menu2)
                 {
                     btn.SetActive(true);
@@ -534,6 +669,8 @@ public class UIControllerTestHand : MonoBehaviour {
                 {
                     btn.SetActive(false);
                 }
+
+                currPad = 3;
                 break;
             default:
                 Debug.Log("padType is invalid.");
@@ -548,22 +685,81 @@ public class UIControllerTestHand : MonoBehaviour {
 
         if (Input.GetAxisRaw(controls.vert) > 0) {
             stickUp();
-            menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+            switch (currPad) {
+                case 1:
+                    menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                case 2:
+                    Debug.Log("yeah");
+                    break;
+                case 3:
+                    // num pad
+                    menu2[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                default:
+                    Debug.Log("currPad is invalid.");
+                    break;
+            }
         }
         else if (Input.GetAxisRaw(controls.vert) < 0) {
             stickDown();
-            menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+            switch (currPad)
+            {
+                case 1:
+                    menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                case 2:
+                    Debug.Log("yeah");
+                    break;
+                case 3:
+                    // num pad
+                    menu2[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                default:
+                    Debug.Log("currPad is invalid.");
+                    break;
+            }
         }
 
         if (Input.GetAxisRaw(controls.hori) > 0)
         {
             stickRight();
-            menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+            switch (currPad)
+            {
+                case 1:
+                    menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                case 2:
+                    Debug.Log("yeah");
+                    break;
+                case 3:
+                    // num pad
+                    menu2[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                default:
+                    Debug.Log("currPad is invalid.");
+                    break;
+            }
         }
         else if (Input.GetAxisRaw(controls.hori) < 0)
         {
             stickLeft();
-            menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+            switch (currPad)
+            {
+                case 1:
+                    menu[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                case 2:
+                    Debug.Log("yeah");
+                    break;
+                case 3:
+                    // num pad
+                    menu2[menuVertLoc, menuHoriLoc].GetComponent<Button>().Select();
+                    break;
+                default:
+                    Debug.Log("currPad is invalid.");
+                    break;
+            }
         }
 
         // prevent inputting stick controls every frame by requiring player to set stick to neutral to move again
