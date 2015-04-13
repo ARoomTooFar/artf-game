@@ -15,8 +15,6 @@ public class Enemy : Character {
 	//Object which holds hivemind aggrotable
 	public Swarm swarm;
 	
-	// Moved from my AI enemy - Francis
-	// public AggroRange aRange;
 	public AoETargetting aRange;
 	
 	protected StateMachine sM;
@@ -83,7 +81,7 @@ public class Enemy : Character {
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
 			animSteInfo = animator.GetCurrentAnimatorStateInfo (0);
-			animSteHash = animSteInfo.nameHash;
+			animSteHash = animSteInfo.fullPathHash;
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
 			

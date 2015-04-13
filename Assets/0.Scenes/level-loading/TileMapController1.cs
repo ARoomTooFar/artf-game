@@ -21,10 +21,8 @@ public class TileMapController1 : MonoBehaviour
 	public HashSet<Vector3> selectedTiles;
 	Vector3 currTile;
 	Vector3 shiftOrigin;
-	string selectedItem = null;
 	GameObject currentObj;
 	Button Button_Room;
-	bool placeRoomClicked = false;
 	float secondX;
 	float secondY;
 	

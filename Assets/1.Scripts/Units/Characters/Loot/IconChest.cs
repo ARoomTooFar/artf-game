@@ -15,8 +15,12 @@ public class IconChest : MonoBehaviour {
 	//Like the data chest, just a one part thing that deals with all the icons being stored so they are accessible in that location
 	//May merge with selector at some point but who knows~
 	// Use this for initialization
+
+    private GSManager gsManager;
+
 	void Start () {
 		actable = false;
+        gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
 	}
 	
 	// Update is called once per frame
@@ -32,8 +36,10 @@ public class IconChest : MonoBehaviour {
 			playerCount();
 			if((Input.GetKeyDown(inventories[0].controls.attack) || (inventories[0].controls.joyUsed &&  Input.GetButtonDown(inventories[0].controls.joyAttack)))&&loaded) {
 				actable = false;
-				
-				Application.LoadLevel("ProtoPaul");
+
+                Debug.Log(gsManager.currLevelId);
+				//Application.LoadLevel("ProtoPaul");
+                gsManager.LoadLevel(gsManager.currLevelId);
 			}else if((Input.GetKeyDown(inventories[1].controls.attack) || (inventories[1].controls.joyUsed &&  Input.GetButtonDown(inventories[1].controls.joyAttack)))&&loaded) {
 				actable = false;
 		

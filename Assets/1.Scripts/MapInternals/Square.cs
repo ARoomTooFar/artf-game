@@ -108,4 +108,10 @@ public class Square {
 			URCorner += new Vector3(0, 0, offset.z);
 		}
 	}
+
+	public void move(Vector3 offset){
+		Debug.Log(offset);
+		LLCorner = LLCorner + offset;
+		URCorner = URCorner + offset;
+	}
 }

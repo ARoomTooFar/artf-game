@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class FolderBarController : MonoBehaviour {
 //	public GameObject[] folders;
@@ -43,7 +44,9 @@ public class FolderBarController : MonoBehaviour {
 	
 	void Start ()
 	{
-		
+		Money.moneyDisplay = GameObject.Find ("Shop").GetComponentInChildren<Text> () as Text;
+		Money.updateMoneyDisplay();
+
 		folderBar = GameObject.Find("FolderBar").GetComponent<RectTransform>();
 
 		buttonColor = new Color32(0, 147, 176, 255);
@@ -187,7 +190,7 @@ public class FolderBarController : MonoBehaviour {
 			
 			//get prefabs we need for this folder
 			UnityEngine.Object[] prefabs = Resources.LoadAll("Prefabs/" + folderType);
-			
+
 			//get ItemList gameobject under this folder
 			Transform itemList = folders [i].transform.Find("ScrollView/ItemList");
 			
@@ -208,10 +211,10 @@ public class FolderBarController : MonoBehaviour {
 				
 				//to make first button show up at the right height
 				if(firstIter){
-					buttonY = -1 * buttRect.sizeDelta.y / 2 - 10;
+					buttonY = -1 * buttRect.sizeDelta.y / 2 - 20;
 					firstIter = false;
 				}else{
-					buttonY -= buttRect.sizeDelta.y + 10;
+					buttonY -= buttRect.sizeDelta.y + 30;
 				}
 				buttRect.anchoredPosition = new Vector2(buttRect.sizeDelta.x / 2 - 5, buttonY);
 
@@ -242,7 +245,12 @@ public class FolderBarController : MonoBehaviour {
 					//set icon
 					string prefabType = prefabs[prefabCounter].name.Substring(prefabs[prefabCounter].name.IndexOf ('_') + 1);
 					uih.setButtonImage(prefabType);
+
 					
+					//set it's type name, for buying/selling
+					uih.itemType = prefabType;
+					uih.price = (prefabs[prefabCounter] as GameObject).GetComponent<LevelEditorData>().baseCost;
+
 					prefabCounter++;
 				}else{
 					

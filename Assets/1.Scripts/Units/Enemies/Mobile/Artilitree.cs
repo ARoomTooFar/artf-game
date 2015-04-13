@@ -224,10 +224,6 @@ public class Artilitree: MobileEnemy {
 		if (this.animator.GetBool ("Charging")) {
 			if (this.artillery.curCircle != null) {
 				this.curTCircle = this.artillery.curCircle;
-				Vector3 direction = (this.target.transform.position - this.transform.position);
-				direction.y = 0.0f;
-				direction = direction.normalized * 4.0f;
-				this.curTCircle.transform.position = new Vector3(this.curTCircle.transform.position.x + direction.x, this.curTCircle.transform.position.y, this.curTCircle.transform.position.z + direction.z);
 				return true;
 			}
 		}
@@ -413,4 +409,11 @@ public class Artilitree: MobileEnemy {
 	}
 	
 	//------------//
+	
+	void OnCollisionEnter(Collision collision) {
+		print(collision.collider.name);
+		if (collision.collider.name == "Root(Clone)") { // Possibly change this if needed
+			collision.gameObject.GetComponent<Prop>().die ();
+		}
+	}
 }

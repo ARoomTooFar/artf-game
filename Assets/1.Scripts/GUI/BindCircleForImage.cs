@@ -14,9 +14,6 @@ public class BindCircleForImage : MonoBehaviour
     [SerializeField]
     Color end;
 
-    [SerializeField]
-    Color current;
-
     //Scrollbar scrollbar { get { return GetComponent<Scrollbar>(); } }
 
     void Start()
@@ -33,7 +30,6 @@ public class BindCircleForImage : MonoBehaviour
 		CircleImage.fillAmount = 1f;
 
         CircleImage.color = Color.Lerp(start, end, 1);
-        current = Color.Lerp(start, end, 1);
     }
 
      

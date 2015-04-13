@@ -12,7 +12,6 @@ using System.Text;
 using System.Linq;
 
 public class TileMapController : MonoBehaviour {
-	Transform itemObjects;
 	public int grid_x;
 	public int grid_z;
 	public float tileSize = 1.0f;
@@ -34,20 +33,22 @@ public class TileMapController : MonoBehaviour {
 		grid_z = 100;
 		buildMesh();
 	}
-	
-	void Awake() {
 
-		itemObjects = GameObject.Find("ItemObjects").GetComponent("Transform") as Transform;
-	}
-	
 	void Update() {
 		RayToScene();
-		
-		Vector3 camPos = UICamera.transform.position;
-		camPos.y = 0f;
-		camPos.x -= (grid_x / 2) * transform.localScale.x;
-		camPos.z -= (grid_z / 2) * transform.localScale.z;
-		transform.position = camPos;
+		Plane ground = new Plane(Vector3.up, Vector3.zero);
+		Ray ray = new Ray();
+		ray.origin = UICamera.transform.position;
+		ray.direction = UICamera.transform.forward;
+		float distance;
+		Vector3 camFocus;
+		if(ground.Raycast(ray, out distance)) {
+			camFocus = ray.GetPoint(distance).Round(1);
+			camFocus.x -= (grid_x / 2) * transform.localScale.x;
+			camFocus.z -= (grid_z / 2) * transform.localScale.z;
+			transform.position = camFocus;
+		}
+
 	}
 
 	public void fillInRoom() {
@@ -241,7 +242,10 @@ public class TileMapController : MonoBehaviour {
 		/* number of vertices in each x z rows and the total number of vertices */
 		int vx = grid_x - 1;
 		int vz = grid_z - 1;
-		//		int vert_total = vx * vz;
+
+		/* number of vertices in each x z rows and the total number of vertices */
+		//int vx = 1;
+		//int vz = 1; 
 		
 		/* Initialization */
 		Vector3[] vertices = new Vector3[4];
@@ -257,9 +261,9 @@ public class TileMapController : MonoBehaviour {
 		/* Arrange the vertices in counterclockwise order to produce the correct normal, used for raycasting and rendering
 		 backface culling */
 		triangles[0] = 0;
-		triangles[2] = 1;
 		triangles[1] = 2;
-		
+		triangles[2] = 1;
+
 		triangles[3] = 1;
 		triangles[4] = 2;
 		triangles[5] = 3;
@@ -270,10 +274,17 @@ public class TileMapController : MonoBehaviour {
 		
 		/* create mesh */
 		Mesh mesh = new Mesh();
-		
+
 		mesh.vertices = vertices;
 		mesh.triangles = triangles;
 		mesh.normals = normals;
+
+		Vector2[] uvs = new Vector2[vertices.Length];
+		
+		for (int i=0; i < uvs.Length; i++) {
+			uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
+		}
+		mesh.uv = uvs;
 		
 		MeshFilter mesh_filter = GetComponent<MeshFilter>();
 		MeshCollider mesh_collider = GetComponent<MeshCollider>();

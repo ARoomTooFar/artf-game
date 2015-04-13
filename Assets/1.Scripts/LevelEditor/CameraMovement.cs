@@ -12,7 +12,7 @@ public class CameraMovement : MonoBehaviour {
 	static float orthoZoomSpeed = 2f;
 	static float maxOrthoSize = 30;
 	static float minOrthoSize = 2;
-	private Plane groundPlane = new Plane(Vector3.up, new Vector3());
+	private Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 	private Vector3 prevMouse = Global.nullVector3;
 	private Ray ray;
 
@@ -36,10 +36,10 @@ public class CameraMovement : MonoBehaviour {
 	}
 	
 	void checkForMouseScrolling() {
-		if(Input.GetAxis("Mouse ScrollWheel") < 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
+		if(Input.GetAxis("Mouse ScrollWheel") < 0 /*&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false*/) {
 			zoomCamIn();
 		}
-		if(Input.GetAxis("Mouse ScrollWheel") > 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
+		if(Input.GetAxis("Mouse ScrollWheel") > 0 /*&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false*/) {
 			zoomCamOut();
 		}
 	}

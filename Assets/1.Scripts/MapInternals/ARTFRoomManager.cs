@@ -173,6 +173,7 @@ public class ARTFRoomManager {
 	 * any rooms already in the list if it is moved by offset.
 	 */
 	public bool isMoveValid(Vector3 oldPos, Vector3 newPos) {
+		Debug.Log(oldPos + ", " + newPos);
 		return isMoveValid(find(oldPos), newPos - oldPos);
 	}
 
@@ -183,12 +184,23 @@ public class ARTFRoomManager {
 	 * any rooms already in the list if it is moved by offset.
 	 */
 	public bool isMoveValid(ARTFRoom rm, Vector3 offset) {
-		//get a new room in the offset position
-		rm.move(offset);
-		//check if the new room intersects
-		bool retVal = doAnyRoomsIntersect(rm);
-		rm.move(-offset);
-		return retVal;
+		if (rm == null) {
+			return false;
+		}
+		Square testSquare = new Square (rm.LLCorner, rm.URCorner);
+		testSquare.move(offset);
+
+		Square roomSquare;
+		foreach (ARTFRoom room in roomList) {
+			if(rm.LLCorner == room.LLCorner){
+				continue;
+			}
+			roomSquare = new Square(room.LLCorner, room.URCorner);
+			if(testSquare.Intersect(roomSquare)){
+				return false;
+			}
+		}
+		return true;
 	}
 	#endregion Move
 

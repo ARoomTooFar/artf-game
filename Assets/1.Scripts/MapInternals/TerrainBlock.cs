@@ -47,26 +47,23 @@ public class TerrainBlock {
 		private set;
 	}
 
-	public TerrainData BlockInfo {
-		get { return GameObj.GetComponent<TerrainData>(); }
-	}
-
 	public string SaveString {
 		get{ return Position.toCSV() + "," + Orientation.ToString();}
 	}
-
+	
 	public bool Pathable {
-		get{ return BlockInfo.Pathable && (Scenery == null ? true : Scenery.Pathable); }
+		get{ return (Scenery == null ? true : Scenery.Pathable); }
 	}
 
 	public bool Walkable {
-		get { return BlockInfo.Pathable && (Scenery == null ? true : Scenery.Walkable); }
+		get { return (Scenery == null ? true : Scenery.Walkable); }
 	}
 
-	public GameObject GameObj {
+	public String BlockID {
 		get;
 		private set;
 	}
+
 	#endregion Properties
 
 	#region Constructors
@@ -77,7 +74,7 @@ public class TerrainBlock {
 		this.Position = pos.Round();
 		this.Orientation = dir;
 		this.Neighbors = new Dictionary<DIRECTION, TerrainBlock>();
-		this.GameObj = GameObjectResourcePool.getResource(blockID, pos, dir.toRotationVector());
+		this.BlockID = blockID;
 		//Debug.Log(GameObj.transform.position);
 	}
 
@@ -306,39 +303,21 @@ public class TerrainBlock {
 		}
 
 		Position += offset;
-		GameObj.transform.position = Position;
+		//GameObj.transform.position = Position;
 
 	}
 
 	public bool changeType(string type) {
-		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
-		GameObj = null;
-
-		GameObject obj = GameObjectResourcePool.getResource(BlockInfo.BlockID, Position, Orientation.toRotationVector());
-
-		TerrainData nInf = obj.GetComponent<TerrainData>();
-		if(!nInf.Pathable) {
-			if(this.Monster != null) {
-				GameObjectResourcePool.returnResource(nInf.BlockID, obj);
-				return false;
-			}
-			if(this.Scenery != null) {
-				GameObjectResourcePool.returnResource(nInf.BlockID, obj);
-				return false;
-			}
-		}
-		GameObj = obj;
+		this.BlockID = type;
 
 		return true;
 	}
 
 	public void rotate(bool goClockwise = true) {
 		Orientation = Orientation.QuarterTurn(goClockwise);
-		GameObj.transform.eulerAngles = Orientation.toRotationVector();
 	}
 
 	public void remove() {
-		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
 		if(Scenery != null) {
 			MapData.SceneryBlocks.remove(Scenery);
 		}
