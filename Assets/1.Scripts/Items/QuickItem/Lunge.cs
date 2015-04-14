@@ -71,6 +71,7 @@ public class Lunge : QuickItem {
 	protected virtual void lungeFunc() {
 		if(contact){
 		RaycastHit hit;
+		user.facing = enemies[0].transform.position - user.transform.position;
 		float newDistance = lungeDistance;
 		Vector3 newPosition;
 
@@ -79,11 +80,14 @@ public class Lunge : QuickItem {
 		// user.GetComponent<Rigidbody>().MovePosition(new Vector3(user.transform.position.x - subFacing.x, user.transform.position.y, user.transform.position.z - subFacing.z));
 
 		// Check for obstacles in our way
-		if (Physics.Raycast(user.transform.position, (enemies[0].transform.position-user.transform.position).normalized, out hit, lungeDistance)) {
-			if (hit.transform.tag == "Wall" || hit.transform.tag == "Enemy") {
-				newDistance = hit.distance + .5f;
+		if (Physics.Raycast(user.transform.position, user.facing.normalized, out hit, lungeDistance)) {
+			if (hit.transform.tag == "Wall" || hit.transform.tag == "Character" || hit.transform.tag == "Prop") {
+				newDistance = hit.distance - 1f;
+				print(hit.transform.name);
+				//Debug.DrawLine(transform.position,hit.point,Color.red);
 			}
 		}
+		//Debug.DrawLine(transform.position,hit.point,Color.red);
 
 		/*
 		if (user.GetComponent<Rigidbody>().SweepTest (user.facing, out hit, blinkDistance)) {
@@ -96,7 +100,7 @@ public class Lunge : QuickItem {
 		newPosition = user.transform.position + user.facing.normalized * newDistance;
 		
 		while (!Physics.Linecast (newPosition, newPosition + Vector3.down * 5)) {
-			newPosition = newPosition - user.facing.normalized * 0.1f;
+			newPosition = newPosition - user.facing.normalized * 0.5f;
 		}
 
 		user.transform.position = newPosition;
