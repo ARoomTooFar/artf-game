@@ -18,7 +18,7 @@ public class Explosion : MonoBehaviour {
 		localTarget.position = new Vector3(localTarget.position.x,localTarget.position.y+5,localTarget.position.z);
 		savedSpot = localTarget;
 		if(unit!=null){
-		spray = Quaternion.Euler(new Vector3(unit.transform.eulerAngles.x,Random.Range(-variance+unit.transform.eulerAngles.y,variance+unit.transform.eulerAngles.y),unit.transform.eulerAngles.z));
+			spray = Quaternion.Euler(new Vector3(unit.transform.eulerAngles.x,Random.Range(-variance+unit.transform.eulerAngles.y,variance+unit.transform.eulerAngles.y),unit.transform.eulerAngles.z));
 		}
 		lifetime = 2f;
 		StartCoroutine(Wait(lifetime-.25f));
