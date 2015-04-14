@@ -57,13 +57,18 @@ public static class Money
 		}
 	}
 
-	public static void buy (string s)
+	public static void buy (string s, int price)
 	{
-		if (priceTable.ContainsKey (s)) {
-			money -= priceTable [s];
-			updateMoneyDisplay();
-		}else{
-			Debug.Log("No price data for that item");
-		}
+
+		money -= price;
+		updateMoneyDisplay();
+
+
+//		if (priceTable.ContainsKey (s)) {
+//			money -= priceTable [s];
+//			updateMoneyDisplay();
+//		}else{
+//			Debug.Log("No price data for that item");
+//		}
 	}
 }
