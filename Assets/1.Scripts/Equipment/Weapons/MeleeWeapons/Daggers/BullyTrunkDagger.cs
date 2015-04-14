@@ -16,8 +16,9 @@ public class BullyTrunkDagger : Dagger {
 	protected override void setInitValues() {
 		//base.setInitValues();
 		
-		//stats.damage = 4;
+		
 		base.setInitValues();
+		stats.damage = (int)(3 + 0.25f * user.GetComponent<Character>().stats.strength);;
 	}
 	
 	// Update is called once per frame
