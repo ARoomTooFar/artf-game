@@ -96,7 +96,7 @@ public class Bomb : MonoBehaviour {
 		if(castEffect && debuff != null) {
 			enemy.BDS.addBuffDebuff(debuff, this.gameObject);
 		}
-		enemy.damage(damage, user);
+		enemy.damage(damage);
 	}
 
 	//----------------------//

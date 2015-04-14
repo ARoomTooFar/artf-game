@@ -26,7 +26,7 @@ public class BullyTrunkBlast : QuickItem {
 		base.useItem ();
 		// user.animator.SetTrigger("Roll"); Once we have the animation for it
 		this.unleashTheBeast ();
-		this.animDone ();
+		this.animDone ();  
 	}
 	
 	protected override void animDone() {

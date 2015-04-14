@@ -35,14 +35,35 @@ public class UpgradeUI : MonoBehaviour
 
 	void Start ()
 	{
+		Button_TierUp = transform.Find("LowerHalf/Button_TierUp").GetComponent("Button") as Button;
+		Button_TierDown = transform.Find("LowerHalf/Button_TierDown").GetComponent("Button") as Button;
+		Button_TierUp.onClick.AddListener (() => {
+			increaseTier (); });
+		Button_TierDown.onClick.AddListener (() => {
+			decreaseTier (); }); 
+		Button_Rotate = transform.Find("LowerHalf/Button_Rotate").GetComponent("Button") as Button;
+		Button_X = transform.Find("LowerHalf/Button_X").GetComponent("Button") as Button;
+		//rotate object button
+		Button_Rotate.onClick.AddListener (() => {
+			MapData.rotateObject(this.transform.parent.gameObject, this.transform.parent.gameObject.transform.position);
+		});
+		//X out
+		Button_X.onClick.AddListener (() => {
+			toggleUpgradeUI(); 
+		});
 
 		parentObject = transform.parent.gameObject;
+
 		Text_Tier = transform.Find("LowerHalf/Text_Tier").GetComponent("Text") as Text;
 		updateMonsterStatText ();
 		
 		UpgradeUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
+
 		UICamera = GameObject.Find("UpgradeUICamera").GetComponent<Camera>();
 		FollowCamera = GameObject.Find("UICamera").GetComponent<Camera>();
+
+		//sets Render Camera if in Screen Space - Camera mode
+		//sets World Camera if in World Space mode
 		UpgradeUICanvas.worldCamera = UICamera;
 		
 		//ui elements we need to toggle on click
@@ -54,40 +75,14 @@ public class UpgradeUI : MonoBehaviour
 		tierStats.SetActive(false);
 
 		mouseStartPos = new Vector3(0,0,0);
-
-		Button_TierUp = transform.Find("LowerHalf/Button_TierUp").GetComponent("Button") as Button;
-		Button_TierDown = transform.Find("LowerHalf/Button_TierDown").GetComponent("Button") as Button;
-		Button_TierUp.onClick.AddListener (() => {
-			increaseTier (); });
-		Button_TierDown.onClick.AddListener (() => {
-			decreaseTier (); }); 
-
-
-		Button_Rotate = transform.Find("LowerHalf/Button_Rotate").GetComponent("Button") as Button;
-		
-		Button_X = transform.Find("LowerHalf/Button_X").GetComponent("Button") as Button;
-
-	
-		//rotate object button
-		Button_Rotate.onClick.AddListener (() => {
-			MapData.rotateObject(this.transform.parent.gameObject, this.transform.parent.gameObject.transform.position);
-		});
-		
-		//X out
-		Button_X.onClick.AddListener (() => {
-			toggleUpgradeUI(); 
-		});
-		
 	}
 	
-	//Update causes itemObjectUI flickering
-	//LateUpdate prevents it
+	//Update causes itemObjectUI flickering. LateUpdate prevents it
 	void LateUpdate(){
 		faceUIToCamera();
 	}
 
-	//turn tiers gray that aren't applied
-	//turn tiers green that are applied
+	//turn tiers gray that aren't applied. turn tiers green that are applied
 	void updateTiers(){
 		for (int i = tier; i <= maxTier; i++) {
 			foreach (Transform thing in tierStats.transform) {
@@ -107,14 +102,33 @@ public class UpgradeUI : MonoBehaviour
 		}
 	}
 
+	void scaleWorldSpaceCanvas(){
+		float uiScaleFactor = FollowCamera.transform.position.y / 17f;
+
+		UpgradeUICanvas.GetComponent<RectTransform>().localScale = 
+			new Vector3(uiScaleFactor, uiScaleFactor, 1f);
+	}
+
+	void stickScreenSpaceOverlayCameraToObject(){
+		Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(FollowCamera, parentObject.transform.position);
+		UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition = screenPoint;
+
+//		Vector3 screenPoint = UICamera.WorldToViewportPoint(parentObject.transform.position);
+//		UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition = screenPoint;
+//		lowerHalf.transform.position = screenPoint;
+		Debug.Log(UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition + ", " + screenPoint);
+	}
+
 	void Update(){
 		RaycastHit hit;
 
 		updateTiers();
 
 		//keeps canvas stuck on world object. for when canvas is in Screen Space - Overlay mode
-//		Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(FollowCamera, parentObject.transform.position);
-//		UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition = screenPoint;
+		stickScreenSpaceOverlayCameraToObject();
+
+		//resizes canvas according to camera zoom, for when canvas is in World Space mode
+//		scaleWorldSpaceCanvas();
 
 		//this checks if the object this script applies to was clicked
 		if (Input.GetMouseButtonDown (0)) {
@@ -146,10 +160,7 @@ public class UpgradeUI : MonoBehaviour
 		
 		p = UICamera.transform.rotation.eulerAngles;
 		UpgradeUICanvas.transform.rotation = Quaternion.Euler(p);
-		
 	}
-	
-
 
 	public void increaseTier ()
 	{

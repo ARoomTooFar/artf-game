@@ -14,14 +14,14 @@ public class Enemy : Character {
 	public bool swarmBool = false;
 	//Object which holds hivemind aggrotable
 	public Swarm swarm;
-	
+
+	public int tier;
 	public AoETargetting aRange;
-	
 	protected StateMachine sM;
 	
 	protected float fov = 150f;
 	protected float lineofsight = 15f;
-	protected float maxAtkRadius, minAtkRadius;
+	public float maxAtkRadius, minAtkRadius;
 	
 	// Variables for use in player detection
 	protected bool alerted = false;
@@ -57,11 +57,13 @@ public class Enemy : Character {
 		aRange.affectPlayers = true;
 		
 		//State machine initialization
-		sM = new StateMachine ();
-		initStates ();
-		sM.Start ();
+		if (testing) {
+			sM = new StateMachine ();
+			initStates ();
+			sM.Start ();
+		}
 	}
-	
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
@@ -121,6 +123,9 @@ public class Enemy : Character {
 	}
 	
 	protected virtual void initStates() {
+	}
+
+	protected virtual void SetStates() {
 	}
 
 	// For subclasses that want to add transitions to existing states

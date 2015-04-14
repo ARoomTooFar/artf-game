@@ -371,62 +371,22 @@ public class MobileEnemy : Enemy {
 	// Calculation Functions //
 	//-----------------------//
 
-	/*
-	protected override bool canSeePlayer(GameObject p) {
-		Vector3 direction = p.transform.position - transform.position;
-		direction.Normalize();
-		float angle = Vector3.Angle(direction, this.facing);
-		
-
-		if (angle < fov) {
-
-			/*
-			RaycastHit hit;
-
-			// if (this.rb.SweepTest(direction, out hit, this.distanceToVector3(p.GetComponent<Collider>().transform.position))) {
-			if (this.rb.SweepTest(direction, out hit, Vector3.Distance(this.transform.position, p.GetComponent<Collider>().transform.position))) {
-				if (hit.collider.gameObject == p) {
-					aggroT.add(p,1);
-					if (this.lastSeenPosition != null) {
-						this.targetDir = p.transform.position - this.lastSeenPosition.Value;
-						this.targetDir.Normalize();
-					}
-					this.lastSeenPosition = p.transform.position;
-					this.alerted = true;
-					return true;
-				}
-			}
-
-
-			RaycastHit[] hits;
-
-			hits = this.rb.SweepTestAll(direction, Vector3.Distance(this.transform.position, p.transform.position) + 2);
-			
-			for (int i = 0; i < hits.Length; ++i) {
-				// print(hits[i].transform.name);
-				if (hits[i].collider.gameObject == p) {
-					aggroT.add(p,1);
-					if (this.lastSeenPosition != null) {
-						this.targetDir = this.lastSeenPosition.Value - p.transform.position;
-						this.targetDir.Normalize();
-					}
-					this.lastSeenPosition = p.transform.position;
-					this.alerted = true;
-					return true;
-				}
-				if (hits[i].collider.tag == "Wall") return false;
-			}
-		}
-		
-		return false;
-
-
-	}*/
-
 	protected float distanceToVector3(Vector3 position) {
 		Vector3 distance = position - this.transform.position;
 		return distance.sqrMagnitude;
 	}
 	
 	//-----------------//
+
+	//-------------------------//
+	//Enemy Inherited Functions//
+	//-------------------------//
+
+	public override void die() {
+		base.die ();
+	}
+
+	//-------------------------//
+
+
 }
