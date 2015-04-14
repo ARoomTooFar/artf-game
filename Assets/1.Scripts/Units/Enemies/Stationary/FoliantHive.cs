@@ -1,22 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class FoliantHive : StationaryEnemy {
 
 	public int maxSpawn;
 	public float spawnCD;
+	public AggroTable hiveMindAggro;
 
 	protected int currentSpawn;
 	protected float nextUse;
 	protected ShootFodderBall shootFodderBall;
 	protected TargetCircle curTCircle;
+	protected List<FoliantFodder> fodderList;
 
 	protected override void Awake () {
 		base.Awake ();
+		fodderList = new List<FoliantFodder> ();
 	}
 
 	protected override void Start (){
 		base.Start ();
+		hiveMindAggro = base.aggroT;
 		currentSpawn = 0;
 		nextUse = Time.time + spawnCD;
 
@@ -118,7 +123,6 @@ public class FoliantHive : StationaryEnemy {
 	protected virtual void doSpawn() {
 		if (canSpawn()) {
 			nextUse = Time.time + spawnCD;
-			currentSpawn++;
 			shootFodderBall.useItem();
 		}
 	}
@@ -127,5 +131,21 @@ public class FoliantHive : StationaryEnemy {
 	}
 	
 	//-------------------//
+
+	//----------------//
+	//Public Functions//
+	//----------------//
+
+	public virtual void addFodder(FoliantFodder newFodder){
+		fodderList.Add (newFodder);
+		currentSpawn = fodderList.Count;
+	}
+
+	public virtual void removeFodder(FoliantFodder deadFodder){
+		fodderList.Remove (deadFodder);
+		currentSpawn = fodderList.Count;
+	}
+
+	//----------------//
 }
 

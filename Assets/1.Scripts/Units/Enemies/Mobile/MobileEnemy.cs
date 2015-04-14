@@ -429,4 +429,16 @@ public class MobileEnemy : Enemy {
 	}
 	
 	//-----------------//
+
+	//-------------------------//
+	//Enemy Inherited Functions//
+	//-------------------------//
+
+	public override void die() {
+		base.die ();
+	}
+
+	//-------------------------//
+
+
 }

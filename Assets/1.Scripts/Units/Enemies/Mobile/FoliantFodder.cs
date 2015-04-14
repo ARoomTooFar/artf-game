@@ -6,8 +6,12 @@ using System.Collections.Generic;
 public class FoliantFodder: MobileEnemy {
 	
 	protected Roll roll;
-	
+	public FoliantHive hive;
+
+	public bool hiveMind;
+
 	protected override void Awake () {
+		hiveMind = false;
 		base.Awake ();
 	}
 	
@@ -98,21 +102,42 @@ public class FoliantFodder: MobileEnemy {
 
 	
 	protected virtual void doLunge() {
+
 		this.roll.useItem();
+	
 	}
 	
 	//-------------------//
 	
 	
-	//------------//
-	// Coroutines //
-	//------------//
+	//------------------//
+	// Public Functions //
+	//------------------//
 	
-	
+	public virtual void setHive(FoliantHive parent){
+		
+		hiveMind = true;
+		hive = parent;
+		base.aggroT = hive.hiveMindAggro;
 
+	}
+
+	//------------------//
+
+	//--------------------------------//
+	//Mobile Enemy Inherited Functions//
+	//--------------------------------//
 	
+	public override void die() {
+
+		if (hiveMind) {
+			hive.removeFodder(this);
+		}
+
+		base.die ();
+	}
 	
-	//------------//
+	//--------------------------------//
 	
 	
 

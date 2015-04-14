@@ -36,6 +36,7 @@ public class ShootFodderBall : QuickItem {
 
 		this.bullet = ((GameObject)Instantiate(projectile, user.transform.position, user.transform.rotation)).GetComponent<FodderBall>();
 		this.bullet.setTarget (this.curCircle.gameObject);
+		this.bullet.hive = (FoliantHive)this.user;
 		this.curCircle.moveable = false;
 	}
 }
