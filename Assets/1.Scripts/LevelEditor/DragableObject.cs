@@ -54,14 +54,17 @@ public class DragableObject : ClickEvent
 						//create copy of item object
 						itemObjectCopy = Instantiate (this.gameObject, getPosition (), getRotation ()) as GameObject;
 
+						Color trans;
 						//update the item object things
 						//shader has to be set in this loop, or transparency won't work
 						//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
 						foreach (Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
-							rend.material.shader = focusedShader;
-							Color trans = rend.material.color;
-							trans.a = .5f;
-							rend.material.color = trans;
+							foreach(Material mat in rend.materials){
+								mat.shader = focusedShader;
+								trans = mat.color;
+								trans.a = .5f;
+								mat.color = trans;
+							}
 						}
 					} else {
 						itemObjectCopy.transform.position = new Vector3 (x, getPosition ().y, z);

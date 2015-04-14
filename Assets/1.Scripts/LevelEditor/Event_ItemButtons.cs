@@ -18,16 +18,19 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	static GameObject buttonBG;
 	static int selectedButtonID;
 	static GameObject itemObjectCopy = null;
-	public Text amountText;
-	public int amount;
+	Text amountText;
+	public int price;
+	Text priceText;
 	public string itemType;
 	
 	void Start ()
 	{
 
 		amountText = this.transform.Find("AmountText").gameObject.GetComponent("Text") as Text;
-		amount = (Money.money / Money.getPrice(itemType));
-		amountText.text = amount.ToString();
+//		amountText.text = (Money.money / Money.getPrice(itemType)).ToString();
+
+		priceText = this.transform.Find("PriceText").gameObject.GetComponent("Text") as Text;
+//		priceText.text = (Money.getPrice(itemType)).ToString();
 
 		UICamera = GameObject.Find ("UICamera").GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent ("TileMapController") as TileMapController;
@@ -42,8 +45,9 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	void Update ()
 	{
 
-		amountText.text = (Money.money / Money.getPrice(itemType)).ToString();
-
+		amountText.text = "x" + (Money.money / price).ToString();
+//		priceText.text = "$" + (Money.getPrice(itemType)).ToString();
+		priceText.text = "$" + price;
 
 		if (selectedButtonID == this.gameObject.GetInstanceID ()) {
 			Ray ray = UICamera.ScreenPointToRay (Input.mousePosition);
@@ -112,11 +116,17 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 				itemObjectCopy.GetComponent<ClickEvent>().enabled = false;
 				//update the item object things
 				//shader has to be set in this loop, or transparency won't work
-				foreach (Renderer rend in itemObjectCopy.transform.root.gameObject.GetComponentsInChildren<Renderer>()){
-					rend.material.shader = translucentShader;
-					Color trans = rend.material.color;
-					trans.a = .5f;
-					rend.material.color = trans;
+				Color trans;
+				//update the item object things
+				//shader has to be set in this loop, or transparency won't work
+				//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
+				foreach (Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
+					foreach(Material mat in rend.materials){
+						mat.shader = translucentShader;
+						trans = mat.color;
+						trans.a = .5f;
+						mat.color = trans;
+					}
 				}
 
 				//copy = itemObjectCopy.GetComponent ("ItemObject") as ItemObject;

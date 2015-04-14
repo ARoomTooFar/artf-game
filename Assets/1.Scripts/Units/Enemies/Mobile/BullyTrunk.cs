@@ -199,10 +199,6 @@ public class BullyTrunk: MobileEnemy {
 		this.getFacingTowardsTarget();
 		this.GetComponent<Rigidbody>().velocity = (this.facing.normalized * stats.speed * stats.spdManip.speedPercent);
 		this.transform.localRotation = Quaternion.LookRotation(facing);
-		/*
-		if (!this.canSeePlayer(this.target)) {
-			this.target = null;
-		} */
 	}
 
 	protected virtual void doneCharge() {
@@ -228,7 +224,7 @@ public class BullyTrunk: MobileEnemy {
 	//------------//
 
 
-	protected virtual IEnumerator shieldsDown() {
+	public virtual IEnumerator shieldsDown() {
 		this.BDS.rmvBuffDebuff (this.rockArms, this.gameObject);
 		yield return new WaitForSeconds(3.0f);
 		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
