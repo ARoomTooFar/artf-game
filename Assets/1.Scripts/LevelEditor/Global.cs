@@ -8,6 +8,7 @@ public static class Global {
 	public static readonly float mouseDeadZone = 10f;
 	public static readonly int grid_x = 300;
 	public static readonly int grid_z = 300;
+	public static bool inLevelEditor = false;
 	
 	public static UpgradeUI currentActiveObjectUI = null;
 }

@@ -5,9 +5,6 @@ using System.Collections.Generic;
 
 public static class GameObjectResourcePool
 {
-
-	public static bool inLevelEditor = false;
-
 	public static int Growth{ get; set; }
 
 	private static Dictionary<string, Stack<GameObject>> pools = new Dictionary<string, Stack<GameObject>> ();
@@ -41,7 +38,7 @@ public static class GameObjectResourcePool
 		Stack<GameObject> stk = getStack (type);
 		GameObject newThing;
 		for (int i = 0; i < Growth; ++i) {
-			newThing = getNewInstance (String.Format(type, inLevelEditor?"LevelEditor":"Gameplay"));
+			newThing = getNewInstance (String.Format(type, Global.inLevelEditor?"LevelEditor":"Gameplay"));
 			stk.Push (newThing);
 		}
 	}
