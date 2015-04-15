@@ -142,12 +142,7 @@ public partial class ARTFRoom {
 		this.Blocks = new List<TerrainBlock>();
 
 		this.Floor = GameObjectResourcePool.getResource(defaultFloor, this.LLCorner, Vector3.zero);
-		Vector3 p = this.Floor.transform.position;
-		this.Floor.transform.position = new Vector3(p.x - .5f, -.01f, p.z - .5f);
-		Vector3 scale = this.Floor.transform.localScale;
-		scale.x = this.Length;
-		scale.z = this.Height;
-		this.Floor.transform.localScale = scale;
+		setFloor();
 
 		this.LinkedRooms = new Dictionary<SceneryBlock, ARTFRoom>();
 		this.Doors = new List<SceneryBlock>();
@@ -283,6 +278,17 @@ public partial class ARTFRoom {
 	}
 
 	#region ManipulationFunctions
+
+	public void setFloor(){
+		Vector3 p = this.Floor.transform.position;
+		this.Floor.transform.position = new Vector3(p.x - .5f, -.01f, p.z - .5f);
+		Vector3 scale = this.Floor.transform.localScale;
+		scale.x = this.Length;
+		scale.z = this.Height;
+		this.Floor.transform.localScale = scale;
+	}
+
+
 	/*
 	 * public void move(Vector3 offset)
 	 * 
@@ -297,16 +303,8 @@ public partial class ARTFRoom {
 		foreach(TerrainBlock blk in Blocks) {
 			blk.move(offset);
 		}
+		setFloor();
 		updateMarkerPositions();
-		/* Should be unnecessary. Blocks are now only linked within rooms
-		//for each block
-		foreach(TerrainBlock blk in Blocks) {
-			//if it is an edge block
-			if(isEdge(blk.Position)) {
-				//force it to re-identify its neighbors
-				MapData.TerrainBlocks.relinkNeighbors(blk);
-			}
-		}*/
 	}
 
 	/*
@@ -351,6 +349,9 @@ public partial class ARTFRoom {
 		}
 		//relink blocks to this room
 		linkTerrain();
+
+		setFloor();
+
 
 		updateMarkerPositions();
 	}
