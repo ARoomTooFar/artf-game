@@ -9,9 +9,9 @@ using System.Collections.Generic;
 public partial class ARTFRoom {
 
 	#region PrivateVariables
-	private static string defaultBlockID = "Prefabs/Rooms/floortile";
-	private static string defaultFloor = "Prefabs/Floors/IndustrialFloor1";
-	private static string defaultWall = "Prefabs/Rooms/wallstoneend";
+	private static string defaultBlockID = "LevelEditor/Rooms/floortile";
+	private static string defaultFloor = "LevelEditor/Floors/IndustrialFloor1";
+	private static string defaultWall = "LevelEditor/Rooms/wallstoneend";
 	#endregion PrivateVariables
 
 	public bool isStartRoom = false;
