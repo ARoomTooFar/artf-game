@@ -11,6 +11,9 @@ public class CameraHitBox : MonoBehaviour {
 	void Start () {
 		GetComponent<Transform>();
 		allPlayers = FindObjectsOfType(typeof(Player)) as Player[];
+		for(int x = 0; x < allPlayers.Length; x++){
+			areaUnits.Add(allPlayers[x]);
+		}
 	}
 	
 	// Update is called once per frame

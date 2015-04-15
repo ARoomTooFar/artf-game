@@ -159,7 +159,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 			// Continues with what is happening
 		} else {
 			
-			if (!Input.GetKey(controls.attack) || (!Input.GetButton(controls.joyAttack))) {
+			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
 				animator.SetBool ("Charging", false);
 			}
 			/*else if (animSteInfo.nameHash == rollHash) { for later
@@ -239,7 +239,10 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void damage(int dmgTaken, Character striker) {
 		if (!invincible&&!stats.isDead) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
-			
+			if(splatter != null){
+				GameObject theSplat = (GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity);
+				Destroy (theSplat, 2);
+			}
 			// print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
 			
@@ -272,7 +275,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		stats.health = 0;
 		//UI.hpBar.current = 0;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position-new Vector3(0,6,0), transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
 			r.enabled = false;

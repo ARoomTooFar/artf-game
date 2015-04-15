@@ -51,6 +51,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	public bool invincible = false;
 	public GameObject drop;
+	public GameObject splatter;
 	public Rigidbody rb;
 	protected Type opposition;
 	public Renderer[] rs;
@@ -346,7 +347,10 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public virtual void damage(int dmgTaken, Character striker) {
 		if (!invincible) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
-		
+			if(splatter != null){
+				GameObject theSplat = (GameObject)Instantiate (splatter, transform.position, Quaternion.identity);
+				Destroy (theSplat, 2);
+			}
 			stats.health -= dmgTaken;
 			//print ("Fuck: " + dmgTaken + " Damage taken");
 
