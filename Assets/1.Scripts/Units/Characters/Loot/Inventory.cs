@@ -36,7 +36,7 @@ public class Inventory : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(actable&&on){
-			if (Input.GetKey(controls.up) &&!ready &&!dupItem) {
+			if ((Input.GetKey(controls.up) || Input.GetAxisRaw(controls.vert) > 0) &&!ready &&!dupItem) {
 				recompileLine(lineNumber);
 				spotNumber= 0;
 				lineNumber--;
@@ -51,7 +51,7 @@ public class Inventory : MonoBehaviour {
 				StartCoroutine(Wait(.15f));
 			}
 			//"Down" key assign pressed
-			if (Input.GetKey(controls.down)&&!ready &&!dupItem) {
+			if ((Input.GetKey(controls.down) || Input.GetAxisRaw(controls.vert) < 0)&&!ready &&!dupItem) {
 				recompileLine(lineNumber);
 				spotNumber= 0;
 				lineNumber++;
@@ -66,7 +66,7 @@ public class Inventory : MonoBehaviour {
 				StartCoroutine(Wait(.15f));
 			}
 			//"Left" key assign pressed
-			if (Input.GetKey(controls.left)&&!ready) {
+			if ((Input.GetKey(controls.left)|| Input.GetAxisRaw(controls.hori) < 0)&&!ready) {
 				//spotCheckIn();
 				spotNumber--;
 				if(spotNumber<0){
@@ -79,7 +79,7 @@ public class Inventory : MonoBehaviour {
 				StartCoroutine(Wait(.15f));
 			}
 			//"Right" key assign pressed
-			if (Input.GetKey(controls.right)&&!ready) {
+			if ((Input.GetKey(controls.right)|| Input.GetAxisRaw(controls.hori) < 0)&&!ready) {
 				spotNumber++;
 				if(spotNumber>loadLine.Length-1){
 					spotNumber = loadLine.Length-1;

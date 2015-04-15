@@ -16,12 +16,16 @@ public class Hook : ChargeItem {
 	private bool check;
 	private Vector3 facing;
 	private Character foe;
+	private Stun debuff;
+	private Immobilize immobil;
 	//private Collider collider;
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
 		//collider = GetComponent<Collider>();
 		GetComponent<Collider>().enabled = false;
+		debuff = new Stun();
+		immobil = new Immobilize();
 	}
 	
 	protected override void setInitValues() {
@@ -55,12 +59,14 @@ public class Hook : ChargeItem {
 	}
 
 	protected override void animDone() {
+		user.BDS.rmvBuffDebuff(immobil,this.gameObject);
 		user.freeAnim = true;
 		GetComponent<Collider>().enabled = false;
 		hit = false;
 		GetComponent<Renderer>().enabled = false;
 	    GetComponent<Rigidbody>().isKinematic = true;
 		foe = null;
+		
 		base.animDone ();
 	}
 	
@@ -86,14 +92,17 @@ public class Hook : ChargeItem {
 	private IEnumerator chgTimeFunc(float chgTime) {
 		float totalTime = chgTime*2;
 		float checkTime = 0;
+		user.BDS.addBuffDebuff(debuff, this.gameObject, totalTime);
 		for (float timer = 0; timer <= totalTime; timer += Time.deltaTime) {
 			if(timer <= totalTime/2){
 				GetComponent<Rigidbody>().velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 				if(foe!=null){
+					foe.BDS.addBuffDebuff(debuff, this.gameObject, stunDuration);
 					foe.transform.position = transform.position;
 				}
 			}else if(timer > totalTime/2){
 				if(foe!=null){
+					foe.BDS.addBuffDebuff(debuff, this.gameObject, stunDuration);
 					foe.transform.position = transform.position;
 				}
 				GetComponent<Rigidbody>().velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;	
@@ -134,8 +143,8 @@ public class Hook : ChargeItem {
 
 	void OnTriggerEnter (Collider other) {
 		if(!hit){
-			RiotShield rShield = other.GetComponent<RiotShield>();
-			if (other.tag == "Wall" || rShield && rShield.user.facing.normalized + user.facing.normalized == Vector3.zero) {
+			//RiotShield rShield = other.GetComponent<RiotShield>();
+			if (other.tag == "Wall") {
 				hit = true;
 				check = true;
 				//StopCoroutine("chgTimeFunc");

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class LootDrop : MonoBehaviour {
 	public float value,high,low;
@@ -50,5 +51,8 @@ public class LootDrop : MonoBehaviour {
 			}
 			GetComponent<Collider>().enabled = false;//Turn of collider so loot doesn't intercept to another unit. 
 		}
+	}
+	public virtual void shoot(Vector3 trajectory) {
+		this.GetComponent<Rigidbody> ().velocity = trajectory;
 	}
 }

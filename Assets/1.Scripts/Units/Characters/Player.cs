@@ -22,8 +22,6 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
 	public GameObject currDoor;
-	public GameObject expDeath;
-	public Renderer[] rs;
 	
 	public UIActive UI;
 	public Controls controls;
@@ -135,16 +133,19 @@ public class Player : Character, IMoveable, IHealable<int>{
 				}*/
 		}
 		if (actable) {
-			if(Input.GetKeyDown(controls.attack) || (controls.joyUsed &&  Input.GetButtonDown(controls.joyAttack))) {
+			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
 				if(currDoor!=null){
 					currDoor.GetComponent<Door>().toggleOpen();
 					currDoor = null;
+					animator.SetBool("Charging", true);
+					//Debug.Log(luckCheck());
+					gear.weapon.initAttack();
 				}else{
 					animator.SetBool("Charging", true);
 					//Debug.Log(luckCheck());
 					gear.weapon.initAttack();
 				}
-			} else if(Input.GetKeyDown (controls.secItem) || (controls.joyUsed && Input.GetButtonDown(controls.joySecItem))) {
+			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
 					inventory.items[inventory.selected].useItem(); // Item count check can be removed if characters are required to have atleast 1 item at all times.
@@ -152,13 +153,13 @@ public class Player : Character, IMoveable, IHealable<int>{
 					// Play sound for trying to use item on cooldown or items
 					print("Item on Cooldown");
 				}
-			} else if(Input.GetKeyDown (controls.cycItem) || (controls.joyUsed && Input.GetButtonDown(controls.joyCycItem))) {
+			} else if(Input.GetKeyDown (controls.cycItem) || Input.GetButtonDown(controls.joyCycItem)) {
 				inventory.cycItems();
 			}
 			// Continues with what is happening
 		} else {
 			
-			if ((!Input.GetKey(controls.attack)&&!controls.joyUsed) || (controls.joyUsed && (!Input.GetButton(controls.joyAttack)))) {
+			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
 				animator.SetBool ("Charging", false);
 			}
 			/*else if (animSteInfo.nameHash == rollHash) { for later
@@ -167,7 +168,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		}
 		
 		
-		if ((Input.GetKeyUp (controls.secItem)&&!controls.joyUsed) || (controls.joyUsed && Input.GetButtonUp(controls.joySecItem)))  {
+		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
 			if (inventory.items.Count > 0) {
 				inventory.keepItemActive = false;
 				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
@@ -200,19 +201,19 @@ public class Player : Character, IMoveable, IHealable<int>{
 				newMoveDir += Vector3.forward;
 			}
 			//"Down" key assign pressed
-			if (Input.GetKey(controls.down)) {
+			else if (Input.GetKey(controls.down)) {
 				newMoveDir += Vector3.back;
 			}
 			//"Left" key assign pressed
-			if (Input.GetKey(controls.left)) {
+			else if (Input.GetKey(controls.left)) {
 				newMoveDir += Vector3.left;
 			}
 			//"Right" key assign pressed
-			if (Input.GetKey(controls.right)) {
+			else if (Input.GetKey(controls.right)) {
 				newMoveDir += Vector3.right;
 			}
 			//Joystick form
-			if(controls.joyUsed){
+			else{
 				newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
 			}
 			
@@ -238,7 +239,10 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void damage(int dmgTaken, Character striker) {
 		if (!invincible&&!stats.isDead) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
-			
+			if(splatter != null){
+				GameObject theSplat = (GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity);
+				Destroy (theSplat, 2);
+			}
 			// print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
 			
@@ -271,7 +275,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		stats.health = 0;
 		//UI.hpBar.current = 0;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position-new Vector3(0,6,0), transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
 			r.enabled = false;
