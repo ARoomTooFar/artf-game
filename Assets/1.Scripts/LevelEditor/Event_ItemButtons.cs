@@ -94,7 +94,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 
 	IEnumerator folderGhostDragging ()
 	{ 
-		string prefabLocation = "Prefabs/" + connectedPrefab;
+		string prefabLocation = "LevelEditor/" + connectedPrefab;
 
 
 		//for the ghost-duplicate

@@ -116,7 +116,7 @@ public class UpgradeUI : MonoBehaviour
 //		Vector3 screenPoint = UICamera.WorldToViewportPoint(parentObject.transform.position);
 //		UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition = screenPoint;
 //		lowerHalf.transform.position = screenPoint;
-		Debug.Log(UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition + ", " + screenPoint);
+		//Debug.Log(UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition + ", " + screenPoint);
 	}
 
 	void Update(){
