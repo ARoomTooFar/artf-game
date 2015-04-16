@@ -194,27 +194,36 @@ public class Player : Character, IMoveable, IHealable<int>{
 	// Might separate commands into a protected function and just have a movement function
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
+		Vector3 camAngle = Camera.main.transform.eulerAngles;
+
 		
 		if (!stats.isDead&&actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing) && this.testControl)) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
-			if (Input.GetKey(controls.up)) {
-				newMoveDir += Vector3.forward;
+
+			float x;
+			float y;
+			if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
+				x = Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
+				z = Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
+				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Down" key assign pressed
-			else if (Input.GetKey(controls.down)) {
-				newMoveDir += Vector3.back;
+			if (Input.GetKey(controls.down) || Input.GetAxis(controls.vert) < 0) {
+				x = -Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
+				z = -Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
+				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Left" key assign pressed
-			else if (Input.GetKey(controls.left)) {
-				newMoveDir += Vector3.left;
+			if (Input.GetKey(controls.left) || Input.GetAxis(controls.hori) < 0) {
+				x = -Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
+				z = Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
+				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Right" key assign pressed
-			else if (Input.GetKey(controls.right)) {
-				newMoveDir += Vector3.right;
-			}
-			//Joystick form
-			else{
-				newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
+			if (Input.GetKey(controls.right)|| Input.GetAxis(controls.hori) > 0) {
+				x = Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
+				z = -Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
+				newMoveDir += new Vector3(x, 0, z);
 			}
 			
 			// facing = newMoveDir;
