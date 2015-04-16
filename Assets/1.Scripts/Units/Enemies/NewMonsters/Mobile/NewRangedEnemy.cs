@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class NewRangedEnemy : NewMobileEnemy {
-	
+
 	//-------------------//
 	// Primary Functions //
 	//-------------------//
@@ -21,13 +21,15 @@ public class NewRangedEnemy : NewMobileEnemy {
 	
 	protected override void Update() {
 		base.Update ();
-		
+
 		if (this.lastSeenPosition.HasValue) {
 			float distance = Vector3.Distance(this.transform.position, this.lastSeenPosition.Value);
 			this.animator.SetBool ("TooClose", distance < this.minAtkRadius );
 			this.animator.SetBool ("FarEnough", distance > this.minAtkRadius + 2.5f);
 		} else {
 			this.animator.SetBool ("HasLastSeenPosition", false);
+			this.animator.SetBool ("FarEnough", true);
+			this.animator.SetBool ("TooClose", false);
 		}
 	}
 	

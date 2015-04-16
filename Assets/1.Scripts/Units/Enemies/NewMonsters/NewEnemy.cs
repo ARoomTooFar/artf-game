@@ -28,6 +28,7 @@ public class NewEnemy : Character {
 	protected bool alerted = false;
 	public GameObject target;
 	public Vector3? lastSeenPosition = null;
+	protected float lastSeenSet = 0.0f;
 	protected AggroTable aggroT;
 	protected bool targetchanged;
 
@@ -187,6 +188,7 @@ public class NewEnemy : Character {
 				aggroT.add(p,1);
 				lastSeenPosition = p.transform.position;
 				this.animator.SetBool ("HasLastSeenPosition", true);
+				this.lastSeenSet = 3.0f;
 				alerted = true;
 				this.animator.SetBool("Alerted", true);
 				this.animator.SetBool("CanSeeTarget", true);
