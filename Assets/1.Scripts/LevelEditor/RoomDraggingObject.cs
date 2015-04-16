@@ -25,7 +25,7 @@ public class RoomDraggingObject : ClickEvent {
 		Vector3 origin = ray.GetPoint(distance).Round();
 
 		//for the ghost-duplicate
-		Vector3 newp = this.gameObject.transform.position;
+		Vector3 newp = origin;
 		tilemapcont.suppressDragSelecting = true;
 		while(Input.GetMouseButton(0)) { 
 			//if user wants to cancel the drag
