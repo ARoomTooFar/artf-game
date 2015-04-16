@@ -24,6 +24,13 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public GameObject currDoor;
 	public GameObject expDeath;
 	public Renderer[] rs;
+	private int mash_threshold;
+	private int mash_value;
+	private KeyCode kc;
+	private bool break_free;
+	public bool tapped;
+	public float last_pressed;
+	private bool stunned;
 	
 	public UIActive UI;
 	public Controls controls;
@@ -58,6 +65,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		//testable = true;
 		
 	}
+
 	//Set cooldown bars to current items. 
 	void ItemCooldowns(){
 		UI.onState = true;
@@ -75,6 +83,22 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	// Update is called once per frame
 	protected override void Update () {
+
+		if (Input.GetKeyDown (kc) && stunned) {
+			tapped = true;
+
+			float now = Time.time;
+			float since = now - last_pressed;
+			last_pressed = now;
+
+			if(since > 0) {
+				float motion = 1.0f / since;
+				motion *= motion;
+				mash_value++;
+				if(mash_value > mash_threshold) break_free = true;
+			}
+		}
+
 		if(UI!=null){
 			if(!UI.onState){
 				ItemCooldowns();
@@ -118,7 +142,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 			animationUpdate ();
 		}
 	}
-	
+
+	public bool mashed_out(){
+		return break_free;
+	}
+
 	//---------------------------------//
 	// Action interface implementation //
 	//---------------------------------//

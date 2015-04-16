@@ -43,7 +43,7 @@ public class CableVine : StationaryEnemy {
 		target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject);
 		target.GetComponent<Player> ().BDS.addBuffDebuff (stun, this.gameObject, 4.0f);
 	}
-	
+
 	private Vector3 pullVelocity(){
 		float time = this.facing.magnitude/pull_velocity;
 		Vector3 velocity = new Vector3 ();
@@ -51,7 +51,6 @@ public class CableVine : StationaryEnemy {
 		velocity.y = this.facing.y / time;
 		velocity.z = this.facing.z / time;
 		return velocity;
-
 	}
-	
+
 }
