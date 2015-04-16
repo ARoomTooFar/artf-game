@@ -250,6 +250,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
+				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
 				Destroy (theSplat, 2);
 			}
 			// print("UGH!" + dmgTaken);
@@ -267,6 +268,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 			print("UGH!" + dmgTaken);
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
+				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
 				Destroy (theSplat, 2);
 			}
 			stats.health -= greyTest(dmgTaken);

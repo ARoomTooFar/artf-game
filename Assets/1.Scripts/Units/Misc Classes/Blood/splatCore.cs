@@ -7,13 +7,12 @@ public class splatCore : MonoBehaviour {
 	int drops;
 	// Use this for initialization
 	void Start () {
-		drops = Random.Range(100,200);
+		drops = (int) Random.Range(100*adjuster,200*adjuster);
 	}
 	void Awake(){
 		RaycastHit hit;
 		int x = -1;
 		//drops = Random.Range(40,80);
-		drops = Random.Range(100,200);
 		while(x<=drops){
 			x++;
 			Vector3 fwd = transform.TransformDirection(Random.onUnitSphere*5);

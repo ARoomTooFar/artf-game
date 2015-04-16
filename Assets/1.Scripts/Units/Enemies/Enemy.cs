@@ -24,6 +24,7 @@ public class Enemy : Character {
 	protected Vector3? lastSeenPosition = null;
 	protected AggroTable aggroT;
 	protected bool targetchanged;
+	public EnemyHealthBar hpBar;
 
 
 	protected int layerMask = 1 << 9;
@@ -44,7 +45,10 @@ public class Enemy : Character {
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType ("Player");
-		
+		hpBar = gameObject.GetComponentInChildren<EnemyHealthBar>();
+		if(hpBar != null){
+			hpBar.health = stats.health/stats.maxHealth;
+		}
 		facing = Vector3.back;
 		targetchanged = false;
 
@@ -206,9 +210,9 @@ public class Enemy : Character {
 
 	public override void damage(int dmgTaken, Character striker) {
 		base.damage(dmgTaken, striker);
-		if(splatter != null){
-			splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
-			Destroy (theSplat, 2);
+		if(hpBar != null){
+			Debug.Log((float)stats.health/stats.maxHealth);
+			hpBar.health = (float)stats.health/stats.maxHealth;
 		}
 		if (aggro == false) {
 			aggro = true;
@@ -220,16 +224,16 @@ public class Enemy : Character {
 	
 	public override void damage(int dmgTaken) {
 		//aggro is on and timer reset if attacked
-		if(splatter != null){
-			splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
-			Destroy (theSplat, 2);
-		}
 		if (aggro == false) {
 			aggro = true;
 			dmgTimer = 0f;
 		}
 
 		base.damage(dmgTaken);
+		if(hpBar != null){
+			Debug.Log((float)stats.health/stats.maxHealth);
+			hpBar.health =(float) stats.health/stats.maxHealth;
+		}
 	}
 
 	public override void die() {

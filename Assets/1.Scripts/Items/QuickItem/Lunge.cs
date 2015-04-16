@@ -22,6 +22,7 @@ public class Lunge : QuickItem {
 		baseSize = cooldown;
 		decSpeed = 1f;
 		gOut = true;
+		GetComponent<Collider>().enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -39,6 +40,7 @@ public class Lunge : QuickItem {
 		base.useItem ();
 		activated = true;
 		GetComponent<Renderer>().enabled = true;
+		GetComponent<Collider>().enabled = true;
 		user.BDS.addBuffDebuff(immobil,this.gameObject);
 		// player.animator.SetTrigger("Blink"); Once we have the animation for it
 		//lungeFunc ();
@@ -63,6 +65,7 @@ public class Lunge : QuickItem {
 		activated = false;
 		contact = false;
 		gOut = true;
+		GetComponent<Collider>().enabled = false;
 		user.BDS.rmvBuffDebuff(immobil,this.gameObject);
 		//startSize();
 		animDone();
@@ -107,6 +110,7 @@ public class Lunge : QuickItem {
 		// user.GetComponent<Rigidbody>().MovePosition(newPosition);
 
 		animDone();
+		GetComponent<Collider>().enabled = false;
 		GetComponent<Renderer>().enabled = false;
 		user.BDS.rmvBuffDebuff(immobil,this.gameObject);
 		user.gear.weapon.initAttack();
