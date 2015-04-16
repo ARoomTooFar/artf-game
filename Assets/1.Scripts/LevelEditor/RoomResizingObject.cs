@@ -24,6 +24,8 @@ public class RoomResizingObject : ClickEvent {
 		//for the ghost-duplicate
 		GameObject itemObjectCopy = null;
 		Vector3 newp = this.gameObject.transform.position;
+		UICamera.GetComponent<CameraDraws>().room = MapData.TheFarRooms.find(newp);
+		UICamera.GetComponent<CameraDraws>().roomResizeOrigin = newp;
 		tilemapcont.suppressDragSelecting = true;
 		while(Input.GetMouseButton(0)) { 
 			//if user wants to cancel the drag
@@ -67,13 +69,16 @@ public class RoomResizingObject : ClickEvent {
 					
 				//for now y-pos remains as prefab's default.
 				newp = new Vector3(x * 1.0f, getPosition().y, z * 1.0f);
+				UICamera.GetComponent<CameraDraws>().roomResize = newp;
 			}	
 
 			yield return null; 
 		}
 		
 		tilemapcont.suppressDragSelecting = false;
-		
+		UICamera.GetComponent<CameraDraws>().room = null;
+		UICamera.GetComponent<CameraDraws>().roomResize = Global.nullVector3;
+		UICamera.GetComponent<CameraDraws>().roomResizeOrigin = Global.nullVector3;
 		//destroy the copy
 		Destroy(itemObjectCopy);
 		tilemapcont.deselect(getPosition());

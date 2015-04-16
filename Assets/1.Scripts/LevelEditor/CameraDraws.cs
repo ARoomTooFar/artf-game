@@ -10,17 +10,26 @@ using System.Text;
 public class CameraDraws : MonoBehaviour {
 	TileMapController tilemapcont;
 
+	public ARTFRoom room;
+	public Vector3 roomOffset = Global.nullVector3;
+	public Vector3 roomResizeOrigin = Global.nullVector3;
+	public Vector3 roomResize = Global.nullVector3;
+
 	private Camera cam;
 
 	public Material selectionMat; //material for selected tiles
 	public Material gridMat;
 	public Material objectFocusMat;
+	public Material invalidMat;
 
 	private Ray ray;
 	
 	bool drawTallBox = false;
 
 	void Start(){
+		roomOffset = Global.nullVector3;
+		roomResizeOrigin = Global.nullVector3;
+		roomResize = Global.nullVector3;
 		cam = this.gameObject.GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
 	}
@@ -31,7 +40,8 @@ public class CameraDraws : MonoBehaviour {
 		drawGrid ();
 		drawMouseSquare();
 		drawBoxAroundFocusedObject();
-
+		drawRoomMoveSquare();
+		drawRoomResizeSquare();
 	}	
 
 	/* select tiles using a list from the mouse manager */
@@ -120,7 +130,62 @@ public class CameraDraws : MonoBehaviour {
 		
 		GL.End ();
 	}
+
+	void drawRoomMoveSquare(){
+
+		if(room == null || roomOffset == Global.nullVector3) {
+			return;
+		}
+		GL.Begin (GL.QUADS);
+		if(MapData.TheFarRooms.isMoveValid(room, roomOffset)){
+			selectionMat.SetPass (0);
+		} else {
+			invalidMat.SetPass(0);
+		}
+		
+		Vector3 pLA = room.LLCorner + roomOffset;
+		Vector3 pLB = room.ULCorner + roomOffset;
+		Vector3 pLC = room.URCorner + roomOffset;
+		Vector3 pLD = room.LRCorner + roomOffset;
+		
+		GL.Vertex (pLA);
+		GL.Vertex (pLB);
+		GL.Vertex (pLC);
+		GL.Vertex (pLD);
+		
+		GL.End ();
+	}
+
 	
+	void drawRoomResizeSquare(){
+		
+		if(room == null || roomResize == Global.nullVector3 || roomResizeOrigin == Global.nullVector3) {
+			return;
+		}
+		Square sq = new Square(room.LLCorner, room.URCorner);
+		sq.resize(roomResizeOrigin, roomResize);
+
+		GL.Begin (GL.QUADS);
+
+		if(MapData.TheFarRooms.isResizeValid(roomResizeOrigin, roomResize)){
+			selectionMat.SetPass (0);
+		} else {
+			invalidMat.SetPass(0);
+		}
+
+		Vector3 pLA = sq.LLCorner;
+		Vector3 pLB = sq.ULCorner;
+		Vector3 pLC = sq.URCorner;
+		Vector3 pLD = sq.LRCorner;
+		
+		GL.Vertex (pLA);
+		GL.Vertex (pLB);
+		GL.Vertex (pLC);
+		GL.Vertex (pLD);
+		
+		GL.End ();
+	}
+
 	/* draw the grid lines */
 	void drawGrid ()
 	{

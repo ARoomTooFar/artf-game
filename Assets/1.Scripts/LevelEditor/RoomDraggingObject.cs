@@ -23,6 +23,7 @@ public class RoomDraggingObject : ClickEvent {
 		Global.ground.Raycast(ray, out distance);
 
 		Vector3 origin = ray.GetPoint(distance).Round();
+		UICamera.GetComponent<CameraDraws>().room = MapData.TheFarRooms.find(origin);
 
 		//for the ghost-duplicate
 		Vector3 newp = origin;
@@ -33,6 +34,8 @@ public class RoomDraggingObject : ClickEvent {
 				Debug.Log("Cancel");
 				return false;
 			}
+
+
 			
 			ray = UICamera.ScreenPointToRay(Input.mousePosition);
 			Global.ground.Raycast(ray, out distance);
@@ -49,13 +52,17 @@ public class RoomDraggingObject : ClickEvent {
 
 				//for now y-pos remains as prefab's default.
 				newp = new Vector3(x, getPosition().y, z);
+				UICamera.GetComponent<CameraDraws>().roomOffset = newp-origin;
 			}	
 
 			yield return null; 
 		}
+
+		UICamera.GetComponent<CameraDraws>().room = null;
+		UICamera.GetComponent<CameraDraws>().roomOffset = Global.nullVector3;
+
 		tilemapcont.suppressDragSelecting = false;
 		tilemapcont.deselect(origin);
-		Debug.Log(origin + ", " + newp);
 		MapData.moveRoom(origin, newp);
 		tilemapcont.selectTile(newp);
 	}
