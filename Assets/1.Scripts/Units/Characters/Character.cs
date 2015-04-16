@@ -39,6 +39,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public bool isDead = false;
 	public bool isGrounded = false;
 	public bool actable = true; // Boolean to show if a unit can act or is stuck in an animation
+	public bool isHit = false;
 	
 	public Vector3 facing; // Direction unit is facing
 	
@@ -236,6 +237,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	// Update is called once per frame
 	protected virtual void Update () {
+		isHit = false;
 	    if(!isDead) {
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 
@@ -346,6 +348,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 		
 			stats.health -= dmgTaken;
+			isHit = true;
 			//print ("Fuck: " + dmgTaken + " Damage taken");
 
 			if (stats.health <= 0) {
@@ -357,6 +360,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public virtual void damage(int dmgTaken) {
 		if (!invincible) {
 			stats.health -= dmgTaken;
+			isHit = true;
 
 			if (stats.health <= 0) {
 				die();

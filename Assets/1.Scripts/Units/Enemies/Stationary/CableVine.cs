@@ -11,6 +11,7 @@ public class CableVine : StationaryEnemy {
 	protected Transform origin;
 	protected float pull_velocity = 0.1f;
 	Player pulltarget;
+	private float maxApproachRadius = 100f;
 //	CableMaw MyMum;
 
 	protected override void Awake () {
@@ -29,6 +30,7 @@ public class CableVine : StationaryEnemy {
 	
 	protected override void Update () {
 		base.Update ();
+		Debug.Log (target.name);
 	}
 
 	protected override void Approach() {
@@ -42,6 +44,18 @@ public class CableVine : StationaryEnemy {
 //		base.Attack ();
 		target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject);
 		target.GetComponent<Player> ().BDS.addBuffDebuff (stun, this.gameObject, 4.0f);
+	}
+
+	protected void redeploy () {
+
+	}
+
+	protected bool outRanged() {
+		if (this.target != null) {
+			float distance = this.distanceToPlayer(this.target);
+			return distance > this.maxApproachRadius && this.isHit;
+		}
+		return false;
 	}
 
 	private Vector3 pullVelocity(){
