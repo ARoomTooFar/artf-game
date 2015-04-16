@@ -15,7 +15,8 @@ public class CameraAdjuster : MonoBehaviour {
 	void Start () {
 		//layerMask = ~layerMask; //Inverse bits
 		//Debug.Log(layerMask);
-		transform.rotation = Quaternion.Euler(70,-45,0);
+		transform.rotation = Quaternion.Euler(Global.initCameraRotation);
+		transform.position = Global.initCameraPosition;
 		diffSpot = transform.position - camHitBox.transform.position;
 		//transform.rotation = Quaternion.Euler(90,0,0);
 		//arbitrarily decided point
