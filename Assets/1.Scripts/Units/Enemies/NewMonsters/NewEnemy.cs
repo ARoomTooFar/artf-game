@@ -23,12 +23,16 @@ public class NewEnemy : Character {
 	protected float lineofsight = 15f;
 	public float maxAtkRadius, minAtkRadius;
 	
+
 	// Variables for use in player detection
 	protected bool alerted = false;
 	public GameObject target;
 	public Vector3? lastSeenPosition = null;
 	protected AggroTable aggroT;
 	protected bool targetchanged;
+
+	public Vector3 targetDir;
+	public Vector3 resetpos;
 	
 	
 	protected int layerMask = 1 << 9;
@@ -64,13 +68,16 @@ public class NewEnemy : Character {
 		//Uses swarm aggro table if this unit swarms
 		if(swarmBool){
 			aggroT = swarm.aggroTable;
-		}
-		else{
+		} else {
 			aggroT = new AggroTable();
 		}
 
 		if (this.testing) {
-			this.SetTierData(1);
+			this.SetTierData(2);
+		}
+
+		foreach(EnemyBehaviour behaviour in this.animator.GetBehaviours<EnemyBehaviour>()) {
+			behaviour.SetVar(this.GetComponent<NewEnemy>());
 		}
 	}
 	
@@ -100,31 +107,10 @@ public class NewEnemy : Character {
 				falling ();
 			}
 
-			if (target != null) {
-				target = aggroT.getTarget ();
-				if (this.canSeePlayer(target)) {
-					float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
-					this.animator.SetBool ("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
-				} else {
-					this.target = null;
-					this.animator.SetBool ("Target", false);
-				}
-			} else {
-				if (aRange.unitsInRange.Count > 0) {
-					foreach(Character tars in aRange.unitsInRange) {
-						if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
-							target = tars.gameObject;
-							this.animator.SetBool("Target", true);
-							this.alerted = true;
-							this.animator.SetBool("Alerted", true);
-							break;
-						}
-					}
-				}
-			}
+			this.TargetFunction();
 		}
 	}
-	
+
 	
 	protected override void setInitValues() {
 		base.setInitValues();
@@ -143,6 +129,38 @@ public class NewEnemy : Character {
 		this.tier = tier;
 		this.animator.SetInteger("Tier", this.tier);
 	}
+
+	//-----------//
+	// Functions //
+	//-----------//
+
+	protected virtual void TargetFunction() {
+		if (target != null) {
+			target = aggroT.getTarget ();
+			if (this.canSeePlayer(target)) {
+				float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
+				this.animator.SetBool ("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
+			} else {
+				this.target = null;
+				this.animator.SetBool ("Target", false);
+			}
+		} else {
+			if (aRange.unitsInRange.Count > 0) {
+				foreach(Character tars in aRange.unitsInRange) {
+					if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
+						target = tars.gameObject;
+						this.animator.SetBool("Target", true);
+						this.alerted = true;
+						this.animator.SetBool("Alerted", true);
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	//-----------//
+
 
 	//-----------------------//
 	// Calculation Functions //

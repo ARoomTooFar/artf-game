@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MirageBlink : Blink {
 
-	public int rank;
+	public int tier;
 	public GameObject image;
 	public List<MirageImage> mirrors;
 
@@ -25,11 +25,11 @@ public class MirageBlink : Blink {
 	}
 
 	protected override void blinkFunc() {
-		if (this.rank > 1) {
+		if (this.tier > 1) {
 			MirageImage newImage = (Instantiate(image, user.transform.position, user.transform.rotation) as GameObject).GetComponent<MirageImage>();
 			newImage.spawnedBy = this;
-			newImage.user = this.user.GetComponent<Mirage>();
-			newImage.hitsToKill = this.rank > 3 ? 2 : 1;
+			newImage.user = this.user.GetComponent<NewMirage>();
+			newImage.hitsToKill = this.tier > 3 ? 2 : 1;
 			mirrors.Add(newImage);
 		}
 
