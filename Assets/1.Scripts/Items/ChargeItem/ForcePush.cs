@@ -56,7 +56,7 @@ public class ForcePush : ChargeItem {
 		GetComponent<Renderer>().enabled = false;
 	    GetComponent<Rigidbody>().isKinematic = true;
 		transform.localScale = new Vector3(0.50f,0.50f,0.50f);
-		transform.position = startSpot.transform.position;
+		//transform.position = startSpot.transform.position;
 		foes.Clear();
 		base.animDone ();
 	}
