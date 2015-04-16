@@ -189,7 +189,7 @@ public class FolderBarController : MonoBehaviour {
 			string folderType = folders[i].name.Substring(folders[i].name.IndexOf ('_') + 1);
 			
 			//get prefabs we need for this folder
-			UnityEngine.Object[] prefabs = Resources.LoadAll("Prefabs/" + folderType);
+			UnityEngine.Object[] prefabs = Resources.LoadAll("LevelEditor/" + folderType);
 
 			//get ItemList gameobject under this folder
 			Transform itemList = folders [i].transform.Find("ScrollView/ItemList");

@@ -25,7 +25,9 @@ public static class MapDataParser {
 		while(i < SaveStringLines.Length-1) {
 			parseMonster(SaveStringLines[i++]);
 		}
-		Mode.setTileMode ();
+		if(Global.inLevelEditor) {
+			Mode.setTileMode();
+		}
 	}
 
 	private static void parseRoom(string SaveString) {

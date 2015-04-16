@@ -20,7 +20,7 @@ public class CameraMovement : MonoBehaviour {
 		
 		// This should only ever be in the Level Editor, so I'm sticking a thing here to tell
 		// the resource pool thing to strip colliders from game objects.
-		GameObjectResourcePool.inLevelEditor = true;
+		Global.inLevelEditor = true;
 		
 		cam = this.gameObject.GetComponent<Camera>();
 		
