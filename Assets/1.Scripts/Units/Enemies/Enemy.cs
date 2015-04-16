@@ -10,11 +10,6 @@ public class Enemy : Character {
 	public float dmgTimer = 0f;
 	public bool aggro = false;
 
-	//Is this unit part of the hive mind?
-	public bool swarmBool = false;
-	//Object which holds hivemind aggrotable
-	public Swarm swarm;
-
 	public int tier;
 	public AoETargetting aRange;
 	protected StateMachine sM;
@@ -67,14 +62,9 @@ public class Enemy : Character {
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
+
+		aggroT = new AggroTable();
 		
-		//Uses swarm aggro table if this unit swarms
-		if(swarmBool){
-			aggroT = swarm.aggroTable;
-		}
-		else{
-			aggroT = new AggroTable();
-		}
 	}
 
 	// Update is called once per frame

@@ -195,6 +195,15 @@ public class StationaryEnemy : Enemy {
 
 	//------------------//
 
+	//-------------------------//
+	//Enemy Inherited Functions//
+	//-------------------------//
+	
+	public override void die() {
+		base.die ();
+	}
+	
+	//-------------------------//
 
 	//-----------------------------//
 	// Coroutines for timing stuff //

@@ -147,5 +147,20 @@ public class FoliantHive : StationaryEnemy {
 	}
 
 	//----------------//
+
+	//--------------------------------//
+	//Stationary Enemy Inherited Functions//
+	//--------------------------------//
+	
+	public override void die() {
+		
+		foreach (FoliantFodder f in fodderList) {
+			f.hiveDied();
+		}
+		
+		base.die ();
+	}
+	
+	//--------------------------------//
 }
 
