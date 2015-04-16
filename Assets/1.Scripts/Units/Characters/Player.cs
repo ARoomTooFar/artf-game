@@ -266,12 +266,12 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void damage(int dmgTaken) {
 		if (!invincible&&!stats.isDead) {
 			print("UGH!" + dmgTaken);
+			stats.health -= greyTest(dmgTaken);
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
-				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
+				theSplat.adjuster = (float) ((stats.maxHealth-stats.health)/stats.maxHealth);
 				Destroy (theSplat, 2);
 			}
-			stats.health -= greyTest(dmgTaken);
 			//UI.greyBar.current = greyDamage+stats.health;
 			if (stats.health <= 0) {
 				
