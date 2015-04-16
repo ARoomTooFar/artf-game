@@ -12,6 +12,10 @@ public class CameraMovement : MonoBehaviour {
 	static float orthoZoomSpeed = 2f;
 	static float maxOrthoSize = 30;
 	static float minOrthoSize = 2;
+
+	private float maxY = 50;
+	private float minY = 10;
+
 	private Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 	private Vector3 prevMouse = Global.nullVector3;
 	private Ray ray;
@@ -94,7 +98,9 @@ public class CameraMovement : MonoBehaviour {
 		if(cam.orthographic) {
 			cam.orthographicSize = Mathf.Min(maxOrthoSize, cam.orthographicSize + orthoZoomSpeed);
 		} else {
-			//baseY = Mathf.Min (maxY, baseY + zoomSpeed);
+			if(cam.transform.position.y > maxY){
+				return;
+			}
 			moveCamera(-cam.transform.forward, cam.transform.position.y / 10f);
 		}
 	}
@@ -103,6 +109,9 @@ public class CameraMovement : MonoBehaviour {
 		if(cam.orthographic) {
 			cam.orthographicSize = Mathf.Max(minOrthoSize, cam.orthographicSize - orthoZoomSpeed);
 		} else {
+			if(cam.transform.position.y < minY){
+				return;
+			}
 			moveCamera(cam.transform.forward, cam.transform.position.y / 10f);
 		}
 	}

@@ -69,7 +69,11 @@ public class Bomb : MonoBehaviour {
 	protected virtual void explode() {
 			// Create explosion while removing self
 		// BombExplosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<BombExplosion>();
-		Instantiate(expDeath, transform.position, transform.rotation);
+		if(this.damage != 0){
+			Instantiate(expDeath, transform.position, transform.rotation);
+		}else{
+			Instantiate(expDeath, transform.position+new Vector3(0,2,0), transform.rotation);
+		}
 		Destroy (this.gameObject);
 
 		// Variables for sight checking

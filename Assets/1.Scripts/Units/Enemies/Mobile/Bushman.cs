@@ -21,7 +21,6 @@ public class Bushman : MobileEnemy {
 	private PowerLevels powlvs;
 	private Frenzy frenzy;
 	private float health;
-	GameObject expDeath;
 	protected Sprint sprint;
 	protected BullCharge charge;
 	protected Roll lungeAttack;

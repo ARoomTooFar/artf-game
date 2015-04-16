@@ -15,10 +15,7 @@ public class CameraDraws : MonoBehaviour {
 	public Material selectionMat; //material for selected tiles
 	public Material gridMat;
 	public Material objectFocusMat;
-	
-	GameObject tileMapGameObj;
 
-	private Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 	private Ray ray;
 	
 	bool drawTallBox = false;
@@ -26,7 +23,6 @@ public class CameraDraws : MonoBehaviour {
 	void Start(){
 		cam = this.gameObject.GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
-		tileMapGameObj = GameObject.Find ("TileMap");
 	}
 
 	void OnPostRender ()
@@ -58,27 +54,21 @@ public class CameraDraws : MonoBehaviour {
 		
 		float squareWidth = .4f;
 		float cubeHeight = 6;
-		
 		Ray ray = cam.ScreenPointToRay (Input.mousePosition);
+		float distance;
+		Global.ground.Raycast(ray, out distance);
 		RaycastHit hitInfo;
-		Physics.Raycast (ray, out hitInfo, Mathf.Infinity);
+
+		Physics.Raycast (ray, out hitInfo, distance);
 		Vector3 point;
 		
-		if (hitInfo.collider == null) {
-			return;
-		}
-		
-		if (hitInfo.collider.gameObject.name != "TileMap") {
+		if (hitInfo.collider != null) {
 			point = hitInfo.transform.position.Round ();
 			//Debug.Log (point.toCSV());
 			point.y = 0;
 		} else {
-			ray = cam.ScreenPointToRay(Input.mousePosition);
-			float distance = 0;
-			groundPlane.Raycast(ray, out distance);
 			point = ray.GetPoint(distance).Round();
 		}
-		
 		GL.Begin (GL.QUADS);
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
@@ -215,8 +205,8 @@ public class CameraDraws : MonoBehaviour {
 //				bound.center = obj.transform.position;
 
 				//Quaternion quat = obj.transform.rotation;
-				Quaternion quat = Quaternion.identity;
-				Vector3 bc = obj.transform.position + quat * (bound.center - obj.transform.position);
+				//Quaternion quat = Quaternion.identity;
+				//Vector3 bc = obj.transform.position + quat * (bound.center - obj.transform.position);
 			
 				/*
 				Vector3 topFrontRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, 1, 1)); 
