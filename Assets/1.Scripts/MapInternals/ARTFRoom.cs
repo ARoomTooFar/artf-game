@@ -282,7 +282,7 @@ public partial class ARTFRoom {
 	#region ManipulationFunctions
 
 	public void setFloor(){
-		Vector3 p = this.Floor.transform.position;
+		Vector3 p = this.LLCorner;
 		this.Floor.transform.position = new Vector3(p.x - .5f, -.01f, p.z - .5f);
 		Vector3 scale = this.Floor.transform.localScale;
 		scale.x = this.Length;
