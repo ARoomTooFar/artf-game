@@ -70,7 +70,7 @@ public static class GameObjectResourcePool
 
 	private static GameObject getNewInstance (string type)
 	{
-//		Debug.Log(type);
+		Debug.Log(type);
 		GameObject temp = GameObject.Instantiate (Resources.Load (type), new Vector3 (1, 0, 1), new Quaternion ()) as GameObject;
 		temp.SetActive (false);
 		return temp;
