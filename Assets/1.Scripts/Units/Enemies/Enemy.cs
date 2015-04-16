@@ -172,12 +172,14 @@ public class Enemy : Character {
 				return false;
 
 			}else{
-
-				aggroT.add(p,1);
-				lastSeenPosition = p.transform.position;
-				alerted = true;
+				Player addable = p.GetComponent<Player>();
+				if(!addable.invis){
+					aggroT.add(p,1);
+					lastSeenPosition = p.transform.position;
+					alerted = true;
+				}
 				return true;
-
+	
 			}
 		}
 		
@@ -204,7 +206,10 @@ public class Enemy : Character {
 
 	public override void damage(int dmgTaken, Character striker) {
 		base.damage(dmgTaken, striker);
-
+		if(splatter != null){
+			splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
+			Destroy (theSplat, 2);
+		}
 		if (aggro == false) {
 			aggro = true;
 			dmgTimer = 0f;
@@ -215,6 +220,10 @@ public class Enemy : Character {
 	
 	public override void damage(int dmgTaken) {
 		//aggro is on and timer reset if attacked
+		if(splatter != null){
+			splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
+			Destroy (theSplat, 2);
+		}
 		if (aggro == false) {
 			aggro = true;
 			dmgTimer = 0f;

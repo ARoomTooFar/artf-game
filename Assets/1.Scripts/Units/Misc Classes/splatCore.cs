@@ -3,15 +3,17 @@ using System.Collections;
 
 public class splatCore : MonoBehaviour {
 	public GameObject drip;
+	public float adjuster;
+	int drops;
 	// Use this for initialization
 	void Start () {
-	
+		drops = Random.Range(100,200);
 	}
 	void Awake(){
 		RaycastHit hit;
 		int x = -1;
-		//int drops = Random.Range(40,80);
-		int drops = Random.Range(100,200);
+		//drops = Random.Range(40,80);
+		drops = Random.Range(100,200);
 		while(x<=drops){
 			x++;
 			Vector3 fwd = transform.TransformDirection(Random.onUnitSphere*5);

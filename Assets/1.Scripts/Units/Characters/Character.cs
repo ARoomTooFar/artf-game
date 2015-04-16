@@ -348,7 +348,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		if (!invincible) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 			if(splatter != null){
-				GameObject theSplat = (GameObject)Instantiate (splatter, transform.position, Quaternion.identity);
+				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position, Quaternion.identity)).GetComponent<splatCore>();
+				theSplat.adjuster = stats.maxHealth/dmgTaken;
 				Destroy (theSplat, 2);
 			}
 			stats.health -= dmgTaken;
@@ -362,6 +363,11 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	public virtual void damage(int dmgTaken) {
 		if (!invincible) {
+			if(splatter != null){
+				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position, Quaternion.identity)).GetComponent<splatCore>();
+				theSplat.adjuster = dmgTaken/stats.maxHealth;
+				Destroy (theSplat, 2);
+			}
 			stats.health -= dmgTaken;
 
 			if (stats.health <= 0) {

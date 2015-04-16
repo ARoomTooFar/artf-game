@@ -17,10 +17,10 @@ public class Controls {
 [RequireComponent(typeof(Rigidbody))]
 public class Player : Character, IMoveable, IHealable<int>{
 	public string nameTag;
-	public bool inGrey;
 	public int testDmg;
 	public int greyDamage;
-	public bool testable, isReady, atEnd, atStart;
+	public bool invis;
+	public bool testable, isReady, atEnd, atStart, inGrey;
 	public GameObject currDoor;
 	
 	public UIActive UI;
@@ -249,7 +249,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		if (!invincible&&!stats.isDead) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
 			if(splatter != null){
-				GameObject theSplat = (GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity);
+				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
 				Destroy (theSplat, 2);
 			}
 			// print("UGH!" + dmgTaken);
@@ -265,6 +265,10 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void damage(int dmgTaken) {
 		if (!invincible&&!stats.isDead) {
 			print("UGH!" + dmgTaken);
+			if(splatter != null){
+				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
+				Destroy (theSplat, 2);
+			}
 			stats.health -= greyTest(dmgTaken);
 			//UI.greyBar.current = greyDamage+stats.health;
 			if (stats.health <= 0) {
