@@ -16,7 +16,9 @@ public class Wall : MonoBehaviour {
 	public virtual void toggleShow(){
 		if(show){
 			show = false;
-			stand.GetComponent<Renderer>().enabled = true;
+			if(stand !=null){
+				stand.GetComponent<Renderer>().enabled = true;
+			}
 			GetComponent<Renderer>().enabled = false;
 			// GetComponent<Collider>().enabled = false;
 			StopCoroutine("revWait");
@@ -36,7 +38,9 @@ public class Wall : MonoBehaviour {
 			yield return 0;
 		}
 		show = true;
-		stand.GetComponent<Renderer>().enabled = false;
+		if(stand !=null){
+			stand.GetComponent<Renderer>().enabled = false;
+		}
 		//GetComponent<Collider>().enabled = true;
 		GetComponent<Renderer>().enabled = true;
 	}
