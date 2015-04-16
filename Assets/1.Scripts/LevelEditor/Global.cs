@@ -9,6 +9,7 @@ public static class Global {
 	public static readonly int grid_x = 300;
 	public static readonly int grid_z = 300;
 	public static bool inLevelEditor = false;
+	public static Plane ground = new Plane(Vector3.up, Vector3.zero);
 	
 	public static UpgradeUI currentActiveObjectUI = null;
 }
