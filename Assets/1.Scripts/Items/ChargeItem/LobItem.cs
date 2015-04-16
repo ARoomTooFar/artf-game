@@ -82,7 +82,7 @@ public class LobItem : ChargeItem {
 	}
 
 	// Once key to charge is released (Or other stuff like taking damage), do what are ability is
-	protected virtual void chgDone() {
+	protected override void chgDone() {
 		animDone();
 	}
 	protected override IEnumerator bgnCharge() {

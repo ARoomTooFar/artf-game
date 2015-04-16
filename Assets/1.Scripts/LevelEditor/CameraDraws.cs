@@ -216,7 +216,7 @@ public class CameraDraws : MonoBehaviour {
 
 				//Quaternion quat = obj.transform.rotation;
 				Quaternion quat = Quaternion.identity;
-				Vector3 bc = obj.transform.position + quat * (bound.center - obj.transform.position);
+				//Vector3 bc = obj.transform.position + quat * (bound.center - obj.transform.position);
 			
 				/*
 				Vector3 topFrontRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, 1, 1)); 
