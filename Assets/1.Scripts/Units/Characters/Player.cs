@@ -201,7 +201,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 			//"Up" key assign pressed
 
 			float x;
-			float y;
+			float z;
 			if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
 				x = Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				z = Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
