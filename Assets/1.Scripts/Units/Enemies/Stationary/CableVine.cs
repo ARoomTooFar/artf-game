@@ -11,7 +11,7 @@ public class CableVine : StationaryEnemy {
 	protected Transform origin;
 	protected float pull_velocity = 0.1f;
 	Player pulltarget;
-	private float maxApproachRadius = 100f;
+	private float maxApproachRadius;
 //	CableMaw MyMum;
 
 	protected override void Awake () {
@@ -22,6 +22,7 @@ public class CableVine : StationaryEnemy {
 		base.Start ();
 		stun = new Stun ();
 		constrict = new GenericDoT (1);
+		maxApproachRadius = GetComponentInChildren<SphereCollider> ().radius;
 	}
 
 	protected override void setInitValues() {
@@ -30,7 +31,6 @@ public class CableVine : StationaryEnemy {
 	
 	protected override void Update () {
 		base.Update ();
-		Debug.Log (target.name);
 	}
 
 	protected override void Approach() {
@@ -47,6 +47,7 @@ public class CableVine : StationaryEnemy {
 	}
 
 	protected void redeploy () {
+		Vector3 direction = target.transform.position - this.transform.position;
 
 	}
 
