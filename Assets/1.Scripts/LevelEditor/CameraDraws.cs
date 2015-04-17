@@ -173,6 +173,8 @@ public class CameraDraws : MonoBehaviour {
 			invalidMat.SetPass(0);
 		}
 
+		sq = new Square(sq.LLCorner, sq.URCorner);
+
 		Vector3 pLA = sq.LLCorner;
 		Vector3 pLB = sq.ULCorner;
 		Vector3 pLC = sq.URCorner;
