@@ -38,6 +38,10 @@ public static class MapData {
 		private set;
 	}
 
+	public static ARTFTerminalRoom StartingRoom;// = new ARTFTerminalRoom(new Vector3(0, 0, 0), new Vector3(7, 0, 7));
+
+	public static ARTFTerminalRoom EndingRoom;// = new ARTFTerminalRoom(new Vector3(0, 0, 8), new Vector3(7, 0, 15));
+
 	public static string SaveString {
 		get {
 			string retVal = "MapData\n";
@@ -49,6 +53,8 @@ public static class MapData {
 			retVal += SceneryBlocks.SaveString;
 			retVal += "Monster\n";
 			retVal += MonsterBlocks.SaveString;
+			retVal += "Terminal\n";
+			retVal += StartingRoom.SaveString + " " + EndingRoom.SaveString + "\n";
 			return retVal;
 		}
 	}
