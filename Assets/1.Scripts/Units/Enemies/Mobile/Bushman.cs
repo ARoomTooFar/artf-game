@@ -43,8 +43,6 @@ public class Bushman : MobileEnemy {
 	protected override void initStates() {
 		base.initStates();
 
-		targetchanged = true;
-		
 		// Initialize all states
 		State charging = new State("charging");
 		State charge = new State ("charge");

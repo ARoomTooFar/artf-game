@@ -25,6 +25,14 @@ public class CableVine : StationaryEnemy {
 		maxApproachRadius = GetComponentInChildren<SphereCollider> ().radius;
 	}
 
+	protected override void initStates() {
+		base.initStates ();
+
+		State outranged = new State ("outranged");
+		sM.states.Add (outranged.id, outranged);
+
+	}
+
 	protected override void setInitValues() {
 		base.setInitValues ();
 	}
@@ -48,6 +56,7 @@ public class CableVine : StationaryEnemy {
 
 	protected void redeploy () {
 		Vector3 direction = target.transform.position - this.transform.position;
+		float wait = 1.5f;
 
 	}
 
