@@ -11,7 +11,7 @@ public static class GameObjectResourcePool
 
 	static GameObjectResourcePool ()
 	{
-		Growth = 5;
+		Growth = Global.inLevelEditor?5:1;
 	}
 
 	public static GameObject getResource (string type, Vector3 pos, Vector3 dir)

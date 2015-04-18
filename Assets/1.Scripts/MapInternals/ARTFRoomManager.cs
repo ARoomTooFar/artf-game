@@ -26,6 +26,9 @@ public class ARTFRoomManager {
 		get {
 			string retVal = "rooms:";
 			foreach(ARTFRoom rm in roomList) {
+				if(rm.Equals(MapData.StartingRoom) || rm.Equals(MapData.EndingRoom)){
+					continue;
+				}
 				retVal += rm.SaveString + " ";
 			}
 			return retVal + "\n";
@@ -232,6 +235,9 @@ public class ARTFRoomManager {
 		if (testSquare.LLCorner.z >= testSquare.URCorner.z) {
 			return false;
 		}
+		if(!isSquareValid(testSquare)) {
+			return false;
+		}
 		Square roomSquare;
 		foreach (ARTFRoom room in roomList) {
 			if(rm.LLCorner == room.LLCorner){
@@ -247,10 +253,7 @@ public class ARTFRoomManager {
 	#endregion Resize
 	public bool isAddValid(Vector3 cor1, Vector3 cor2) {
 		Square testSquare = new Square (cor1, cor2);
-		if (testSquare.LLCorner.x >= testSquare.URCorner.x) {
-			return false;
-		}
-		if (testSquare.LLCorner.z >= testSquare.URCorner.z) {
+		if(!isSquareValid(testSquare)) {
 			return false;
 		}
 		Square roomSquare;
@@ -268,6 +271,19 @@ public class ARTFRoomManager {
 
 		if(Mathf.Abs(cor1.x - cor2.x) < minSize || Mathf.Abs(cor1.z - cor2.z) < minSize){
 			Debug.Log("Starting and ending rooms must be at least " + minSize + "x" + minSize + " in size");
+			return false;
+		}
+		return true;
+	}
+
+	public bool isSquareValid(Square sq){
+		if(sq.Area < 25) {
+			return false;
+		}
+		if(sq.Length < 3+2) {
+			return false;
+		}
+		if(sq.Height < 3+2) {
 			return false;
 		}
 		return true;

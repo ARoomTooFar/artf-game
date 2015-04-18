@@ -34,7 +34,6 @@ public class DragableObject : ClickEvent {
 			}
 			
 			Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hitInfo;
 			float distance;
 			Global.ground.Raycast(ray, out distance);
 			
