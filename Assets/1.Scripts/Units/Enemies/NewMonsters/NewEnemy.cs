@@ -74,7 +74,7 @@ public class NewEnemy : Character {
 		}
 
 		if (this.testing) {
-			this.SetTierData(2);
+			this.SetTierData(0);
 		}
 
 		foreach(EnemyBehaviour behaviour in this.animator.GetBehaviours<EnemyBehaviour>()) {

@@ -50,9 +50,12 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public bool testing; // Whether it takes gear in automatically or lets the gear loader to it
 
 	public bool invincible = false;
-
+	public GameObject drop;
+	public GameObject splatter;
 	public Rigidbody rb;
 	protected Type opposition;
+	public Renderer[] rs;
+	public GameObject expDeath;
 	
 	// Animation variables
 	public Animator animator;
@@ -344,7 +347,11 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public virtual void damage(int dmgTaken, Character striker) {
 		if (!invincible) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
-		
+			if(splatter != null){
+				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position, Quaternion.identity)).GetComponent<splatCore>();
+				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
+				Destroy (theSplat, 2);
+			}
 			stats.health -= dmgTaken;
 			//print ("Fuck: " + dmgTaken + " Damage taken");
 
@@ -356,6 +363,11 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	public virtual void damage(int dmgTaken) {
 		if (!invincible) {
+			if(splatter != null){
+				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position, Quaternion.identity)).GetComponent<splatCore>();
+				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
+				Destroy (theSplat, 2);
+			}
 			stats.health -= dmgTaken;
 
 			if (stats.health <= 0) {

@@ -10,23 +10,28 @@ using System.Text;
 public class CameraDraws : MonoBehaviour {
 	TileMapController tilemapcont;
 
+	public ARTFRoom room;
+	public Vector3 roomOffset = Global.nullVector3;
+	public Vector3 roomResizeOrigin = Global.nullVector3;
+	public Vector3 roomResize = Global.nullVector3;
+
 	private Camera cam;
 
 	public Material selectionMat; //material for selected tiles
 	public Material gridMat;
 	public Material objectFocusMat;
-	
-	GameObject tileMapGameObj;
+	public Material invalidMat;
 
-	private Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 	private Ray ray;
 	
 	bool drawTallBox = false;
 
 	void Start(){
+		roomOffset = Global.nullVector3;
+		roomResizeOrigin = Global.nullVector3;
+		roomResize = Global.nullVector3;
 		cam = this.gameObject.GetComponent<Camera> ();
 		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
-		tileMapGameObj = GameObject.Find ("TileMap");
 	}
 
 	void OnPostRender ()
@@ -35,7 +40,8 @@ public class CameraDraws : MonoBehaviour {
 		drawGrid ();
 		drawMouseSquare();
 		drawBoxAroundFocusedObject();
-
+		drawRoomMoveSquare();
+		drawRoomResizeSquare();
 	}	
 
 	/* select tiles using a list from the mouse manager */
@@ -58,27 +64,21 @@ public class CameraDraws : MonoBehaviour {
 		
 		float squareWidth = .4f;
 		float cubeHeight = 6;
-		
 		Ray ray = cam.ScreenPointToRay (Input.mousePosition);
+		float distance;
+		Global.ground.Raycast(ray, out distance);
 		RaycastHit hitInfo;
-		Physics.Raycast (ray, out hitInfo, Mathf.Infinity);
+
+		Physics.Raycast (ray, out hitInfo, distance);
 		Vector3 point;
 		
-		if (hitInfo.collider == null) {
-			return;
-		}
-		
-		if (hitInfo.collider.gameObject.name != "TileMap") {
+		if (hitInfo.collider != null) {
 			point = hitInfo.transform.position.Round ();
 			//Debug.Log (point.toCSV());
 			point.y = 0;
 		} else {
-			ray = cam.ScreenPointToRay(Input.mousePosition);
-			float distance = 0;
-			groundPlane.Raycast(ray, out distance);
 			point = ray.GetPoint(distance).Round();
 		}
-		
 		GL.Begin (GL.QUADS);
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
@@ -130,7 +130,62 @@ public class CameraDraws : MonoBehaviour {
 		
 		GL.End ();
 	}
+
+	void drawRoomMoveSquare(){
+
+		if(room == null || roomOffset == Global.nullVector3) {
+			return;
+		}
+		GL.Begin (GL.QUADS);
+		if(MapData.TheFarRooms.isMoveValid(room, roomOffset)){
+			selectionMat.SetPass (0);
+		} else {
+			invalidMat.SetPass(0);
+		}
+		
+		Vector3 pLA = room.LLCorner + roomOffset;
+		Vector3 pLB = room.ULCorner + roomOffset;
+		Vector3 pLC = room.URCorner + roomOffset;
+		Vector3 pLD = room.LRCorner + roomOffset;
+		
+		GL.Vertex (pLA);
+		GL.Vertex (pLB);
+		GL.Vertex (pLC);
+		GL.Vertex (pLD);
+		
+		GL.End ();
+	}
+
 	
+	void drawRoomResizeSquare(){
+		
+		if(room == null || roomResize == Global.nullVector3 || roomResizeOrigin == Global.nullVector3) {
+			return;
+		}
+		Square sq = new Square(room.LLCorner, room.URCorner);
+		sq.resize(roomResizeOrigin, roomResize);
+
+		GL.Begin (GL.QUADS);
+
+		if(MapData.TheFarRooms.isResizeValid(roomResizeOrigin, roomResize)){
+			selectionMat.SetPass (0);
+		} else {
+			invalidMat.SetPass(0);
+		}
+
+		Vector3 pLA = sq.LLCorner;
+		Vector3 pLB = sq.ULCorner;
+		Vector3 pLC = sq.URCorner;
+		Vector3 pLD = sq.LRCorner;
+		
+		GL.Vertex (pLA);
+		GL.Vertex (pLB);
+		GL.Vertex (pLC);
+		GL.Vertex (pLD);
+		
+		GL.End ();
+	}
+
 	/* draw the grid lines */
 	void drawGrid ()
 	{
@@ -215,8 +270,8 @@ public class CameraDraws : MonoBehaviour {
 //				bound.center = obj.transform.position;
 
 				//Quaternion quat = obj.transform.rotation;
-				Quaternion quat = Quaternion.identity;
-				Vector3 bc = obj.transform.position + quat * (bound.center - obj.transform.position);
+				//Quaternion quat = Quaternion.identity;
+				//Vector3 bc = obj.transform.position + quat * (bound.center - obj.transform.position);
 			
 				/*
 				Vector3 topFrontRight = bc + quat * Vector3.Scale (bound.extents, new Vector3 (1, 1, 1)); 

@@ -31,18 +31,17 @@ public class TileMapController : MonoBehaviour {
 		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
 		grid_x = 100;
 		grid_z = 100;
-		buildMesh();
+		//buildMesh();
 	}
 
 	void Update() {
 		RayToScene();
-		Plane ground = new Plane(Vector3.up, Vector3.zero);
 		Ray ray = new Ray();
 		ray.origin = UICamera.transform.position;
 		ray.direction = UICamera.transform.forward;
 		float distance;
 		Vector3 camFocus;
-		if(ground.Raycast(ray, out distance)) {
+		if(Global.ground.Raycast(ray, out distance)) {
 			camFocus = ray.GetPoint(distance).Round(1);
 			camFocus.x -= (grid_x / 2) * transform.localScale.x;
 			camFocus.z -= (grid_z / 2) * transform.localScale.z;
@@ -63,43 +62,42 @@ public class TileMapController : MonoBehaviour {
 		return MapData.addEndRoom(new Vector3(shiftOrigin.x, 0, shiftOrigin.z), new Vector3(secondX, 0, secondZ));
 	}
 
-	public Vector3 getCenterOfSelectedArea(){
-		return (new Vector3(Mathf.Floor(shiftOrigin.x + secondX) / 2f, 0f , Mathf.Floor(shiftOrigin.z + secondZ) / 2f));
+	public Vector3 getCenterOfSelectedArea() {
+		return (new Vector3(Mathf.Floor(shiftOrigin.x + secondX) / 2f, 0f, Mathf.Floor(shiftOrigin.z + secondZ) / 2f));
 	}
 	
 	void RayToScene() {
 		/* get world coordinates with respect to mouse position by raycast */
 		Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hitInfo;
+		float distance;
+		Global.ground.Raycast(ray, out distance);
 		
 		/* getting raycast info and logic */
 		//&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false
-		if(Physics.Raycast(ray, out hitInfo, Mathf.Infinity)) {
-			//selectedItem gets set by UIHandler_ItemButtons calling setSelectedItem()
-			//in this script. the !Input.GetMouseButton (0) check below will indicate
-			//that a drag has ended, and so we can drop the object on the map.
-			if(selectedItem != null && !Input.GetMouseButton(0)) {
-				int x = Mathf.RoundToInt(hitInfo.transform.position.x / tileSize);
-				int z = Mathf.RoundToInt(hitInfo.transform.position.z / tileSize);
+		Physics.Raycast(ray, out hitInfo, distance);
+		//selectedItem gets set by UIHandler_ItemButtons calling setSelectedItem()
+		//in this script. the !Input.GetMouseButton (0) check below will indicate
+		//that a drag has ended, and so we can drop the object on the map.
+		if(selectedItem != null && !Input.GetMouseButton(0)) {
+			int x = Mathf.RoundToInt(ray.GetPoint(distance).x);
+			int z = Mathf.RoundToInt(ray.GetPoint(distance).z);
 				
-				Vector3 obj_pos = new Vector3(x, 0f, z);
-				Vector3 obj_rot = new Vector3(0f, 90f, 0f);
-				//output_tileMap.instantiateItemObject (selectedItem, obj_pos, obj_rot);
-				MapData.addObject(selectedItem, obj_pos, obj_rot.toDirection());
+			Vector3 obj_pos = new Vector3(x, 0f, z);
+			Vector3 obj_rot = new Vector3(0f, 90f, 0f);
+			//output_tileMap.instantiateItemObject (selectedItem, obj_pos, obj_rot);
+			MapData.addObject(selectedItem, obj_pos, obj_rot.toDirection());
 
-				clearSelectedItem();
+			clearSelectedItem();
+		} else {
+			/* check whether the ray hits an object or the tile map */
+			if(hitInfo.collider != null) {
+				snapToGrid(hitInfo.collider.gameObject.transform.position.x, hitInfo.collider.transform.position.z);
 			} else {
-				/* check whether the ray hits an object or the tile map */
-				switch(hitInfo.collider.gameObject.name) {
-				case "TileMap":
-					snapToGrid(hitInfo.point.x, hitInfo.point.z);
-					break;
-				default: 
-					snapToGrid(hitInfo.collider.gameObject.transform.position.x, hitInfo.collider.transform.position.z);
-					break;
-				}
+				snapToGrid(ray.GetPoint(distance).x, ray.GetPoint(distance).z);
 			}
 		}
+
 	}
 	
 	/* snap mouse selection to grid */
@@ -167,9 +165,9 @@ public class TileMapController : MonoBehaviour {
 		//the mouse moves around
 //		Debug.Log("sfgsdfgs" + suppressDragSelecting);
 		if(clickOrigin != stgVector
-		   && suppressDragSelecting == false
-		   && Input.GetMouseButton(0)
-		   && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
+			&& suppressDragSelecting == false
+			&& Input.GetMouseButton(0)
+			&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
 			//If no tiles have been selected ever, just select that tile
 			if(shiftOrigin == Global.nullVector3) {
 				selectTile(stgVector);
@@ -240,12 +238,12 @@ public class TileMapController : MonoBehaviour {
 	void buildMesh() {
 		
 		/* number of vertices in each x z rows and the total number of vertices */
-		int vx = grid_x - 1;
-		int vz = grid_z - 1;
+		//int vx = grid_x - 1;
+		//int vz = grid_z - 1;
 
 		/* number of vertices in each x z rows and the total number of vertices */
-		//int vx = 1;
-		//int vz = 1; 
+		int vx = 1;
+		int vz = 1; 
 		
 		/* Initialization */
 		Vector3[] vertices = new Vector3[4];
@@ -253,10 +251,10 @@ public class TileMapController : MonoBehaviour {
 		Vector3[] normals = new Vector3[4];
 		
 		/* store the 4 corners of the mesh */
-		vertices[0] = new Vector3(0, 0, 0);
-		vertices[1] = new Vector3(tileSize * vx, 0, 0);
-		vertices[2] = new Vector3(0, 0, tileSize * vz);
-		vertices[3] = new Vector3(tileSize * vx, 0, tileSize * vz);
+		vertices[0] = new Vector3(0-.5f, 0, 0-.5f);
+		vertices[1] = new Vector3((tileSize * vx)-.5f, 0, 0-.5f);
+		vertices[2] = new Vector3(0-.5f, 0, tileSize * vz-.5f);
+		vertices[3] = new Vector3((tileSize * vx)-.5f, 0, (tileSize * vz)-.5f);
 		
 		/* Arrange the vertices in counterclockwise order to produce the correct normal, used for raycasting and rendering
 		 backface culling */
@@ -281,7 +279,7 @@ public class TileMapController : MonoBehaviour {
 
 		Vector2[] uvs = new Vector2[vertices.Length];
 		
-		for (int i=0; i < uvs.Length; i++) {
+		for(int i=0; i < uvs.Length; i++) {
 			uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
 		}
 		mesh.uv = uvs;

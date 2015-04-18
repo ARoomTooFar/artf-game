@@ -3,12 +3,12 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class EnemyHealthBar : MonoBehaviour {
-	Slider healthBar;
-	Canvas healthBarCanvas;
-	float health = 0.7f;
+	public Slider healthBar;
+	public Canvas healthBarCanvas;
+	public float health = .5f;
 
 	void Start () {
-		healthBar = this.transform.Find("HealthBar").gameObject.GetComponent("Slider") as Slider;
+		healthBar = this.gameObject.GetComponentInChildren<Slider>();
 		healthBarCanvas = this.gameObject.GetComponent("Canvas") as Canvas;
 	}
 	

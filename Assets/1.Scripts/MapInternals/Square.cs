@@ -110,7 +110,7 @@ public class Square {
 	}
 
 	public void move(Vector3 offset){
-		Debug.Log(offset);
+		//Debug.Log(offset);
 		LLCorner = LLCorner + offset;
 		URCorner = URCorner + offset;
 	}

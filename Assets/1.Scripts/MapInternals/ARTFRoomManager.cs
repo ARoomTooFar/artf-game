@@ -173,7 +173,6 @@ public class ARTFRoomManager {
 	 * any rooms already in the list if it is moved by offset.
 	 */
 	public bool isMoveValid(Vector3 oldPos, Vector3 newPos) {
-		Debug.Log(oldPos + ", " + newPos);
 		return isMoveValid(find(oldPos), newPos - oldPos);
 	}
 

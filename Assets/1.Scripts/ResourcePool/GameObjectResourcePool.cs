@@ -5,16 +5,13 @@ using System.Collections.Generic;
 
 public static class GameObjectResourcePool
 {
-
-	public static bool inLevelEditor = false;
-
 	public static int Growth{ get; set; }
 
 	private static Dictionary<string, Stack<GameObject>> pools = new Dictionary<string, Stack<GameObject>> ();
 
 	static GameObjectResourcePool ()
 	{
-		Growth = 1;
+		Growth = 5;
 	}
 
 	public static GameObject getResource (string type, Vector3 pos, Vector3 dir)
@@ -39,19 +36,9 @@ public static class GameObjectResourcePool
 	private static void restock (string type)
 	{
 		Stack<GameObject> stk = getStack (type);
+		GameObject newThing;
 		for (int i = 0; i < Growth; ++i) {
-			GameObject newThing = getNewInstance (type);
-			if (inLevelEditor) {
-				foreach (Collider col in newThing.GetComponents<Collider>()) {
-					if(col is MeshCollider && !(col as MeshCollider).convex){
-						continue;
-					}
-					col.isTrigger = true;
-				}
-				foreach (Rigidbody rig in newThing.GetComponents<Rigidbody>()) {
-					rig.useGravity = false;
-				}
-			}
+			newThing = getNewInstance (String.Format(type, Global.inLevelEditor?"LevelEditor":"Gameplay"));
 			stk.Push (newThing);
 		}
 	}
@@ -70,7 +57,7 @@ public static class GameObjectResourcePool
 
 	private static GameObject getNewInstance (string type)
 	{
-//		Debug.Log(type);
+		//Debug.Log(type);
 		GameObject temp = GameObject.Instantiate (Resources.Load (type), new Vector3 (1, 0, 1), new Quaternion ()) as GameObject;
 		temp.SetActive (false);
 		return temp;

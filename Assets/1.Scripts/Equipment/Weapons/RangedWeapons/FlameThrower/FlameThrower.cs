@@ -4,12 +4,14 @@ using System.Collections;
 public class FlameThrower : RangedWeapons {
 	public float lastDmgTime, curDuration, maxDuration;
 	public Fire currFire, oneFalse, twoFalse;
+	public Immobilize immobil;
 	protected override void Start () {
 		base.Start ();
 	}
 	protected override void setInitValues() {
 		base.setInitValues();
 		maxAmmo = 99;
+		immobil = new Immobilize();
 		currAmmo = maxAmmo;
 		// Use sword animations for now
 		stats.weapType = 2;
@@ -51,6 +53,7 @@ public class FlameThrower : RangedWeapons {
 	}*/
 
 	protected override IEnumerator bgnCharge() {
+		user.BDS.addBuffDebuff(immobil,this.gameObject);
 		if (user.animator.GetBool("Charging")) particles.Play();
 		while (user.animator.GetBool("Charging") && stats.curChgDuration < stats.timeForChgAttack) {
 			stats.curChgDuration = Mathf.Clamp(stats.curChgDuration + Time.deltaTime, 0.0f, stats.maxChgTime);
@@ -131,6 +134,7 @@ public class FlameThrower : RangedWeapons {
 			currFire = null;
 		}
 		user.animator.speed = 1.0f;
+		user.BDS.rmvBuffDebuff(immobil,this.gameObject);
 		//currFire = null;
 	}
 	protected void fireFlame(bool activated) {

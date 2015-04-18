@@ -377,6 +377,7 @@ public class MobileEnemy : Enemy {
 	}
 	
 	//-----------------//
+	
 
 	//-------------------------//
 	//Enemy Inherited Functions//
