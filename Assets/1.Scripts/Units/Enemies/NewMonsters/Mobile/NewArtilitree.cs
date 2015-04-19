@@ -42,7 +42,7 @@ public class NewArtilitree: NewRangedEnemy {
 	}
 	
 	public override void SetTierData(int tier) {
-		tier = 1;
+		tier = 5;
 		base.SetTierData(tier);
 		
 		if (tier < 1) stats.speed = 2;
@@ -57,6 +57,10 @@ public class NewArtilitree: NewRangedEnemy {
 		if (tier > 4) {
 			this.roots = this.inventory.items[inventory.selected].GetComponent<RootRing>();
 			if (this.roots == null) Debug.LogWarning ("Artilitree does not have root ring equipped");
+			
+			foreach(RootSelf behaviour in this.animator.GetBehaviours<RootSelf>()) {
+				behaviour.SetVar(this.roots);
+			}
 		}
 	}
 	
