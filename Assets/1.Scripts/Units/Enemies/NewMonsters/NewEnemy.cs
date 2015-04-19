@@ -126,6 +126,7 @@ public class NewEnemy : Character {
 		setAnimHash ();
 	}
 
+	// Things that are tier specific should be set here
 	public virtual void SetTierData(int tier) {
 		this.tier = tier;
 		this.animator.SetInteger("Tier", this.tier);

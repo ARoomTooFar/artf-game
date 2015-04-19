@@ -18,8 +18,9 @@ public class NewArtilitree: NewRangedEnemy {
 		this.artillery = this.gear.weapon.GetComponent<Artillery>();
 		if (this.artillery == null) print("Artilitree has no artillery equipped");
 		
-		this.roots = this.inventory.items[inventory.selected].GetComponent<RootRing>();
-		if (this.roots == null) Debug.LogWarning ("Artilitree does not have root ring equipped");
+		foreach(ArtilleryBehaviour behaviour in this.animator.GetBehaviours<ArtilleryBehaviour>()) {
+			behaviour.SetVar(this.artillery);
+		}
 	}
 	
 	protected override void Update() {
@@ -40,7 +41,15 @@ public class NewArtilitree: NewRangedEnemy {
 		this.maxAtkRadius = 40.0f;
 	}
 	
-	
+	public override void SetTierData(int tier) {
+		tier = 0;
+		base.SetTierData(tier);
+		
+		if (tier > 4) {
+			this.roots = this.inventory.items[inventory.selected].GetComponent<RootRing>();
+			if (this.roots == null) Debug.LogWarning ("Artilitree does not have root ring equipped");
+		}
+	}
 	
 	//----------------------//
 	// Transition Functions //
