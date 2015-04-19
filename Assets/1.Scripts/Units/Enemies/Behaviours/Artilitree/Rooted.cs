@@ -7,8 +7,7 @@ public class Rooted : ArtilleryBehaviour {
 
 	// This will be called when the animator first transitions to this state.
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		this.constraints = this.unit.rb.constraints; // Find better code for this
-		this.unit.rb.constraints = RigidbodyConstraints.FreezePosition;
+		this.unit.rb.isKinematic = true;
 		if (this.artillery.curCircle == null) animator.SetBool ("GotCircle", false);
 	}
 	

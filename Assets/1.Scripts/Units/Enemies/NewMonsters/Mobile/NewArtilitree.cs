@@ -29,41 +29,36 @@ public class NewArtilitree: NewRangedEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 40;
+		stats.maxHealth = 200;
 		stats.health = stats.maxHealth;
 		stats.armor = 0;
 		stats.strength = 10;
 		stats.coordination=0;
-		stats.speed=7;
+		stats.speed=2;
 		stats.luck=0;
-		
-		this.minAtkRadius = 8.0f;
+
+		this.minAtkRadius = 4.0f;
 		this.maxAtkRadius = 40.0f;
 	}
 	
 	public override void SetTierData(int tier) {
-		tier = 0;
+		tier = 1;
 		base.SetTierData(tier);
+		
+		if (tier < 1) stats.speed = 2;
+		else if (tier > 0 && tier < 5) stats.speed = 3;
+		else stats.speed = 4;
+		
+		foreach(Rooting behaviour in this.animator.GetBehaviours<Rooting>()) {
+			if (tier < 3) behaviour.SetVar(3);
+			else behaviour.SetVar(2);
+		}
 		
 		if (tier > 4) {
 			this.roots = this.inventory.items[inventory.selected].GetComponent<RootRing>();
 			if (this.roots == null) Debug.LogWarning ("Artilitree does not have root ring equipped");
 		}
 	}
-	
-	//----------------------//
-	// Transition Functions //
-	//----------------------//
-	
-	//----------------------//
-	
-	
-	//-------------------//
-	// Actions Functions //
-	//-------------------//
-	
-	
-	//-------------------//
 	
 	
 	//------------//
@@ -81,4 +76,10 @@ public class NewArtilitree: NewRangedEnemy {
 	
 	
 	//------------------//
+	
+	void OnCollisionEnter(Collision collision) {
+		if (collision.collider.name == "Root(Clone)") { // Possibly change this if needed
+			collision.gameObject.GetComponent<Prop>().die ();
+		}
+	}
 }
