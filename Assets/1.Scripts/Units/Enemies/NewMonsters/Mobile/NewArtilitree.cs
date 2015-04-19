@@ -64,22 +64,38 @@ public class NewArtilitree: NewRangedEnemy {
 		}
 	}
 	
+	//---------------------//
+	// Character Functions //
+	//---------------------//
+
+	public override void die() {
+		if (this.tier > 3) {
+			this.artillery.initAttack();
+			StartCoroutine(waitTillDeath());
+		} else {
+			base.die ();
+		}
+	}
 	
+	//---------------------//
+
 	//------------//
 	// Coroutines //
 	//------------//
-	
+
+	protected virtual IEnumerator waitTillDeath() {
+		while (this.artillery.curCircle == null) {
+			yield return null;
+		}
+		base.die ();
+	}
 	
 	
 	//------------//
 	
 	
-	//------------------//
-	// Helper Functions //
-	//------------------//
-	
-	
-	//------------------//
+
+
 	
 	void OnCollisionEnter(Collision collision) {
 		if (collision.collider.name == "Root(Clone)") { // Possibly change this if needed

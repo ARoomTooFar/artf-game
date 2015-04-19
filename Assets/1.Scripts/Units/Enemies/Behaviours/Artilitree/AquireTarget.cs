@@ -14,7 +14,7 @@ public class AquireTarget : ArtilleryBehaviour {
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		// Checks to see if circle is within targetting unit
-		if (!(this.unit.target != null && Vector3.Distance(this.curTCircle.transform.position, this.unit.target.transform.position) > 1.5f))
+		if (!(this.unit.target != null && Vector3.Distance(this.curTCircle.transform.position, this.unit.target.transform.position) > 2.0f))
 			animator.SetBool("Charging", false);
 		this.curTCircle.moveCircle(this.unit.target.transform.position - this.curTCircle.transform.position);
 		this.unit.getFacingTowardsTarget(); // Swap to facing target circle in future

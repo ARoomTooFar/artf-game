@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
-
 public class StatsMultiplier{
 	public float health, armor,maxHealth,rezCount;
 	public float strength, coordination, speed, luck;

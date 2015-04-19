@@ -82,7 +82,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		if(stats.health <= 0){
 			
 			isDead = true;
-			UI.hpBar.current = 0;
+			if(UI!=null) UI.hpBar.current = 0;
 		} else {
 			if(UI!=null){
 				if(UI.onState){
