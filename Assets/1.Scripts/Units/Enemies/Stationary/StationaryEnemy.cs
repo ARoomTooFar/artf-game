@@ -33,7 +33,7 @@ public class StationaryEnemy : Enemy {
 		setAnimHash ();
 
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 5.0f;
+		this.maxAtkRadius = 3.0f;
 	}
 
 	// Initializes states, transitions and actions

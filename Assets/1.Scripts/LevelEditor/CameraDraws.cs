@@ -173,6 +173,8 @@ public class CameraDraws : MonoBehaviour {
 			invalidMat.SetPass(0);
 		}
 
+		sq = new Square(sq.LLCorner, sq.URCorner);
+
 		Vector3 pLA = sq.LLCorner;
 		Vector3 pLB = sq.ULCorner;
 		Vector3 pLC = sq.URCorner;
@@ -203,17 +205,13 @@ public class CameraDraws : MonoBehaviour {
 		GL.Begin (GL.LINES);
 		gridMat.SetPass (0);
 		selectionMat.SetPass (0);
-		
-		Color c = new Color(1f,1f,1f,0.01f) ;
-		selectionMat.SetColor("Main Color", c);
+
 		//draw grid over tilemap
 		for (int i = Mathf.RoundToInt(camFocus.x) - (Global.grid_x/2); i < Mathf.RoundToInt(camFocus.x) + (Global.grid_x/2); i++ ) {
-			GL.Color(c);
 			GL.Vertex (new Vector3 (i-.5f , 0f, camFocus.z + (Global.grid_z/2) + 0.5f));
 			GL.Vertex (new Vector3 (i-.5f, 0f, camFocus.z - (Global.grid_z/2) + 0.5f));
 		}
 		for (int i = Mathf.RoundToInt(camFocus.z) - (Global.grid_z/2); i < Mathf.RoundToInt(camFocus.z) + (Global.grid_z/2); i++ ) {
-			GL.Color(c);
 			GL.Vertex (new Vector3 (camFocus.x + (Global.grid_x/2)-.5f , 0f, i + 0.5f));
 			GL.Vertex (new Vector3 (camFocus.x - (Global.grid_x/2)-.5f, 0f, i + 0.5f));
 		}

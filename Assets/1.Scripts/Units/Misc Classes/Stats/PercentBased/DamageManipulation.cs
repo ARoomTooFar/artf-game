@@ -33,8 +33,6 @@ public class DamageManipulation {
 		fntDamage = new PercentValues();
 		backDamage = new PercentValues();
 		sideDamage = new PercentValues();
-//		atkSpd = new PercentValues ();
-		
 	}
 
 	// Gets the total % of the damage change
@@ -53,19 +51,6 @@ public class DamageManipulation {
 			ttlReduction *= fntDamage.percentValue;
 			// Debug.Log ("Front Damage");
 		}
-
-		/*
-		float angle = Vector2.Angle(new Vector2(unitPos.x - atkPos.x, unitPos.z - atkPos.z), new Vector2(unitFacing.x, unitFacing.z));
-		
-		if (angle < 45.0f) {
-			ttlReduction *= backDamage.percentValue;
-		} else if (angle < 135.0f) {
-			ttlReduction *= sideDamage.percentValue;
-		} else if (angle <= 180.0f) {
-			ttlReduction *= fntDamage.percentValue;
-		} else {
-			Debug.Log ("I shouldn't be here");
-		}*/
 		
 		return ttlReduction;
 	}
@@ -86,11 +71,6 @@ public class DamageManipulation {
 				break;
 		}
 	}
-
-	/*
-	public void setAtkSpdAmplification(float amp) {
-		atkSpd.setAmplification(amp);
-	}*/
 	
 	public void removeDamageAmplification(int dir, float amp) {
 		switch(dir) {

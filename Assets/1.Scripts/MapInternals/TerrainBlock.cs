@@ -12,6 +12,9 @@ using System.Collections.Generic;
 public class TerrainBlock {
 
 	#region Properties
+
+	public string wallType = "{0}/Rooms/wallstoneend";
+
 	public Dictionary<DIRECTION, TerrainBlock> Neighbors {
 		get;
 		private set;
@@ -48,7 +51,7 @@ public class TerrainBlock {
 	}
 
 	public string SaveString {
-		get{ return Position.toCSV() + "," + Orientation.ToString();}
+		get{ return Position.toCSV() + "," + Orientation.ToString() + "," + wallType;}
 	}
 	
 	public bool Pathable {
@@ -75,6 +78,7 @@ public class TerrainBlock {
 		this.Orientation = dir;
 		this.Neighbors = new Dictionary<DIRECTION, TerrainBlock>();
 		this.BlockID = blockID;
+		this.Wall = null;
 		//Debug.Log(GameObj.transform.position);
 	}
 
@@ -234,13 +238,14 @@ public class TerrainBlock {
 		this.Scenery = null;
 	}
 
-	public bool addWall(SceneryBlock scn) {
+	public bool addWall(DIRECTION dir) {
+
 		//return false if there is already scenery
 		if(this.Wall != null) {
 			return false;
 		}
 		
-		this.Wall = scn;
+		this.Wall = new SceneryBlock(wallType, this.Position, dir);
 		return true;
 	}
 

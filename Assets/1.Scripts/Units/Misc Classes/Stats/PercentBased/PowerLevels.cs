@@ -2,9 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
-
-public class StatsMultiplier{
+public class StatsMultiplier {
 	public float health, armor,maxHealth,rezCount;
 	public float strength, coordination, speed, luck;
 	public float atkSpeed;
@@ -41,11 +39,7 @@ public class PowerLevels{
 		frenzy.setSpeedBoost (0);
 		target.BDS.addBuffDebuff (frenzy, target.gameObject);
 	}
-	
-	/*
-	public int currentStage(){
 
-	}*/
 	
 	public PowerLevels(Character c){
 		stages = new List<PowerStage>();

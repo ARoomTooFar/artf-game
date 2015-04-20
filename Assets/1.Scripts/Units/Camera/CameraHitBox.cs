@@ -39,13 +39,21 @@ public class CameraHitBox : MonoBehaviour {
 			areaUnits.Add (unit);
 		}
 		if(other.tag == "Wall"){
-			Wall wallSpot = other.transform.parent.GetComponent<Wall>();
+			if(other.transform.parent != null){
+				Wall wallSpot = other.transform.parent.GetComponent<Wall>();
+				if(wallSpot != null){
+					wallSpot.toggleShow();
+				//Debug.Log("Here");
+				}
+			}else{
+				Wall wallSpot = other.gameObject.GetComponent<Wall>();
+				if(wallSpot != null){
+					wallSpot.toggleShow();
+				//Debug.Log("Here");
+				}
+			}
 			//Debug.Log("Here");
 		//Wall wallSpot = other.GetComponent<Wall>();
-			if(wallSpot != null){
-				wallSpot.toggleShow();
-				//Debug.Log("Here");
-			}
 		}
 	}
 	void OnTriggerStay (Collider other) {

@@ -23,12 +23,17 @@ public class NewEnemy : Character {
 	protected float lineofsight = 15f;
 	public float maxAtkRadius, minAtkRadius;
 	
+
 	// Variables for use in player detection
 	protected bool alerted = false;
 	public GameObject target;
 	public Vector3? lastSeenPosition = null;
+	protected float lastSeenSet = 0.0f;
 	protected AggroTable aggroT;
 	protected bool targetchanged;
+
+	public Vector3 targetDir;
+	public Vector3 resetpos;
 	
 	
 	protected int layerMask = 1 << 9;
@@ -64,13 +69,16 @@ public class NewEnemy : Character {
 		//Uses swarm aggro table if this unit swarms
 		if(swarmBool){
 			aggroT = swarm.aggroTable;
-		}
-		else{
+		} else {
 			aggroT = new AggroTable();
 		}
 
 		if (this.testing) {
-			this.SetTierData(1);
+			this.SetTierData(0);
+		}
+
+		foreach(EnemyBehaviour behaviour in this.animator.GetBehaviours<EnemyBehaviour>()) {
+			behaviour.SetVar(this.GetComponent<NewEnemy>());
 		}
 	}
 	
@@ -100,31 +108,10 @@ public class NewEnemy : Character {
 				falling ();
 			}
 
-			if (target != null) {
-				target = aggroT.getTarget ();
-				if (this.canSeePlayer(target)) {
-					float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
-					this.animator.SetBool ("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
-				} else {
-					this.target = null;
-					this.animator.SetBool ("Target", false);
-				}
-			} else {
-				if (aRange.unitsInRange.Count > 0) {
-					foreach(Character tars in aRange.unitsInRange) {
-						if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
-							target = tars.gameObject;
-							this.animator.SetBool("Target", true);
-							this.alerted = true;
-							this.animator.SetBool("Alerted", true);
-							break;
-						}
-					}
-				}
-			}
+			this.TargetFunction();
 		}
 	}
-	
+
 	
 	protected override void setInitValues() {
 		base.setInitValues();
@@ -139,10 +126,43 @@ public class NewEnemy : Character {
 		setAnimHash ();
 	}
 
+	// Things that are tier specific should be set here
 	public virtual void SetTierData(int tier) {
 		this.tier = tier;
 		this.animator.SetInteger("Tier", this.tier);
 	}
+
+	//-----------//
+	// Functions //
+	//-----------//
+
+	protected virtual void TargetFunction() {
+		if (target != null) {
+			target = aggroT.getTarget ();
+			if (this.canSeePlayer(target)) {
+				float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
+				this.animator.SetBool ("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
+			} else {
+				this.target = null;
+				this.animator.SetBool ("Target", false);
+			}
+		} else {
+			if (aRange.unitsInRange.Count > 0) {
+				foreach(Character tars in aRange.unitsInRange) {
+					if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
+						target = tars.gameObject;
+						this.animator.SetBool("Target", true);
+						this.alerted = true;
+						this.animator.SetBool("Alerted", true);
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	//-----------//
+
 
 	//-----------------------//
 	// Calculation Functions //
@@ -169,6 +189,7 @@ public class NewEnemy : Character {
 				aggroT.add(p,1);
 				lastSeenPosition = p.transform.position;
 				this.animator.SetBool ("HasLastSeenPosition", true);
+				this.lastSeenSet = 3.0f;
 				alerted = true;
 				this.animator.SetBool("Alerted", true);
 				this.animator.SetBool("CanSeeTarget", true);
@@ -185,10 +206,13 @@ public class NewEnemy : Character {
 	public virtual void getFacingTowardsTarget() {
 		Vector3 newFacing = Vector3.zero;
 		
-		if (this.target != null) {
+		if (this.target != null && !this.stunned) {
 			newFacing = this.target.transform.position - this.transform.position;
 			newFacing.y = 0.0f;
-			if (newFacing != Vector3.zero) this.facing = newFacing.normalized;
+			if (newFacing != Vector3.zero) {
+				this.facing = newFacing.normalized;
+				this.transform.localRotation = Quaternion.LookRotation(facing);	
+			}
 		}
 	}
 	

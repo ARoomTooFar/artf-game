@@ -10,8 +10,7 @@ public partial class ARTFRoom {
 
 	#region PrivateVariables
 	private static string defaultBlockID = "LevelEditor/Rooms/floortile";
-	private static string defaultFloor = "LevelEditor/Floors/IndustrialFloor1";
-	private static string defaultWall = "{0}/Rooms/wallstoneend";
+	private static string defaultFloor = "{0}/Floors/IndustrialFloor1";
 	#endregion PrivateVariables
 
 	public bool isStartRoom = false;
@@ -87,21 +86,21 @@ public partial class ARTFRoom {
 		get { return (LLCorner + URCorner) / 2; }
 	}
 
-	public GameObject LLMarker { get; private set; }
-	public GameObject URMarker { get; private set; }
-	public GameObject LRMarker { get; private set; }
-	public GameObject ULMarker { get; private set; }
+	public GameObject LLMarker { get; protected set; }
+	public GameObject URMarker { get; protected set; }
+	public GameObject LRMarker { get; protected set; }
+	public GameObject ULMarker { get; protected set; }
 
 
 
-	public void updateMarkerPositions(){
+	public virtual void updateMarkerPositions(){
 		LLMarker.transform.root.position = LLCorner;
 		URMarker.transform.root.position = URCorner;
 		LRMarker.transform.root.position = LRCorner;
 		ULMarker.transform.root.position = ULCorner;
 	}
 
-	public void setMarkerActive(bool active){
+	public virtual void setMarkerActive(bool active){
 		LLMarker.SetActive (active);
 		URMarker.SetActive (active);
 		LRMarker.SetActive (active);
@@ -190,7 +189,7 @@ public partial class ARTFRoom {
 				blk.Room = this;
 				//If the block is along the edge, give it a wall prefab
 				if(this.isEdge(blk.Position)) {
-					blk.addWall(new SceneryBlock(defaultWall, blk.Position, getWallSide(blk.Position)));
+					blk.addWall(getWallSide(blk.Position));
 				}
 			}
 		}
@@ -269,8 +268,11 @@ public partial class ARTFRoom {
 					continue;
 				}
 				//find the path between the two and store it
+				List<Vector3> path = Pathfinder.getSingleRoomPath(kvp1.Key.Position, kvp2.Key.Position);
+				path.Insert(0, this.getDoorCheckPosition(kvp1.Key));
+				path.Insert(path.Count, this.getDoorCheckPosition(kvp2.Key));
 				RoomPaths.Add(new KeyValuePair<Vector3, Vector3>(kvp1.Key.Position, kvp2.Key.Position),
-				              Pathfinder.getSingleRoomPath(kvp1.Key.Position, kvp2.Key.Position));
+				              path);
 			}
 		}
 	}
@@ -298,6 +300,10 @@ public partial class ARTFRoom {
 	 * by the offset Vector3
 	 */
 	public void move(Vector3 offset) {
+		List<ARTFRoom> rmlst = new List<ARTFRoom>();
+		foreach(SceneryBlock dr in this.Doors) {
+			rmlst.Add(MapData.TheFarRooms.find(this.getDoorCheckPosition(dr)));
+		}
 		//Shift the LowerLeft and UpperRight corners by offset
 		LLCorner = LLCorner + offset;
 		URCorner = URCorner + offset;
@@ -307,6 +313,10 @@ public partial class ARTFRoom {
 		}
 		setFloor();
 		updateMarkerPositions();
+		foreach(ARTFRoom rm in rmlst) {
+			rm.linkRoomsViaDoors();
+		}
+		this.linkRoomsViaDoors();
 	}
 
 	/*
@@ -318,6 +328,10 @@ public partial class ARTFRoom {
 		//Make sure that the old corner is actually a corner
 		if(!isCorner(oldCor)) {
 			return;
+		}
+		List<ARTFRoom> rmlst = new List<ARTFRoom>();
+		foreach(SceneryBlock dr in this.Doors) {
+			rmlst.Add(MapData.TheFarRooms.find(this.getDoorCheckPosition(dr)));
 		}
 		//get the offset
 		Vector3 offset = newCor - oldCor;
@@ -356,6 +370,10 @@ public partial class ARTFRoom {
 
 
 		updateMarkerPositions();
+		foreach(ARTFRoom rm in rmlst) {
+			rm.linkRoomsViaDoors();
+		}
+		this.linkRoomsViaDoors();
 	}
 
 	/*
