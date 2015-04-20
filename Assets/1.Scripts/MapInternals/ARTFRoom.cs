@@ -10,7 +10,7 @@ public partial class ARTFRoom {
 
 	#region PrivateVariables
 	private static string defaultBlockID = "LevelEditor/Rooms/floortile";
-	private static string defaultFloor = "LevelEditor/Floors/IndustrialFloor1";
+	private static string defaultFloor = "{0}/Floors/IndustrialFloor1";
 	#endregion PrivateVariables
 
 	public bool isStartRoom = false;
