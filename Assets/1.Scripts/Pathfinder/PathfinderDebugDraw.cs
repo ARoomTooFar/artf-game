@@ -11,6 +11,8 @@ public class PathfinderDebugDraw : MonoBehaviour {
 	Vector3 prevEnd;
 	public Vector3 offset;
 	List<Vector3> path;
+	public bool viewRoomPaths = true;
+	public bool viewPath = true;
 
 	// Update is called once per frame
 	void Update () {
@@ -26,8 +28,12 @@ public class PathfinderDebugDraw : MonoBehaviour {
 
 	void OnPostRender(){
 		path = Pathfinder.getPath(start, end);
-		drawPath(path);
-		drawRoomPaths();
+		if(viewPath) {
+			drawPath(path);
+		}
+		if(viewRoomPaths) {
+			drawRoomPaths();
+		}
 
 	}
 
