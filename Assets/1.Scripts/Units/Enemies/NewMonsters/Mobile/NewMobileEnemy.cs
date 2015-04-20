@@ -6,8 +6,6 @@ using System.Collections.Generic;
 
 public class NewMobileEnemy : NewEnemy {
 
-	public Vector3 resetpos;
-	public Vector3 targetDir;
 	public CoroutineController searchController, searchStateController;
 	
 	//-------------------//
@@ -22,10 +20,6 @@ public class NewMobileEnemy : NewEnemy {
 	
 	protected override void Start() {
 		base.Start ();
-
-		foreach(EnemyBehaviour behaviour in this.animator.GetBehaviours<EnemyBehaviour>()) {
-			behaviour.unit = this.GetComponent<NewMobileEnemy>();
-		}
 	}
 	
 	protected override void Update() {
@@ -35,8 +29,12 @@ public class NewMobileEnemy : NewEnemy {
 			this.targetDir = this.target.GetComponent<Player>().facing;
 		}
 
-		if (!this.lastSeenPosition.HasValue) {
+
+		if (!this.lastSeenPosition.HasValue || this.lastSeenSet <= 0.0f) {
 			this.animator.SetBool ("HasLastSeenPosition", false);
+			this.lastSeenPosition = null;
+		} else {
+			this.lastSeenSet -= Time.deltaTime;
 		}
 	}
 	

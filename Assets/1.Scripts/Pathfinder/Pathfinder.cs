@@ -6,7 +6,6 @@ using UnityEngine;
 public static class Pathfinder {
 
 	private static List<AbstractNode> DijkstraPathfinder(AbstractNode start, AbstractNode end){
-		Debug.Log("Pathfinder triggered");
 		List<AbstractNode> open = new List<AbstractNode>();
 		List<AbstractNode> closed = new List<AbstractNode>();
 		open.Add(start);
@@ -56,16 +55,19 @@ public static class Pathfinder {
 			retVal.Add(current);
 			current = current.FromNode;
 		}
-		retVal.Add(current);;
+		retVal.Add(current);
 		retVal.Reverse();
 		return retVal;
 	} 
 
 	public static List<SceneryBlock> getRoomPath(ARTFRoom start, ARTFRoom end){
 		List<AbstractNode> path = DijkstraPathfinder(new RoomNode(start, null), new RoomNode(end, null));
+		if(path == null || path.Count == 0) {
+			return null;
+		}
 		List<SceneryBlock> retVal = new List<SceneryBlock>();
-		foreach(RoomNode node in path) {
-			retVal.Add(node.Door);
+		for(int i = 0; i < path.Count; ++i) {
+			retVal.Add(((RoomNode)path[i]).Door);
 		}
 		return retVal;
 	}
@@ -88,22 +90,38 @@ public static class Pathfinder {
 		ARTFRoom sRoom = MapData.TheFarRooms.find(start);
 		ARTFRoom eRoom = MapData.TheFarRooms.find(end);
 
+		if(sRoom == null || eRoom == null) {
+			return null;
+		}
+
 		if(sRoom.Equals(eRoom)) {
 			return getSingleRoomPath(start, end);
 		}
 
 		List<SceneryBlock> roomPath = getRoomPath(sRoom, eRoom);
+		if(roomPath == null) {
+			return null;
+		}
 
 		List<Vector3> retVal = new List<Vector3>();
 
-		retVal.AddRange(getSingleRoomPath(start, roomPath[0].Position));
+		List<Vector3> somePath = getSingleRoomPath(start, roomPath[1].Position);
+		if(somePath == null) {
+			return null;
+		}
+		retVal.AddRange(somePath);
 		ARTFRoom r1;
+		ARTFRoom r2;
 		for(int i = 1; i < roomPath.Count-1; ++i){
 			r1 = MapData.TheFarRooms.find(roomPath[i].Position);
-			retVal.AddRange(r1.RoomPaths[new KeyValuePair<Vector3, Vector3>
+			r2 = MapData.TheFarRooms.find(r1.getDoorCheckPosition(roomPath[i]));
+			retVal.AddRange(r2.RoomPaths[new KeyValuePair<Vector3, Vector3>
 			                             (r1.getDoorCheckPosition(roomPath[i]), roomPath[i+1].Position)]);
 		}
-		retVal.AddRange(getSingleRoomPath(roomPath[roomPath.Count - 1].Position, end));
+
+		ARTFRoom rm = MapData.TheFarRooms.find(roomPath[roomPath.Count - 1].Position);
+
+		retVal.AddRange(getSingleRoomPath(rm.getDoorCheckPosition(roomPath[roomPath.Count-1]), end));
 
 		return retVal;
 

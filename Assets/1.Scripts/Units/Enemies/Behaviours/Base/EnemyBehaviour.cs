@@ -4,5 +4,9 @@
 using UnityEngine;
 
 public class EnemyBehaviour : StateMachineBehaviour {
-	public NewMobileEnemy unit;
+	protected NewEnemy unit;
+
+	public virtual void SetVar(NewEnemy unit) {
+		this.unit = unit;
+	}
 }
