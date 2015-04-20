@@ -386,7 +386,6 @@ public class Artilitree: MobileEnemy {
 			this.timing += Time.deltaTime;
 			yield return null;
 		}
-		// this.timing = this.rootTime;
 		this.rooted = true;
 	}
 	
@@ -396,7 +395,6 @@ public class Artilitree: MobileEnemy {
 			this.timing += Time.deltaTime;
 			yield return null;
 		}
-		// this.timing = this.rootTime;
 		this.unrooting = false;
 		this.rooted = false;
 	}

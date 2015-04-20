@@ -50,7 +50,7 @@ public class TargetCircle : MonoBehaviour {
 			this.controls = user.GetComponent<Player>().controls;
 		}
 
-		this.speed = 7.5f;
+		this.speed = user.stats.speed * 3;
 	}
 
 	// AI uses this to move circle
