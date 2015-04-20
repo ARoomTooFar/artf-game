@@ -17,10 +17,10 @@ public class Controls {
 [RequireComponent(typeof(Rigidbody))]
 public class Player : Character, IMoveable, IHealable<int>{
 	public string nameTag;
-	public bool inGrey;
 	public int testDmg;
 	public int greyDamage;
-	public bool testable, isReady, atEnd, atStart;
+	public bool invis;
+	public bool testable, isReady, atEnd, atStart, inGrey;
 	public GameObject currDoor;
 	public GameObject expDeath;
 	public Renderer[] rs;
@@ -31,7 +31,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public bool tapped;
 	public float last_pressed;
 	private bool stunned;
-	
+
 	public UIActive UI;
 	public Controls controls;
 	
@@ -41,7 +41,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	protected override void Awake() {
 		base.Awake();
-		opposition = Type.GetType("Enemy");
+		opposition = Type.GetType("NewEnemy");
 	}
 	
 	// Use this for initialization
@@ -163,16 +163,19 @@ public class Player : Character, IMoveable, IHealable<int>{
 				}*/
 		}
 		if (actable) {
-			if(Input.GetKeyDown(controls.attack) || (controls.joyUsed &&  Input.GetButtonDown(controls.joyAttack))) {
+			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
 				if(currDoor!=null){
 					currDoor.GetComponent<Door>().toggleOpen();
 					currDoor = null;
+					animator.SetBool("Charging", true);
+					//Debug.Log(luckCheck());
+					gear.weapon.initAttack();
 				}else{
 					animator.SetBool("Charging", true);
 					//Debug.Log(luckCheck());
 					gear.weapon.initAttack();
 				}
-			} else if(Input.GetKeyDown (controls.secItem) || (controls.joyUsed && Input.GetButtonDown(controls.joySecItem))) {
+			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
 					inventory.items[inventory.selected].useItem(); // Item count check can be removed if characters are required to have atleast 1 item at all times.
@@ -180,13 +183,13 @@ public class Player : Character, IMoveable, IHealable<int>{
 					// Play sound for trying to use item on cooldown or items
 					print("Item on Cooldown");
 				}
-			} else if(Input.GetKeyDown (controls.cycItem) || (controls.joyUsed && Input.GetButtonDown(controls.joyCycItem))) {
+			} else if(Input.GetKeyDown (controls.cycItem) || Input.GetButtonDown(controls.joyCycItem)) {
 				inventory.cycItems();
 			}
 			// Continues with what is happening
 		} else {
 			
-			if ((!Input.GetKey(controls.attack)&&!controls.joyUsed) || (controls.joyUsed && (!Input.GetButton(controls.joyAttack)))) {
+			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
 				animator.SetBool ("Charging", false);
 			}
 			/*else if (animSteInfo.nameHash == rollHash) { for later
@@ -195,7 +198,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		}
 		
 		
-		if ((Input.GetKeyUp (controls.secItem)&&!controls.joyUsed) || (controls.joyUsed && Input.GetButtonUp(controls.joySecItem)))  {
+		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
 			if (inventory.items.Count > 0) {
 				inventory.keepItemActive = false;
 				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
@@ -221,27 +224,36 @@ public class Player : Character, IMoveable, IHealable<int>{
 	// Might separate commands into a protected function and just have a movement function
 	public virtual void moveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
+		Vector3 camAngle = Camera.main.transform.eulerAngles;
+
 		
 		if (!stats.isDead&&actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing) && this.testControl)) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
 			//"Up" key assign pressed
-			if (Input.GetKey(controls.up)) {
-				newMoveDir += Vector3.forward;
+
+			float x;
+			float z;
+			if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
+				x = Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
+				z = Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
+				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Down" key assign pressed
-			if (Input.GetKey(controls.down)) {
-				newMoveDir += Vector3.back;
+			if (Input.GetKey(controls.down) || Input.GetAxis(controls.vert) < 0) {
+				x = -Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
+				z = -Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
+				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Left" key assign pressed
-			if (Input.GetKey(controls.left)) {
-				newMoveDir += Vector3.left;
+			if (Input.GetKey(controls.left) || Input.GetAxis(controls.hori) < 0) {
+				x = -Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
+				z = Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
+				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Right" key assign pressed
-			if (Input.GetKey(controls.right)) {
-				newMoveDir += Vector3.right;
-			}
-			//Joystick form
-			if(controls.joyUsed){
-				newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
+			if (Input.GetKey(controls.right)|| Input.GetAxis(controls.hori) > 0) {
+				x = Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
+				z = -Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
+				newMoveDir += new Vector3(x, 0, z);
 			}
 			
 			// facing = newMoveDir;
@@ -268,7 +280,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void damage(int dmgTaken, Character striker) {
 		if (!invincible&&!stats.isDead) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
-			
+			if(splatter != null){
+				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
+				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
+				Destroy (theSplat, 2);
+			}
 			// print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
 			
@@ -282,6 +298,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void damage(int dmgTaken) {
 		if (!invincible&&!stats.isDead) {
 			print("UGH!" + dmgTaken);
+			if(splatter != null){
+				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
+				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
+				Destroy (theSplat, 2);
+			}
 			stats.health -= greyTest(dmgTaken);
 			//UI.greyBar.current = greyDamage+stats.health;
 			if (stats.health <= 0) {
@@ -301,7 +322,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		stats.health = 0;
 		//UI.hpBar.current = 0;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position-new Vector3(0,6,0), transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
 			r.enabled = false;

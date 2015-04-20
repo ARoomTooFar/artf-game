@@ -5,8 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine;
 using System.Collections;
 
-public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHandler,*/ IPointerClickHandler
-{
+public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHandler,*/ IPointerClickHandler {
 	TileMapController tilemapcont;
 	static Camera UICamera;
 	GameObject draggedImageAnchor;
@@ -23,8 +22,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	Text priceText;
 	public string itemType;
 	
-	void Start ()
-	{
+	void Start() {
 
 		amountText = this.transform.Find("AmountText").gameObject.GetComponent("Text") as Text;
 //		amountText.text = (Money.money / Money.getPrice(itemType)).ToString();
@@ -32,68 +30,65 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		priceText = this.transform.Find("PriceText").gameObject.GetComponent("Text") as Text;
 //		priceText.text = (Money.getPrice(itemType)).ToString();
 
-		UICamera = GameObject.Find ("UICamera").GetComponent<Camera> ();
-		tilemapcont = GameObject.Find ("TileMap").GetComponent ("TileMapController") as TileMapController;
-		draggedImageAnchor = GameObject.Find ("DraggedImageAnchor");
-		Image p = draggedImageAnchor.GetComponent ("Image") as Image;
-		matToMakeInvisible = Resources.Load ("Textures/basecolor") as Material;
+		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
+		tilemapcont = GameObject.Find("TileMap").GetComponent("TileMapController") as TileMapController;
+		draggedImageAnchor = GameObject.Find("DraggedImageAnchor");
+		Image p = draggedImageAnchor.GetComponent("Image") as Image;
+		matToMakeInvisible = Resources.Load("Textures/basecolor") as Material;
 		p.material = matToMakeInvisible;
 
-		translucentShader = Shader.Find ("Transparent/Bumped Diffuse");
+		translucentShader = Shader.Find("Transparent/Bumped Diffuse");
 	}
 
-	void Update ()
-	{
+	void Update() {
 
 		amountText.text = "x" + (Money.money / price).ToString();
 //		priceText.text = "$" + (Money.getPrice(itemType)).ToString();
 		priceText.text = "$" + price;
 
-		if (selectedButtonID == this.gameObject.GetInstanceID ()) {
-			Ray ray = UICamera.ScreenPointToRay (Input.mousePosition);
+		if(selectedButtonID == this.gameObject.GetInstanceID()) {
+			Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit; 
 			
-			if (Physics.Raycast (ray, out hit, Mathf.Infinity)/* 
+			if(Physics.Raycast(ray, out hit, Mathf.Infinity)/* 
 			&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false*/) {
 				selectedButtonID = -1;
-				StartCoroutine (folderGhostDragging ());
+				StartCoroutine(folderGhostDragging());
 			}
 		}
 	}
 
 	//when this button is clicked
-	public void OnPointerClick (PointerEventData data)
-	{
-		if (selectedButtonID != this.gameObject.GetInstanceID()){
+	public void OnPointerClick(PointerEventData data) {
+		if(selectedButtonID != this.gameObject.GetInstanceID()) {
 			selectedButtonID = this.gameObject.GetInstanceID();
 			selectButton(this.gameObject);
 		}
 	}
 
-	public void selectButton(GameObject butt){
+	public void selectButton(GameObject butt) {
 		Destroy(buttonBG);
 		
 		//get bgButton from resources and child it to the itemList we're in
-		buttonBG = Instantiate (Resources.Load ("bgButton")) as GameObject;
-		buttonBG.transform.SetParent (butt.transform.parent);
-		RectTransform bgRect = buttonBG.GetComponent ("RectTransform") as RectTransform;
+		buttonBG = Instantiate(Resources.Load("bgButton")) as GameObject;
+		buttonBG.transform.SetParent(butt.transform.parent);
+		RectTransform bgRect = buttonBG.GetComponent("RectTransform") as RectTransform;
 		
 		//set its position and scale to be slightly bigger than the button
-		RectTransform thisRect = butt.GetComponent ("RectTransform") as RectTransform;
-		bgRect.anchoredPosition = new Vector2 (thisRect.anchoredPosition.x, thisRect.anchoredPosition.y);
-		bgRect.sizeDelta = new Vector2 (thisRect.sizeDelta.x, thisRect.sizeDelta.y);
+		RectTransform thisRect = butt.GetComponent("RectTransform") as RectTransform;
+		bgRect.anchoredPosition = new Vector2(thisRect.anchoredPosition.x, thisRect.anchoredPosition.y);
+		bgRect.sizeDelta = new Vector2(thisRect.sizeDelta.x, thisRect.sizeDelta.y);
 		
 		
 		//set its color
-		Button buttonOfBG = buttonBG.GetComponent ("Button") as Button;
+		Button buttonOfBG = buttonBG.GetComponent("Button") as Button;
 		buttonOfBG.image.color = Color.yellow;
 		
 		//make it so it's just an outline
 		buttonOfBG.image.fillCenter = false;
 	}
 
-	IEnumerator folderGhostDragging ()
-	{ 
+	IEnumerator folderGhostDragging() { 
 		string prefabLocation = "LevelEditor/" + connectedPrefab;
 
 
@@ -102,16 +97,16 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		
 		bool cancellingMove = false;
 		bool copyCreated = false;
-		newp = new Vector3 (0f, 0f, 0f);
+		newp = new Vector3(0f, 0f, 0f);
 		bool doorRotated = false;
-		Vector3 doorWallRot = new Vector3 (0f, 0f, 0f);
+		Vector3 doorWallRot = new Vector3(0f, 0f, 0f);
 		
-		while (!Input.GetMouseButton(0)) { 
+		while(!Input.GetMouseButton(0)) { 
 
 			//if we haven't made a copy of the object yet
-			if (!copyCreated) {
+			if(!copyCreated) {
 				//create copy of item object
-				itemObjectCopy = Instantiate (Resources.Load (prefabLocation)) as GameObject;
+				itemObjectCopy = Instantiate(Resources.Load(prefabLocation)) as GameObject;
 				itemObjectCopy.name = "Copy";
 				itemObjectCopy.GetComponent<ClickEvent>().enabled = false;
 				//update the item object things
@@ -120,8 +115,8 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 				//update the item object things
 				//shader has to be set in this loop, or transparency won't work
 				//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
-				foreach (Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
-					foreach(Material mat in rend.materials){
+				foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
+					foreach(Material mat in rend.materials) {
 						mat.shader = translucentShader;
 						trans = mat.color;
 						trans.a = .5f;
@@ -136,93 +131,89 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			}
 			
 			//if user wants to cancel the drag
-			if (Input.GetKeyDown (KeyCode.Escape)) {
-				Destroy (itemObjectCopy);
+			if(Input.GetKeyDown(KeyCode.Escape)) {
+				Destroy(itemObjectCopy);
 				cancellingMove = true;
 				
 				//break out of while loop
 				break;
 			}
 			
-			Ray ray = UICamera.ScreenPointToRay (Input.mousePosition);
-			RaycastHit hitInfo;
+			Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
+			float distance;
+			Global.ground.Raycast(ray, out distance);
 
-			if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity, draggingLayerMask)) {
-				if (hitInfo.collider.gameObject.name == "TileMap") {
-					int x = Mathf.RoundToInt (hitInfo.point.x / tilemapcont.tileSize);
-					int z = Mathf.RoundToInt (hitInfo.point.z / tilemapcont.tileSize);
+			int x = Mathf.RoundToInt(ray.GetPoint(distance).x);
+			int z = Mathf.RoundToInt(ray.GetPoint(distance).z);
 
-					//postion holder for inside this loop
-					Vector3 movePos = new Vector3 (x, 0f, z);
+			//postion holder for inside this loop
+			Vector3 movePos = new Vector3(x, 0f, z);
 
-					//for final placement of object, after we break from this loop
-					newp = movePos;
+			//for final placement of object, after we break from this loop
+			newp = movePos;
 
-					//if copy exists
-					if (copyCreated) {
+			//if copy exists
+			if(copyCreated) {
 
-						//if we got a door and it's on the edge of a room
-						if (itemObjectCopy.GetComponent<SceneryData> () != null
-							&& itemObjectCopy.GetComponent<SceneryData> ().isDoor
-							&& MapData.TheFarRooms.find (movePos) != null
+				//if we got a door and it's on the edge of a room
+				if(itemObjectCopy.GetComponent<SceneryData>() != null
+					&& itemObjectCopy.GetComponent<SceneryData>().isDoor
+					&& MapData.TheFarRooms.find(movePos) != null
 						   ) {
-							//snap door to an edge if it's near it
-							if ((MapData.TheFarRooms.find (movePos).isCloseToEdge (movePos, 3f)))
-								movePos = MapData.TheFarRooms.find (movePos).getNearestEdgePosition (movePos);
-
-							//set its new rotation
-							if (MapData.TheFarRooms.find (movePos).isEdge (movePos)) {
-								doorRotated = true;
-								doorWallRot = MapData.TheFarRooms.find (movePos).getWallSide (movePos).toRotationVector ();
-							}
-
-						}
-
-
-
+					//snap door to an edge if it's near it
+					if((MapData.TheFarRooms.find(movePos).isCloseToEdge(movePos, 3f))) {
+						movePos = MapData.TheFarRooms.find(movePos).getNearestEdgePosition(movePos);
 					}
 
-					//if it's a door, set it to last wall rotation
-					if (doorRotated == true) {
-						itemObjectCopy.transform.eulerAngles = doorWallRot;
+					//set its new rotation
+					if(MapData.TheFarRooms.find(movePos).isEdge(movePos)) {
+						doorRotated = true;
+						doorWallRot = MapData.TheFarRooms.find(movePos).getWallSide(movePos).toRotationVector();
 					}
 
-					itemObjectCopy.transform.position = movePos;
 				}
+
+				//if it's a door, set it to last wall rotation
+				if(doorRotated == true) {
+					itemObjectCopy.transform.eulerAngles = doorWallRot;
+				}
+
+				itemObjectCopy.transform.position = movePos;
 			}
+
 			yield return null; 
 		}
 		
 
 		
 		//if move was cancelled, we don't perform an update on the item object's position
-		if (cancellingMove == true) {
-			Destroy (buttonBG);
+		if(cancellingMove == true) {
+			Destroy(buttonBG);
 //			destroyButtonBG();
 			selectedButtonID = -1;
 		} else {
 
 			Vector3 pos = newp;
-			Vector3 rot = new Vector3 (0f, 0f, 0f);
+			Vector3 rot = new Vector3(0f, 0f, 0f);
 
 			//don't place item if we've click a button
-			if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false){
+			if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
 				SceneryData sdat = itemObjectCopy.GetComponent<SceneryData>();
-				if (sdat != null && sdat.isDoor){
-					ARTFRoom rm = MapData.TheFarRooms.find (pos);
-					if(rm != null && rm.isCloseToEdge(pos, 3f)){
-						pos = MapData.TheFarRooms.find (pos).getNearestEdgePosition (pos);
+				if(sdat != null && sdat.isDoor) {
+					ARTFRoom rm = MapData.TheFarRooms.find(pos);
+					if(rm != null && rm.isCloseToEdge(pos, 3f)) {
+						pos = MapData.TheFarRooms.find(pos).getNearestEdgePosition(pos);
 					}
 				}
 				Money.buy(itemType, price);
-				MapData.addObject (prefabLocation, pos, rot.toDirection ());
+				MapData.addObject(prefabLocation, pos, rot.toDirection());
 			}
 
 			//destroy the copy
-			Destroy (itemObjectCopy);
+			Destroy(itemObjectCopy);
 			itemObjectCopy = null;
 
-			Destroy (buttonBG);
+			Destroy(buttonBG);
 //			destroyButtonBG();
 			selectedButtonID = -1;
 		
@@ -231,15 +222,13 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		tilemapcont.suppressDragSelecting = false;
 	}
 
-	public void setConnectedPrefab (string s)
-	{
+	public void setConnectedPrefab(string s) {
 		connectedPrefab = s;
 	}
 
-	public void setButtonImage (string icon)
-	{
-		Image im = this.GetComponent ("Image") as Image;
-		Sprite sp = Resources.Load <Sprite> ("IconsUI/" + icon);
+	public void setButtonImage(string icon) {
+		Image im = this.GetComponent("Image") as Image;
+		Sprite sp = Resources.Load <Sprite>("IconsUI/" + icon);
 		im.sprite = sp;
 	}
 

@@ -11,7 +11,6 @@ public partial class ARTFRoom {
 	#region PrivateVariables
 	private static string defaultBlockID = "LevelEditor/Rooms/floortile";
 	private static string defaultFloor = "LevelEditor/Floors/IndustrialFloor1";
-	private static string defaultWall = "{0}/Rooms/wallstoneend";
 	#endregion PrivateVariables
 
 	public bool isStartRoom = false;
@@ -87,21 +86,21 @@ public partial class ARTFRoom {
 		get { return (LLCorner + URCorner) / 2; }
 	}
 
-	public GameObject LLMarker { get; private set; }
-	public GameObject URMarker { get; private set; }
-	public GameObject LRMarker { get; private set; }
-	public GameObject ULMarker { get; private set; }
+	public GameObject LLMarker { get; protected set; }
+	public GameObject URMarker { get; protected set; }
+	public GameObject LRMarker { get; protected set; }
+	public GameObject ULMarker { get; protected set; }
 
 
 
-	public void updateMarkerPositions(){
+	public virtual void updateMarkerPositions(){
 		LLMarker.transform.root.position = LLCorner;
 		URMarker.transform.root.position = URCorner;
 		LRMarker.transform.root.position = LRCorner;
 		ULMarker.transform.root.position = ULCorner;
 	}
 
-	public void setMarkerActive(bool active){
+	public virtual void setMarkerActive(bool active){
 		LLMarker.SetActive (active);
 		URMarker.SetActive (active);
 		LRMarker.SetActive (active);
@@ -190,7 +189,7 @@ public partial class ARTFRoom {
 				blk.Room = this;
 				//If the block is along the edge, give it a wall prefab
 				if(this.isEdge(blk.Position)) {
-					blk.addWall(new SceneryBlock(defaultWall, blk.Position, getWallSide(blk.Position)));
+					blk.addWall(getWallSide(blk.Position));
 				}
 			}
 		}
@@ -282,8 +281,8 @@ public partial class ARTFRoom {
 	#region ManipulationFunctions
 
 	public void setFloor(){
-		Vector3 p = this.Floor.transform.position;
-		this.Floor.transform.position = new Vector3(p.x - .5f, -.01f, p.z - .5f);
+		Vector3 p = this.Center;
+		this.Floor.transform.position = new Vector3(p.x, -.01f, p.z);
 		Vector3 scale = this.Floor.transform.localScale;
 		scale.x = this.Length;
 		scale.z = this.Height;

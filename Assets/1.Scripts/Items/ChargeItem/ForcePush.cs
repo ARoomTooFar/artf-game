@@ -14,11 +14,14 @@ public class ForcePush : ChargeItem {
 	public float stunDuration;
 	private Vector3 facing;
 	public List<Character> foes;
+	//public ReturnPoint startSpot;
 	//private Collider collider;
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
+		//startSpot = (ReturnPoint) FindObjectOfType(typeof(ReturnPoint));
 		//collider = GetComponent<Collider>();
+		//startSpot = transform.position - user.transform.position;
 		GetComponent<Collider>().enabled = false;
 	}
 	
@@ -50,7 +53,10 @@ public class ForcePush : ChargeItem {
 	protected override void animDone() {
 		user.freeAnim = true;
 		GetComponent<Collider>().enabled = false;
+		GetComponent<Renderer>().enabled = false;
 	    GetComponent<Rigidbody>().isKinematic = true;
+		transform.localScale = new Vector3(0.50f,0.50f,0.50f);
+		//transform.position = startSpot.transform.position;
 		foes.Clear();
 		base.animDone ();
 	}
@@ -62,7 +68,7 @@ public class ForcePush : ChargeItem {
 		yield return StartCoroutine(chgTimeFunc(chgTime));
 		//float tempStun = stunDuration * (hitWall ? 2 : 1);
 		
-		yield return StartCoroutine(retTimeFunc(chgTime));
+		//yield return StartCoroutine(retTimeFunc(chgTime));
 		yield return StartCoroutine(chgLagTime());
 
 		animDone();
@@ -73,6 +79,7 @@ public class ForcePush : ChargeItem {
 	// Timer and velocity changing thing
 	private IEnumerator chgTimeFunc(float chgTime) {
 		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
+			GetComponent<Renderer>().enabled = true;
 			GetComponent<Rigidbody>().velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 			transform.localScale += new Vector3(0.20f,0,0.20f);
 			foreach(Character foe in foes) {
@@ -83,19 +90,22 @@ public class ForcePush : ChargeItem {
 		}
 	}
 	private IEnumerator retTimeFunc(float chgTime) {
-		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
+		/*for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
             transform.localScale -= new Vector3(0.20f,0,0.20f);
 			GetComponent<Rigidbody>().velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 			/*if (!hit) {
 				rigidbody.velocity = Vector3.zero;
 				yield break;
-			}*/
+			}
 			foreach(Character foe in foes) {
 				foe.GetComponent<Rigidbody>().velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 				//((IForcible<float>)foe.GetComponent(typeof(IForcible<float>))).push(0.1f);
 			}
 			yield return 0;
-		}
+		}*/
+		//transform.localScale = new Vector3(0.50f,0.150f,0.50f);
+		//transform.position = startSpot.transform.position;
+		yield return 0;
 	}
 	
 	private IEnumerator chgLagTime() {

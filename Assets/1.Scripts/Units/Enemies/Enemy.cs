@@ -10,11 +10,6 @@ public class Enemy : Character {
 	public float dmgTimer = 0f;
 	public bool aggro = false;
 
-	//Is this unit part of the hive mind?
-	public bool swarmBool = false;
-	//Object which holds hivemind aggrotable
-	public Swarm swarm;
-
 	public int tier;
 	public AoETargetting aRange;
 	protected StateMachine sM;
@@ -29,6 +24,7 @@ public class Enemy : Character {
 	protected Vector3? lastSeenPosition = null;
 	protected AggroTable aggroT;
 	protected bool targetchanged;
+	public EnemyHealthBar hpBar;
 
 
 	protected int layerMask = 1 << 9;
@@ -49,7 +45,10 @@ public class Enemy : Character {
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType ("Player");
-		
+		hpBar = gameObject.GetComponentInChildren<EnemyHealthBar>();
+		if(hpBar != null){
+			hpBar.health = stats.health/stats.maxHealth;
+		}
 		facing = Vector3.back;
 		targetchanged = false;
 
@@ -67,14 +66,9 @@ public class Enemy : Character {
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
+
+		aggroT = new AggroTable();
 		
-		//Uses swarm aggro table if this unit swarms
-		if(swarmBool){
-			aggroT = swarm.aggroTable;
-		}
-		else{
-			aggroT = new AggroTable();
-		}
 	}
 
 	// Update is called once per frame
@@ -181,12 +175,14 @@ public class Enemy : Character {
 				return false;
 
 			}else{
-
-				aggroT.add(p,1);
-				lastSeenPosition = p.transform.position;
-				alerted = true;
+				Player addable = p.GetComponent<Player>();
+				if(!addable.invis){
+					aggroT.add(p,1);
+					lastSeenPosition = p.transform.position;
+					alerted = true;
+				}
 				return true;
-
+	
 			}
 		}
 		
@@ -213,7 +209,10 @@ public class Enemy : Character {
 
 	public override void damage(int dmgTaken, Character striker) {
 		base.damage(dmgTaken, striker);
-
+		if(hpBar != null){
+			Debug.Log((float)stats.health/stats.maxHealth);
+			hpBar.health = (float)stats.health/stats.maxHealth;
+		}
 		if (aggro == false) {
 			aggro = true;
 			dmgTimer = 0f;
@@ -230,11 +229,22 @@ public class Enemy : Character {
 		}
 
 		base.damage(dmgTaken);
+		if(hpBar != null){
+			Debug.Log((float)stats.health/stats.maxHealth);
+			hpBar.health =(float) stats.health/stats.maxHealth;
+		}
 	}
 
 	public override void die() {
 		base.die ();
-		Destroy (gameObject);
+		stats.health = 0;
+		//UI.hpBar.current = 0;
+		Renderer[] rs = GetComponentsInChildren<Renderer>();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
+		eDeath.setInitValues(this, true);
+		foreach (Renderer r in rs) {
+			r.enabled = false;
+		}
 	}
 
 	//-------------------------------//

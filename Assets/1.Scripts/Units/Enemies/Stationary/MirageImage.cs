@@ -2,10 +2,10 @@
 using System.Collections;
 
 // Inherits from mirage just to get enemy component
-public class MirageImage : Mirage, IDamageable<int, Character> {
+public class MirageImage : NewMirage {
 	
 	public MirageBlink spawnedBy;
-	public Mirage user;
+	public NewMirage user;
 
 	public int hitsToKill;
 

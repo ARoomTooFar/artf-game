@@ -18,12 +18,4 @@ public class Shockwave : EnergyProjectile {
 	protected override void Update() {
 		base.Update();
 	}
-
-	void OnTriggerEnter(Collider other) {
-		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
-		Character enemy = (Character) other.GetComponent(opposition);
-		if( component != null && enemy != null) {
-			enemy.damage(damage, user);
-		}
-	}
 }

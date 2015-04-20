@@ -6,8 +6,8 @@ using System.Collections.Generic;
 public class FoliantFodder: MobileEnemy {
 	
 	protected Roll roll;
-	public FoliantHive hive;
 
+	public FoliantHive hive;
 	public bool hiveMind;
 
 	protected override void Awake () {
@@ -114,12 +114,19 @@ public class FoliantFodder: MobileEnemy {
 	// Public Functions //
 	//------------------//
 	
-	public virtual void setHive(FoliantHive parent){
-		
+	public virtual void setHive(FoliantHive parent)
+	{
 		hiveMind = true;
 		hive = parent;
 		base.aggroT = hive.hiveMindAggro;
 
+	}
+
+	public virtual void hiveDied()
+	{
+		hiveMind = false;
+		hive = null;
+		base.aggroT = new AggroTable ();
 	}
 
 	//------------------//

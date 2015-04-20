@@ -50,6 +50,25 @@ public class Square {
 	}
 	#endregion Corners
 
+	#region SquareProperties
+	public float Area {
+		get { return Length * Height; }
+	}
+	
+	public float Perimeter {
+		get { return 2 * (Length + Height); }
+	}
+	
+	//Add 1 because a grid with corners in the same position has Length/Height == 1
+	public float Height {
+		get { return 1 + URCorner.z - LLCorner.z; }
+	}
+	
+	public float Length {
+		get { return 1 + URCorner.x - LLCorner.x; }
+	}
+	#endregion SquareProperties
+
 	public bool Intersect(Square that) {
 		//for each corner in room1
 		foreach(Vector3 cor in this.Corners) {
@@ -110,7 +129,7 @@ public class Square {
 	}
 
 	public void move(Vector3 offset){
-		Debug.Log(offset);
+		//Debug.Log(offset);
 		LLCorner = LLCorner + offset;
 		URCorner = URCorner + offset;
 	}

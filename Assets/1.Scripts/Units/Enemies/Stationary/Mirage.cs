@@ -45,7 +45,7 @@ public class Mirage : StationaryEnemy {
 
 		this.blink = this.inventory.items[inventory.selected].GetComponent<MirageBlink>();
 		if (this.blink == null) Debug.LogWarning ("Mirage does not have MirageBlink equipped");
-		else this.blink.rank = this.rank; // Put in check later for Rank
+		else this.blink.tier = this.rank; // Put in check later for Rank
 	}
 
 	protected override void setInitValues() {
