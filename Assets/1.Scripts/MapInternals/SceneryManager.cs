@@ -89,8 +89,6 @@ public class SceneryManager {
 				blk.remove();
 				return false;
 			}
-			
-			Debug.Log(blk.Orientation);
 			rm.Doors.Add(blk);
 			rm.linkRoomsViaDoors();
 			try{MapData.TheFarRooms.find(rm.getDoorCheckPosition(blk)).linkRoomsViaDoors();} catch{}

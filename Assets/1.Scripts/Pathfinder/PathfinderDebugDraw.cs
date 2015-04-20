@@ -7,15 +7,24 @@ public class PathfinderDebugDraw : MonoBehaviour {
 	public Material lineMat;
 	public Vector3 start;
 	public Vector3 end;
+	Vector3 prevStart;
+	Vector3 prevEnd;
 	public Vector3 offset;
+	List<Vector3> path;
 
 	// Update is called once per frame
 	void Update () {
-
+		if(prevStart != start || prevEnd != end) {
+			prevStart = start;
+			prevEnd = end;
+			path = Pathfinder.getPath(start, end);
+			if(path == null){
+				Debug.Log("Invalid Start and/or End point");
+			}
+		}
 	}
 
 	void OnPostRender(){
-		List<Vector3> path = null;
 		path = Pathfinder.getPath(start, end);
 		drawPath(path);
 		drawRoomPaths();
