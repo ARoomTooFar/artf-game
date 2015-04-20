@@ -55,8 +55,20 @@ public class CableVine : StationaryEnemy {
 	}
 
 	protected void redeploy () {
-		Vector3 direction = target.transform.position - this.transform.position;
+		this.facing = this.target.transform.position - this.transform.position;
+		this.facing.y = 0.0f;
 		float wait = 1.5f;
+
+		do {
+			/*
+			this.facing.x =  Random.value * (this.facing.x == 0 ? (Random.value - 0.5f) : Mathf.Sign);
+			this.facing.z = Random.value * (this.facing.z == 0 ? (Random.value - 0.5f) : Mathf.Sign);*/
+
+			this.facing.x = 1 - Random.value * 2;
+			this.facing.z = 1 - Random.value * 2;
+			
+			this.facing.Normalize();
+		} while (this.facing == Vector3.zero);
 
 	}
 
