@@ -7,10 +7,7 @@ using System.Collections.Generic;
 
 [System.Serializable]
 public class PercentValues {
-	private float PercentValue;
-	public float percentValue { // Makes our percent read only
-		get {return PercentValue;}
-	}
+	public float percentValue {get; protected set;}
 
 	// Our list of percent reductions
 	//     - Consider using trees instead
@@ -18,7 +15,7 @@ public class PercentValues {
 	private List<float> pntChanges;
 
 	public PercentValues() {
-		PercentValue = 1.0f;
+		percentValue = 1.0f;
 		pntChanges = new List<float>();
 	}
 
@@ -64,7 +61,7 @@ public class PercentValues {
 		foreach (float percent in pntChanges) {
 			tempValue += tempValue * percent;
 		}
-		PercentValue = tempValue;
+		percentValue = tempValue;
 	}
 }
 

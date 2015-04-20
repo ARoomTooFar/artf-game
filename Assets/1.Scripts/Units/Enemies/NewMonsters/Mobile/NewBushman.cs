@@ -5,9 +5,7 @@ using System.Collections.Generic;
 
 public class NewBushman : NewMobileEnemy {
 	
-	
 	private class BMFrenzyGrowth : StatsMultiplier {
-		
 		protected StatsMultiplier FrenzyGrowth(float dmgUp, float dmgRedUp, float spdUp, float currentGrowth) {
 			StatsMultiplier nextLv = new StatsMultiplier ();
 			nextLv.dmgAmp = dmgUp * currentGrowth;
@@ -16,8 +14,7 @@ public class NewBushman : NewMobileEnemy {
 			return nextLv;
 		}
 	}
-	
-	// private bool inFrenzy;
+
 	private PowerLevels powlvs;
 	private Frenzy frenzy;
 	private float health;
@@ -28,18 +25,16 @@ public class NewBushman : NewMobileEnemy {
 	
 	protected override void Awake () {
 		base.Awake ();
-		// inFrenzy = false;
-		health = stats.health;
-		
-		
+
 	}
 	
 	protected override void Start() {
 		base.Start ();
-		charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
-		lungeAttack = this.inventory.items[++inventory.selected].GetComponent<Roll>();
-		if (charge == null) Debug.LogWarning ("Bushmen does not have charge equipped");
 		setFrenzy ();
+
+		// charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
+		// lungeAttack = this.inventory.items[++inventory.selected].GetComponent<Roll>();
+		// if (charge == null) Debug.LogWarning ("Bushmen does not have charge");
 	}
 
 	protected override void Update() {
@@ -47,7 +42,6 @@ public class NewBushman : NewMobileEnemy {
 			health = stats.health;
 			powlvs.addRage(Mathf.CeilToInt((float)(stats.maxHealth - stats.health)/stats.maxHealth * 150));
 		}
-		//		Debug.Log (stats.health);
 		powlvs.Update();
 		base.Update ();
 	}
@@ -107,18 +101,4 @@ public class NewBushman : NewMobileEnemy {
 		lungeAttack.useItem ();
 		targetchanged = false;
 	}
-
-	/*
-	protected bool isFrenzy() {
-		return inFrenzy;
-	}
-	
-	protected bool isFrenzy(Character a){
-		Bushman bushman = (Bushman) a;
-		return bushman.isFrenzy ();
-	}
-	
-	protected void Frenzy(){
-		
-	}*/
 }
