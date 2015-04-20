@@ -181,6 +181,8 @@ public class Enemy : Character {
 					aggroT.add(p,1);
 					lastSeenPosition = p.transform.position;
 					alerted = true;
+				}else{
+					return false;
 				}
 				return true;
 	

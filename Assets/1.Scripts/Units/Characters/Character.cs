@@ -47,13 +47,13 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public bool freeAnim, attacking, stunned, knockedback;
 	public AudioClip hurt, victory, failure;
 
-	public bool testing; // Whether it takes gear in automatically or lets the gear loader to it
+	public bool testing, invis; // Whether it takes gear in automatically or lets the gear loader to it
 
 	public bool invincible = false;
 	public GameObject drop;
 	public GameObject splatter;
 	public Rigidbody rb;
-	protected Type opposition;
+	public Type opposition;
 	public Renderer[] rs;
 	public GameObject expDeath;
 	
@@ -385,7 +385,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	}
 	
 	public virtual void rez(){
-		//Debug.Log("Dooby");
 		if(stats.isDead){
 			stats.isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
