@@ -3,8 +3,10 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class MainMenuCtrl : MonoBehaviour {
+    public Controls controls;
     private int menuWidth = 1;
     private int menuHeight = 2;
+    private bool menuMoved = false;
 
     private GameObject[,] p1Menu;
     private int p1LocX = 0;
@@ -20,12 +22,31 @@ public class MainMenuCtrl : MonoBehaviour {
         p1Menu[0, 0].GetComponent<Button>().Select();
 	}
 
-    void Move () {
-        
+    void MenuMove (float hori, float vert) {
+        if (vert == 0 && hori == 0)
+        {
+            menuMoved = false;
+        } else if (menuMoved == false) {
+            menuMoved = true;
+
+            if (vert < 0)
+            {
+                p1LocY = (p1LocY + 1) % (menuHeight);
+            } else if (vert > 0) {
+                --p1LocY;
+                if (p1LocY < 0)
+                {
+                    p1LocY = menuHeight - 1;
+                }
+            }
+
+            p1Menu[p1LocY, p1LocX].GetComponent<Button>().Select();
+            Debug.Log(p1LocY);
+        }
     }
 	
 	// Update is called once per frame
 	void Update () {
-	
+        MenuMove(Input.GetAxisRaw(controls.hori), Input.GetAxisRaw(controls.vert));
 	}
 }
