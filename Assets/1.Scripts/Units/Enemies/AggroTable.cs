@@ -30,8 +30,6 @@ public class AggroTable {
 	private AggroNode head;
 	private AggroNode tail;
 
-	bool switchingTarget = false;
-
 	// Constructor
 	public AggroTable() {
 		aggroedSize = 0;
@@ -105,6 +103,19 @@ public class AggroTable {
 		fool.RemoveSelf();
 		fool = null;
 		aggroedSize--;
+		if (aggroedSize == 0) this.head = this.tail = null;
+	}
+
+	public void ClearTable() {
+		AggroNode temp;
+		while (head != null) {
+			temp = head;
+			head = head.next;
+			temp.RemoveSelf();
+			temp = null;
+		}
+		aggroedSize = 0;
+		this.head = this.tail = null;
 	}
 
 	public void PrintTable() {

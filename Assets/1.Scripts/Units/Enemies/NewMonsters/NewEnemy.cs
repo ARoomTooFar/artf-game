@@ -5,11 +5,9 @@ using System.Collections;
 using System;
 
 public class NewEnemy : Character {
-	
-	//Aggro Variables
-	public float dmgTimer = 0f;
-	public bool aggro = false;
-	
+
+	protected float lastSawTargetCount;
+
 	//Is this unit part of the hive mind?
 	public bool swarmBool = false;
 	//Object which holds hivemind aggrotable
@@ -38,7 +36,7 @@ public class NewEnemy : Character {
 	
 	protected int layerMask = 1 << 9;
 	
-	protected float aggroTimer = 7.0f;
+	protected float aggroTimer = 5.0f;
 	
 	void OnEnable()
 	{
@@ -95,13 +93,6 @@ public class NewEnemy : Character {
 			this.animator.SetBool("IsInAttackAnimation", this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge);
 			
 			
-			//If aggro'd, will chase, and if not attacked for 5 seconds, will deaggro
-			//If we want a deaggro function, change the if statement to require broken line of sight to target
-			/*if (aggro == true) {
-				fAggro ();
-			}*/
-			
-			
 			if (isGrounded) {
 				movementAnimation ();
 			} else {
@@ -139,12 +130,19 @@ public class NewEnemy : Character {
 	protected virtual void TargetFunction() {
 		target = aggroT.GetTopAggro ();
 		if (target != null) {
+			this.animator.SetBool ("Target", true);
 			if (this.canSeePlayer(target)) {
+				this.lastSawTargetCount = 0.0f;
 				float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
 				this.animator.SetBool ("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
 			} else {
+				this.lastSawTargetCount += Time.deltaTime;
 				this.target = null;
 				this.animator.SetBool ("Target", false);
+				if (this.lastSawTargetCount > this.aggroTimer) {
+					this.aggroT.RemoveUnit(this.aggroT.GetTopAggro());
+					this.lastSawTargetCount = 2;
+				}
 			}
 		} else {
 			if (aRange.unitsInRange.Count > 0) {
@@ -226,21 +224,11 @@ public class NewEnemy : Character {
 	public override void damage(int dmgTaken, Character striker) {
 		base.damage(dmgTaken, striker);
 		
-		if (aggro == false) {
-			aggro = true;
-			dmgTimer = 0f;
-		}		
-		
 		aggroT.AddAggro(striker.gameObject, dmgTaken);
-		aggroT.PrintTable();
+		// aggroT.PrintTable();
 	}
 	
 	public override void damage(int dmgTaken) {
-		//aggro is on and timer reset if attacked
-		if (aggro == false) {
-			aggro = true;
-			dmgTimer = 0f;
-		}
 		
 		base.damage(dmgTaken);
 	}
@@ -255,25 +243,7 @@ public class NewEnemy : Character {
 	//-----------------//
 	// Aggro Functions //
 	//-----------------//
-	
-	public virtual void fAggro(){
-		if (dmgTimer < 5f)
-		{
-			dmgTimer += Time.deltaTime;
-		}
-		else if (dmgTimer >= 5f)
-		{
-			resetAggro ();
-			dmgTimer = 0f;
-		}
-	}
-	
-	public virtual void resetAggro(){
-		dmgTimer = 0f;
-		aggro = false;
-		target = null;
-		this.animator.SetBool ("Target", false);
-	}
+
 	
 	public virtual void playerDied(GameObject dead){
 		if (aggroT != null) {
