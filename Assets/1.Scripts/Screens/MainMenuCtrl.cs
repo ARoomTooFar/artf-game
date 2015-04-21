@@ -23,18 +23,19 @@ public class MainMenuCtrl : MonoBehaviour {
         LevelSelect
     };
 
-
-
 	void Start () {
         // create p1 Start menu
         p1Menu = new GameObject[menuHeight, menuWidth];
 
-        p1Menu[0, 0] = GameObject.Find("/Canvas/BtnLogin");
-        p1Menu[1, 0] = GameObject.Find("/Canvas/BtnRegister");
+        p1Menu[0, 0] = GameObject.Find("/Canvas/P1MenuContainer/BtnLogin");
+        p1Menu[1, 0] = GameObject.Find("/Canvas/P1MenuContainer/BtnRegister");
 
         p1Menu[0, 0].GetComponent<Button>().Select();
 
-        //menu[0, 0].onClick.AddListener(() => keyboardbuttons(new char[1] { '-' }));
+        p1Menu[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            GameObject.Find("/Canvas").GetComponent<Animator>().SetTrigger("fadeOut");
+        });
 	}
 
     void MenuMove (float hori, float vert) {
