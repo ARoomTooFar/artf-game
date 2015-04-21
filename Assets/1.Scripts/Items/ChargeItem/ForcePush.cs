@@ -14,6 +14,7 @@ public class ForcePush : ChargeItem {
 	public float stunDuration;
 	private Vector3 facing;
 	public List<Character> foes;
+	public Projectile pusher;
 	//public ReturnPoint startSpot;
 	//private Collider collider;
 	// Use this for initialization
@@ -68,7 +69,7 @@ public class ForcePush : ChargeItem {
 		yield return StartCoroutine(chgTimeFunc(chgTime));
 		//float tempStun = stunDuration * (hitWall ? 2 : 1);
 		
-		//yield return StartCoroutine(retTimeFunc(chgTime));
+		yield return StartCoroutine(retTimeFunc(chgTime));
 		yield return StartCoroutine(chgLagTime());
 
 		animDone();
@@ -90,19 +91,15 @@ public class ForcePush : ChargeItem {
 		}
 	}
 	private IEnumerator retTimeFunc(float chgTime) {
-		/*for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
+		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
             transform.localScale -= new Vector3(0.20f,0,0.20f);
 			GetComponent<Rigidbody>().velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
-			/*if (!hit) {
-				rigidbody.velocity = Vector3.zero;
-				yield break;
-			}
 			foreach(Character foe in foes) {
 				foe.GetComponent<Rigidbody>().velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 				//((IForcible<float>)foe.GetComponent(typeof(IForcible<float>))).push(0.1f);
 			}
 			yield return 0;
-		}*/
+		}
 		//transform.localScale = new Vector3(0.50f,0.150f,0.50f);
 		//transform.position = startSpot.transform.position;
 		yield return 0;
@@ -119,9 +116,9 @@ public class ForcePush : ChargeItem {
 			RiotShield rShield = other.GetComponent<RiotShield>();
 			if (other.tag == "Wall" || rShield && rShield.user.facing.normalized + user.facing.normalized == Vector3.zero) {
 			}
-		IForcible<Vector3, float> component = (IForcible<Vector3,float>) other.GetComponent( typeof(IForcible<Vector3,float>) );
-			Character foe = other.GetComponent<Character>();
-			if( component != null && foe != null) {
+			IForcible<Vector3, float> component = (IForcible<Vector3,float>) other.GetComponent( typeof(IForcible<Vector3,float>) );
+			Character foe = (Character) other.GetComponent(user.opposition);
+			if( component != null && foe != null && foe != user) {
 				foes.Add (foe);
 			}
 		// Will need a differentiation in the future(Or not if we want this)

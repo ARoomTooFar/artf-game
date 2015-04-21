@@ -182,6 +182,8 @@ public class Enemy : Character {
 					aggroT.AddAggro(p, 1);
 					lastSeenPosition = p.transform.position;
 					alerted = true;
+				}else{
+					return false;
 				}
 				return true;
 	
@@ -242,7 +244,7 @@ public class Enemy : Character {
 		stats.health = 0;
 		//UI.hpBar.current = 0;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position-new Vector3(0,6,0), transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
 			r.enabled = false;
@@ -276,6 +278,19 @@ public class Enemy : Character {
 	public virtual void playerDied(GameObject dead){
 		if (aggroT != null) {
 			aggroT.RemoveUnit(dead);
+		}
+	}
+	
+	public virtual void playerVanished(GameObject dead){
+		if (aggroT != null) {
+			aggroT.deletePlayer(dead);
+			target = null;
+		}
+	}
+	
+	public virtual void taunted(GameObject taunter){
+		if (aggroT != null){
+			aggroT.add(taunter,aggroT.getVal()*2);
 		}
 	}
 	

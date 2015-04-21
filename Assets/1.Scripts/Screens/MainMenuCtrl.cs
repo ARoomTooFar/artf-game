@@ -4,22 +4,37 @@ using UnityEngine.UI;
 
 public class MainMenuCtrl : MonoBehaviour {
     public Controls controls;
+
+    // UI state
     private int menuWidth = 1;
     private int menuHeight = 2;
     private bool menuMoved = false;
 
+    // player1 menu
     private GameObject[,] p1Menu;
     private int p1LocX = 0;
     private int p1LocY = 0;
 
+    private enum Menu
+    {
+        Start,
+        Register,
+        Login,
+        LevelSelect
+    };
+
+
+
 	void Start () {
-        // create p1Menu
+        // create p1 Start menu
         p1Menu = new GameObject[menuHeight, menuWidth];
 
         p1Menu[0, 0] = GameObject.Find("/Canvas/BtnLogin");
         p1Menu[1, 0] = GameObject.Find("/Canvas/BtnRegister");
 
         p1Menu[0, 0].GetComponent<Button>().Select();
+
+        //menu[0, 0].onClick.AddListener(() => keyboardbuttons(new char[1] { '-' }));
 	}
 
     void MenuMove (float hori, float vert) {

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class Lunge : QuickItem {
 
-	[Range(0, 10)]
-	public int lungeDistance;
+	//[Range(0, 10)]
+	public float lungeDistance;
 	public bool contact, gOut, activated;
 	public float decSpeed, baseSize;
 	public List<Character> enemies;
@@ -19,7 +19,8 @@ public class Lunge : QuickItem {
 	protected override void setInitValues() {
 		cooldown = 10.0f;
 		immobil = new Immobilize();
-		baseSize = cooldown;
+		baseSize = cooldown*2;
+		lungeDistance = baseSize;
 		decSpeed = 1f;
 		gOut = true;
 		GetComponent<Collider>().enabled = false;
@@ -63,6 +64,11 @@ public class Lunge : QuickItem {
 	protected virtual void startSize(){
 		transform.localScale = new Vector3(0,.02f,0);
 		activated = false;
+		if(contact){
+			cooldown = cooldown*7.5f;
+		}else{
+			cooldown = 10f;
+		}
 		contact = false;
 		gOut = true;
 		GetComponent<Collider>().enabled = false;
@@ -84,7 +90,7 @@ public class Lunge : QuickItem {
 
 		// Check for obstacles in our way
 		if (Physics.Raycast(user.transform.position, user.facing.normalized, out hit, lungeDistance)) {
-			if (hit.transform.tag == "Wall" || hit.transform.tag == "Character" || hit.transform.tag == "Prop") {
+			if (hit.transform.tag == "Wall"  || hit.collider.GetComponent(user.opposition) || hit.transform.tag == "Prop") {
 				newDistance = hit.distance - 1f;
 				print(hit.transform.name);
 				//Debug.DrawLine(transform.position,hit.point,Color.red);
@@ -122,11 +128,12 @@ public class Lunge : QuickItem {
 	void OnTriggerEnter (Collider other) {
 		// Will need a differentiation in the future(Or not if we want this)
 		//     I suggest having the users know what is there enemy and settign ti that way somehow
-		Character enemy = other.GetComponent<Character>();
+		Character enemy = (Character) other.GetComponent(user.opposition);
 		IForcible<Vector3, float> component = (IForcible<Vector3, float>) other.GetComponent( typeof(IForcible<Vector3, float>));
 		if(component != null && enemy != null) {
 			contact = true;
 			enemies.Add (enemy);
+			print(enemy);
 			lungeFunc();
 		}
 	}

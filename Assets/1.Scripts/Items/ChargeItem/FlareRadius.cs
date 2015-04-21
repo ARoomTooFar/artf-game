@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NetRadius : MonoBehaviour,IFallable {
+public class FlareRadius : MonoBehaviour,IFallable {
 	public float gravity = 1.0f;
 	public bool isGrounded = false;
 	public float decSpeed;
 	public float baseSize;
 	public bool used;
 	public bool activated;
-	private Immobilize debuff;
 	public ParticleSystem particles;
 	public float duration;
+	public GameObject dummy;
 	
 	void Start () {
-		decSpeed = .0025f;
-		baseSize = 8f;
+		decSpeed = .0225f;
+		baseSize = 64f;
 		//transform.localScale = new Vector3(baseSize,.02f,baseSize);
 		//StartCoroutine("pulse",pulseTime);
 	}
@@ -24,7 +24,6 @@ public class NetRadius : MonoBehaviour,IFallable {
 	}
 	protected virtual void setInitValues(int num){
 		duration = num;
-		debuff = new Immobilize();
 	}
 	// Update is called once per frame
 	void Update () {
@@ -85,10 +84,10 @@ public class NetRadius : MonoBehaviour,IFallable {
 			used = true;
 			//Destroy(gameObject);
 		}*/
-		Character enemy = other.GetComponent<Character>();
+		Enemy enemy = other.GetComponent<Enemy>();
 		if (enemy != null) {
 			decSpeed = decSpeed*4;
-			enemy.BDS.addBuffDebuff(debuff, this.gameObject,duration/16);
+			enemy.taunted(dummy);
 		}
 	}
 	void OnTriggerExit (Collider other) {
