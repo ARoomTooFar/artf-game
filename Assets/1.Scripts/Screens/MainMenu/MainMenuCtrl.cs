@@ -33,8 +33,10 @@ public class MainMenuCtrl : MonoBehaviour {
         p1Menu[0, 0].GetComponent<Button>().Select();
 
         p1Menu[0, 0].GetComponent<Button>().onClick.AddListener(() => {
-            GameObject camera = GameObject.Find("/Main Camera");
+            //GameObject camera = GameObject.Find("/Main Camera");
             //camera.MoveCameraDown();
+
+            GameObject.Find("/Canvas").GetComponent<Animator>().SetTrigger("fadeOut");
         });
 	}
 
