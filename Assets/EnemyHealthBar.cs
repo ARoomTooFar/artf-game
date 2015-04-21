@@ -15,6 +15,12 @@ public class EnemyHealthBar : MonoBehaviour {
 
 	void Update () {
 		healthBar.value = health;
+		if(health == 1){
+			//Something for showing the health bar, doesn't need to be up if no damage is done. 
+		}
+		if(health == 0){
+			//Something for disappearing the health bar
+		}
 	}
 
 	//Update causes itemObjectUI flickering. LateUpdate prevents it
