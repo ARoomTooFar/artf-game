@@ -55,6 +55,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public Rigidbody rb;
 	public Type opposition;
 	public Renderer[] rs;
+	public Cloak[] skins;
 	public GameObject expDeath;
 	
 	// Animation variables
@@ -189,6 +190,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		stunned = knockedback = false;
 		setInitValues();
 		this.testControl = true;
+		skins = gameObject.GetComponentsInChildren<Cloak>();
 	}
 
 	// Use this for initialization

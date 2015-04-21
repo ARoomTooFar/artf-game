@@ -78,7 +78,7 @@ public class Vanish : QuickItem {
 		if(component != null && enemy != null) {
 			contact = true;
 			enemies.Add (enemy);
-			enemy.playerDied(user.gameObject);
+			enemy.playerVanished(user.gameObject);
 		}
 	}
 }

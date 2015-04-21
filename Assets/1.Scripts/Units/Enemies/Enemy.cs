@@ -280,5 +280,18 @@ public class Enemy : Character {
 		}
 	}
 	
+	public virtual void playerVanished(GameObject dead){
+		if (aggroT != null) {
+			aggroT.deletePlayer(dead);
+			target = null;
+		}
+	}
+	
+	public virtual void taunted(GameObject taunter){
+		if (aggroT != null){
+			aggroT.add(taunter,aggroT.getVal()*2);
+		}
+	}
+	
 	//---------------//
 }
