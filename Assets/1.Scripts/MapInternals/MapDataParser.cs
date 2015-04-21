@@ -39,6 +39,7 @@ public static class MapDataParser {
 			GameObject.Instantiate(Resources.Load("Player2"), start.Coordinates[1], Quaternion.identity);
 			GameObject.Instantiate(Resources.Load("Player3"), start.Coordinates[2], Quaternion.identity);
 			GameObject.Instantiate(Resources.Load("Player4"), start.Coordinates[3], Quaternion.identity);
+
 		}
 	}
 
