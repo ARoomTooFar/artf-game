@@ -8,12 +8,14 @@ public class AggroTable {
 	//     Holds the gameobject with aggro and the neighboring nodes
 	private class AggroNode {
 		public GameObject unit;
+		public Player play; // Used for testing for death (May need to derive from damageable in the future)
 		public int aggro;
 		public AggroNode prev;
 		public AggroNode next;
 		
 		public AggroNode(GameObject unit, int aggro) {
 			this.unit = unit;
+			this.play = unit.GetComponent<Player>();
 			this.aggro = aggro;
 			this.prev = null;
 			this.next = null;
@@ -44,7 +46,14 @@ public class AggroTable {
 
 	// Returns head, which should be the highest aggro
 	public GameObject GetTopAggro() {
-		if (this.head != null) return this.head.aggro >= 0 ? this.head.unit : null;
+		if (this.head != null) {
+			if (this.head.unit == null || (this.head.play != null && this.head.play.isDead)) {
+				Debug.Log (this.head.play.isDead);
+				this.RemoveUnit(this.head.unit);
+				return null;
+			}
+			return this.head.aggro >= 0 ? this.head.unit : null;
+		}
 		else return null;
 	}
 

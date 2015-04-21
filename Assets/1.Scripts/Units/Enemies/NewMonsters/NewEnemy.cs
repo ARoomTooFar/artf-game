@@ -98,7 +98,6 @@ public class NewEnemy : Character {
 			} else {
 				falling ();
 			}
-
 			this.TargetFunction();
 		}
 	}
@@ -129,6 +128,7 @@ public class NewEnemy : Character {
 
 	protected virtual void TargetFunction() {
 		target = aggroT.GetTopAggro ();
+		aggroT.PrintTable();
 		if (target != null) {
 			this.animator.SetBool ("Target", true);
 			if (this.canSeePlayer(target)) {
@@ -145,9 +145,11 @@ public class NewEnemy : Character {
 				}
 			}
 		} else {
+			this.animator.SetBool ("Target", false);
 			if (aRange.unitsInRange.Count > 0) {
 				foreach(Character tars in aRange.unitsInRange) {
 					if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
+						aggroT.AddAggro(tars.gameObject, 1);
 						target = tars.gameObject;
 						this.animator.SetBool("Target", true);
 						this.alerted = true;
@@ -184,7 +186,6 @@ public class NewEnemy : Character {
 				this.animator.SetBool("CanSeeTarget", false);
 				return false;
 			} else {
-				if (aggroT.aggroedSize == 0) aggroT.AddAggro(p,1);
 				lastSeenPosition = p.transform.position;
 				this.animator.SetBool ("HasLastSeenPosition", true);
 				this.lastSeenSet = 3.0f;
