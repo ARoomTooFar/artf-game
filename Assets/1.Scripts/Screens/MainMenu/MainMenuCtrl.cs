@@ -37,6 +37,7 @@ public class MainMenuCtrl : MonoBehaviour {
             //camera.MoveCameraDown();
 
             GameObject.Find("/Canvas").GetComponent<Animator>().SetTrigger("fadeOut");
+            GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
         });
 	}
 
