@@ -13,6 +13,7 @@ public class TableTester : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		/*
 		test = new AggroTable ();
 		test.testing = testing;
 		test.add (p1, 10);
@@ -23,6 +24,7 @@ public class TableTester : MonoBehaviour {
 		test.add (p1, 11);
 		test.add (p2, 25);
 		test.printOrder ();
+		*/
 	}
 	
 	// Update is called once per frame

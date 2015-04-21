@@ -137,8 +137,8 @@ public class NewEnemy : Character {
 	//-----------//
 
 	protected virtual void TargetFunction() {
+		target = aggroT.GetTopAggro ();
 		if (target != null) {
-			target = aggroT.getTarget ();
 			if (this.canSeePlayer(target)) {
 				float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
 				this.animator.SetBool ("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
@@ -186,7 +186,7 @@ public class NewEnemy : Character {
 				this.animator.SetBool("CanSeeTarget", false);
 				return false;
 			} else {
-				aggroT.add(p,1);
+				if (aggroT.aggroedSize == 0) aggroT.AddAggro(p,1);
 				lastSeenPosition = p.transform.position;
 				this.animator.SetBool ("HasLastSeenPosition", true);
 				this.lastSeenSet = 3.0f;
@@ -231,7 +231,8 @@ public class NewEnemy : Character {
 			dmgTimer = 0f;
 		}		
 		
-		// aggroT.add(striker.gameObject, dmgTaken); // This is causing the the AI to stop attacking and only approach and search for a target once they get damaged
+		aggroT.AddAggro(striker.gameObject, dmgTaken);
+		aggroT.PrintTable();
 	}
 	
 	public override void damage(int dmgTaken) {
@@ -276,7 +277,7 @@ public class NewEnemy : Character {
 	
 	public virtual void playerDied(GameObject dead){
 		if (aggroT != null) {
-			aggroT.deletePlayer(dead);
+			aggroT.RemoveUnit(dead);
 		}
 	}
 	

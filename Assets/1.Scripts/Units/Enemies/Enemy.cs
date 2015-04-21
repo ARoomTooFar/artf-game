@@ -96,9 +96,9 @@ public class Enemy : Character {
 				falling ();
 			}
 
-			if (target != null)
-				target = aggroT.getTarget ();
-			
+			// if (target != null)
+			//	target = aggroT.getTarget ();
+			target = aggroT.GetTopAggro();
 			
 		}
 	}
@@ -178,7 +178,8 @@ public class Enemy : Character {
 			}else{
 				Player addable = p.GetComponent<Player>();
 				if(!addable.invis){
-					aggroT.add(p,1);
+					// aggroT.add(p,1);
+					aggroT.AddAggro(p, 1);
 					lastSeenPosition = p.transform.position;
 					alerted = true;
 				}
@@ -219,7 +220,7 @@ public class Enemy : Character {
 			dmgTimer = 0f;
 		}		
 
-		// aggroT.add(striker.gameObject, dmgTaken); // This is causing the the AI to stop attacking and only approach and search for a target once they get damaged
+		aggroT.AddAggro(striker.gameObject, dmgTaken);
 	}
 	
 	public override void damage(int dmgTaken) {
@@ -274,7 +275,7 @@ public class Enemy : Character {
 
 	public virtual void playerDied(GameObject dead){
 		if (aggroT != null) {
-			aggroT.deletePlayer(dead);
+			aggroT.RemoveUnit(dead);
 		}
 	}
 	

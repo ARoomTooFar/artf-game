@@ -1,174 +1,169 @@
 using UnityEngine;
 using System.Collections;
 
-public class AggroNode 
-{
-	private GameObject g;
-	private int p;
-	public AggroNode l;
-	public AggroNode r;
-	
-	public AggroNode(GameObject g1, int p1)
-	{
-		g = g1;
-		p = p1;
-	}
-	public int getPrio()
-	{
-		return p;
-	}
-	public GameObject getObj()
-	{
-		return g;
-	}
-	public void changePrio(int n)
-	{
-		p = n;
-	}
-}
-
 //Aggro table class for enemies
-public class AggroTable 
-{
+public class AggroTable {
+
+	// Aggro Node class
+	//     Holds the gameobject with aggro and the neighboring nodes
+	private class AggroNode {
+		public GameObject unit;
+		public int aggro;
+		public AggroNode prev;
+		public AggroNode next;
+		
+		public AggroNode(GameObject unit, int aggro) {
+			this.unit = unit;
+			this.aggro = aggro;
+			this.prev = null;
+			this.next = null;
+		}
+
+		public void RemoveSelf() {
+			this.unit = null;
+			this.prev = null;
+			this.next = null;
+		}
+	}
+
+	public int aggroedSize{get; private set;}
 	private AggroNode head;
-	public bool testing = false;
+	private AggroNode tail;
+
 	bool switchingTarget = false;
-	
-	public  AggroTable(){
-		head = new AggroNode (null, 0);
+
+	// Constructor
+	public AggroTable() {
+		aggroedSize = 0;
+		head = null;
+		tail = null;
 	}
 
-	public GameObject topPrio(){
-		return this.head.getObj();
+
+	//-------------------//
+	// Primary Functions //
+	//-------------------//
+
+	// Returns head, which should be the highest aggro
+	public GameObject GetTopAggro() {
+		if (this.head != null) return this.head.aggro >= 0 ? this.head.unit : null;
+		else return null;
 	}
 
-	public bool changingAggro(){
-		if (switchingTarget) {
-			switchingTarget = false;
-			return true;
-		}
-		return false;
+	public int GetAggro() {
+		if (this.head != null) return this.head.aggro;
+		else return -1;
 	}
-	
-	public void add(GameObject g1, int p1)
-	{
-		// Debug.Log ("Adding " + g1 + " with prio " + p1);
-		AggroNode n = new AggroNode (g1, p1);
-		
-		AggroNode runner = head;
-		while (runner != null)
-		{
-			AggroNode temp = runner;
-			runner = runner.r;
-			if (g1 == temp.getObj ())
-			{
-				if (p1 > temp.getPrio ())
-				{
-					deleteNode (temp);
-				}
-				else
-				{
-					return;
-				}
+
+	// Adds to the aggro if unit is in list, else makes a new node and adds it to the list
+	public void AddAggro(GameObject source, int aggro) {
+		AggroNode newBlood = this.GetNodeInList(source);
+		if (newBlood != null) newBlood.aggro += aggro;
+		else {
+			newBlood = new AggroNode(source, aggro);
+			if (tail != null) {
+				tail.next = newBlood;
+				newBlood.prev = tail;
+			} else {
+				head = newBlood;
 			}
+			tail = newBlood;
+			aggroedSize++;
 		}
-		
-		if (head == null) {
-			head = n;
-		}else {
-			addR (n, head);
-		}
+		this.SetRank (newBlood);
 	}
-	
-	
-	public void addR(AggroNode nAdd, AggroNode nOld){
-		if (nAdd.getPrio () > nOld.getPrio ()) 
-		{
-			if (nOld.l != null) 
-			{
-				nOld.l.r = nAdd;
+
+	// Like AddAggro but sets aggro to given amount (Stuff like taunt, stealth, flare, etc);
+	public void SetAggro(GameObject source, int aggro) {
+		AggroNode newBlood = this.GetNodeInList(source);
+		if (newBlood != null) newBlood.aggro = aggro;
+		else {
+			newBlood = new AggroNode(source, aggro);
+			if (tail != null) {
+				tail.next = newBlood;
+				newBlood.prev = tail;
+			} else {
+				head = newBlood;
 			}
-			else
-			{
-				head = nAdd;
-				switchingTarget = true;
+			tail = newBlood;
+			aggroedSize++;
+		}
+		this.SetRank (newBlood);
+	}
+
+	public void RemoveUnit(GameObject source) {
+		AggroNode fool = this.GetNodeInList (source);
+		if (fool == null) return;
+		if (fool.prev != null) {
+			fool.prev.next = fool.next;
+			if (fool.next == null) this.tail = fool.prev;
+		}
+		if (fool.next != null) {
+			fool.next.prev = fool.prev;
+			if (fool.prev == null) this.head = fool.next;
+		}
+		fool.RemoveSelf();
+		fool = null;
+		aggroedSize--;
+	}
+
+	public void PrintTable() {
+		string theAssHoles = "";
+		AggroNode tempNode = head;
+		while (tempNode != null) {
+			theAssHoles = theAssHoles += tempNode.unit.name + " (" + tempNode.aggro + ") ";
+			tempNode = tempNode.next;
+		}
+		Debug.Log (theAssHoles);
+	}
+
+	//------------------//
+	// Helper Functions //
+	//------------------//
+
+	// Goes through our list and returns the node with the matching target
+	//     returns null if none is found
+	private AggroNode GetNodeInList(GameObject source) {
+		AggroNode tempNode = head;
+		while (tempNode != null) {
+			if (tempNode.unit != source) tempNode = tempNode.next;
+			else break;
+		}
+		return tempNode;
+	}
+
+	// Goes through the neighbors of the passed in node to see if it is in correct place
+	private void SetRank(AggroNode unit) {
+		// Checks those higher in the list
+		while (unit.prev != null) {
+			if (unit.prev.aggro > unit.aggro) break;
+			else {
+				AggroNode prevNode = unit.prev;
+				unit.prev = prevNode.prev;
+				if (unit.prev != null) unit.prev.next = unit;
+				if (unit.next != null) unit.next.prev = prevNode;
+				prevNode.prev = unit;
+				prevNode.next = unit.next;
+				unit.next = prevNode;
+				if (prevNode.next == null) this.tail = prevNode;
 			}
-			nAdd.l = nOld.l;
-			nAdd.r = nOld;
-			nOld.l = nAdd;
-		} 
-		else if (nOld.r == null) 
-		{
-			nOld.r = nAdd;
-			nAdd.l = nOld;
-		} 
-		else 
-		{
-			addR (nAdd, nOld.r);
+			if (unit.prev == null) this.head = unit;
 		}
-	}
-	
-	public void deleteNode(AggroNode del)
-	{
-		if (testing)
-			Debug.Log ("Deleting " + del.getPrio());
-		//Case node given is null
-		if (del == null) 
-		{
-			return;
-		}
-		//Case node was head
-		else if (del.l == null) 
-		{
-			head = del.r;
-		}
-		//Case node is in middle, not head nor tail
-		else if (del.r != null)
-		{
-			if(testing)
-				Debug.Log (del.l.getPrio() + " is to the left of the deleted node");
-			del.l.r = del.r;
-			del.r.l = del.l;
-		}
-		//Case node is tail
-		else
-		{
-			del.l.r = null;
-		}
-		del = null;
-	}
-	
-	
-	public void deletePlayer(GameObject del)
-	{
-		AggroNode runner = head;
-		while (runner != null)
-		{
-			AggroNode temp = runner;
-			runner = runner.r;
-			if (del == temp.getObj ())
-			{
-				deleteNode (temp);
+
+		// Checks those lower in the list
+		while (unit.next != null) {
+			if (unit.next.aggro < unit.aggro) break;
+			else {
+				AggroNode nextNode = unit.next;
+				unit.next = nextNode.next;
+				if (unit.next != null) unit.next.prev = unit;
+				if (unit.prev != null) unit.prev.next = nextNode;
+				nextNode.next = unit;
+				nextNode.prev = unit.prev;
+				unit.prev = nextNode;
+				if (nextNode.prev == null) this.head = nextNode;
 			}
-		}
-	}
-	
-	public GameObject getTarget()
-	{
-		return head.getObj ();
-	}
-	
-	public int getVal()
-	{
-		return head.getPrio ();
-	}
-	
-	public void printOrder()
-	{
-		AggroNode runner = head;
-		while (runner != null) {
-			Debug.Log (runner.getPrio ());
-			runner = runner.r;
+			if (unit.next == null) this.tail = unit;
 		}
 	}
 }

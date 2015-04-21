@@ -20,6 +20,7 @@ public class NewMobileEnemy : NewEnemy {
 	
 	protected override void Start() {
 		base.Start ();
+		this.rb.isKinematic = true;
 	}
 	
 	protected override void Update() {
