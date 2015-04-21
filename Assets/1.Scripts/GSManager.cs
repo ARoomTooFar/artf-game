@@ -72,7 +72,7 @@ public class GSManager : MonoBehaviour {
 		if (serv.dataCheck(currLevelData))
 		{
 			Debug.Log("LVL DL SUCCESS: " + currLevelData);
-			yield return StartCoroutine(LoadSceneAsync("MondayPresentation"));
+			yield return StartCoroutine(LoadSceneAsync("Proto-level-loading"));
 			
 			// after loading is done, find new LoadingBG in new scene
 			//loadingBG = GameObject.Find("LoadingBG");
