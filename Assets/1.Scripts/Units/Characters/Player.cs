@@ -21,15 +21,12 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart, inGrey;
 	public GameObject currDoor;
-	public GameObject expDeath;
-	public Renderer[] rs;
 	private int mash_threshold;
 	private int mash_value;
 	private KeyCode kc;
 	private bool break_free;
 	public bool tapped;
 	public float last_pressed;
-	private bool stunned;
 
 	public UIActive UI;
 	public Controls controls;
@@ -40,8 +37,8 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	protected override void Awake() {
 		base.Awake();
-		opposition = Type.GetType("NewEnemy");
-		//opposition = Type.GetType("Enemy"); //Use this if going after testable opponents
+		// opposition = Type.GetType("NewEnemy");
+		opposition = Type.GetType("Enemy"); //Use this if going after testable opponents
 	}
 	
 	// Use this for initialization

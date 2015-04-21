@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CableVine : StationaryEnemy {
 	
-	protected Stun stun;
+	//protected Stun stunDebuff;
 	protected GenericDoT constrict;
 	bool inStealth;
 	HingeJoint tether;
@@ -20,7 +20,7 @@ public class CableVine : StationaryEnemy {
 
 	protected override void Start() {
 		base.Start ();
-		stun = new Stun ();
+		//stunDebuff = new Stun ();
 		constrict = new GenericDoT (1);
 		maxApproachRadius = GetComponentInChildren<SphereCollider> ().radius;
 		this.blink = this.inventory.items[inventory.selected].GetComponent<Blink> ();
@@ -28,6 +28,7 @@ public class CableVine : StationaryEnemy {
 	}
 
 	protected override void initStates() {
+	
 		base.initStates ();
 
 		State outranged = new State ("outranged");
@@ -63,14 +64,12 @@ public class CableVine : StationaryEnemy {
 		base.Approach ();
 		target.transform.position = target.transform.position - pullVelocity();
 		target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject);
-		redeploy ();
 	}
 
 	protected override void Attack ()
 	{
-//		base.Attack ();
-		target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject);
-		target.GetComponent<Player> ().BDS.addBuffDebuff (stun, this.gameObject, 4.0f);
+		base.Attack ();
+		// target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject);
 	}
 
 	protected override void Rest() {
