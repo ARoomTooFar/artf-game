@@ -79,18 +79,19 @@ public class SceneryManager {
 	 */
 	public bool add(SceneryBlock blk) {
 		if(blk.BlockInfo.isDoor){
-			if(!MapData.TheFarRooms.find(blk.Position).isEdge(blk.Position)){
+			ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
+			if(!rm.isEdge(blk.Position)){
 				blk.remove();
 				return false;
 			}
-			blk.rotate(MapData.TheFarRooms.find(blk.Position).getWallSide(blk.Position));
+			blk.rotate(rm.getWallSide(blk.Position));
 			if(!blk.Orientation.isCardinal()){
 				blk.remove();
 				return false;
 			}
-			Debug.Log(blk.Orientation);
-			MapData.TheFarRooms.find(blk.Position).Doors.Add(blk);
-			MapData.TheFarRooms.find(blk.Position).linkRoomsViaDoors();
+			rm.Doors.Add(blk);
+			rm.linkRoomsViaDoors();
+			try{MapData.TheFarRooms.find(rm.getDoorCheckPosition(blk)).linkRoomsViaDoors();} catch{}
 
 			//aaron - gets wall tiles that are replaced by door
 			foreach(Vector3 pos in blk.Coordinates){

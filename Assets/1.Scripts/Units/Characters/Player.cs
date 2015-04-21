@@ -19,7 +19,6 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public string nameTag;
 	public int testDmg;
 	public int greyDamage;
-	public bool invis;
 	public bool testable, isReady, atEnd, atStart, inGrey;
 	public GameObject currDoor;
 	public GameObject expDeath;
@@ -42,6 +41,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType("NewEnemy");
+		//opposition = Type.GetType("Enemy"); //Use this if going after testable opponents
 	}
 	
 	// Use this for initialization
@@ -108,7 +108,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		if(stats.health <= 0){
 			
 			isDead = true;
-			UI.hpBar.current = 0;
+			if(UI!=null) UI.hpBar.current = 0;
 		} else {
 			if(UI!=null){
 				if(UI.onState){
@@ -298,12 +298,12 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void damage(int dmgTaken) {
 		if (!invincible&&!stats.isDead) {
 			print("UGH!" + dmgTaken);
+			stats.health -= greyTest(dmgTaken);
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
-				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
+				theSplat.adjuster = (float) ((stats.maxHealth-stats.health)/stats.maxHealth);
 				Destroy (theSplat, 2);
 			}
-			stats.health -= greyTest(dmgTaken);
 			//UI.greyBar.current = greyDamage+stats.health;
 			if (stats.health <= 0) {
 				

@@ -35,7 +35,7 @@ public class AoETargetting : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if ((affectPlayers && other.GetComponent<Player>() != null) || (affectEnemies && other.GetComponent<Enemy>() != null)) {
 			Character unit = other.GetComponent<Character>();
-			if (unitsInRange.Count == 0) this.InvokeRepeating("cleanList", 3.0f, 3.0f);
+			if (unitsInRange.Count == 0 && !unit.invis) this.InvokeRepeating("cleanList", 3.0f, 3.0f);
 			unitsInRange.Add(unit);
 			this.gameObject.SendMessageUpwards("unitEntered", unit, SendMessageOptions.DontRequireReceiver);
 		}
