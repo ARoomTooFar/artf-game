@@ -35,11 +35,18 @@ public static class MapDataParser {
 		if(Global.inLevelEditor) {
 			Mode.setTileMode();
 		} else {
-			GameObject.Instantiate(Resources.Load("Player1"), start.Coordinates[0], Quaternion.identity);
-			GameObject.Instantiate(Resources.Load("Player2"), start.Coordinates[1], Quaternion.identity);
-			GameObject.Instantiate(Resources.Load("Player3"), start.Coordinates[2], Quaternion.identity);
-			GameObject.Instantiate(Resources.Load("Player4"), start.Coordinates[3], Quaternion.identity);
+            Debug.Log(Resources.Load("Player1"));
 
+			GameObject p1 = GameObject.Instantiate(Resources.Load("Player1"), start.Coordinates[0], Quaternion.identity) as GameObject;
+            GameObject p2 = GameObject.Instantiate(Resources.Load("Player2"), start.Coordinates[1], Quaternion.identity) as GameObject;
+            GameObject p3 = GameObject.Instantiate(Resources.Load("Player3"), start.Coordinates[2], Quaternion.identity) as GameObject;
+            GameObject p4 = GameObject.Instantiate(Resources.Load("Player4"), start.Coordinates[3], Quaternion.identity) as GameObject;
+
+            Loadgear loadgear = GameObject.Find("/Loadgear").GetComponent<Loadgear>();
+            loadgear.players[0] = p1.GetComponent<Character>();
+            loadgear.players[1] = p2.GetComponent<Character>();
+            loadgear.players[2] = p3.GetComponent<Character>();
+            loadgear.players[3] = p4.GetComponent<Character>();
 		}
 	}
 
