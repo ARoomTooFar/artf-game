@@ -70,12 +70,12 @@ public static class MapDataParser {
 	}
 
 	private static void parseTerrain(string SaveString) {
-//		Debug.Log(SaveString);
+        // Debug.Log(SaveString);
 		string[] type = SaveString.Split(':');
 		string[] blocks = type[1].Trim().Split(' ');
 		foreach(string blk in blocks) {
 			string[] blkParams = blk.Split(',');
-//			Debug.Log(blkParams[0] + ", " + blkParams[1] + ", " + blkParams[2] + ": " + type[0]);
+            // Debug.Log(blkParams[0] + ", " + blkParams[1] + ", " + blkParams[2] + ": " + type[0]);
 			Vector3 pos = new Vector3(float.Parse(blkParams[0]),
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
