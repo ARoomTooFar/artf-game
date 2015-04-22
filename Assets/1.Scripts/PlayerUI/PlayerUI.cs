@@ -2,11 +2,12 @@
 using System.Collections;
 using UnityEngine.UI;
 
+//initializes the 4 player panes
 public class PlayerUI : MonoBehaviour {
 
 	void Start () {
 
-		//hardcoded for the test scene
+		//hardcoded just for the test scene
 		PlayerUIPane playerPane = new PlayerUIPane();
 		playerPane = transform.Find("Player1").gameObject.AddComponent<PlayerUIPane>();
 		playerPane.initVals("PlayerZ");
