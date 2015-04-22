@@ -10,7 +10,7 @@ public static class ObjectFocus {
 	}
 
 	public static void fillFocusedObjects(){
-		focusedObjects = MapData.getObjects ((GameObject.Find ("TileMap").GetComponent ("TileMapController") as TileMapController).selectedTiles);
+		focusedObjects = MapData.getObjects (Camera.main.GetComponent<TileMapController>().selectedTiles);
 	}
 	
 }

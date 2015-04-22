@@ -14,13 +14,9 @@ using System.Linq;
 public class TileMapController : MonoBehaviour {
 	public int grid_x;
 	public int grid_z;
-	public float tileSize = 1.0f;
 	Camera UICamera;
 	public HashSet<Vector3> selectedTiles = new HashSet<Vector3>();
-	Vector3 currTile;
 	public Vector3 shiftOrigin = Global.nullVector3;
-	string selectedItem = null;
-	GameObject currentObj;
 	public bool placeRoomClicked = false;
 	public float secondX;
 	public float secondZ;
@@ -28,44 +24,84 @@ public class TileMapController : MonoBehaviour {
 	Vector3 clickOrigin = Global.nullVector3;
 	
 	void Start() {	
-		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
+		UICamera = Camera.main;
 		grid_x = 100;
 		grid_z = 100;
 		//buildMesh();
 	}
 
 	void Update() {
-		RayToScene();
-		Ray ray = new Ray();
-		ray.origin = UICamera.transform.position;
-		ray.direction = UICamera.transform.forward;
+		//RayToScene();
+		if(EventSystem.current.IsPointerOverGameObject()) {
+			return;
+		}
+		Vector3 point = Global.nullVector3;
+		if(!Input.GetMouseButton(0)) {
+			clickOrigin = Global.nullVector3;
+			return;
+		}
+		//raycast
+		Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hitInfo;
 		float distance;
-		Vector3 camFocus;
-		if(Global.ground.Raycast(ray, out distance)) {
-			camFocus = ray.GetPoint(distance).Round(1);
-			camFocus.x -= (grid_x / 2) * transform.localScale.x;
-			camFocus.z -= (grid_z / 2) * transform.localScale.z;
-			transform.position = camFocus;
+		Global.ground.Raycast(ray, out distance);
+		Physics.Raycast(ray, out hitInfo, distance);
+			
+		/* check whether the ray hits an object or the tile map */
+		if(hitInfo.collider != null) {
+			point = hitInfo.collider.transform.position.Round();
+			point.y = 0;
+		} else {
+			point = ray.GetPoint(distance).Round();
+		}
+		if(clickOrigin == Global.nullVector3) {
+			clickOrigin = point;
 		}
 
+		if(Input.GetMouseButtonDown(0)) {
+			if(Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) {
+				if(!selectedTiles.Add(point)) {
+					selectedTiles.Remove(point);
+				} else {
+					shiftOrigin = point;
+				}
+				return;
+			}
+
+			if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+				if(shiftOrigin == Global.nullVector3) {
+					shiftOrigin = point;
+				}
+				selectBlock(shiftOrigin, point);
+				return;
+			}
+
+			selectedTiles.Clear();
+			selectedTiles.Add(point);
+			shiftOrigin = point;
+
+			return;
+		}  
+		if(Input.GetMouseButton(0) && clickOrigin != point) {
+			selectBlock(shiftOrigin, point);
+		}
+	}
+
+	private void selectBlock(Vector3 vec1, Vector3 vec2){
+		selectedTiles.Clear();
+		Vector3 max = vec1.getMaxVals(vec2);
+		Vector3 min = vec1.getMinVals(vec2);
+		for(int i = (int) min.x; i <= (int) max.x; ++i) {
+			for(int j = (int) min.z; j <= (int) max.z; ++j) {
+				selectedTiles.Add(new Vector3(i, 0, j));
+			}
+		}
 	}
 
 	public void fillInRoom() {
 		MapData.addRoom(new Vector3(shiftOrigin.x, 0, shiftOrigin.z), new Vector3(secondX, 0, secondZ));
 	}
 
-	public bool fillInStartRoom() {
-		return MapData.addStartRoom(new Vector3(shiftOrigin.x, 0, shiftOrigin.z), new Vector3(secondX, 0, secondZ));
-	}
-
-	public bool fillInEndRoom() {
-		return MapData.addEndRoom(new Vector3(shiftOrigin.x, 0, shiftOrigin.z), new Vector3(secondX, 0, secondZ));
-	}
-
-	public Vector3 getCenterOfSelectedArea() {
-		return (new Vector3(Mathf.Floor(shiftOrigin.x + secondX) / 2f, 0f, Mathf.Floor(shiftOrigin.z + secondZ) / 2f));
-	}
-	
 	void RayToScene() {
 		/* get world coordinates with respect to mouse position by raycast */
 		Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
@@ -76,34 +112,18 @@ public class TileMapController : MonoBehaviour {
 		/* getting raycast info and logic */
 		//&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false
 		Physics.Raycast(ray, out hitInfo, distance);
-		//selectedItem gets set by UIHandler_ItemButtons calling setSelectedItem()
-		//in this script. the !Input.GetMouseButton (0) check below will indicate
-		//that a drag has ended, and so we can drop the object on the map.
-		if(selectedItem != null && !Input.GetMouseButton(0)) {
-			int x = Mathf.RoundToInt(ray.GetPoint(distance).x);
-			int z = Mathf.RoundToInt(ray.GetPoint(distance).z);
-				
-			Vector3 obj_pos = new Vector3(x, 0f, z);
-			Vector3 obj_rot = new Vector3(0f, 90f, 0f);
-			//output_tileMap.instantiateItemObject (selectedItem, obj_pos, obj_rot);
-			MapData.addObject(selectedItem, obj_pos, obj_rot.toDirection());
-
-			clearSelectedItem();
+		/* check whether the ray hits an object or the tile map */
+		if(hitInfo.collider != null) {
+			snapToGrid(hitInfo.collider.gameObject.transform.position.x, hitInfo.collider.transform.position.z);
 		} else {
-			/* check whether the ray hits an object or the tile map */
-			if(hitInfo.collider != null) {
-				snapToGrid(hitInfo.collider.gameObject.transform.position.x, hitInfo.collider.transform.position.z);
-			} else {
-				snapToGrid(ray.GetPoint(distance).x, ray.GetPoint(distance).z);
-			}
+			snapToGrid(ray.GetPoint(distance).x, ray.GetPoint(distance).z);
 		}
-
 	}
 	
 	/* snap mouse selection to grid */
 	void snapToGrid(float xf, float zf) {
-		int x = Mathf.RoundToInt(xf / tileSize);
-		int z = Mathf.RoundToInt(zf / tileSize);
+		int x = Mathf.RoundToInt(xf);
+		int z = Mathf.RoundToInt(zf);
 
 		Vector3 stgVector = new Vector3(x, 0, z);
 		if(Input.GetMouseButton(0)) {
@@ -155,15 +175,13 @@ public class TileMapController : MonoBehaviour {
 				deselectAll();
 				selectTile(stgVector);
 			}
-			
-			secondX = Mathf.RoundToInt(xf / tileSize);
-			secondZ = Mathf.RoundToInt(zf / tileSize);
+			secondX = Mathf.RoundToInt(xf);
+			secondZ = Mathf.RoundToInt(zf);
 		}
 
 		//if user is holding down left mouse button, and dragging,
 		//we make a box of selected tile and have it resize as
 		//the mouse moves around
-//		Debug.Log("sfgsdfgs" + suppressDragSelecting);
 		if(clickOrigin != stgVector
 			&& suppressDragSelecting == false
 			&& Input.GetMouseButton(0)
@@ -185,25 +203,15 @@ public class TileMapController : MonoBehaviour {
 						selectedTiles.Add(new Vector3(xx, 0, zz));
 					}
 				}
-				secondX = Mathf.RoundToInt(xf / tileSize);
-				secondZ = Mathf.RoundToInt(zf / tileSize);
+				secondX = Mathf.RoundToInt(xf);
+				secondZ = Mathf.RoundToInt(zf);
 			}
-			
-			//			print("we draggin a box");
 		}
 
-
-		
 		if(placeRoomClicked) {
 			fillInRoom();
 			placeRoomClicked = false;
 		}
-		//if we've clicked room button, fill in selected area with a room
-		//		if (placeRoomClicked){
-		//			fillInRoom(selectedTiles, shiftOrigin.x, shiftOrigin.z, x, z);
-		//			placeRoomClicked = false;
-		//		}
-		
 	}
 	
 	/* Add selected tile index to a list to be access by the camera script for rendering 
@@ -222,74 +230,8 @@ public class TileMapController : MonoBehaviour {
 	public void deselect(Vector3 remove) {
 		selectedTiles.Remove(remove);
 	}
-	
-	public void setSelectedItem(string s) {
-		selectedItem = s;
-	}
-	
-	public void clearSelectedItem() {
-		selectedItem = null;
-	}
-	
+
 	public HashSet<Vector3> getSelectedTiles() {
 		return selectedTiles;
 	}
-	
-	void buildMesh() {
-		
-		/* number of vertices in each x z rows and the total number of vertices */
-		//int vx = grid_x - 1;
-		//int vz = grid_z - 1;
-
-		/* number of vertices in each x z rows and the total number of vertices */
-		int vx = 1;
-		int vz = 1; 
-		
-		/* Initialization */
-		Vector3[] vertices = new Vector3[4];
-		int[] triangles = new int[2 * 3];
-		Vector3[] normals = new Vector3[4];
-		
-		/* store the 4 corners of the mesh */
-		vertices[0] = new Vector3(0-.5f, 0, 0-.5f);
-		vertices[1] = new Vector3((tileSize * vx)-.5f, 0, 0-.5f);
-		vertices[2] = new Vector3(0-.5f, 0, tileSize * vz-.5f);
-		vertices[3] = new Vector3((tileSize * vx)-.5f, 0, (tileSize * vz)-.5f);
-		
-		/* Arrange the vertices in counterclockwise order to produce the correct normal, used for raycasting and rendering
-		 backface culling */
-		triangles[0] = 0;
-		triangles[1] = 2;
-		triangles[2] = 1;
-
-		triangles[3] = 1;
-		triangles[4] = 2;
-		triangles[5] = 3;
-		
-		for(int i = 0; i < 4; ++i) {
-			normals[i] = Vector3.up;
-		}
-		
-		/* create mesh */
-		Mesh mesh = new Mesh();
-
-		mesh.vertices = vertices;
-		mesh.triangles = triangles;
-		mesh.normals = normals;
-
-		Vector2[] uvs = new Vector2[vertices.Length];
-		
-		for(int i=0; i < uvs.Length; i++) {
-			uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
-		}
-		mesh.uv = uvs;
-		
-		MeshFilter mesh_filter = GetComponent<MeshFilter>();
-		MeshCollider mesh_collider = GetComponent<MeshCollider>();
-		
-		mesh_filter.mesh = mesh;
-		mesh_collider.sharedMesh = mesh;
-		
-	}
-	
 }

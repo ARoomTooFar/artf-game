@@ -11,8 +11,8 @@ public class DragableObject : ClickEvent {
 
 	void Start() {
 		draggingLayerMask = LayerMask.GetMask("Walls");
-		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
-		tilemapcont = GameObject.Find("TileMap").GetComponent("TileMapController") as TileMapController;
+		UICamera = Camera.main;
+		tilemapcont = Camera.main.GetComponent<TileMapController>();
 		
 		focusedShader = Shader.Find("Transparent/Bumped Diffuse");
 	}

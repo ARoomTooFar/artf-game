@@ -26,7 +26,7 @@ public class CameraDraws : MonoBehaviour {
 		roomResizeOrigin = Global.nullVector3;
 		roomResize = Global.nullVector3;
 		cam = this.gameObject.GetComponent<Camera> ();
-		tilemapcont = GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController;
+		tilemapcont = Camera.main.GetComponent<TileMapController>();
 		normalColor = new Color(0f, .5f, 1f, .2f);
 		invalidColor = new Color(1f, 0f, 0f, .2f);
 	}

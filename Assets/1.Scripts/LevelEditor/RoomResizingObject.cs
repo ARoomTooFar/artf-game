@@ -11,8 +11,7 @@ public class RoomResizingObject : ClickEvent {
 	
 	void Start() {
 		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
-		tilemapcont = GameObject.Find("TileMap").GetComponent("TileMapController") as TileMapController;
-		
+		tilemapcont = Camera.main.GetComponent<TileMapController>();	
 		focusedShader = Shader.Find("Transparent/Bumped Diffuse");
 	}
 	

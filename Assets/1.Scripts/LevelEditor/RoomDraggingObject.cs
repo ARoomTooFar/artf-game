@@ -10,7 +10,7 @@ public class RoomDraggingObject : ClickEvent {
 	void Start() {
 		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
-		tilemapcont = GameObject.Find("TileMap").GetComponent("TileMapController") as TileMapController;
+		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}
 		
 	public override IEnumerator onClick(Vector3 initPosition) {

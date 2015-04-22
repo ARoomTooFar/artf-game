@@ -13,9 +13,6 @@ public partial class ARTFRoom {
 	private static string defaultFloor = "{0}/Floors/IndustrialFloor1";
 	#endregion PrivateVariables
 
-	public bool isStartRoom = false;
-	public bool isEndRoom = false;
-
 	#region Properties
 	//A list of the TerrainBlocks contained within the room
 	public List<TerrainBlock> Blocks {
@@ -151,6 +148,7 @@ public partial class ARTFRoom {
 			this.LLMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LLCorner, Vector3.zero);
 			this.ULMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", ULCorner, Vector3.zero);
 			this.LRMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LRCorner, Vector3.zero);
+			setMarkerActive(Mode.isRoomMode());
 		}
 	}
 
@@ -231,7 +229,7 @@ public partial class ARTFRoom {
 		//for each door
 		foreach(SceneryBlock dr in Doors) {
 			//get the position where a linked door needs to be
-			Vector3 checkPos = getDoorCheckPosition(dr);
+			Vector3 checkPos = dr.doorCheckPosition;
 			//grab the SceneryBlock at this position if it exists
 			SceneryBlock scnBlk = MapData.SceneryBlocks.find(checkPos);
 			//if there is no scenery block, move on
@@ -269,17 +267,13 @@ public partial class ARTFRoom {
 				}
 				//find the path between the two and store it
 				List<Vector3> path = Pathfinder.getSingleRoomPath(kvp1.Key.Position, kvp2.Key.Position);
-				path.Insert(0, this.getDoorCheckPosition(kvp1.Key));
-				path.Insert(path.Count, this.getDoorCheckPosition(kvp2.Key));
+				path.Insert(0, kvp1.Key.doorCheckPosition);
+				path.Insert(path.Count, kvp2.Key.doorCheckPosition);
 				RoomPaths.Add(new KeyValuePair<Vector3, Vector3>(kvp1.Key.Position, kvp2.Key.Position),
 				              path);
 			}
 		}
-	}
-
-	public Vector3 getDoorCheckPosition(SceneryBlock dr) {
-		return dr.Position.moveinDir(dr.Orientation);
-	}
+	} 
 
 	#region ManipulationFunctions
 
@@ -302,7 +296,7 @@ public partial class ARTFRoom {
 	public void move(Vector3 offset) {
 		List<ARTFRoom> rmlst = new List<ARTFRoom>();
 		foreach(SceneryBlock dr in this.Doors) {
-			rmlst.Add(MapData.TheFarRooms.find(this.getDoorCheckPosition(dr)));
+			rmlst.Add(MapData.TheFarRooms.find(dr.doorCheckPosition));
 		}
 		//Shift the LowerLeft and UpperRight corners by offset
 		LLCorner = LLCorner + offset;
@@ -331,7 +325,7 @@ public partial class ARTFRoom {
 		}
 		List<ARTFRoom> rmlst = new List<ARTFRoom>();
 		foreach(SceneryBlock dr in this.Doors) {
-			rmlst.Add(MapData.TheFarRooms.find(this.getDoorCheckPosition(dr)));
+			rmlst.Add(MapData.TheFarRooms.find(dr.doorCheckPosition));
 		}
 		//get the offset
 		Vector3 offset = newCor - oldCor;
