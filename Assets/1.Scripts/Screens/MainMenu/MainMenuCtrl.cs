@@ -39,7 +39,7 @@ public class MainMenuCtrl : MonoBehaviour {
 
         // login button press handler
         startMenu[0, 0].GetComponent<Button>().onClick.AddListener(() => {
-            GameObject.Find("/Canvas").GetComponent<Animator>().SetTrigger("fadeOut");
+            GameObject.Find("/Canvas" + menuContainerName).GetComponent<Animator>().SetTrigger("fadeOut");
             GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
             menuLock = true;
         });
@@ -72,7 +72,6 @@ public class MainMenuCtrl : MonoBehaviour {
             var pointer = new PointerEventData(EventSystem.current);
             ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
             ExecuteEvents.Execute(startMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
-
             prevBtn = startMenu[locY, locX];
         }
     }
