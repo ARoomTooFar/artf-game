@@ -10,9 +10,15 @@ public class LifeBar: MonoBehaviour
 	public float current;
 	public float onState;
 	public Renderer[] rs;
+	
+	public PlayerUI pui;
+
+
 	protected virtual void Start(){
 		onState = 0;
 		//Renderer[] rs = GetComponentsInChildren<Renderer>();
+
+		pui = GameObject.Find ("PlayerUI").GetComponent("PlayerUI") as PlayerUI;
 	}
 	protected virtual void Update () {
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
@@ -29,5 +35,9 @@ public class LifeBar: MonoBehaviour
 				r.enabled = false;
 			}
 		}
+
 	}
+
+
+
 }
