@@ -76,6 +76,7 @@ public class NewEnemy : Character {
 			
 			animSteInfo = animator.GetCurrentAnimatorStateInfo (0);
 			animSteHash = animSteInfo.fullPathHash;
+			freeAnim = !stunned && !knockedback;
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
 			this.animator.SetBool("Actable", this.actable);
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;

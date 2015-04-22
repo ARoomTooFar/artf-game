@@ -2,12 +2,7 @@
 
 using UnityEngine;
 
-public class BushmanApproach3 : BushmanApproach2 {
+public class BushmanApproach3 : Approach {
 
 	protected Lunge lunge;
-	
-	protected override void SetTriggers(Animator animator) {
-		base.SetTriggers(animator);
-		if (lunge.curCoolDown <= 0) animator.SetTrigger ("LungeOffCD");
-	}
 }

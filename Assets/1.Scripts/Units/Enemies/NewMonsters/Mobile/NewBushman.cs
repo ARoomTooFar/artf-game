@@ -70,27 +70,32 @@ public class NewBushman : NewMobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 1;
+		tier = 3;
 		base.SetTierData (tier);
 
-		
+
 		if (tier > 0) {
-			sprint = this.inventory.items[inventory.selected].GetComponent<Sprint>();
+			this.sprint = this.inventory.items[inventory.selected].GetComponent<Sprint>();
 			if (sprint == null) Debug.LogWarning ("Bushman does not have sprint equipped");
 			
-			// this.inventory.cycItems ();
-			
+
 			// blast = this.inventory.items[inventory.selected].GetComponent<BullyTrunkBlast>();
 			// if (blast == null) Debug.LogWarning ("BullyTrunk does not have blast equipped");
 			
-			foreach(BushmanSprint behaviour in this.animator.GetBehaviours<BushmanSprint>()) {
+			foreach(SprintBehaviour behaviour in this.animator.GetBehaviours<SprintBehaviour>()) {
 				behaviour.SetVar(this.sprint);
 			}
-			
-			foreach(BushmanApproach1 behaviour in this.animator.GetBehaviours<BushmanApproach1>()) {
-				behaviour.SetVar(this.sprint);
-			}
+		}
 
+		if (tier > 2) {
+			this.inventory.cycItems ();
+
+			this.charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
+			if (charge == null) Debug.LogWarning ("Bushman does not have BullCharge equipped");
+
+			foreach(ChargeBehaviour behaviour in this.animator.GetBehaviours<ChargeBehaviour>()) {
+				behaviour.SetVar(this.charge);
+			}
 		}
 	}
 
