@@ -23,15 +23,27 @@ public class PlayerUIPane : MonoBehaviour{
 	}
 
 	void Update(){
+		updateHPBar();
+		updateSlots();
+	}
+
+	void updateHPBar(){
 		hp.fillAmount = normalizeForFilling(pl.stats.health);
 		greyhp.fillAmount = normalizeForFilling(pl.stats.health) + normalizeForFilling(pl.greyDamage);
 		
+		if(pl.stats.isDead){
+			hp.fillAmount = 0f;
+			greyhp.fillAmount = 0f;
+		}
+	}
+
+	void updateSlots(){
 		slot1.fillAmount = Mathf.MoveTowards(slot1.fillAmount, 1f, Time.deltaTime / 5f);
 		if(slot1.fillAmount == 1f) slot1.fillAmount = 0f; //reset to 0 for demo purposes only
-
+		
 		slot2.fillAmount = Mathf.MoveTowards(slot2.fillAmount, 1f, Time.deltaTime / 25f);
 		if(slot2.fillAmount == 1f) slot2.fillAmount = 0f; //reset to 0 for demo purposes only
-
+		
 		slot3.fillAmount = Mathf.MoveTowards(slot3.fillAmount, 1f, Time.deltaTime / 15f);
 		if(slot3.fillAmount == 1f) slot3.fillAmount = 0f; //reset to 0 for demo purposes only
 	}
