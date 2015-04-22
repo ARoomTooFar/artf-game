@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class MainMenuCtrl : MonoBehaviour {
     public Controls controls;
@@ -9,6 +10,7 @@ public class MainMenuCtrl : MonoBehaviour {
     private int menuWidth = 1;
     private int menuHeight = 2;
     private bool menuMoved = false;
+    private GameObject prevBtn;
 
     // player1 menu
     private GameObject[,] p1Menu;
@@ -30,14 +32,16 @@ public class MainMenuCtrl : MonoBehaviour {
         p1Menu[0, 0] = GameObject.Find("/Canvas/P1MenuContainer/BtnLogin");
         p1Menu[1, 0] = GameObject.Find("/Canvas/P1MenuContainer/BtnRegister");
 
-        p1Menu[0, 0].GetComponent<Button>().Select();
+        //p1Menu[0, 0].GetComponent<Button>().Select();
 
         p1Menu[0, 0].GetComponent<Button>().onClick.AddListener(() => {
             //GameObject camera = GameObject.Find("/Main Camera");
             //camera.MoveCameraDown();
 
-            GameObject.Find("/Canvas").GetComponent<Animator>().SetTrigger("fadeOut");
-            GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
+            //GameObject.Find("/Canvas").GetComponent<Animator>().SetTrigger("fadeOut");
+            //GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
+
+            Debug.Log("asdf");
         });
 	}
 
@@ -59,13 +63,26 @@ public class MainMenuCtrl : MonoBehaviour {
                 }
             }
 
-            p1Menu[p1LocY, p1LocX].GetComponent<Button>().Select();
-            Debug.Log(p1LocY);
+            //p1Menu[p1LocY, p1LocX].GetComponent<Button>().Select();
+            var pointer = new PointerEventData(EventSystem.current);
+
+            if (prevBtn != null)
+                ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler);
+
+            ExecuteEvents.Execute(p1Menu[p1LocY, p1LocX], pointer, ExecuteEvents.pointerEnterHandler);
+
+            prevBtn = p1Menu[p1LocY, p1LocX];
         }
     }
 	
 	// Update is called once per frame
 	void Update () {
         MenuMove(Input.GetAxisRaw(controls.hori), Input.GetAxisRaw(controls.vert));
+
+        if (Input.GetButtonUp(controls.joyAttack))
+        {
+            var pointer = new PointerEventData(EventSystem.current);
+            ExecuteEvents.Execute(p1Menu[p1LocY, p1LocX], pointer, ExecuteEvents.submitHandler);
+        }
 	}
 }

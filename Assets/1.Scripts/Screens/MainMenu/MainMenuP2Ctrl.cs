@@ -23,7 +23,7 @@ public class MainMenuP2Ctrl : MonoBehaviour {
         p2Menu[0, 0] = GameObject.Find("/P2Canvas/P2MenuContainer/BtnP2Login");
         p2Menu[1, 0] = GameObject.Find("/P2Canvas/P2MenuContainer/BtnP2Register");
 
-        p2Menu[0, 0].GetComponent<Button>().Select();
+        //p2Menu[0, 0].GetComponent<Button>().Select();
 
         p2Menu[0, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -32,7 +32,7 @@ public class MainMenuP2Ctrl : MonoBehaviour {
 
             //GameObject.Find("/Canvas").GetComponent<Animator>().SetTrigger("fadeOut");
             GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
-            SendSubmitEventToSelectedObject();
+            //SendSubmitEventToSelectedObject();
         });
 	}
 
