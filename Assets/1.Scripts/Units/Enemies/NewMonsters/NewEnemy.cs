@@ -38,17 +38,6 @@ public class NewEnemy : Character {
 	
 	protected float aggroTimer = 5.0f;
 	
-	void OnEnable()
-	{
-		Player.OnDeath += playerDied;
-	}
-	
-	
-	void OnDisable()
-	{
-		Player.OnDeath -= playerDied;
-	}
-	
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType ("Player");
@@ -128,7 +117,6 @@ public class NewEnemy : Character {
 
 	protected virtual void TargetFunction() {
 		target = aggroT.GetTopAggro ();
-		aggroT.PrintTable();
 		if (target != null) {
 			this.animator.SetBool ("Target", true);
 			if (this.canSeePlayer(target)) {
@@ -245,12 +233,18 @@ public class NewEnemy : Character {
 	// Aggro Functions //
 	//-----------------//
 
-	
-	public virtual void playerDied(GameObject dead){
+	public virtual void playerVanished(GameObject dead){
 		if (aggroT != null) {
 			aggroT.RemoveUnit(dead);
+			target = null;
 		}
 	}
 	
+	public virtual void taunted(GameObject taunter){
+		if (aggroT != null){
+			aggroT.AddAggro(taunter,aggroT.GetAggro()*2);
+		}
+	}
+
 	//---------------//
 }

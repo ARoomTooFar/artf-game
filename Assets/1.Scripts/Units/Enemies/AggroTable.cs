@@ -131,7 +131,7 @@ public class AggroTable {
 		string theAssHoles = "";
 		AggroNode tempNode = head;
 		while (tempNode != null) {
-			theAssHoles = theAssHoles += tempNode.unit.name + " (" + tempNode.aggro + ") ";
+			theAssHoles += tempNode.unit.name + " (" + tempNode.aggro + ") ";
 			tempNode = tempNode.next;
 		}
 		Debug.Log (theAssHoles);

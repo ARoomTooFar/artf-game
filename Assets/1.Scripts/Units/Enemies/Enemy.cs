@@ -31,6 +31,7 @@ public class Enemy : Character {
 
 	protected float aggroTimer = 7.0f;
 
+	/*
 	void OnEnable()
 	{
 		Player.OnDeath += playerDied;
@@ -40,7 +41,7 @@ public class Enemy : Character {
 	void OnDisable()
 	{
 		Player.OnDeath -= playerDied;
-	}
+	}*/
 
 	protected override void Awake() {
 		base.Awake();
@@ -275,11 +276,12 @@ public class Enemy : Character {
 		target = null;
 	}
 
+	/*
 	public virtual void playerDied(GameObject dead){
 		if (aggroT != null) {
 			aggroT.RemoveUnit(dead);
 		}
-	}
+	}*/
 	
 	public virtual void playerVanished(GameObject dead){
 		if (aggroT != null) {

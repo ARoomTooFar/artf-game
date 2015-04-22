@@ -24,10 +24,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	public UIActive UI;
 	public Controls controls;
-	
+
+	// New Aggro system does not need these
 	// Events for death
-	public delegate void DieBroadcast(GameObject dead);
-	public static event DieBroadcast OnDeath;
+	// public delegate void DieBroadcast(GameObject dead);
+	// public static event DieBroadcast OnDeath;
 	
 	protected override void Awake() {
 		base.Awake();
@@ -286,9 +287,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void die() {
 		Debug.Log("IsDead");
 		base.die();
+
+		/*
 		if (OnDeath != null) {
 			OnDeath (this.gameObject);
-		}
+		}*/
 		stats.health = 0;
 		//UI.hpBar.current = 0;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
