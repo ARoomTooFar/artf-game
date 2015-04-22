@@ -15,13 +15,15 @@ public class NewBushman : NewMobileEnemy {
 		}
 	}
 
-	protected GameObject oldTarget;
+	protected GameObject oldTarget; // Needs to know when it switches targets
+
+	protected Sprint sprint;
 
 	// Old Stuff
 	protected PowerLevels powlvs;
 	protected Frenzy frenzy;
 	protected float health;
-	protected Sprint sprint;
+
 	protected BullCharge charge;
 	protected Roll lungeAttack;
 
@@ -64,11 +66,37 @@ public class NewBushman : NewMobileEnemy {
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 3.0f;
+		this.maxAtkRadius = 2.0f;
+	}
+
+	public override void SetTierData(int tier) {
+		tier = 1;
+		base.SetTierData (tier);
+
+		
+		if (tier > 0) {
+			sprint = this.inventory.items[inventory.selected].GetComponent<Sprint>();
+			if (sprint == null) Debug.LogWarning ("Bushman does not have sprint equipped");
+			
+			// this.inventory.cycItems ();
+			
+			// blast = this.inventory.items[inventory.selected].GetComponent<BullyTrunkBlast>();
+			// if (blast == null) Debug.LogWarning ("BullyTrunk does not have blast equipped");
+			
+			foreach(BushmanSprint behaviour in this.animator.GetBehaviours<BushmanSprint>()) {
+				behaviour.SetVar(this.sprint);
+			}
+			
+			foreach(BushmanApproach1 behaviour in this.animator.GetBehaviours<BushmanApproach1>()) {
+				behaviour.SetVar(this.sprint);
+			}
+
+		}
 	}
 
 	protected override void TargetFunction() {
 		base.TargetFunction();
+		if (this.oldTarget != null && this.target != this.oldTarget) this.animator.SetTrigger("TargetSwitched");
 	}
 
 	//----------------------------------//
@@ -98,14 +126,6 @@ public class NewBushman : NewMobileEnemy {
 		nextLv.dmgRed = dmgRedUp * currentGrowth;
 		nextLv.speed = spdUp * currentGrowth;
 		return nextLv;
-	}
-
-	protected bool reAggro(){
-		return targetchanged;
-	}
-	
-	protected bool freestate(){
-		return this.freeAnim;
 	}
 
 	protected virtual void switchTarget() {

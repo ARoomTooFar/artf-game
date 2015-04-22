@@ -48,7 +48,6 @@ public class AggroTable {
 	public GameObject GetTopAggro() {
 		if (this.head != null) {
 			if (this.head.unit == null || (this.head.play != null && this.head.play.isDead)) {
-				Debug.Log (this.head.play.isDead);
 				this.RemoveUnit(this.head.unit);
 				return null;
 			}
