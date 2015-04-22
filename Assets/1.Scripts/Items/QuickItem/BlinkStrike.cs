@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Lunge : QuickItem {
+public class BlinkStrike: QuickItem {
 
 	//[Range(0, 10)]
 	public float lungeDistance;

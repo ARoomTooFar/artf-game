@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class BushmanApproach3 : Approach {
 
-	protected Lunge lunge;
+	// protected Lunge lunge;
 }
