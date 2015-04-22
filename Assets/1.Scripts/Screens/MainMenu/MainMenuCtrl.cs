@@ -30,17 +30,18 @@ public class MainMenuCtrl : MonoBehaviour {
 	void Start () {
         // create start menu
         startMenu = new GameObject[menuHeight, menuWidth];
-        startMenu[0, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/BtnLogin");
-        startMenu[1, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/BtnRegister");
+        startMenu[0, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/StartMenu/BtnLogin");
+        startMenu[1, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/StartMenu/BtnRegister");
 
         var pointer = new PointerEventData(EventSystem.current);
         ExecuteEvents.Execute(startMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); // highlight first button
         prevBtn = startMenu[locY, locX];
 
         // login button press handler
-        startMenu[0, 0].GetComponent<Button>().onClick.AddListener(() => {
-            GameObject.Find("/Canvas" + menuContainerName).GetComponent<Animator>().SetTrigger("fadeOut");
-            GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
+        startMenu[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            GameObject.Find("/Canvas/" + menuContainerName).GetComponent<Animator>().SetTrigger("startMenuFadeOut");
+            //GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
             menuLock = true;
         });
 
