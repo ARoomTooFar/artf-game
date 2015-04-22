@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class MainMenuCtrl : MonoBehaviour {
     public Controls controls;
+    public string menuContainerName;
 
     // UI state
     private int menuWidth = 1;
@@ -12,11 +13,11 @@ public class MainMenuCtrl : MonoBehaviour {
     private bool menuMoved = false;
     private bool menuLock = false;
     private GameObject prevBtn;
+    private int locX = 0;
+    private int locY = 0;
 
-    // player1 menu
-    private GameObject[,] p1Menu;
-    private int p1LocX = 0;
-    private int p1LocY = 0;
+    // menus
+    private GameObject[,] startMenu;
 
     private enum Menu
     {
@@ -27,24 +28,24 @@ public class MainMenuCtrl : MonoBehaviour {
     };
 
 	void Start () {
-        // create p1 Start menu
-        p1Menu = new GameObject[menuHeight, menuWidth];
-        p1Menu[0, 0] = GameObject.Find("/Canvas/P1MenuContainer/BtnLogin");
-        p1Menu[1, 0] = GameObject.Find("/Canvas/P1MenuContainer/BtnRegister");
+        // create start menu
+        startMenu = new GameObject[menuHeight, menuWidth];
+        startMenu[0, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/BtnLogin");
+        startMenu[1, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/BtnRegister");
 
         var pointer = new PointerEventData(EventSystem.current);
-        ExecuteEvents.Execute(p1Menu[p1LocY, p1LocX], pointer, ExecuteEvents.pointerEnterHandler); // highlight first button
-        prevBtn = p1Menu[p1LocY, p1LocX];
+        ExecuteEvents.Execute(startMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); // highlight first button
+        prevBtn = startMenu[locY, locX];
 
         // login button press handler
-        p1Menu[0, 0].GetComponent<Button>().onClick.AddListener(() => {
+        startMenu[0, 0].GetComponent<Button>().onClick.AddListener(() => {
             GameObject.Find("/Canvas").GetComponent<Animator>().SetTrigger("fadeOut");
             GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
             menuLock = true;
         });
 
         // register button press handler
-        p1Menu[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+        startMenu[1, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
             Debug.Log("Register button pressed!");
         });
@@ -59,20 +60,20 @@ public class MainMenuCtrl : MonoBehaviour {
 
             if (vert < 0)
             {
-                p1LocY = (p1LocY + 1) % (menuHeight);
+                locY = (locY + 1) % (menuHeight);
             } else if (vert > 0) {
-                --p1LocY;
-                if (p1LocY < 0)
+                --locY;
+                if (locY < 0)
                 {
-                    p1LocY = menuHeight - 1;
+                    locY = menuHeight - 1;
                 }
             }
 
             var pointer = new PointerEventData(EventSystem.current);
             ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
-            ExecuteEvents.Execute(p1Menu[p1LocY, p1LocX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
+            ExecuteEvents.Execute(startMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 
-            prevBtn = p1Menu[p1LocY, p1LocX];
+            prevBtn = startMenu[locY, locX];
         }
     }
 	
@@ -83,7 +84,7 @@ public class MainMenuCtrl : MonoBehaviour {
         if (Input.GetButtonUp(controls.joyAttack) && menuLock == false)
         {
             var pointer = new PointerEventData(EventSystem.current);
-            ExecuteEvents.Execute(p1Menu[p1LocY, p1LocX], pointer, ExecuteEvents.submitHandler);
+            ExecuteEvents.Execute(startMenu[locY, locX], pointer, ExecuteEvents.submitHandler);
         }
 	}
 }
