@@ -361,15 +361,13 @@ public class Player : Character, IMoveable, IHealable<int>{
 				}
 				return damage;
 			}
-		}
-		else if(inGrey && !(damage > (stats.maxHealth/5))){
+		} else if(inGrey && !(damage > (stats.maxHealth/5))){
 			inGrey = false;
 			int tempDmg = greyDamage;
 			greyDamage = 0;
 			//print("True!WGBT:"+(damage + greyDamage));
 			return damage + tempDmg;
-		}
-		else{
+		} else{
 			inGrey = false;
 			//print("True!NG:"+damage);
 			return damage;

@@ -78,6 +78,12 @@ public class NewMirage : NewStationaryEnemy {
 	protected override void TargetFunction() {
 		if (this.deathTarget != null) {
 			target = this.deathTarget.gameObject;
+			if (this.deathTarget.isDead) {
+				deathTarget.BDS.rmvBuffDebuff(this.mark, this.gameObject);
+				this.target = null;
+				this.animator.SetBool ("Target", false);
+				this.deathTarget = null;
+			}
 			if (this.canSeePlayer(target)) {
 				float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
 				this.animator.SetBool ("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
@@ -87,6 +93,7 @@ public class NewMirage : NewStationaryEnemy {
 			this.animator.SetBool ("Target", false);
 			if (aRange.unitsInRange.Count > 0) {
 				foreach(Character tars in aRange.unitsInRange) {
+					if (tars.isDead) continue; 
 					if (this.canSeePlayer(tars.gameObject)) {
 						this.alerted = true;
 						this.target = tars.gameObject;

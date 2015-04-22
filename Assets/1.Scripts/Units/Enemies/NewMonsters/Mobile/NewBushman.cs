@@ -15,14 +15,21 @@ public class NewBushman : NewMobileEnemy {
 		}
 	}
 
-	private PowerLevels powlvs;
-	private Frenzy frenzy;
-	private float health;
+	protected GameObject oldTarget;
+
+	// Old Stuff
+	protected PowerLevels powlvs;
+	protected Frenzy frenzy;
+	protected float health;
 	protected Sprint sprint;
 	protected BullCharge charge;
 	protected Roll lungeAttack;
-	
-	
+
+
+	//-------------------//
+	// Primary Functions //
+	//-------------------//
+
 	protected override void Awake () {
 		base.Awake ();
 
@@ -57,8 +64,14 @@ public class NewBushman : NewMobileEnemy {
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 5.0f;
+		this.maxAtkRadius = 3.0f;
 	}
+
+	protected override void TargetFunction() {
+		base.TargetFunction();
+	}
+
+	//----------------------------------//
 
 	protected void setFrenzy() {
 		powlvs = new PowerLevels (this);
