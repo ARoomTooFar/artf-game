@@ -78,8 +78,6 @@ public class FileIO : MonoBehaviour
             txtDlLvl.enabled = false;
             MapDataParser.ParseSaveString(lvlData);
             Debug.Log("LVL DL SUCCESS: " + lvlData);
-
-
         }
         else
         {
@@ -123,7 +121,7 @@ public class FileIO : MonoBehaviour
 	void LoadPlayable(){
 		ItemObject[] itemObs =  FindObjectsOfType(typeof(ItemObject)) as ItemObject[];
 		foreach(ItemObject io in itemObs){
-//			print (io.gameObject.name);
+            //print (io.gameObject.name);
 			GameObject ob = io.gameObject;
 			DontDestroyOnLoad(ob);
 		}
