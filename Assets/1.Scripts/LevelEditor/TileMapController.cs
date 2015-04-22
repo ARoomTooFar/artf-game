@@ -22,6 +22,7 @@ public class TileMapController : MonoBehaviour {
 	public float secondZ;
 	public bool suppressDragSelecting;
 	Vector3 clickOrigin = Global.nullVector3;
+	Vector3 lastClick = Global.nullVector3;
 	
 	void Start() {	
 		UICamera = Camera.main;
@@ -59,6 +60,7 @@ public class TileMapController : MonoBehaviour {
 		}
 
 		if(Input.GetMouseButtonDown(0)) {
+			lastClick = point;
 			if(Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) {
 				if(!selectedTiles.Add(point)) {
 					selectedTiles.Remove(point);
@@ -82,8 +84,9 @@ public class TileMapController : MonoBehaviour {
 
 			return;
 		}  
-		if(Input.GetMouseButton(0) && clickOrigin != point) {
+		if(Input.GetMouseButton(0) && clickOrigin != point && !suppressDragSelecting) {
 			selectBlock(shiftOrigin, point);
+			lastClick = point;
 		}
 	}
 
@@ -99,7 +102,7 @@ public class TileMapController : MonoBehaviour {
 	}
 
 	public void fillInRoom() {
-		MapData.addRoom(new Vector3(shiftOrigin.x, 0, shiftOrigin.z), new Vector3(secondX, 0, secondZ));
+		MapData.addRoom(shiftOrigin, lastClick);
 	}
 
 	void RayToScene() {

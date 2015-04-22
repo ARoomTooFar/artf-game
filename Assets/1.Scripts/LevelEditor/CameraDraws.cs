@@ -76,31 +76,28 @@ public class CameraDraws : MonoBehaviour {
 		} else {
 			point = ray.GetPoint(distance).Round();
 		}
+
 		GL.Begin (GL.QUADS);
 		singleColorTransMat.color = normalColor;
 		singleColorTransMat.SetPass(0);
-		
 		drawSquare(point, .8f, .8f, .002f);
-
 		GL.End ();
 	}
 
 	void drawRoomMoveSquare(){
-
 		if(room == null || roomOffset == Global.nullVector3) {
 			return;
 		}
+
 		GL.Begin (GL.QUADS);
-		if(MapData.TheFarRooms.isMoveValid(room, roomOffset)){
+		if(MapData.TheFarRooms.isMoveValid(room, roomOffset)) {
 			singleColorTransMat.color = normalColor;
 			singleColorTransMat.SetPass(0);
 		} else {
 			singleColorTransMat.color = invalidColor;
 			singleColorTransMat.SetPass(0);
 		}
-		
 		drawSquare(room.Center + roomOffset, room.Length, room.Height, .003f);
-		
 		GL.End ();
 	}
 
@@ -112,9 +109,9 @@ public class CameraDraws : MonoBehaviour {
 		}
 		Square sq = new Square(room.LLCorner, room.URCorner);
 		sq.resize(roomResizeOrigin, roomResize);
+		sq = new Square(sq.LLCorner, sq.URCorner);
 
 		GL.Begin (GL.QUADS);
-
 		if(MapData.TheFarRooms.isResizeValid(roomResizeOrigin, roomResize)){
 			singleColorTransMat.color = normalColor;
 			singleColorTransMat.SetPass(0);
@@ -122,18 +119,14 @@ public class CameraDraws : MonoBehaviour {
 			singleColorTransMat.color = invalidColor;
 			singleColorTransMat.SetPass(0);
 		}
-
-		sq = new Square(sq.LLCorner, sq.URCorner);
-		
 		drawSquare(sq.Center, sq.Length, sq.Height, .003f);
-		
 		GL.End ();
 	}
 
 	/* draw the grid lines */
 	void drawGrid ()
 	{
-		Camera UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
+		Camera UICamera = Camera.main;
 		Ray ray = new Ray(UICamera.transform.position, UICamera.transform.forward);
 		float distance;
 		Vector3 camFocus = Vector3.zero;
@@ -159,9 +152,9 @@ public class CameraDraws : MonoBehaviour {
 	
 	public void drawBoxAroundFocusedObject ()
 	{
-		ObjectFocus.fillFocusedObjects();
+		HashSet<GameObject> focusedObjects = MapData.getObjects(cam.GetComponent<TileMapController>().selectedTiles);
 
-		foreach (GameObject obj in ObjectFocus.focusedObjects) {
+		foreach (GameObject obj in focusedObjects) {
 			if (obj != null) {
 				Bounds bound = new Bounds();
 				int i = 0;
