@@ -17,7 +17,6 @@ public class Controls {
 [RequireComponent(typeof(Rigidbody))]
 public class Player : Character, IMoveable, IHealable<int>{
 	public string nameTag;
-	public int testDmg;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart, inGrey;
 	public GameObject currDoor;
@@ -53,7 +52,6 @@ public class Player : Character, IMoveable, IHealable<int>{
 		stats.luck=0;
 		inGrey = false;
 		greyDamage = 0;
-		testDmg = 0;
 		//testable = true;
 		
 	}
@@ -124,15 +122,6 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	public override void actionCommands() {
 		// Invokes an action/animation
-		if(Input.GetKey("space")&&testable){
-			if(!stats.isDead){
-				damage(testDmg);
-				testable = false;
-			}/*else{
-					rez();
-					testable=false;
-				}*/
-		}
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
 				if(currDoor!=null){
@@ -255,8 +244,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 				Destroy (theSplat, 2);
 			}
 			// print("UGH!" + dmgTaken);
-			// stats.health -= greyTest(dmgTaken);
-			stats.health -= (dmgTaken);
+			stats.health -= greyTest(dmgTaken);
 			
 			if (stats.health <= 0) {
 				die();
@@ -268,8 +256,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void damage(int dmgTaken) {
 		if (!invincible&&!stats.isDead) {
 			print("UGH!" + dmgTaken);
-			stats.health -= (dmgTaken);
-			// stats.health -= greyTest(dmgTaken);
+			stats.health -= greyTest(dmgTaken);
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
 				theSplat.adjuster = (float) ((stats.maxHealth-stats.health)/stats.maxHealth);
@@ -338,13 +325,12 @@ public class Player : Character, IMoveable, IHealable<int>{
 	}
 	
 	//----------------------------------//
-	
+
+
 	// Grey Health functions
 	public virtual int greyTest(int damage){
 		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){
-			stats.health = 0;
-			die();
-			return 0;
+			return damage;
 		}
 		if(((greyDamage + damage) >= stats.maxHealth) && stats.health == stats.maxHealth){
 			stats.health = 1;
