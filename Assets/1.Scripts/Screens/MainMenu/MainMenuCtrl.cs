@@ -10,6 +10,7 @@ public class MainMenuCtrl : MonoBehaviour {
     private int menuWidth = 1;
     private int menuHeight = 2;
     private bool menuMoved = false;
+    private bool menuLock = false;
     private GameObject prevBtn;
 
     // player1 menu
@@ -28,20 +29,24 @@ public class MainMenuCtrl : MonoBehaviour {
 	void Start () {
         // create p1 Start menu
         p1Menu = new GameObject[menuHeight, menuWidth];
-
         p1Menu[0, 0] = GameObject.Find("/Canvas/P1MenuContainer/BtnLogin");
         p1Menu[1, 0] = GameObject.Find("/Canvas/P1MenuContainer/BtnRegister");
 
-        //p1Menu[0, 0].GetComponent<Button>().Select();
+        var pointer = new PointerEventData(EventSystem.current);
+        ExecuteEvents.Execute(p1Menu[p1LocY, p1LocX], pointer, ExecuteEvents.pointerEnterHandler); // highlight first button
+        prevBtn = p1Menu[p1LocY, p1LocX];
 
+        // login button press handler
         p1Menu[0, 0].GetComponent<Button>().onClick.AddListener(() => {
-            //GameObject camera = GameObject.Find("/Main Camera");
-            //camera.MoveCameraDown();
+            GameObject.Find("/Canvas").GetComponent<Animator>().SetTrigger("fadeOut");
+            GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
+            menuLock = true;
+        });
 
-            //GameObject.Find("/Canvas").GetComponent<Animator>().SetTrigger("fadeOut");
-            //GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
-
-            Debug.Log("asdf");
+        // register button press handler
+        p1Menu[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            Debug.Log("Register button pressed!");
         });
 	}
 
@@ -63,13 +68,9 @@ public class MainMenuCtrl : MonoBehaviour {
                 }
             }
 
-            //p1Menu[p1LocY, p1LocX].GetComponent<Button>().Select();
             var pointer = new PointerEventData(EventSystem.current);
-
-            if (prevBtn != null)
-                ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler);
-
-            ExecuteEvents.Execute(p1Menu[p1LocY, p1LocX], pointer, ExecuteEvents.pointerEnterHandler);
+            ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
+            ExecuteEvents.Execute(p1Menu[p1LocY, p1LocX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 
             prevBtn = p1Menu[p1LocY, p1LocX];
         }
@@ -79,7 +80,7 @@ public class MainMenuCtrl : MonoBehaviour {
 	void Update () {
         MenuMove(Input.GetAxisRaw(controls.hori), Input.GetAxisRaw(controls.vert));
 
-        if (Input.GetButtonUp(controls.joyAttack))
+        if (Input.GetButtonUp(controls.joyAttack) && menuLock == false)
         {
             var pointer = new PointerEventData(EventSystem.current);
             ExecuteEvents.Execute(p1Menu[p1LocY, p1LocX], pointer, ExecuteEvents.submitHandler);
