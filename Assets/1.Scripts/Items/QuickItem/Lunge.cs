@@ -6,7 +6,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Lunge : QuickItem {
-
 	protected MeshCollider collider;
 	protected List<Character> enemiesInRange;
 
@@ -39,13 +38,14 @@ public class Lunge : QuickItem {
 			} else {
 				dis = Vector3.Distance(this.user.transform.position, enemiesInRange[count].transform.position);
 				if (dis >= distance) continue;
+
 				distance = dis;
 				closestEnemy = enemiesInRange[count];
 			}
 		}
 		if (this.enemiesInRange.Count == 0) return;
 
-		base.useItem ();
+		curCoolDown = cooldown;
 		user.stunned = true;
 		this.StartCoroutine(LungeFunction(closestEnemy));
 	}
@@ -71,7 +71,6 @@ public class Lunge : QuickItem {
 			yield return 0;
 		}
 	}
-
 
 	// Tracks all oppositions
 	void OnTriggerEnter (Collider other) {
