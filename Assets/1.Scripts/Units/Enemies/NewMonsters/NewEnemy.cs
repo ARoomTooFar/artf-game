@@ -211,15 +211,17 @@ public class NewEnemy : Character {
 	// Character Inherited Functions //
 	//-------------------------------//
 	
-	public override void damage(int dmgTaken, Character striker) {
-		base.damage(dmgTaken, striker);
-		
-		aggroT.AddAggro(striker.gameObject, dmgTaken);
-		// aggroT.PrintTable();
+	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
+		if (this.invincible) return;
+		this.damage(dmgTaken, atkPosition);
+		aggroT.AddAggro(source, dmgTaken);
+	}
+	
+	public override void damage(int dmgTaken, Transform atkPosition) {
+		base.damage(dmgTaken, atkPosition);
 	}
 	
 	public override void damage(int dmgTaken) {
-		
 		base.damage(dmgTaken);
 	}
 	

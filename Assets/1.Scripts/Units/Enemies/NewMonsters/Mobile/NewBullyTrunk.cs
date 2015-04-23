@@ -107,6 +107,11 @@ public class NewBullyTrunk: NewMobileEnemy {
 			foreach(ChargeBehaviour behaviour in this.animator.GetBehaviours<ChargeBehaviour>()) {
 				behaviour.SetVar(this.charge);
 			}
+			
+			foreach(ShieldsDown behaviour in this.animator.GetBehaviours<ShieldsDown>()) {
+				behaviour.SetVar(this);
+				Debug.Log (this);
+			}
 
 			this.charge.chargeSpeed = tier < 5 ? 3 : 4;
 
@@ -159,9 +164,11 @@ public class NewBullyTrunk: NewMobileEnemy {
 	//------------//
 
 	public virtual IEnumerator shieldsDown() {
+		Debug.Log ("Down");
 		this.BDS.rmvBuffDebuff (this.rockArms, this.gameObject);
 		yield return new WaitForSeconds(3.0f);
 		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
+		Debug.Log ("Up");
 	}
 
 	

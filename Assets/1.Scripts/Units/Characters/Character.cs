@@ -31,7 +31,7 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, IStunable, IForcible<Vector3, float> {
+public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Transform, GameObject>, IStunable, IForcible<Vector3, float> {
 
 	public bool testControl;
 
@@ -348,20 +348,21 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	// Damage Interface Implementation //
 	//---------------------------------//
 	
-	public virtual void damage(int dmgTaken, Character striker) {
+	public virtual void damage(int dmgTaken, Transform atkPosition, GameObject source) {
+		this.damage (dmgTaken, atkPosition); // Untill character needs to do something with source, just call previous function
+	}
+	
+	public virtual void damage(int dmgTaken, Transform atkPosition) {
 		if (!invincible) {
-			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
+			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(atkPosition.position, facing, transform.position)), 1, 100000);
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position, Quaternion.identity)).GetComponent<splatCore>();
 				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
 				Destroy (theSplat, 2);
 			}
 			stats.health -= dmgTaken;
-			//print ("Fuck: " + dmgTaken + " Damage taken");
 
-			if (stats.health <= 0) {
-				die();
-			}
+			if (stats.health <= 0) this.die();
 		}
 	}
 	
@@ -374,9 +375,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			}
 			stats.health -= dmgTaken;
 
-			if (stats.health <= 0) {
-				die();
-			}
+			if (stats.health <= 0) die();
 		}
 	}
 
