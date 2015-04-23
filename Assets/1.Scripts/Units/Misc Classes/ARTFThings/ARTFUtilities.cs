@@ -33,7 +33,39 @@ public static class ARTFUtilities {
 			return false;
 		}
 	}
-	
+
+	// If this character has sight of the object
+	public static bool CanSeeObject(Character unit, GameObject target, int layerMask = ~0) {
+		if (target == null) return false;
+		
+		// Check angle of forward direction vector against the vector of enemy position relative to player position
+		Vector3 direction = target.transform.position - unit.transform.position;
+		float angle = Vector3.Angle(direction, unit.facing);
+		
+		float dis = Vector3.Distance(unit.transform.position, target.transform.position);
+
+		// 150 is the field of view, can make it into a param if we want more options
+		if (angle >= 150) return false;
+		RaycastHit hit;
+		if (Physics.Raycast (unit.transform.position + unit.transform.up, direction.normalized, out hit, dis, layerMask))
+			if (hit.collider.gameObject != target)
+				return false;
+		return true;
+	}
+
+
+	// Gets the vector of the facing towards an object
+	public static Vector3 GetFacingTowardsObject (Character unit, GameObject target) {
+		if (target == null) return unit.facing;
+		Vector3 newFacing = Vector3.zero;
+		
+		newFacing = target.transform.position - unit.transform.position;
+		newFacing.y = 0.0f;
+		if (newFacing != Vector3.zero) return newFacing.normalized;
+		return unit.facing;
+	}
+
+
 	
 	// Calculates a trajectory for a parabolic motion given start and end location and an angle
 	//     Angle is from y direction to forward direction not the starting angle from the ground
@@ -97,6 +129,5 @@ public static class ARTFUtilities {
 		// What speed to disburse between x and z after calculating speed for y
 		float speedOverLand = Mathf.Sin (angle) * speed;
 		return new Vector3(speedOverLand * Mathf.Cos (newAngle), speed * Mathf.Cos(angle), zDir * speedOverLand * Mathf.Sin (newAngle));
-	
 	}
 }

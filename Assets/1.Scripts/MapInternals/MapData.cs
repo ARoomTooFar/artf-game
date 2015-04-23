@@ -47,14 +47,14 @@ public static class MapData {
 			string retVal = "MapData\n";
 			retVal += "Terrain\n";
 			retVal += TerrainBlocks.SaveString;
+			retVal += "Terminal\n";
+			retVal += StartingRoom.SaveString + " " + EndingRoom.SaveString + "\n";
 			retVal += "Room\n";
 			retVal += TheFarRooms.SaveString;
 			retVal += "Scenery\n";
 			retVal += SceneryBlocks.SaveString;
 			retVal += "Monster\n";
 			retVal += MonsterBlocks.SaveString;
-			retVal += "Terminal\n";
-			retVal += StartingRoom.SaveString + " " + EndingRoom.SaveString + "\n";
 			return retVal;
 		}
 	}
@@ -63,26 +63,6 @@ public static class MapData {
 	public static void addRoom(Vector3 pos1, Vector3 pos2) {
 		if(TheFarRooms.isAddValid(pos1, pos2)) {
 			TheFarRooms.add(pos1, pos2);
-		}
-	}
-
-	public static bool addStartRoom(Vector3 pos1, Vector3 pos2) {
-		if(TheFarRooms.isAddValid(pos1, pos2) && TheFarRooms.isStartOrEndRoomValid(pos1, pos2)) {
-			TheFarRooms.add(pos1, pos2);
-			TheFarRooms.find(pos1).isStartRoom = true;
-			return true;
-		}else{
-			return false;
-		}
-	}
-
-	public static bool addEndRoom(Vector3 pos1, Vector3 pos2) {
-		if(TheFarRooms.isAddValid(pos1, pos2) && TheFarRooms.isStartOrEndRoomValid(pos1, pos2)) {
-			TheFarRooms.add(pos1, pos2);
-			TheFarRooms.find(pos1).isEndRoom = true;
-			return true;
-		}else{
-			return false;
 		}
 	}
 
@@ -96,16 +76,6 @@ public static class MapData {
 		TheFarRooms.remove(pos);
 	}
 	#endregion Rooms
-
-	#region TerrainManipulation
-	public static void changeTerrainType(Vector3 pos, string type) {
-		TerrainBlocks.changeType(pos, type);
-	}
-
-	public static void rotateTerrain(Vector3 pos, bool goClockwise = true) {
-		TerrainBlocks.rotate(pos, goClockwise);
-	}
-	#endregion TerrainManipulation
 
 	public static void addObject(string type, Vector3 pos, DIRECTION dir) {
 		GameObject obj = GameObjectResourcePool.getResource(type, pos, dir.toRotationVector());

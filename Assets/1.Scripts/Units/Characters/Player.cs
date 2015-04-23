@@ -17,22 +17,22 @@ public class Controls {
 [RequireComponent(typeof(Rigidbody))]
 public class Player : Character, IMoveable, IHealable<int>{
 	public string nameTag;
-	public int testDmg;
 	public int greyDamage;
-	public bool invis;
 	public bool testable, isReady, atEnd, atStart, inGrey;
 	public GameObject currDoor;
 	
 	public UIActive UI;
 	public Controls controls;
-	
+
+	// New Aggro system does not need these
 	// Events for death
-	public delegate void DieBroadcast(GameObject dead);
-	public static event DieBroadcast OnDeath;
+	// public delegate void DieBroadcast(GameObject dead);
+	// public static event DieBroadcast OnDeath;
 	
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType("NewEnemy");
+		//opposition = Type.GetType("Enemy"); //Use this if going after testable opponents
 	}
 	
 	// Use this for initialization
@@ -52,7 +52,6 @@ public class Player : Character, IMoveable, IHealable<int>{
 		stats.luck=0;
 		inGrey = false;
 		greyDamage = 0;
-		testDmg = 0;
 		//testable = true;
 		
 	}
@@ -123,15 +122,6 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	public override void actionCommands() {
 		// Invokes an action/animation
-		if(Input.GetKey("space")&&testable){
-			if(!stats.isDead){
-				damage(testDmg);
-				testable = false;
-			}/*else{
-					rez();
-					testable=false;
-				}*/
-		}
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
 				if(currDoor!=null){
@@ -266,12 +256,12 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void damage(int dmgTaken) {
 		if (!invincible&&!stats.isDead) {
 			print("UGH!" + dmgTaken);
+			stats.health -= greyTest(dmgTaken);
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
-				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
+				theSplat.adjuster = (float) ((stats.maxHealth-stats.health)/stats.maxHealth);
 				Destroy (theSplat, 2);
 			}
-			stats.health -= greyTest(dmgTaken);
 			//UI.greyBar.current = greyDamage+stats.health;
 			if (stats.health <= 0) {
 				
@@ -284,9 +274,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void die() {
 		Debug.Log("IsDead");
 		base.die();
+
+		/*
 		if (OnDeath != null) {
 			OnDeath (this.gameObject);
-		}
+		}*/
 		stats.health = 0;
 		//UI.hpBar.current = 0;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
@@ -333,13 +325,12 @@ public class Player : Character, IMoveable, IHealable<int>{
 	}
 	
 	//----------------------------------//
-	
+
+
 	// Grey Health functions
 	public virtual int greyTest(int damage){
 		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){
-			stats.health = 0;
-			die();
-			return 0;
+			return damage;
 		}
 		if(((greyDamage + damage) >= stats.maxHealth) && stats.health == stats.maxHealth){
 			stats.health = 1;
@@ -370,15 +361,13 @@ public class Player : Character, IMoveable, IHealable<int>{
 				}
 				return damage;
 			}
-		}
-		else if(inGrey && !(damage > (stats.maxHealth/5))){
+		} else if(inGrey && !(damage > (stats.maxHealth/5))){
 			inGrey = false;
 			int tempDmg = greyDamage;
 			greyDamage = 0;
 			//print("True!WGBT:"+(damage + greyDamage));
 			return damage + tempDmg;
-		}
-		else{
+		} else{
 			inGrey = false;
 			//print("True!NG:"+damage);
 			return damage;

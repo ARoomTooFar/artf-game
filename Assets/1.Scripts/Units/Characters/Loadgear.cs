@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Loadgear : MonoBehaviour {
 
 	public DataChest data;
+	public bool loaded;
 	public string[] loadData;
 	public string[] loadLine;
 	public List<Character> players = new List<Character>();
@@ -14,18 +15,26 @@ public class Loadgear : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		loaded = false;
+	}
+	void loadPlayers(){
 		for (int i = 0; i < players.Count; i++) {
 			if(players[i] != null){
+				Debug.Log("P" + (i+1).ToString());
 				loadFromText("P" + (i + 1).ToString());
 				players[i].equipTest(equipment.ToArray(), abilities.ToArray());
 				equipment.Clear();
 				abilities.Clear();
 			}
 		}
+		if(players[0] !=null){
+			loaded = true;
+		}
 	}
-
 	void Update() {
-
+		if(!loaded){
+			loadPlayers();
+		}
 		/*
 		if(Input.GetKeyDown(KeyCode.Space)) {
 

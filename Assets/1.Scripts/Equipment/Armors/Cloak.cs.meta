@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 319b1152acfb7804a87e99afacf3410f
+timeCreated: 1429583281
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - current: {instanceID: 0}
+  - cloak: {fileID: 2100000, guid: f1cbf9af951f4344b8f72679f32db2c8, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

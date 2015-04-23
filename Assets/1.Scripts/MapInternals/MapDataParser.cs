@@ -13,8 +13,12 @@ public static class MapDataParser {
 			i++;
 		}
 		i++;
-		while(SaveStringLines[i] != "Room") {
+		while(SaveStringLines[i] != "Terminal") {
 			parseTerrain(SaveStringLines[i++]);
+		}
+		i++;
+		while(SaveStringLines[i] != "Room") {
+			parseTerminalRooms(SaveStringLines[i++]);
 		}
 		i++;
 		while(SaveStringLines[i] != "Scenery") {
@@ -25,20 +29,24 @@ public static class MapDataParser {
 			parseScenery(SaveStringLines[i++]);
 		}
 		i++;
-		while(SaveStringLines[i] != "Terminal") {
-			parseMonster(SaveStringLines[i++]);
-		}
-		i++;
 		while(i < SaveStringLines.Length-1) {
-			parseTerminalRooms(SaveStringLines[i++]);
+			parseMonster(SaveStringLines[i++]);
 		}
 		if(Global.inLevelEditor) {
 			Mode.setTileMode();
 		} else {
-			GameObject.Instantiate(Resources.Load("Player1"), start.Coordinates[0], Quaternion.identity);
-			GameObject.Instantiate(Resources.Load("Player2"), start.Coordinates[1], Quaternion.identity);
-			GameObject.Instantiate(Resources.Load("Player3"), start.Coordinates[2], Quaternion.identity);
-			GameObject.Instantiate(Resources.Load("Player4"), start.Coordinates[3], Quaternion.identity);
+            Debug.Log(Resources.Load("Player1"));
+
+			GameObject p1 = GameObject.Instantiate(Resources.Load("Player1"), start.Coordinates[0], Quaternion.identity) as GameObject;
+            GameObject p2 = GameObject.Instantiate(Resources.Load("Player2"), start.Coordinates[1], Quaternion.identity) as GameObject;
+            GameObject p3 = GameObject.Instantiate(Resources.Load("Player3"), start.Coordinates[2], Quaternion.identity) as GameObject;
+            GameObject p4 = GameObject.Instantiate(Resources.Load("Player4"), start.Coordinates[3], Quaternion.identity) as GameObject;
+
+            Loadgear loadgear = GameObject.Find("/Loadgear").GetComponent<Loadgear>();
+            loadgear.players[0] = p1.GetComponent<Character>();
+            loadgear.players[1] = p2.GetComponent<Character>();
+            loadgear.players[2] = p3.GetComponent<Character>();
+            loadgear.players[3] = p4.GetComponent<Character>();
 		}
 	}
 
@@ -62,12 +70,15 @@ public static class MapDataParser {
 	}
 
 	private static void parseTerrain(string SaveString) {
-//		Debug.Log(SaveString);
+        //Debug.Log(SaveString);
 		string[] type = SaveString.Split(':');
 		string[] blocks = type[1].Trim().Split(' ');
 		foreach(string blk in blocks) {
 			string[] blkParams = blk.Split(',');
-//			Debug.Log(blkParams[0] + ", " + blkParams[1] + ", " + blkParams[2] + ": " + type[0]);
+			if(blkParams.Length != 5){
+				continue;
+			}
+            // Debug.Log(blkParams[0] + ", " + blkParams[1] + ", " + blkParams[2] + ": " + type[0]);
 			Vector3 pos = new Vector3(float.Parse(blkParams[0]),
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
@@ -82,6 +93,9 @@ public static class MapDataParser {
 		string[] blocks = type[1].Trim().Split(' ');
 		foreach(string blk in blocks) {
 			string[] blkParams = blk.Split(',');
+			if(blkParams.Length != 4){
+				continue;
+			}
 			Vector3 pos = new Vector3(float.Parse(blkParams[0]),
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
@@ -98,15 +112,20 @@ public static class MapDataParser {
 		string[] blocks = type[1].Trim().Split(' ');
 		foreach(string blk in blocks) {
 			string[] blkParams = blk.Split(',');
+			if(blkParams.Length != 5){
+				continue;
+			}
 			Vector3 pos = new Vector3(float.Parse(blkParams[0]),
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
 			MonsterBlock nBlk = new MonsterBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
+			nBlk.Tier = Convert.ToInt32(blkParams[4]);
 			MapData.MonsterBlocks.add(nBlk);
 		}
 	}
 
 	private static void parseTerminalRooms(string SaveString) {
+		Debug.Log(SaveString);
 		string[] rms = SaveString.Split(' ');
 		string[] rmParams = rms[0].Split(',');
 		Vector3 pos1 = new Vector3(float.Parse(rmParams[0]),

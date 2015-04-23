@@ -2,8 +2,12 @@ using UnityEngine;
 using System.Collections;
 
 public class MonsterData : LevelEntityData {
+	public MonsterData() : base(){
+		tier = 0;
+	}
+
 	// The tier of the monster
-	public int tier {get; protected set;}
+	public int tier {get; set;}
 	
 	// Base cost of monster which is multiplied by the rank of monster+1
 
@@ -18,10 +22,5 @@ public class MonsterData : LevelEntityData {
 			for (int t = this.tier; t >= 0; t--) total = total + (baseCost * (t + 1)); // Based on our test formula ^
 			return total;
 		}
-	}
-	
-	// Ranks up the unit by one
-	public void Upgrade() {
-		this.tier++;
 	}
 }
