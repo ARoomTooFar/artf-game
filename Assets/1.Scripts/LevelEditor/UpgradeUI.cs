@@ -10,6 +10,7 @@ public class UpgradeUI : MonoBehaviour
 {
 	public GameObject parentObject;
 
+	static UpgradeUI currentActiveObjectUI = null;
 
 	int tier = 0;
 	int maxTier = 6;
@@ -35,14 +36,14 @@ public class UpgradeUI : MonoBehaviour
 
 	void Start ()
 	{
-		Button_TierUp = transform.Find("LowerHalf/Button_TierUp").GetComponent("Button") as Button;
-		Button_TierDown = transform.Find("LowerHalf/Button_TierDown").GetComponent("Button") as Button;
+		Button_TierUp = transform.Find("LowerHalf/Button_TierUp").GetComponent<Button>();
+		Button_TierDown = transform.Find("LowerHalf/Button_TierDown").GetComponent<Button>();
 		Button_TierUp.onClick.AddListener (() => {
 			increaseTier (); });
 		Button_TierDown.onClick.AddListener (() => {
 			decreaseTier (); }); 
-		Button_Rotate = transform.Find("LowerHalf/Button_Rotate").GetComponent("Button") as Button;
-		Button_X = transform.Find("LowerHalf/Button_X").GetComponent("Button") as Button;
+		Button_Rotate = transform.Find("LowerHalf/Button_Rotate").GetComponent<Button>();
+		Button_X = transform.Find("LowerHalf/Button_X").GetComponent<Button>();
 		//rotate object button
 		Button_Rotate.onClick.AddListener (() => {
 			MapData.rotateObject(this.transform.parent.gameObject, this.transform.parent.gameObject.transform.position);
@@ -54,10 +55,10 @@ public class UpgradeUI : MonoBehaviour
 
 		parentObject = transform.parent.gameObject;
 
-		Text_Tier = transform.Find("LowerHalf/Text_Tier").GetComponent("Text") as Text;
+		Text_Tier = transform.Find("LowerHalf/Text_Tier").GetComponent<Text>();
 		updateMonsterStatText ();
 		
-		UpgradeUICanvas = this.gameObject.GetComponent("Canvas") as Canvas;
+		UpgradeUICanvas = this.gameObject.GetComponent<Canvas>();
 
 		UICamera = GameObject.Find("UpgradeUICamera").GetComponent<Camera>();
 		FollowCamera = GameObject.Find("UICamera").GetComponent<Camera>();
@@ -190,19 +191,19 @@ public class UpgradeUI : MonoBehaviour
 	
 	//makes sure only one ObjectUI is active in the level editor
 	public bool toggleUpgradeUI(){
-		if(Global.currentActiveObjectUI == null){
+		if(currentActiveObjectUI == null){
 			lowerHalf.SetActive(true);
 			tierStats.SetActive(true);
-			Global.currentActiveObjectUI = this.gameObject.GetComponent("UpgradeUI") as UpgradeUI;
-		}else if(Global.currentActiveObjectUI == this.gameObject.GetComponent("UpgradeUI") as UpgradeUI){
+			currentActiveObjectUI = this.gameObject.GetComponent<UpgradeUI>();
+		}else if(currentActiveObjectUI == this.gameObject.GetComponent<UpgradeUI>()){
 			lowerHalf.SetActive(false);
 			tierStats.SetActive(false);
-			Global.currentActiveObjectUI = null;
+			currentActiveObjectUI = null;
 		}else{
-			Global.currentActiveObjectUI.toggleUpgradeUI();
+			currentActiveObjectUI.toggleUpgradeUI();
 			lowerHalf.SetActive(true);
 			tierStats.SetActive(true);
-			Global.currentActiveObjectUI = this.gameObject.GetComponent("UpgradeUI") as UpgradeUI;
+			currentActiveObjectUI = this.gameObject.GetComponent<UpgradeUI>();
 		}
 
 		//if already active return false, otherwise return true (used for select/deselect all)
