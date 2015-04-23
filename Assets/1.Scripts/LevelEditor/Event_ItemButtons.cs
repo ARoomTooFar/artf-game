@@ -11,7 +11,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	string connectedPrefab = "";
 	Vector3 newp;
 	public LayerMask draggingLayerMask;
-	Shader translucentShader;
 	static GameObject buttonBG;
 	static int selectedButtonID;
 	static GameObject itemObjectCopy = null;
@@ -30,8 +29,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 
 		UICamera = Camera.main.GetComponent<Camera>();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
-
-		translucentShader = Shader.Find("Transparent/Bumped Diffuse");
 	}
 
 	void Update() {
@@ -44,8 +41,8 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit; 
 			
-			if(Physics.Raycast(ray, out hit, Mathf.Infinity)/* 
-			&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false*/) {
+			if(/*Physics.Raycast(ray, out hit, Mathf.Infinity)
+			&& */UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
 				selectedButtonID = -1;
 				StartCoroutine(folderGhostDragging());
 			}
@@ -111,7 +108,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 				//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
 				foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
 					foreach(Material mat in rend.materials) {
-						mat.shader = translucentShader;
 						trans = mat.color;
 						trans.a = .5f;
 						mat.color = trans;

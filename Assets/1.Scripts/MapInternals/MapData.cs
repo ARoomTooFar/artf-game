@@ -70,10 +70,12 @@ public static class MapData {
 		if(TheFarRooms.isMoveValid(oldPos, newPos)){
 			TheFarRooms.move(oldPos, newPos - oldPos);
 		}
+		LevelPathCheck.checkPath();
 	}
 
 	public static void removeRoom(Vector3 pos) {
 		TheFarRooms.remove(pos);
+		LevelPathCheck.checkPath();
 	}
 	#endregion Rooms
 
@@ -85,6 +87,7 @@ public static class MapData {
 			if(SceneryBlocks.isAddValid(type, pos, dir)) {
 				SceneryBlocks.add(new SceneryBlock(type, pos, dir));
 			}
+			LevelPathCheck.checkPath();
 			return;
 		} 
 		if(data is MonsterData) {
@@ -102,6 +105,7 @@ public static class MapData {
 			if(TheFarRooms.isResizeValid(pos, pos + offset)) {
 				TheFarRooms.resize(pos, pos + offset);
 			}
+			LevelPathCheck.checkPath();
 			return;
 		}
 
@@ -109,6 +113,7 @@ public static class MapData {
 			if(SceneryBlocks.isMoveValid(pos, offset)) {
 				SceneryBlocks.move(pos, offset);
 			}
+			LevelPathCheck.checkPath();
 			return;
 		}
 
@@ -128,6 +133,7 @@ public static class MapData {
 			if(SceneryBlocks.isRotateValid(pos, goClockwise)) {
 				SceneryBlocks.rotate(pos, goClockwise);
 			}
+			LevelPathCheck.checkPath();
 			return;
 		}
 
@@ -141,6 +147,7 @@ public static class MapData {
 		foreach(Vector3 vec in set) {
 			removeObject(vec);
 		}
+		LevelPathCheck.checkPath();
 	}
 
 	public static void removeObject(Vector3 pos) {

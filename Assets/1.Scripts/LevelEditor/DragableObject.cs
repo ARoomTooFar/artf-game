@@ -7,15 +7,11 @@ public class DragableObject : ClickEvent {
 	public LayerMask draggingLayerMask;
 	Camera UICamera;
 	TileMapController tilemapcont;
-	Shader focusedShader;
-
 
 	void Start() {
 		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = Camera.main;
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
-		
-		focusedShader = Shader.Find("Transparent/Bumped Diffuse");
 	}
 		
 	public override IEnumerator onClick(Vector3 initPosition) {
@@ -59,7 +55,6 @@ public class DragableObject : ClickEvent {
 					//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
 					foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
 						foreach(Material mat in rend.materials) {
-							mat.shader = focusedShader;
 							trans = mat.color;
 							trans.a = .5f;
 							mat.color = trans;

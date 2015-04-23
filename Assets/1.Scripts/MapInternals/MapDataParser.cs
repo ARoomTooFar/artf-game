@@ -3,7 +3,7 @@ using UnityEngine;
 
 public static class MapDataParser {
 	public static SceneryBlock start;
-	public static GameObject end;
+	public static SceneryBlock end;
 
 	public static void ParseSaveString(string SaveString) {
 		MapData.ClearData();
@@ -103,6 +103,9 @@ public static class MapDataParser {
 			MapData.SceneryBlocks.add(nBlk);
 			if(type[0] == "Prefabs/PlayerStartingLocation") {
 				start = nBlk;
+			}
+			if(type[0] == "Prefabs/PlayerEndingLocation") {
+				end = nBlk;
 			}
 		}
 	}

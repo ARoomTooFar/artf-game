@@ -58,10 +58,12 @@ public class RoomDraggingObject : ClickEvent {
 		UICamera.GetComponent<CameraDraws>().room = null;
 		UICamera.GetComponent<CameraDraws>().roomOffset = Global.nullVector3;
 
+
 		tilemapcont.suppressDragSelecting = false;
 		tilemapcont.deselect(origin);
 		MapData.moveRoom(origin, position);
 		tilemapcont.selectTile(position);
+	
 	}
 
 	public Vector3 getPosition() {

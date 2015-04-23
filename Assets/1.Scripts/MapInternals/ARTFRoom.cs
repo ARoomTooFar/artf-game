@@ -308,6 +308,7 @@ public partial class ARTFRoom {
 		setFloor();
 		updateMarkerPositions();
 		foreach(ARTFRoom rm in rmlst) {
+			Debug.Log(rm);
 			rm.linkRoomsViaDoors();
 		}
 		this.linkRoomsViaDoors();
