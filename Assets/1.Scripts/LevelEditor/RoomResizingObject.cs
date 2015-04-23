@@ -11,8 +11,7 @@ public class RoomResizingObject : ClickEvent {
 	
 	void Start() {
 		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
-		tilemapcont = GameObject.Find("TileMap").GetComponent("TileMapController") as TileMapController;
-		
+		tilemapcont = Camera.main.GetComponent<TileMapController>();	
 		focusedShader = Shader.Find("Transparent/Bumped Diffuse");
 	}
 	
@@ -23,9 +22,9 @@ public class RoomResizingObject : ClickEvent {
 		
 		//for the ghost-duplicate
 		GameObject itemObjectCopy = null;
-		Vector3 newp = this.gameObject.transform.position;
-		UICamera.GetComponent<CameraDraws>().room = MapData.TheFarRooms.find(newp);
-		UICamera.GetComponent<CameraDraws>().roomResizeOrigin = newp;
+		Vector3 position = this.gameObject.transform.position;
+		UICamera.GetComponent<CameraDraws>().room = MapData.TheFarRooms.find(position);
+		UICamera.GetComponent<CameraDraws>().roomResizeOrigin = position;
 		tilemapcont.suppressDragSelecting = true;
 		while(Input.GetMouseButton(0)) { 
 			//if user wants to cancel the drag
@@ -41,8 +40,7 @@ public class RoomResizingObject : ClickEvent {
 			
 			Vector3 mouseChange = initPosition - Input.mousePosition;
 
-			int x = Mathf.RoundToInt(ray.GetPoint(distance).x);
-			int z = Mathf.RoundToInt(ray.GetPoint(distance).z);
+			position = ray.GetPoint(distance).Round();
 				
 			//if mouse left deadzone
 			if(Math.Abs(mouseChange.x) > Global.mouseDeadZone 
@@ -63,13 +61,11 @@ public class RoomResizingObject : ClickEvent {
 						rend.material.color = trans;
 					}
 				} else {
-					itemObjectCopy.transform.position = new Vector3(x, getPosition().y, z);
+					itemObjectCopy.transform.position = position;
 					itemObjectCopy.transform.rotation = getRotation();
 				}
-					
-				//for now y-pos remains as prefab's default.
-				newp = new Vector3(x * 1.0f, getPosition().y, z * 1.0f);
-				UICamera.GetComponent<CameraDraws>().roomResize = newp;
+
+				UICamera.GetComponent<CameraDraws>().roomResize = position;
 			}	
 
 			yield return null; 
@@ -82,8 +78,8 @@ public class RoomResizingObject : ClickEvent {
 		//destroy the copy
 		Destroy(itemObjectCopy);
 		tilemapcont.deselect(getPosition());
-		MapData.dragObject(this.gameObject, getPosition(), newp - getPosition());
-		tilemapcont.selectTile(newp);
+		MapData.dragObject(this.gameObject, getPosition(), position - getPosition());
+		tilemapcont.selectTile(position);
 	}
 	
 	public Vector3 getPosition() {

@@ -19,28 +19,27 @@ public class UIButtonSetup : MonoBehaviour {
 
 		btn = GameObject.Find("Button_Room").GetComponent("Button") as Button;
 		btn.onClick.AddListener(() => {
-			GameObject.Find ("TileMap").GetComponent<TileMapController>().placeRoomClicked = true;
-		});
+			Camera.main.GetComponent<TileMapController>().fillInRoom(); });
 
 		btn = GameObject.Find ("Button_TopDown").GetComponent("Button") as Button;
 		btn.onClick.AddListener (() => {
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().changeToTopDown (); });
+			Camera.main.GetComponent<CameraMovement>().changeToTopDown (); });
 
 		btn = GameObject.Find ("Button_Perspective").GetComponent("Button") as Button;
 		btn.onClick.AddListener(() => {
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().changeToPerspective();});
+			Camera.main.GetComponent<CameraMovement>().changeToPerspective();});
 
 		btn = GameObject.Find ("Button_Orthographic").GetComponent("Button") as Button;
 		btn.onClick.AddListener (() => {
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().changetoOrthographic ();});
+			Camera.main.GetComponent<CameraMovement>().changetoOrthographic ();});
 
 		btn = GameObject.Find ("Button_ZoomOut").GetComponent("Button") as Button;
 		btn.onClick.AddListener (() => {
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().zoomCamIn ();});
+			Camera.main.GetComponent<CameraMovement>().zoomCamIn ();});
 
 		btn = GameObject.Find ("Button_ZoomIn").GetComponent("Button") as Button;
 		btn.onClick.AddListener (() => {
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().zoomCamOut ();});
+			Camera.main.GetComponent<CameraMovement>().zoomCamOut ();});
 
 		//Button_Hand = GameObject.Find ("Button_Hand").GetComponent("Button") as Button;
 		//Button_Pointer = GameObject.Find ("Button_Pointer").GetComponent("Button") as Button;

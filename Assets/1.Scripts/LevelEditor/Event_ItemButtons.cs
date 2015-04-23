@@ -8,8 +8,6 @@ using System.Collections;
 public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHandler,*/ IPointerClickHandler {
 	TileMapController tilemapcont;
 	static Camera UICamera;
-	GameObject draggedImageAnchor;
-	Material matToMakeInvisible;
 	string connectedPrefab = "";
 	Vector3 newp;
 	public LayerMask draggingLayerMask;
@@ -30,12 +28,8 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		priceText = this.transform.Find("PriceText").gameObject.GetComponent("Text") as Text;
 //		priceText.text = (Money.getPrice(itemType)).ToString();
 
-		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
-		tilemapcont = GameObject.Find("TileMap").GetComponent("TileMapController") as TileMapController;
-		draggedImageAnchor = GameObject.Find("DraggedImageAnchor");
-		Image p = draggedImageAnchor.GetComponent("Image") as Image;
-		matToMakeInvisible = Resources.Load("Textures/basecolor") as Material;
-		p.material = matToMakeInvisible;
+		UICamera = Camera.main.GetComponent<Camera>();
+		tilemapcont = Camera.main.GetComponent<TileMapController>();
 
 		translucentShader = Shader.Find("Transparent/Bumped Diffuse");
 	}

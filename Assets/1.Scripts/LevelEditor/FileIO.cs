@@ -119,12 +119,6 @@ public class FileIO : MonoBehaviour
 	}
 
 	void LoadPlayable(){
-		ItemObject[] itemObs =  FindObjectsOfType(typeof(ItemObject)) as ItemObject[];
-		foreach(ItemObject io in itemObs){
-            //print (io.gameObject.name);
-			GameObject ob = io.gameObject;
-			DontDestroyOnLoad(ob);
-		}
 		Application.LoadLevel(1);
 	}
 }

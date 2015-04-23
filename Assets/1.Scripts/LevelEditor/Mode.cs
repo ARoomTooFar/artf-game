@@ -30,7 +30,7 @@ public static class Mode
 		Button_RoomMode_Background.SetActive(true);
 		Button_TileMode_Background.SetActive(false);
 
-		RoomPanel.SetActive(true);
+		//RoomPanel.SetActive(true);
 
 		foreach (ARTFRoom rm in MapData.TheFarRooms.roomList) {
 			rm.setMarkerActive(true);
@@ -45,7 +45,7 @@ public static class Mode
 		Button_RoomMode_Background.SetActive(false);
 		Button_TileMode_Background.SetActive(true);
 
-		RoomPanel.SetActive(false);
+		//RoomPanel.SetActive(false);
 
 		foreach (ARTFRoom rm in MapData.TheFarRooms.roomList) {
 			rm.setMarkerActive(false);
