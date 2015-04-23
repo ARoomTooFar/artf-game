@@ -1,21 +1,18 @@
-// Charge state of bully trunk, when enemy is out of attackRange it will charge BullRush
-
+﻿// Checks sprint cd and tells when it is off cd
 using UnityEngine;
 
-public class RammingBlast : Ram {
-	
+public class CheckSprintCD : SprintBehaviour {
 	// This will be called when the animator first transitions to this state.
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		base.OnStateEnter (animator, stateInfo, layerIndex);
+		if (sprint.curCoolDown <= 0) animator.SetTrigger("SprintOffCD");
 	}
 	
 	// This will be called once the animator has transitioned out of the state.
 	public override void OnStateExit (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		base.OnStateExit (animator, stateInfo, layerIndex);
-		this.blast.useItem();
+		if (sprint.curCoolDown <= 0) animator.SetTrigger("SprintOffCD");
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		base.OnStateUpdate(animator, stateInfo, layerIndex);
+		if (sprint.curCoolDown <= 0) animator.SetTrigger("SprintOffCD");
 	}
 }
