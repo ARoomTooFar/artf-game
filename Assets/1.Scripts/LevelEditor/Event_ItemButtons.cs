@@ -195,8 +195,9 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 						pos = MapData.TheFarRooms.find(pos).getNearestEdgePosition(pos);
 					}
 				}
-				Money.buy(itemType, price);
-				MapData.addObject(prefabLocation, pos, rot.toDirection());
+				if(Money.buy(itemType, price)){
+					MapData.addObject(prefabLocation, pos, rot.toDirection());
+				}
 			}
 
 			//destroy the copy
