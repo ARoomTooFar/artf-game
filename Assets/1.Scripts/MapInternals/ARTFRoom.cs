@@ -379,6 +379,7 @@ public partial class ARTFRoom {
 		foreach(TerrainBlock blk in this.Blocks) {
 			MapData.TerrainBlocks.remove(blk);
 		}
+		GameObjectResourcePool.returnResource(defaultFloor, Floor);
 		this.Blocks.Clear();
 	}
 	#endregion ManipulationFunctions
