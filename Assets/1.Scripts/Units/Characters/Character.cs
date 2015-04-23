@@ -52,7 +52,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	public bool invincible = false;
 	public GameObject drop;
 	public GameObject splatter;
-	public Collider collider;
+	public Collider col;
 	public Rigidbody rb;
 	public Type opposition;
 	public Renderer[] rs;
@@ -185,7 +185,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 		stats = new Stats();
 		this.animator = GetComponent<Animator>();
 		this.rb = this.GetComponent<Rigidbody>();
-		this.collider = this.GetComponent<Collider>();
+		this.col = this.GetComponent<Collider>();
 		facing = Vector3.forward;
 		isDead = false;
 		freeAnim = true;

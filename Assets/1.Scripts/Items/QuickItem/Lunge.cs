@@ -6,14 +6,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Lunge : QuickItem {
-	protected MeshCollider collider;
+	protected Collider col;
 	protected List<Character> enemiesInRange;
 
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
-		this.collider = this.GetComponent<MeshCollider>();
-		this.collider.enabled = true;
+
+		this.col = this.GetComponent<Collider>();
+		this.col.enabled = true;
 
 		this.enemiesInRange = new List<Character>();
 	}
@@ -64,7 +65,7 @@ public class Lunge : QuickItem {
 	
 	// Timer and velocity changing thing
 	protected IEnumerator LungeTimeFunction(Character target) {
-		while (!this.user.collider.bounds.Intersects(target.collider.bounds)) {
+		while (!this.user.col.bounds.Intersects(target.col.bounds)) {
 			this.user.facing = this.user.GetFacingTowardsObject(target.gameObject);
 			this.user.transform.localRotation = Quaternion.LookRotation(this.user.facing);	
 			this.user.rb.velocity = user.facing.normalized * 60f;
