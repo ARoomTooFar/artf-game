@@ -76,8 +76,14 @@ public class FileIO : MonoBehaviour
         if (serv.dataCheck(lvlData))
         {
             txtDlLvl.enabled = false;
-            MapDataParser.ParseSaveString(lvlData);
-            Debug.Log("LVL DL SUCCESS: " + lvlData);
+			try{
+				MapDataParser.ParseSaveString(lvlData);
+            	Debug.Log("LVL DL SUCCESS: " + lvlData);
+			} catch (Exception ex){
+				Debug.Log(ex.Message);
+				Debug.Log("ERROR: Map data format wrong. Loading default level.");
+				MapDataParser.ParseSaveString(Global.defaultLevel);
+			}
         }
         else
         {
@@ -119,12 +125,6 @@ public class FileIO : MonoBehaviour
 	}
 
 	void LoadPlayable(){
-		ItemObject[] itemObs =  FindObjectsOfType(typeof(ItemObject)) as ItemObject[];
-		foreach(ItemObject io in itemObs){
-            //print (io.gameObject.name);
-			GameObject ob = io.gameObject;
-			DontDestroyOnLoad(ob);
-		}
 		Application.LoadLevel(1);
 	}
 }
