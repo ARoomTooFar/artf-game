@@ -14,7 +14,7 @@ public static class Money
 
 	static Money ()
 	{
-		money = 300;
+		money = 3000;
 
 		priceTable = new Dictionary<string, int> ();
 
@@ -57,11 +57,17 @@ public static class Money
 		}
 	}
 
-	public static void buy (string s, int price)
+	public static bool buy (string s, int price)
 	{
+		if(price <= money){
+			money -= price;
+			updateMoneyDisplay();
+			return true;
+		}else{
+			Debug.Log("Insufficient funds. Construct more pylons.");
+			return false;
+		}
 
-		money -= price;
-		updateMoneyDisplay();
 
 
 //		if (priceTable.ContainsKey (s)) {

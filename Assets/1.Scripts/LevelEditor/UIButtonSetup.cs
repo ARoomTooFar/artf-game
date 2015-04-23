@@ -21,17 +21,17 @@ public class UIButtonSetup : MonoBehaviour {
 		btn.onClick.AddListener(() => {
 			Camera.main.GetComponent<TileMapController>().fillInRoom(); });
 
-		btn = GameObject.Find ("Button_TopDown").GetComponent("Button") as Button;
-		btn.onClick.AddListener (() => {
-			Camera.main.GetComponent<CameraMovement>().changeToTopDown (); });
+//		btn = GameObject.Find ("Button_TopDown").GetComponent("Button") as Button;
+//		btn.onClick.AddListener (() => {
+//			Camera.main.GetComponent<CameraMovement>().changeToTopDown (); });
 
-		btn = GameObject.Find ("Button_Perspective").GetComponent("Button") as Button;
-		btn.onClick.AddListener(() => {
-			Camera.main.GetComponent<CameraMovement>().changeToPerspective();});
+//		btn = GameObject.Find ("Button_Perspective").GetComponent("Button") as Button;
+//		btn.onClick.AddListener(() => {
+//			Camera.main.GetComponent<CameraMovement>().changeToPerspective();});
 
-		btn = GameObject.Find ("Button_Orthographic").GetComponent("Button") as Button;
-		btn.onClick.AddListener (() => {
-			Camera.main.GetComponent<CameraMovement>().changetoOrthographic ();});
+//		btn = GameObject.Find ("Button_Orthographic").GetComponent("Button") as Button;
+//		btn.onClick.AddListener (() => {
+//			Camera.main.GetComponent<CameraMovement>().changetoOrthographic ();});
 
 		btn = GameObject.Find ("Button_ZoomOut").GetComponent("Button") as Button;
 		btn.onClick.AddListener (() => {
@@ -44,14 +44,35 @@ public class UIButtonSetup : MonoBehaviour {
 		//Button_Hand = GameObject.Find ("Button_Hand").GetComponent("Button") as Button;
 		//Button_Pointer = GameObject.Find ("Button_Pointer").GetComponent("Button") as Button;
 
-		btn = GameObject.Find ("Button_TileMode").GetComponent("Button") as Button;
+//		btn = GameObject.Find ("Button_TileMode").GetComponent("Button") as Button;
+//		btn.onClick.AddListener (() => {
+//			Mode.setTileMode();
+//		});
+//
+//		btn = GameObject.Find ("Button_RoomMode").GetComponent("Button") as Button;
+//		btn.onClick.AddListener (() => {
+//			Mode.setRoomMode();
+//		});
+
+		btn = GameObject.Find ("Button_ModeToggle").GetComponent("Button") as Button;
 		btn.onClick.AddListener (() => {
-			Mode.setTileMode();
+			Debug.Log ("sdf");
+			if(Mode.isRoomMode())
+				Mode.setTileMode();
+			else if(Mode.isTileMode())
+				Mode.setRoomMode();
 		});
 
-		btn = GameObject.Find ("Button_RoomMode").GetComponent("Button") as Button;
-		btn.onClick.AddListener (() => {
-			Mode.setRoomMode();
+		btn = GameObject.Find ("Button_CameraToggle").GetComponent("Button") as Button;
+		btn.onClick.AddListener(() => {
+			if(Camera.main.orthographic){
+				Camera.main.GetComponent<CameraMovement>().changeToPerspective();
+				btn.GetComponent<Image>().sprite = Resources.Load <Sprite>("IconsUI/perspe");
+			}
+			else{
+				Camera.main.GetComponent<CameraMovement>().changeToTopDown();
+				btn.GetComponent<Image>().sprite = Resources.Load <Sprite>("IconsUI/orthog");
+			}
 		});
 
 
