@@ -1,10 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class KeyboardInputs : MonoBehaviour {	
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetKeyDown(KeyCode.Backspace)) {
+
+			HashSet<GameObject> obs = MapData.getObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
+
+			//refund costs
+			foreach(GameObject ob in obs){
+				if(ob != null){
+					Money.money += ob.GetComponent<LevelEntityData>().baseCost;
+					Money.updateMoneyDisplay();
+				}
+			}
+
 			MapData.removeObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
 		}
 
