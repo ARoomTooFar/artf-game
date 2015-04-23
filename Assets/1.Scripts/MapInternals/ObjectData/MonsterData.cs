@@ -2,6 +2,10 @@ using UnityEngine;
 using System.Collections;
 
 public class MonsterData : LevelEntityData {
+	public MonsterData() : base(){
+		tier = 0;
+	}
+
 	// The tier of the monster
 	public int tier {get; set;}
 	

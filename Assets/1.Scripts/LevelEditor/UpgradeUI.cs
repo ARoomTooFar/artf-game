@@ -170,6 +170,7 @@ public class UpgradeUI : MonoBehaviour
 			tier = maxTier;
 		}
 		updateMonsterStatText ();
+		parentObject.GetComponent<MonsterData>().tier = tier;
 	}
 	
 	public void decreaseTier ()
@@ -179,6 +180,7 @@ public class UpgradeUI : MonoBehaviour
 			tier = 0;
 		}
 		updateMonsterStatText ();
+		parentObject.GetComponent<MonsterData>().tier = tier;
 	}
 	
 
