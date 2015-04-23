@@ -111,7 +111,7 @@ public class NewBushman : NewMobileEnemy {
 
 	protected override void TargetFunction() {
 		base.TargetFunction();
-		if (/*this.oldTarget != null && */this.target != this.oldTarget) this.animator.SetTrigger("TargetSwitched");
+		if (this.target != this.oldTarget) this.animator.SetTrigger("TargetSwitched");
 	}
 
 	//----------------------------------//
