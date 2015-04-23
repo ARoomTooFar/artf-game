@@ -10,11 +10,8 @@ public partial class ARTFRoom {
 
 	#region PrivateVariables
 	private static string defaultBlockID = "LevelEditor/Rooms/floortile";
-	private static string defaultFloor = "LevelEditor/Floors/IndustrialFloor1";
+	private static string defaultFloor = "{0}/Floors/IndustrialFloor1";
 	#endregion PrivateVariables
-
-	public bool isStartRoom = false;
-	public bool isEndRoom = false;
 
 	#region Properties
 	//A list of the TerrainBlocks contained within the room
@@ -151,6 +148,7 @@ public partial class ARTFRoom {
 			this.LLMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LLCorner, Vector3.zero);
 			this.ULMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", ULCorner, Vector3.zero);
 			this.LRMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LRCorner, Vector3.zero);
+			setMarkerActive(Mode.isRoomMode());
 		}
 	}
 
@@ -231,7 +229,7 @@ public partial class ARTFRoom {
 		//for each door
 		foreach(SceneryBlock dr in Doors) {
 			//get the position where a linked door needs to be
-			Vector3 checkPos = getDoorCheckPosition(dr);
+			Vector3 checkPos = dr.doorCheckPosition;
 			//grab the SceneryBlock at this position if it exists
 			SceneryBlock scnBlk = MapData.SceneryBlocks.find(checkPos);
 			//if there is no scenery block, move on
@@ -268,15 +266,14 @@ public partial class ARTFRoom {
 					continue;
 				}
 				//find the path between the two and store it
+				List<Vector3> path = Pathfinder.getSingleRoomPath(kvp1.Key.Position, kvp2.Key.Position);
+				path.Insert(0, kvp1.Key.doorCheckPosition);
+				path.Insert(path.Count, kvp2.Key.doorCheckPosition);
 				RoomPaths.Add(new KeyValuePair<Vector3, Vector3>(kvp1.Key.Position, kvp2.Key.Position),
-				              Pathfinder.getSingleRoomPath(kvp1.Key.Position, kvp2.Key.Position));
+				              path);
 			}
 		}
-	}
-
-	public Vector3 getDoorCheckPosition(SceneryBlock dr) {
-		return dr.Position.moveinDir(dr.Orientation);
-	}
+	} 
 
 	#region ManipulationFunctions
 
@@ -297,6 +294,10 @@ public partial class ARTFRoom {
 	 * by the offset Vector3
 	 */
 	public void move(Vector3 offset) {
+		List<ARTFRoom> rmlst = new List<ARTFRoom>();
+		foreach(SceneryBlock dr in this.Doors) {
+			rmlst.Add(MapData.TheFarRooms.find(dr.doorCheckPosition));
+		}
 		//Shift the LowerLeft and UpperRight corners by offset
 		LLCorner = LLCorner + offset;
 		URCorner = URCorner + offset;
@@ -306,6 +307,10 @@ public partial class ARTFRoom {
 		}
 		setFloor();
 		updateMarkerPositions();
+		foreach(ARTFRoom rm in rmlst) {
+			rm.linkRoomsViaDoors();
+		}
+		this.linkRoomsViaDoors();
 	}
 
 	/*
@@ -317,6 +322,10 @@ public partial class ARTFRoom {
 		//Make sure that the old corner is actually a corner
 		if(!isCorner(oldCor)) {
 			return;
+		}
+		List<ARTFRoom> rmlst = new List<ARTFRoom>();
+		foreach(SceneryBlock dr in this.Doors) {
+			rmlst.Add(MapData.TheFarRooms.find(dr.doorCheckPosition));
 		}
 		//get the offset
 		Vector3 offset = newCor - oldCor;
@@ -355,6 +364,10 @@ public partial class ARTFRoom {
 
 
 		updateMarkerPositions();
+		foreach(ARTFRoom rm in rmlst) {
+			rm.linkRoomsViaDoors();
+		}
+		this.linkRoomsViaDoors();
 	}
 
 	/*
@@ -366,6 +379,7 @@ public partial class ARTFRoom {
 		foreach(TerrainBlock blk in this.Blocks) {
 			MapData.TerrainBlocks.remove(blk);
 		}
+		GameObjectResourcePool.returnResource(defaultFloor, Floor);
 		this.Blocks.Clear();
 	}
 	#endregion ManipulationFunctions

@@ -13,6 +13,11 @@ public class MonsterBlock {
 	public MonsterData BlockInfo {
 		get { return GameObj.GetComponent<MonsterData>(); }
 	}
+
+	public int Tier{
+		get{ return BlockInfo.tier; }
+		set{ BlockInfo.tier = value; }
+	}
 	
 	public Vector3 Position {
 		get;
@@ -25,7 +30,7 @@ public class MonsterBlock {
 	}
 
 	public string SaveString{
-		get{ return Position.toCSV () + "," + Orientation.ToString(); }
+		get{ return Position.toCSV () + "," + Orientation.ToString() + ", " + Tier; }
 	}
 
 	public GameObject GameObj {

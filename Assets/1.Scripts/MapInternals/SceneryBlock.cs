@@ -99,6 +99,10 @@ public class SceneryBlock {
 	public void remove(){
 		GameObjectResourcePool.returnResource(BlockID, GameObj);
 	}
+
+	public Vector3 doorCheckPosition {
+		get{return Position.moveinDir(Orientation);}
+	}
 }
 
 

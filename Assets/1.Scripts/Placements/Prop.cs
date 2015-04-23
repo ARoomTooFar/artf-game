@@ -36,8 +36,8 @@ public class Prop : MonoBehaviour, IDamageable<int, Traps> {
 	}
 
 	public virtual void die() {
-		Instantiate(expDeath, transform.position, transform.rotation);
 		Destroy(this.gameObject);
+		Instantiate(expDeath, transform.position, transform.rotation);
 	}
 
 	void OnCollisionEnter(Collision collision) {

@@ -126,6 +126,7 @@ public class NewEnemy : Character {
 		setAnimHash ();
 	}
 
+	// Things that are tier specific should be set here
 	public virtual void SetTierData(int tier) {
 		this.tier = tier;
 		this.animator.SetInteger("Tier", this.tier);
@@ -205,10 +206,13 @@ public class NewEnemy : Character {
 	public virtual void getFacingTowardsTarget() {
 		Vector3 newFacing = Vector3.zero;
 		
-		if (this.target != null) {
+		if (this.target != null && !this.stunned) {
 			newFacing = this.target.transform.position - this.transform.position;
 			newFacing.y = 0.0f;
-			if (newFacing != Vector3.zero) this.facing = newFacing.normalized;
+			if (newFacing != Vector3.zero) {
+				this.facing = newFacing.normalized;
+				this.transform.localRotation = Quaternion.LookRotation(facing);	
+			}
 		}
 	}
 	

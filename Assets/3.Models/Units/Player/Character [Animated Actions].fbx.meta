@@ -1,0 +1,2244 @@
+fileFormatVersion: 2
+guid: 1922d7c28d2cc47498013b5aeb4057ac
+timeCreated: 1429489580
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Character
+    100002: //RootNode
+    100004: Character Bone Structure
+    100006: Head
+    100008: Head_end
+    100010: Left Ankle
+    100012: Left Arm 1
+    100014: Left Arm 2
+    100016: Left Foot
+    100018: Left Hand 1
+    100020: Left Hand 2
+    100022: Left Hand 3
+    100024: Left Hand 3_end
+    100026: Left Leg 1
+    100028: Left Leg 2
+    100030: Left Pelvis
+    100032: Left Shoulder
+    100034: Left Thumb 1
+    100036: Left Thumb 2
+    100038: Left Thumb 2_end
+    100040: Left Toes
+    100042: Left Toes_end
+    100044: Left Wrist
+    100046: Lower Spine
+    100048: Middle Spine
+    100050: Neck
+    100052: Right Ankle
+    100054: Right Arm 1
+    100056: Right Arm 2
+    100058: Right Foot
+    100060: RIght Hand 1
+    100062: Right Hand 2
+    100064: RIght Hand 3
+    100066: RIght Hand 3_end
+    100068: Right Leg 1
+    100070: Right Leg 2
+    100072: Right Pelvis
+    100074: RIght Shoulder
+    100076: Right Thumb 1
+    100078: Right Thumb 2
+    100080: Right Thumb 2_end
+    100082: Right Toes
+    100084: Right Toes_end
+    100086: Right Wrist
+    100088: Upper Spine
+    400000: Character
+    400002: //RootNode
+    400004: Character Bone Structure
+    400006: Head
+    400008: Head_end
+    400010: Left Ankle
+    400012: Left Arm 1
+    400014: Left Arm 2
+    400016: Left Foot
+    400018: Left Hand 1
+    400020: Left Hand 2
+    400022: Left Hand 3
+    400024: Left Hand 3_end
+    400026: Left Leg 1
+    400028: Left Leg 2
+    400030: Left Pelvis
+    400032: Left Shoulder
+    400034: Left Thumb 1
+    400036: Left Thumb 2
+    400038: Left Thumb 2_end
+    400040: Left Toes
+    400042: Left Toes_end
+    400044: Left Wrist
+    400046: Lower Spine
+    400048: Middle Spine
+    400050: Neck
+    400052: Right Ankle
+    400054: Right Arm 1
+    400056: Right Arm 2
+    400058: Right Foot
+    400060: RIght Hand 1
+    400062: Right Hand 2
+    400064: RIght Hand 3
+    400066: RIght Hand 3_end
+    400068: Right Leg 1
+    400070: Right Leg 2
+    400072: Right Pelvis
+    400074: RIght Shoulder
+    400076: Right Thumb 1
+    400078: Right Thumb 2
+    400080: Right Thumb 2_end
+    400082: Right Toes
+    400084: Right Toes_end
+    400086: Right Wrist
+    400088: Upper Spine
+    4300000: Character
+    7400000: Character Bone Structure|Attack [1H Melee - Horizontal Slash]
+    7400002: Character Bone Structure|Attack [1H Melee - Stab]
+    7400004: Character Bone Structure|Attack [1H Melee - Vertical Slash]
+    7400006: Character Bone Structure|Attack [2H Polearm - Butt Jab]
+    7400008: Character Bone Structure|Attack [2H Polearm - Ground Impale]
+    7400010: Character Bone Structure|Attack [2H Polearm - Stab]
+    7400012: Character Bone Structure|Death [Fall on Knees]
+    7400014: Character Bone Structure|Idle [1H Melee]
+    7400016: Character Bone Structure|Idle [2H Polearm]
+    7400018: Character Bone Structure|Jump [Running]
+    7400020: Character Bone Structure|Jump [Standing]
+    7400022: Character Bone Structure|Running [1H Melee]
+    7400024: Character Bone Structure|Running [2H Polearm]
+    7400026: Character Bone Structure|Running [Without Weapon]
+    9500000: //RootNode
+    13700000: Character
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Character Bone Structure|Attack [1H Melee - Horizontal Slash]
+      takeName: Character Bone Structure|Attack [1H Melee - Horizontal Slash]
+      firstFrame: 0
+      lastFrame: 29
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Attack [1H Melee - Stab]
+      takeName: Character Bone Structure|Attack [1H Melee - Stab]
+      firstFrame: 0
+      lastFrame: 14
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Attack [1H Melee - Vertical Slash]
+      takeName: Character Bone Structure|Attack [1H Melee - Vertical Slash]
+      firstFrame: 0
+      lastFrame: 22
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Attack [2H Polearm - Butt Jab]
+      takeName: Character Bone Structure|Attack [2H Polearm - Butt Jab]
+      firstFrame: 0
+      lastFrame: 22
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Attack [2H Polearm - Ground Impale]
+      takeName: Character Bone Structure|Attack [2H Polearm - Ground Impale]
+      firstFrame: 0
+      lastFrame: 21
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Attack [2H Polearm - Stab]
+      takeName: Character Bone Structure|Attack [2H Polearm - Stab]
+      firstFrame: 0
+      lastFrame: 23
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Death [Fall on Knees]
+      takeName: Character Bone Structure|Death [Fall on Knees]
+      firstFrame: 0
+      lastFrame: 74
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Idle [1H Melee]
+      takeName: Character Bone Structure|Idle [1H Melee]
+      firstFrame: 0
+      lastFrame: 260
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Idle [2H Polearm]
+      takeName: Character Bone Structure|Idle [2H Polearm]
+      firstFrame: 0
+      lastFrame: 260
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Jump [Running]
+      takeName: Character Bone Structure|Jump [Running]
+      firstFrame: 0
+      lastFrame: 19
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Jump [Standing]
+      takeName: Character Bone Structure|Jump [Standing]
+      firstFrame: 0
+      lastFrame: 19
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Running [1H Melee]
+      takeName: Character Bone Structure|Running [1H Melee]
+      firstFrame: 0
+      lastFrame: 19
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Running [2H Polearm]
+      takeName: Character Bone Structure|Running [2H Polearm]
+      firstFrame: 0
+      lastFrame: 20
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Character Bone Structure|Running [Without Weapon]
+      takeName: Character Bone Structure|Running [Without Weapon]
+      firstFrame: 0
+      lastFrame: 20
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character
+        weight: 1
+      - path: Character Bone Structure
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes
+        weight: 1
+      - path: Character Bone Structure/Left Pelvis/Left Leg 1/Left Leg 2/Left Ankle/Left
+          Foot/Left Toes/Left Toes_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Hand 1/Left Hand 2/Left Hand 3/Left Hand
+          3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Left Shoulder/Left
+          Arm 1/Left Arm 2/Left Wrist/Left Thumb 1/Left Thumb 2/Left Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/Neck/Head/Head_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/RIght Hand 1/Right Hand 2/RIght
+          Hand 3/RIght Hand 3_end
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2
+        weight: 1
+      - path: Character Bone Structure/Lower Spine/Middle Spine/Upper Spine/RIght
+          Shoulder/Right Arm 1/Right Arm 2/Right Wrist/Right Thumb 1/Right Thumb 2/Right
+          Thumb 2_end
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes
+        weight: 1
+      - path: Character Bone Structure/Right Pelvis/Right Leg 1/Right Leg 2/Right
+          Ankle/Right Foot/Right Toes/Right Toes_end
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
