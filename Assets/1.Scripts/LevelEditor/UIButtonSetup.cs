@@ -55,7 +55,7 @@ public class UIButtonSetup : MonoBehaviour {
 		});
 
 
-
+		/*
 		btn = GameObject.Find ("Button_StartRoom").GetComponent("Button") as Button;
 		btn.onClick.AddListener (() => {
 			StartEndRoom.placeStartRoom();
@@ -66,7 +66,7 @@ public class UIButtonSetup : MonoBehaviour {
 		btn.onClick.AddListener (() => {
 			StartEndRoom.placeEndRoom();
 		});
-		StartEndRoom.EndRoomCheckMark.SetActive(false);
+		StartEndRoom.EndRoomCheckMark.SetActive(false);*/
 
 		//Mode.setTileMode();
 	}

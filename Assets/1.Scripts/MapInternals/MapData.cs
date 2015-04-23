@@ -47,14 +47,14 @@ public static class MapData {
 			string retVal = "MapData\n";
 			retVal += "Terrain\n";
 			retVal += TerrainBlocks.SaveString;
+			retVal += "Terminal\n";
+			retVal += StartingRoom.SaveString + " " + EndingRoom.SaveString + "\n";
 			retVal += "Room\n";
 			retVal += TheFarRooms.SaveString;
 			retVal += "Scenery\n";
 			retVal += SceneryBlocks.SaveString;
 			retVal += "Monster\n";
 			retVal += MonsterBlocks.SaveString;
-			retVal += "Terminal\n";
-			retVal += StartingRoom.SaveString + " " + EndingRoom.SaveString + "\n";
 			return retVal;
 		}
 	}
