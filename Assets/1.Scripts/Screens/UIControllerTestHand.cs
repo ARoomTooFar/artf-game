@@ -230,11 +230,15 @@ public class UIControllerTestHand : MonoBehaviour {
 		move(Input.GetAxisRaw(controls.vert), Input.GetAxisRaw(controls.hori));
 		currentMenu[menuVertLoc, menuHoriLoc].Select();
 		if(Input.GetButtonUp(controls.joySecItem)) {
+			Debug.Log("Butt");
 			if(fieldCharName.text.Length > 0) {
 				fieldCharName.text = fieldCharName.text.Remove(fieldCharName.text.Length - 1);
 				arrLoc = 0;
 				prevBtn = "";
 			}
+		}
+		if(Input.GetButtonUp(controls.joyCycItem)) {
+			Debug.Log("Butt2");
 		}
 	}
 }
