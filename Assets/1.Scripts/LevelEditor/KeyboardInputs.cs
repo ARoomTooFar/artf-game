@@ -1,35 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class KeyboardInputs : MonoBehaviour {	
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetKeyDown(KeyCode.Backspace)) {
-			MapData.removeObjects((GameObject.Find ("TileMap").GetComponent("TileMapController") as TileMapController).selectedTiles);
+
+			HashSet<GameObject> obs = MapData.getObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
+
+			//refund costs
+			foreach(GameObject ob in obs){
+				if(ob != null){
+					Money.money += ob.GetComponent<LevelEntityData>().baseCost;
+					Money.updateMoneyDisplay();
+				}
+			}
+
+			MapData.removeObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
 		}
 
 		if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().moveForward();
+			Camera.main.GetComponent<CameraMovement>().moveForward();
 		}
 
 		if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) {
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().moveBackward();
+			Camera.main.GetComponent<CameraMovement>().moveBackward();
 		}
 
 		if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().moveLeft();
+			Camera.main.GetComponent<CameraMovement>().moveLeft();
 		}
 
 		if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().moveRight();
+			Camera.main.GetComponent<CameraMovement>().moveRight();
 		}
 
 		if(Input.GetKey(KeyCode.Minus) || Input.GetKey(KeyCode.KeypadMinus)){
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().zoomCamIn();
+			Camera.main.GetComponent<CameraMovement>().zoomCamIn();
 		}
 
 		if(Input.GetKey(KeyCode.Equals)|| Input.GetKey(KeyCode.KeypadPlus)){
-			GameObject.Find("UICamera").GetComponent<CameraMovement>().zoomCamOut();
+			Camera.main.GetComponent<CameraMovement>().zoomCamOut();
 		}
 	}
 }

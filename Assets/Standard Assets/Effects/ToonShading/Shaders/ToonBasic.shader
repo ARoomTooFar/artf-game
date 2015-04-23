@@ -1,14 +1,16 @@
 Shader "Toon/Basic" {
 	Properties {
-		_Color ("Main Color", Color) = (.5,.5,.5,1)
+		_Color ("Main Color", Color) = (.5,.5,.5,.5)
 		_MainTex ("Base (RGB)", 2D) = "white" {}
 		_ToonShade ("ToonShader Cubemap(RGB)", CUBE) = "" { }
 	}
 
 
 	SubShader {
-		Tags { "RenderType"="Opaque" }
+		Tags { "RenderType"="Transparent" "Queue" = "Transparent"}
 		Pass {
+			Blend SrcAlpha OneMinusSrcAlpha
+		
 			Name "BASE"
 			Cull Off
 			

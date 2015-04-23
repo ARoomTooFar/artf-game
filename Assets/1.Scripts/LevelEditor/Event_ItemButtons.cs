@@ -8,12 +8,9 @@ using System.Collections;
 public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHandler,*/ IPointerClickHandler {
 	TileMapController tilemapcont;
 	static Camera UICamera;
-	GameObject draggedImageAnchor;
-	Material matToMakeInvisible;
 	string connectedPrefab = "";
 	Vector3 newp;
 	public LayerMask draggingLayerMask;
-	Shader translucentShader;
 	static GameObject buttonBG;
 	static int selectedButtonID;
 	static GameObject itemObjectCopy = null;
@@ -30,14 +27,8 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		priceText = this.transform.Find("PriceText").gameObject.GetComponent("Text") as Text;
 //		priceText.text = (Money.getPrice(itemType)).ToString();
 
-		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
-		tilemapcont = GameObject.Find("TileMap").GetComponent("TileMapController") as TileMapController;
-		draggedImageAnchor = GameObject.Find("DraggedImageAnchor");
-		Image p = draggedImageAnchor.GetComponent("Image") as Image;
-		matToMakeInvisible = Resources.Load("Textures/basecolor") as Material;
-		p.material = matToMakeInvisible;
-
-		translucentShader = Shader.Find("Transparent/Bumped Diffuse");
+		UICamera = Camera.main.GetComponent<Camera>();
+		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}
 
 	void Update() {
@@ -50,8 +41,8 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit; 
 			
-			if(Physics.Raycast(ray, out hit, Mathf.Infinity)/* 
-			&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false*/) {
+			if(/*Physics.Raycast(ray, out hit, Mathf.Infinity)
+			&& */UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
 				selectedButtonID = -1;
 				StartCoroutine(folderGhostDragging());
 			}
@@ -117,7 +108,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 				//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
 				foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
 					foreach(Material mat in rend.materials) {
-						mat.shader = translucentShader;
 						trans = mat.color;
 						trans.a = .5f;
 						mat.color = trans;
@@ -205,8 +195,9 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 						pos = MapData.TheFarRooms.find(pos).getNearestEdgePosition(pos);
 					}
 				}
-				Money.buy(itemType, price);
-				MapData.addObject(prefabLocation, pos, rot.toDirection());
+				if(Money.buy(itemType, price)){
+					MapData.addObject(prefabLocation, pos, rot.toDirection());
+				}
 			}
 
 			//destroy the copy

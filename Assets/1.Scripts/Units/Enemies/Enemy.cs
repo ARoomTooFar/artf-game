@@ -31,6 +31,7 @@ public class Enemy : Character {
 
 	protected float aggroTimer = 7.0f;
 
+	/*
 	void OnEnable()
 	{
 		Player.OnDeath += playerDied;
@@ -40,7 +41,7 @@ public class Enemy : Character {
 	void OnDisable()
 	{
 		Player.OnDeath -= playerDied;
-	}
+	}*/
 
 	protected override void Awake() {
 		base.Awake();
@@ -96,9 +97,9 @@ public class Enemy : Character {
 				falling ();
 			}
 
-			if (target != null)
-				target = aggroT.getTarget ();
-			
+			// if (target != null)
+			//	target = aggroT.getTarget ();
+			target = aggroT.GetTopAggro();
 			
 		}
 	}
@@ -178,9 +179,12 @@ public class Enemy : Character {
 			}else{
 				Player addable = p.GetComponent<Player>();
 				if(!addable.invis){
-					aggroT.add(p,1);
+					// aggroT.add(p,1);
+					aggroT.AddAggro(p, 1);
 					lastSeenPosition = p.transform.position;
 					alerted = true;
+				}else{
+					return false;
 				}
 				return true;
 	
@@ -219,7 +223,7 @@ public class Enemy : Character {
 			dmgTimer = 0f;
 		}		
 
-		// aggroT.add(striker.gameObject, dmgTaken); // This is causing the the AI to stop attacking and only approach and search for a target once they get damaged
+		aggroT.AddAggro(striker.gameObject, dmgTaken);
 	}
 	
 	public override void damage(int dmgTaken) {
@@ -241,7 +245,7 @@ public class Enemy : Character {
 		stats.health = 0;
 		//UI.hpBar.current = 0;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position-new Vector3(0,6,0), transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
 			r.enabled = false;
@@ -272,9 +276,23 @@ public class Enemy : Character {
 		target = null;
 	}
 
+	/*
 	public virtual void playerDied(GameObject dead){
 		if (aggroT != null) {
-			aggroT.deletePlayer(dead);
+			aggroT.RemoveUnit(dead);
+		}
+	}*/
+	
+	public virtual void playerVanished(GameObject dead){
+		if (aggroT != null) {
+			aggroT.RemoveUnit(dead);
+			target = null;
+		}
+	}
+	
+	public virtual void taunted(GameObject taunter){
+		if (aggroT != null){
+			aggroT.AddAggro(taunter,aggroT.GetAggro()*2);
 		}
 	}
 	

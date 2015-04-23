@@ -95,7 +95,7 @@ public class NewBullyTrunk: NewMobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 3;
+		tier = 4;
 		base.SetTierData (tier);
 
 		this.stats.speed = tier < 3 ? 9 : 12;
@@ -104,29 +104,12 @@ public class NewBullyTrunk: NewMobileEnemy {
 			charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
 			if (charge == null) Debug.LogWarning ("BullyTrunk does not have charge equipped");
 
-			this.charge.chargeSpeed = tier < 5 ? 3 : 4;
-			
-			this.inventory.cycItems ();
-			
-			blast = this.inventory.items[inventory.selected].GetComponent<BullyTrunkBlast>();
-			if (blast == null) Debug.LogWarning ("BullyTrunk does not have blast equipped");
-			
-			foreach(Charge behaviour in this.animator.GetBehaviours<Charge>()) {
-				behaviour.charge = this.charge;
-			}
-			
-			foreach(BullyApproach behaviour in this.animator.GetBehaviours<BullyApproach>()) {
-				behaviour.charge = this.charge;
-			}
-			
-			foreach(Ram behaviour in this.animator.GetBehaviours<Ram>()) {
-				behaviour.charge = this.charge;
-				behaviour.blast = this.blast;
+			foreach(ChargeBehaviour behaviour in this.animator.GetBehaviours<ChargeBehaviour>()) {
+				behaviour.SetVar(this.charge);
 			}
 
-			foreach(Pummel behaviour in this.animator.GetBehaviours<Pummel>()) {
-				behaviour.trunk = this.gear.weapon.GetComponent<MeleeWeapons>();
-			}
+			this.charge.chargeSpeed = tier < 5 ? 3 : 4;
+
 
 			headReduction = 0.9f;
 			sideReduction = tier < 3 ? 0.45f : 0.9f;
@@ -137,6 +120,23 @@ public class NewBullyTrunk: NewMobileEnemy {
 			
 			this.BDS.addBuffDebuff (this.rockHead, this.gameObject);
 			this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
+		}
+
+		if (tier > 1) {
+			foreach(Pummel behaviour in this.animator.GetBehaviours<Pummel>()) {
+				behaviour.trunk = this.gear.weapon.GetComponent<MeleeWeapons>();
+			}
+		}
+
+		if (tier > 3) {
+			this.inventory.cycItems ();
+			
+			blast = this.inventory.items[inventory.selected].GetComponent<BullyTrunkBlast>();
+			if (blast == null) Debug.LogWarning ("BullyTrunk does not have blast equipped");
+			
+			foreach(TrunkBlast behaviour in this.animator.GetBehaviours<TrunkBlast>()) {
+				behaviour.SetVar(this.blast);
+			}
 		}
 	}
 	

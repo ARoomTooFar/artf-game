@@ -88,7 +88,7 @@ public class NetRadius : MonoBehaviour,IFallable {
 		Character enemy = other.GetComponent<Character>();
 		if (enemy != null) {
 			decSpeed = decSpeed*4;
-			enemy.BDS.addBuffDebuff(debuff, this.gameObject,duration);
+			enemy.BDS.addBuffDebuff(debuff, this.gameObject,duration/16);
 		}
 	}
 	void OnTriggerExit (Collider other) {

@@ -10,7 +10,7 @@ public class RoomDraggingObject : ClickEvent {
 	void Start() {
 		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
-		tilemapcont = GameObject.Find("TileMap").GetComponent("TileMapController") as TileMapController;
+		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}
 		
 	public override IEnumerator onClick(Vector3 initPosition) {
@@ -26,7 +26,7 @@ public class RoomDraggingObject : ClickEvent {
 		UICamera.GetComponent<CameraDraws>().room = MapData.TheFarRooms.find(origin);
 
 		//for the ghost-duplicate
-		Vector3 newp = origin;
+		Vector3 position = origin;
 		tilemapcont.suppressDragSelecting = true;
 		while(Input.GetMouseButton(0)) { 
 			//if user wants to cancel the drag
@@ -35,15 +35,12 @@ public class RoomDraggingObject : ClickEvent {
 				return false;
 			}
 
-
-			
 			ray = UICamera.ScreenPointToRay(Input.mousePosition);
 			Global.ground.Raycast(ray, out distance);
 			
 			Vector3 mouseChange = initPosition - Input.mousePosition;
 
-			float x = Mathf.Round(ray.GetPoint(distance).x);
-			float z = Mathf.Round(ray.GetPoint(distance).z);
+			position = ray.GetPoint(distance).Round();
 					
 			//if mouse left deadzone
 			if(Math.Abs(mouseChange.x) > Global.mouseDeadZone 
@@ -51,8 +48,8 @@ public class RoomDraggingObject : ClickEvent {
 				|| Math.Abs(mouseChange.z) > Global.mouseDeadZone) {
 
 				//for now y-pos remains as prefab's default.
-				newp = new Vector3(x, getPosition().y, z);
-				UICamera.GetComponent<CameraDraws>().roomOffset = newp-origin;
+
+				UICamera.GetComponent<CameraDraws>().roomOffset = position-origin;
 			}	
 
 			yield return null; 
@@ -61,10 +58,12 @@ public class RoomDraggingObject : ClickEvent {
 		UICamera.GetComponent<CameraDraws>().room = null;
 		UICamera.GetComponent<CameraDraws>().roomOffset = Global.nullVector3;
 
+
 		tilemapcont.suppressDragSelecting = false;
 		tilemapcont.deselect(origin);
-		MapData.moveRoom(origin, newp);
-		tilemapcont.selectTile(newp);
+		MapData.moveRoom(origin, position);
+		tilemapcont.selectTile(position);
+	
 	}
 
 	public Vector3 getPosition() {

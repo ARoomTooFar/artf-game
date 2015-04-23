@@ -47,14 +47,14 @@ public static class MapData {
 			string retVal = "MapData\n";
 			retVal += "Terrain\n";
 			retVal += TerrainBlocks.SaveString;
+			retVal += "Terminal\n";
+			retVal += StartingRoom.SaveString + " " + EndingRoom.SaveString + "\n";
 			retVal += "Room\n";
 			retVal += TheFarRooms.SaveString;
 			retVal += "Scenery\n";
 			retVal += SceneryBlocks.SaveString;
 			retVal += "Monster\n";
 			retVal += MonsterBlocks.SaveString;
-			retVal += "Terminal\n";
-			retVal += StartingRoom.SaveString + " " + EndingRoom.SaveString + "\n";
 			return retVal;
 		}
 	}
@@ -66,46 +66,18 @@ public static class MapData {
 		}
 	}
 
-	public static bool addStartRoom(Vector3 pos1, Vector3 pos2) {
-		if(TheFarRooms.isAddValid(pos1, pos2) && TheFarRooms.isStartOrEndRoomValid(pos1, pos2)) {
-			TheFarRooms.add(pos1, pos2);
-			TheFarRooms.find(pos1).isStartRoom = true;
-			return true;
-		}else{
-			return false;
-		}
-	}
-
-	public static bool addEndRoom(Vector3 pos1, Vector3 pos2) {
-		if(TheFarRooms.isAddValid(pos1, pos2) && TheFarRooms.isStartOrEndRoomValid(pos1, pos2)) {
-			TheFarRooms.add(pos1, pos2);
-			TheFarRooms.find(pos1).isEndRoom = true;
-			return true;
-		}else{
-			return false;
-		}
-	}
-
 	public static void moveRoom(Vector3 oldPos, Vector3 newPos) {
 		if(TheFarRooms.isMoveValid(oldPos, newPos)){
 			TheFarRooms.move(oldPos, newPos - oldPos);
 		}
+		LevelPathCheck.checkPath();
 	}
 
 	public static void removeRoom(Vector3 pos) {
 		TheFarRooms.remove(pos);
+		LevelPathCheck.checkPath();
 	}
 	#endregion Rooms
-
-	#region TerrainManipulation
-	public static void changeTerrainType(Vector3 pos, string type) {
-		TerrainBlocks.changeType(pos, type);
-	}
-
-	public static void rotateTerrain(Vector3 pos, bool goClockwise = true) {
-		TerrainBlocks.rotate(pos, goClockwise);
-	}
-	#endregion TerrainManipulation
 
 	public static void addObject(string type, Vector3 pos, DIRECTION dir) {
 		GameObject obj = GameObjectResourcePool.getResource(type, pos, dir.toRotationVector());
@@ -115,6 +87,7 @@ public static class MapData {
 			if(SceneryBlocks.isAddValid(type, pos, dir)) {
 				SceneryBlocks.add(new SceneryBlock(type, pos, dir));
 			}
+			LevelPathCheck.checkPath();
 			return;
 		} 
 		if(data is MonsterData) {
@@ -132,6 +105,7 @@ public static class MapData {
 			if(TheFarRooms.isResizeValid(pos, pos + offset)) {
 				TheFarRooms.resize(pos, pos + offset);
 			}
+			LevelPathCheck.checkPath();
 			return;
 		}
 
@@ -139,6 +113,7 @@ public static class MapData {
 			if(SceneryBlocks.isMoveValid(pos, offset)) {
 				SceneryBlocks.move(pos, offset);
 			}
+			LevelPathCheck.checkPath();
 			return;
 		}
 
@@ -158,6 +133,7 @@ public static class MapData {
 			if(SceneryBlocks.isRotateValid(pos, goClockwise)) {
 				SceneryBlocks.rotate(pos, goClockwise);
 			}
+			LevelPathCheck.checkPath();
 			return;
 		}
 
@@ -171,6 +147,7 @@ public static class MapData {
 		foreach(Vector3 vec in set) {
 			removeObject(vec);
 		}
+		LevelPathCheck.checkPath();
 	}
 
 	public static void removeObject(Vector3 pos) {
