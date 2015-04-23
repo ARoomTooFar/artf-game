@@ -15,12 +15,12 @@ public class AssaultRifle : RangedWeapons {
 		stats.weapTypeName = "sword";
 		
 		stats.atkSpeed = 2.0f;
-		stats.damage = 1;
+		stats.damage = 20;
 		stats.maxChgTime = 2.0f;
 		
 		// Bull Pattern M originally
 		//machine gun
-		variance = 32f;
+		variance = 15f;
 		kick = 5f;
 
 		spray = user.transform.rotation;

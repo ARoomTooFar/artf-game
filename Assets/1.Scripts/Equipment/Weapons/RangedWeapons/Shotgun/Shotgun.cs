@@ -16,12 +16,12 @@ public class Shotgun : RangedWeapons {
 		stats.weapTypeName = "sword";
 		loadSpeed = 5f;
 		stats.atkSpeed = 2.0f;
-		stats.damage = 1;
+		stats.damage = 10;
 		stats.maxChgTime = 2.0f;
 		
 		// Originally bull pattern S
 		//shotty
-		variance = 30f;
+		variance = 25f;
 
 		spray = user.transform.rotation;
 		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(12f-user.stats.coordination)+user.transform.eulerAngles.y,(12f-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
