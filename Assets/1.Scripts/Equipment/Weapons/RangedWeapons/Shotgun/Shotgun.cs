@@ -21,7 +21,7 @@ public class Shotgun : RangedWeapons {
 		
 		// Originally bull pattern S
 		//shotty
-		variance = 47f;
+		variance = 30f;
 
 		spray = user.transform.rotation;
 		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(12f-user.stats.coordination)+user.transform.eulerAngles.y,(12f-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
@@ -40,7 +40,7 @@ public class Shotgun : RangedWeapons {
 	protected override IEnumerator Shoot(int count) {
 		if(!reload || !needReload){
 			//High cap for shotty is 27f variance, low cap for shotty is 47f
-
+			float origVariance = variance;
 			StartCoroutine(makeSound(action,playSound,action.length));
 			for (int i = 0; i < count*(int)Random.Range(3,5); i++) {
 				yield return 0;
@@ -53,6 +53,7 @@ public class Shotgun : RangedWeapons {
 				}
 				variance += 2;
 			}
+			variance = origVariance;
 		}
 	}
 }
