@@ -34,13 +34,13 @@ public class Roll : QuickItem {
 	public override void useItem() {
 		base.useItem ();
 		// user.animator.SetTrigger("Roll"); Once we have the animation for it
-		user.freeAnim = false;
+		user.stunned = true;
 
 		StartCoroutine(rollFunc(rollInt * 0.1f));
 	}
 
 	protected override void animDone() {
-		user.freeAnim = true;
+		user.stunned = false;
 		base.animDone();
 	}
 
