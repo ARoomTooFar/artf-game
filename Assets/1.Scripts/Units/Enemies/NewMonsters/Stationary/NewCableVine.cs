@@ -11,7 +11,7 @@ public class NewCableVine : NewStationaryEnemy {
 	protected Transform origin;
 	protected float pull_velocity = 0.1f;
 	private float maxApproachRadius;
-	protected Blink blink;
+	public Blink blink;
 	//	CableMaw MyMum;
 	
 	protected override void Awake () {

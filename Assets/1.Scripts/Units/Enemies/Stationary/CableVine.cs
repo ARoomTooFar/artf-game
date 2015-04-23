@@ -12,6 +12,7 @@ public class CableVine : StationaryEnemy {
 	protected float pull_velocity = 0.1f;
 	private float maxApproachRadius;
 	protected Blink blink;
+	protected Vector3 MyMawPos;
 //	CableMaw MyMum;
 
 	protected override void Awake () {
@@ -25,6 +26,8 @@ public class CableVine : StationaryEnemy {
 		maxApproachRadius = GetComponentInChildren<SphereCollider> ().radius;
 		this.blink = this.inventory.items[inventory.selected].GetComponent<Blink> ();
 		if (this.blink == null) Debug.LogWarning ("Cable Vine does not have Blink equipped");
+
+		MyMawPos.x = -5.93f; MyMawPos.y = 0f; MyMawPos.z = 10.47f;
 	}
 
 	protected override void initStates() {
@@ -62,7 +65,13 @@ public class CableVine : StationaryEnemy {
 
 	protected override void Approach() {
 		base.Approach ();
-		target.transform.position = target.transform.position - pullVelocity();
+		if (MyMawPos != null) {
+			target.transform.position = target.transform.position - pullVelocity (MyMawPos);
+			Debug.Log (MyMawPos);
+		} else { 
+			target.transform.position = target.transform.position - pullVelocity (this.transform.position);
+			Debug.Log (this.transform.position);
+		}
 		target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject);
 	}
 
@@ -106,18 +115,23 @@ public class CableVine : StationaryEnemy {
 		return false;
 	}
 
-	private Vector3 pullVelocity(){
-		float time = this.facing.magnitude/pull_velocity;
+	private Vector3 pullVelocity(Vector3 destination){
+		Vector3 dir = target.transform.position - destination;
+		float time = dir.magnitude/pull_velocity;
 		Vector3 velocity = new Vector3 ();
-		velocity.x = this.facing.x / time;
-		velocity.y = this.facing.y / time;
-		velocity.z = this.facing.z / time;
+		velocity.x = dir.x / time;
+		velocity.y = dir.y / time;
+		velocity.z = dir.z / time;
 		return velocity;
 	}
 
 	public override void damage(int dmgTaken, Character striker) {
 		base.damage (dmgTaken, striker);
 		target = striker.gameObject;
+	}
+
+	protected bool hasMaw() {
+		return true;
 	}
 
 }
