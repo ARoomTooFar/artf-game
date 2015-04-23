@@ -13,9 +13,6 @@ public class PlayerMarkerController : MonoBehaviour {
 		Vector3 playerPos = GameObject.Find ("PlayerZ").transform.position;
 		playerPos.y = transform.position.y;
 
-
 		transform.position = playerPos;
-
-
 	}
 }
