@@ -8,11 +8,10 @@ public class MainMenuCtrl : MonoBehaviour {
     public string menuContainerName;
 
     // UI state
-    private int currMenuWidth;
-    private int currMenuHeight;
     private bool menuMoved = false;
     private bool menuLock = false;
     private GameObject prevBtn;
+	private GameObject[,] currMenu;
     private int locX = 0;
     private int locY = 0;
 
@@ -48,20 +47,23 @@ public class MainMenuCtrl : MonoBehaviour {
         {
             GameObject.Find("/Canvas/" + menuContainerName).GetComponent<Animator>().SetTrigger("startMenuFadeOut");
             //GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
-            menuLock = true;
+			GameObject.Find("/Canvas/" + menuContainerName).GetComponent<Animator>().SetTrigger("loginFormFadeIn");
+            //menuLock = true;
         });
 
         // register button press handler
         startMenu[1, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
             Debug.Log("Register button pressed!");
+			Debug.Log(startMenu.Length);
         });
 
+		// set currMenu to startMenu
+		currMenu = startMenu;
+
         var pointer = new PointerEventData(EventSystem.current);
-        ExecuteEvents.Execute(startMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); // highlight first button
-        prevBtn = startMenu[locY, locX];
-        currMenuWidth = startMenuWidth;
-        currMenuHeight = startMenuHeight;
+        ExecuteEvents.Execute(currMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); // highlight first button
+        prevBtn = currMenu[locY, locX];
 	}
 
     void MenuMove (float hori, float vert) {
@@ -73,19 +75,19 @@ public class MainMenuCtrl : MonoBehaviour {
 
             if (vert < 0)
             {
-                locY = (locY + 1) % (currMenuHeight);
+                locY = (locY + 1) % (currMenu.Length);
             } else if (vert > 0) {
                 --locY;
                 if (locY < 0)
                 {
-                    locY = currMenuHeight - 1;
+					locY = currMenu.Length - 1;
                 }
             }
 
             var pointer = new PointerEventData(EventSystem.current);
             ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
             ExecuteEvents.Execute(startMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
-            prevBtn = startMenu[locY, locX];
+            prevBtn = currMenu[locY, locX];
         }
     }
 	
