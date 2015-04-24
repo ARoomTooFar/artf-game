@@ -20,13 +20,14 @@ public class Swarm : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		target = aggroTable.getTarget ();
-		priority = aggroTable.getVal ();
+		target = aggroTable.GetTopAggro();//aggroTable.getTarget ();
+		//priority = aggroTable.getVal ();
 	}
 
 	protected virtual void swarmTarget(GameObject newTarget)
 	{
 		//Change this value to as high as possible when I find out what a reasonable value is
-		aggroTable.add (newTarget, 999);
+		// aggroTable.add (newTarget, 999);
+		aggroTable.AddAggro(newTarget, 999);
 	}
 }

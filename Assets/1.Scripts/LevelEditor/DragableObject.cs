@@ -7,14 +7,11 @@ public class DragableObject : ClickEvent {
 	public LayerMask draggingLayerMask;
 	Camera UICamera;
 	TileMapController tilemapcont;
-	Shader focusedShader;
 
 	void Start() {
 		draggingLayerMask = LayerMask.GetMask("Walls");
-		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
-		tilemapcont = GameObject.Find("TileMap").GetComponent("TileMapController") as TileMapController;
-		
-		focusedShader = Shader.Find("Transparent/Bumped Diffuse");
+		UICamera = Camera.main;
+		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}
 		
 	public override IEnumerator onClick(Vector3 initPosition) {
@@ -24,8 +21,10 @@ public class DragableObject : ClickEvent {
 
 		//for the ghost-duplicate
 		GameObject itemObjectCopy = null;
-		Vector3 newp = this.gameObject.transform.position;
+		Vector3 position = this.gameObject.transform.position;
 		tilemapcont.suppressDragSelecting = true;
+		Ray ray;
+		Vector3 mouseChange; 
 		while(Input.GetMouseButton(0)) { 
 			//if user wants to cancel the drag
 			if(Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButton(1)) {
@@ -33,15 +32,14 @@ public class DragableObject : ClickEvent {
 				return false;
 			}
 			
-			Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
+			ray = UICamera.ScreenPointToRay(Input.mousePosition);
 			float distance;
 			Global.ground.Raycast(ray, out distance);
 			
-			Vector3 mouseChange = initPosition - Input.mousePosition;
+			mouseChange = initPosition - Input.mousePosition;
 
-			int x = Mathf.RoundToInt(ray.GetPoint(distance).x);
-			int z = Mathf.RoundToInt(ray.GetPoint(distance).z);
-					
+			position = ray.GetPoint(distance).Round();
+
 			//if mouse left deadzone
 			if(Math.Abs(mouseChange.x) > Global.mouseDeadZone 
 				|| Math.Abs(mouseChange.y) > Global.mouseDeadZone 
@@ -57,19 +55,18 @@ public class DragableObject : ClickEvent {
 					//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
 					foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
 						foreach(Material mat in rend.materials) {
-							mat.shader = focusedShader;
 							trans = mat.color;
 							trans.a = .5f;
 							mat.color = trans;
 						}
 					}
 				} else {
-					itemObjectCopy.transform.position = new Vector3(x, getPosition().y, z);
+					itemObjectCopy.transform.position = position;
 					itemObjectCopy.transform.rotation = getRotation();
 				}
 
 				//for now y-pos remains as prefab's default.
-				newp = new Vector3(x * 1.0f, getPosition().y, z * 1.0f);
+
 			}
 			yield return null; 
 		}
@@ -79,8 +76,8 @@ public class DragableObject : ClickEvent {
 		//destroy the copy
 		Destroy(itemObjectCopy);
 		tilemapcont.deselect(getPosition());
-		MapData.dragObject(this.gameObject, getPosition(), newp - getPosition());
-		tilemapcont.selectTile(newp);
+		MapData.dragObject(this.gameObject, getPosition(), position - getPosition());
+		tilemapcont.selectTile(position);
 	}
 
 	public Vector3 getPosition() {

@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class BtnScript : MonoBehaviour {
-    public void SelectTxt() {
+    public void HighlightTxt() {
         Text[] txtChild = this.GetComponentsInChildren<Text>();
         foreach (Text child in txtChild)
         {
@@ -11,7 +11,7 @@ public class BtnScript : MonoBehaviour {
         }
     }
 
-    public void DeselectTxt()
+    public void DehighlightTxt()
     {
         Text[] txtChild = this.GetComponentsInChildren<Text>();
         foreach (Text child in txtChild)

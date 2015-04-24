@@ -34,7 +34,7 @@ public class NewSwordEnemy : NewMobileEnemy {
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 2.0f;
+		this.maxAtkRadius = 4.0f;
 	}
 	
 	//----------------------//

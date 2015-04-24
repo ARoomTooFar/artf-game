@@ -329,6 +329,9 @@ public class TerrainBlock {
 		if(Monster != null) {
 			MapData.MonsterBlocks.remove(Monster);
 		}
+		if(Wall != null) {
+			this.removeWall();
+		}
 	}
 	#endregion Manipulation
 }

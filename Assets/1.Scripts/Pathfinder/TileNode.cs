@@ -26,11 +26,14 @@ public class TileNode : AbstractNode, IEquatable<TileNode> {
 	
 	public override List<KeyValuePair<AbstractNode, float>> getConnections() {
 		List<KeyValuePair<AbstractNode, float>> retVal = new List<KeyValuePair<AbstractNode, float>>();
-		foreach(TerrainBlock blk in this.terBlock.Neighbors.Values) {
-			if(!blk.Walkable){
+		foreach(KeyValuePair<DIRECTION, TerrainBlock> kvp in this.terBlock.Neighbors) {
+			if(!kvp.Key.isCardinal()){
 				continue;
 			}
-			retVal.Add(new KeyValuePair<AbstractNode, float>(new TileNode(blk), Vector3.Distance(blk.Position, this.terBlock.Position)));
+			if(!kvp.Value.Walkable){
+				continue;
+			}
+			retVal.Add(new KeyValuePair<AbstractNode, float>(new TileNode(kvp.Value), Vector3.Distance(kvp.Value.Position, this.terBlock.Position)));
 		}
 		return retVal;
 	}

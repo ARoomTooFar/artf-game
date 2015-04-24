@@ -90,8 +90,6 @@ public class SceneryManager {
 				return false;
 			}
 			rm.Doors.Add(blk);
-			rm.linkRoomsViaDoors();
-			try{MapData.TheFarRooms.find(rm.getDoorCheckPosition(blk)).linkRoomsViaDoors();} catch{}
 
 			//aaron - gets wall tiles that are replaced by door
 			foreach(Vector3 pos in blk.Coordinates){

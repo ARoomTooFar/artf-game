@@ -14,7 +14,8 @@ public static class Pathfinder {
 		
 		while(open.Count > 0) {
 			//open.Sort((first, second) => first.CostSoFar.CompareTo(second.CostSoFar));
-			open.Sort((first, second) => Vector3.Distance(first.position(), end.position()).CompareTo(Vector3.Distance(second.position(), end.position())));
+			open.Sort((first, second) => Vector3.Distance(first.position(), end.position())
+			          .CompareTo(Vector3.Distance(second.position(), end.position())));
 
 			current = open[0];
 			
@@ -79,6 +80,9 @@ public static class Pathfinder {
 
 		List<AbstractNode> path = DijkstraPathfinder(new TileNode(MapData.TerrainBlocks.find(start)),
 		                                  new TileNode(MapData.TerrainBlocks.find(end)));
+		if(path == null) {
+			return null;
+		}
 		List<Vector3> retVal = new List<Vector3>();
 		foreach(TileNode node in path) {
 			retVal.Add(node.terBlock.Position);
@@ -103,25 +107,27 @@ public static class Pathfinder {
 			return null;
 		}
 
-		List<Vector3> retVal = new List<Vector3>();
-
 		List<Vector3> somePath = getSingleRoomPath(start, roomPath[1].Position);
 		if(somePath == null) {
 			return null;
 		}
+
+		List<Vector3> retVal = new List<Vector3>();
 		retVal.AddRange(somePath);
-		ARTFRoom r1;
-		ARTFRoom r2;
+		ARTFRoom rm;
+		KeyValuePair<Vector3, Vector3> kvp;
 		for(int i = 1; i < roomPath.Count-1; ++i){
-			r1 = MapData.TheFarRooms.find(roomPath[i].Position);
-			r2 = MapData.TheFarRooms.find(r1.getDoorCheckPosition(roomPath[i]));
-			retVal.AddRange(r2.RoomPaths[new KeyValuePair<Vector3, Vector3>
-			                             (r1.getDoorCheckPosition(roomPath[i]), roomPath[i+1].Position)]);
+			rm = MapData.TheFarRooms.find(roomPath[i].doorCheckPosition);
+			kvp = new KeyValuePair<Vector3, Vector3>(roomPath[i].doorCheckPosition, roomPath[i+1].Position);
+			if(!rm.RoomPaths.ContainsKey(kvp)){
+				return null;
+			}
+			retVal.AddRange(rm.RoomPaths[kvp]);
 		}
 
-		ARTFRoom rm = MapData.TheFarRooms.find(roomPath[roomPath.Count - 1].Position);
+		rm = MapData.TheFarRooms.find(roomPath[roomPath.Count - 1].Position);
 
-		retVal.AddRange(getSingleRoomPath(rm.getDoorCheckPosition(roomPath[roomPath.Count-1]), end));
+		retVal.AddRange(getSingleRoomPath(roomPath[roomPath.Count-1].doorCheckPosition, end));
 
 		return retVal;
 
