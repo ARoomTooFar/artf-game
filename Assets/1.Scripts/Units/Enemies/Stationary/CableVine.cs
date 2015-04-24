@@ -6,13 +6,13 @@ public class CableVine : StationaryEnemy {
 	//protected Stun stunDebuff;
 	protected GenericDoT constrict;
 	bool inStealth;
-	HingeJoint tether;
 	Rigidbody joints;
 	protected Transform origin;
 	protected float pull_velocity = 0.1f;
 	private float maxApproachRadius;
 	protected Blink blink;
 	protected Vector3 MyMawPos;
+	HingeJoint tether;
 //	CableMaw MyMum;
 
 	protected override void Awake () {
@@ -21,6 +21,7 @@ public class CableVine : StationaryEnemy {
 
 	protected override void Start() {
 		base.Start ();
+		tether = GetComponentInChildren <HingeJoint> ();
 		//stunDebuff = new Stun ();
 		constrict = new GenericDoT (1);
 		maxApproachRadius = GetComponentInChildren<SphereCollider> ().radius;
@@ -59,6 +60,7 @@ public class CableVine : StationaryEnemy {
 	
 	protected override void Update () {
 		base.Update ();
+		GameObject herro = aggroT.GetTopAggro();
 		//Debug.Log (this.stats.health);
 		//Debug.Log (this.transform.position);
 	}
@@ -72,6 +74,7 @@ public class CableVine : StationaryEnemy {
 			target.transform.position = target.transform.position - pullVelocity (this.transform.position);
 			Debug.Log (this.transform.position);
 		}
+
 		target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject);
 	}
 

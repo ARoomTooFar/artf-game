@@ -221,8 +221,10 @@ public class Enemy : Character {
 			aggro = true;
 			dmgTimer = 0f;
 		}		
+		Debug.Log (striker.name);
 
 		aggroT.AddAggro(striker.gameObject, dmgTaken);
+		aggroT.PrintTable ();
 	}
 	
 	public override void damage(int dmgTaken) {
