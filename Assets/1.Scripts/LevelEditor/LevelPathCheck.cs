@@ -20,6 +20,9 @@ public static class LevelPathCheck {
 		}
 		roomPath = Pathfinder.getRoomPath(MapData.StartingRoom, MapData.EndingRoom);
 		fullPath = Pathfinder.getPath(MapDataParser.start.Position, MapDataParser.end.Position);
-		GameObject.Find("LevelCheck").GetComponent<Text>().enabled = (fullPath == null);
+		GameObject obj = GameObject.Find("LevelCheck");
+		if(obj != null) {
+			obj.GetComponent<Text>().enabled = (fullPath == null);
+		}
 	}
 }
