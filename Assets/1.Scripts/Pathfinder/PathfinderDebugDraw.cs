@@ -28,8 +28,10 @@ public class PathfinderDebugDraw : MonoBehaviour {
 	}
 
 	void OnPostRender(){
-		//path = Pathfinder.getPath(start, end);
+		try{
 		path = Pathfinder.getPath(MapDataParser.start.Position, MapDataParser.end.Position);
+		}catch{
+		}
 		if(viewPath) {
 			drawPath(path);
 		}
