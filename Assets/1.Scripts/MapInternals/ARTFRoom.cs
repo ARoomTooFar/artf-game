@@ -262,13 +262,16 @@ public partial class ARTFRoom {
 		//for each pair of doors
 		foreach(KeyValuePair<SceneryBlock, ARTFRoom> kvp1 in LinkedRooms) {
 			foreach(KeyValuePair<SceneryBlock, ARTFRoom> kvp2 in LinkedRooms) {
-				if(kvp1.Key == kvp2.Key){
+				if(kvp1.Equals(kvp2)){
 					continue;
 				}
 				//find the path between the two and store it
 				List<Vector3> path = Pathfinder.getSingleRoomPath(kvp1.Key.Position, kvp2.Key.Position);
-				path.Insert(0, kvp1.Key.doorCheckPosition);
-				path.Insert(path.Count, kvp2.Key.doorCheckPosition);
+				if(path == null){
+					continue;
+				}
+				//path.Insert(0, kvp1.Key.doorCheckPosition);
+				//path.Insert(path.Count, kvp2.Key.doorCheckPosition);
 				RoomPaths.Add(new KeyValuePair<Vector3, Vector3>(kvp1.Key.Position, kvp2.Key.Position),
 				              path);
 			}
@@ -294,10 +297,6 @@ public partial class ARTFRoom {
 	 * by the offset Vector3
 	 */
 	public void move(Vector3 offset) {
-		List<ARTFRoom> rmlst = new List<ARTFRoom>();
-		foreach(SceneryBlock dr in this.Doors) {
-			rmlst.Add(MapData.TheFarRooms.find(dr.doorCheckPosition));
-		}
 		//Shift the LowerLeft and UpperRight corners by offset
 		LLCorner = LLCorner + offset;
 		URCorner = URCorner + offset;
@@ -307,11 +306,6 @@ public partial class ARTFRoom {
 		}
 		setFloor();
 		updateMarkerPositions();
-		foreach(ARTFRoom rm in rmlst) {
-			Debug.Log(rm);
-			rm.linkRoomsViaDoors();
-		}
-		this.linkRoomsViaDoors();
 	}
 
 	/*
@@ -323,10 +317,6 @@ public partial class ARTFRoom {
 		//Make sure that the old corner is actually a corner
 		if(!isCorner(oldCor)) {
 			return;
-		}
-		List<ARTFRoom> rmlst = new List<ARTFRoom>();
-		foreach(SceneryBlock dr in this.Doors) {
-			rmlst.Add(MapData.TheFarRooms.find(dr.doorCheckPosition));
 		}
 		//get the offset
 		Vector3 offset = newCor - oldCor;
@@ -365,10 +355,6 @@ public partial class ARTFRoom {
 
 
 		updateMarkerPositions();
-		foreach(ARTFRoom rm in rmlst) {
-			rm.linkRoomsViaDoors();
-		}
-		this.linkRoomsViaDoors();
 	}
 
 	/*

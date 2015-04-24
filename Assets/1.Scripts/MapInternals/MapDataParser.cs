@@ -48,6 +48,7 @@ public static class MapDataParser {
             loadgear.players[2] = p3.GetComponent<Character>();
             loadgear.players[3] = p4.GetComponent<Character>();
 		}
+		LevelPathCheck.checkPath();
 	}
 
 	private static void parseRoom(string SaveString) {

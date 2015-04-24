@@ -13,6 +13,7 @@ public class PathfinderDebugDraw : MonoBehaviour {
 	List<Vector3> path;
 	public bool viewRoomPaths = true;
 	public bool viewPath = true;
+	public Color drawColor;
 
 	// Update is called once per frame
 	void Update () {
@@ -27,7 +28,10 @@ public class PathfinderDebugDraw : MonoBehaviour {
 	}
 
 	void OnPostRender(){
-		path = Pathfinder.getPath(start, end);
+		try{
+		path = Pathfinder.getPath(MapDataParser.start.Position, MapDataParser.end.Position);
+		}catch{
+		}
 		if(viewPath) {
 			drawPath(path);
 		}
@@ -44,8 +48,8 @@ public class PathfinderDebugDraw : MonoBehaviour {
 		}
 
 		GL.Begin (GL.LINES);
+		lineMat.color = drawColor;
 		lineMat.SetPass (0);
-
 		for (int i = 0; i < path.Count-1; ++i) {
 			GL.Vertex (path[i] + offset);
 			GL.Vertex (path[i+1] + offset);
