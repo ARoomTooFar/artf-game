@@ -12,7 +12,8 @@ public class CableVine : StationaryEnemy {
 	private float maxApproachRadius;
 	protected Blink blink;
 	protected Vector3 MyMawPos;
-	HingeJoint tether;
+	GameObject tether;
+	public CVSensor feeler;
 //	CableMaw MyMum;
 
 	protected override void Awake () {
@@ -21,7 +22,8 @@ public class CableVine : StationaryEnemy {
 
 	protected override void Start() {
 		base.Start ();
-		tether = GetComponentInChildren <HingeJoint> ();
+		feeler = GetComponentInChildren<CVSensor> ();
+		tether = GameObject.Find ("CVFeelers");
 		//stunDebuff = new Stun ();
 		constrict = new GenericDoT (1);
 		maxApproachRadius = GetComponentInChildren<SphereCollider> ().radius;
@@ -69,12 +71,13 @@ public class CableVine : StationaryEnemy {
 
 	protected override void Approach() {
 		base.Approach ();
-		if (MyMawPos != null) {
+		if (!feeler.Hooked ()) {
+			tether.transform.RotateAround (this.transform.position, Vector3.up, 50 * Time.deltaTime);
+		} else if (MyMawPos != null) {
 			target.transform.position = target.transform.position - pullVelocity (MyMawPos);
 			Debug.Log (MyMawPos);
 		} else { 
 			target.transform.position = target.transform.position - pullVelocity (this.transform.position);
-			Debug.Log (this.transform.position);
 		}
 
 		target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject);
@@ -88,6 +91,7 @@ public class CableVine : StationaryEnemy {
 
 	protected override void Rest() {
 		base.Rest ();
+
 	}
 
 	protected void redeploy () {
@@ -138,5 +142,6 @@ public class CableVine : StationaryEnemy {
 	protected bool hasMaw() {
 		return true;
 	}
+
 
 }
