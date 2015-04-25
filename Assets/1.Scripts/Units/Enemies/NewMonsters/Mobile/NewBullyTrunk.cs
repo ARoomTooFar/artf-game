@@ -110,7 +110,6 @@ public class NewBullyTrunk: NewMobileEnemy {
 			
 			foreach(ShieldsDown behaviour in this.animator.GetBehaviours<ShieldsDown>()) {
 				behaviour.SetVar(this);
-				Debug.Log (this);
 			}
 
 			this.charge.chargeSpeed = tier < 5 ? 3 : 4;
