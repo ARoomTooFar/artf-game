@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class NewEnemy : Character {
+public class NewEnemy : NewCharacter {
 
 	protected float lastSawTargetCount;
 
@@ -71,6 +71,10 @@ public class NewEnemy : Character {
 	
 	// Update is called once per frame
 	protected override void Update () {
+		if (stats.isDead) return;
+		base.Update();
+		this.TargetFunction();
+		/*
 		if (!stats.isDead) {
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 			
@@ -89,7 +93,7 @@ public class NewEnemy : Character {
 				falling ();
 			}
 			this.TargetFunction();
-		}
+		}*/
 	}
 
 	

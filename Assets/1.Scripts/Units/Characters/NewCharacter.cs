@@ -164,6 +164,7 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 		this.animator = GetComponent<Animator>();
 		this.rb = this.GetComponent<Rigidbody>();
 		this.col = this.GetComponent<Collider>();
+
 		facing = Vector3.forward;
 		isDead = false;
 		stunned = knockedback = false;
@@ -175,6 +176,10 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	// Use this for initialization
 	protected override void Start () {
 		if (testing) this.SetGearAndAbilities();
+		foreach (CharacterBehaviour behaviour in this.animator.GetBehaviours<CharacterBehaviour>()) {
+			behaviour.SetVar(this);
+		}
+
 	}
 	
 	protected override void setInitValues() {
@@ -195,9 +200,12 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	protected override void Update () {
 		if(isDead) return;
 
-		freeAnim = !stunned && !knockedback;
 
-		actionCommands ();
+		freeAnim = !stunned && !knockedback;
+		actable = freeAnim;
+		this.animator.SetBool("Actable", this.actable);
+
+		// actionCommands ();
 		animationUpdate ();
 	}
 	
@@ -211,6 +219,7 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	
 	// Constant animation updates (Main loop for characters movement/actions)
 	public override void animationUpdate() {
+		// print(this.rb.velocity);
 		if (this.rb.velocity != Vector3.zero && facing != Vector3.zero) animator.SetBool("Moving", true);
 		else animator.SetBool("Moving", false);
 		transform.localRotation = Quaternion.LookRotation(facing);

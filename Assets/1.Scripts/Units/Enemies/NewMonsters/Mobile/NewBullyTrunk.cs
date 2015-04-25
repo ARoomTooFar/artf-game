@@ -91,7 +91,7 @@ public class NewBullyTrunk: NewMobileEnemy {
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 2.0f;
+		this.maxAtkRadius = 4.5f;
 	}
 
 	public override void SetTierData(int tier) {
@@ -163,11 +163,9 @@ public class NewBullyTrunk: NewMobileEnemy {
 	//------------//
 
 	public virtual IEnumerator shieldsDown() {
-		Debug.Log ("Down");
 		this.BDS.rmvBuffDebuff (this.rockArms, this.gameObject);
 		yield return new WaitForSeconds(3.0f);
 		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
-		Debug.Log ("Up");
 	}
 
 	

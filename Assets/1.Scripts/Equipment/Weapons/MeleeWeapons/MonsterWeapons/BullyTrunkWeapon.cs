@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class BullyTrunkWeapon : MeleeWeapons {
 	
@@ -11,31 +12,44 @@ public class BullyTrunkWeapon : MeleeWeapons {
 		
 		debuff = new Knockback();
 	}
-	
+
+	public override void equip(Character u, Type ene) {
+		user = u;
+		setInitValues();
+		opposition = ene;
+	}
+
 	// Used for setting sword stats for each equipment piece
 	protected override void setInitValues() {
+		stats.damage = (int)(3 * user.GetComponent<Character>().stats.strength);
 
-		base.setInitValues();
-		stats.damage = (int)(3 + 0.25f * user.GetComponent<Character>().stats.strength);;
+		soundDur = 0.1f;
+		playSound = true;
 	}
-	
+
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
 	}
 	
 	public override void initAttack() {
-		base.initAttack();
+		user.animator.SetTrigger("Attack");
 	}
 	
-	// Test sword attack functions
-	protected override void attack() {
-		base.attack ();
-
-	}
 	// Does something when opponent is hit
-	protected override void onHit(Character enemy) {
-		// base.onHit (enemy);
+	protected virtual void OnHit(Character enemy) {
 		enemy.damage(stats.damage + stats.chgDamage, user.transform, user.gameObject);
+	}
+
+	void OnTriggerEnter(Collider other) {
+		IDamageable<int, Transform, GameObject> component = (IDamageable<int, Transform, GameObject>) other.GetComponent( typeof(IDamageable<int, Transform, GameObject>) );
+		Character enemy = (Character) other.GetComponent(opposition);
+		if( component != null && enemy != null) {
+			this.OnHit(enemy);
+		} else {
+			IDamageable<int, Traps, GameObject> component2 = (IDamageable<int, Traps, GameObject>) other.GetComponent (typeof(IDamageable<int, Traps, GameObject>));
+			if (component2 == null) return;
+			component2.damage(stats.damage + stats.chgDamage);
+		}
 	}
 }
