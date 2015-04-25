@@ -39,7 +39,7 @@ public class AssaultRifle : RangedWeapons {
 	protected override IEnumerator Shoot(int count) {
 		if(!reload || !needReload){
 			if(count == 0){
-				count = 1;
+				count = 2;
 			}
 
 			spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination)+user.transform.eulerAngles.y,(variance-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
