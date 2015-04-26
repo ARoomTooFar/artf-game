@@ -31,8 +31,8 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	protected override void Awake() {
 		base.Awake();
-		opposition = Type.GetType("NewEnemy");
-		//opposition = Type.GetType("Enemy"); //Use this if going after testable opponents
+		//opposition = Type.GetType("NewEnemy");
+		opposition = Type.GetType("Enemy"); //Use this if going after testable opponents
 	}
 	
 	// Use this for initialization
@@ -178,7 +178,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	// Constant animation updates (Main loop for characters movement/actions)
 	public override void animationUpdate() {
-		if (attacking) {
+		if (attacking&&!stats.isDead) {
 			attackAnimation();
 		} else {
 			movementAnimation();

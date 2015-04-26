@@ -186,14 +186,30 @@ public class NewEnemy : Character {
 				this.animator.SetBool("CanSeeTarget", false);
 				return false;
 			} else {
-				aggroT.add(p,1);
-				lastSeenPosition = p.transform.position;
-				this.animator.SetBool ("HasLastSeenPosition", true);
-				this.lastSeenSet = 3.0f;
-				alerted = true;
-				this.animator.SetBool("Alerted", true);
-				this.animator.SetBool("CanSeeTarget", true);
-				return true;
+				Player addable = p.GetComponent<Player>();
+				Prop addprop = p.GetComponent<Prop>();
+				if(!addable.invis){
+					aggroT.add(p,1);
+					lastSeenPosition = p.transform.position;
+					alerted = true;
+					this.animator.SetBool ("HasLastSeenPosition", true);
+					this.lastSeenSet = 3.0f;
+					this.animator.SetBool("Alerted", true);
+					this.animator.SetBool("CanSeeTarget", true);
+					return true;
+				}else if(addprop != null){
+					aggroT.add(p,1);
+					lastSeenPosition = p.transform.position;
+					alerted = true;
+					this.animator.SetBool ("HasLastSeenPosition", true);
+					this.lastSeenSet = 3.0f;
+					this.animator.SetBool("Alerted", true);
+					this.animator.SetBool("CanSeeTarget", true);
+					return true;
+				}else{
+					return false;
+				}
+				//return true;
 				
 			}
 		}
@@ -277,6 +293,22 @@ public class NewEnemy : Character {
 	public virtual void playerDied(GameObject dead){
 		if (aggroT != null) {
 			aggroT.deletePlayer(dead);
+		}
+	}
+	
+	public virtual void playerVanished(GameObject dead){
+		if (aggroT != null) {
+			aggroT.deletePlayer(dead);
+			target = null;
+		}
+	}
+	
+	public virtual void taunted(GameObject taunter){
+		if(aggroT != null){
+			if(aggroT.getVal() < 99999){
+				aggroT.add(taunter,99999);
+				Debug.Log(aggroT.getVal());
+			}
 		}
 	}
 	

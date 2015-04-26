@@ -177,15 +177,30 @@ public class Enemy : Character {
 
 			}else{
 				Player addable = p.GetComponent<Player>();
-				if(!addable.invis){
+				Prop addprop = p.GetComponent<Prop>();
+				if(addable != null){
+					if(!addable.invis){
+						aggroT.add(p,1);
+						lastSeenPosition = p.transform.position;
+						alerted = true;
+						//this.animator.SetBool ("HasLastSeenPosition", true);
+					//this.lastSeenSet = 3.0f;
+						//this.animator.SetBool("Alerted", true);
+						//this.animator.SetBool("CanSeeTarget", true);
+						return true;
+					}
+				}else if(addprop !=null){
 					aggroT.add(p,1);
 					lastSeenPosition = p.transform.position;
 					alerted = true;
+					//this.animator.SetBool ("HasLastSeenPosition", true);
+					//this.lastSeenSet = 3.0f;
+					//this.animator.SetBool("Alerted", true);
+					//this.animator.SetBool("CanSeeTarget", true);
+					return true;
 				}else{
 					return false;
 				}
-				return true;
-	
 			}
 		}
 		
@@ -213,7 +228,7 @@ public class Enemy : Character {
 	public override void damage(int dmgTaken, Character striker) {
 		base.damage(dmgTaken, striker);
 		if(hpBar != null){
-			Debug.Log((float)stats.health/stats.maxHealth);
+			//Debug.Log((float)stats.health/stats.maxHealth);
 			hpBar.health = (float)stats.health/stats.maxHealth;
 		}
 		if (aggro == false) {
@@ -289,7 +304,10 @@ public class Enemy : Character {
 	
 	public virtual void taunted(GameObject taunter){
 		if (aggroT != null){
-			aggroT.add(taunter,aggroT.getVal()*2);
+			if(aggroT.getVal() < 99999){
+				aggroT.add(taunter,99999);
+				Debug.Log(aggroT.getVal());
+			}
 		}
 	}
 	

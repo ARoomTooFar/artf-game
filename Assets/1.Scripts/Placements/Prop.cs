@@ -36,6 +36,9 @@ public class Prop : MonoBehaviour, IDamageable<int, Traps> {
 	}
 
 	public virtual void die() {
+		if(transform.parent !=null){
+			Destroy(transform.parent.gameObject);
+		}
 		Destroy(this.gameObject);
 		Instantiate(expDeath, transform.position, transform.rotation);
 	}

@@ -354,6 +354,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
 				Destroy (theSplat, 2);
 			}
+			//Character enemy = other.GetComponent<Character>();
+			knockback(striker.transform.position-gameObject.transform.position,1);
 			stats.health -= dmgTaken;
 			//print ("Fuck: " + dmgTaken + " Damage taken");
 
