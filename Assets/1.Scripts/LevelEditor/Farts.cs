@@ -11,9 +11,9 @@ public class Farts : MonoBehaviour
 	const float timeoutTime = 60f; //HTTP requests timeout after 1 minute
 	
 	// Checks if returned data is valid or not. Returns true if the data is valid, false otherwise.
-	public bool dataCheck(string input)
+	public bool dataCheck(string levelData)
 	{
-		if (input == "") return false;
+		if (levelData == "error") return false;
 		// need to also check if string contains "<html>" tag because Unity 5's networking code returns HTML when it downloads a 404
 		return true;
 	}

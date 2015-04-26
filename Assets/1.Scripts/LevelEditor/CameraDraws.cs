@@ -27,12 +27,13 @@ public class CameraDraws : MonoBehaviour {
 		roomResize = Global.nullVector3;
 		cam = this.gameObject.GetComponent<Camera> ();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
-		normalColor = new Color(0f, .5f, 1f, .2f);
+		normalColor = new Color(0f, .5f, 1f, .5f);
 		invalidColor = new Color(1f, 0f, 0f, .2f);
 	}
 
 	void OnPostRender ()
 	{
+		singleColorTransMat.SetPass(0);
 		drawSelectedTiles ();
 		drawGrid ();
 		drawMouseSquare();

@@ -76,8 +76,14 @@ public class FileIO : MonoBehaviour
         if (serv.dataCheck(lvlData))
         {
             txtDlLvl.enabled = false;
-            MapDataParser.ParseSaveString(lvlData);
-            Debug.Log("LVL DL SUCCESS: " + lvlData);
+			try{
+				MapDataParser.ParseSaveString(lvlData);
+            	Debug.Log("LVL DL SUCCESS: " + lvlData);
+			} catch (Exception ex){
+				Debug.Log(ex.Message);
+				Debug.Log("ERROR: Map data format wrong. Loading default level.");
+				MapDataParser.ParseSaveString(Global.defaultLevel);
+			}
         }
         else
         {

@@ -55,11 +55,11 @@ public class TerrainBlock {
 	}
 	
 	public bool Pathable {
-		get{ return (Scenery == null ? true : Scenery.Pathable); }
+		get{ return ((Wall == null) && (Scenery == null ? true : Scenery.Pathable)); }
 	}
 
 	public bool Walkable {
-		get { return (Scenery == null ? true : Scenery.Walkable); }
+		get { return ((Wall == null) && (Scenery == null ? true : Scenery.Walkable)); }
 	}
 
 	public String BlockID {
@@ -328,6 +328,9 @@ public class TerrainBlock {
 		}
 		if(Monster != null) {
 			MapData.MonsterBlocks.remove(Monster);
+		}
+		if(Wall != null) {
+			this.removeWall();
 		}
 	}
 	#endregion Manipulation

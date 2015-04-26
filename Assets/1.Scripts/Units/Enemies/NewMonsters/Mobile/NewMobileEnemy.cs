@@ -81,8 +81,11 @@ public class NewMobileEnemy : NewEnemy {
 	//-----------------------------//
 	
 	protected IEnumerator moveToPosition(Vector3 position) {
-		while (Vector3.Distance(this.transform.position, this.targetDir) > 0.25f&& this.target == null) {
+		float moveToTime = 1.0f;
+		while ((Vector3.Distance(this.transform.position, this.targetDir) > 0.25f && this.target == null)) {
 			this.rb.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			moveToTime -= Time.deltaTime;
+			if (moveToTime <= 0.0f) break;
 			yield return null;
 		}
 	}

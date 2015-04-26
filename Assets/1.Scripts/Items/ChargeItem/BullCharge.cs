@@ -69,12 +69,12 @@ public class BullCharge : ChargeItem {
 		// user.animator.SetTrigger("Charge Forward");
 		
 		GetComponent<Collider>().enabled = true;
-		user.freeAnim = false;
+		user.stunned = true;
 		StartCoroutine(chargeFunc((chgDist + curChgTime) * 0.1f));
 	}
 
 	protected override void animDone() {
-		user.freeAnim = true;
+		user.stunned = false;
 		GetComponent<Collider>().enabled = false;
 		hitWall = false;
 		enemies.Clear();

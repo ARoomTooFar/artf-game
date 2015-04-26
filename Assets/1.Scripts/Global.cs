@@ -9,8 +9,8 @@ public static class Global {
 	public static readonly int grid_x = 300;
 	public static readonly int grid_z = 300;
 	public static bool inLevelEditor = false;
-	public static Plane ground = new Plane(Vector3.up, Vector3.zero);
-	
-	public static UpgradeUI currentActiveObjectUI = null;
+	public static readonly Plane ground = new Plane(Vector3.up, Vector3.zero);
+
+	public static readonly String defaultLevel = "MapData\nTerrain\nTerminal\n-1,0,-8,6,0,-1 0,0,8,7,0,15\nRoom\nrooms:-1,0,-8,6,0,-1 0,0,8,7,0,15\nScenery\nPrefabs/PlayerStartingLocation:2,0,-5,North \nPrefabs/PlayerEndingLocation:3,0,11,North \nMonster";
 }
 

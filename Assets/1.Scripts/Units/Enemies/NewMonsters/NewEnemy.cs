@@ -5,11 +5,9 @@ using System.Collections;
 using System;
 
 public class NewEnemy : Character {
-	
-	//Aggro Variables
-	public float dmgTimer = 0f;
-	public bool aggro = false;
-	
+
+	protected float lastSawTargetCount;
+
 	//Is this unit part of the hive mind?
 	public bool swarmBool = false;
 	//Object which holds hivemind aggrotable
@@ -38,18 +36,7 @@ public class NewEnemy : Character {
 	
 	protected int layerMask = 1 << 9;
 	
-	protected float aggroTimer = 7.0f;
-	
-	void OnEnable()
-	{
-		Player.OnDeath += playerDied;
-	}
-	
-	
-	void OnDisable()
-	{
-		Player.OnDeath -= playerDied;
-	}
+	protected float aggroTimer = 5.0f;
 	
 	protected override void Awake() {
 		base.Awake();
@@ -89,17 +76,11 @@ public class NewEnemy : Character {
 			
 			animSteInfo = animator.GetCurrentAnimatorStateInfo (0);
 			animSteHash = animSteInfo.fullPathHash;
+			freeAnim = !stunned && !knockedback;
 			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
 			this.animator.SetBool("Actable", this.actable);
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
 			this.animator.SetBool("IsInAttackAnimation", this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge);
-			
-			
-			//If aggro'd, will chase, and if not attacked for 5 seconds, will deaggro
-			//If we want a deaggro function, change the if statement to require broken line of sight to target
-			/*if (aggro == true) {
-				fAggro ();
-			}*/
 			
 			
 			if (isGrounded) {
@@ -107,7 +88,6 @@ public class NewEnemy : Character {
 			} else {
 				falling ();
 			}
-
 			this.TargetFunction();
 		}
 	}
@@ -137,19 +117,28 @@ public class NewEnemy : Character {
 	//-----------//
 
 	protected virtual void TargetFunction() {
+		target = aggroT.GetTopAggro ();
 		if (target != null) {
-			target = aggroT.getTarget ();
+			this.animator.SetBool ("Target", true);
 			if (this.canSeePlayer(target)) {
+				this.lastSawTargetCount = 0.0f;
 				float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
 				this.animator.SetBool ("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
 			} else {
+				this.lastSawTargetCount += Time.deltaTime;
 				this.target = null;
 				this.animator.SetBool ("Target", false);
+				if (this.lastSawTargetCount > this.aggroTimer) {
+					this.aggroT.RemoveUnit(this.aggroT.GetTopAggro());
+					this.lastSawTargetCount = 2;
+				}
 			}
 		} else {
+			this.animator.SetBool ("Target", false);
 			if (aRange.unitsInRange.Count > 0) {
 				foreach(Character tars in aRange.unitsInRange) {
 					if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
+						aggroT.AddAggro(tars.gameObject, 1);
 						target = tars.gameObject;
 						this.animator.SetBool("Target", true);
 						this.alerted = true;
@@ -186,30 +175,13 @@ public class NewEnemy : Character {
 				this.animator.SetBool("CanSeeTarget", false);
 				return false;
 			} else {
-				Player addable = p.GetComponent<Player>();
-				Prop addprop = p.GetComponent<Prop>();
-				if(!addable.invis){
-					aggroT.add(p,1);
-					lastSeenPosition = p.transform.position;
-					alerted = true;
-					this.animator.SetBool ("HasLastSeenPosition", true);
-					this.lastSeenSet = 3.0f;
-					this.animator.SetBool("Alerted", true);
-					this.animator.SetBool("CanSeeTarget", true);
-					return true;
-				}else if(addprop != null){
-					aggroT.add(p,1);
-					lastSeenPosition = p.transform.position;
-					alerted = true;
-					this.animator.SetBool ("HasLastSeenPosition", true);
-					this.lastSeenSet = 3.0f;
-					this.animator.SetBool("Alerted", true);
-					this.animator.SetBool("CanSeeTarget", true);
-					return true;
-				}else{
-					return false;
-				}
-				//return true;
+				lastSeenPosition = p.transform.position;
+				this.animator.SetBool ("HasLastSeenPosition", true);
+				this.lastSeenSet = 3.0f;
+				alerted = true;
+				this.animator.SetBool("Alerted", true);
+				this.animator.SetBool("CanSeeTarget", true);
+				return true;
 				
 			}
 		}
@@ -242,20 +214,11 @@ public class NewEnemy : Character {
 	public override void damage(int dmgTaken, Character striker) {
 		base.damage(dmgTaken, striker);
 		
-		if (aggro == false) {
-			aggro = true;
-			dmgTimer = 0f;
-		}		
-		
-		// aggroT.add(striker.gameObject, dmgTaken); // This is causing the the AI to stop attacking and only approach and search for a target once they get damaged
+		aggroT.AddAggro(striker.gameObject, dmgTaken);
+		// aggroT.PrintTable();
 	}
 	
 	public override void damage(int dmgTaken) {
-		//aggro is on and timer reset if attacked
-		if (aggro == false) {
-			aggro = true;
-			dmgTimer = 0f;
-		}
 		
 		base.damage(dmgTaken);
 	}
@@ -270,47 +233,19 @@ public class NewEnemy : Character {
 	//-----------------//
 	// Aggro Functions //
 	//-----------------//
-	
-	public virtual void fAggro(){
-		if (dmgTimer < 5f)
-		{
-			dmgTimer += Time.deltaTime;
-		}
-		else if (dmgTimer >= 5f)
-		{
-			resetAggro ();
-			dmgTimer = 0f;
-		}
-	}
-	
-	public virtual void resetAggro(){
-		dmgTimer = 0f;
-		aggro = false;
-		target = null;
-		this.animator.SetBool ("Target", false);
-	}
-	
-	public virtual void playerDied(GameObject dead){
-		if (aggroT != null) {
-			aggroT.deletePlayer(dead);
-		}
-	}
-	
+
 	public virtual void playerVanished(GameObject dead){
 		if (aggroT != null) {
-			aggroT.deletePlayer(dead);
+			aggroT.RemoveUnit(dead);
 			target = null;
 		}
 	}
 	
 	public virtual void taunted(GameObject taunter){
-		if(aggroT != null){
-			if(aggroT.getVal() < 99999){
-				aggroT.add(taunter,99999);
-				Debug.Log(aggroT.getVal());
-			}
+		if (aggroT != null){
+			aggroT.AddAggro(taunter,aggroT.GetAggro()*2);
 		}
 	}
-	
+
 	//---------------//
 }

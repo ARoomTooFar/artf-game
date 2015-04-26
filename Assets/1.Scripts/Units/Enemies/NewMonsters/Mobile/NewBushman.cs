@@ -15,14 +15,22 @@ public class NewBushman : NewMobileEnemy {
 		}
 	}
 
-	private PowerLevels powlvs;
-	private Frenzy frenzy;
-	private float health;
+	protected GameObject oldTarget; // Needs to know when it switches targets
+
 	protected Sprint sprint;
 	protected BullCharge charge;
-	protected Roll lungeAttack;
-	
-	
+	protected MonsterLunge lunge;
+
+	// Old Stuff
+	protected PowerLevels powlvs;
+	protected Frenzy frenzy;
+	protected float health;
+
+
+	//-------------------//
+	// Primary Functions //
+	//-------------------//
+
 	protected override void Awake () {
 		base.Awake ();
 
@@ -31,10 +39,6 @@ public class NewBushman : NewMobileEnemy {
 	protected override void Start() {
 		base.Start ();
 		setFrenzy ();
-
-		// charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
-		// lungeAttack = this.inventory.items[++inventory.selected].GetComponent<Roll>();
-		// if (charge == null) Debug.LogWarning ("Bushmen does not have charge");
 	}
 
 	protected override void Update() {
@@ -57,8 +61,60 @@ public class NewBushman : NewMobileEnemy {
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 5.0f;
+		this.maxAtkRadius = 2.0f;
 	}
+
+	public override void SetTierData(int tier) {
+		tier = 4;
+		base.SetTierData (tier);
+
+
+		if (tier > 0) {
+			this.sprint = this.inventory.items[inventory.selected].GetComponent<Sprint>();
+			if (sprint == null) Debug.LogWarning ("Bushman does not have sprint equipped");
+			
+			foreach(SprintBehaviour behaviour in this.animator.GetBehaviours<SprintBehaviour>()) {
+				behaviour.SetVar(this.sprint);
+			}
+		} else {
+			this.inventory.items[inventory.selected].GetComponent<Sprint>().gameObject.SetActive(false);
+		}
+
+		this.inventory.cycItems ();
+
+		if (tier > 2) {
+			this.charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
+			if (charge == null) Debug.LogWarning ("Bushman does not have BullCharge equipped");
+
+			foreach(ChargeBehaviour behaviour in this.animator.GetBehaviours<ChargeBehaviour>()) {
+				behaviour.SetVar(this.charge);
+			}
+		} else {
+			this.inventory.items[inventory.selected].GetComponent<BullCharge>().gameObject.SetActive(false);
+		}
+
+		this.inventory.cycItems ();
+
+		if (tier > 3) {
+			this.lunge = this.inventory.items[inventory.selected].GetComponent<MonsterLunge>();
+			if (lunge == null) Debug.LogWarning ("Bushman does not have lunge equipped");
+
+			foreach(LungeBehaviour behaviour in this.animator.GetBehaviours<LungeBehaviour>()) {
+				behaviour.SetVar (this.lunge);
+			}
+
+			lunge.SetUp();
+		} else {
+			this.inventory.items[inventory.selected].GetComponent<MonsterLunge>().gameObject.SetActive(false);
+		}
+	}
+
+	protected override void TargetFunction() {
+		base.TargetFunction();
+		if (this.target != this.oldTarget) this.animator.SetTrigger("TargetSwitched");
+	}
+
+	//----------------------------------//
 
 	protected void setFrenzy() {
 		powlvs = new PowerLevels (this);
@@ -85,20 +141,5 @@ public class NewBushman : NewMobileEnemy {
 		nextLv.dmgRed = dmgRedUp * currentGrowth;
 		nextLv.speed = spdUp * currentGrowth;
 		return nextLv;
-	}
-
-	protected bool reAggro(){
-		return targetchanged;
-	}
-	
-	protected bool freestate(){
-		return this.freeAnim;
-	}
-
-	protected virtual void switchTarget() {
-		this.facing = this.target.transform.position - this.transform.position;
-		this.facing.y = 0.0f;
-		lungeAttack.useItem ();
-		targetchanged = false;
 	}
 }
