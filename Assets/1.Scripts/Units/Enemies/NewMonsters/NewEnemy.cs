@@ -169,6 +169,7 @@ public class NewEnemy : NewCharacter {
 		
 		// Check angle of forward direction vector against the vector of enemy position relative to player position
 		Vector3 direction = p.transform.position - transform.position;
+		direction.y = 0.0f;
 		float angle = Vector3.Angle(direction, this.facing);
 
 		float dis = Vector3.Distance(this.transform.position, p.transform.position);

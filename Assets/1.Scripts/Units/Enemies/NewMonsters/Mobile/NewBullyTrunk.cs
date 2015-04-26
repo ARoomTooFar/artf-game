@@ -98,7 +98,7 @@ public class NewBullyTrunk: NewMobileEnemy {
 		tier = 4;
 		base.SetTierData (tier);
 
-		this.stats.speed = tier < 3 ? 9 : 12;
+		this.stats.speed = tier < 3 ? 7 : 10;
 
 		if (tier > 0) {
 			charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
@@ -162,6 +162,7 @@ public class NewBullyTrunk: NewMobileEnemy {
 	// Coroutines //
 	//------------//
 
+
 	public virtual IEnumerator shieldsDown() {
 		this.BDS.rmvBuffDebuff (this.rockArms, this.gameObject);
 		yield return new WaitForSeconds(3.0f);
@@ -175,7 +176,6 @@ public class NewBullyTrunk: NewMobileEnemy {
 	//------------------//
 	// Helper Functions //
 	//------------------//
-	
-	
+
 	//------------------//
 }

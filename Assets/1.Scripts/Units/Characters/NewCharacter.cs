@@ -167,7 +167,7 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 
 		facing = Vector3.forward;
 		isDead = false;
-		stunned = knockedback = false;
+		stunned = knockedback = animationLock = false;
 		setInitValues();
 		this.testControl = true;
 		skins = gameObject.GetComponentsInChildren<Cloak>();
@@ -201,7 +201,7 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 		if(isDead) return;
 
 
-		freeAnim = !stunned && !knockedback;
+		freeAnim = !stunned && !knockedback && !animationLock;
 		actable = freeAnim;
 		this.animator.SetBool("Actable", this.actable);
 
@@ -212,7 +212,15 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	//---------------------------------//
 	// Action interface implementation //
 	//---------------------------------//
+
+	public override void colliderStart() {
+		gear.weapon.collideOn ();
+	}
 	
+	public override void colliderEnd() {
+		gear.weapon.collideOff ();
+	}
+
 	public override void actionCommands() {
 		
 	}
@@ -237,15 +245,6 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	
 	public override void attacks() {
 		
-	}
-	
-	
-	public override void colliderStart() {
-		gear.weapon.collideOn ();
-	}
-	
-	public override void colliderEnd() {
-		gear.weapon.collideOff ();
 	}
 	
 	public override void specialAttack() {

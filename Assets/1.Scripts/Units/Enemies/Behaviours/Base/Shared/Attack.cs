@@ -9,11 +9,12 @@ public class Attack : EnemyBehaviour {
 		this.unit.getFacingTowardsTarget();
 		this.unit.transform.localRotation = Quaternion.LookRotation(unit.facing);
 		this.unit.gear.weapon.initAttack();
+		this.unit.gear.weapon.collideOn();
 	}
 	
 	// This will be called once the animator has transitioned out of the state.
 	public override void OnStateExit (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		
+		this.unit.gear.weapon.collideOff();
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

@@ -31,7 +31,7 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Transform, GameObject>, IStunable, IForcible<Vector3, float> {
+public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallable, IDamageable<int, Transform, GameObject>, IStunable, IForcible<Vector3, float> {
 
 	public bool testControl;
 
@@ -44,7 +44,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
 
-	public bool freeAnim, attacking, stunned, knockedback;
+	public bool freeAnim, attacking, stunned, knockedback, animationLock;
 	public AudioClip hurt, victory, failure;
 
 	public bool testing, invis; // Whether it takes gear in automatically or lets the gear loader to it
@@ -305,6 +305,14 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	// Falling Interface Implementation //
 	//----------------------------------//
 
+	public virtual void colliderStart() {
+		gear.weapon.collideOn ();
+	}
+	
+	public virtual void colliderEnd() {
+		gear.weapon.collideOff ();
+	}
+
 	public virtual void falling() {
 		// fake gravity
 		// Animation make it so rigidbody gravity works oddly due to some gravity weight
@@ -325,15 +333,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	public virtual void attacks() {
 
-	}
-
-
-	public virtual void colliderStart() {
-		gear.weapon.collideOn ();
-	}
-
-	public virtual void colliderEnd() {
-		gear.weapon.collideOff ();
 	}
 
 	public virtual void specialAttack() {

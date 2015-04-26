@@ -21,7 +21,7 @@ public class BullyTrunkWeapon : MeleeWeapons {
 
 	// Used for setting sword stats for each equipment piece
 	protected override void setInitValues() {
-		stats.damage = (int)(3 * user.GetComponent<Character>().stats.strength);
+		stats.damage = (int)(user.GetComponent<Character>().stats.strength);
 
 		soundDur = 0.1f;
 		playSound = true;
@@ -38,7 +38,8 @@ public class BullyTrunkWeapon : MeleeWeapons {
 	
 	// Does something when opponent is hit
 	protected virtual void OnHit(Character enemy) {
-		enemy.damage(stats.damage + stats.chgDamage, user.transform, user.gameObject);
+		Debug.Log (stats.damage);
+		enemy.damage(stats.damage, user.transform, user.gameObject);
 	}
 
 	void OnTriggerEnter(Collider other) {
