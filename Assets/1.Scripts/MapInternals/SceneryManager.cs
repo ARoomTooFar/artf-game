@@ -93,7 +93,7 @@ public class SceneryManager {
 
 			//aaron - gets wall tiles that are replaced by door
 			foreach(Vector3 pos in blk.Coordinates){
-				MapData.TerrainBlocks.find(pos).Wall.GameObj.SetActive(false);
+				MapData.TerrainBlocks.find(pos).removeWall();
 			}
 		}
 		//attempt to link the scenery to the appropriate terrain
@@ -141,7 +141,7 @@ public class SceneryManager {
 			if(rm != null) {
 				rm.Doors.Remove(blk);
 				foreach(Vector3 pos in blk.Coordinates) {
-					MapData.TerrainBlocks.find(pos).Wall.GameObj.SetActive(true);
+					MapData.TerrainBlocks.find(pos).addWall(rm.getWallSide(pos));
 				}
 			}
 		}
