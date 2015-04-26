@@ -66,6 +66,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	// Swap these over to weapons in the future
 	public string weapTypeName;
 	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
+	protected bool usingAnimHash;
 
 	// protected delegate void BuffDelegate(float strength);
 

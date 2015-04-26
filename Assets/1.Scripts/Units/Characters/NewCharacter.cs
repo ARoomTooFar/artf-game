@@ -175,7 +175,18 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	
 	// Use this for initialization
 	protected override void Start () {
-		if (testing) this.SetGearAndAbilities();
+		if (testing) {
+			this.SetGearAndAbilities();
+
+			// Used so our old units still work, onc we have all models and animations, scrap this crap
+			if (this.weapTypeName.Length > 0) {
+				setAnimHash(); // Remove this later
+				this.usingAnimHash = true;
+			} else {
+				this.usingAnimHash = false;
+			}
+
+		}
 		foreach (CharacterBehaviour behaviour in this.animator.GetBehaviours<CharacterBehaviour>()) {
 			behaviour.SetVar(this);
 		}
@@ -200,9 +211,19 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	protected override void Update () {
 		if(isDead) return;
 
-
-		freeAnim = !stunned && !knockedback && !animationLock;
-		actable = freeAnim;
+		// Again, this part is only until everthing is transferred over to new models with animations
+		if (this.usingAnimHash) {
+			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
+			animSteHash = animSteInfo.fullPathHash;
+			freeAnim = !stunned && !knockedback && !animationLock;
+			
+			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
+			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
+			this.animator.SetBool("IsInAttackAnimation", this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge);
+		} else {
+			freeAnim = !stunned && !knockedback && !animationLock;
+			actable = freeAnim;
+		}
 		this.animator.SetBool("Actable", this.actable);
 
 		// actionCommands ();
