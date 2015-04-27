@@ -39,7 +39,7 @@ public static class Mode
 			rm.setMarkerActive(true);
 		}
 
-		modeText.text = "M";
+		modeText.text = "R";
 	}
 
 	public static void setTileMode ()
