@@ -244,7 +244,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	// Update is called once per frame
 	protected virtual void Update () {
-		isHit = false;
 	    if(!isDead) {
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 

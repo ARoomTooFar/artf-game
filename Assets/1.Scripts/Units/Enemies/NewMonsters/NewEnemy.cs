@@ -156,6 +156,12 @@ public class NewEnemy : Character {
 	//-----------------------//
 	// Calculation Functions //
 	//-----------------------//
+
+	protected float distanceToPlayer(GameObject p) {
+		if (p == null) return 0.0f;
+		Vector3 distance = p.transform.position - this.transform.position;
+		return distance.sqrMagnitude;
+	}
 	
 	public virtual bool canSeePlayer(GameObject p) {
 		if (p == null) {

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CVineDeploy : EnemyBehaviour {
 
-	Blink blink;
+	public Blink blink;
 
 	public override void OnStateEnter (Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{

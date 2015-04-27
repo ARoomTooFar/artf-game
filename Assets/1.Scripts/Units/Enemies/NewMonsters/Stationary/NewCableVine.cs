@@ -9,9 +9,10 @@ public class NewCableVine : NewStationaryEnemy {
 	HingeJoint tether;
 	Rigidbody joints;
 	protected Transform origin;
-	protected float pull_velocity = 0.1f;
+	public float pull_velocity = 0.1f;
 	private float maxApproachRadius;
-	public Blink blink;
+	protected Blink blink;
+
 	//	CableMaw MyMum;
 	
 	protected override void Awake () {
@@ -23,8 +24,16 @@ public class NewCableVine : NewStationaryEnemy {
 		//stunDebuff = new Stun ();
 		constrict = new GenericDoT (1);
 		maxApproachRadius = GetComponentInChildren<SphereCollider> ().radius;
-		this.blink = this.inventory.items[inventory.selected].GetComponent<Blink> ();
-		if (this.blink == null) Debug.LogWarning ("Cable Vine does not have Blink equipped");
+		foreach(CVineDeploy behaviour in this.animator.GetBehaviours<CVineDeploy>()) {
+			behaviour.blink = this.blink;
+		}
+
+		foreach(CVineDeploy behaviour in this.animator.GetBehaviours<CVineDeploy>()) {
+			behaviour.blink = this.blink;
+		}
+
+//		this.blink = this.inventory.items[inventory.selected].GetComponent<Blink> ();
+//		if (this.blink == null) Debug.LogWarning ("Cable Vine does not have Blink equipped");
 	}
 
 	
@@ -34,10 +43,10 @@ public class NewCableVine : NewStationaryEnemy {
 	
 	protected override void Update () {
 		base.Update ();
-		//Debug.Log (this.stats.health);
-		//Debug.Log (this.transform.position);
+		redeploy ();
 	}
-	
+
+	/*
 	protected void redeploy () {
 		this.facing = this.target.transform.position - this.transform.position;
 		this.facing.y = 0.0f;
@@ -45,9 +54,9 @@ public class NewCableVine : NewStationaryEnemy {
 		
 		if (this.blink.curCoolDown <= 0) {
 			do {
-				/*
+
 				this.facing.x =  Random.value * (this.facing.x == 0 ? (Random.value - 0.5f) : Mathf.Sign);
-				this.facing.z = Random.value * (this.facing.z == 0 ? (Random.value - 0.5f) : Mathf.Sign);*/
+				this.facing.z = Random.value * (this.facing.z == 0 ? (Random.value - 0.5f) : Mathf.Sign);
 				
 				this.facing.x += Mathf.Sign (this.facing.x) * Random.value * 10;
 				this.facing.z += Mathf.Sign (this.facing.z) * Random.value * 10;
@@ -58,16 +67,44 @@ public class NewCableVine : NewStationaryEnemy {
 			this.blink.useItem ();
 		}
 		
+	}*/
+
+	protected virtual void isApproaching() {
+		// If we don't have a target currently and aren't alerted, automatically assign anyone in range that we can see as our target
+		if (this.target == null) {
+			if (aRange.unitsInRange.Count > 0) {
+				foreach(Character tars in aRange.unitsInRange) {
+					if (this.canSeePlayer(tars.gameObject)) {
+						animator.SetBool("Alerted", true);
+						target = tars.gameObject;
+						break;
+					}
+				}
+				
+				if (target == null) {
+					animator.SetBool("InAttackRange", false);
+					return;
+				}
+			} else {
+				animator.SetBool("InAttackRange", false);
+				return ;
+			}
+		}
+		
+		float distance = this.distanceToPlayer(this.target);
+		
+		if (distance >= this.maxApproachRadius && this.canSeePlayer (this.target)) {
+			// agent.alerted = true;
+			animator.SetBool("InAttackRange", true);
+		}
 	}
 
-	/*
-	protected bool outRanged() {
+	protected void redeploy() {
 		if (this.target != null) {
 			float distance = this.distanceToPlayer(this.target);
-			return distance > this.maxApproachRadius && this.isHit;
+			this.animator.SetBool("redeployed", distance > this.maxApproachRadius && this.isHit);
 		}
-		return false;
-	}*/
+	}
 	
 	private Vector3 pullVelocity(){
 		float time = this.facing.magnitude/pull_velocity;

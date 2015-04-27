@@ -64,7 +64,6 @@ public class CableVine : StationaryEnemy {
 	
 	protected override void Update () {
 		base.Update ();
-		GameObject herro = aggroT.GetTopAggro();
 		//Debug.Log (this.stats.health);
 		//Debug.Log (this.transform.position);
 	}
