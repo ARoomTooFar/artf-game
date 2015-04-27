@@ -95,7 +95,7 @@ public class NewBullyTrunk: NewMobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 4;
+		tier = 5;
 		base.SetTierData (tier);
 
 		this.stats.speed = tier < 3 ? 9 : 12;
