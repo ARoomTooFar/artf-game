@@ -91,7 +91,7 @@ public class NewBullyTrunk: NewMobileEnemy {
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 4.5f;
+		this.maxAtkRadius = 4.0f;
 	}
 
 	public override void SetTierData(int tier) {
@@ -155,7 +155,7 @@ public class NewBullyTrunk: NewMobileEnemy {
 	// Actions Functions //
 	//-------------------//
 
-	// These are here because for some reason I can't find the inherited functions from the animation events thing
+	// These are here because for some reason I can't find the inherited collider functions from the animation events thing
 	// Fuck Unity, such a tease
 	protected virtual void SmashNow() {
 		this.colliderStart();

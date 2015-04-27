@@ -276,7 +276,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		stats.health = 0;
 		
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position-new Vector3(0,6,0), transform.rotation)).GetComponent<Explosion>();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
 			r.enabled = false;

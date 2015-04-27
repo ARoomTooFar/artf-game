@@ -18,12 +18,21 @@ public class Hook : ChargeItem {
 	private Character foe;
 	private Stun debuff;
 	private Immobilize immobil;
-	//private Collider collider;
+
+	private Collider col;
+	private Renderer ren;
+	private Rigidbody rb;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
-		//collider = GetComponent<Collider>();
-		GetComponent<Collider>().enabled = false;
+
+		this.col = this.GetComponent<Collider>();
+		this.col.enabled = false;
+
+		this.ren = this.GetComponent<Renderer>();
+		this.rb = this.GetComponent<Rigidbody>();
+
 		debuff = new Stun();
 		immobil = new Immobilize();
 	}
@@ -39,15 +48,13 @@ public class Hook : ChargeItem {
 	public override void useItem() {
 		base.useItem ();
 
-		// user.animator.SetTrigger("Charging Charge"); Once we have the animation for it
-
-		GetComponent<Renderer>().enabled = true;
-
+		this.ren.enabled = true;
 	}
 
 	public override void deactivateItem() {
 		base.deactivateItem();
 	}
+
 	// Update is called once per frame
 	protected override void chgDone() {
 		// user.animator.SetTrigger("Charge Forward");
@@ -61,10 +68,10 @@ public class Hook : ChargeItem {
 	protected override void animDone() {
 		user.BDS.rmvBuffDebuff(immobil,this.gameObject);
 		user.freeAnim = true;
-		GetComponent<Collider>().enabled = false;
+		this.col.enabled = false;
 		hit = false;
-		GetComponent<Renderer>().enabled = false;
-	    GetComponent<Rigidbody>().isKinematic = true;
+		this.ren.enabled = false;
+	    this.rb.isKinematic = true;
 		foe = null;
 		
 		base.animDone ();
@@ -72,21 +79,12 @@ public class Hook : ChargeItem {
 	
 	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
 	private IEnumerator chargeFunc(float chgTime) {
-		GetComponent<Rigidbody>().isKinematic = false;
-		GetComponent<Collider>().enabled = true;
+		this.rb.isKinematic = false;
+		this.col.enabled = true;
 		yield return StartCoroutine("chgTimeFunc",(chgTime));
-		//float tempStun = stunDuration * (hitWall ? 2 : 1);
-		/*foreach(Character ene in enemies) {
-			((IStunable<float>)ene.GetComponent(typeof(IStunable<float>))).stun(tempStun);
-		}*/
-		
-		//yield return StartCoroutine("retTimeFunc",(chgTime));
 		yield return StartCoroutine("chgLagTime");
-
 		animDone();
 	}
-
-
 	
 	// Timer and velocity changing thing
 	private IEnumerator chgTimeFunc(float chgTime) {
@@ -118,47 +116,27 @@ public class Hook : ChargeItem {
 			yield return 0;
 		}
 	}
-	/*
-	private IEnumerator retTimeFunc(float chgTime) {
-		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
-
-			/*if (!hit) {
-				rigidbody.velocity = Vector3.zero;
-				yield break;
-			}
-			if(foe!=null){
-				foe.transform.position = transform.position;
-			}
-			rigidbody.velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
-			yield return 0;
-		}
-	}*/
 	
 	private IEnumerator chgLagTime() {
 		for (float timer = 0; timer < chgLag; timer += Time.deltaTime) {
-			GetComponent<Rigidbody>().velocity = Vector3.zero;
+			this.rb.velocity = Vector3.zero;
 			yield return 0;
 		}
 	}
 
 	void OnTriggerEnter (Collider other) {
 		if(!hit){
-			//RiotShield rShield = other.GetComponent<RiotShield>();
 			if (other.tag == "Wall") {
 				hit = true;
 				check = true;
-				//StopCoroutine("chgTimeFunc");
 			}
 			IForcible<Vector3,float> component = (IForcible<Vector3,float>) other.GetComponent( typeof(IForcible<Vector3,float>) );
 			foe = other.GetComponent<Character>();
 			if( component != null && foe != null) {
 				hit = true;
 				check = true;
-				GetComponent<Collider>().enabled = false;
+				this.col.enabled = false;
 			}
 		}
-		// Will need a differentiation in the future(Or not if we want this)
-		//     I suggest having the users know what is there enemy and settign ti that way somehow
-
 	}
 }

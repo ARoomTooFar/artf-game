@@ -15,6 +15,7 @@ public class Pummel : Approach {
 	
 	// This will be called once the animator has transitioned out of the state.
 	public override void OnStateExit (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		this.unit.gear.weapon.initAttack();
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
@@ -25,7 +26,6 @@ public class Pummel : Approach {
 		} else {
 			this.unit.rb.velocity = Vector3.zero;
 			animator.SetBool ("Pummeling", true);
-			this.unit.gear.weapon.initAttack();
 		}
 	}
 }
