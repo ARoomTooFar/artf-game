@@ -108,9 +108,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 						}
 					}
 				}
-
-				//copy = itemObjectCopy.GetComponent ("ItemObject") as ItemObject;
-				
 				//so this code only happens once
 				copyCreated = true;
 			}
@@ -174,7 +171,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		//if move was cancelled, we don't perform an update on the item object's position
 		if(cancellingMove == true) {
 			Destroy(buttonBG);
-//			destroyButtonBG();
 			selectedButtonID = -1;
 		} else {
 
@@ -200,7 +196,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			itemObjectCopy = null;
 
 			Destroy(buttonBG);
-//			destroyButtonBG();
 			selectedButtonID = -1;
 		
 		}
@@ -214,56 +209,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 
 	public void setButtonImage(string icon) {
 		Image im = this.GetComponent("Image") as Image;
-		Sprite sp = Resources.Load <Sprite>("IconsUI/" + icon);
+		Sprite sp = Resources.Load <Sprite>("LevelEditorIcons/" + icon);
 		im.sprite = sp;
 	}
-
-
-
-	//below: bunch of stuff from when buttons were dragged from folders
-
-//	public void OnBeginDrag (PointerEventData data)
-//	{
-//
-//		tilemapcont.suppressDragSelecting = true;
-//
-//		Image p = draggedImageAnchor.GetComponent ("Image") as Image;
-//		p.sprite = thisImage.sprite;
-//		p.material = null;
-//
-//		StartCoroutine (dragIt ());
-//
-//
-//	}
-//
-//	//for placing items by way of dragging the buttons from the folder and
-//	//placing them on the map
-//	public void OnEndDrag (PointerEventData data)
-//	{
-//		tilemapcont.suppressDragSelecting = false;
-//
-//		Image p = draggedImageAnchor.GetComponent ("Image") as Image;
-//		p.sprite = thisImage.sprite;
-//		p.material = matToMakeInvisible;
-//
-//
-//		string prefabLocation = "Prefabs/" + connectedPrefab;
-//		tilemapcont.setSelectedItem (prefabLocation);
-//
-//		//make sure image anchor is way off screen, so it doesn't interfere
-//		//with dragging of objects
-//		RectTransform anchorRect = draggedImageAnchor.GetComponent ("RectTransform") as RectTransform;
-//		anchorRect.anchoredPosition = new Vector2 (-22f, -100f);
-//	}
-
-//	IEnumerator dragIt ()
-//	{ 
-//		while (Input.GetMouseButton(0)) {
-//			draggedImageAnchor.transform.position = Input.mousePosition;
-//
-//			yield return null; 
-//		}
-//
-//		
-//	}
 }
