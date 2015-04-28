@@ -43,7 +43,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	protected override void setInitValues() {
 		base.setInitValues();
 		//Testing with base 0-10 on stats with 10 being 100/cap%
-		stats.maxHealth = 40;
+		stats.maxHealth = 60;
 		stats.health = stats.maxHealth;
 		stats.armor = 0;
 		stats.strength = 10;
@@ -235,40 +235,34 @@ public class Player : Character, IMoveable, IHealable<int>{
 	// Damage Interface Implementation //
 	//---------------------------------//
 	
-	public override void damage(int dmgTaken, Character striker) {
-		if (!invincible&&!stats.isDead) {
-			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
-			if(splatter != null){
-				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
-				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
-				Destroy (theSplat, 2);
-			}
-			// print("UGH!" + dmgTaken);
-			stats.health -= greyTest(dmgTaken);
-			
-			if (stats.health <= 0) {
-				die();
-			}
-			//			UI.hpBar.current = stats.health;
-		}
+	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
+		this.damage (dmgTaken, atkPosition);
+	}
+	
+	public override void damage(int dmgTaken, Transform atkPosition) {
+		if (invincible || stats.isDead) return;
+		
+		dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(atkPosition.position, facing, transform.position)), 1, 100000);
+		stats.health -= greyTest(dmgTaken);
+		if (stats.health <= 0) die();
+		
+		// Blood Effect Code
+		if(splatter == null) return;	
+		splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
+		theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
+		Destroy (theSplat, 2);
 	}
 	
 	public override void damage(int dmgTaken) {
-		if (!invincible&&!stats.isDead) {
-			print("UGH!" + dmgTaken);
-			stats.health -= greyTest(dmgTaken);
-			if(splatter != null){
-				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
-				theSplat.adjuster = (float) ((stats.maxHealth-stats.health)/stats.maxHealth);
-				Destroy (theSplat, 2);
-			}
-			//UI.greyBar.current = greyDamage+stats.health;
-			if (stats.health <= 0) {
-				
-				die();
-			}
-			//UI.hpBar.current = stats.health;
-		}
+		if (invincible || stats.isDead) return;
+		
+		stats.health -= greyTest(dmgTaken);
+		if (stats.health <= 0) this.die();
+		
+		if(splatter == null) return;
+		splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
+		theSplat.adjuster = (float) ((stats.maxHealth-stats.health)/stats.maxHealth);
+		Destroy (theSplat, 2);
 	}
 	
 	public override void die() {
@@ -280,9 +274,9 @@ public class Player : Character, IMoveable, IHealable<int>{
 			OnDeath (this.gameObject);
 		}*/
 		stats.health = 0;
-		//UI.hpBar.current = 0;
+		
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position-new Vector3(0,6,0), transform.rotation)).GetComponent<Explosion>();
+		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
 			r.enabled = false;

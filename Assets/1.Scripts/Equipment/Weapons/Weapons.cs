@@ -43,9 +43,12 @@ public class Weapons : Equipment {
 
 	public Type opposition;
 
+	protected Collider col;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
+		this.col = this.GetComponent<Collider>();
 	}
 
 	public virtual void equip(Character u, Type ene) {
@@ -79,10 +82,6 @@ public class Weapons : Equipment {
 		playSound = true;
 	}
 
-	protected override void FixedUpdate() {
-		base.FixedUpdate();
-	}
-
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
@@ -92,12 +91,13 @@ public class Weapons : Equipment {
 	// Some Helper Functions //
 	//-----------------------//
 
+	// Move this over to melee weapons
 	public virtual void collideOn() {
-		this.GetComponent<Collider>().enabled = true;
+		this.col.enabled = true;
 	}
 	
 	public virtual void collideOff() {
-		this.GetComponent<Collider>().enabled = false;
+		this.col.enabled = false;
 	}
 
 	// A unique attack command called from thje animator

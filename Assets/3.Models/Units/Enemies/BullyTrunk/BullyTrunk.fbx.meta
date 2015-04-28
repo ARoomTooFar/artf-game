@@ -1,0 +1,120 @@
+fileFormatVersion: 2
+guid: 20e4fb7c221bf3e4dac7936e7ba0029f
+timeCreated: 1429915674
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: BullyTrunk
+    100004: hand_l
+    100006: hand_r
+    100008: head
+    100010: leg_l
+    100012: leg_r
+    100014: lower_arm_l
+    100016: lower_arm_r
+    100018: lower_back
+    100020: lower_foot_l
+    100022: lower_foot_r
+    100024: neck
+    100026: obj_bullytrunk
+    100028: thigh_l
+    100030: thigh_r
+    100032: upper_arm_l
+    100034: upper_arm_r
+    100036: upper_back
+    100038: upper_Foot_l
+    100040: upper_Foot_r
+    400000: //RootNode
+    400002: BullyTrunk
+    400004: hand_l
+    400006: hand_r
+    400008: head
+    400010: leg_l
+    400012: leg_r
+    400014: lower_arm_l
+    400016: lower_arm_r
+    400018: lower_back
+    400020: lower_foot_l
+    400022: lower_foot_r
+    400024: neck
+    400026: obj_bullytrunk
+    400028: thigh_l
+    400030: thigh_r
+    400032: upper_arm_l
+    400034: upper_arm_r
+    400036: upper_back
+    400038: upper_Foot_l
+    400040: upper_Foot_r
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: obj_bullytrunk
+    7400000: obj_bullytrunk|obj_bullytrunk.attack_3
+    7400002: obj_bullytrunk|obj_bullytrunk.attack_1
+    7400004: obj_bullytrunk_attack_1
+    7400006: obj_bullytrunk_attack_2
+    7400008: obj_bullytrunk_attack_3
+    7400010: obj_bullytrunk_walk_begin
+    7400012: obj_bullytrunk_walk_loop
+    7400014: PoseLib
+    9500000: //RootNode
+    13700000: obj_bullytrunk
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 2
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
