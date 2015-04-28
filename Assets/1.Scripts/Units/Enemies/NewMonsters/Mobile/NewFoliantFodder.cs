@@ -38,7 +38,7 @@ public class NewFoliantFodder: NewMobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 3;
+		tier = 0;
 		base.SetTierData (tier);
 		
 		this.stats.speed = tier < 3 ? 9 : 12;
