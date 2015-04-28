@@ -16,7 +16,7 @@ public class Pistol : RangedWeapons {
 		stats.weapTypeName = "sword";
 		loadSpeed = 2.5f;
 		stats.atkSpeed = 2.0f;
-		stats.damage = 10;
+		stats.damage = 2 + user.GetComponent<Character>().stats.coordination;
 		stats.maxChgTime = 2.0f;
 		
 		// Bull Pattern L originally

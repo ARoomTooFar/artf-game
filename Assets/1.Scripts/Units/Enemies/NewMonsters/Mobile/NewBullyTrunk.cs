@@ -82,12 +82,12 @@ public class NewBullyTrunk: NewMobileEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 35;
+		stats.maxHealth = 50;
 		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 6;
+		stats.armor = 1;
+		stats.strength = 10;
 		stats.coordination=0;
-		stats.speed=4;
+		stats.speed=6;
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
@@ -95,7 +95,7 @@ public class NewBullyTrunk: NewMobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 0;
+		tier = 1;
 		base.SetTierData (tier);
 
 		this.stats.speed = tier < 3 ? 7 : 10;
