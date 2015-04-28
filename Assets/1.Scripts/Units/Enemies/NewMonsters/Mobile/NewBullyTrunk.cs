@@ -91,14 +91,14 @@ public class NewBullyTrunk: NewMobileEnemy {
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 2.0f;
+		this.maxAtkRadius = 4.0f;
 	}
 
 	public override void SetTierData(int tier) {
 		tier = 5;
 		base.SetTierData (tier);
 
-		this.stats.speed = tier < 3 ? 9 : 12;
+		this.stats.speed = tier < 3 ? 7 : 10;
 
 		if (tier > 0) {
 			charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
@@ -106,6 +106,10 @@ public class NewBullyTrunk: NewMobileEnemy {
 
 			foreach(ChargeBehaviour behaviour in this.animator.GetBehaviours<ChargeBehaviour>()) {
 				behaviour.SetVar(this.charge);
+			}
+			
+			foreach(ShieldsDown behaviour in this.animator.GetBehaviours<ShieldsDown>()) {
+				behaviour.SetVar(this);
 			}
 
 			this.charge.chargeSpeed = tier < 5 ? 3 : 4;
@@ -150,13 +154,24 @@ public class NewBullyTrunk: NewMobileEnemy {
 	//-------------------//
 	// Actions Functions //
 	//-------------------//
-	
+
+	// These are here because for some reason I can't find the inherited collider functions from the animation events thing
+	// Fuck Unity, such a tease
+	protected virtual void SmashNow() {
+		this.colliderStart();
+	}
+
+	protected virtual void SmashOver() {
+		this.colliderEnd();
+	}
+
 	//-------------------//
 	
 	
 	//------------//
 	// Coroutines //
 	//------------//
+
 
 	public virtual IEnumerator shieldsDown() {
 		this.BDS.rmvBuffDebuff (this.rockArms, this.gameObject);
@@ -171,7 +186,6 @@ public class NewBullyTrunk: NewMobileEnemy {
 	//------------------//
 	// Helper Functions //
 	//------------------//
-	
-	
+
 	//------------------//
 }

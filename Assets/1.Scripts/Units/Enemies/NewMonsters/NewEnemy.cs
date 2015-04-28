@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class NewEnemy : Character {
+public class NewEnemy : NewCharacter {
 
 	protected float lastSawTargetCount;
 
@@ -71,6 +71,10 @@ public class NewEnemy : Character {
 	
 	// Update is called once per frame
 	protected override void Update () {
+		if (stats.isDead) return;
+		base.Update();
+		this.TargetFunction();
+		/*
 		if (!stats.isDead) {
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
 			
@@ -89,7 +93,7 @@ public class NewEnemy : Character {
 				falling ();
 			}
 			this.TargetFunction();
-		}
+		}*/
 	}
 
 	
@@ -165,6 +169,7 @@ public class NewEnemy : Character {
 		
 		// Check angle of forward direction vector against the vector of enemy position relative to player position
 		Vector3 direction = p.transform.position - transform.position;
+		direction.y = 0.0f;
 		float angle = Vector3.Angle(direction, this.facing);
 
 		float dis = Vector3.Distance(this.transform.position, p.transform.position);
@@ -211,15 +216,17 @@ public class NewEnemy : Character {
 	// Character Inherited Functions //
 	//-------------------------------//
 	
-	public override void damage(int dmgTaken, Character striker) {
-		base.damage(dmgTaken, striker);
-		
-		aggroT.AddAggro(striker.gameObject, dmgTaken);
-		// aggroT.PrintTable();
+	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
+		if (this.invincible) return;
+		this.damage(dmgTaken, atkPosition);
+		aggroT.AddAggro(source, dmgTaken);
+	}
+	
+	public override void damage(int dmgTaken, Transform atkPosition) {
+		base.damage(dmgTaken, atkPosition);
 	}
 	
 	public override void damage(int dmgTaken) {
-		
 		base.damage(dmgTaken);
 	}
 	
