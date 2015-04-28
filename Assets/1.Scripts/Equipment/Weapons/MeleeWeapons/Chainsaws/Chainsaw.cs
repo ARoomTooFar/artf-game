@@ -133,12 +133,12 @@ public class Chainsaw : MeleeWeapons {
 				lastDmgTime = Time.time;
 				foreach(Character meat in chained) {
 					if (meat == null) continue;
-					meat.damage(stats.damage, user);
+					meat.damage(stats.damage, user.transform, user.gameObject);
 				}
 
 				foreach(GameObject crop in cropping) {
 					if (crop == null) continue;
-					IDamageable<int, Traps> component = (IDamageable<int, Traps>) crop.GetComponent (typeof(IDamageable<int, Traps>));
+					IDamageable<int, Traps, GameObject> component = (IDamageable<int, Traps, GameObject>) crop.GetComponent (typeof(IDamageable<int, Traps, GameObject>));
 					if(component != null) {
 						component.damage(stats.damage);
 					}
@@ -185,10 +185,10 @@ public class Chainsaw : MeleeWeapons {
 				chained.Add(enemy);
 				enemy.BDS.addBuffDebuff(debuff, user.gameObject);
 			} else {
-				enemy.damage(stats.damage * 2, user);
+				enemy.damage(stats.damage * 2, user.transform, user.gameObject);
 			}
 		} else {
-			IDamageable<int, Traps> component = (IDamageable<int, Traps>) other.GetComponent (typeof(IDamageable<int, Traps>));
+			IDamageable<int, Traps, GameObject> component = (IDamageable<int, Traps, GameObject>) other.GetComponent (typeof(IDamageable<int, Traps, GameObject>));
 			if (component != null) {
 				if (user.animator.GetBool("Charging")) {
 					cropping.Add(other.gameObject);
@@ -211,7 +211,7 @@ public class Chainsaw : MeleeWeapons {
 				user.BDS.rmvBuffDebuff(debuff, user.gameObject);
 			}
 		} else {
-			IDamageable<int, Traps> component = (IDamageable<int, Traps>) other.GetComponent (typeof(IDamageable<int, Traps>));
+			IDamageable<int, Traps, GameObject> component = (IDamageable<int, Traps, GameObject>) other.GetComponent (typeof(IDamageable<int, Traps, GameObject>));
 			if (component != null) {
 				if (cropping.Contains (other.gameObject)) {
 					cropping.Remove(other.gameObject);

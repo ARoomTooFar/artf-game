@@ -9,10 +9,11 @@ public class FinishedCharging : ChargeBehaviour {
 	
 	// This will be called once the animator has transitioned out of the state.
 	public override void OnStateExit (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		this.unit.rb.velocity = Vector3.zero;
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		if (this.charge.curCoolDown > 0) {
+		if (animator.GetBool ("Actable")) {
 			animator.SetTrigger ("ChargeOffCD"); // Used here just to transition out after charge is done
 		}
 	}

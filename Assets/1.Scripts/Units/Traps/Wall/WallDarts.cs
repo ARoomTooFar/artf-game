@@ -90,7 +90,7 @@ public class WallDarts : Traps {
 	}*/
 
 	void OnParticleCollision(GameObject other) {
-		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
+		IDamageable<int, Transform, GameObject> component = (IDamageable<int, Transform, GameObject>) other.GetComponent( typeof(IDamageable<int, Transform, GameObject>) );
 		IForcible<Vector3, float> component2 = (IForcible<Vector3, float>) other.GetComponent( typeof(IForcible<Vector3, float>) );
 		Character enemy = other.GetComponent<Character>();
 		if( component != null && enemy != null) {
