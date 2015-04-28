@@ -16,12 +16,12 @@ public class Pistol : RangedWeapons {
 		stats.weapTypeName = "sword";
 		loadSpeed = 2.5f;
 		stats.atkSpeed = 2.0f;
-		stats.damage = 1;
+		stats.damage = 10;
 		stats.maxChgTime = 2.0f;
 		
 		// Bull Pattern L originally
 		//rifle(L,2) + pistol (L,1)
-		variance = 22f;
+		variance = 10f;
 		kick = 2f;
 
 		spray = user.transform.rotation;

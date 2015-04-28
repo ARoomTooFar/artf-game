@@ -29,7 +29,7 @@ public class NewCackleBranch: NewRangedEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 40;
+		stats.maxHealth = 30;
 		stats.health = stats.maxHealth;
 		stats.armor = 0;
 		stats.strength = 10;

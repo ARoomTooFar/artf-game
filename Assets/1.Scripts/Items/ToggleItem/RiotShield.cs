@@ -49,7 +49,7 @@ public class RiotShield : ToggleItem {
 
 		cooldown = 10.0f;
 		maxDuration = 5;
-		dmgReduction = 0.9f;
+		dmgReduction = 1.0f;
 		userSlow = 0.75f;
 		debuff = new FreedomController (userSlow, dmgReduction);
 	}
