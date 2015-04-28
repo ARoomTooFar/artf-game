@@ -28,17 +28,17 @@ public class MeleeWeapons : Weapons {
 				enemy.BDS.addBuffDebuff(stats.debuff, this.gameObject);
 			}
 		}
-		enemy.damage(stats.damage + stats.chgDamage, user);
+		enemy.damage(stats.damage + stats.chgDamage, user.transform, user.gameObject);
 	}
 
 	// only capsule collider should be checked in this function
 	void OnTriggerEnter(Collider other) {
-		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
+		IDamageable<int, Transform, GameObject> component = (IDamageable<int, Transform, GameObject>) other.GetComponent( typeof(IDamageable<int, Transform, GameObject>) );
 		Character enemy = (Character) other.GetComponent(opposition);
 		if( component != null && enemy != null) {
 			onHit(enemy);
 		} else {
-			IDamageable<int, Traps> component2 = (IDamageable<int, Traps>) other.GetComponent (typeof(IDamageable<int, Traps>));
+			IDamageable<int, Traps, GameObject> component2 = (IDamageable<int, Traps, GameObject>) other.GetComponent (typeof(IDamageable<int, Traps, GameObject>));
 			if (component2 != null) {
 				component2.damage(stats.damage + stats.chgDamage);
 			}

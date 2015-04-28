@@ -15,10 +15,14 @@ public static class LevelPathCheck {
 	}
 
 	public static void checkPath(){
+		foreach(ARTFRoom rm in MapData.TheFarRooms.roomList) {
+			rm.linkRoomsViaDoors();
+		}
 		roomPath = Pathfinder.getRoomPath(MapData.StartingRoom, MapData.EndingRoom);
 		fullPath = Pathfinder.getPath(MapDataParser.start.Position, MapDataParser.end.Position);
-		Debug.Log(MapDataParser.start.Position + ", " + MapDataParser.end.Position);
-		Debug.Log(roomPath);
-		GameObject.Find("LevelCheck").GetComponent<Text>().enabled = (fullPath == null);
+		GameObject obj = GameObject.Find("LevelCheck");
+		if(obj != null) {
+			obj.GetComponent<Text>().enabled = (fullPath == null);
+		}
 	}
 }

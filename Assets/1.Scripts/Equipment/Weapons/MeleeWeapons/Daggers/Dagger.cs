@@ -44,9 +44,9 @@ public class Dagger : MeleeWeapons {
 
 	protected override void onHit(Character enemy) {
 		if (ARTFUtilities.IsBehind(user.transform.position, enemy.facing, enemy.transform.position)) {
-			enemy.damage((int)((stats.damage + stats.chgDamage) * 1.5f), user);
+			enemy.damage((int)((stats.damage + stats.chgDamage) * 1.5f), user.transform, user.gameObject);
 		} else {
-			enemy.damage(stats.damage + stats.chgDamage, user);
+			enemy.damage(stats.damage + stats.chgDamage, user.transform, user.gameObject);
 		}
 
 	}

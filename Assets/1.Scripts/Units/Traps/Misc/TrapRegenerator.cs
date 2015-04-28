@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TrapRegenerator : MonoBehaviour, IDamageable<int, Traps> {
+public class TrapRegenerator : MonoBehaviour, IDamageable<int, Traps, GameObject> {
 
 	public bool regenerable;
 	public int regenTime;
@@ -20,16 +20,22 @@ public class TrapRegenerator : MonoBehaviour, IDamageable<int, Traps> {
 		
 	}
 
-	public void damage(int dmgTaken, Traps atkPosition) {
-		damage(dmgTaken);
+	//------------------//
+	// Damage Functions //
+	//------------------//
+
+	public virtual void damage(int dmgTaken, Traps atkPosition, GameObject source) {
+		this.damage(dmgTaken);
 	}
 
-	public void damage(int dmgTaken) {
-		health -= dmgTaken;
+	public virtual void damage(int dmgTaken, Traps atkPosition) {
+		this.damage(dmgTaken);
+	}
 
-		if (health <= 0) {
-			die();
-		}
+	public virtual void damage(int dmgTaken) {
+		this.health -= dmgTaken;
+
+		if (this.health <= 0) this.die();
 	}
 
 	public void die() {
@@ -41,6 +47,9 @@ public class TrapRegenerator : MonoBehaviour, IDamageable<int, Traps> {
 			StartCoroutine(regen());
 		}
 	}
+	
+	//----------------------//
+	
 	public void rez(){
 	}
 	public void heal(int d){

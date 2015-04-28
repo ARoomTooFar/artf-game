@@ -13,7 +13,6 @@ public static class Pathfinder {
 		AbstractNode current = null;
 		
 		while(open.Count > 0) {
-			//open.Sort((first, second) => first.CostSoFar.CompareTo(second.CostSoFar));
 			open.Sort((first, second) => Vector3.Distance(first.position(), end.position())
 			          .CompareTo(Vector3.Distance(second.position(), end.position())));
 
@@ -80,6 +79,9 @@ public static class Pathfinder {
 
 		List<AbstractNode> path = DijkstraPathfinder(new TileNode(MapData.TerrainBlocks.find(start)),
 		                                  new TileNode(MapData.TerrainBlocks.find(end)));
+		if(path == null) {
+			return null;
+		}
 		List<Vector3> retVal = new List<Vector3>();
 		foreach(TileNode node in path) {
 			retVal.Add(node.terBlock.Position);
@@ -116,6 +118,9 @@ public static class Pathfinder {
 		for(int i = 1; i < roomPath.Count-1; ++i){
 			rm = MapData.TheFarRooms.find(roomPath[i].doorCheckPosition);
 			kvp = new KeyValuePair<Vector3, Vector3>(roomPath[i].doorCheckPosition, roomPath[i+1].Position);
+			if(!rm.RoomPaths.ContainsKey(kvp)){
+				return null;
+			}
 			retVal.AddRange(rm.RoomPaths[kvp]);
 		}
 

@@ -20,7 +20,7 @@ public class HurtBox : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
+		IDamageable<int, Transform, GameObject> component = (IDamageable<int, Transform, GameObject>) other.GetComponent( typeof(IDamageable<int, Transform, GameObject>) );
 		Character enemy = other.GetComponent<Character>();
 		if( component != null && enemy != null) {
 			enemy.damage(damage);

@@ -22,11 +22,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	void Start() {
 
 		amountText = this.transform.Find("AmountText").gameObject.GetComponent("Text") as Text;
-//		amountText.text = (Money.money / Money.getPrice(itemType)).ToString();
-
 		priceText = this.transform.Find("PriceText").gameObject.GetComponent("Text") as Text;
-//		priceText.text = (Money.getPrice(itemType)).ToString();
-
 		UICamera = Camera.main.GetComponent<Camera>();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}
@@ -34,15 +30,10 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	void Update() {
 
 		amountText.text = "x" + (Money.money / price).ToString();
-//		priceText.text = "$" + (Money.getPrice(itemType)).ToString();
 		priceText.text = "$" + price;
 
-		if(selectedButtonID == this.gameObject.GetInstanceID()) {
-			Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hit; 
-			
-			if(/*Physics.Raycast(ray, out hit, Mathf.Infinity)
-			&& */UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
+		if(selectedButtonID == this.gameObject.GetInstanceID()) {		
+			if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
 				selectedButtonID = -1;
 				StartCoroutine(folderGhostDragging());
 			}

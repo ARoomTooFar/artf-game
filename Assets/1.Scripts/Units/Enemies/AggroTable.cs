@@ -8,7 +8,7 @@ public class AggroTable {
 	//     Holds the gameobject with aggro and the neighboring nodes
 	private class AggroNode {
 		public GameObject unit;
-		public Player play; // Used for testing for death (May need to derive from damageable in the future)
+		public Player play; // Used for testing for death (May need to derive from damageable in the future instead of Player)
 		public int aggro;
 		public AggroNode prev;
 		public AggroNode next;
