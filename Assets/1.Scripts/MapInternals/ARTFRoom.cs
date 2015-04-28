@@ -282,10 +282,9 @@ public partial class ARTFRoom {
 				if(path == null){
 					continue;
 				}
-				//path.Insert(0, kvp1.Key.doorCheckPosition);
-				//path.Insert(path.Count, kvp2.Key.doorCheckPosition);
+				try{
 				RoomPaths.Add(new KeyValuePair<Vector3, Vector3>(kvp1.Key.Position, kvp2.Key.Position),
-				              path);
+					              path);} catch{}
 			}
 		}
 	} 

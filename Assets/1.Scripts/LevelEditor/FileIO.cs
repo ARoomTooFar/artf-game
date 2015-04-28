@@ -81,6 +81,7 @@ public class FileIO : MonoBehaviour
             	Debug.Log("LVL DL SUCCESS: " + lvlData);
 			} catch (Exception ex){
 				Debug.Log(ex.Message);
+				Debug.Log(ex.StackTrace);
 				Debug.Log("ERROR: Map data format wrong. Loading default level.");
 				MapDataParser.ParseSaveString(Global.defaultLevel);
 			}
