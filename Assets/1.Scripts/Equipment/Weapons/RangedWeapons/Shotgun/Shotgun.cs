@@ -16,7 +16,7 @@ public class Shotgun : RangedWeapons {
 		stats.weapTypeName = "sword";
 		loadSpeed = 5f;
 		stats.atkSpeed = 2.0f;
-		stats.damage = 10;
+		stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
 		stats.maxChgTime = 2.0f;
 		
 		// Originally bull pattern S
