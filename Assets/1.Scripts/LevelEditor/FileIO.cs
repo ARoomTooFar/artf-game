@@ -55,6 +55,7 @@ public class FileIO : MonoBehaviour
 	public void getIds(string inputIds)
     {
         #if UNITY_EDITOR
+        //gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
         WWW www = serv.getLvlWww(dummyLvlId);
         #else
         string[] ids = inputIds.Split(',');

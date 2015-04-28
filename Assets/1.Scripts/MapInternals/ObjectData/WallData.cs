@@ -2,6 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class WallData : LevelEditorData {
+public class WallData : SceneryData {
 
 }
