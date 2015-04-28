@@ -105,10 +105,10 @@ public static class MapDataParser {
 				nBlk = new SceneryBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
 				MapData.SceneryBlocks.add(nBlk);
 			}
-			if(type[0] == "Prefabs/PlayerStartingLocation") {
+			if(type[0] == "LevelEditor/Other/PlayerStartingLocation") {
 				start = nBlk;
 			}
-			if(type[0] == "Prefabs/PlayerEndingLocation") {
+			if(type[0] == "LevelEditor/Other/PlayerEndingLocation") {
 				end = nBlk;
 			}
 		}

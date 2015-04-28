@@ -1,23 +1,17 @@
 fileFormatVersion: 2
-guid: 2af04d01cdd54b64e95c336d5070cf2f
-timeCreated: 1428119200
+guid: 5b507b2873004fb44ab86cf52b35f07e
+timeCreated: 1430257133
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
-    100000: Camera
-    100002: Cylinder
-    100004: Lamp
-    100006: //RootNode
-    400000: Camera
-    400002: Cylinder
-    400004: Lamp
-    400006: //RootNode
-    2300000: Cylinder
-    3300000: Cylinder
-    4300000: Cylinder
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: shiv1
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
