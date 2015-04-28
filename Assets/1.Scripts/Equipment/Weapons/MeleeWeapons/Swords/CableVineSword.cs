@@ -18,7 +18,7 @@ public class CableVineSword : Sword {
 		//stats.damage = 4;
 		base.setInitValues();
 		stats.weapType = 0;
-		stats.specialAttackType = 1;
+		stats.specialAttackType = 0;
 	}
 	
 	// Update is called once per frame

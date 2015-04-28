@@ -1,4 +1,7 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System;
 
 public class VinePull : Approach {
 
@@ -8,12 +11,18 @@ public class VinePull : Approach {
 	public GameObject tether;
 	public Vector3 MyMawPos;
 	private Player p;
+	bool onCoolDown;
+	float currTime, waitUntil;
 
 	// This will be called when the animator first transitions to this state.
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		tether = GameObject.Find ("CVFeelers");
-		feeler = tether.GetComponent<CVSensor> ();
+		feeler = unit.GetComponentInChildren<CVSensor> ();
+		tether = feeler.gameObject;
 		p = unit.target.GetComponent<Player> ();
+		stun = new Stun ();
+		p.mash_threshold = 4;
+		p.mash_value = 0;
+		onCoolDown = false;
 	}
 	
 	// This will be called once the animator has transitioned out of the state.
@@ -23,19 +32,43 @@ public class VinePull : Approach {
 
 
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+
+		if (onCoolDown) {
+			currTime += Time.deltaTime;
+			if(currTime >= waitUntil){
+				onCoolDown = false;
+				p.mash_value = 0;
+			}
+			return;
+		}
+
+		if (p.break_free) {
+			onCoolDown = true;
+			p.BDS.rmvBuffDebuff(stun, unit.gameObject);
+			p.mash_value = 0;
+			currTime = Time.time;
+			waitUntil = Time.time + 2.0f;
+			return;
+		}
+
 		unit.facing = unit.target.transform.position - unit.transform.position;
 		unit.facing.y = 0.0f;
+
 		if (!feeler.Hooked ()) {
 			tether.transform.RotateAround (unit.transform.position, Vector3.up, 50 * Time.deltaTime);
 		} else if (MyMawPos != null) {
 			unit.target.transform.position = unit.target.transform.position - pullVelocity (MyMawPos);
 			if (unit.actable && !unit.attacking){
 				unit.gear.weapon.initAttack();
+				p.damage(1);
+				p.BDS.addBuffDebuff (stun, unit.gameObject, 4.0f);
 			}
 		} else { 
 			unit.target.transform.position = unit.target.transform.position - pullVelocity (unit.transform.position);
 			if (unit.actable && !unit.attacking){
 				unit.gear.weapon.initAttack();
+				p.damage(1);
+				p.BDS.addBuffDebuff (stun, unit.gameObject, 4.0f);
 			}
 
 		}
@@ -60,5 +93,11 @@ public class VinePull : Approach {
 		velocity.y = unit.facing.y / time;
 		velocity.z = unit.facing.z / time;
 		return velocity;
+	}
+
+	private IEnumerator Wait(float duration){
+		for (float timer = 0; timer < duration; timer += Time.deltaTime){
+			yield return 0;
+		}
 	}
 }

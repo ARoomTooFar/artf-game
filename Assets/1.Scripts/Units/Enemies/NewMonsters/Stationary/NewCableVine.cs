@@ -100,8 +100,9 @@ public class NewCableVine : NewStationaryEnemy {
 	}
 
 	protected void redeploy() {
-		if (this.target != null) {
+		if (this.lastSeenPosition != null) {
 			float distance = this.distanceToPlayer(this.target);
+			if(this.isHit) { Debug.Log ("ouch"); Debug.Log (distance); Debug.Log (maxApproachRadius);}
 			this.animator.SetBool("redeployed", distance > this.maxApproachRadius && this.isHit);
 		}
 	}

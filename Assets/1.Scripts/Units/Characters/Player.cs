@@ -20,10 +20,10 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart, inGrey;
 	public GameObject currDoor;
-	private int mash_threshold;
-	private int mash_value;
+	public int mash_threshold;
+	public int mash_value;
 	private KeyCode kc;
-	private bool break_free;
+	public bool break_free;
 	public bool tapped;
 	public float last_pressed;
 
@@ -37,8 +37,8 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	protected override void Awake() {
 		base.Awake();
-		// opposition = Type.GetType("NewEnemy");
-		opposition = Type.GetType("Enemy"); //Use this if going after testable opponents
+		opposition = Type.GetType("NewEnemy");
+		//opposition = Type.GetType("Enemy"); //Use this if going after testable opponents
 	}
 	
 	// Use this for initialization
@@ -79,6 +79,9 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	// Update is called once per frame
 	protected override void Update () {
+
+		if (break_free)
+			break_free = false;
 
 		if (Input.GetKeyDown (kc) && stunned) {
 			tapped = true;
@@ -149,6 +152,23 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	public override void actionCommands() {
 		// Invokes an action/animation
+		if (stunned) {
+			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
+			tapped = true;
+
+			float now = Time.time;
+			float since = now - last_pressed;
+			last_pressed = now;
+
+			if(since > 0) {
+				float motion = 1.0f / since;
+				motion *= motion;
+				mash_value++;
+				if(mash_value > mash_threshold) break_free = true;
+			}
+		}
+		}
+
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
 				if(currDoor!=null){
@@ -284,7 +304,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	public override void damage(int dmgTaken) {
 		if (!invincible&&!stats.isDead) {
-			print("UGH!" + dmgTaken);
+//			print("UGH!" + dmgTaken);
 			stats.health -= greyTest(dmgTaken);
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
