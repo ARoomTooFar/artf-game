@@ -110,6 +110,10 @@ public partial class ARTFRoom {
 		get { return Length * Height; }
 	}
 
+	public float UsableArea{
+		get { return Area - Perimeter;}
+	}
+
 	public float Perimeter {
 		get { return 2 * (Length + Height); }
 	}
@@ -121,6 +125,14 @@ public partial class ARTFRoom {
 
 	public float Length {
 		get { return 1 + URCorner.x - LLCorner.x; }
+	}
+
+	public int Cost {
+		get { return Mathf.RoundToInt((10 * Mathf.Pow(2, (Mathf.Sqrt(UsableArea)) - 7) + 25) * 100); }
+	}
+
+	public int Points{
+		get { return Mathf.RoundToInt(Mathf.Min(Length, Height)/20*UsableArea);}
 	}
 	#endregion SquareProperties
 
