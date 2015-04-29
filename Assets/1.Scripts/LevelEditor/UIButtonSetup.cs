@@ -42,11 +42,11 @@ public class UIButtonSetup : MonoBehaviour {
 		btn.onClick.AddListener(() => {
 			if(Camera.main.orthographic){
 				Camera.main.GetComponent<CameraMovement>().changeToPerspective();
-				btn.GetComponent<Image>().sprite = Resources.Load <Sprite>("IconsUI/perspe");
+				btn.GetComponent<Image>().sprite = Resources.Load <Sprite>("LevelEditorIcons/perspe");
 			}
 			else{
 				Camera.main.GetComponent<CameraMovement>().changeToTopDown();
-				btn.GetComponent<Image>().sprite = Resources.Load <Sprite>("IconsUI/orthog");
+				btn.GetComponent<Image>().sprite = Resources.Load <Sprite>("LevelEditorIcons/orthog");
 			}
 		});
 	}

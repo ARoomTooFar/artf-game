@@ -77,14 +77,13 @@ public static class Pathfinder {
 			return null;
 		}
 
-		List<AbstractNode> path = DijkstraPathfinder(new TileNode(MapData.TerrainBlocks.find(start)),
-		                                  new TileNode(MapData.TerrainBlocks.find(end)));
+		List<AbstractNode> path = DijkstraPathfinder(new TileNode(start), new TileNode(end));
 		if(path == null) {
 			return null;
 		}
 		List<Vector3> retVal = new List<Vector3>();
 		foreach(TileNode node in path) {
-			retVal.Add(node.terBlock.Position);
+			retVal.Add(node.Position);
 		}
 		return retVal;
 	}
