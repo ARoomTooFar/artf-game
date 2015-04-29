@@ -41,7 +41,7 @@ ModelImporter:
     4300006: handle piece
     4300008: blade
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:

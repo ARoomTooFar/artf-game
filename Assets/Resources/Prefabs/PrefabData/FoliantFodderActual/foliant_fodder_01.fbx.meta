@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ca20405659c20467ba801b43d3f7690b
+guid: 0a67cc688e4116a418e1a534a68c195d
 timeCreated: 1429155561
 licenseType: Free
 ModelImporter:
@@ -11,7 +11,7 @@ ModelImporter:
     3300000: //RootNode
     4300000: foliant_fodder_01
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -32,7 +32,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importBlendShapes: 1
+    importBlendShapes: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1

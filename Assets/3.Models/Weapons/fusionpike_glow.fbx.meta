@@ -53,7 +53,7 @@ ModelImporter:
     4300006: grip thing?
     4300008: handle
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:

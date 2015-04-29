@@ -109,7 +109,7 @@ public class BullCharge : ChargeItem {
 			}
 			
 			foreach(Character ene in enemies) {
-				ene.transform.position = transform.position;
+				ene.transform.position = new Vector3(transform.position.x, ene.transform.position.y, transform.position.z);
 				ene.BDS.addBuffDebuff(debuff, this.gameObject, 0.1f);
 			}
 
