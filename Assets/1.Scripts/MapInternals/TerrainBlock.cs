@@ -299,13 +299,6 @@ public class TerrainBlock {
 	 * moves the block and associated scenery and monster
 	 */
 	public void move(Vector3 offset) {
-		if(this.Scenery != null && this.Scenery.Position.Equals(this.Position)) {
-			this.Scenery.move(offset);
-		}
-
-		if(this.Monster != null) {
-			this.Monster.move(offset);
-		}
 		if(this.Wall != null) {
 			this.Wall.move(offset);
 		}

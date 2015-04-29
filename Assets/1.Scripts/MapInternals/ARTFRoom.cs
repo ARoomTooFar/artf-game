@@ -11,11 +11,22 @@ public partial class ARTFRoom {
 	#region PrivateVariables
 	private static string defaultBlockID = "LevelEditor/Rooms/floortile";
 	private static string defaultFloor = "{0}/Floors/IndustrialFloor1";
+	private static string roomCornerId = "LevelEditor/Other/RoomCorner";
 	#endregion PrivateVariables
 
 	#region Properties
 	//A list of the TerrainBlocks contained within the room
 	public List<TerrainBlock> Blocks {
+		get;
+		private set;
+	}
+
+	public List<SceneryBlock> Scenery {
+		get;
+		private set;
+	}
+
+	public List<MonsterBlock> Monster {
 		get;
 		private set;
 	}
@@ -153,13 +164,15 @@ public partial class ARTFRoom {
 		setFloor();
 
 		this.LinkedRooms = new Dictionary<SceneryBlock, ARTFRoom>();
+		this.Scenery = new List<SceneryBlock> ();
+		this.Monster = new List<MonsterBlock> ();
 		this.Doors = new List<SceneryBlock>();
 		this.RoomPaths = new Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>>();
 		if(Global.inLevelEditor) {
-			this.URMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", URCorner, Vector3.zero);
-			this.LLMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LLCorner, Vector3.zero);
-			this.ULMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", ULCorner, Vector3.zero);
-			this.LRMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LRCorner, Vector3.zero);
+			this.URMarker = GameObjectResourcePool.getResource(roomCornerId, URCorner, Vector3.zero);
+			this.LLMarker = GameObjectResourcePool.getResource(roomCornerId, LLCorner, Vector3.zero);
+			this.ULMarker = GameObjectResourcePool.getResource(roomCornerId, ULCorner, Vector3.zero);
+			this.LRMarker = GameObjectResourcePool.getResource(roomCornerId, LRCorner, Vector3.zero);
 			setMarkerActive(Mode.isRoomMode());
 		}
 	}
@@ -314,6 +327,9 @@ public partial class ARTFRoom {
 		//move each block by offset
 		foreach(TerrainBlock blk in Blocks) {
 			blk.move(offset);
+		}
+		foreach (SceneryBlock blk in Scenery) {
+			blk.move (offset);
 		}
 		setFloor();
 		updateMarkerPositions();

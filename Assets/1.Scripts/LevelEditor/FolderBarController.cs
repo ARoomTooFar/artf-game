@@ -244,6 +244,7 @@ public class FolderBarController : MonoBehaviour {
 
 					//set icon
 					string prefabType = prefabs[prefabCounter].name.Substring(prefabs[prefabCounter].name.IndexOf ('_') + 1);
+					//Debug.Log (prefabType);
 					uih.setButtonImage(prefabType);
 
 					

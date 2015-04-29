@@ -37,7 +37,6 @@ public class MonsterManager {
 			dictionary.Add(blk.BlockInfo.BlockID, lst);
 		}
 
-
 		//add the block to the list
 		lst.Add(blk);
 	}
