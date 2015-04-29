@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 
 public class CameraMovement : MonoBehaviour {
-	static Camera cam;
+	static Camera mainCam;
 	static float orthoZoomSpeed = 2f;
 	static float maxOrthoSize = 30;
 	static float minOrthoSize = 2;
@@ -25,11 +25,13 @@ public class CameraMovement : MonoBehaviour {
 		// This should only ever be in the Level Editor, so I'm sticking a thing here to tell
 		// the resource pool thing to strip colliders from game objects.
 		Global.inLevelEditor = true;
-		
-		cam = this.gameObject.GetComponent<Camera>();
-		
-		cam.transform.position = Global.initCameraPosition;
-		cam.transform.eulerAngles = Global.initCameraRotation;
+
+		mainCam = Camera.main;
+
+		foreach(Camera cam in Camera.allCameras) {
+			cam.transform.position = Global.initCameraPosition;
+			cam.transform.eulerAngles = Global.initCameraRotation;
+		}
 		
 		changeToPerspective();
 	}
@@ -57,7 +59,7 @@ public class CameraMovement : MonoBehaviour {
 	}
 	
 	public void dragCamera() {
-		Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+		Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
 		float distance = 0;
 		groundPlane.Raycast(ray, out distance);
 		Vector3 point = ray.GetPoint(distance).Round(1);
@@ -71,72 +73,84 @@ public class CameraMovement : MonoBehaviour {
 	}
 	
 	public void moveForward() {
-		float x = Mathf.Sin(cam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
-		float z = Mathf.Cos(cam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
+		float x = Mathf.Sin(mainCam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
+		float z = Mathf.Cos(mainCam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
 		moveCamera(new Vector3(x, 0, z));
 	}
 
 	public void moveBackward() {
-		float x = -Mathf.Sin(cam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
-		float z = -Mathf.Cos(cam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
+		float x = -Mathf.Sin(mainCam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
+		float z = -Mathf.Cos(mainCam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
 		moveCamera(new Vector3(x, 0, z));
 	}
 
 	public void moveLeft() {
-		float x = -Mathf.Cos(cam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
-		float z = Mathf.Sin(cam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
+		float x = -Mathf.Cos(mainCam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
+		float z = Mathf.Sin(mainCam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
 		moveCamera(new Vector3(x, 0, z));
 	}
 
 	public void moveRight() {
-		float x = Mathf.Cos(cam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
-		float z = -Mathf.Sin(cam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
+		float x = Mathf.Cos(mainCam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
+		float z = -Mathf.Sin(mainCam.transform.root.eulerAngles.y * Mathf.Deg2Rad);
 		moveCamera(new Vector3(x, 0, z));
 	}
 
 	public void zoomCamIn() {
-		if(cam.orthographic) {
-			cam.orthographicSize = Mathf.Min(maxOrthoSize, cam.orthographicSize + orthoZoomSpeed);
+		if(mainCam.orthographic) {
+			mainCam.orthographicSize = Mathf.Min(maxOrthoSize, mainCam.orthographicSize + orthoZoomSpeed);
+			foreach(Camera cam in Camera.allCameras) {
+				cam.orthographicSize = mainCam.orthographicSize;
+			}
 		} else {
-			if(cam.transform.position.y > maxY){
+			if(mainCam.transform.position.y > maxY){
 				return;
 			}
-			moveCamera(-cam.transform.forward, cam.transform.position.y / 10f);
+			moveCamera(-mainCam.transform.forward, mainCam.transform.position.y / 10f);
 		}
 	}
 
 	public void zoomCamOut() {
-		if(cam.orthographic) {
-			cam.orthographicSize = Mathf.Max(minOrthoSize, cam.orthographicSize - orthoZoomSpeed);
+		if(mainCam.orthographic) {
+			mainCam.orthographicSize = Mathf.Max(minOrthoSize, mainCam.orthographicSize - orthoZoomSpeed);
+			foreach(Camera cam in Camera.allCameras) {
+				cam.orthographicSize = mainCam.orthographicSize;
+			}
 		} else {
-			if(cam.transform.position.y < minY){
+			if(mainCam.transform.position.y < minY){
 				return;
 			}
-			moveCamera(cam.transform.forward, cam.transform.position.y / 10f);
+			moveCamera(mainCam.transform.forward, mainCam.transform.position.y / 10f);
 		}
 	}
 	
 	void moveCamera(Vector3 pos, float speed = 1) {
-		Vector3 vec = cam.transform.position;
+		Vector3 vec = mainCam.transform.position;
 		vec.x = vec.x + (pos.x * speed);
 		vec.y = vec.y + (pos.y * speed);
 		vec.z = vec.z + (pos.z * speed);
-		cam.transform.position = vec;
+		mainCam.transform.position = vec;
 	}
 	
 	public void changeToTopDown() {
-		cam.transform.eulerAngles = new Vector3(90, 0, 0);
-		cam.orthographic = true;
+		foreach(Camera cam in Camera.allCameras) {
+			cam.transform.eulerAngles = new Vector3(90, 0, 0);
+			cam.orthographic = true;
+		}
 	}
 
 	public void changeToPerspective() {
-		cam.orthographic = false;
-		cam.transform.eulerAngles = Global.initCameraRotation;
+		foreach(Camera cam in Camera.allCameras) {
+			cam.orthographic = false;
+			cam.transform.eulerAngles = Global.initCameraRotation;
+		}
 	}
 
 	public void changetoOrthographic() {
-		cam.orthographic = true;
-		cam.transform.eulerAngles = Global.initCameraRotation;
+		foreach(Camera cam in Camera.allCameras) {
+			cam.orthographic = true;
+			cam.transform.eulerAngles = Global.initCameraRotation;
+		}
 	}
 }
 

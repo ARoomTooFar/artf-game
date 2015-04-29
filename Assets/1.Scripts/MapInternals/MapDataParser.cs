@@ -100,12 +100,15 @@ public static class MapDataParser {
 			Vector3 pos = new Vector3(float.Parse(blkParams[0]),
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
-			SceneryBlock nBlk = new SceneryBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
-			MapData.SceneryBlocks.add(nBlk);
-			if(type[0] == "Prefabs/PlayerStartingLocation") {
+			SceneryBlock nBlk = null;
+			if(MapData.SceneryBlocks.isAddValid(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]))){
+				nBlk = new SceneryBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
+				MapData.SceneryBlocks.add(nBlk);
+			}
+			if(type[0] == "LevelEditor/Other/PlayerStartingLocation") {
 				start = nBlk;
 			}
-			if(type[0] == "Prefabs/PlayerEndingLocation") {
+			if(type[0] == "LevelEditor/Other/PlayerEndingLocation") {
 				end = nBlk;
 			}
 		}
@@ -129,7 +132,6 @@ public static class MapDataParser {
 	}
 
 	private static void parseTerminalRooms(string SaveString) {
-		Debug.Log(SaveString);
 		string[] rms = SaveString.Split(' ');
 		string[] rmParams = rms[0].Split(',');
 		Vector3 pos1 = new Vector3(float.Parse(rmParams[0]),

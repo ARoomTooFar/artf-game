@@ -267,7 +267,7 @@ public class ARTFRoomManager {
 	}
 
 	public bool isSquareValid(Square sq){
-		if(sq.Area < 25) {
+		if(sq.Area-sq.Perimeter < 25) {
 			return false;
 		}
 		if(sq.Length < 3+2) {

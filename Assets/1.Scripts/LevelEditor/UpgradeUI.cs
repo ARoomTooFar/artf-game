@@ -81,6 +81,12 @@ public class UpgradeUI : MonoBehaviour
 	//Update causes itemObjectUI flickering. LateUpdate prevents it
 	void LateUpdate(){
 		faceUIToCamera();
+
+		if(FollowCamera.orthographic == true){
+			lowerHalf.SetActive(false);
+			tierStats.SetActive(false);
+			currentActiveObjectUI = null;
+		}
 	}
 
 	//turn tiers gray that aren't applied. turn tiers green that are applied
@@ -193,6 +199,9 @@ public class UpgradeUI : MonoBehaviour
 	
 	//makes sure only one ObjectUI is active in the level editor
 	public bool toggleUpgradeUI(){
+
+
+
 		if(currentActiveObjectUI == null){
 			lowerHalf.SetActive(true);
 			tierStats.SetActive(true);

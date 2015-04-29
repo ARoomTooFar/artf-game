@@ -55,6 +55,7 @@ public class FileIO : MonoBehaviour
 	public void getIds(string inputIds)
     {
         #if UNITY_EDITOR
+        //gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
         WWW www = serv.getLvlWww(dummyLvlId);
         #else
         string[] ids = inputIds.Split(',');
@@ -81,6 +82,7 @@ public class FileIO : MonoBehaviour
             	Debug.Log("LVL DL SUCCESS: " + lvlData);
 			} catch (Exception ex){
 				Debug.Log(ex.Message);
+				Debug.Log(ex.StackTrace);
 				Debug.Log("ERROR: Map data format wrong. Loading default level.");
 				MapDataParser.ParseSaveString(Global.defaultLevel);
 			}
