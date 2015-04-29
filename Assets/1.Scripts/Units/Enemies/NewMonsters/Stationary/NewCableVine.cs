@@ -116,9 +116,5 @@ public class NewCableVine : NewStationaryEnemy {
 		return velocity;
 	}
 	
-	public override void damage(int dmgTaken, Character striker) {
-		base.damage (dmgTaken, striker);
-		target = striker.gameObject;
-	}
-	
+
 }

@@ -15,12 +15,12 @@ public class AssaultRifle : RangedWeapons {
 		stats.weapTypeName = "sword";
 		
 		stats.atkSpeed = 2.0f;
-		stats.damage = 1;
+		stats.damage = 5 + user.GetComponent<Character>().stats.coordination;
 		stats.maxChgTime = 2.0f;
 		
 		// Bull Pattern M originally
 		//machine gun
-		variance = 32f;
+		variance = 15f;
 		kick = 5f;
 
 		spray = user.transform.rotation;
@@ -39,7 +39,7 @@ public class AssaultRifle : RangedWeapons {
 	protected override IEnumerator Shoot(int count) {
 		if(!reload || !needReload){
 			if(count == 0){
-				count = 1;
+				count = 2;
 			}
 
 			spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination)+user.transform.eulerAngles.y,(variance-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));

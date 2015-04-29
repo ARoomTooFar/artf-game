@@ -18,7 +18,7 @@ public class Sword : MeleeWeapons {
 		stats.weapType = 0;
 		stats.weapTypeName = "sword";
 		stats.atkSpeed = 1.0f;
-		stats.damage = 4 + user.GetComponent<Character>().stats.strength;
+		stats.damage = 2 + user.GetComponent<Character>().stats.strength;
 
 		stats.maxChgTime = 2.0f;
 

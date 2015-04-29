@@ -22,11 +22,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	void Start() {
 
 		amountText = this.transform.Find("AmountText").gameObject.GetComponent("Text") as Text;
-//		amountText.text = (Money.money / Money.getPrice(itemType)).ToString();
-
 		priceText = this.transform.Find("PriceText").gameObject.GetComponent("Text") as Text;
-//		priceText.text = (Money.getPrice(itemType)).ToString();
-
 		UICamera = Camera.main.GetComponent<Camera>();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}
@@ -34,15 +30,10 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	void Update() {
 
 		amountText.text = "x" + (Money.money / price).ToString();
-//		priceText.text = "$" + (Money.getPrice(itemType)).ToString();
 		priceText.text = "$" + price;
 
-		if(selectedButtonID == this.gameObject.GetInstanceID()) {
-			Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hit; 
-			
-			if(/*Physics.Raycast(ray, out hit, Mathf.Infinity)
-			&& */UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
+		if(selectedButtonID == this.gameObject.GetInstanceID()) {		
+			if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
 				selectedButtonID = -1;
 				StartCoroutine(folderGhostDragging());
 			}
@@ -106,16 +97,17 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 				//update the item object things
 				//shader has to be set in this loop, or transparency won't work
 				//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
-				foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
-					foreach(Material mat in rend.materials) {
-						trans = mat.color;
-						trans.a = .5f;
-						mat.color = trans;
+				if(itemObjectCopy.GetComponentsInChildren<Renderer>() != null){
+					foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
+						foreach(Material mat in rend.materials) {
+							if(mat.HasProperty("_Color")){
+								trans = mat.color;
+								trans.a = .5f;
+								mat.color = trans;
+							}
+						}
 					}
 				}
-
-				//copy = itemObjectCopy.GetComponent ("ItemObject") as ItemObject;
-				
 				//so this code only happens once
 				copyCreated = true;
 			}
@@ -179,7 +171,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		//if move was cancelled, we don't perform an update on the item object's position
 		if(cancellingMove == true) {
 			Destroy(buttonBG);
-//			destroyButtonBG();
 			selectedButtonID = -1;
 		} else {
 
@@ -205,7 +196,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 			itemObjectCopy = null;
 
 			Destroy(buttonBG);
-//			destroyButtonBG();
 			selectedButtonID = -1;
 		
 		}
@@ -219,56 +209,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 
 	public void setButtonImage(string icon) {
 		Image im = this.GetComponent("Image") as Image;
-		Sprite sp = Resources.Load <Sprite>("IconsUI/" + icon);
+		Sprite sp = Resources.Load <Sprite>("LevelEditorIcons/" + icon);
 		im.sprite = sp;
 	}
-
-
-
-	//below: bunch of stuff from when buttons were dragged from folders
-
-//	public void OnBeginDrag (PointerEventData data)
-//	{
-//
-//		tilemapcont.suppressDragSelecting = true;
-//
-//		Image p = draggedImageAnchor.GetComponent ("Image") as Image;
-//		p.sprite = thisImage.sprite;
-//		p.material = null;
-//
-//		StartCoroutine (dragIt ());
-//
-//
-//	}
-//
-//	//for placing items by way of dragging the buttons from the folder and
-//	//placing them on the map
-//	public void OnEndDrag (PointerEventData data)
-//	{
-//		tilemapcont.suppressDragSelecting = false;
-//
-//		Image p = draggedImageAnchor.GetComponent ("Image") as Image;
-//		p.sprite = thisImage.sprite;
-//		p.material = matToMakeInvisible;
-//
-//
-//		string prefabLocation = "Prefabs/" + connectedPrefab;
-//		tilemapcont.setSelectedItem (prefabLocation);
-//
-//		//make sure image anchor is way off screen, so it doesn't interfere
-//		//with dragging of objects
-//		RectTransform anchorRect = draggedImageAnchor.GetComponent ("RectTransform") as RectTransform;
-//		anchorRect.anchoredPosition = new Vector2 (-22f, -100f);
-//	}
-
-//	IEnumerator dragIt ()
-//	{ 
-//		while (Input.GetMouseButton(0)) {
-//			draggedImageAnchor.transform.position = Input.mousePosition;
-//
-//			yield return null; 
-//		}
-//
-//		
-//	}
 }

@@ -10,7 +10,7 @@ public class Bullet : Projectile {
 
 	public override void setInitValues(Character player, Type opposition, float partSpeed,bool effect,BuffsDebuffs hinder) {
 		base.setInitValues(player, opposition, partSpeed, effect, hinder);
-
+		this.speed = 1f;
 		// Set stats here is each bullet will have its own properties
 	}
 

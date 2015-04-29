@@ -31,13 +31,13 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackable, IDamageable<int, Character>, IStunable, IForcible<Vector3, float> {
+public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallable, IDamageable<int, Transform, GameObject>, IStunable, IForcible<Vector3, float> {
 
 	public bool testControl;
 
-	public float gravity = 50.0f;
+	protected float gravity = 50.0f;
 	public bool isDead = false;
-	public bool isGrounded = false;
+	protected bool isGrounded = false;
 	public bool actable = true; // Boolean to show if a unit can act or is stuck in an animation
 	public bool isHit = false;
 	
@@ -45,7 +45,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	
 	public float minGroundDistance; // How far this unit should be from the ground when standing up
 
-	public bool freeAnim, attacking, stunned, knockedback;
+	public bool freeAnim, attacking, stunned, knockedback, animationLock;
 	public AudioClip hurt, victory, failure;
 
 	public bool testing, invis; // Whether it takes gear in automatically or lets the gear loader to it
@@ -67,6 +67,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	// Swap these over to weapons in the future
 	public string weapTypeName;
 	public int idleHash, runHash, atkHashStart, atkHashCharge, atkHashSwing, atkHashChgSwing, atkHashEnd, animSteHash;
+	protected bool usingAnimHash;
 
 	// protected delegate void BuffDelegate(float strength);
 
@@ -306,6 +307,14 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	// Falling Interface Implementation //
 	//----------------------------------//
 
+	public virtual void colliderStart() {
+		gear.weapon.collideOn ();
+	}
+	
+	public virtual void colliderEnd() {
+		gear.weapon.collideOff ();
+	}
+
 	public virtual void falling() {
 		// fake gravity
 		// Animation make it so rigidbody gravity works oddly due to some gravity weight
@@ -328,15 +337,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 
 	}
 
-
-	public virtual void colliderStart() {
-		gear.weapon.collideOn ();
-	}
-
-	public virtual void colliderEnd() {
-		gear.weapon.collideOff ();
-	}
-
 	public virtual void specialAttack() {
 		gear.weapon.specialAttack ();
 	}
@@ -349,9 +349,13 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 	// Damage Interface Implementation //
 	//---------------------------------//
 	
-	public virtual void damage(int dmgTaken, Character striker) {
+	public virtual void damage(int dmgTaken, Transform atkPosition, GameObject source) {
+		this.damage (dmgTaken, atkPosition); // Untill character needs to do something with source, just call previous function
+	}
+	
+	public virtual void damage(int dmgTaken, Transform atkPosition) {
 		if (!invincible) {
-			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(striker.transform.position, facing, transform.position)), 1, 100000);
+			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(atkPosition.position, facing, transform.position)), 1, 100000);
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position, Quaternion.identity)).GetComponent<splatCore>();
 				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
@@ -361,9 +365,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			isHit = true;
 			//print ("Fuck: " + dmgTaken + " Damage taken");
 
-			if (stats.health <= 0) {
-				die();
-			}
+			if (stats.health <= 0) this.die();
 		}
 	}
 	
@@ -377,9 +379,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IFallable, IAttackabl
 			stats.health -= dmgTaken;
 			isHit = true;
 
-			if (stats.health <= 0) {
-				die();
-			}
+			if (stats.health <= 0) die();
 		}
 	}
 

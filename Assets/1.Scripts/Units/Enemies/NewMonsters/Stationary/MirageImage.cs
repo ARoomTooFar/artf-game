@@ -27,7 +27,11 @@ public class MirageImage : NewMirage {
 		this.transform.localRotation = Quaternion.LookRotation(facing);
 	}
 
-	public override void damage(int dmgTaken, Character striker) {
+	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
+		this.damage(dmgTaken);
+	}
+
+	public override void damage(int dmgTaken, Transform atkPosition) {
 		this.damage(dmgTaken);
 	}
 	

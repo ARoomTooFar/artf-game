@@ -80,6 +80,10 @@ public class SceneryManager {
 	public bool add(SceneryBlock blk) {
 		if(blk.BlockInfo.isDoor){
 			ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
+			if(rm == null){
+				blk.remove();
+				return false;
+			}
 			if(!rm.isEdge(blk.Position)){
 				blk.remove();
 				return false;
@@ -114,6 +118,11 @@ public class SceneryManager {
 		}
 		//add the block to the list
 		lst.Add(blk);
+		if(blk.BlockInfo.isDoor) {
+			if(isAddValid(blk.BlockID, blk.doorCheckPosition, blk.Orientation.Opposite())) {
+				add(new SceneryBlock(blk.BlockID, blk.doorCheckPosition, blk.Orientation.Opposite()));
+			}
+		}
 
 		return true;
 	}
@@ -133,6 +142,12 @@ public class SceneryManager {
 	
 	public void remove(SceneryBlock blk) {
 		if(blk == null) {
+			return;
+		}
+		if(blk.BlockID == "Prefabs/PlayerStartingLocation") {
+			return;
+		}
+		if(blk.BlockID == "Prefabs/PlayerEndingLocation") {
 			return;
 		}
 		unlinkTerrain(blk);

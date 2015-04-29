@@ -133,10 +133,7 @@ public class CableVine : StationaryEnemy {
 		return velocity;
 	}
 
-	public override void damage(int dmgTaken, Character striker) {
-		base.damage (dmgTaken, striker);
-		target = striker.gameObject;
-	}
+
 
 	protected bool hasMaw() {
 		return true;

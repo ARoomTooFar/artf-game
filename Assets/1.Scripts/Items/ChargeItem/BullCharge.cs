@@ -69,12 +69,12 @@ public class BullCharge : ChargeItem {
 		// user.animator.SetTrigger("Charge Forward");
 		
 		GetComponent<Collider>().enabled = true;
-		user.stunned = true;
+		user.animationLock = true;
 		StartCoroutine(chargeFunc((chgDist + curChgTime) * 0.1f));
 	}
 
 	protected override void animDone() {
-		user.stunned = false;
+		user.animationLock = false;
 		GetComponent<Collider>().enabled = false;
 		hitWall = false;
 		enemies.Clear();
@@ -90,6 +90,7 @@ public class BullCharge : ChargeItem {
 			// ((IStunable)ene.GetComponent(typeof(IStunable))).stun();
 
 			ene.BDS.addBuffDebuff(debuff, this.gameObject, tempStun);
+			ene.rb.velocity = Vector3.zero;
 		}
 		yield return StartCoroutine(chgLagTime());
 
@@ -108,7 +109,7 @@ public class BullCharge : ChargeItem {
 			}
 			
 			foreach(Character ene in enemies) {
-				ene.transform.position = transform.position;
+				ene.transform.position = new Vector3(transform.position.x, ene.transform.position.y, transform.position.z);
 				ene.BDS.addBuffDebuff(debuff, this.gameObject, 0.1f);
 			}
 

@@ -11,6 +11,7 @@ public partial class ARTFRoom {
 	#region PrivateVariables
 	private static string defaultBlockID = "LevelEditor/Rooms/floortile";
 	private static string defaultFloor = "{0}/Floors/IndustrialFloor1";
+	private static string roomCornerId = "LevelEditor/Other/RoomCorner";
 	#endregion PrivateVariables
 
 	#region Properties
@@ -110,6 +111,10 @@ public partial class ARTFRoom {
 		get { return Length * Height; }
 	}
 
+	public float UsableArea{
+		get { return Area - Perimeter;}
+	}
+
 	public float Perimeter {
 		get { return 2 * (Length + Height); }
 	}
@@ -121,6 +126,14 @@ public partial class ARTFRoom {
 
 	public float Length {
 		get { return 1 + URCorner.x - LLCorner.x; }
+	}
+
+	public int Cost {
+		get { return Mathf.RoundToInt((10 * Mathf.Pow(2, (Mathf.Sqrt(UsableArea)) - 7) + 25) * 100); }
+	}
+
+	public int Points{
+		get { return Mathf.RoundToInt(Mathf.Min(Length, Height)/20*UsableArea);}
 	}
 	#endregion SquareProperties
 
@@ -144,10 +157,10 @@ public partial class ARTFRoom {
 		this.Doors = new List<SceneryBlock>();
 		this.RoomPaths = new Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>>();
 		if(Global.inLevelEditor) {
-			this.URMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", URCorner, Vector3.zero);
-			this.LLMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LLCorner, Vector3.zero);
-			this.ULMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", ULCorner, Vector3.zero);
-			this.LRMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LRCorner, Vector3.zero);
+			this.URMarker = GameObjectResourcePool.getResource(roomCornerId, URCorner, Vector3.zero);
+			this.LLMarker = GameObjectResourcePool.getResource(roomCornerId, LLCorner, Vector3.zero);
+			this.ULMarker = GameObjectResourcePool.getResource(roomCornerId, ULCorner, Vector3.zero);
+			this.LRMarker = GameObjectResourcePool.getResource(roomCornerId, LRCorner, Vector3.zero);
 			setMarkerActive(Mode.isRoomMode());
 		}
 	}
@@ -270,10 +283,9 @@ public partial class ARTFRoom {
 				if(path == null){
 					continue;
 				}
-				//path.Insert(0, kvp1.Key.doorCheckPosition);
-				//path.Insert(path.Count, kvp2.Key.doorCheckPosition);
+				try{
 				RoomPaths.Add(new KeyValuePair<Vector3, Vector3>(kvp1.Key.Position, kvp2.Key.Position),
-				              path);
+					              path);} catch{}
 			}
 		}
 	} 

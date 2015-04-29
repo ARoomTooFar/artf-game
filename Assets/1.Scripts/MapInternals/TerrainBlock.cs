@@ -250,6 +250,9 @@ public class TerrainBlock {
 	}
 
 	public void removeWall(){
+		if(this.Wall == null) {
+			return;
+		}
 		this.Wall.remove();
 		this.Wall = null;
 	}

@@ -52,12 +52,12 @@ public class NewBushman : NewMobileEnemy {
 
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 60;
+		stats.maxHealth = 100;
 		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 10;
+		stats.armor = 5;
+		stats.strength = 6;
 		stats.coordination=0;
-		stats.speed=6;
+		stats.speed=4;
 		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
@@ -65,7 +65,7 @@ public class NewBushman : NewMobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 4;
+		tier = 1;
 		base.SetTierData (tier);
 
 

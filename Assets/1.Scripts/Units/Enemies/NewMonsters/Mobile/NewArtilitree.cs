@@ -31,9 +31,9 @@ public class NewArtilitree: NewRangedEnemy {
 		base.setInitValues();
 		stats.maxHealth = 200;
 		stats.health = stats.maxHealth;
-		stats.armor = 0;
+		stats.armor = 6;
 		stats.strength = 10;
-		stats.coordination=0;
+		stats.coordination=10;
 		stats.speed=2;
 		stats.luck=0;
 
@@ -42,7 +42,7 @@ public class NewArtilitree: NewRangedEnemy {
 	}
 	
 	public override void SetTierData(int tier) {
-		tier = 5;
+		tier = 0;
 		base.SetTierData(tier);
 		
 		if (tier < 1) stats.speed = 2;

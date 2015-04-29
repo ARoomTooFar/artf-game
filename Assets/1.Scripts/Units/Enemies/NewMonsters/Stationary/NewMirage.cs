@@ -52,9 +52,9 @@ public class NewMirage : NewStationaryEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 20;
+		stats.maxHealth = 40;
 		stats.health = stats.maxHealth;
-		stats.armor = 0;
+		stats.armor = 1;
 		stats.strength = 20;
 		stats.coordination=0;
 		stats.speed=4;
