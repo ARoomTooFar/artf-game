@@ -13,6 +13,7 @@ public class QuickItem : Item {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
+		itemType = 'Q';
 		cooldown = 10.0f;
 	}
 	

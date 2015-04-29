@@ -47,10 +47,10 @@ public class EnergyProjectile : MonoBehaviour {
 			Destroy(this.gameObject);
 		}
 		
-		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
+		IDamageable<int, Transform, GameObject> component = (IDamageable<int, Transform, GameObject>) other.GetComponent( typeof(IDamageable<int, Transform, GameObject>) );
 		Character enemy = (Character) other.GetComponent(opposition);
 		if( component != null && enemy != null) {
-			enemy.damage(damage, user);
+			enemy.damage(damage, user.transform, user.gameObject);
 		}
 	}
 }

@@ -22,7 +22,7 @@ public class ToggleItem : Item {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		
+		itemType = 'T';
 		cooldown = 10.0f;
 		maxDuration = 10;
 		isActive = false;

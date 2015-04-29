@@ -11,22 +11,21 @@ public class Pummel : Approach {
 		this.unit.rb.velocity = Vector3.zero;
 		this.unit.getFacingTowardsTarget();
 		this.unit.transform.localRotation = Quaternion.LookRotation(unit.facing);
-		animator.SetBool ("Charging", true);
-		this.unit.gear.weapon.initAttack();
 	}
 	
 	// This will be called once the animator has transitioned out of the state.
 	public override void OnStateExit (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		this.unit.gear.weapon.initAttack();
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		if (this.trunk.stats.curChgDuration > 0.8f) animator.SetBool ("Charging", false);
-		else if (!animator.GetBool ("InAttackRange")) {
+		if (!animator.GetBool ("InAttackRange")) {
 			this.unit.getFacingTowardsTarget();
 			this.unit.rb.velocity = (this.unit.facing.normalized * this.unit.stats.speed * this.unit.stats.spdManip.speedPercent);
 			this.unit.transform.localRotation = Quaternion.LookRotation(this.unit.facing);
 		} else {
 			this.unit.rb.velocity = Vector3.zero;
+			animator.SetBool ("Pummeling", true);
 		}
 	}
 }

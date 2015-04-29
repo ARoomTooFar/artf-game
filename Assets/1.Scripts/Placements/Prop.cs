@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Prop : MonoBehaviour, IDamageable<int, Traps> {
+public class Prop : MonoBehaviour, IDamageable<int, Traps, GameObject> {
 
 	public GameObject expDeath;
 	public int health;
@@ -21,18 +21,22 @@ public class Prop : MonoBehaviour, IDamageable<int, Traps> {
 	
 	}
 
+	//------------------//
+	// Damage Functions //
+	//------------------//
+
+	public virtual void damage(int dmgTaken, Traps atkPosition, GameObject source) {
+		this.damage (dmgTaken);
+	}
+
 	// Using traps since logic for weapons to damage thtings are already in place
-	public virtual void damage(int dmgTaken, Traps striker) {
+	public virtual void damage(int dmgTaken, Traps atkPosition) {
 		this.damage (dmgTaken);
 	}
 	
 	public virtual void damage(int dmgTaken) {
 		this.health -= dmgTaken;
 		if (this.health <= 0) this.die ();
-	}
-
-	protected virtual void notJustSpawned() {
-		this.justSpawned = false;
 	}
 
 	public virtual void die() {
@@ -42,6 +46,14 @@ public class Prop : MonoBehaviour, IDamageable<int, Traps> {
 		Destroy(this.gameObject);
 		Instantiate(expDeath, transform.position, transform.rotation);
 	}
+	
+	//--------------------//
+
+	protected virtual void notJustSpawned() {
+		this.justSpawned = false;
+	}
+
+
 
 	void OnCollisionEnter(Collision collision) {
 		if (collision.gameObject.tag == "Wall") {

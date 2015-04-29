@@ -28,8 +28,8 @@ public class MainMenuCtrl : MonoBehaviour {
 
 	// login form
     private GameObject[,] loginForm;
-    private int loginFormWidth = 1;
-    private int loginFormHeight = 1;
+    private int loginFormWidth = 2;
+    private int loginFormHeight = 3;
 	private Animator loginFormAnim;
 
 	void Start () {
@@ -54,16 +54,19 @@ public class MainMenuCtrl : MonoBehaviour {
         });
 
 		// setup login
-		loginForm = new GameObject[startMenuHeight, startMenuWidth];
-		loginForm[0, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnPrefab");
+		loginForm = new GameObject[loginFormHeight, loginFormWidth];
+		loginForm[0, 0] = loginForm[0, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName");
+        loginForm[1, 0] = loginForm[1, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldPasscode");
+        loginForm[2, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnLogin");
+        loginForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnBack");
 		loginFormAnim = GameObject.Find ("/Canvas/" + menuContainerName + "/LoginForm").GetComponent<Animator>();
 		
 		// test button press handler
-        loginForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+        /*loginForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
 			Debug.Log ("Test button pressed!");
 			MenuSwitch (Menu.StartMenu);
-        });
+        });*/
 
 		// switch to start menu
 		MenuSwitch (Menu.StartMenu);

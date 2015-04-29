@@ -212,8 +212,14 @@ public class Enemy : Character {
 	// Character Inherited Functions //
 	//-------------------------------//
 
-	public override void damage(int dmgTaken, Character striker) {
-		base.damage(dmgTaken, striker);
+	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
+		if (this.invincible) return;
+		this.damage(dmgTaken, atkPosition);
+		aggroT.AddAggro(source, dmgTaken);
+	}
+
+	public override void damage(int dmgTaken, Transform atkPosition) {
+		base.damage(dmgTaken, atkPosition);
 		if(hpBar != null){
 			Debug.Log((float)stats.health/stats.maxHealth);
 			hpBar.health = (float)stats.health/stats.maxHealth;
@@ -222,8 +228,6 @@ public class Enemy : Character {
 			aggro = true;
 			dmgTimer = 0f;
 		}		
-
-		aggroT.AddAggro(striker.gameObject, dmgTaken);
 	}
 	
 	public override void damage(int dmgTaken) {
