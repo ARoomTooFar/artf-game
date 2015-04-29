@@ -215,6 +215,7 @@ public class Enemy : Character {
 		if (this.invincible) return;
 		this.damage(dmgTaken, atkPosition);
 		aggroT.AddAggro(source, dmgTaken);
+		isHit = true;
 	}
 
 	public override void damage(int dmgTaken, Transform atkPosition) {
@@ -226,7 +227,9 @@ public class Enemy : Character {
 		if (aggro == false) {
 			aggro = true;
 			dmgTimer = 0f;
-		}		
+		}
+
+		isHit = true;
 
 	}
 	
@@ -242,6 +245,8 @@ public class Enemy : Character {
 			Debug.Log((float)stats.health/stats.maxHealth);
 			hpBar.health =(float) stats.health/stats.maxHealth;
 		}
+
+		isHit = true;
 	}
 
 	public override void die() {

@@ -163,8 +163,9 @@ public class NewEnemy : NewCharacter {
 
 	protected float distanceToPlayer(GameObject p) {
 		if (p == null) return 0.0f;
-		Vector3 distance = p.transform.position - this.transform.position;
-		return distance.sqrMagnitude;
+		float distance = Vector3.Distance(this.transform.position, p.transform.position);
+		//Debug.Log (distance);
+		return distance;
 	}
 	
 	public virtual bool canSeePlayer(GameObject p) {
@@ -226,14 +227,17 @@ public class NewEnemy : NewCharacter {
 		if (this.invincible) return;
 		this.damage(dmgTaken, atkPosition);
 		aggroT.AddAggro(source, dmgTaken);
+		isHit = true;
 	}
 	
 	public override void damage(int dmgTaken, Transform atkPosition) {
 		base.damage(dmgTaken, atkPosition);
+		isHit = true;
 	}
 	
 	public override void damage(int dmgTaken) {
 		base.damage(dmgTaken);
+		isHit = true;
 	}
 	
 	public override void die() {

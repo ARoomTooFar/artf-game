@@ -22,12 +22,9 @@ public class NewCableVine : NewStationaryEnemy {
 	protected override void Start() {
 		base.Start ();
 		//stunDebuff = new Stun ();
+		this.blink = this.inventory.items[inventory.selected].GetComponent<Blink>();
 		constrict = new GenericDoT (1);
 		maxApproachRadius = GetComponentInChildren<SphereCollider> ().radius;
-		foreach(CVineDeploy behaviour in this.animator.GetBehaviours<CVineDeploy>()) {
-			behaviour.blink = this.blink;
-		}
-
 		foreach(CVineDeploy behaviour in this.animator.GetBehaviours<CVineDeploy>()) {
 			behaviour.blink = this.blink;
 		}
@@ -44,6 +41,8 @@ public class NewCableVine : NewStationaryEnemy {
 	protected override void Update () {
 		base.Update ();
 		redeploy ();
+		if (isHit && target != null)
+			isHit = false;
 	}
 
 	/*
@@ -68,42 +67,14 @@ public class NewCableVine : NewStationaryEnemy {
 		}
 		
 	}*/
-
-	protected virtual void isApproaching() {
-		// If we don't have a target currently and aren't alerted, automatically assign anyone in range that we can see as our target
-		if (this.target == null) {
-			if (aRange.unitsInRange.Count > 0) {
-				foreach(Character tars in aRange.unitsInRange) {
-					if (this.canSeePlayer(tars.gameObject)) {
-						animator.SetBool("Alerted", true);
-						target = tars.gameObject;
-						break;
-					}
-				}
-				
-				if (target == null) {
-					animator.SetBool("InAttackRange", false);
-					return;
-				}
-			} else {
-				animator.SetBool("InAttackRange", false);
-				return ;
-			}
-		}
-		
-		float distance = this.distanceToPlayer(this.target);
-		
-		if (distance >= this.maxApproachRadius && this.canSeePlayer (this.target)) {
-			// agent.alerted = true;
-			animator.SetBool("InAttackRange", true);
-		}
-	}
+	
 
 	protected void redeploy() {
-		if (this.lastSeenPosition != null) {
-			float distance = this.distanceToPlayer(this.target);
-			if(this.isHit) { Debug.Log ("ouch"); Debug.Log (distance); Debug.Log (maxApproachRadius);}
-			this.animator.SetBool("redeployed", distance > this.maxApproachRadius && this.isHit);
+		if (isHit)
+			Debug.Log ("rara");
+		if ((this.target == null && this.isHit) || (this.target != null && (this.distanceToPlayer(this.target) >= maxApproachRadius) && this.isHit)) {
+			this.animator.SetTrigger("redeployed");
+
 		}
 	}
 	
@@ -115,6 +86,19 @@ public class NewCableVine : NewStationaryEnemy {
 		velocity.z = this.facing.z / time;
 		return velocity;
 	}
+
+
+	// OVERRIDE
+
+	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
+		base.damage (dmgTaken, atkPosition, source);
+		if (target == null)
+			this.lastSeenPosition = atkPosition.position;
+	}
 	
+	public override void damage(int dmgTaken, Transform atkPosition) {
+		base.damage(dmgTaken, atkPosition);
+		if (target == null && this.lastSeenPosition == null) this.lastSeenPosition = atkPosition.position;
+	}
 
 }

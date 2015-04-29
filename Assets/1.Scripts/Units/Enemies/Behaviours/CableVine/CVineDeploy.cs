@@ -18,7 +18,7 @@ public class CVineDeploy : EnemyBehaviour {
 	
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		unit.facing = unit.target.transform.position - unit.transform.position;
+		unit.facing = unit.lastSeenPosition.Value - unit.transform.position;
 		unit.facing.y = 0.0f;
 		float wait = 1.5f;
 		
