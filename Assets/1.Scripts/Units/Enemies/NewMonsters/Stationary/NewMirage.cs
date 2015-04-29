@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class NewMirage : NewStationaryEnemy {
 
+	public MirageWeapon leftClaw, rightClaw;
+
 	protected List<MirageImage> images;
 	protected MarkOfDeath mark;
 	public Player deathTarget;
@@ -74,6 +76,10 @@ public class NewMirage : NewStationaryEnemy {
 	//---------//
 	// Actions //
 	//---------//
+	
+	public override void initAttack() {
+		this.animator.SetTrigger("Attack");
+	}
 
 	protected override void TargetFunction() {
 		if (this.deathTarget != null) {
