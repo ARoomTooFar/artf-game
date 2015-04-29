@@ -9,7 +9,7 @@ public class VinePull : Approach {
 	public MeleeWeapons weap;
 	public CVSensor feeler;
 	public GameObject tether;
-	public Vector3 MyMawPos;
+	public GameObject MyMawPos;
 	private Player p;
 	bool onCoolDown;
 	float currTime, waitUntil;
@@ -57,7 +57,7 @@ public class VinePull : Approach {
 		if (!feeler.Hooked ()) {
 			tether.transform.RotateAround (unit.transform.position, Vector3.up, 50 * Time.deltaTime);
 		} else if (MyMawPos != null) {
-			unit.target.transform.position = unit.target.transform.position - pullVelocity (MyMawPos);
+			unit.target.transform.position = unit.target.transform.position - pullVelocity (MyMawPos.transform.position);
 			if (unit.actable && !unit.attacking){
 				unit.gear.weapon.initAttack();
 				p.damage(1);
