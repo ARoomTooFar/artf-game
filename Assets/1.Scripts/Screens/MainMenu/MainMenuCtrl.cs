@@ -50,6 +50,7 @@ public class MainMenuCtrl : MonoBehaviour {
         // register button press handler
         startMenu[1, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
+            MenuSwitch(Menu.LoginForm);
 			Debug.Log ("Register button pressed!");
         });
 
@@ -61,12 +62,11 @@ public class MainMenuCtrl : MonoBehaviour {
         loginForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnBack");
 		loginFormAnim = GameObject.Find ("/Canvas/" + menuContainerName + "/LoginForm").GetComponent<Animator>();
 		
-		// test button press handler
-        /*loginForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		// back button
+        loginForm[2, 1].GetComponent<Button>().onClick.AddListener(() =>
         {
-			Debug.Log ("Test button pressed!");
 			MenuSwitch (Menu.StartMenu);
-        });*/
+        });
 
 		// switch to start menu
 		MenuSwitch (Menu.StartMenu);
@@ -88,6 +88,19 @@ public class MainMenuCtrl : MonoBehaviour {
                 if (locY < 0)
                 {
 					locY = currMenu.Length - 1;
+                }
+            }
+
+            if (hori > 0)
+            {
+                locX = (locX + 1) % (currMenu.GetLength(1));
+            }
+            else if (hori < 0)
+            {
+                --locX;
+                if (locX < 0)
+                {
+                    locX = currMenu.GetLength(1) - 1;
                 }
             }
 
@@ -121,6 +134,9 @@ public class MainMenuCtrl : MonoBehaviour {
 
 		// setup first button highlight and show new menu
 		var pointer = new PointerEventData(EventSystem.current);
+        ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
+        locY = 0;
+        locX = 0;
 		ExecuteEvents.Execute(currMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
 		prevBtn = currMenu[locY, locX];
 		currAnim.SetBool("show", true);
