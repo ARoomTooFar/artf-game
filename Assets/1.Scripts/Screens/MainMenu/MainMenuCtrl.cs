@@ -50,8 +50,11 @@ public class MainMenuCtrl : MonoBehaviour {
         // register button press handler
         startMenu[1, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
-            MenuSwitch(Menu.LoginForm);
 			Debug.Log ("Register button pressed!");
+            //MenuSwitch(Menu.LoginForm);
+
+            Farts serv = gameObject.AddComponent<Farts>();
+            serv.login("spacedandy", "boobies");
         });
 
 		// setup login

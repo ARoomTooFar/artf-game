@@ -6,7 +6,7 @@ public class Farts : MonoBehaviour
 	//const string SERVERURI = "http://localhost:8080/api"; //local server
 	const string SERVERURI = "https://artf-server.appspot.com/api"; //live server
 	const string LVLPATH = "/levels/";
-	const string GAMEACCTPATH = "/gameaccounts/";
+	const string GAMEACCTPATH = "/gameaccts/";
 	const string CHARPATH = "/characters/";
 	const float timeoutTime = 60f; //HTTP requests timeout after 1 minute
 	
@@ -149,7 +149,7 @@ public class Farts : MonoBehaviour
 			}
 			//Debug.Log("HTTP request time elapsed: " + (Time.realtimeSinceStartup - timeStart));
 		}
-		
+
 		return www.text;
 	}
 	
@@ -160,6 +160,7 @@ public class Farts : MonoBehaviour
 		form.AddField("game_acct_password", gameAcctPass);
 		
 		WWW www = new WWW(SERVERURI + GAMEACCTPATH + "login", form);
+        Debug.Log(SERVERURI + GAMEACCTPATH + "login");
 		StartCoroutine(httpRequest(www));
 		
 		float timeStart = Time.realtimeSinceStartup;
@@ -173,7 +174,8 @@ public class Farts : MonoBehaviour
 			}
 			//Debug.Log("HTTP request time elapsed: " + (Time.realtimeSinceStartup - timeStart));
 		}
-		
+
+        Debug.Log(www.text);
 		return www.text;
 	}
 	
