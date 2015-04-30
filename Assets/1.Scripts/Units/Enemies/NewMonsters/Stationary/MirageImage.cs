@@ -22,6 +22,8 @@ public class MirageImage : NewMirage {
 	
 	// Update is called once per frame
 	protected override void Update () {
+
+		if (this.user.deathTarget == null) return;
 		Vector3 facing = this.user.deathTarget.transform.position - this.transform.position;
 		facing.y = 0.0f;
 		this.transform.localRotation = Quaternion.LookRotation(facing);
@@ -42,6 +44,10 @@ public class MirageImage : NewMirage {
 	}
 
 	public override void die() {
+		this.animator.SetTrigger("IllusionOut");
+	}
+
+	public virtual void Death() {
 		spawnedBy.mirrors.Remove(this);
 		Destroy(this.gameObject);
 	}

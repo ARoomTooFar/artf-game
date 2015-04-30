@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 
 public class MirageWeapon : MeleeWeapons {
-	
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -36,6 +36,7 @@ public class MirageWeapon : MeleeWeapons {
 	protected virtual void OnHit(Character enemy) {
 		Debug.Log (stats.damage);
 		enemy.damage(stats.damage, user.transform, user.gameObject);
+		this.user.animator.SetBool ("HitEnemy", true);
 	}
 	
 	void OnTriggerEnter(Collider other) {
