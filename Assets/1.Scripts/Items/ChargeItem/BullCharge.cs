@@ -86,6 +86,7 @@ public class BullCharge : ChargeItem {
 	private IEnumerator chargeFunc(float chgTime) {
 		yield return StartCoroutine(chgTimeFunc(chgTime));
 		float tempStun = stunDuration * (hitWall ? 2 : 1);
+		user.GetComponent<Rigidbody>().velocity = Vector3.zero;
 		foreach(Character ene in enemies) {
 			// ((IStunable)ene.GetComponent(typeof(IStunable))).stun();
 
