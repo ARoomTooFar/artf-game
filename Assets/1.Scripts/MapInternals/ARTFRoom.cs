@@ -21,6 +21,16 @@ public partial class ARTFRoom {
 		private set;
 	}
 
+	public List<SceneryBlock> Scenery {
+		get;
+		private set;
+	}
+
+	public List<MonsterBlock> Monster {
+		get;
+		private set;
+	}
+
 	public GameObject Floor {
 		get;
 		private set;
@@ -154,6 +164,8 @@ public partial class ARTFRoom {
 		setFloor();
 
 		this.LinkedRooms = new Dictionary<SceneryBlock, ARTFRoom>();
+		this.Scenery = new List<SceneryBlock> ();
+		this.Monster = new List<MonsterBlock> ();
 		this.Doors = new List<SceneryBlock>();
 		this.RoomPaths = new Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>>();
 		if(Global.inLevelEditor) {
@@ -315,6 +327,9 @@ public partial class ARTFRoom {
 		//move each block by offset
 		foreach(TerrainBlock blk in Blocks) {
 			blk.move(offset);
+		}
+		foreach (SceneryBlock blk in Scenery) {
+			blk.move (offset);
 		}
 		setFloor();
 		updateMarkerPositions();

@@ -29,19 +29,34 @@ public class SceneryManager {
 	 */
 	private bool linkTerrain(SceneryBlock blk) {
 		TerrainBlock terBlk;
+		ARTFRoom rm = MapData.TheFarRooms.find (blk.Position);
+		if (rm == null) {
+			return false;
+		}
 		//for each coordinate this block occupies
 		foreach(Vector3 coordinate in blk.Coordinates) {
 			//get the terrain block in that position
 			terBlk = MapData.TerrainBlocks.find(coordinate);
-			//if there's no block there, this block is not placeable
+			//if there's no block then... what? continue anyways
 			if(terBlk == null) {
+				continue;
+			}
+			//if the block is linked to this piece of scenery, then unlink it
+			if(terBlk.Scenery != null && terBlk.Scenery.Equals(blk)) {
+				terBlk.unlinkScenery();
+			}
+			terBlk.addScenery(blk);
+			if(!rm.inRoom(coordinate)){
 				return false;
 			}
-			//try to link the scenery, return false if problem
-			if(!terBlk.addScenery(blk)) {
-				return false;
+			foreach(SceneryBlock scn in rm.Scenery){
+				if (scn.Coordinates.Contains(coordinate)){
+					return false;
+				}
 			}
 		}
+
+		rm.Scenery.Add(blk);
 		return true;
 	}
 	
@@ -66,6 +81,8 @@ public class SceneryManager {
 				terBlk.unlinkScenery();
 			}
 		}
+		ARTFRoom rm = MapData.TheFarRooms.find (blk.Position);
+		rm.Scenery.Remove (blk);
 	}
 	#endregion (un)linkTerrain
 
@@ -248,7 +265,6 @@ public class SceneryManager {
 
 	#region isMoveValid
 	public bool isMoveValid(Vector3 pos, Vector3 offset) {
-//		Debug.Log(pos);
 		return isMoveValid(find(pos), offset);
 	}
 
@@ -285,19 +301,26 @@ public class SceneryManager {
 	}
 
 	public bool isBlockValid(SceneryBlock blk) {
-		TerrainBlock terBlk;
-		foreach(Vector3 coordinate in blk.Coordinates) {
-			//get the terrain block in that position
-			terBlk = MapData.TerrainBlocks.find(coordinate);
-			//if there's no block there, this block is not placeable
-			if(terBlk == null) {
+		ARTFRoom rm = MapData.TheFarRooms.find (blk.Position);
+		if (rm == null) {
+			return false;
+		}
+		foreach(Vector3 coor in blk.Coordinates){
+			if(!rm.inRoom(coor)){
 				return false;
 			}
-			if(terBlk.Scenery != null && terBlk.Scenery != blk) {
-				return false;
+			foreach(SceneryBlock scn in rm.Scenery){
+				if(scn == blk){
+					continue;
+				}
+				if (scn.Coordinates.Contains(coor)){
+					return false;
+				}
 			}
 		}
 		return true;
+
+
 	}
 	#endregion isBlockValid
 	#endregion Validation

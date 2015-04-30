@@ -83,7 +83,6 @@ public class UpgradeUI : MonoBehaviour
 		faceUIToCamera();
 
 		if(FollowCamera.orthographic == true){
-			print("ASdfadF");
 			lowerHalf.SetActive(false);
 			tierStats.SetActive(false);
 			currentActiveObjectUI = null;
