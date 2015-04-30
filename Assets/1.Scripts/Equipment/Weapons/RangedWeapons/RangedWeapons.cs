@@ -61,6 +61,7 @@ public class RangedWeapons : Weapons {
 		// print("Normal Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
 		StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
+		StartCoroutine(makeSound(action,playSound,action.length));
 		StartCoroutine(atkFinish());
 	}
 
@@ -68,6 +69,7 @@ public class RangedWeapons : Weapons {
 		// print("Charged Attack; Power level:" + stats.chgDamage);
 		user.GetComponent<Character>().animator.SetBool("ChargedAttack", true);
 		StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
+		StartCoroutine(makeSound(chargeAttack,playSound,chargeAttack.length));
 		StartCoroutine(atkFinish());
 	}
 
