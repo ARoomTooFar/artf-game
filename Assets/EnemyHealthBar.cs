@@ -14,13 +14,18 @@ public class EnemyHealthBar : MonoBehaviour {
 	
 
 	void Update () {
+		health = gameObject.GetComponent<Character> ().stats.health;
+		float maxhealth = gameObject.GetComponent<Character> ().stats.maxHealth;
+		health = health / maxhealth;
+		print (health);
 		healthBar.value = health;
-		if(health == 1){
+		//if(health == 1){
 			//Something for showing the health bar, doesn't need to be up if no damage is done. 
-		}
-		if(health == 0){
+		//}
+		//if(health == 0){
 			//Something for disappearing the health bar
-		}
+		//}
+
 	}
 
 	//Update causes itemObjectUI flickering. LateUpdate prevents it
