@@ -20,13 +20,15 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 		if(tt == null && gameObject.name == "Button_Room"){
 			instantiateToolTip("Place Room");
 		} else if(gameObject.name == "Button_ModeToggle"){
-			instantiateToolTip("Toggle Mode");
+			instantiateToolTip("Room/Tile Mode");
 		} else if(gameObject.name == "Button_ZoomIn"){
 			instantiateToolTip("Zoom In");
 		} else if(gameObject.name == "Button_ZoomOut"){
 			instantiateToolTip("Zoom Out");
 		} else if(gameObject.name == "Button_CameraToggle"){
 			instantiateToolTip("Toggle Camera");
+		} else if(gameObject.name == "Button_Delete"){
+			instantiateToolTip("Delete Object(s)");
 		}
 	}
 	

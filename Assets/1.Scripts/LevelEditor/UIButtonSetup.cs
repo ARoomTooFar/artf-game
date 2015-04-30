@@ -11,6 +11,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class UIButtonSetup : MonoBehaviour {
 	void Start(){
@@ -36,6 +37,19 @@ public class UIButtonSetup : MonoBehaviour {
 				Mode.setTileMode();
 			else if(Mode.isTileMode())
 				Mode.setRoomMode();
+		});
+
+		btn = GameObject.Find ("Button_Delete").GetComponent("Button") as Button;
+		btn.onClick.AddListener (() => {
+			HashSet<GameObject> obs = MapData.getObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
+			//refund costs
+			foreach(GameObject ob in obs){
+				if(ob != null){
+					Money.money += ob.GetComponent<LevelEntityData>().baseCost;
+					Money.updateMoneyDisplay();
+				}
+			}
+			MapData.removeObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
 		});
 
 		btn = GameObject.Find ("Button_CameraToggle").GetComponent("Button") as Button;
