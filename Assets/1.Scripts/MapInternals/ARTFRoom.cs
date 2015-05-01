@@ -380,7 +380,6 @@ public partial class ARTFRoom {
 
 		setFloor();
 
-
 		updateMarkerPositions();
 	}
 
@@ -438,74 +437,29 @@ public partial class ARTFRoom {
 	/*
 	 * check if we're close to the edge of a room
 	 */ 
-	public bool isCloseToEdge(Vector3 pos, float thresh){
+	public bool isNearEdge(Vector3 pos, float thresh){
 		if(Math.Abs(pos.z - LLCorner.z) <= thresh || Math.Abs(URCorner.z - pos.z) <= thresh) {
 			return true;
 		}
-
 		if(Math.Abs(pos.x - LLCorner.x) <= thresh || Math.Abs(URCorner.x - pos.x) <= thresh) {
 			return true;
 		}
-
 		return false;
 	}
-
 
 	/*
 	 * return edge the mouse is nearest
 	 */ 
-	public Vector3 getNearestEdgePosition(Vector3 pos){
-		float zDistLL;
-		float xDistLL;
-		float zDistUR;
-		float xDistUR;
+	public Vector3 nearEdgePosition(Vector3 pos){
+		float leftXDist = Mathf.Abs(pos.x - LLCorner.x);
+		float rightXDist = Mathf.Abs(pos.x - URCorner.x);
+		float leftZDist = Mathf.Abs(pos.z - LLCorner.z);
+		float rightZDist = Mathf.Abs(pos.z - URCorner.z);
 
-		Vector3 returnPos = new Vector3();
+		float x = leftXDist < rightXDist ? LLCorner.x : URCorner.x;
+		float z = leftZDist < rightZDist ? LLCorner.z : URCorner.z;
 
-		zDistLL = Mathf.Abs(pos.z - LLCorner.z);
-		xDistLL = Mathf.Abs(pos.x - LLCorner.x);
-		zDistUR = Mathf.Abs(pos.z - URCorner.z);
-		xDistUR = Mathf.Abs(pos.x - URCorner.x);
-
-		bool zURSmallest = false;
-		if(zDistUR < zDistLL){
-			zURSmallest = true;
-		}
-
-		bool xURSmallest = false;
-		if(xDistUR < xDistLL){
-			xURSmallest = true;
-		}
-
-
-		if(zURSmallest && xURSmallest){
-			if(zDistUR < xDistUR){
-				returnPos = new Vector3(pos.x, 0f, URCorner.z);
-			}else{
-				returnPos = new Vector3(URCorner.x, 0f, pos.z);
-			}
-		}else if (zURSmallest && !xURSmallest){
-			if(zDistUR < xDistLL){
-				returnPos = new Vector3(pos.x, 0f, URCorner.z);
-			}else{
-				returnPos = new Vector3(LLCorner.x, 0f, pos.z);
-			}
-		}else if (!zURSmallest && !xURSmallest){
-			if(zDistLL < xDistLL){
-				returnPos = new Vector3(pos.x, 0f, LLCorner.z);
-			}else{
-				returnPos = new Vector3(LLCorner.x, 0f, pos.z);
-			}
-		}else if (!zURSmallest && xURSmallest){
-			if(zDistLL < xDistUR){
-				returnPos = new Vector3(pos.x, 0f, LLCorner.z);
-			}else{
-				returnPos = new Vector3(URCorner.x, 0f, pos.z);
-			}
-		}
-
-//		Debug.Log (returnPos);
-		return (returnPos);
+		return Mathf.Min(leftXDist, rightXDist) < Mathf.Min(leftZDist, rightZDist) ? new Vector3(x, 0f, pos.z) : new Vector3(pos.x, 0f, z);
 	}
 
 	/*
