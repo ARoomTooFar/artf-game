@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /*
  * Object to represent a room within the mapdata
  */
-public partial class ARTFRoom {
+public partial class ARTFRoom : Square {
 
 	#region PrivateVariables
 	private static string defaultBlockID = "LevelEditor/Rooms/floortile";
@@ -55,52 +55,11 @@ public partial class ARTFRoom {
 	}
 
 	#region Corners
-	//Lower Left Corner
-	public Vector3 LLCorner {
-		get;
-		private set;
-	}
-
-	//Upper Right Corner
-	public Vector3 URCorner {
-		get;
-		private set;
-	}
-
-	//Lower Right Corner
-	public Vector3 LRCorner {
-		get { return new Vector3(URCorner.x, URCorner.y, LLCorner.z); }
-	}
-
-	//Upper Right Corner
-	public Vector3 ULCorner {
-		get { return new Vector3(LLCorner.x, URCorner.y, URCorner.z); }
-	}
-
-	//A list of all four corners
-	public List<Vector3> Corners {
-		get {
-			List<Vector3> retVal = new List<Vector3>();
-			retVal.Add(LLCorner);
-			retVal.Add(URCorner);
-			retVal.Add(LRCorner);
-			retVal.Add(ULCorner);
-			return retVal;
-		}
-	}
-
-	//Center of the room. May be on the edge of two blocks in even sized rooms
-	public Vector3 Center {
-		get { return (LLCorner + URCorner) / 2; }
-	}
-
 	public GameObject LLMarker { get; protected set; }
 	public GameObject URMarker { get; protected set; }
 	public GameObject LRMarker { get; protected set; }
 	public GameObject ULMarker { get; protected set; }
-
-
-
+	
 	public virtual void updateMarkerPositions(){
 		LLMarker.transform.root.position = LLCorner;
 		URMarker.transform.root.position = URCorner;
@@ -117,34 +76,9 @@ public partial class ARTFRoom {
 	#endregion Corners
 
 	#region SquareProperties
-	public float Area {
-		get { return Length * Height; }
-	}
 
-	public float UsableArea{
-		get { return Area - Perimeter;}
-	}
 
-	public float Perimeter {
-		get { return 2 * (Length + Height); }
-	}
 
-	//Add 1 because a grid with corners in the same position has Length/Height == 1
-	public float Height {
-		get { return 1 + URCorner.z - LLCorner.z; }
-	}
-
-	public float Length {
-		get { return 1 + URCorner.x - LLCorner.x; }
-	}
-
-	public int Cost {
-		get { return Mathf.RoundToInt((10 * Mathf.Pow(2, (Mathf.Sqrt(UsableArea)) - 7) + 25) * 100); }
-	}
-
-	public int Points{
-		get { return Mathf.RoundToInt(Mathf.Min(Length, Height)/20*UsableArea);}
-	}
 	#endregion SquareProperties
 
 	public string SaveString {
@@ -155,14 +89,10 @@ public partial class ARTFRoom {
 	/*
 	 * Constructor
 	 */
-	public ARTFRoom(Vector3 pos1, Vector3 pos2) {
-		this.LLCorner = pos1.getMinVals(pos2);
-		this.URCorner = pos1.getMaxVals(pos2);
+	public ARTFRoom(Vector3 pos1, Vector3 pos2) : base(pos1, pos2) {
 		this.Blocks = new List<TerrainBlock>();
-
 		this.Floor = GameObjectResourcePool.getResource(defaultFloor, this.LLCorner, Vector3.zero);
 		setFloor();
-
 		this.LinkedRooms = new Dictionary<SceneryBlock, ARTFRoom>();
 		this.Scenery = new List<SceneryBlock> ();
 		this.Monster = new List<MonsterBlock> ();
@@ -320,16 +250,17 @@ public partial class ARTFRoom {
 	 * Moves a room in the x/y/z direction specified
 	 * by the offset Vector3
 	 */
-	public void move(Vector3 offset) {
-		//Shift the LowerLeft and UpperRight corners by offset
-		LLCorner = LLCorner + offset;
-		URCorner = URCorner + offset;
+	public override void move(Vector3 offset) {
+		base.move(offset);
 		//move each block by offset
 		foreach(TerrainBlock blk in Blocks) {
 			blk.move(offset);
 		}
 		foreach (SceneryBlock blk in Scenery) {
 			blk.move (offset);
+		}
+		foreach(MonsterBlock blk in Monster) {
+			blk.move(offset);
 		}
 		setFloor();
 		updateMarkerPositions();
@@ -340,25 +271,13 @@ public partial class ARTFRoom {
 	 * 
 	 * Resizes a room by moving one corner to a new position
 	 */
-	public void resize(Vector3 oldCor, Vector3 newCor) {
+	public override void resize(Vector3 oldCor, Vector3 newCor) {
 		//Make sure that the old corner is actually a corner
 		if(!isCorner(oldCor)) {
 			return;
 		}
-		//get the offset
-		Vector3 offset = newCor - oldCor;
-		//determine which corner to move in the x direction
-		if(oldCor.x == LLCorner.x) {
-			LLCorner += new Vector3(offset.x, 0, 0);
-		} else {
-			URCorner += new Vector3(offset.x, 0, 0);
-		}
-		//determine which corner to move in the z direction
-		if(oldCor.z == LLCorner.z) {
-			LLCorner += new Vector3(0, 0, offset.z);
-		} else {
-			URCorner += new Vector3(0, 0, offset.z);
-		}
+		base.resize(oldCor, newCor);
+
 		//remove blocks no longer in room
 		foreach(TerrainBlock blk in Blocks) {
 			if(!inRoom(blk.Position)) {
@@ -398,23 +317,6 @@ public partial class ARTFRoom {
 	#endregion ManipulationFunctions
 
 	#region PositionChecks
-	/*
-	 * public bool isCorner(Vector3 pos)
-	 * 
-	 * Check if a position is a corner position
-	 */
-	public bool isCorner(Vector3 pos) {
-		if(LLCorner.Equals(pos))
-			return true;
-		if(URCorner.Equals(pos))
-			return true;
-		if(LRCorner.Equals(pos))
-			return true;
-		if(ULCorner.Equals(pos))
-			return true;
-		return false;
-	}
-
 	/*
 	 * public bool isEdge(Vector3 pos)
 	 * 
