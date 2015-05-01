@@ -48,6 +48,11 @@ public partial class ARTFRoom : Square {
 		private set;
 	}
 
+	public int CurrentPoints {
+		get;
+		private set;
+	}
+
 	//Stored paths to get from point A to point B. Primarily for storing paths from one door to another
 	public Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>> RoomPaths {
 		get;
@@ -436,6 +441,16 @@ public partial class ARTFRoom : Square {
 			}
 		}
 		return true;
+	}
+
+	public void addMonster(MonsterBlock mon){
+		CurrentPoints += mon.BlockInfo.Points;
+		Monster.Add(mon);
+	}
+
+	public void removeMonster(MonsterBlock mon){
+		CurrentPoints -= mon.BlockInfo.Points;
+		Monster.Remove(mon);
 	}
 	#endregion PositionChecks
 }
