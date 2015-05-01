@@ -40,17 +40,7 @@ public class UIButtonSetup : MonoBehaviour {
 		});
 
 		btn = GameObject.Find ("Button_Delete").GetComponent("Button") as Button;
-		btn.onClick.AddListener (() => {
-			HashSet<GameObject> obs = MapData.getObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
-			//refund costs
-			foreach(GameObject ob in obs){
-				if(ob != null){
-					Money.money += ob.GetComponent<LevelEntityData>().baseCost;
-					Money.updateMoneyDisplay();
-				}
-			}
-			MapData.removeObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
-		});
+		btn.onClick.AddListener (() => {MapData.delete();});
 
 		btn = GameObject.Find ("Button_CameraToggle").GetComponent("Button") as Button;
 		btn.onClick.AddListener(() => {

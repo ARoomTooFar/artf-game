@@ -165,5 +165,19 @@ public static class MapData {
 		return obs;
 
 	}
+
+	public static void delete(){
+		HashSet<GameObject> obs = MapData.getObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
+		
+		//refund costs
+		foreach(GameObject ob in obs){
+			if(ob != null){
+				Money.money += ob.GetComponent<LevelEntityData>().baseCost;
+				Money.updateMoneyDisplay();
+			}
+		}
+		
+		MapData.removeObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
+	}
 	
 }

@@ -161,10 +161,10 @@ public class SceneryManager {
 		if(blk == null) {
 			return;
 		}
-		if(blk.BlockID == "Prefabs/PlayerStartingLocation") {
+		if(blk.BlockID == "LevelEditor/Other/PlayerStartingLocation") {
 			return;
 		}
-		if(blk.BlockID == "Prefabs/PlayerEndingLocation") {
+		if(blk.BlockID == "LevelEditor/Other/PlayerEndingLocation") {
 			return;
 		}
 		unlinkTerrain(blk);
