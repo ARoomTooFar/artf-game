@@ -54,7 +54,7 @@ public class MainMenuCtrl : MonoBehaviour {
             //MenuSwitch(Menu.LoginForm);
 
             Farts serv = gameObject.AddComponent<Farts>();
-            serv.login("spacedandy", "boobies");
+            serv.login("Paradoxium", "pass");
         });
 
 		// setup login

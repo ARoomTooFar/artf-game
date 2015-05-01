@@ -20,4 +20,9 @@ public class BtnScript : MonoBehaviour {
             child.color = new Color32(152, 213, 217, 255);
         }
     }
+
+    public void EnableTxt()
+    {
+
+    }
 }
