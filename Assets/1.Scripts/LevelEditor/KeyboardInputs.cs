@@ -53,5 +53,8 @@ public class KeyboardInputs : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.E)) {
 			Camera.main.GetComponent<TileMapController>().fillInRoom();
 		}
+		if(Input.GetKeyDown(KeyCode.Q)){
+			move.changeModes();
+		}
 	}
 }

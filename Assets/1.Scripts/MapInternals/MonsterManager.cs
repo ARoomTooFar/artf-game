@@ -78,41 +78,12 @@ public class MonsterManager {
 		if(blk == null) {
 			return;
 		}
-		//unlink neighbors
-		//unlinkTerrain(blk);
 		blk.remove();
 		//remove from list
 		dictionary[blk.BlockInfo.BlockID].Remove(blk);
 	}
 	#endregion Remove
 	#endregion Manipulation
-
-
-	#region (un)linkTerrain
-	/*
-	 * private void linkTerrain (MonsterBlock block)
-	 * 
-	 * Gets the adjacent blocks and adds them as neighbors to block.
-	 * Also links block as a neighbor to any adjacent blocks.
-	 */
-	private void linkTerrain(MonsterBlock blk) {
-		MapData.TerrainBlocks.find(blk.Position).addMonster(blk);
-	}
-
-	/*
-	 * private void unlinkTerrain(MonsterBlock block)
-	 * 
-	 * Breaks all neighbor links between block and its list of neighbors.
-	 * 
-	 */
-	private void unlinkTerrain(MonsterBlock blk) {
-		TerrainBlock terBlk = MapData.TerrainBlocks.find(blk.Position);
-		if(terBlk.Monster.Equals(blk)){
-			terBlk.removeMonster();
-		}
-	}
-	#endregion (un)linkTerrain
-
 
 	/*
 	 * public TerrainBlock findBlock (Vector3 position)

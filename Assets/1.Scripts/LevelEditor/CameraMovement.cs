@@ -177,5 +177,12 @@ public class CameraMovement : MonoBehaviour {
 		Global.ground.Raycast(ray, out distance);
 		return ray.GetPoint(distance);
 	}
+
+	public void changeModes(){
+		if(Mode.isRoomMode())
+			Mode.setTileMode();
+		else if(Mode.isTileMode())
+			Mode.setRoomMode();
+	}
 }
 

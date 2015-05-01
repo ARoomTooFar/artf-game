@@ -36,10 +36,7 @@ public class UIButtonSetup : MonoBehaviour {
 
 		btn = GameObject.Find("Button_ModeToggle").GetComponent("Button") as Button;
 		btn.onClick.AddListener(() => {
-			if(Mode.isRoomMode())
-				Mode.setTileMode();
-			else if(Mode.isTileMode())
-				Mode.setRoomMode();
+			move.changeModes();
 		});
 
 		btn = GameObject.Find("Button_Delete").GetComponent("Button") as Button;

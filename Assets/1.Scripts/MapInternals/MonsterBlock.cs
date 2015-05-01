@@ -98,7 +98,6 @@ public class MonsterBlock {
 	}
 
 	public void remove(){
-		MapData.TerrainBlocks.find(Position).removeMonster();
 		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
 	}
 }
