@@ -191,12 +191,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 						Money.buy(price);
 					}
 				}
-
-
-				/*
-				if(Money.buy(itemType, price)){
-					MapData.addObject(prefabLocation, pos, rot.toDirection());
-				}*/
 			}
 
 			//destroy the copy
