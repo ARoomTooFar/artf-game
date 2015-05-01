@@ -186,9 +186,17 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 						pos = MapData.TheFarRooms.find(pos).nearEdgePosition(pos);
 					}
 				}
+				if(Money.money > price){
+					if(MapData.addObject(prefabLocation, pos, rot.toDirection())){
+						Money.buy(price);
+					}
+				}
+
+
+				/*
 				if(Money.buy(itemType, price)){
 					MapData.addObject(prefabLocation, pos, rot.toDirection());
-				}
+				}*/
 			}
 
 			//destroy the copy

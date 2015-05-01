@@ -30,7 +30,7 @@ public static class Money
 		}
 	}
 
-	public static bool buy (string s, int price)
+	public static bool buy (int price)
 	{
 		if(price <= money){
 			money -= price;

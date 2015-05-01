@@ -79,23 +79,28 @@ public static class MapData {
 	}
 	#endregion Rooms
 
-	public static void addObject(string type, Vector3 pos, DIRECTION dir) {
+	public static bool addObject(string type, Vector3 pos, DIRECTION dir) {
 		GameObject obj = GameObjectResourcePool.getResource(type, pos, dir.toRotationVector());
 		BlockData data = obj.GetComponent<BlockData>();
 		GameObjectResourcePool.returnResource(type, obj);
 		if(data is SceneryData) {
 			if(SceneryBlocks.isAddValid(type, pos, dir)) {
 				SceneryBlocks.add(new SceneryBlock(type, pos, dir));
+			} else {
+				return false;
 			}
 			LevelPathCheck.checkPath();
-			return;
+			return true;
 		} 
 		if(data is MonsterData) {
 			if(MonsterBlocks.isAddValid(type, pos, dir)) {
 				MonsterBlocks.add(new MonsterBlock(type, pos, dir));
+			} else {
+				return false;
 			}
-			return;
+			return true;
 		}
+		return false;
 	}
 
 	public static void dragObject(GameObject obj, Vector3 pos, Vector3 offset) {
