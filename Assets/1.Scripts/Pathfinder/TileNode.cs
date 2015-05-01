@@ -34,20 +34,14 @@ public class TileNode : AbstractNode, IEquatable<TileNode> {
 		checkVals.Add (Position.moveinDir (DIRECTION.West));
 
 		foreach (Vector3 vec in checkVals) {
-			ARTFRoom checkRm = MapData.TheFarRooms.find(vec);
-			if(checkRm == null){
-				continue;
-			}
-			if(!checkRm.Equals(rm)){
+			if(!rm.inRoom(vec)){
 				continue;
 			}
 			if(rm.isEdge(vec)){
 				//continue;
 			}
-			foreach(SceneryBlock blk in rm.Scenery){
-				if(blk.Coordinates.Contains(vec)){
-					continue;
-				}
+			if(!rm.isPathable(vec)){
+				continue;
 			}
 			retVal.Add (new KeyValuePair<AbstractNode, float> (new TileNode (vec), Vector3.Distance (vec, Position)));
 		}

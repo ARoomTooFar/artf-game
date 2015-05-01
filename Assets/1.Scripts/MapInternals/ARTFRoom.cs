@@ -511,5 +511,29 @@ public partial class ARTFRoom {
 			pos.z >= LLCorner.z &&
 			pos.z <= URCorner.z;
 	}
+
+	public bool isWalkable(Vector3 pos){
+		if(!inRoom(pos)) {
+			return false;
+		}
+		foreach(SceneryBlock blk in Scenery) {
+			if(blk.Coordinates.Contains(pos)){
+				return blk.Walkable;
+			}
+		}
+		return true;
+	}
+
+	public bool isPathable(Vector3 pos){
+		if(!inRoom(pos)) {
+			return false;
+		}
+		foreach(SceneryBlock blk in Scenery) {
+			if(blk.Coordinates.Contains(pos)){
+				return blk.Pathable;
+			}
+		}
+		return true;
+	}
 	#endregion PositionChecks
 }

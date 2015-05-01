@@ -91,7 +91,7 @@ public static class MapData {
 			return;
 		} 
 		if(data is MonsterData) {
-			if(MonsterBlocks.isAddValid(pos)) {
+			if(MonsterBlocks.isAddValid(type, pos, dir)) {
 				MonsterBlocks.add(new MonsterBlock(type, pos, dir));
 			}
 			return;
@@ -118,7 +118,7 @@ public static class MapData {
 		}
 
 		if(data is MonsterData) {
-			if(MonsterBlocks.isAddValid(pos+offset)) {
+			if(MonsterBlocks.isMoveValid(pos, offset)) {
 				MonsterBlocks.move(pos, offset);
 			}
 			return;
@@ -158,9 +158,17 @@ public static class MapData {
 	public static HashSet<GameObject> getObjects(HashSet<Vector3> set){
 		HashSet<GameObject> obs = new HashSet<GameObject>();
 
+		SceneryBlock blk;
+		MonsterBlock mon;
 		foreach(Vector3 vec in set) {
-			obs.Add(SceneryBlocks.findGameObj(vec));
-			obs.Add(MonsterBlocks.findGameObj(vec));
+			blk = SceneryBlocks.find(vec);
+			if(blk != null){
+				obs.Add(blk.GameObj);
+			}
+			mon = MonsterBlocks.find(vec);
+			if(mon != null){
+				obs.Add(mon.GameObj);
+			}
 		}
 		return obs;
 

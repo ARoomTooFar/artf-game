@@ -53,14 +53,6 @@ public class TerrainBlock {
 	public string SaveString {
 		get{ return Position.toCSV() + "," + Orientation.ToString() + "," + wallType;}
 	}
-	
-	public bool Pathable {
-		get{ return ((Wall == null) && (Scenery == null ? true : Scenery.Pathable)); }
-	}
-
-	public bool Walkable {
-		get { return ((Wall == null) && (Scenery == null ? true : Scenery.Walkable)); }
-	}
 
 	public String BlockID {
 		get;

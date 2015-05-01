@@ -37,6 +37,35 @@ public class MonsterBlock {
 		get;
 		private set;
 	}
+
+	public List<Vector3> Coordinates{
+		get{
+			//get the local coordinates this piece of scenery occupies in a given rotation
+			List<Vector3> retVal = new List<Vector3>();
+			//for each coordinate
+			foreach(Vector3 vec in BlockInfo.LocalCoordinates(Orientation)){
+				//shift it to the global coordinate
+				retVal.Add(vec + Position);
+			}
+			//return the list
+			return retVal;
+		}
+	}
+
+	public List<Vector3> RadiusCoordinates{
+		get{
+			//get the local coordinates this piece of scenery occupies in a given rotation
+			List<Vector3> retVal = new List<Vector3>();
+			//for each coordinate
+			foreach(Vector3 vec in BlockInfo.RadiusCoordinates(Orientation)){
+				//shift it to the global coordinate
+				retVal.Add(vec + Position);
+			}
+			//return the list
+			retVal.AddRange(Coordinates);
+			return retVal;
+		}
+	}
 	#endregion Properties
 
 	/*
