@@ -60,10 +60,13 @@ public static class MapData {
 	}
 
 	#region Rooms
-	public static void addRoom(Vector3 pos1, Vector3 pos2) {
+	public static bool addRoom(Vector3 pos1, Vector3 pos2) {
 		if(TheFarRooms.isAddValid(pos1, pos2)) {
 			TheFarRooms.add(pos1, pos2);
+		} else {
+			return false;
 		}
+		return true;
 	}
 
 	public static void moveRoom(Vector3 oldPos, Vector3 newPos) {

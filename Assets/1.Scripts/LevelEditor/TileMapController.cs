@@ -103,7 +103,10 @@ public class TileMapController : MonoBehaviour {
 	}
 
 	public void fillInRoom() {
-		MapData.addRoom(shiftOrigin, lastClick);
+		if(MapData.addRoom(shiftOrigin, lastClick)) {
+			Debug.Log("roomfill");
+			Money.buy(new Square(shiftOrigin, lastClick).Cost);
+		}
 	}
 
 	/* Add selected tile index to a list to be access by the camera script for rendering 
