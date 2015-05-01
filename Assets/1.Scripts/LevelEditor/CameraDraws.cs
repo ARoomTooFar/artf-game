@@ -28,7 +28,7 @@ public class CameraDraws : MonoBehaviour {
 		cam = this.gameObject.GetComponent<Camera> ();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
 		normalColor = new Color(0f, .5f, 1f, .5f);
-		invalidColor = new Color(1f, 0f, 0f, .2f);
+		invalidColor = new Color(1f, 0f, 0f, .4f);
 	}
 
 	void OnPostRender ()
@@ -54,11 +54,16 @@ public class CameraDraws : MonoBehaviour {
 	{
 		HashSet<Vector3> selTile = tilemapcont.getSelectedTiles ();
 		GL.Begin (GL.QUADS);
-		singleColorTransMat.color = normalColor;
+		Square sq = new Square(tilemapcont.shiftOrigin, tilemapcont.lastClick);
+		if(MapData.TheFarRooms.isSquareValid(sq)) {
+			singleColorTransMat.color = normalColor;
+		} else {
+			singleColorTransMat.color = invalidColor;
+		}
 		singleColorTransMat.SetPass(0);
 
 		foreach (Vector3 origin in selTile) {
-			drawSquare(origin, 1f, 1f, .001f);
+			drawSquare(origin, 1f, 1f, -.01f);
 		}
 		GL.End ();
 	}

@@ -22,7 +22,7 @@ public class TileMapController : MonoBehaviour {
 	public float secondZ;
 	public bool suppressDragSelecting;
 	Vector3 clickOrigin = Global.nullVector3;
-	Vector3 lastClick = Global.nullVector3;
+	public Vector3 lastClick = Global.nullVector3;
 	
 	void Start() {	
 		UICamera = Camera.main;
@@ -104,7 +104,6 @@ public class TileMapController : MonoBehaviour {
 
 	public void fillInRoom() {
 		if(MapData.addRoom(shiftOrigin, lastClick)) {
-			Debug.Log("roomfill");
 			Money.buy(new Square(shiftOrigin, lastClick).Cost);
 		}
 	}

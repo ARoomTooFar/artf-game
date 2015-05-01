@@ -276,7 +276,6 @@ public class ARTFRoomManager {
 		if(sq.Height < 3+2) {
 			return false;
 		}
-		Debug.Log(sq.Cost);
 		if(sq.Cost > Money.money) {
 			return false;
 		}
