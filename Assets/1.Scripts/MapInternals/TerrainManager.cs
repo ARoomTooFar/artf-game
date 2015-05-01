@@ -135,25 +135,6 @@ public class TerrainManager {
 	#endregion Remove
 
 
-	#region Rotate
-	public void rotate(Vector3 pos, bool goClockwise = true){
-		rotate(find(pos), goClockwise);
-	}
-
-	public void rotate(TerrainBlock blk, bool goClockwise = true){
-		blk.rotate(goClockwise);
-	}
-	#endregion Rotate
-
-	#region changeType
-	public void changeType(Vector3 pos, string type){
-		changeType(find(pos), type);
-	}
-
-	public void changeType(TerrainBlock blk, string type){
-		blk.changeType(type);
-	}
-	#endregion changeType
 	#endregion Manipulation
 
 	

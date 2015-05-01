@@ -126,7 +126,7 @@ public static class MapDataParser {
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
 			MonsterBlock nBlk = new MonsterBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
-			nBlk.Tier = Convert.ToInt32(blkParams[4]);
+			nBlk.BlockInfo.Tier = Convert.ToInt32(blkParams[4]);
 			MapData.MonsterBlocks.add(nBlk);
 		}
 	}

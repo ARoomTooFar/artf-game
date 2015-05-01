@@ -3,45 +3,58 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class KeyboardInputs : MonoBehaviour {	
+
+	CameraMovement move;
+
+	void Start(){
+		move = Camera.main.GetComponent<CameraMovement>();
+	}
 	// Update is called once per frame
 	void Update () {
+
+		if(Input.GetAxis("Mouse ScrollWheel") < 0) {
+			move.zoomCamIn();
+		}
+
+		if(Input.GetAxis("Mouse ScrollWheel") > 0) {
+			move.zoomCamOut();
+		}
+
 		if(Input.GetKeyDown(KeyCode.Backspace)) {
-
-			HashSet<GameObject> obs = MapData.getObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
-
-			//refund costs
-			foreach(GameObject ob in obs){
-				if(ob != null){
-					Money.money += ob.GetComponent<LevelEntityData>().baseCost;
-					Money.updateMoneyDisplay();
-				}
-			}
-
-			MapData.removeObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
+			MapData.delete();
 		}
 
 		if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
-			Camera.main.GetComponent<CameraMovement>().moveForward();
+			move.moveForward();
 		}
 
 		if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) {
-			Camera.main.GetComponent<CameraMovement>().moveBackward();
+			move.moveBackward();
 		}
 
 		if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
-			Camera.main.GetComponent<CameraMovement>().moveLeft();
+			move.moveLeft();
 		}
 
 		if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
-			Camera.main.GetComponent<CameraMovement>().moveRight();
+			move.moveRight();
 		}
 
 		if(Input.GetKey(KeyCode.Minus) || Input.GetKey(KeyCode.KeypadMinus)){
-			Camera.main.GetComponent<CameraMovement>().zoomCamIn();
+			move.zoomCamIn();
 		}
 
 		if(Input.GetKey(KeyCode.Equals)|| Input.GetKey(KeyCode.KeypadPlus)){
-			Camera.main.GetComponent<CameraMovement>().zoomCamOut();
+			move.zoomCamOut();
+		}
+		if(Input.GetKeyDown(KeyCode.Tab)) {
+			move.toggleCamera();
+		}
+		if(Input.GetKeyDown(KeyCode.E)) {
+			Camera.main.GetComponent<TileMapController>().fillInRoom();
+		}
+		if(Input.GetKeyDown(KeyCode.Q)){
+			move.changeModes();
 		}
 	}
 }
