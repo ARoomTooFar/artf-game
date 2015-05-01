@@ -192,5 +192,4 @@ public class UpgradeUI : MonoBehaviour
 		else 
 			return true;
 	}
-	
 }
