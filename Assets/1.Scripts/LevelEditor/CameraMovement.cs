@@ -23,7 +23,6 @@ public class CameraMovement : MonoBehaviour {
 	Vector3 rotOffset;
 
 	void Start() {
-		
 		// This should only ever be in the Level Editor, so I'm sticking a thing here to tell
 		// the resource pool thing to strip colliders from game objects.
 		Global.inLevelEditor = true;
@@ -38,28 +37,13 @@ public class CameraMovement : MonoBehaviour {
 		btn = GameObject.Find("Button_CameraToggle").GetComponent("Button") as Button;
 		orth = Resources.Load <Sprite>("LevelEditorIcons/orthog");
 		pers = Resources.Load <Sprite>("LevelEditorIcons/perspe");
-
-		foreach(Camera cam in Camera.allCameras) {
-			cam.transform.position = Global.initCameraPosition;
-			cam.orthographic = false;
-			cam.transform.eulerAngles = Global.initCameraRotation;
-		}
 	}
 	
 	void Update() {
-		checkForMouseScrolling();
 		checkForMouseClicks();
 	}
 	
-	void checkForMouseScrolling() {
-		if(Input.GetAxis("Mouse ScrollWheel") < 0 /*&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false*/) {
-			zoomCamIn();
-		}
-		if(Input.GetAxis("Mouse ScrollWheel") > 0 /*&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false*/) {
-			zoomCamOut();
-		}
-	}
-	
+
 	void checkForMouseClicks() {
 		if(Input.GetMouseButton(1)) {
 			dragCamera();
@@ -158,16 +142,19 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	public void changeToPerspective() {
+		// Get original focus point
 		Vector3 oldFocus = getFocusPoint();
-		Debug.Log(oldFocus);
+		// Change back to perspective and original rotation
 		mainCam.orthographic = false;
 		mainCam.transform.eulerAngles = Global.initCameraRotation;
+		// Figure out the new Y value for zooming
 		Vector3 newVec = Camera.main.transform.position;
 		newVec.y = minY + maxY * Global.Normalize(mainCam.orthographicSize, minOrthoSize, maxOrthoSize);
 		Camera.main.transform.position = newVec;
+		// Get the current focus point
 		Vector3 newFocus = getFocusPoint();
+		// Move camera to put focus back at the original focus point.
 		transform.position = transform.position - newFocus + oldFocus;
-		Debug.Log(getFocusPoint());
 		foreach(Camera cam in Camera.allCameras) {
 			cam.orthographic = mainCam.orthographic;
 		}

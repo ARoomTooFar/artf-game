@@ -11,6 +11,15 @@ public class KeyboardInputs : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
+
+		if(Input.GetAxis("Mouse ScrollWheel") < 0) {
+			move.zoomCamIn();
+		}
+
+		if(Input.GetAxis("Mouse ScrollWheel") > 0) {
+			move.zoomCamOut();
+		}
+
 		if(Input.GetKeyDown(KeyCode.Backspace)) {
 			MapData.delete();
 		}
@@ -40,6 +49,9 @@ public class KeyboardInputs : MonoBehaviour {
 		}
 		if(Input.GetKeyDown(KeyCode.Tab)) {
 			move.toggleCamera();
+		}
+		if(Input.GetKeyDown(KeyCode.E)) {
+			Camera.main.GetComponent<TileMapController>().fillInRoom();
 		}
 	}
 }
