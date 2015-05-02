@@ -22,7 +22,7 @@ public class TileMapController : MonoBehaviour {
 	public float secondZ;
 	public bool suppressDragSelecting;
 	Vector3 clickOrigin = Global.nullVector3;
-	Vector3 lastClick = Global.nullVector3;
+	public Vector3 lastClick = Global.nullVector3;
 	
 	void Start() {	
 		UICamera = Camera.main;
@@ -61,6 +61,7 @@ public class TileMapController : MonoBehaviour {
 
 		if(Input.GetMouseButtonDown(0)) {
 			lastClick = point;
+			/*
 			if(Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) {
 				if(!selectedTiles.Add(point)) {
 					selectedTiles.Remove(point);
@@ -68,7 +69,7 @@ public class TileMapController : MonoBehaviour {
 					shiftOrigin = point;
 				}
 				return;
-			}
+			}*/
 
 			if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
 				if(shiftOrigin == Global.nullVector3) {
@@ -102,133 +103,18 @@ public class TileMapController : MonoBehaviour {
 	}
 
 	public void fillInRoom() {
-		MapData.addRoom(shiftOrigin, lastClick);
-	}
-
-	void RayToScene() {
-		/* get world coordinates with respect to mouse position by raycast */
-		Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hitInfo;
-		float distance;
-		Global.ground.Raycast(ray, out distance);
-		
-		/* getting raycast info and logic */
-		//&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false
-		Physics.Raycast(ray, out hitInfo, distance);
-		/* check whether the ray hits an object or the tile map */
-		if(hitInfo.collider != null) {
-			snapToGrid(hitInfo.collider.gameObject.transform.position.x, hitInfo.collider.transform.position.z);
-		} else {
-			snapToGrid(ray.GetPoint(distance).x, ray.GetPoint(distance).z);
+		if(MapData.addRoom(shiftOrigin, lastClick)) {
+			Money.buy(new Square(shiftOrigin, lastClick).Cost);
 		}
 	}
-	
-	/* snap mouse selection to grid */
-	void snapToGrid(float xf, float zf) {
-		int x = Mathf.RoundToInt(xf);
-		int z = Mathf.RoundToInt(zf);
 
-		Vector3 stgVector = new Vector3(x, 0, z);
-		if(Input.GetMouseButton(0)) {
-			if(clickOrigin == Global.nullVector3) {
-				clickOrigin = stgVector;
-			}
-		} else {
-			clickOrigin = Global.nullVector3;
-		}
-
-		//for selecting single tiles, and for shift-clicking to select a group of tiles
-		//
-		//check whether mouse is pressed AND the tile hasn't been selected AND weather we're over a screen UI element
-		if(Input.GetMouseButtonDown(0) && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
-			//Control functionality: selects tiles and adds to hashset
-			if(Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) {
-				//If the tile already has been selected, deselect it
-				if(selectedTiles.Contains(stgVector)) {
-					deselect(stgVector);
-				}
-				//Otherwise, select it
-				else {
-					selectTile(stgVector);
-				}
-				return;
-			}
-			//Shift functionality: selects all tiles between last selected tile, and shift clicked tile
-			else if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
-				//If no tiles have been selected ever, just select that tile
-				if(shiftOrigin == Global.nullVector3) {
-					selectTile(stgVector);
-				}
-				//Deselect other tiles, then select all tiles between bounds
-				else {
-					deselectAll();
-					Vector3 vec = new Vector3(x, 0, z);
-					Vector3 max = vec.getMaxVals(shiftOrigin);
-					Vector3 min = vec.getMinVals(shiftOrigin);
-					// Debug.Log (shiftOrigin + " to " + x + ", " + z);
-					for(int xx = (int) min.x; xx <= (int) max.x; xx++) {
-						for(int zz = (int) min.z; zz <= (int) max.z; zz++) {
-							selectedTiles.Add(new Vector3(xx, 0, zz));
-						}
-					}
-					
-				}
-				//Normal click functionality: Deselect all selected, select target	
-			} else {
-				deselectAll();
-				selectTile(stgVector);
-			}
-			secondX = Mathf.RoundToInt(xf);
-			secondZ = Mathf.RoundToInt(zf);
-		}
-
-		//if user is holding down left mouse button, and dragging,
-		//we make a box of selected tile and have it resize as
-		//the mouse moves around
-		if(clickOrigin != stgVector
-			&& suppressDragSelecting == false
-			&& Input.GetMouseButton(0)
-			&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
-			//If no tiles have been selected ever, just select that tile
-			if(shiftOrigin == Global.nullVector3) {
-				selectTile(stgVector);
-			}
-			
-			//Deselect other tiles, then select all tiles between bounds 
-			else {
-				deselectAll();
-				Vector3 vec = new Vector3(x, 0, z);
-				Vector3 max = vec.getMaxVals(shiftOrigin);
-				Vector3 min = vec.getMinVals(shiftOrigin);
-				//Debug.Log (shiftOrigin + " to " + x + ", " + z);
-				for(int xx = (int) min.x; xx <= (int) max.x; xx++) {
-					for(int zz = (int) min.z; zz <= (int) max.z; zz++) {
-						selectedTiles.Add(new Vector3(xx, 0, zz));
-					}
-				}
-				secondX = Mathf.RoundToInt(xf);
-				secondZ = Mathf.RoundToInt(zf);
-			}
-		}
-
-		if(placeRoomClicked) {
-			fillInRoom();
-			placeRoomClicked = false;
-		}
-	}
-	
 	/* Add selected tile index to a list to be access by the camera script for rendering 
 	 * and update the last selected tile in case of shift click */
 	public void selectTile(Vector3 add) {
 		selectedTiles.Add(add);
 		shiftOrigin = add;
 	}
-	
-	/*deselects all tiles */
-	void deselectAll() {
-		selectedTiles.Clear();
-	}
-	
+
 	/*deselects tile passed into function */
 	public void deselect(Vector3 remove) {
 		selectedTiles.Remove(remove);
