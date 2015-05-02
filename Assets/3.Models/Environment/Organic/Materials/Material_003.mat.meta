@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 8002a7f4a13fc5c40aabb76a4f75f684
 timeCreated: 1430548964
+=======
+guid: 82f12ee2541fef34d9268222abdb6126
+timeCreated: 1430527159
+>>>>>>> GP-Test-Branch
 licenseType: Free
 NativeFormatImporter:
   userData: 
