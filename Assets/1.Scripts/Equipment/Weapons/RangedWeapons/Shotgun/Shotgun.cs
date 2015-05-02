@@ -14,10 +14,10 @@ public class Shotgun : RangedWeapons {
 		// Use sword animations for now
 		stats.weapType = 0;
 		stats.weapTypeName = "sword";
-		loadSpeed = 5f;
-		stats.atkSpeed = 2.0f;
-		stats.damage = 10;
-		stats.maxChgTime = 2.0f;
+		loadSpeed = 0f;
+		stats.atkSpeed = 1.0f;
+		stats.damage = 15 + user.GetComponent<Character>().stats.coordination;
+		stats.maxChgTime = 5.0f;
 		
 		// Originally bull pattern S
 		//shotty

@@ -42,7 +42,7 @@ public class NewArtilitree: NewRangedEnemy {
 	}
 	
 	public override void SetTierData(int tier) {
-		tier = 0;
+		tier = 5;
 		base.SetTierData(tier);
 		
 		if (tier < 1) stats.speed = 2;

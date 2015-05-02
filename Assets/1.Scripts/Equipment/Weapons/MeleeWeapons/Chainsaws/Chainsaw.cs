@@ -54,7 +54,7 @@ public class Chainsaw : MeleeWeapons {
 		stats.weapTypeName = "chainsaw";
 
 		stats.atkSpeed = 3.0f;
-		stats.damage = (int)(1 + 0.1f * user.GetComponent<Character>().stats.strength);
+		stats.damage = (int)(5 + 0.1f * user.GetComponent<Character>().stats.strength);
 		
 		stats.maxChgTime = 3.0f;
 		stats.timeForChgAttack = 0.5f;
