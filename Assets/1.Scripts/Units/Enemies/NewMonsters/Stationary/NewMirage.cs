@@ -178,6 +178,7 @@ public class NewMirage : NewStationaryEnemy {
 			foreach (MirageImage im in this.blink.mirrors) {
 				if (im != null) im.die(); //Destroy(im.gameObject);
 			}
+			this.isDead = true;
 			this.deathTarget.BDS.rmvBuffDebuff(this.mark, this.gameObject);
 			animator.SetTrigger("Died");
 		}

@@ -54,7 +54,7 @@ public class Projectile : MonoBehaviour {
 		}
 		enemy.damage(damage, user.transform, user.gameObject);
 	}
-	
+
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Wall" || other.tag == "Door") {
 			if(particles !=null){
