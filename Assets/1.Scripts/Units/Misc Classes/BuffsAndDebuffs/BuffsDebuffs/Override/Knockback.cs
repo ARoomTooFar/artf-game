@@ -51,11 +51,13 @@ public class Knockback : Override {
 	
 	protected override void removeEffects (BDData oldData, GameObject source) {
 		base.removeEffects (oldData, source);
+		//Debug.Log ("GotHere");
 		oldData.unit.stabled();
 	}
 	
 	public override void purgeBD(Character unit, GameObject source) {
 		base.purgeBD (unit, source);
+		//Debug.Log ("GotHere");
 		unit.stabled();
 	}
 	

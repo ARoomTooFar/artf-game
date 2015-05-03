@@ -251,6 +251,8 @@ public class Player : Character, IMoveable, IHealable<int>{
 		splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
 		theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
 		Destroy (theSplat, 2);
+		//hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
+		//BDS.addBuffDebuff(hitConfirm,gameObject,10);
 	}
 	
 	public override void damage(int dmgTaken) {

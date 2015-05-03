@@ -58,6 +58,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	public Renderer[] rs;
 	public Cloak[] skins;
 	public GameObject expDeath;
+	public Knockback hitConfirm;
 	
 	// Animation variables
 	public Animator animator;
@@ -353,15 +354,19 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	}
 	
 	public virtual void damage(int dmgTaken, Transform atkPosition) {
-		if (!invincible) {
+		if (!invincible && !stats.isDead) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(atkPosition.position, facing, transform.position)), 1, 100000);
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position, Quaternion.identity)).GetComponent<splatCore>();
 				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
+				Debug.Log (theSplat.adjuster);
 				Destroy (theSplat, 2);
 			}
 			//Character enemy = other.GetComponent<Character>();
-			knockback(gameObject.transform.position-atkPosition.position,1);
+			Debug.Log ((float) dmgTaken/stats.maxHealth*5.0f);
+			hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
+			BDS.addBuffDebuff(hitConfirm,gameObject,10);
+
 			stats.health -= dmgTaken;
 
 			if (stats.health <= 0) this.die();
@@ -369,12 +374,13 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	}
 	
 	public virtual void damage(int dmgTaken) {
-		if (!invincible) {
+		if (!invincible && !stats.isDead) {
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position, Quaternion.identity)).GetComponent<splatCore>();
 				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
 				Destroy (theSplat, 2);
 			}
+			//hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(dmgTaken/stats.maxHealth)*5.0f);
 			stats.health -= dmgTaken;
 
 			if (stats.health <= 0) die();
