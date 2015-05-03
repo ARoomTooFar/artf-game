@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MonsterData : LevelEntityData {
 	public MonsterData() : base(){
@@ -22,5 +23,13 @@ public class MonsterData : LevelEntityData {
 			for (int t = this.tier; t >= 0; t--) total = total + (baseCost * (t + 1)); // Based on our test formula ^
 			return total;
 		}
+	}
+
+	public List<Vector3> RadiusCoordinates(DIRECTION dir) {
+		List<Vector3> retVal = new List<Vector3>();
+		foreach(Vector3 vec in Coordinates) {
+			retVal.Add(vec.RotateTo(dir));
+		}
+		return retVal;
 	}
 }

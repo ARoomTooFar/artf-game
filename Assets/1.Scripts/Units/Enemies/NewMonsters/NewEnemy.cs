@@ -206,7 +206,7 @@ public class NewEnemy : NewCharacter {
 	public virtual void getFacingTowardsTarget() {
 		Vector3 newFacing = Vector3.zero;
 		
-		if (this.target != null && !this.stunned) {
+		if (this.target != null && this.actable) {
 			newFacing = this.target.transform.position - this.transform.position;
 			newFacing.y = 0.0f;
 			if (newFacing != Vector3.zero) {

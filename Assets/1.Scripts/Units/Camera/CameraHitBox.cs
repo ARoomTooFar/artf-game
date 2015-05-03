@@ -24,6 +24,7 @@ public class CameraHitBox : MonoBehaviour {
 		totalX = 0;
 		totalZ = 0;
 		foreach(Character unit in areaUnits) {
+			if (unit == null) continue;
 			totalX+=unit.transform.position.x;
 			totalZ+=unit.transform.position.z;
 		}

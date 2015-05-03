@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class MonsterManager {
 
@@ -26,8 +27,8 @@ public class MonsterManager {
 	 * Returns false if a block already seems to exist in its position.
 	 */
 	public void add(MonsterBlock blk) {
-		//attempt to link the input to its neighbors
-		linkTerrain(blk);
+		ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
+		rm.Monster.Add(blk);
 		//get the list for the block type
 		List<MonsterBlock> lst;
 		try{
@@ -36,7 +37,6 @@ public class MonsterManager {
 			lst = new List<MonsterBlock>();
 			dictionary.Add(blk.BlockInfo.BlockID, lst);
 		}
-
 
 		//add the block to the list
 		lst.Add(blk);
@@ -48,9 +48,9 @@ public class MonsterManager {
 	}
 	
 	public void move(MonsterBlock blk, Vector3 offset){
-		unlinkTerrain (blk);
+		//unlinkTerrain (blk);
 		blk.move(offset);
-		linkTerrain (blk);
+		//linkTerrain (blk);
 	}
 	#endregion Move
 
@@ -78,41 +78,12 @@ public class MonsterManager {
 		if(blk == null) {
 			return;
 		}
-		//unlink neighbors
-		//unlinkTerrain(blk);
 		blk.remove();
 		//remove from list
 		dictionary[blk.BlockInfo.BlockID].Remove(blk);
 	}
 	#endregion Remove
 	#endregion Manipulation
-
-
-	#region (un)linkTerrain
-	/*
-	 * private void linkTerrain (MonsterBlock block)
-	 * 
-	 * Gets the adjacent blocks and adds them as neighbors to block.
-	 * Also links block as a neighbor to any adjacent blocks.
-	 */
-	private void linkTerrain(MonsterBlock blk) {
-		MapData.TerrainBlocks.find(blk.Position).addMonster(blk);
-	}
-
-	/*
-	 * private void unlinkTerrain(MonsterBlock block)
-	 * 
-	 * Breaks all neighbor links between block and its list of neighbors.
-	 * 
-	 */
-	private void unlinkTerrain(MonsterBlock blk) {
-		TerrainBlock terBlk = MapData.TerrainBlocks.find(blk.Position);
-		if(terBlk.Monster.Equals(blk)){
-			terBlk.removeMonster();
-		}
-	}
-	#endregion (un)linkTerrain
-
 
 	/*
 	 * public TerrainBlock findBlock (Vector3 position)
@@ -135,31 +106,50 @@ public class MonsterManager {
 		return null;
 	}
 
-	public GameObject findGameObj(Vector3 pos) {
-		//for each type of block
-		foreach(KeyValuePair<string, List<MonsterBlock>> kvPair in dictionary) {
-			//check each block
-			foreach(MonsterBlock blk in kvPair.Value) {
-				//return block if position matches
-				if(blk.Position.Equals(pos)) {
-					return blk.GameObj;
-				}//otherwise continue to next
-			}
-		}
-		//return null if none found
-		return null;
+	#region Validation
+	public bool isAddValid(string type, Vector3 pos, DIRECTION dir){
+		MonsterBlock tstMon = new MonsterBlock(type, pos, dir);
+		bool retVal = isMonsterValid(tstMon);
+		tstMon.remove();
+		return retVal;
 	}
 
-	#region Validation
-	public bool isAddValid(Vector3 pos){
-		TerrainBlock blk = MapData.TerrainBlocks.find(pos);
-		if(blk == null) {
+	public bool isMoveValid(Vector3 pos, Vector3 offset){
+		MonsterBlock tstMon = find(pos);
+		if(tstMon == null) {
 			return false;
 		}
-		if(blk.Monster != null) {
+		tstMon.move(offset);
+		bool retVal = isMonsterValid(tstMon);
+		tstMon.move(-offset);
+		return retVal;
+	}
+
+	public bool isMonsterValid(MonsterBlock mon){
+
+		ARTFRoom rm = MapData.TheFarRooms.find(mon.Position);
+		if(rm == null) {
 			return false;
 		}
-		return blk.Pathable;
+		foreach(Vector3 vec in mon.Coordinates) {
+			if(!rm.inRoom(vec)){
+				return false;
+			}
+		}
+		foreach(MonsterBlock other in rm.Monster) {
+			if(other == mon){
+				continue;
+			}
+			if(mon.RadiusCoordinates.Intersect(other.RadiusCoordinates).Count() != 0){
+				return false;
+			}
+		}
+		foreach(SceneryBlock blk in rm.Scenery) {
+			if(blk.Coordinates.Intersect(mon.Coordinates).Count() != 0){
+				return blk.Walkable;
+			}
+		}
+		return true;
 	}
 	#endregion Validation
 

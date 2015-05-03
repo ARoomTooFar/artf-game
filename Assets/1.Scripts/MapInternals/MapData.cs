@@ -79,23 +79,28 @@ public static class MapData {
 	}
 	#endregion Rooms
 
-	public static void addObject(string type, Vector3 pos, DIRECTION dir) {
+	public static bool addObject(string type, Vector3 pos, DIRECTION dir) {
 		GameObject obj = GameObjectResourcePool.getResource(type, pos, dir.toRotationVector());
 		BlockData data = obj.GetComponent<BlockData>();
 		GameObjectResourcePool.returnResource(type, obj);
 		if(data is SceneryData) {
 			if(SceneryBlocks.isAddValid(type, pos, dir)) {
 				SceneryBlocks.add(new SceneryBlock(type, pos, dir));
+			} else {
+				return false;
 			}
 			LevelPathCheck.checkPath();
-			return;
+			return true;
 		} 
 		if(data is MonsterData) {
-			if(MonsterBlocks.isAddValid(pos)) {
+			if(MonsterBlocks.isAddValid(type, pos, dir)) {
 				MonsterBlocks.add(new MonsterBlock(type, pos, dir));
+			} else {
+				return false;
 			}
-			return;
+			return true;
 		}
+		return false;
 	}
 
 	public static void dragObject(GameObject obj, Vector3 pos, Vector3 offset) {
@@ -118,7 +123,7 @@ public static class MapData {
 		}
 
 		if(data is MonsterData) {
-			if(MonsterBlocks.isAddValid(pos+offset)) {
+			if(MonsterBlocks.isMoveValid(pos, offset)) {
 				MonsterBlocks.move(pos, offset);
 			}
 			return;
@@ -158,12 +163,34 @@ public static class MapData {
 	public static HashSet<GameObject> getObjects(HashSet<Vector3> set){
 		HashSet<GameObject> obs = new HashSet<GameObject>();
 
+		SceneryBlock blk;
+		MonsterBlock mon;
 		foreach(Vector3 vec in set) {
-			obs.Add(SceneryBlocks.findGameObj(vec));
-			obs.Add(MonsterBlocks.findGameObj(vec));
+			blk = SceneryBlocks.find(vec);
+			if(blk != null){
+				obs.Add(blk.GameObj);
+			}
+			mon = MonsterBlocks.find(vec);
+			if(mon != null){
+				obs.Add(mon.GameObj);
+			}
 		}
 		return obs;
 
+	}
+
+	public static void delete(){
+		HashSet<GameObject> obs = MapData.getObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
+		
+		//refund costs
+		foreach(GameObject ob in obs){
+			if(ob != null){
+				Money.money += ob.GetComponent<LevelEntityData>().baseCost;
+				Money.updateMoneyDisplay();
+			}
+		}
+		
+		MapData.removeObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
 	}
 	
 }

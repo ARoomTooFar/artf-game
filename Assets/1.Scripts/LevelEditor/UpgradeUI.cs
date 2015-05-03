@@ -23,33 +23,30 @@ public class UpgradeUI : MonoBehaviour
 	
 	GameObject lowerHalf;
 	GameObject tierStats;
-
-	Button Button_TierDown;
-	Button Button_TierUp;
-	Button Button_Rotate;
-	
-	Button Button_X;
 	
 	Vector3 mouseStartPos;
 	
 	bool rayHit = false;
+	RaycastHit hit;
 
 	void Start ()
 	{
-		Button_TierUp = transform.Find("LowerHalf/Button_TierUp").GetComponent<Button>();
-		Button_TierDown = transform.Find("LowerHalf/Button_TierDown").GetComponent<Button>();
-		Button_TierUp.onClick.AddListener (() => {
+		Button btn;
+		btn = transform.Find("LowerHalf/Button_TierUp").GetComponent<Button>();
+		btn.onClick.AddListener (() => {
 			increaseTier (); });
-		Button_TierDown.onClick.AddListener (() => {
-			decreaseTier (); }); 
-		Button_Rotate = transform.Find("LowerHalf/Button_Rotate").GetComponent<Button>();
-		Button_X = transform.Find("LowerHalf/Button_X").GetComponent<Button>();
-		//rotate object button
-		Button_Rotate.onClick.AddListener (() => {
+
+		btn = transform.Find("LowerHalf/Button_TierDown").GetComponent<Button>();
+		btn.onClick.AddListener (() => {
+			decreaseTier (); });
+
+		btn = transform.Find("LowerHalf/Button_Rotate").GetComponent<Button>();
+		btn.onClick.AddListener (() => {
 			MapData.rotateObject(this.transform.parent.gameObject, this.transform.parent.gameObject.transform.position);
 		});
-		//X out
-		Button_X.onClick.AddListener (() => {
+
+		btn = transform.Find("LowerHalf/Button_X").GetComponent<Button>();
+		btn.onClick.AddListener (() => {
 			toggleUpgradeUI(); 
 		});
 
@@ -83,7 +80,6 @@ public class UpgradeUI : MonoBehaviour
 		faceUIToCamera();
 
 		if(FollowCamera.orthographic == true){
-			print("ASdfadF");
 			lowerHalf.SetActive(false);
 			tierStats.SetActive(false);
 			currentActiveObjectUI = null;
@@ -92,20 +88,14 @@ public class UpgradeUI : MonoBehaviour
 
 	//turn tiers gray that aren't applied. turn tiers green that are applied
 	void updateTiers(){
-		for (int i = tier; i <= maxTier; i++) {
-			foreach (Transform thing in tierStats.transform) {
-				if (thing.GetComponent<Text> () != null && thing.name != "Title" && thing.name.Contains ("Tier" + i.ToString ())) {
-					thing.GetComponent<Text> ().color = Color.gray;
-				}
+		foreach(Transform thing in tierStats.transform) {
+			if(!thing.name.Contains("Tier")){
+				continue;
 			}
-		}
-
-		for (int i = tier; i >= 0; i--) {
-
-			foreach (Transform thing in tierStats.transform) {
-				if (thing.name.Contains ("Tier" + i.ToString ())) {
-					thing.GetComponent<Text> ().color = Color.green;
-				} 
+			if(Convert.ToInt32(thing.name[thing.name.Length-1])-Convert.ToInt32('0') <= tier){
+				thing.GetComponent<Text>().color = Color.green;
+			} else {
+				thing.GetComponent<Text>().color = Color.gray;
 			}
 		}
 	}
@@ -120,23 +110,15 @@ public class UpgradeUI : MonoBehaviour
 	void stickScreenSpaceOverlayCameraToObject(){
 		Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(FollowCamera, parentObject.transform.position);
 		UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition = screenPoint;
-
-//		Vector3 screenPoint = UICamera.WorldToViewportPoint(parentObject.transform.position);
-//		UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition = screenPoint;
-//		lowerHalf.transform.position = screenPoint;
-		//Debug.Log(UpgradeUICanvas.GetComponent<RectTransform>().anchoredPosition + ", " + screenPoint);
 	}
 
 	void Update(){
-		RaycastHit hit;
-
-		updateTiers();
 
 		//keeps canvas stuck on world object. for when canvas is in Screen Space - Overlay mode
 		stickScreenSpaceOverlayCameraToObject();
 
 		//resizes canvas according to camera zoom, for when canvas is in World Space mode
-//		scaleWorldSpaceCanvas();
+		//scaleWorldSpaceCanvas();
 
 		//this checks if the object this script applies to was clicked
 		if (Input.GetMouseButtonDown (0)) {
@@ -161,37 +143,26 @@ public class UpgradeUI : MonoBehaviour
 	}
 	
 	void faceUIToCamera(){
-		Vector3 p = new Vector3();
-
-		p = parentObject.transform.position;
-		UpgradeUICanvas.transform.position = p; 
-		
-		p = UICamera.transform.rotation.eulerAngles;
-		UpgradeUICanvas.transform.rotation = Quaternion.Euler(p);
+		UpgradeUICanvas.transform.position = parentObject.transform.position;
+		UpgradeUICanvas.transform.rotation = UICamera.transform.rotation;
 	}
 
 	public void increaseTier ()
 	{
-		tier += 1;
-		if (tier >= maxTier) {
-			tier = maxTier;
-		}
+		tier = Math.Min(tier + 1, maxTier);
 		updateMonsterStatText ();
 		parentObject.GetComponent<MonsterData>().tier = tier;
+		updateTiers();
 	}
 	
 	public void decreaseTier ()
 	{
-		tier -= 1;
-		if (tier <= 0) {
-			tier = 0;
-		}
+		tier = Math.Max(0, tier - 1);
 		updateMonsterStatText ();
 		parentObject.GetComponent<MonsterData>().tier = tier;
+		updateTiers();
 	}
-	
 
-	
 	//Update the monster stat text with the newly changed value
 	void updateMonsterStatText ()
 	{
@@ -200,9 +171,6 @@ public class UpgradeUI : MonoBehaviour
 	
 	//makes sure only one ObjectUI is active in the level editor
 	public bool toggleUpgradeUI(){
-
-
-
 		if(currentActiveObjectUI == null){
 			lowerHalf.SetActive(true);
 			tierStats.SetActive(true);

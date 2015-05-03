@@ -11,43 +11,42 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class UIButtonSetup : MonoBehaviour {
-	void Start(){
-
+	void Start() {
 		Button btn;
+		CameraMovement move = Camera.main.GetComponent<CameraMovement>();
 
 		btn = GameObject.Find("Button_Room").GetComponent("Button") as Button;
 		btn.onClick.AddListener(() => {
-			Camera.main.GetComponent<TileMapController>().fillInRoom(); });
-
-
-		btn = GameObject.Find ("Button_ZoomOut").GetComponent("Button") as Button;
-		btn.onClick.AddListener (() => {
-			Camera.main.GetComponent<CameraMovement>().zoomCamIn ();});
-
-		btn = GameObject.Find ("Button_ZoomIn").GetComponent("Button") as Button;
-		btn.onClick.AddListener (() => {
-			Camera.main.GetComponent<CameraMovement>().zoomCamOut ();});
-
-		btn = GameObject.Find ("Button_ModeToggle").GetComponent("Button") as Button;
-		btn.onClick.AddListener (() => {
-			if(Mode.isRoomMode())
-				Mode.setTileMode();
-			else if(Mode.isTileMode())
-				Mode.setRoomMode();
+			Camera.main.GetComponent<TileMapController>().fillInRoom();
+		});
+		
+		btn = GameObject.Find("Button_ZoomOut").GetComponent("Button") as Button;
+		btn.onClick.AddListener(() => {
+			move.zoomCamIn();
 		});
 
-		btn = GameObject.Find ("Button_CameraToggle").GetComponent("Button") as Button;
+		btn = GameObject.Find("Button_ZoomIn").GetComponent("Button") as Button;
 		btn.onClick.AddListener(() => {
-			if(Camera.main.orthographic){
-				Camera.main.GetComponent<CameraMovement>().changeToPerspective();
-				btn.GetComponent<Image>().sprite = Resources.Load <Sprite>("IconsUI/perspe");
-			}
-			else{
-				Camera.main.GetComponent<CameraMovement>().changeToTopDown();
-				btn.GetComponent<Image>().sprite = Resources.Load <Sprite>("IconsUI/orthog");
-			}
+			move.zoomCamOut();
+		
+		});
+
+		btn = GameObject.Find("Button_ModeToggle").GetComponent("Button") as Button;
+		btn.onClick.AddListener(() => {
+			move.changeModes();
+		});
+
+		btn = GameObject.Find("Button_Delete").GetComponent("Button") as Button;
+		btn.onClick.AddListener(() => {
+			MapData.delete();
+		});
+
+		btn = GameObject.Find("Button_CameraToggle").GetComponent("Button") as Button;
+		btn.onClick.AddListener(() => {
+			move.toggleCamera();
 		});
 	}
 }

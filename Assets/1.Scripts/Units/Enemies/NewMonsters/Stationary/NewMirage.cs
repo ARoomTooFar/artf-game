@@ -4,10 +4,13 @@ using System.Collections.Generic;
 
 public class NewMirage : NewStationaryEnemy {
 
+	public MirageWeapon leftClaw, rightClaw;
+
 	protected List<MirageImage> images;
 	protected MarkOfDeath mark;
 	public Player deathTarget;
 	protected MirageBlink blink;
+	protected BlinkStrike blinkStrike;
 	
 	// Mark of Death
 	protected class MarkOfDeath : Stacking {
@@ -45,24 +48,41 @@ public class NewMirage : NewStationaryEnemy {
 		if (this.blink == null) Debug.LogWarning ("Mirage does not have MirageBlink equipped");
 		else this.blink.tier = this.tier; // Put in check later for tier
 
-		foreach(MirageApproach behaviour in this.animator.GetBehaviours<MirageApproach>()) {
-			behaviour.blink = this.blink;
+		this.inventory.cycItems();
+		this.blinkStrike = this.inventory.items[inventory.selected].GetComponent<BlinkStrike>();
+		if (this.blinkStrike == null) Debug.LogWarning ("Mirage does not have BlinkStrike equipped");
+		else this.blinkStrike.mirage = this;
+
+		foreach(MirageBlinkBehaviour behaviour in this.animator.GetBehaviours<MirageBlinkBehaviour>()) {
+			behaviour.SetVar (this.blink);
 		}
+
+		foreach (MirageBlinkStrike behaviour in this.animator.GetBehaviours<MirageBlinkStrike>()) {
+			behaviour.SetVar (this.blinkStrike);
+		}
+
+		leftClaw.equip (this, opposition);
+		rightClaw.equip (this, opposition);
+	}
+
+	public override void SetTierData(int tier) {
+		tier = 2;
+		base.SetTierData (tier);
 	}
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 40;
+		stats.maxHealth = 5;
 		stats.health = stats.maxHealth;
 		stats.armor = 1;
-		stats.strength = 20;
+		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=4;
 		stats.luck=0;
 		setAnimHash ();
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 3.0f;
+		this.maxAtkRadius = 4.0f;
 	}
 	
 	//-------------//
@@ -74,7 +94,40 @@ public class NewMirage : NewStationaryEnemy {
 	//---------//
 	// Actions //
 	//---------//
+	
+	public override void initAttack() {
+		this.animator.SetTrigger("Attack");
+	}
 
+	protected virtual void LeftClawiderOn() {
+		this.leftClaw.collideOn();
+	}
+
+	protected virtual void LeftClawiderOff() {
+		this.leftClaw.collideOff();
+	}
+
+	protected virtual void RightClawiderOn() {
+		this.rightClaw.collideOn();
+	}
+
+	protected virtual void RightClawiderOff() {
+		this.rightClaw.collideOff();
+	}
+
+	protected virtual void Blink() {
+		this.facing = this.deathTarget.transform.position - this.transform.position;
+		this.facing.y = 0.0f;
+
+		do {
+			this.facing.x = Random.value * (this.facing.x == 0 ? (Random.value - 0.5f) : (Mathf.Abs(this.facing.x)/this.facing.x));
+			this.facing.z = Random.value * (this.facing.z == 0 ? (Random.value - 0.5f) : (Mathf.Abs(this.facing.z)/this.facing.z));
+			this.facing.Normalize();
+		} while (this.facing == Vector3.zero);
+			
+		this.blink.useItem();
+	}
+	
 	protected override void TargetFunction() {
 		if (this.deathTarget != null) {
 			target = this.deathTarget.gameObject;
@@ -123,14 +176,17 @@ public class NewMirage : NewStationaryEnemy {
 			}
 		} else {
 			foreach (MirageImage im in this.blink.mirrors) {
-				Destroy(im.gameObject);
+				if (im != null) im.die(); //Destroy(im.gameObject);
 			}
 			this.deathTarget.BDS.rmvBuffDebuff(this.mark, this.gameObject);
-			base.die ();
+			animator.SetTrigger("Died");
 		}
 		
 	}
-	
+
+	public virtual void Death() {
+		base.die ();
+	}
 	
 	//---------------------//
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO; 
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -143,8 +143,8 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 					&& MapData.TheFarRooms.find(movePos) != null
 						   ) {
 					//snap door to an edge if it's near it
-					if((MapData.TheFarRooms.find(movePos).isCloseToEdge(movePos, 3f))) {
-						movePos = MapData.TheFarRooms.find(movePos).getNearestEdgePosition(movePos);
+					if((MapData.TheFarRooms.find(movePos).isNearEdge(movePos, 3f))) {
+						movePos = MapData.TheFarRooms.find(movePos).nearEdgePosition(movePos);
 					}
 
 					//set its new rotation
@@ -182,12 +182,14 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 				SceneryData sdat = itemObjectCopy.GetComponent<SceneryData>();
 				if(sdat != null && sdat.isDoor) {
 					ARTFRoom rm = MapData.TheFarRooms.find(pos);
-					if(rm != null && rm.isCloseToEdge(pos, 3f)) {
-						pos = MapData.TheFarRooms.find(pos).getNearestEdgePosition(pos);
+					if(rm != null && rm.isNearEdge(pos, 3f)) {
+						pos = MapData.TheFarRooms.find(pos).nearEdgePosition(pos);
 					}
 				}
-				if(Money.buy(itemType, price)){
-					MapData.addObject(prefabLocation, pos, rot.toDirection());
+				if(Money.money > price){
+					if(MapData.addObject(prefabLocation, pos, rot.toDirection())){
+						Money.buy(price);
+					}
 				}
 			}
 

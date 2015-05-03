@@ -25,11 +25,6 @@ public class TerrainBlock {
 		private set;
 	}
 
-	public MonsterBlock Monster {
-		get;
-		private set;
-	}
-
 	public SceneryBlock Wall {
 		get;
 		private set;
@@ -53,14 +48,6 @@ public class TerrainBlock {
 	public string SaveString {
 		get{ return Position.toCSV() + "," + Orientation.ToString() + "," + wallType;}
 	}
-	
-	public bool Pathable {
-		get{ return ((Wall == null) && (Scenery == null ? true : Scenery.Pathable)); }
-	}
-
-	public bool Walkable {
-		get { return ((Wall == null) && (Scenery == null ? true : Scenery.Walkable)); }
-	}
 
 	public String BlockID {
 		get;
@@ -81,18 +68,7 @@ public class TerrainBlock {
 		this.Wall = null;
 		//Debug.Log(GameObj.transform.position);
 	}
-
-	/*
-	 * Deep Copy constructor
-	 */
-	public TerrainBlock(TerrainBlock original) {
-		this.Neighbors = new Dictionary<DIRECTION, TerrainBlock>(original.Neighbors);
-		this.Scenery = original.Scenery;
-		this.Monster = original.Monster;
-		this.Room = original.Room;
-		this.Position = original.Position.Copy();
-		this.Orientation = original.Orientation;
-	}
+	
 	#endregion Constructors
 
 	#region Neighbors
@@ -142,19 +118,6 @@ public class TerrainBlock {
 		Neighbors.Clear();
 	}
 
-	/*
-	 * public TerrainBlock getNeighbor(DIRECTION dir)
-	 * 
-	 * Returns the neighboring TerrainBlock in direction dir.
-	 * Returns null if there is no block in that direction
-	 */
-	public TerrainBlock getNeighbor(DIRECTION dir) {
-		try {
-			return Neighbors[dir];
-		} catch(Exception) {
-			return null;
-		}
-	}
 
 	/*
 	 * public DIRECTION isNeighbor(TerrainBlock other)
@@ -201,43 +164,6 @@ public class TerrainBlock {
 	#endregion Neighbors
 
 	#region Scenery
-	/*
-	 * public bool addScenery(SceneryBlock scenery)
-	 * 
-	 * Links this block to a piece of scenery
-	 * 
-	 * Returns true if successfully linked
-	 * Returns false if not.
-	 */
-	public bool addScenery(SceneryBlock scn) {
-		//return false if there is already scenery
-		if(this.Scenery != null) {
-			return false;
-		}
-
-		//if the scenery blocks movement and there is a monster, return false
-		if(!scn.BlockInfo.Pathable && this.Monster != null) {
-			return false;
-		}
-		
-		this.Scenery = scn;
-		return true;
-	}
-
-	/*
-	 * public void removeScenery()
-	 * 
-	 * Unlinks the piece of scenery linked to this block
-	 */
-	public void removeScenery() {
-		this.Scenery.remove();
-		unlinkScenery();
-	}
-
-	public void unlinkScenery(){
-		this.Scenery = null;
-	}
-
 	public bool addWall(DIRECTION dir) {
 
 		//return false if there is already scenery
@@ -258,40 +184,6 @@ public class TerrainBlock {
 	}
 	#endregion Scenery
 
-	#region Monster
-	/*
-	 * public bool addMonster(MonsterBlock monster)
-	 * 
-	 * Links this block to a monster
-	 * 
-	 * Returns true if successfully linked
-	 * Returns false if not.
-	 */
-	public bool addMonster(MonsterBlock mon) {
-		//return false if there is already a monster linked
-		if(this.Monster != null) {
-			return false;
-		}
-
-		//return false if there is a piece of scenery that blocks pathing
-		if(this.Scenery != null && !this.Scenery.BlockInfo.Pathable) {
-			return false;
-		}
-		
-		this.Monster = mon;
-		return true;
-	}
-
-	/*
-	 * public void removeMonster()
-	 * 
-	 * Unlinks the monster linked to this block
-	 */
-	public void removeMonster() {
-		this.Monster = null;
-	}
-	#endregion Monster
-
 	#region Manipulation
 	/*
 	 * public void move(Vector3 offset)
@@ -299,13 +191,6 @@ public class TerrainBlock {
 	 * moves the block and associated scenery and monster
 	 */
 	public void move(Vector3 offset) {
-		if(this.Scenery != null && this.Scenery.Position.Equals(this.Position)) {
-			this.Scenery.move(offset);
-		}
-
-		if(this.Monster != null) {
-			this.Monster.move(offset);
-		}
 		if(this.Wall != null) {
 			this.Wall.move(offset);
 		}
@@ -314,24 +199,8 @@ public class TerrainBlock {
 		//GameObj.transform.position = Position;
 
 	}
-
-	public bool changeType(string type) {
-		this.BlockID = type;
-
-		return true;
-	}
-
-	public void rotate(bool goClockwise = true) {
-		Orientation = Orientation.QuarterTurn(goClockwise);
-	}
-
+	
 	public void remove() {
-		if(Scenery != null) {
-			MapData.SceneryBlocks.remove(Scenery);
-		}
-		if(Monster != null) {
-			MapData.MonsterBlocks.remove(Monster);
-		}
 		if(Wall != null) {
 			this.removeWall();
 		}

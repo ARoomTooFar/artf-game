@@ -59,31 +59,21 @@ public class FolderBarController : MonoBehaviour {
 		numberOfbuttons = buttonObject.gameObject.transform.childCount;
 		buttons = new GameObject[numberOfbuttons];
 		
-
-
-
-
-		
 		//add all the folder scrollviews to their array
 		for (int i = 0; i < numberOfFolders; i++) {
 			folders [i] = folderObject.gameObject.transform.GetChild (i).gameObject;
 		}
 
-		
 		//shove all of the folder button into the array we have for them
 		for (int i = 0; i < numberOfbuttons; i++) {
 			buttons [i] = buttonObject.gameObject.transform.GetChild (i).gameObject;
 			Image img = buttons [i].GetComponent<Image> ();
 			img.color = buttonColor;
 		}
-		
 
 		setupButtons();
-		
 	}
-	
 
-	
 	void Update(){
 		if(lerpingFolderClosed == true){
 
@@ -180,9 +170,6 @@ public class FolderBarController : MonoBehaviour {
 		}
 	}
 
-
-	
-	
 	void setupButtons(){
 		for (int i = 0; i < numberOfFolders; i++) {
 			//get folder type (Puzzle, Monster, etc.)
@@ -193,8 +180,7 @@ public class FolderBarController : MonoBehaviour {
 
 			//get ItemList gameobject under this folder
 			Transform itemList = folders [i].transform.Find("ScrollView/ItemList");
-			
-			
+
 			//instantiate the amount of buttons we need in
 			//a vertical column
 			float buttonY = 0;
@@ -202,13 +188,10 @@ public class FolderBarController : MonoBehaviour {
 			for(int j = 0; j < prefabs.Length; j++){
 				GameObject newButt = Instantiate (Resources.Load ("folderButton")) as GameObject;
 
-
 				newButt.transform.SetParent(itemList);
-
 
 				RectTransform buttRect = newButt.GetComponent("RectTransform") as RectTransform;
 
-				
 				//to make first button show up at the right height
 				if(firstIter){
 					buttonY = -1 * buttRect.sizeDelta.y / 2 - 20;
@@ -217,13 +200,8 @@ public class FolderBarController : MonoBehaviour {
 					buttonY -= buttRect.sizeDelta.y + 30;
 				}
 				buttRect.anchoredPosition = new Vector2(buttRect.sizeDelta.x / 2 - 5, buttonY);
-
-				
 			}
-			
-			
-			
-			
+
 			int prefabCounter = 0;
 			//setup each button
 			for(int h = 0; h < itemList.childCount; h++){
@@ -253,13 +231,10 @@ public class FolderBarController : MonoBehaviour {
 					uih.price = (prefabs[prefabCounter] as GameObject).GetComponent<LevelEditorData>().baseCost;
 
 					prefabCounter++;
-				}else{
-					
+				}else{	
 					//make rest of buttons inactive, invisible, and unclickabble
 					itemList.GetChild(h).gameObject.SetActive(false);
 				}
-				
-				
 			}
 		}
 	}
