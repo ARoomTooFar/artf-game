@@ -69,7 +69,7 @@ public class HealRadius : MonoBehaviour,IFallable {
 	//----------------------------------//
 	protected virtual void inHeal(Character ally) {
 		if (ally && ally.GetComponent<Collider>().bounds.Intersects(GetComponent<Collider>().bounds)) {
-			//ally.heal (1);
+			ally.heal (1);
 			ally.BDS.addBuffDebuff(buff, this.gameObject, 4.0f);
 			StartCoroutine(healPulse(ally, 0.5f));
 		}
@@ -84,7 +84,7 @@ public class HealRadius : MonoBehaviour,IFallable {
 	void OnTriggerEnter (Collider other) {
 		//RiotShield rShield = other.GetComponent<RiotShield>();
 		if (other.tag == "Grave") {
-			//Debug.Log("RezConfirm");
+			Debug.Log("RezConfirm");
 			other.GetComponent<Grave>().ressurrection();
 			used = true;
 			//Destroy(gameObject);
@@ -93,6 +93,7 @@ public class HealRadius : MonoBehaviour,IFallable {
 		if (ally != null) {
 			//decSpeed = decSpeed*2;
 			ally.BDS.addBuffDebuff(buff, this.gameObject,duration);
+			used = true;
 		}
 	}
 	void OnTriggerExit (Collider other) {

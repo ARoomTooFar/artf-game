@@ -393,12 +393,12 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 		stats.isDead = true;
 		actable = false;
 		freeAnim = false;
-		GetComponent<Collider> ().isTrigger = true;
+		//GetComponent<Collider> ().isTrigger = true;
 	}
 	
 	public virtual void rez(){
 		if(stats.isDead){
-			GetComponent<Collider>().isTrigger = false;
+			//GetComponent<Collider>().isTrigger = false;
 			stats.isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
 			stats.rezCount++;
@@ -449,7 +449,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	public virtual void stabled() {
 		this.rb.velocity = Vector3.zero;
 		this.knockedback = false;
-		Debug.Log (this.knockedback);
+		//Debug.Log (this.knockedback);
 	}
 
 	// The duration are essentiall y stun, expand on these later

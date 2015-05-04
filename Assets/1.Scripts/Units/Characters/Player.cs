@@ -280,7 +280,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		stats.health = 0;
 		
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		GetComponent<Collider> ().isTrigger = true;
+		//GetComponent<Collider> ().isTrigger = true;
 		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
@@ -306,19 +306,19 @@ public class Player : Character, IMoveable, IHealable<int>{
 			UI.greyBar.current = stats.health + greyDamage;
 		}
 	}
-	
+
 	public override void rez(){
 		if(stats.isDead){
 			stats.isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
 			stats.rezCount++;
-		}else{
+		}/*else{
 			heal(stats.maxHealth/(2+2*stats.rezCount));
-		}//if and else are the 'base' rez from prior
-		GetComponent<Collider> ().isTrigger = false;
+		}*///if and else are the 'base' rez from prior
+		//GetComponent<Collider> ().isTrigger = false;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		foreach (Renderer r in rs) {
-			if(GetComponent<Renderer>().gameObject.tag != "Item")
+			if(r.GetComponent<Renderer>().gameObject.tag != "Item")
 				r.enabled = true;
 		}
 		//UI.hpBar.current = stats.health;

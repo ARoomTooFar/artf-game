@@ -12,8 +12,6 @@ public class Grave : MonoBehaviour {
 		unit = p;
 	}
 	public void ressurrection(){
-		child = this.GetComponentInChildren<Collider>();
-		child.enabled = false;
 		unit.rez();
 		Destroy(gameObject);
 	}
