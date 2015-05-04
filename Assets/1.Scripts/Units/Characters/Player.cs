@@ -252,6 +252,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 		theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
 		Destroy (theSplat, 2);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		//hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
+		//BDS.addBuffDebuff(hitConfirm,gameObject,10);
+>>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
 =======
 		//hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
 		//BDS.addBuffDebuff(hitConfirm,gameObject,10);

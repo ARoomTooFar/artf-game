@@ -125,7 +125,11 @@ ModelImporter:
     splitTangentsAcrossUV: 1
     normalImportMode: 0
 <<<<<<< HEAD
+<<<<<<< HEAD
     tangentImportMode: 0
+=======
+    tangentImportMode: 1
+>>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
 =======
     tangentImportMode: 1
 >>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01

@@ -355,7 +355,11 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	
 	public virtual void damage(int dmgTaken, Transform atkPosition) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		if (!invincible) {
+=======
+		if (!invincible && !stats.isDead) {
+>>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
 =======
 		if (!invincible && !stats.isDead) {
 >>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01

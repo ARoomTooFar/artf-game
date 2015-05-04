@@ -11,7 +11,11 @@ public class PlayerUI : MonoBehaviour {
 		//PlayerUIPane playerPane = new PlayerUIPane();
 		//playerPane = transform.Find("Player1").gameObject.AddComponent<PlayerUIPane>();
 <<<<<<< HEAD
+<<<<<<< HEAD
 		//playerPane.initVals("Player1");
+=======
+		//playerPane.initVals("PlayerZ");
+>>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
 =======
 		//playerPane.initVals("PlayerZ");
 >>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
@@ -22,6 +26,7 @@ public class PlayerUI : MonoBehaviour {
 		setUpPlayerUIPane("Player3");
 		setUpPlayerUIPane("Player4");
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 		//PlayerUIPane playerPane = new PlayerUIPane();
 		//playerPane = transform.Find("Player5").gameObject.AddComponent<PlayerUIPane>();
@@ -30,6 +35,8 @@ public class PlayerUI : MonoBehaviour {
 		//playerPane = new PlayerUIPane();
 		//playerPane = transform.Find("Player2").gameObject.AddComponent<PlayerUIPane>();
 		//playerPane.initVals("Player2");
+=======
+>>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
 =======
 >>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
 
