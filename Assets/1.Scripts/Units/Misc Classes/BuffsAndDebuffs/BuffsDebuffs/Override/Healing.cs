@@ -26,9 +26,9 @@ public class Healing : Override {
 
 	private IEnumerator healBabyHeal(Character unit) {
 		while (true) {
-			unit.heal(healPow);
+			unit.heal(healPow/2);
 
-			yield return new WaitForSeconds(1.0f);
+			yield return new WaitForSeconds(.25f);
 		}
 	}
 

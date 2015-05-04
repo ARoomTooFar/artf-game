@@ -13,17 +13,17 @@ public class HealRadius : MonoBehaviour,IFallable {
 	public int duration;
 	
 	void Start () {
-		decSpeed = .0025f;
+		decSpeed = .005f;
 		baseSize = 8f;
 		//transform.localScale = new Vector3(baseSize,.02f,baseSize);
 		//StartCoroutine("pulse",pulseTime);
 	}
 	void Awake(){
-		setInitValues(4);
+		setInitValues(5);
 		particles.enableEmission = false;
 	}
 	protected virtual void setInitValues(int num){
-		duration = chngNum(num);
+		duration = num;//chngNum(num);
 		buff = new Healing(num);
 	}
 	protected virtual int chngNum(int num){
@@ -71,7 +71,7 @@ public class HealRadius : MonoBehaviour,IFallable {
 		if (ally && ally.GetComponent<Collider>().bounds.Intersects(GetComponent<Collider>().bounds)) {
 			//ally.heal (1);
 			ally.BDS.addBuffDebuff(buff, this.gameObject, 4.0f);
-			StartCoroutine(healPulse(ally, 0.75f));
+			StartCoroutine(healPulse(ally, 0.5f));
 		}
 	}
 	protected IEnumerator healPulse(Character ally, float duration){
@@ -91,14 +91,14 @@ public class HealRadius : MonoBehaviour,IFallable {
 		}
 		Character ally = other.GetComponent<Character>();
 		if (ally != null) {
-			decSpeed = decSpeed*2;
+			//decSpeed = decSpeed*2;
 			ally.BDS.addBuffDebuff(buff, this.gameObject,duration);
 		}
 	}
 	void OnTriggerExit (Collider other) {
 		Character ally = other.GetComponent<Character>();
 		if (ally != null) {
-			decSpeed = decSpeed/2;
+			//decSpeed = decSpeed/2;
 			//ally.BDS.rmvBuffDebuff(buff, this.gameObject);
 		}
 	}

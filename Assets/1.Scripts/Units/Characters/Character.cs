@@ -354,15 +354,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	}
 	
 	public virtual void damage(int dmgTaken, Transform atkPosition) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-		if (!invincible) {
-=======
 		if (!invincible && !stats.isDead) {
->>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
-=======
-		if (!invincible && !stats.isDead) {
->>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(atkPosition.position, facing, transform.position)), 1, 100000);
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position, Quaternion.identity)).GetComponent<splatCore>();
@@ -373,7 +365,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 			//Character enemy = other.GetComponent<Character>();
 			Debug.Log ((float) dmgTaken/stats.maxHealth*5.0f);
 			hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
-			BDS.addBuffDebuff(hitConfirm,gameObject,10);
+			BDS.addBuffDebuff(hitConfirm,gameObject,.5f);
 
 			stats.health -= dmgTaken;
 
@@ -401,10 +393,12 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 		stats.isDead = true;
 		actable = false;
 		freeAnim = false;
+		GetComponent<Collider> ().isTrigger = true;
 	}
 	
 	public virtual void rez(){
 		if(stats.isDead){
+			GetComponent<Collider>().isTrigger = false;
 			stats.isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
 			stats.rezCount++;
@@ -455,6 +449,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	public virtual void stabled() {
 		this.rb.velocity = Vector3.zero;
 		this.knockedback = false;
+		Debug.Log (this.knockedback);
 	}
 
 	// The duration are essentiall y stun, expand on these later

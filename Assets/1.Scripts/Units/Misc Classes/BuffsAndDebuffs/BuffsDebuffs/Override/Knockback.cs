@@ -47,17 +47,20 @@ public class Knockback : Override {
 		}
 		pushBackDir.y = 0.0f;
 		newData.unit.knockback(pushBackDir, this.speed);
+		//newData.unit.actable = false;
 	}
 	
 	protected override void removeEffects (BDData oldData, GameObject source) {
 		base.removeEffects (oldData, source);
 		//Debug.Log ("GotHere");
+		//oldData.unit.actable = true;
 		oldData.unit.stabled();
 	}
 	
 	public override void purgeBD(Character unit, GameObject source) {
 		base.purgeBD (unit, source);
 		//Debug.Log ("GotHere");
+		//unit.actable = true;
 		unit.stabled();
 	}
 	

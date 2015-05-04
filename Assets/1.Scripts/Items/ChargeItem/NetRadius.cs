@@ -13,13 +13,13 @@ public class NetRadius : MonoBehaviour,IFallable {
 	public float duration;
 	
 	void Start () {
-		decSpeed = .0025f;
+		decSpeed = .025f;
 		baseSize = 8f;
 		//transform.localScale = new Vector3(baseSize,.02f,baseSize);
 		//StartCoroutine("pulse",pulseTime);
 	}
 	void Awake(){
-		setInitValues(4);
+		setInitValues(3);
 		particles.enableEmission = false;
 	}
 	protected virtual void setInitValues(int num){
@@ -28,7 +28,7 @@ public class NetRadius : MonoBehaviour,IFallable {
 	}
 	// Update is called once per frame
 	void Update () {
-		isGrounded = Physics.Raycast (transform.position, -Vector3.up, 0.2f);
+		isGrounded = Physics.Raycast (transform.position, -Vector3.up, 0.05f);
 		if(isGrounded){
 			GetComponent<Rigidbody>().velocity = Vector3.zero;
 			if(activated){
@@ -87,15 +87,15 @@ public class NetRadius : MonoBehaviour,IFallable {
 		}*/
 		Character enemy = other.GetComponent<Character>();
 		if (enemy != null) {
-			decSpeed = decSpeed*4;
-			enemy.BDS.addBuffDebuff(debuff, this.gameObject,duration/16);
+			//decSpeed = decSpeed*4;
+			enemy.BDS.addBuffDebuff(debuff, this.gameObject,duration);
 		}
 	}
 	void OnTriggerExit (Collider other) {
-		Character enemy = other.GetComponent<Character>();
+		/*Character enemy = other.GetComponent<Character>();
 		if (enemy != null) {
 			decSpeed = decSpeed/4;
 			//enemy.BDS.timedRemoval(debuff, this.gameObject,duration);
-		}
+		}*/
 	}
 }

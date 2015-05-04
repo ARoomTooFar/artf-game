@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: 93ebddcb2a2dde94594a61ae143c7720
-timeCreated: 1430101802
-licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
@@ -87,7 +85,7 @@ ModelImporter:
     9500000: //RootNode
     13700000: Mirage
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
@@ -105,7 +103,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
@@ -124,16 +122,8 @@ ModelImporter:
     normalSmoothAngle: 60
     splitTangentsAcrossUV: 1
     normalImportMode: 0
-<<<<<<< HEAD
-<<<<<<< HEAD
-    tangentImportMode: 0
-=======
     tangentImportMode: 1
->>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
-=======
-    tangentImportMode: 1
->>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []

@@ -10,23 +10,13 @@ public class PlayerUI : MonoBehaviour {
 		//hardcoded just for the test scene
 		//PlayerUIPane playerPane = new PlayerUIPane();
 		//playerPane = transform.Find("Player1").gameObject.AddComponent<PlayerUIPane>();
-<<<<<<< HEAD
-<<<<<<< HEAD
-		//playerPane.initVals("Player1");
-=======
-		//playerPane.initVals("PlayerZ");
->>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
-=======
-		//playerPane.initVals("PlayerZ");
->>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
 
 		//for scenes with all 4 players
 		setUpPlayerUIPane("Player1");
 		setUpPlayerUIPane("Player2");
 		setUpPlayerUIPane("Player3");
 		setUpPlayerUIPane("Player4");
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 
 		//PlayerUIPane playerPane = new PlayerUIPane();
 		//playerPane = transform.Find("Player5").gameObject.AddComponent<PlayerUIPane>();
@@ -35,15 +25,10 @@ public class PlayerUI : MonoBehaviour {
 		//playerPane = new PlayerUIPane();
 		//playerPane = transform.Find("Player2").gameObject.AddComponent<PlayerUIPane>();
 		//playerPane.initVals("Player2");
-=======
->>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
-=======
->>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
-
 	}
 
 	void setUpPlayerUIPane(string pl){
-		Debug.Log (pl);
+		//Debug.Log (pl);
 		PlayerUIPane playerPane = new PlayerUIPane();
 		playerPane = transform.Find(pl).gameObject.AddComponent<PlayerUIPane>();
 		playerPane.initVals(pl);

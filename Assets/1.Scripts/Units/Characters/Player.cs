@@ -251,16 +251,10 @@ public class Player : Character, IMoveable, IHealable<int>{
 		splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
 		theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
 		Destroy (theSplat, 2);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-		//hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
-		//BDS.addBuffDebuff(hitConfirm,gameObject,10);
->>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
-=======
-		//hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
-		//BDS.addBuffDebuff(hitConfirm,gameObject,10);
->>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
+
+		hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
+		BDS.addBuffDebuff(hitConfirm,gameObject,.5f);
+
 	}
 	
 	public override void damage(int dmgTaken) {
@@ -286,6 +280,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		stats.health = 0;
 		
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
+		GetComponent<Collider> ().isTrigger = true;
 		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
@@ -320,6 +315,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		}else{
 			heal(stats.maxHealth/(2+2*stats.rezCount));
 		}//if and else are the 'base' rez from prior
+		GetComponent<Collider> ().isTrigger = false;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		foreach (Renderer r in rs) {
 			if(GetComponent<Renderer>().gameObject.tag != "Item")
