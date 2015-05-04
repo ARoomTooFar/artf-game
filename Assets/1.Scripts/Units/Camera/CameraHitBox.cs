@@ -18,6 +18,12 @@ public class CameraHitBox : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		for(int i = 0; i < areaUnits.Count; i++) {
+			if(areaUnits[i].isDead){
+				areaUnits.Remove(areaUnits[i]);
+				i--;
+			}
+		}
 		avgMake();
 	}
 	void avgMake(){
@@ -35,10 +41,11 @@ public class CameraHitBox : MonoBehaviour {
 		}
 	}
 	void OnTriggerEnter (Collider other) {
-		Character unit = other.GetComponent<Character>();
+		/*Character unit = other.GetComponent<Character>();
 		if(unit != null) {
 			areaUnits.Add (unit);
 		}
+		*/
 		if(other.tag == "Wall"){
 			if(other.transform.parent != null){
 				Wall wallSpot = other.transform.parent.GetComponent<Wall>();
@@ -56,8 +63,10 @@ public class CameraHitBox : MonoBehaviour {
 			//Debug.Log("Here");
 		//Wall wallSpot = other.GetComponent<Wall>();
 		}
-	}
+
+}
 	void OnTriggerStay (Collider other) {
+		/*
 		Character unit = other.GetComponent<Character>();
 		if(unit != null) {
 			foreach(Character thingie in areaUnits) {
@@ -70,6 +79,7 @@ public class CameraHitBox : MonoBehaviour {
 			}
 			same = false;
 		}
+		*/
 		if(other.tag == "Wall"){
 			Wall wallSpot = other.transform.parent.GetComponent<Wall>();
 			//Debug.Log("Here");
@@ -79,5 +89,6 @@ public class CameraHitBox : MonoBehaviour {
 				//Debug.Log("Here");
 			}
 		}
+
 	}
 }

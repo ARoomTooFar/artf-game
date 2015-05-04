@@ -1,0 +1,151 @@
+fileFormatVersion: 2
+guid: 29eb8a839fcecb744a4f34b970a1aaa2
+timeCreated: 1430384869
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Cable_Maw
+    100004: Cable_Maw_-_Tentacle_Bone_Structure
+    100006: Teeth
+    100008: Tentacle_1_1
+    100010: Tentacle_1_2
+    100012: Tentacle_1_3
+    100014: Tentacle_1_4
+    100016: Tentacle_1_5
+    100018: Tentacle_2_1
+    100020: Tentacle_2_2
+    100022: Tentacle_2_3
+    100024: Tentacle_2_4
+    100026: Tentacle_2_5
+    100028: Tentacle_3_1
+    100030: Tentacle_3_2
+    100032: Tentacle_3_3
+    100034: Tentacle_3_4
+    100036: Tentacle_3_5
+    100038: Tentacle_4_1
+    100040: Tentacle_4_2
+    100042: Tentacle_4_3
+    100044: Tentacle_4_4
+    100046: Tentacle_4_5
+    100048: Tentacle_5_1
+    100050: Tentacle_5_2
+    100052: Tentacle_5_3
+    100054: Tentacle_5_4
+    100056: Tentacle_5_5
+    100058: Tentacle_6_1
+    100060: Tentacle_6_2
+    100062: Tentacle_6_3
+    100064: Tentacle_6_4
+    100066: Tentacle_6_5
+    100068: Z-Ground
+    400000: //RootNode
+    400002: Cable_Maw
+    400004: Cable_Maw_-_Tentacle_Bone_Structure
+    400006: Teeth
+    400008: Tentacle_1_1
+    400010: Tentacle_1_2
+    400012: Tentacle_1_3
+    400014: Tentacle_1_4
+    400016: Tentacle_1_5
+    400018: Tentacle_2_1
+    400020: Tentacle_2_2
+    400022: Tentacle_2_3
+    400024: Tentacle_2_4
+    400026: Tentacle_2_5
+    400028: Tentacle_3_1
+    400030: Tentacle_3_2
+    400032: Tentacle_3_3
+    400034: Tentacle_3_4
+    400036: Tentacle_3_5
+    400038: Tentacle_4_1
+    400040: Tentacle_4_2
+    400042: Tentacle_4_3
+    400044: Tentacle_4_4
+    400046: Tentacle_4_5
+    400048: Tentacle_5_1
+    400050: Tentacle_5_2
+    400052: Tentacle_5_3
+    400054: Tentacle_5_4
+    400056: Tentacle_5_5
+    400058: Tentacle_6_1
+    400060: Tentacle_6_2
+    400062: Tentacle_6_3
+    400064: Tentacle_6_4
+    400066: Tentacle_6_5
+    400068: Z-Ground
+    2300000: Z-Ground
+    3300000: Z-Ground
+    4300000: Z-Ground
+    4300002: Cable_Maw
+    7400000: Default Take
+    7400002: Attack__Pull_Player_Into_Teeth_
+    7400004: Attack__Rotate_Teeth_
+    7400006: Attack__Spit_Player_Out_
+    7400008: Death
+    7400010: Idle
+    7400012: Movement__Sit_Down_
+    7400014: Movement__Stand_Up_
+    7400016: Movement__Tentacle_Walking_
+    7400018: Reaction
+    9500000: //RootNode
+    13700000: Cable_Maw
+  materials:
+    importMaterials: 1
+    materialName: 2
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

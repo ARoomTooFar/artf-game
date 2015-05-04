@@ -72,7 +72,7 @@ public class NewMirage : NewStationaryEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 5;
+		stats.maxHealth = 35;
 		stats.health = stats.maxHealth;
 		stats.armor = 1;
 		stats.strength = 10;
@@ -178,6 +178,7 @@ public class NewMirage : NewStationaryEnemy {
 			foreach (MirageImage im in this.blink.mirrors) {
 				if (im != null) im.die(); //Destroy(im.gameObject);
 			}
+			this.isDead = true;
 			this.deathTarget.BDS.rmvBuffDebuff(this.mark, this.gameObject);
 			animator.SetTrigger("Died");
 		}

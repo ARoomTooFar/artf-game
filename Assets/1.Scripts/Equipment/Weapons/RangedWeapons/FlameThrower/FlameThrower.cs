@@ -18,7 +18,7 @@ public class FlameThrower : RangedWeapons {
 		stats.weapTypeName = "chainsaw";
 		stats.atkSpeed = 3.0f;
 		loadSpeed = 5f;
-		stats.damage = 1;
+		stats.damage = 10;
 		stats.maxChgTime = 3.0f;
 		stats.timeForChgAttack = 0.5f;
 		
