@@ -67,6 +67,7 @@ public class NewMirage : NewStationaryEnemy {
 
 	public override void SetTierData(int tier) {
 		tier = 2;
+
 		base.SetTierData (tier);
 	}
 	
