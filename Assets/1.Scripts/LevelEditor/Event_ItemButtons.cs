@@ -20,8 +20,14 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 	public string itemType;
 	
 	void Start() {
+<<<<<<< HEAD
 		amountText = this.transform.Find("AmountText").gameObject.GetComponent<Text>();
 		priceText = this.transform.Find("PriceText").gameObject.GetComponent<Text>();
+=======
+
+		amountText = this.transform.Find("AmountText").gameObject.GetComponent("Text") as Text;
+		priceText = this.transform.Find("PriceText").gameObject.GetComponent("Text") as Text;
+>>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
 		UICamera = Camera.main.GetComponent<Camera>();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}

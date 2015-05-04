@@ -82,8 +82,32 @@ public partial class ARTFRoom : Square {
 
 	#region SquareProperties
 
+<<<<<<< HEAD
+=======
+	public float UsableArea{
+		get { return Area - Perimeter;}
+	}
+
+	public float Perimeter {
+		get { return 2 * (Length + Height); }
+	}
+>>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
 
 
+<<<<<<< HEAD
+=======
+	public float Length {
+		get { return 1 + URCorner.x - LLCorner.x; }
+	}
+
+	public int Cost {
+		get { return Mathf.RoundToInt((10 * Mathf.Pow(2, (Mathf.Sqrt(UsableArea)) - 7) + 25) * 100); }
+	}
+
+	public int Points{
+		get { return Mathf.RoundToInt(Mathf.Min(Length, Height)/20*UsableArea);}
+	}
+>>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
 	#endregion SquareProperties
 
 	public string SaveString {

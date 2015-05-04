@@ -21,7 +21,7 @@ public class ChargeItem : Item {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-
+		itemType = 'C';
 		cooldown = 10.0f;
 		curChgTime = -1.0f;
 		maxChgTime = 2.0f;

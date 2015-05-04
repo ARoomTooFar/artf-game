@@ -31,8 +31,8 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	protected override void Awake() {
 		base.Awake();
-		opposition = Type.GetType("NewEnemy");
-		//opposition = Type.GetType("Enemy"); //Use this if going after testable opponents
+		//opposition = Type.GetType("NewEnemy");
+		opposition = Type.GetType("Enemy"); //Use this if going after testable opponents
 	}
 	
 	// Use this for initialization
@@ -168,7 +168,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	// Constant animation updates (Main loop for characters movement/actions)
 	public override void animationUpdate() {
-		if (attacking) {
+		if (attacking&&!stats.isDead) {
 			attackAnimation();
 		} else {
 			movementAnimation();
@@ -251,6 +251,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 		splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
 		theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
 		Destroy (theSplat, 2);
+<<<<<<< HEAD
+=======
+		//hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
+		//BDS.addBuffDebuff(hitConfirm,gameObject,10);
+>>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
 	}
 	
 	public override void damage(int dmgTaken) {

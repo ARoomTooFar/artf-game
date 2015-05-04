@@ -124,7 +124,11 @@ ModelImporter:
     normalSmoothAngle: 60
     splitTangentsAcrossUV: 1
     normalImportMode: 0
+<<<<<<< HEAD
     tangentImportMode: 0
+=======
+    tangentImportMode: 1
+>>>>>>> 039de27056e39a1d09758e5fbff0801fa2174a01
   importAnimation: 0
   copyAvatar: 0
   humanDescription:

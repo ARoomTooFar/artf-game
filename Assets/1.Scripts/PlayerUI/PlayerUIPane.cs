@@ -16,6 +16,7 @@ public class PlayerUIPane : MonoBehaviour
 	public Image slot2bg;
 	public Image slot3bg;
 	public int currSlot = 1;
+	float slot1Curr,slot2Curr,slot3Curr,chgCurr,tempCD1,tempCD2,tempCD3;
 
 	public void initVals (string player)
 	{
@@ -29,12 +30,17 @@ public class PlayerUIPane : MonoBehaviour
 		slot1bg = transform.Find ("ActionSlots/Slot1/RingBG").gameObject.GetComponent<Image> ();
 		slot2bg = transform.Find ("ActionSlots/Slot2/RingBG").gameObject.GetComponent<Image> ();
 		slot3bg = transform.Find ("ActionSlots/Slot3/RingBG").gameObject.GetComponent<Image> ();
+		charge.fillAmount = 0;
+		slot1.fillAmount = 1;
+		slot2.fillAmount = 1;
+		slot3.fillAmount = 1;
 	}
 
 	void Update ()
 	{
 		updateHPBar ();
 		updateSlots ();
+		updateChg ();
 	}
 
 	void updateHPBar ()
@@ -47,9 +53,31 @@ public class PlayerUIPane : MonoBehaviour
 			greyhp.fillAmount = 0f;
 		}
 	}
+	void updateChg(){
+		if (pl.inventory.keepItemActive && pl.inventory.items [pl.inventory.selected].itemType == 'C') {
+			//Debug.Log (pl.inventory.items[pl.inventory.selected].itemType);
+			//Debug.Log (pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().curChgTime);
+			if ((pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().curChgTime / pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().maxChgTime) <= 0) {
+				chgCurr = 0;
+			} else {
+				chgCurr = (pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().curChgTime / pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().maxChgTime);
+			}
+			//charge.fillAmount = 0;
+		} else if (pl.animator.GetBool ("Charging")) {
+			if((pl.gear.weapon.stats.curChgDuration / pl.gear.weapon.stats.maxChgTime) <=0){
+				chgCurr = 0;
+			}else{
+				chgCurr = (pl.gear.weapon.stats.curChgDuration / pl.gear.weapon.stats.maxChgTime);
+			}
+		}else if (!pl.inventory.keepItemActive && !pl.animator.GetBool ("Charging")){
+			chgCurr = 0;
+		}
+		charge.fillAmount = Mathf.MoveTowards (charge.fillAmount, chgCurr,1f* Time.deltaTime);
+	}
 
 	void updateSlots ()
 	{
+		currSlot = pl.inventory.selected + 1;
 		switch (currSlot) {
 		case 1:
 			slot1bg.color = Color.yellow;
@@ -66,19 +94,55 @@ public class PlayerUIPane : MonoBehaviour
 			slot2bg.color = Color.gray;
 			slot3bg.color = Color.yellow;
 			break;
+		}if ((pl.inventory.items [0].curCoolDown / pl.inventory.items [0].cooldown) <= 0) {
+			slot1Curr = 1;
+			tempCD1 = 0;
+		} else if ((pl.inventory.items [0].curCoolDown > pl.inventory.items [0].cooldown)) {
+			if(pl.inventory.items[0].curCoolDown > tempCD1){
+				tempCD1 = pl.inventory.items [0].curCoolDown;
+			}
+			slot1Curr = (pl.inventory.items [0].curCoolDown / tempCD1);
+		} else {
+			if(tempCD1 > 0){
+				slot1Curr = (pl.inventory.items [0].curCoolDown / tempCD1);
+			}else{
+				slot1Curr = (pl.inventory.items [0].curCoolDown / pl.inventory.items [0].cooldown);
+			}
+		}
+		slot1.fillAmount = Mathf.MoveTowards (slot1.fillAmount, slot1Curr,1f* Time.deltaTime);
+		if ((pl.inventory.items [1].curCoolDown / pl.inventory.items [1].cooldown) <= 0) {
+			slot2Curr = 1;
+			tempCD2 = 0;
+		} else if ((pl.inventory.items [1].curCoolDown > pl.inventory.items [1].cooldown)) {
+			if(pl.inventory.items[1].curCoolDown > tempCD2){
+				tempCD2 = pl.inventory.items [1].curCoolDown;
+			}
+			slot2Curr = (pl.inventory.items [1].curCoolDown / tempCD2);
+		} else {
+			if(tempCD2 > 0){
+				slot2Curr = (pl.inventory.items [1].curCoolDown / tempCD2);
+			}else{
+				slot2Curr = (pl.inventory.items [1].curCoolDown / pl.inventory.items [1].cooldown);
+			}
+		}
+		slot2.fillAmount = Mathf.MoveTowards (slot2.fillAmount, slot2Curr, 1f* Time.deltaTime);
+		if ((pl.inventory.items [2].curCoolDown / pl.inventory.items [2].cooldown) <= 0) {
+			slot3Curr = 1;
+			tempCD3 = 0;
+		} else if ((pl.inventory.items [2].curCoolDown > pl.inventory.items [2].cooldown)) {
+			if(pl.inventory.items[2].curCoolDown > tempCD3){
+				tempCD3 = pl.inventory.items [2].curCoolDown;
+			}
+			slot3Curr = (pl.inventory.items [2].curCoolDown / tempCD3);
+		} else {
+			if(tempCD3 > 0){
+				slot3Curr = (pl.inventory.items [2].curCoolDown / tempCD3);
+			}else{
+				slot3Curr = (pl.inventory.items [2].curCoolDown / pl.inventory.items [2].cooldown);
+			}
 		}
 
-		slot1.fillAmount = Mathf.MoveTowards (slot1.fillAmount, 1f, Time.deltaTime / 5f);
-		if (slot1.fillAmount == 1f)
-			slot1.fillAmount = 0f; //reset to 0 for demo purposes only
-		
-		slot2.fillAmount = Mathf.MoveTowards (slot2.fillAmount, 1f, Time.deltaTime / 25f);
-		if (slot2.fillAmount == 1f)
-			slot2.fillAmount = 0f; //reset to 0 for demo purposes only
-		
-		slot3.fillAmount = Mathf.MoveTowards (slot3.fillAmount, 1f, Time.deltaTime / 15f);
-		if (slot3.fillAmount == 1f)
-			slot3.fillAmount = 0f; //reset to 0 for demo purposes only
+		slot3.fillAmount = Mathf.MoveTowards (slot3.fillAmount, slot3Curr, 1f* Time.deltaTime);
 	}
 
 	float normalizeForFilling (int val)
