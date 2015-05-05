@@ -66,7 +66,9 @@ public static class MapDataParser {
 			Vector3 pos2 = new Vector3(float.Parse(rmParams[3]),
 			                         float.Parse(rmParams[4]),
 			                         float.Parse(rmParams[5]));
-			MapData.addRoom(pos1, pos2);           
+			ARTFRoom room = new ARTFRoom(pos1, pos2);
+			room.placedThisSession = true;
+			MapData.addRoom(room);
 		}
 	}
 
@@ -103,6 +105,7 @@ public static class MapDataParser {
 			SceneryBlock nBlk = null;
 			if(MapData.SceneryBlocks.isAddValid(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]))){
 				nBlk = new SceneryBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
+				nBlk.BlockInfo.placedThisSession = true;
 				MapData.SceneryBlocks.add(nBlk);
 			}
 			if(type[0] == "LevelEditor/Other/PlayerStartingLocation") {
@@ -126,6 +129,7 @@ public static class MapDataParser {
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
 			MonsterBlock nBlk = new MonsterBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
+			nBlk.BlockInfo.placedThisSession = true;
 			nBlk.BlockInfo.Tier = Convert.ToInt32(blkParams[4]);
 			MapData.MonsterBlocks.add(nBlk);
 		}
@@ -141,6 +145,7 @@ public static class MapDataParser {
 			                           float.Parse(rmParams[4]),
 			                           float.Parse(rmParams[5]));
 		ARTFTerminalRoom rm = new ARTFTerminalRoom(pos1, pos2);
+		rm.placedThisSession = true;
 		MapData.StartingRoom = rm;
 		MapData.TheFarRooms.add(rm);
 
@@ -152,6 +157,7 @@ public static class MapDataParser {
 		                           float.Parse(rmParams[4]),
 		                           float.Parse(rmParams[5]));
 		rm = new ARTFTerminalRoom(pos1, pos2);
+		rm.placedThisSession = true;
 		MapData.EndingRoom = rm;
 		MapData.TheFarRooms.add(rm);
 	}

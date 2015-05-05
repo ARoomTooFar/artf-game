@@ -21,6 +21,8 @@ public partial class ARTFRoom : Square {
 		private set;
 	}
 
+	public bool placedThisSession = true;
+
 	public List<SceneryBlock> Scenery {
 		get;
 		private set;
