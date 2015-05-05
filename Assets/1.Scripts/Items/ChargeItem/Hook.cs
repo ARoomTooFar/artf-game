@@ -12,13 +12,13 @@ public class Hook : ChargeItem {
 
 	[Range(0.5f, 3.0f)]
 	public float stunDuration;
-	private bool hit;
-	private bool check;
+	public bool hit;
+	public bool check;
 	private Vector3 facing;
-	private Character foe;
+	public Character foe;
 	private Stun debuff;
 	private Immobilize immobil;
-
+	public GameObject hook;
 	private Collider col;
 	private Renderer ren;
 	private Rigidbody rb;
@@ -27,11 +27,12 @@ public class Hook : ChargeItem {
 	protected override void Start () {
 		base.Start ();
 
-		this.col = this.GetComponent<Collider>();
-		this.col.enabled = false;
+		col = hook.GetComponent<Collider>();
+		hook.GetComponent<HookHelper> ().spawner = this;
+		col.enabled = false;
 
-		this.ren = this.GetComponent<Renderer>();
-		this.rb = this.GetComponent<Rigidbody>();
+		ren = hook.GetComponent<Renderer>();
+		rb = hook.GetComponent<Rigidbody>();
 
 		debuff = new Stun();
 		immobil = new Immobilize();
@@ -48,7 +49,7 @@ public class Hook : ChargeItem {
 	public override void useItem() {
 		base.useItem ();
 
-		this.ren.enabled = true;
+		ren.enabled = true;
 	}
 
 	public override void deactivateItem() {
@@ -68,19 +69,19 @@ public class Hook : ChargeItem {
 	protected override void animDone() {
 		user.BDS.rmvBuffDebuff(immobil,this.gameObject);
 		user.freeAnim = true;
-		this.col.enabled = false;
+		col.enabled = false;
 		hit = false;
-		this.ren.enabled = false;
-	    this.rb.isKinematic = true;
+		ren.enabled = false;
+	    rb.isKinematic = true;
 		foe = null;
-		
+		check = true;
 		base.animDone ();
 	}
 	
 	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
 	private IEnumerator chargeFunc(float chgTime) {
-		this.rb.isKinematic = false;
-		this.col.enabled = true;
+		rb.isKinematic = false;
+		col.enabled = true;
 		yield return StartCoroutine("chgTimeFunc",(chgTime));
 		yield return StartCoroutine("chgLagTime");
 		animDone();
@@ -90,10 +91,10 @@ public class Hook : ChargeItem {
 	private IEnumerator chgTimeFunc(float chgTime) {
 		float totalTime = chgTime*2;
 		float checkTime = 0;
-		user.BDS.addBuffDebuff(debuff, this.gameObject, totalTime);
+		user.BDS.addBuffDebuff(immobil, this.gameObject, totalTime);
 		for (float timer = 0; timer <= totalTime; timer += Time.deltaTime) {
 			if(timer <= totalTime/2){
-				GetComponent<Rigidbody>().velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
+				rb.velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
 				if(foe!=null){
 					foe.BDS.addBuffDebuff(debuff, this.gameObject, stunDuration);
 					foe.transform.position = transform.position;
@@ -103,13 +104,13 @@ public class Hook : ChargeItem {
 					foe.BDS.addBuffDebuff(debuff, this.gameObject, stunDuration);
 					foe.transform.position = transform.position;
 				}
-				GetComponent<Rigidbody>().velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;	
+				rb.velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;	
 			}
-			if(check){
+			if(hit){
 			   checkTime = (totalTime/2) - timer;
 			   timer = totalTime/2;
 			   timer += checkTime;
-			   check = false;
+			   //check = false;
 			   checkTime = 0;
 			}
 			//((IForcible<float>)foe.GetComponent(typeof(IForcible<float>))).push(0.1f);
@@ -119,12 +120,12 @@ public class Hook : ChargeItem {
 	
 	private IEnumerator chgLagTime() {
 		for (float timer = 0; timer < chgLag; timer += Time.deltaTime) {
-			this.rb.velocity = Vector3.zero;
+			rb.velocity = Vector3.zero;
 			yield return 0;
 		}
 	}
 
-	void OnTriggerEnter (Collider other) {
+	/*void OnTriggerEnter (Collider other) {
 		if(!hit){
 			if (other.tag == "Wall") {
 				hit = true;
@@ -135,8 +136,8 @@ public class Hook : ChargeItem {
 			if( component != null && foe != null) {
 				hit = true;
 				check = true;
-				this.col.enabled = false;
+				col.enabled = false;
 			}
 		}
-	}
+	}*/
 }
