@@ -1,0 +1,121 @@
+fileFormatVersion: 2
+guid: 7a05770c93ae26a4aa884de83d6771e9
+timeCreated: 1430687662
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: 1H_Ranged_Placeholder
+    100002: Cacklebranch
+    100004: //RootNode
+    100006: Cacklebranch_Rig
+    100008: Head
+    100010: Left_Foot
+    100012: Left_Fore_Arm
+    100014: Left_Hand
+    100016: Left_Lower_Leg
+    100018: Left_Upper_Arm
+    100020: Left_Upper_Leg
+    100022: Lower_Back
+    100024: Neck
+    100026: Right_Foot
+    100028: Right_Fore_Arm
+    100030: Right_Hand
+    100032: Right_Lower_Leg
+    100034: Right_Upper_Arm
+    100036: Right_Upper_Leg
+    100038: Upper_Back
+    100040: Z-Stand
+    400000: 1H_Ranged_Placeholder
+    400002: Cacklebranch
+    400004: //RootNode
+    400006: Cacklebranch_Rig
+    400008: Head
+    400010: Left_Foot
+    400012: Left_Fore_Arm
+    400014: Left_Hand
+    400016: Left_Lower_Leg
+    400018: Left_Upper_Arm
+    400020: Left_Upper_Leg
+    400022: Lower_Back
+    400024: Neck
+    400026: Right_Foot
+    400028: Right_Fore_Arm
+    400030: Right_Hand
+    400032: Right_Lower_Leg
+    400034: Right_Upper_Arm
+    400036: Right_Upper_Leg
+    400038: Upper_Back
+    400040: Z-Stand
+    2300000: Z-Stand
+    3300000: Z-Stand
+    4300000: Z-Stand
+    4300002: 1H_Ranged_Placeholder
+    4300004: Cacklebranch
+    7400000: Default Take
+    7400002: Attack__Crazy_Gun_Shot_
+    7400004: Death
+    7400006: Idle
+    7400008: Movement__Hopping_
+    7400010: Reaction
+    9500000: //RootNode
+    13700000: 1H_Ranged_Placeholder
+    13700002: Cacklebranch
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

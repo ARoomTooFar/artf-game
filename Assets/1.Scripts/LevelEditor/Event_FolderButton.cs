@@ -14,7 +14,7 @@ public class Event_FolderButton : MonoBehaviour, IPointerClickHandler {
 
 
 	void Start () {
-		fb = GameObject.Find ("FolderBar").GetComponent("FolderBarController") as FolderBarController;
+		fb = GameObject.Find ("FolderBar").GetComponent<FolderBarController>();
 	}
 
 
@@ -22,13 +22,9 @@ public class Event_FolderButton : MonoBehaviour, IPointerClickHandler {
 	//this opens the right folder, and highlights the right button
 	public void OnPointerClick (PointerEventData data)
 	{
-
 		buttonIsSelected = !buttonIsSelected; //boolean for changing button color
-		
 		fb.setFolderStates (this.name);
-		
 		fb.slideFolderBar();
-		
 		fb.setButtonStates ();
 	}
 }

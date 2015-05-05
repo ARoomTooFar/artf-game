@@ -15,7 +15,7 @@ public class AssaultRifle : RangedWeapons {
 		stats.weapTypeName = "sword";
 		
 		stats.atkSpeed = 2.0f;
-		stats.damage = 5 + user.GetComponent<Character>().stats.coordination;
+		stats.damage = 15 + user.GetComponent<Character>().stats.coordination;
 		stats.maxChgTime = 2.0f;
 		
 		// Bull Pattern M originally

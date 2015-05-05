@@ -11,6 +11,9 @@ public static class Global {
 	public static bool inLevelEditor = false;
 	public static readonly Plane ground = new Plane(Vector3.up, Vector3.zero);
 
-	public static readonly String defaultLevel = "MapData\nTerrain\nTerminal\n-1,0,-8,6,0,-1 0,0,8,7,0,15\nRoom\nrooms:-1,0,-8,6,0,-1 0,0,8,7,0,15\nScenery\nLevelEditor/Other/PlayerStartingLocation:2,0,-5,North \nLevelEditor/Other \t/PlayerEndingLocation:3,0,11,North \nMonster";
-}
+	public static readonly String defaultLevel = "MapData\nTerminal\n-1,0,-8,6,0,-1 0,0,8,7,0,15\nRoom\nrooms:-1,0,-8,6,0,-1 0,0,8,7,0,15\nScenery\nLevelEditor/Other/PlayerStartingLocation:2,0,-5,North \nLevelEditor/Other/PlayerEndingLocation:3,0,11,North \nMonster";
 
+	public static float Normalize(float x, float min, float max){
+		return (x - min) / (max - min);
+	}
+}

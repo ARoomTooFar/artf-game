@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 public class DragableObject : ClickEvent {
 
