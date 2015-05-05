@@ -47,7 +47,7 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 	}
 	
 	void makeToolTipFollowMouse() {
-		Vector2 screenPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+		Vector2 screenPos = new Vector2(Input.mousePosition.x+5, Input.mousePosition.y+5);
 		tt.transform.position = screenPos;
 	}
 }
