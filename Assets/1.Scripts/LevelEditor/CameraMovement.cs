@@ -132,7 +132,7 @@ public class CameraMovement : MonoBehaviour {
 		Vector3 oldFocus = getFocusPoint();
 		mainCam.transform.eulerAngles = new Vector3(90, 0, 0);
 		mainCam.orthographic = true;
-		mainCam.orthographicSize = minOrthoSize + maxOrthoSize * Global.Normalize(mainCam.transform.position.y, minY, maxY);
+		mainCam.orthographicSize = minOrthoSize + (maxOrthoSize-minOrthoSize) * Global.Normalize(mainCam.transform.position.y, minY, maxY);
 		Vector3 newFocus = getFocusPoint();
 		mainCam.transform.position = transform.position - newFocus + oldFocus;
 		foreach(Camera cam in Camera.allCameras) {
@@ -149,10 +149,10 @@ public class CameraMovement : MonoBehaviour {
 		mainCam.transform.eulerAngles = Global.initCameraRotation;
 		// Figure out the new Y value for zooming
 		Vector3 newVec = Camera.main.transform.position;
-		newVec.y = minY + maxY * Global.Normalize(mainCam.orthographicSize, minOrthoSize, maxOrthoSize);
+		newVec.y = minY + (maxY-minY) * Global.Normalize(mainCam.orthographicSize, minOrthoSize, maxOrthoSize);
 		Camera.main.transform.position = newVec;
 		// Get the current focus point
-		Vector3 newFocus = getFocusPoint();
+		Vector3 newFocus = getFocusPoint(); 
 		// Move camera to put focus back at the original focus point.
 		transform.position = transform.position - newFocus + oldFocus;
 		foreach(Camera cam in Camera.allCameras) {
