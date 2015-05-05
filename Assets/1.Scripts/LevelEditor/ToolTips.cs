@@ -7,49 +7,48 @@ using System.Collections;
 
 public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 	GameObject tt;
+	public String tipText;
 	
-	void Start () {
-		
+	void Start() {
+		tt = Instantiate(Resources.Load("ScreenUI/ToolTip")) as GameObject;
+		tt.transform.SetParent(GameObject.Find("ScreenUI").transform);
+		Text t = tt.transform.Find("Text").GetComponent<Text>();
+		t.text = tipText;
+		tt.SetActive(false);
 	}
 	
-	void Update () {
-		makeToolTipFollowMouse();
-	}
-	
-	public void OnPointerEnter(PointerEventData data){
-		if(tt == null && gameObject.name == "Button_Room"){
-			instantiateToolTip("Place Room");
-		} else if(gameObject.name == "Button_ModeToggle"){
-			instantiateToolTip("Room/Tile Mode");
-		} else if(gameObject.name == "Button_ZoomIn"){
-			instantiateToolTip("Zoom In");
-		} else if(gameObject.name == "Button_ZoomOut"){
-			instantiateToolTip("Zoom Out");
-		} else if(gameObject.name == "Button_CameraToggle"){
-			instantiateToolTip("Toggle Camera");
-		} else if(gameObject.name == "Button_Delete"){
-			instantiateToolTip("Delete Object(s)");
+	void Update() {
+		if(tt.activeSelf) {
+			makeToolTipFollowMouse();
 		}
 	}
-	
-	public void OnPointerExit(PointerEventData data){
-		Destroy(tt);
+
+	void OnDisable() {
+		OnMouseExit();
+	}
+
+	void OnMouseEnter() {
+		if(gameObject.name == "Copy") {
+			return;
+		}
+		tt.SetActive(true);
+	}
+
+	void OnMouseExit() {
+		tt.SetActive(false);
+	}
+
+	public void OnPointerEnter(PointerEventData data) {
+		OnMouseEnter();
 	}
 	
-	void instantiateToolTip(string s){
-		tt = Instantiate (Resources.Load ("ScreenUI/ToolTip")) as GameObject;
-		tt.transform.SetParent(GameObject.Find("ScreenUI").transform);
+	public void OnPointerExit(PointerEventData data) {
+		OnMouseExit();
+	}
+	
+	void makeToolTipFollowMouse() {
 		Vector2 screenPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 		tt.transform.position = screenPos;
-		Text t = tt.transform.Find("Text").GetComponent<Text>() as Text;
-		t.text = s;
-	}
-	
-	void makeToolTipFollowMouse(){
-		if (tt != null){
-			Vector2 screenPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-			tt.transform.position = screenPos;
-		}
 	}
 }
 

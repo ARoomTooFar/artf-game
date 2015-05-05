@@ -12,6 +12,7 @@ public class MirageBlinkStrike : EnemyBehaviour {
 
 	// This will be called when the animator first transitions to this state.
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		if (this.unit.target == null) return;
 		this.unit.facing = this.unit.target.transform.position - this.unit.transform.position;
 		this.unit.facing.y = 0.0f;
 		this.blink.useItem();

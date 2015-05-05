@@ -73,7 +73,7 @@ public class Square {
 	}
 
 	public int Cost {
-		get { return Mathf.RoundToInt((10 * Mathf.Pow(2, (Mathf.Sqrt(UsableArea)) - 7) + 25) * 100); }
+		get { return Mathf.RoundToInt((10 * Mathf.Pow(2, (Mathf.Sqrt(UsableArea)) - 7) + 25) * 10); }
 	}
 	
 	public int Points{
