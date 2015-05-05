@@ -185,10 +185,17 @@ public class MainMenuCtrl : MonoBehaviour {
         imgPanel.color = new Color(0.3f, 0.3f, 0.3f);
 
         // grey text in buttons
-        BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
+        /*BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
         foreach (BtnScript child in btnChild)
         {
             child.DisableTxt();
+        }*/
+
+        // grey text
+        Text[] txtChild = this.GetComponentsInChildren<Text>();
+        foreach (Text child in txtChild)
+        {
+            child.color = new Color(0.3f, 0.3f, 0.3f);
         }
 
         // lock controls
