@@ -78,7 +78,7 @@ public class RoomResizingObject : ClickEvent {
 		//destroy the copy
 		Destroy(itemObjectCopy);
 		tilemapcont.deselect(getPosition());
-		MapData.dragObject(this.gameObject, getPosition(), position - getPosition());
+		MapData.resizeRoom(this.gameObject, getPosition(), position - getPosition());
 		tilemapcont.selectTile(position);
 	}
 	

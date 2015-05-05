@@ -238,13 +238,15 @@ public class ARTFRoomManager {
 		if(!isSquareValid(testSquare)) {
 			return false;
 		}
+		if(testSquare.Cost - rm.Cost > Money.money) {
+			return false;
+		}
 		Square roomSquare;
 		foreach (ARTFRoom room in roomList) {
 			if(rm.LLCorner == room.LLCorner){
 				continue;
 			}
-			roomSquare = new Square(room.LLCorner, room.URCorner);
-			if(testSquare.Intersect(roomSquare)){
+			if(testSquare.Intersect(room)){
 				return false;
 			}
 		}
@@ -259,10 +261,11 @@ public class ARTFRoomManager {
 		if(!isSquareValid(rm)) {
 			return false;
 		}
-		Square roomSquare;
+		if(rm.Cost > Money.money) {
+			return false;
+		}
 		foreach (ARTFRoom room in roomList) {
-			roomSquare = new Square(room.LLCorner, room.URCorner);
-			if(rm.Intersect(roomSquare)){
+			if(rm.Intersect(room)){
 				return false;
 			}
 		}
@@ -270,16 +273,13 @@ public class ARTFRoomManager {
 	}
 
 	public bool isSquareValid(Square sq){
-		if(sq.Area-sq.Perimeter < 25) {
+		if(sq.UsableArea < 25) {
 			return false;
 		}
 		if(sq.Length < 3+2) {
 			return false;
 		}
 		if(sq.Height < 3+2) {
-			return false;
-		}
-		if(sq.Cost > Money.money) {
 			return false;
 		}
 		return true;

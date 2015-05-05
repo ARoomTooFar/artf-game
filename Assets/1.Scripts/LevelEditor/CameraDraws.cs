@@ -55,7 +55,7 @@ public class CameraDraws : MonoBehaviour {
 		HashSet<Vector3> selTile = tilemapcont.getSelectedTiles ();
 		GL.Begin (GL.QUADS);
 		Square sq = new Square(tilemapcont.shiftOrigin, tilemapcont.lastClick);
-		if(MapData.TheFarRooms.isSquareValid(sq)) {
+		if(MapData.TheFarRooms.isAddValid(sq)) {
 			singleColorTransMat.color = normalColor;
 		} else {
 			singleColorTransMat.color = invalidColor;

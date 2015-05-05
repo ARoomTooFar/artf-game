@@ -104,7 +104,7 @@ public class TileMapController : MonoBehaviour {
 
 	public void fillInRoom() {
 		if(MapData.addRoom(shiftOrigin, lastClick)) {
-			Money.buy(new Square(shiftOrigin, lastClick).Cost);
+			Money.buy(MapData.TheFarRooms.find(shiftOrigin).Cost);
 		}
 	}
 
