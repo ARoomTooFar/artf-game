@@ -53,6 +53,7 @@ public partial class ARTFRoom : Square {
 		private set;
 	}
 
+
 	//Stored paths to get from point A to point B. Primarily for storing paths from one door to another
 	public Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>> RoomPaths {
 		get;
@@ -79,30 +80,6 @@ public partial class ARTFRoom : Square {
 		ULMarker.SetActive (active);
 	}
 	#endregion Corners
-
-	#region SquareProperties
-
-
-	public float UsableArea{
-		get { return Area - Perimeter;}
-	}
-
-	public float Perimeter {
-		get { return 2 * (Length + Height); }
-	}
-	public float Length {
-		get { return 1 + URCorner.x - LLCorner.x; }
-	}
-
-	public int Cost {
-		get { return Mathf.RoundToInt((10 * Mathf.Pow(2, (Mathf.Sqrt(UsableArea)) - 7) + 25) * 100); }
-	}
-
-	public int Points{
-		get { return Mathf.RoundToInt(Mathf.Min(Length, Height)/20*UsableArea);}
-	}
-
-	#endregion SquareProperties
 
 	public string SaveString {
 		get{ return LLCorner.toCSV() + "," + URCorner.toCSV();}
