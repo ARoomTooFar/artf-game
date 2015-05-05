@@ -16,13 +16,16 @@ public class BtnScript : MonoBehaviour {
         Text[] txtChild = this.GetComponentsInChildren<Text>();
         foreach (Text child in txtChild)
         {
-            
             child.color = new Color32(152, 213, 217, 255);
         }
     }
 
-    public void EnableTxt()
+    public void DisableTxt()
     {
-
+        Text[] txtChild = this.GetComponentsInChildren<Text>();
+        foreach (Text child in txtChild)
+        {
+            child.color = new Color(0.3f, 0.3f, 0.3f);
+        }
     }
 }

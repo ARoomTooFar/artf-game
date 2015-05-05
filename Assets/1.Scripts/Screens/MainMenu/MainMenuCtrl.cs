@@ -73,6 +73,10 @@ public class MainMenuCtrl : MonoBehaviour {
 
 		// switch to start menu
 		MenuSwitch (Menu.StartMenu);
+
+        // test
+        MenuDisable();
+        //MenuEnable();
 	}
 
 	// handles menu joystick movement control
@@ -144,6 +148,52 @@ public class MainMenuCtrl : MonoBehaviour {
 		prevBtn = currMenu[locY, locX];
 		currAnim.SetBool("show", true);
 	}
+
+    void MenuEnable() {
+        // return color to buttons
+        CanvasGroup groupContainer = GameObject.Find("/Canvas/" + menuContainerName).GetComponent<CanvasGroup>();
+        groupContainer.interactable = true;
+
+        // return color to image panel
+        Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
+        imgPanel.color = new Color32(255, 255, 255, 100);
+
+        // return text color in buttons
+        BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
+        foreach (BtnScript child in btnChild)
+        {
+            child.DehighlightTxt();
+        }
+
+        // highlight first button of currMenu
+        locX = 0;
+        locY = 0;
+        var pointer = new PointerEventData(EventSystem.current);
+        ExecuteEvents.Execute(currMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
+
+        // unlock controls
+        menuLock = false;
+    }
+
+    void MenuDisable() {
+        // grey buttons
+        CanvasGroup groupContainer = GameObject.Find("/Canvas/" + menuContainerName).GetComponent<CanvasGroup>();
+        groupContainer.interactable = false;
+
+        // grey image panel
+        Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
+        imgPanel.color = new Color(0.3f, 0.3f, 0.3f);
+
+        // grey text in buttons
+        BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
+        foreach (BtnScript child in btnChild)
+        {
+            child.DisableTxt();
+        }
+
+        // lock controls
+        menuLock = true;
+    }
 	
 	void Update () {
 		// check for joystick movement
