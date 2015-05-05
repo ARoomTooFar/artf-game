@@ -6,6 +6,7 @@ public class CVSensor : MonoBehaviour {
 
 	private bool hooked;
 	public List<Player> playersHooked;
+	private bool walled;
 
 	void Start () {
 		playersHooked = new List<Player> ();
@@ -17,6 +18,13 @@ public class CVSensor : MonoBehaviour {
 		if (p != null) {
 			hooked = true;
 			playersHooked.Add(p);
+			return;
+		}
+
+		Wall w = other.GetComponent<Wall> ();
+
+		if (w != null) {
+			walled = true;
 		}
 	}
 
@@ -25,7 +33,13 @@ public class CVSensor : MonoBehaviour {
 		if(playersHooked.Count == 0) hooked = false;
 	}
 
-	public bool Hooked(){
+	public bool Hooked() {
 		return hooked;
 	}
+
+	public bool Walled() {
+		return walled;
+	}
+
+
 }

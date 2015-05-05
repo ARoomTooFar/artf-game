@@ -5,6 +5,7 @@ using System;
 
 public class VinePull : Approach {
 
+	private Transform transform;
 	public Stun stun;
 	public MeleeWeapons weap;
 	public CVSensor feeler;
@@ -23,6 +24,7 @@ public class VinePull : Approach {
 		p.mash_threshold = 4;
 		p.mash_value = 0;
 		onCoolDown = false;
+		transform = unit.transform.Find ("CVFeelers");
 	}
 	
 	// This will be called once the animator has transitioned out of the state.
@@ -53,6 +55,10 @@ public class VinePull : Approach {
 
 		unit.facing = unit.target.transform.position - unit.transform.position;
 		unit.facing.y = 0.0f;
+
+		if (feeler.Walled ()) {
+
+		}
 
 		if (!feeler.Hooked ()) {
 			tether.transform.RotateAround (unit.transform.position, Vector3.up, 50 * Time.deltaTime);
