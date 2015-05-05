@@ -82,7 +82,7 @@ public class NewMirage : NewStationaryEnemy {
 		setAnimHash ();
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 4.0f;
+		this.maxAtkRadius = 3.5f;
 	}
 	
 	//-------------//

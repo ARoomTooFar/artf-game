@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: e4b93a613ae9ea74faa8f315117c4f15
-timeCreated: 1430104024
+guid: 72a719d61dba516439be35aa3a6521be
+timeCreated: 1430790904
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -36,9 +36,7 @@ ModelImporter:
     100056: Right_Shoulder
     100058: Upper_Back
     100060: Upper_Neck
-    100062: Z-Camera
-    100064: Z-Ground
-    100066: Z-Sun
+    100062: Z-Ground
     400000: Bulb_Bottom
     400002: Head
     400004: Left_Arm_1_1
@@ -70,9 +68,7 @@ ModelImporter:
     400056: Right_Shoulder
     400058: Upper_Back
     400060: Upper_Neck
-    400062: Z-Camera
-    400064: Z-Ground
-    400066: Z-Sun
+    400062: Z-Ground
     2300000: Z-Ground
     3300000: Z-Ground
     4300000: Mirage
@@ -87,7 +83,7 @@ ModelImporter:
     9500000: //RootNode
     13700000: Mirage
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -125,7 +121,7 @@ ModelImporter:
     splitTangentsAcrossUV: 1
     normalImportMode: 0
     tangentImportMode: 1
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     human: []

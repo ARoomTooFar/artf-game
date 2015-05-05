@@ -18,7 +18,7 @@ public class HookHelper : MonoBehaviour {
 			}
 		}
 		if (other.gameObject == spawner.gameObject && spawner.check) {
-			this.transform = spawner.transform;
+			// this.transform = spawner.transform;
 
 		}
 	}
