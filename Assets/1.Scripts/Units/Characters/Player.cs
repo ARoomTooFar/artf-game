@@ -32,7 +32,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	protected override void Awake() {
 		base.Awake();
 		//opposition = Type.GetType("NewEnemy");
-		opposition = Type.GetType("Enemy"); //Use this if going after testable opponents
+		opposition = Type.GetType("NewEnemy"); //Use this if going after testable opponents
 	}
 	
 	// Use this for initialization
