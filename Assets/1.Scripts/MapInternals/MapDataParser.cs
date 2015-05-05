@@ -9,14 +9,14 @@ public static class MapDataParser {
 		MapData.ClearData();
 		string[] SaveStringLines = SaveString.Split('\n');
 		int i = 0;
-		while(SaveStringLines[i] != "Terrain") {
+		while(SaveStringLines[i] != "Terminal") {
 			i++;
 		}
 		i++;
-		while(SaveStringLines[i] != "Terminal") {
-			parseTerrain(SaveStringLines[i++]);
-		}
-		i++;
+		//while(SaveStringLines[i] != "Terminal") {
+		//	parseTerrain(SaveStringLines[i++]);
+		//}
+		//i++;
 		while(SaveStringLines[i] != "Room") {
 			parseTerminalRooms(SaveStringLines[i++]);
 		}
@@ -69,25 +69,6 @@ public static class MapDataParser {
 			ARTFRoom room = new ARTFRoom(pos1, pos2);
 			room.placedThisSession = true;
 			MapData.addRoom(room);
-		}
-	}
-
-	private static void parseTerrain(string SaveString) {
-        //Debug.Log(SaveString);
-		string[] type = SaveString.Split(':');
-		string[] blocks = type[1].Trim().Split(' ');
-		foreach(string blk in blocks) {
-			string[] blkParams = blk.Split(',');
-			if(blkParams.Length != 5){
-				continue;
-			}
-            // Debug.Log(blkParams[0] + ", " + blkParams[1] + ", " + blkParams[2] + ": " + type[0]);
-			Vector3 pos = new Vector3(float.Parse(blkParams[0]),
-			                          float.Parse(blkParams[1]),
-			                          float.Parse(blkParams[2]));
-			TerrainBlock nBlk = new TerrainBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
-			nBlk.wallType = blkParams[4];
-			MapData.TerrainBlocks.add(nBlk);
 		}
 	}
 

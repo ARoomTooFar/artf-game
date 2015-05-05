@@ -55,7 +55,7 @@ public class ARTFRoomManager {
 		//add the new room to the list of rooms
 		roomList.Add(rm);
 		//link the needed terrain to it
-		rm.linkTerrain();
+		//rm.linkTerrain();
 	}
 	#endregion Add
 
@@ -252,14 +252,17 @@ public class ARTFRoomManager {
 	}
 	#endregion Resize
 	public bool isAddValid(Vector3 cor1, Vector3 cor2) {
-		Square testSquare = new Square (cor1, cor2);
-		if(!isSquareValid(testSquare)) {
+		return isAddValid(new Square(cor1, cor2));
+	}
+
+	public bool isAddValid(Square rm){
+		if(!isSquareValid(rm)) {
 			return false;
 		}
 		Square roomSquare;
 		foreach (ARTFRoom room in roomList) {
 			roomSquare = new Square(room.LLCorner, room.URCorner);
-			if(testSquare.Intersect(roomSquare)){
+			if(rm.Intersect(roomSquare)){
 				return false;
 			}
 		}

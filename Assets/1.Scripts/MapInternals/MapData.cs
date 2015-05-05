@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public static class MapData {
 
 	static MapData() {
-		TerrainBlocks = new TerrainManager();
 		SceneryBlocks = new SceneryManager();
 		MonsterBlocks = new MonsterManager();
 		TheFarRooms = new ARTFRoomManager();
@@ -14,13 +13,7 @@ public static class MapData {
 	public static void ClearData() {
 		SceneryBlocks.clear();
 		MonsterBlocks.clear();
-		TerrainBlocks.clear();
 		TheFarRooms.clear();
-	}
-
-	public static TerrainManager TerrainBlocks {
-		get;
-		private set;
 	}
 
 	public static SceneryManager SceneryBlocks {
@@ -45,8 +38,8 @@ public static class MapData {
 	public static string SaveString {
 		get {
 			string retVal = "MapData\n";
-			retVal += "Terrain\n";
-			retVal += TerrainBlocks.SaveString;
+			//retVal += "Terrain\n";
+			//retVal += TerrainBlocks.SaveString;
 			retVal += "Terminal\n";
 			retVal += StartingRoom.SaveString + " " + EndingRoom.SaveString + "\n";
 			retVal += "Room\n";
@@ -60,13 +53,17 @@ public static class MapData {
 	}
 
 	#region Rooms
-	public static bool addRoom(Vector3 pos1, Vector3 pos2) {
-		if(TheFarRooms.isAddValid(pos1, pos2)) {
-			TheFarRooms.add(pos1, pos2);
+	public static bool addRoom(ARTFRoom rm){
+		if(TheFarRooms.isAddValid(rm)) {
+			TheFarRooms.add(rm);
 		} else {
 			return false;
 		}
 		return true;
+	}
+
+	public static bool addRoom(Vector3 pos1, Vector3 pos2) {
+		return addRoom(new ARTFRoom(pos1, pos2));
 	}
 
 	public static void moveRoom(Vector3 oldPos, Vector3 newPos) {

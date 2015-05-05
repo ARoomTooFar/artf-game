@@ -9,19 +9,18 @@ using System.Collections.Generic;
 public partial class ARTFRoom : Square {
 
 	#region PrivateVariables
-	private static string defaultBlockID = "LevelEditor/Rooms/floortile";
 	private static string defaultFloor = "{0}/Floors/IndustrialFloor1";
 	private static string roomCornerId = "LevelEditor/Other/RoomCorner";
+	private static string wallType = "{0}/Rooms/wallstoneend";
 	#endregion PrivateVariables
 
 	#region Properties
-	//A list of the TerrainBlocks contained within the room
-	public List<TerrainBlock> Blocks {
+	public bool placedThisSession = true;
+
+	public List<SceneryBlock> Walls {
 		get;
 		private set;
 	}
-
-	public bool placedThisSession = true;
 
 	public List<SceneryBlock> Scenery {
 		get;
@@ -92,11 +91,12 @@ public partial class ARTFRoom : Square {
 	 * Constructor
 	 */
 	public ARTFRoom(Vector3 pos1, Vector3 pos2) : base(pos1, pos2) {
-		this.Blocks = new List<TerrainBlock>();
 		this.Floor = GameObjectResourcePool.getResource(defaultFloor, this.LLCorner, Vector3.zero);
 		setFloor();
 		this.LinkedRooms = new Dictionary<SceneryBlock, ARTFRoom>();
 		this.Scenery = new List<SceneryBlock> ();
+		this.Walls = new List<SceneryBlock>();
+		setWalls();
 		this.Monster = new List<MonsterBlock> ();
 		this.Doors = new List<SceneryBlock>();
 		this.RoomPaths = new Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>>();
@@ -108,72 +108,6 @@ public partial class ARTFRoom : Square {
 			setMarkerActive(Mode.isRoomMode());
 		}
 	}
-
-	#region (un)linkTerrain
-	/*
-	 * public void linkTerrain() 
-	 * 
-	 * Grabs any existing terrain that falls within the
-	 * room's boundries and links them.
-	 * 
-	 * Creates new terrain using a default block if it
-	 * does not already exist.
-	 */
-	public void linkTerrain() {
-		//Undo all extant links to terrain
-		unlinkTerrain();
-		TerrainBlock blk;
-		Vector3 pos = new Vector3();
-		//for each coordinate in this room
-		for(int i = 0; i < Length; ++i) {
-			for(int j = 0; j < Height; ++j) {
-				//set a Vector3 to the correct position
-				pos.Set(i + LLCorner.x, 0, j + LLCorner.z);
-				//try to find an existing block at that coordinate
-				blk = MapData.TerrainBlocks.find(pos);
-				//if it doesn't exist
-				if(blk == null) {
-					//create a new one
-					blk = new TerrainBlock(defaultBlockID, pos, DIRECTION.North);
-					//and add it to the MapData
-					MapData.TerrainBlocks.add(blk);
-				}
-				//link the block to the room
-				Blocks.Add(blk);
-				//and link the room to the block
-				blk.Room = this;
-				//If the block is along the edge, give it a wall prefab
-				if(this.isEdge(blk.Position)) {
-					blk.addWall(getWallSide(blk.Position));
-				}
-			}
-		}
-		//For each block in the room, reevaluate its neighbor links
-		foreach(TerrainBlock blks in Blocks) {
-			MapData.TerrainBlocks.relinkNeighbors(blks);
-		}
-	}
-
-	/*
-	 * public void unlinkTerrain()
-	 * 
-	 * Breaks any links between the room and its
-	 * currently linked blocks
-	 */
-	public void unlinkTerrain() {
-		//for each linked block
-		foreach(TerrainBlock blk in Blocks) {
-			//unlink the room from the block
-			blk.Room = null;
-			//if the room has a wall, return it to the resource pool
-			if(blk.Wall != null) {
-				blk.removeWall();
-			}
-		}
-		//remove all the links to terrain
-		Blocks.Clear();
-	}
-	#endregion (un)linkTerrain
 
 	/*
 	 * public void linkRoomsViaDoors()
@@ -255,9 +189,6 @@ public partial class ARTFRoom : Square {
 	public override void move(Vector3 offset) {
 		base.move(offset);
 		//move each block by offset
-		foreach(TerrainBlock blk in Blocks) {
-			blk.move(offset);
-		}
 		foreach (SceneryBlock blk in Scenery) {
 			blk.move (offset);
 		}
@@ -265,6 +196,9 @@ public partial class ARTFRoom : Square {
 			blk.move(offset);
 		}
 		setFloor();
+		foreach(SceneryBlock wall in Walls){
+			wall.move(offset);
+		}
 		updateMarkerPositions();
 	}
 
@@ -279,13 +213,7 @@ public partial class ARTFRoom : Square {
 			return;
 		}
 		base.resize(oldCor, newCor);
-
-		//remove blocks no longer in room
-		foreach(TerrainBlock blk in Blocks) {
-			if(!inRoom(blk.Position)) {
-				MapData.TerrainBlocks.remove(blk);
-			}
-		}
+	
 		List<SceneryBlock> remDoor = new List<SceneryBlock> ();
 		foreach (SceneryBlock door in Doors) {
 			if(!isEdge(door.Position)){
@@ -296,11 +224,9 @@ public partial class ARTFRoom : Square {
 			Doors.Remove(door);
 			MapData.SceneryBlocks.remove(door);
 		}
-		//relink blocks to this room
-		linkTerrain();
 
 		setFloor();
-
+		setWalls();
 		updateMarkerPositions();
 	}
 
@@ -310,11 +236,16 @@ public partial class ARTFRoom : Square {
 	 * Removes all linked blocks from MapData
 	 */
 	public void remove() {
-		foreach(TerrainBlock blk in this.Blocks) {
-			MapData.TerrainBlocks.remove(blk);
+		foreach(SceneryBlock scn in Scenery) {
+			scn.remove();
+		}
+		foreach(MonsterBlock mon in Monster) {
+			mon.remove();
+		}
+		foreach(SceneryBlock wall in Walls) {
+			wall.remove();
 		}
 		GameObjectResourcePool.returnResource(defaultFloor, Floor);
-		this.Blocks.Clear();
 	}
 	#endregion ManipulationFunctions
 
@@ -449,5 +380,23 @@ public partial class ARTFRoom : Square {
 		CurrentPoints -= mon.BlockInfo.Points;
 		Monster.Remove(mon);
 	}
+
+	public void setWalls(){
+		foreach(SceneryBlock wall in Walls) {
+			wall.remove();
+		}
+		Walls.Clear();
+		Vector3 vec;
+		for(float i = LLCorner.x; i <= URCorner.x; ++i) {
+			for(float j = LLCorner.z; j <= URCorner.z; ++j){
+				vec = new Vector3(i,0,j);
+				if(!isEdge(vec)){
+					continue;
+				}
+				Walls.Add(new SceneryBlock(wallType, vec, DIRECTION.North));
+			}
+		}
+	}
+
 	#endregion PositionChecks
 }
