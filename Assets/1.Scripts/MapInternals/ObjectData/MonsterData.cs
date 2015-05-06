@@ -14,6 +14,8 @@ public class MonsterData : LevelEntityData {
 		get;
 		private set;
 	}
+
+	public List<Vector3> RadiusCoordinates;
 	
 	// Base cost of monster which is multiplied by the rank of monster+1
 
@@ -30,9 +32,9 @@ public class MonsterData : LevelEntityData {
 		}
 	}
 
-	public List<Vector3> RadiusCoordinates(DIRECTION dir) {
+	public List<Vector3> LocalRadiusCoordinates(DIRECTION dir) {
 		List<Vector3> retVal = new List<Vector3>();
-		foreach(Vector3 vec in Coordinates) {
+		foreach(Vector3 vec in RadiusCoordinates) {
 			retVal.Add(vec.RotateTo(dir));
 		}
 		return retVal;
