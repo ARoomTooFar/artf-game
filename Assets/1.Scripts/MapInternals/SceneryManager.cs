@@ -16,6 +16,7 @@ public class SceneryManager {
 				blk.remove();
 			}
 		}
+		dictionary.Clear();
 	}
 
 	#region (un)linkTerrain

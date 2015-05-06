@@ -241,7 +241,6 @@ public class ARTFRoomManager {
 		if(testSquare.Cost - rm.Cost > Money.money) {
 			return false;
 		}
-		Square roomSquare;
 		foreach (ARTFRoom room in roomList) {
 			if(rm.LLCorner == room.LLCorner){
 				continue;
