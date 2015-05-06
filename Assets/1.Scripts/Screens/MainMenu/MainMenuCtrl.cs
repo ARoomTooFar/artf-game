@@ -150,6 +150,9 @@ public class MainMenuCtrl : MonoBehaviour {
 	}
 
     void MenuEnable() {
+		// unlock controls
+		menuLock = false;
+
         // return color to buttons
         CanvasGroup groupContainer = GameObject.Find("/Canvas/" + menuContainerName).GetComponent<CanvasGroup>();
         groupContainer.interactable = true;
@@ -158,24 +161,31 @@ public class MainMenuCtrl : MonoBehaviour {
         Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
         imgPanel.color = new Color32(255, 255, 255, 100);
 
-        // return text color in buttons
+        /*// return text color in buttons
         BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
         foreach (BtnScript child in btnChild)
         {
             child.DehighlightTxt();
-        }
+        }*/
+
+		// return color to text
+		Text[] txtChild = this.GetComponentsInChildren<Text>();
+		foreach (Text child in txtChild)
+		{
+			child.color = new Color32(152, 213, 217, 255);
+		}
 
         // highlight first button of currMenu
         locX = 0;
         locY = 0;
         var pointer = new PointerEventData(EventSystem.current);
         ExecuteEvents.Execute(currMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
-
-        // unlock controls
-        menuLock = false;
     }
 
     void MenuDisable() {
+		// lock controls
+		menuLock = true;
+
         // grey buttons
         CanvasGroup groupContainer = GameObject.Find("/Canvas/" + menuContainerName).GetComponent<CanvasGroup>();
         groupContainer.interactable = false;
@@ -184,22 +194,12 @@ public class MainMenuCtrl : MonoBehaviour {
         Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
         imgPanel.color = new Color(0.3f, 0.3f, 0.3f);
 
-        // grey text in buttons
-        /*BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
-        foreach (BtnScript child in btnChild)
-        {
-            child.DisableTxt();
-        }*/
-
         // grey text
         Text[] txtChild = this.GetComponentsInChildren<Text>();
         foreach (Text child in txtChild)
         {
             child.color = new Color(0.3f, 0.3f, 0.3f);
         }
-
-        // lock controls
-        menuLock = true;
     }
 	
 	void Update () {
