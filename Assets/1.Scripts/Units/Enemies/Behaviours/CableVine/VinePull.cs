@@ -82,6 +82,10 @@ public class VinePull : Approach {
 
 	}
 
+	private void retract() {
+		
+	}
+
 	private Vector3 pullVelocity(Vector3 destination){
 		Vector3 dir = unit.target.transform.position - destination;
 		float time =  dir.magnitude/((NewCableVine)unit).pull_velocity;
@@ -106,4 +110,6 @@ public class VinePull : Approach {
 			yield return 0;
 		}
 	}
+
+
 }
