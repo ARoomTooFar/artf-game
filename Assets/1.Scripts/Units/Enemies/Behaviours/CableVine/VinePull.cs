@@ -57,7 +57,8 @@ public class VinePull : Approach {
 		unit.facing.y = 0.0f;
 
 		if (feeler.Walled ()) {
-
+			retract();
+			return;
 		}
 
 		if (!feeler.Hooked ()) {
@@ -83,7 +84,9 @@ public class VinePull : Approach {
 	}
 
 	private void retract() {
-		
+		if(unit.transform.localScale.x > 0.5) unit.transform.localScale -= new Vector3(0.01f, 0, 0);
+		if(unit.transform.localScale.z > 0.5) unit.transform.localScale -= new Vector3(0, 0, 0.01f);
+		//tether.transform.position = unit.facing - new Vector3((tether.transform.localScale.y)/2.0f, 0, 0);
 	}
 
 	private Vector3 pullVelocity(Vector3 destination){

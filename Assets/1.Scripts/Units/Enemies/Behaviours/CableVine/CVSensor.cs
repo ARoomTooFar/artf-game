@@ -11,8 +11,10 @@ public class CVSensor : MonoBehaviour {
 	void Start () {
 		playersHooked = new List<Player> ();
 	}
-	
+
+
 	void OnTriggerEnter(Collider other) {
+
 		Player p = other.GetComponent<Player> ();
 
 		if (p != null) {
@@ -31,6 +33,11 @@ public class CVSensor : MonoBehaviour {
 	void OnTriggerExit(Collider other) {
 		playersHooked.Remove (other.GetComponent<Player> ());
 		if(playersHooked.Count == 0) hooked = false;
+		Wall w = other.GetComponent<Wall> ();
+		if (w != null) {
+			walled = false;
+		}
+		
 	}
 
 	public bool Hooked() {
