@@ -225,8 +225,7 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 			actable = freeAnim;
 		}
 		this.animator.SetBool("Actable", this.actable);
-
-		// actionCommands ();
+		
 		animationUpdate ();
 	}
 	

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System;
 
 [System.Serializable]
-public class CryControls {
+public class Controls {
 	//First 7 are Keys, last 2 are joystick axis
 	public string up, down, left, right, attack, secItem, cycItem, hori, vert, joyAttack, joySecItem, joyCycItem;
 	//0 for Joystick off, 1 for Joystick on and no keys
@@ -15,19 +15,15 @@ public class CryControls {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : Character, IMoveable, IHealable<int>{
+public class NewPlayer : NewCharacter, IHealable<int>{
 	public string nameTag;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart, inGrey;
-	public GameObject currDoor;
 	
 	public UIActive UI;
-	public CryControls controls;
+	public Controls controls;
 
-	// New Aggro system does not need these
-	// Events for death
-	// public delegate void DieBroadcast(GameObject dead);
-	// public static event DieBroadcast OnDeath;
+	private Door currDoor;
 	
 	protected override void Awake() {
 		base.Awake();
@@ -52,11 +48,9 @@ public class Player : Character, IMoveable, IHealable<int>{
 		stats.luck=0;
 		inGrey = false;
 		greyDamage = 0;
-		//testable = true;
-		
 	}
 	//Set cooldown bars to current items. 
-	void ItemCooldowns(){
+	void ItemCooldowns() {
 		UI.onState = true;
 		UI.hpBar.onState =1;
 		UI.greyBar.onState =1;
@@ -73,47 +67,31 @@ public class Player : Character, IMoveable, IHealable<int>{
 	// Update is called once per frame
 	protected override void Update () {
 		if(UI!=null){
-			if(!UI.onState){
+			if(!UI.onState) {
 				ItemCooldowns();
 			}
-			//testable = false;
 		}
-		if(stats.health <= 0){
-			
-			isDead = true;
-			if(UI!=null) UI.hpBar.current = 0;
-		} else {
-			if(UI!=null){
-				if(UI.onState){
-					UI.hpBar.max = stats.maxHealth;
-					UI.greyBar.max = stats.maxHealth;
-					UI.greyBar.current = stats.health+greyDamage;
-					UI.hpBar.current = stats.health;
-				}
+
+		if(isDead) return;
+
+		if(UI!=null){
+			if(UI.onState){
+				UI.hpBar.max = stats.maxHealth;
+				UI.greyBar.max = stats.maxHealth;
+				UI.greyBar.current = stats.health+greyDamage;
+				UI.hpBar.current = stats.health;
 			}
-			isDead = false;
 		}
-		if(!isDead) {
-			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
-			
-			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-			animSteHash = animSteInfo.fullPathHash;
-			
-			freeAnim = !stunned && !knockedback;
-			
-			
-			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
-			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
-			
-			if (isGrounded) {
-				actionCommands ();
-				moveCommands ();
-			} else {
-				falling();
-			}
-			
-			animationUpdate ();
-		}
+
+		freeAnim = !stunned && !knockedback && !animationLock;
+		actable = freeAnim;
+
+		this.animator.SetBool("Actable", this.actable);
+
+		if (!actable) return;
+		actionCommands ();
+		moveCommands ();
+		animationUpdate ();
 	}
 	
 	//---------------------------------//
@@ -127,14 +105,9 @@ public class Player : Character, IMoveable, IHealable<int>{
 				if(currDoor!=null){
 					currDoor.GetComponent<Door>().toggleOpen();
 					currDoor = null;
-					animator.SetBool("Charging", true);
-					//Debug.Log(luckCheck());
-					gear.weapon.initAttack();
-				}else{
-					animator.SetBool("Charging", true);
-					//Debug.Log(luckCheck());
-					gear.weapon.initAttack();
 				}
+				animator.SetBool("Charging", true);
+				gear.weapon.initAttack();
 			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
@@ -152,9 +125,6 @@ public class Player : Character, IMoveable, IHealable<int>{
 			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
 				animator.SetBool ("Charging", false);
 			}
-			/*else if (animSteInfo.nameHash == rollHash) { for later
-			}
-			*/
 		}
 		
 		
@@ -168,7 +138,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	// Constant animation updates (Main loop for characters movement/actions)
 	public override void animationUpdate() {
-		if (attacking&&!stats.isDead) {
+		if (attacking) {
 			attackAnimation();
 		} else {
 			movementAnimation();
@@ -186,10 +156,9 @@ public class Player : Character, IMoveable, IHealable<int>{
 		Vector3 newMoveDir = Vector3.zero;
 		Vector3 camAngle = Camera.main.transform.eulerAngles;
 
-		
-		if (!stats.isDead&&actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing) && this.testControl)) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
+		if (actable || animator.GetBool("Charging")) {
 			//"Up" key assign pressed
-
+			
 			float x;
 			float z;
 			if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
@@ -251,10 +220,10 @@ public class Player : Character, IMoveable, IHealable<int>{
 		splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
 		theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
 		Destroy (theSplat, 2);
-
+		
 		hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
 		BDS.addBuffDebuff(hitConfirm,gameObject,.5f);
-
+		
 	}
 	
 	public override void damage(int dmgTaken) {
@@ -270,15 +239,11 @@ public class Player : Character, IMoveable, IHealable<int>{
 	}
 	
 	public override void die() {
-		Debug.Log("IsDead");
 		base.die();
 
-		/*
-		if (OnDeath != null) {
-			OnDeath (this.gameObject);
-		}*/
 		stats.health = 0;
-		
+		if(UI!=null) UI.hpBar.current = 0;
+
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		//GetComponent<Collider> ().isTrigger = true;
 		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
@@ -306,27 +271,25 @@ public class Player : Character, IMoveable, IHealable<int>{
 			UI.greyBar.current = stats.health + greyDamage;
 		}
 	}
-
+	
 	public override void rez(){
 		if(stats.isDead){
 			stats.isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
+			if(UI!=null) UI.hpBar.current = stats.health;
 			stats.rezCount++;
-		}/*else{
-			heal(stats.maxHealth/(2+2*stats.rezCount));
-		}*///if and else are the 'base' rez from prior
+		}
 		//GetComponent<Collider> ().isTrigger = false;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		foreach (Renderer r in rs) {
 			if(r.GetComponent<Renderer>().gameObject.tag != "Item")
 				r.enabled = true;
 		}
-		//UI.hpBar.current = stats.health;
 	}
 	
 	//----------------------------------//
-
-
+	
+	
 	// Grey Health functions
 	public virtual int greyTest(int damage){
 		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){
@@ -339,22 +302,17 @@ public class Player : Character, IMoveable, IHealable<int>{
 			return 0;
 		}
 		if((damage > (stats.maxHealth/5)) && !inGrey){
-			//print("Got Here"+(stats.maxHealth/20)+":"+damage);
 			int tempDmg = greyDamage;
 			if(inGrey){
 				greyDamage = damage - stats.maxHealth/5;
-				print("Grey!:"+tempDmg);
 				StopCoroutine("RegenWait");
 				if(inGrey &&!stats.isDead){
 					StartCoroutine("RegenWait");
 				}
-				//print("True!WGAT:"+(stats.maxHealth/20 + tempDmg));
 				return damage + tempDmg;
 			}else{
 				inGrey = true;
 				greyDamage = damage - stats.maxHealth/5;
-				//print("Grey!:"+(damage - stats.maxHealth/20));
-				//print("True!NGAT:"+stats.maxHealth/20);
 				StopCoroutine("RegenWait");
 				if(inGrey &&!stats.isDead){
 					StartCoroutine("RegenWait");
@@ -365,11 +323,9 @@ public class Player : Character, IMoveable, IHealable<int>{
 			inGrey = false;
 			int tempDmg = greyDamage;
 			greyDamage = 0;
-			//print("True!WGBT:"+(damage + greyDamage));
 			return damage + tempDmg;
 		} else{
 			inGrey = false;
-			//print("True!NG:"+damage);
 			return damage;
 		}
 	}
@@ -395,13 +351,14 @@ public class Player : Character, IMoveable, IHealable<int>{
 		}
 		yield return 0;
 	}
+
 	private void OnTriggerEnter(Collider other){
 		if(other.tag == "Door"){
-			currDoor = other.gameObject;
+			currDoor = other.GetComponent<Door>();
 		}
 	}
 	private void OnTriggerExit(Collider other){
-		if(other.tag == "Door"){
+		if(other.gameObject == this.currDoor.gameObject){
 			currDoor = null;
 		}
 	}
