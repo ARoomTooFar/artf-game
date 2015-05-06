@@ -57,6 +57,7 @@ public static class MapData {
 		if(TheFarRooms.isAddValid(rm)) {
 			TheFarRooms.add(rm);
 		} else {
+			rm.remove();
 			return false;
 		}
 		return true;
@@ -103,16 +104,23 @@ public static class MapData {
 		return false;
 	}
 
-	public static void dragObject(GameObject obj, Vector3 pos, Vector3 offset) {
-		BlockData data = obj.GetComponent<BlockData>();
-
-		if(data is WallCornerData) {
+	public static void resizeRoom(GameObject obj, Vector3 pos, Vector3 offset){
+		WallCornerData data = obj.GetComponent <WallCornerData>();
+		
+		if(data != null) {
 			if(TheFarRooms.isResizeValid(pos, pos + offset)) {
+				int oldCost = TheFarRooms.find(pos).Cost;
 				TheFarRooms.resize(pos, pos + offset);
+				int newCost = TheFarRooms.find(pos+offset).Cost;
+				Money.buy(newCost - oldCost);
 			}
 			LevelPathCheck.checkPath();
 			return;
 		}
+	}
+
+	public static void dragObject(GameObject obj, Vector3 pos, Vector3 offset) {
+		BlockData data = obj.GetComponent <BlockData>();
 
 		if(data is SceneryData) {
 			if(SceneryBlocks.isMoveValid(pos, offset)) {

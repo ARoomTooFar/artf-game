@@ -47,7 +47,7 @@ public class TargetCircle : MonoBehaviour {
 		this.moveable = true;
 
 		if (user.GetComponent<Player> () != null) {
-			this.controls = user.GetComponent<Player>().controls;
+			this.controls = user.GetComponent<NewPlayer>().controls;
 		}
 
 		this.speed = user.stats.speed * 3;

@@ -60,7 +60,7 @@ public class Square {
 	}
 	
 	public float Perimeter {
-		get { return 2 * (Length + Height); }
+		get { return (2 * (Length + Height))-4; }
 	}
 	
 	//Add 1 because a grid with corners in the same position has Length/Height == 1

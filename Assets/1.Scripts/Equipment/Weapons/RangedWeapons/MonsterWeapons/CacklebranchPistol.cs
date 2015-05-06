@@ -30,7 +30,7 @@ public class CacklebranchPistol : RangedWeapons {
 		base.initAttack();
 	}
 	
-	public virtual IEnumerator Shoot(int count) {
+	new public virtual IEnumerator Shoot(int count) {
 		variance = 22f;
 
 		if(count == 0){

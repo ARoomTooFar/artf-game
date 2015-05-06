@@ -138,7 +138,7 @@ ModelImporter:
     4300048: pTorus2
     4300050: pTorus3
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:

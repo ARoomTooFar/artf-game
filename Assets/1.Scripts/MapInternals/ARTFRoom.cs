@@ -246,6 +246,18 @@ public partial class ARTFRoom : Square {
 			wall.remove();
 		}
 		GameObjectResourcePool.returnResource(defaultFloor, Floor);
+		if(LLMarker != null) {
+			GameObjectResourcePool.returnResource(roomCornerId, LLMarker);
+		}
+		if(URMarker != null) {
+			GameObjectResourcePool.returnResource(roomCornerId, URMarker);
+		}
+		if(ULMarker != null) {
+			GameObjectResourcePool.returnResource(roomCornerId, ULMarker);
+		}
+		if(LRMarker != null) {
+			GameObjectResourcePool.returnResource(roomCornerId, LRMarker);
+		}
 	}
 	#endregion ManipulationFunctions
 
