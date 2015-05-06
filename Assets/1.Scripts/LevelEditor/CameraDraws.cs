@@ -37,7 +37,7 @@ public class CameraDraws : MonoBehaviour {
 		drawSelectedTiles ();
 		drawGrid ();
 		drawMouseSquare();
-		drawBoxAroundFocusedObject();
+		//drawBoxAroundFocusedObject();
 		drawRoomMoveSquare();
 		drawRoomResizeSquare();
 	}	

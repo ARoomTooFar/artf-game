@@ -172,7 +172,7 @@ public partial class ARTFRoom : Square {
 
 	public void setFloor(){
 		Vector3 p = this.Center;
-		this.Floor.transform.position = new Vector3(p.x, -.01f, p.z);
+		this.Floor.transform.position = new Vector3(p.x, -.03f, p.z);
 		Vector3 scale = this.Floor.transform.localScale;
 		scale.x = this.Length;
 		scale.z = this.Height;

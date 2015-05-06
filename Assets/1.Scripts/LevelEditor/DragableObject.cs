@@ -29,6 +29,7 @@ public class DragableObject : ClickEvent {
 		while(Input.GetMouseButton(0)) { 
 			//if user wants to cancel the drag
 			if(Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButton(1)) {
+				Debug.Log("canceled");
 				Destroy(itemObjectCopy);
 				return false;
 			}
@@ -59,7 +60,7 @@ public class DragableObject : ClickEvent {
 							foreach(Material mat in rend.materials) {
 								if(mat.HasProperty("_Color")){
 									trans = mat.color;
-									trans.a = .5f;
+									trans.a *= .5f;
 									mat.color = trans;
 								}
 							}
@@ -77,7 +78,11 @@ public class DragableObject : ClickEvent {
 		}
 		
 		tilemapcont.suppressDragSelecting = false;
-		
+
+		if(itemObjectCopy == null) {
+			return false;
+		}
+
 		//destroy the copy
 		Destroy(itemObjectCopy);
 		tilemapcont.deselect(getPosition());
