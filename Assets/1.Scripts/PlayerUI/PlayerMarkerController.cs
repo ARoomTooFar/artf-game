@@ -2,15 +2,13 @@
 using System.Collections;
 
 public class PlayerMarkerController : MonoBehaviour {
-	Transform initPos;
-	public string name;
-	Vector3 playerPos;
+	public string controllerName;
+	Vector3 playerPos = Global.nullVector3;
 	GameObject player;
 	void Start () {
-		initPos = transform;
 		//Find should only ever run in start
-		if (GameObject.Find (name) != null) {
-			player = GameObject.Find (name);
+		if (GameObject.Find (controllerName) != null) {
+			player = GameObject.Find (controllerName);
 			playerPos = player.transform.position;
 		} else {//Fail check and removal
 			gameObject.GetComponent<Renderer>().enabled = false;
@@ -19,7 +17,7 @@ public class PlayerMarkerController : MonoBehaviour {
 	
 
 	void Update () {
-		if (playerPos != null) {
+		if (playerPos != Global.nullVector3) {
 			playerPos = player.transform.position;
 			playerPos.y = transform.position.y;
 			transform.position = playerPos;
