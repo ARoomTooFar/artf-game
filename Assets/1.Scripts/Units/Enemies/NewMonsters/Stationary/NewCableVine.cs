@@ -29,7 +29,7 @@ public class NewCableVine : NewStationaryEnemy {
 		foreach(CVineDeploy behaviour in this.animator.GetBehaviours<CVineDeploy>()) {
 			behaviour.blink = this.blink;
 		}
-		feeler = transform.Find ("CVFeelers").gameObject.GetComponent<CVSensor> ();
+		feeler = transform.Find ("CVFeeler").gameObject.GetComponent<CVSensor> ();
 
 //		this.blink = this.inventory.items[inventory.selected].GetComponent<Blink> ();
 //		if (this.blink == null) Debug.LogWarning ("Cable Vine does not have Blink equipped");
