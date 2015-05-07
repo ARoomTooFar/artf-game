@@ -19,7 +19,7 @@ ModelImporter:
     3300002: BlockCone
     4300000: BlockCone
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:

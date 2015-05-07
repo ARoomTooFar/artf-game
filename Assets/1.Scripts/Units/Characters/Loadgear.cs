@@ -11,6 +11,7 @@ public class Loadgear : MonoBehaviour {
 	public List<Character> players = new List<Character>();
 	public List<GameObject> equipment = new List<GameObject>();
 	public List<GameObject> abilities = new List<GameObject>();
+	//public List<GameObject> 
 	public string cName;
 
 	// Use this for initialization

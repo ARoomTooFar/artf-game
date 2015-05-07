@@ -55,7 +55,7 @@ public class ARTFRoomManager {
 		//add the new room to the list of rooms
 		roomList.Add(rm);
 		//link the needed terrain to it
-		rm.linkTerrain();
+		//rm.linkTerrain();
 	}
 	#endregion Add
 
@@ -238,13 +238,14 @@ public class ARTFRoomManager {
 		if(!isSquareValid(testSquare)) {
 			return false;
 		}
-		Square roomSquare;
+		if(testSquare.Cost - rm.Cost > Money.money) {
+			return false;
+		}
 		foreach (ARTFRoom room in roomList) {
 			if(rm.LLCorner == room.LLCorner){
 				continue;
 			}
-			roomSquare = new Square(room.LLCorner, room.URCorner);
-			if(testSquare.Intersect(roomSquare)){
+			if(testSquare.Intersect(room)){
 				return false;
 			}
 		}
@@ -252,14 +253,18 @@ public class ARTFRoomManager {
 	}
 	#endregion Resize
 	public bool isAddValid(Vector3 cor1, Vector3 cor2) {
-		Square testSquare = new Square (cor1, cor2);
-		if(!isSquareValid(testSquare)) {
+		return isAddValid(new Square(cor1, cor2));
+	}
+
+	public bool isAddValid(Square rm){
+		if(!isSquareValid(rm)) {
 			return false;
 		}
-		Square roomSquare;
+		if(rm.Cost > Money.money) {
+			return false;
+		}
 		foreach (ARTFRoom room in roomList) {
-			roomSquare = new Square(room.LLCorner, room.URCorner);
-			if(testSquare.Intersect(roomSquare)){
+			if(rm.Intersect(room)){
 				return false;
 			}
 		}
@@ -267,7 +272,7 @@ public class ARTFRoomManager {
 	}
 
 	public bool isSquareValid(Square sq){
-		if(sq.Area < 25) {
+		if(sq.UsableArea < 25) {
 			return false;
 		}
 		if(sq.Length < 3+2) {

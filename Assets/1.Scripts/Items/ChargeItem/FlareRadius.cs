@@ -33,6 +33,10 @@ public class FlareRadius : MonoBehaviour,IFallable {
 			if(activated){
 				transform.localScale -= new Vector3(decSpeed,0,decSpeed);
 				if(transform.localScale.x < .5|| transform.localScale.z < .5){
+					Prop[] flareNode = GetComponentsInChildren<Prop>();
+					if(flareNode[0] != null){
+						flareNode[0].die();
+					}
 					Destroy(gameObject);
 				}
 			}else{
@@ -84,15 +88,22 @@ public class FlareRadius : MonoBehaviour,IFallable {
 			used = true;
 			//Destroy(gameObject);
 		}*/
+		NewEnemy foe = other.GetComponent<NewEnemy>();
 		Enemy enemy = other.GetComponent<Enemy>();
 		if (enemy != null) {
 			decSpeed = decSpeed*4;
 			enemy.taunted(dummy);
 		}
+		if (foe != null) {
+			decSpeed = decSpeed*4;
+			foe.taunted(dummy);
+		}
+		
 	}
 	void OnTriggerExit (Collider other) {
-		Character enemy = other.GetComponent<Character>();
-		if (enemy != null) {
+		Enemy enemy = other.GetComponent<Enemy>();
+		NewEnemy foe = other.GetComponent<NewEnemy>();
+		if (enemy != null || foe != null) {
 			decSpeed = decSpeed/4;
 			//enemy.BDS.timedRemoval(debuff, this.gameObject,duration);
 		}

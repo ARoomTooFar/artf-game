@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 public class DragableObject : ClickEvent {
 
@@ -28,6 +29,7 @@ public class DragableObject : ClickEvent {
 		while(Input.GetMouseButton(0)) { 
 			//if user wants to cancel the drag
 			if(Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButton(1)) {
+				Debug.Log("canceled");
 				Destroy(itemObjectCopy);
 				return false;
 			}
@@ -53,11 +55,15 @@ public class DragableObject : ClickEvent {
 					//update the item object things
 					//shader has to be set in this loop, or transparency won't work
 					//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
-					foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
-						foreach(Material mat in rend.materials) {
-							trans = mat.color;
-							trans.a = .5f;
-							mat.color = trans;
+					if(itemObjectCopy.GetComponentsInChildren<Renderer>() != null){
+						foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
+							foreach(Material mat in rend.materials) {
+								if(mat.HasProperty("_Color")){
+									trans = mat.color;
+									trans.a *= .5f;
+									mat.color = trans;
+								}
+							}
 						}
 					}
 				} else {
@@ -72,7 +78,11 @@ public class DragableObject : ClickEvent {
 		}
 		
 		tilemapcont.suppressDragSelecting = false;
-		
+
+		if(itemObjectCopy == null) {
+			return false;
+		}
+
 		//destroy the copy
 		Destroy(itemObjectCopy);
 		tilemapcont.deselect(getPosition());

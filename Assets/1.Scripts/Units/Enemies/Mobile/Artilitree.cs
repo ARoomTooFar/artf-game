@@ -36,7 +36,7 @@ public class Artilitree: MobileEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 200;
+		stats.maxHealth = 150;
 		stats.health = stats.maxHealth;
 		stats.armor = 0;
 		stats.strength = 10;

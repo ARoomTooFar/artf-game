@@ -52,9 +52,9 @@ public class Projectile : MonoBehaviour {
 				enemy.BDS.addBuffDebuff(debuff, this.gameObject);
 			//}
 		}
-		enemy.damage(damage, user);
+		enemy.damage(damage, user.transform, user.gameObject);
 	}
-	
+
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Wall" || other.tag == "Door") {
 			if(particles !=null){
@@ -69,7 +69,7 @@ public class Projectile : MonoBehaviour {
 			}
 			Destroy(gameObject);
 		}
-		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
+		IDamageable<int, Transform, GameObject> component = (IDamageable<int, Transform, GameObject>) other.GetComponent( typeof(IDamageable<int, Transform, GameObject>) );
 		Character enemy = (Character) other.GetComponent(opposition);
 		if( component != null && enemy != null) {
 			onHit(enemy);
@@ -78,7 +78,7 @@ public class Projectile : MonoBehaviour {
 			}
 			Destroy(gameObject);
 		} else {
-			IDamageable<int, Traps> component2 = (IDamageable<int, Traps>) other.GetComponent (typeof(IDamageable<int, Traps>));
+			IDamageable<int, Traps, GameObject> component2 = (IDamageable<int, Traps, GameObject>) other.GetComponent (typeof(IDamageable<int, Traps, GameObject>));
 			if (component2 != null) {
 				component2.damage(damage);
 			}

@@ -54,9 +54,13 @@ public class Square {
 	public float Area {
 		get { return Length * Height; }
 	}
+
+	public float UsableArea{
+		get { return Area - Perimeter;}
+	}
 	
 	public float Perimeter {
-		get { return 2 * (Length + Height); }
+		get { return (2 * (Length + Height))-4; }
 	}
 	
 	//Add 1 because a grid with corners in the same position has Length/Height == 1
@@ -66,6 +70,14 @@ public class Square {
 	
 	public float Length {
 		get { return 1 + URCorner.x - LLCorner.x; }
+	}
+
+	public int Cost {
+		get { return Mathf.RoundToInt((10 * Mathf.Pow(2, (Mathf.Sqrt(UsableArea)) - 7) + 25) * 10); }
+	}
+	
+	public int Points{
+		get { return Mathf.RoundToInt(Mathf.Min(Length, Height)/20*UsableArea);}
 	}
 	#endregion SquareProperties
 
@@ -107,7 +119,7 @@ public class Square {
 		return false;
 	}
 
-	public void resize(Vector3 oldCor, Vector3 newCor) {
+	public virtual void resize(Vector3 oldCor, Vector3 newCor) {
 		//Make sure that the old corner is actually a corner
 		if(!isCorner(oldCor)) {
 			return;
@@ -128,7 +140,7 @@ public class Square {
 		}
 	}
 
-	public void move(Vector3 offset){
+	public virtual void move(Vector3 offset){
 		//Debug.Log(offset);
 		LLCorner = LLCorner + offset;
 		URCorner = URCorner + offset;

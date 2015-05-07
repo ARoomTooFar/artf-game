@@ -16,13 +16,13 @@ public class Pistol : RangedWeapons {
 		stats.weapTypeName = "sword";
 		loadSpeed = 2.5f;
 		stats.atkSpeed = 2.0f;
-		stats.damage = 1;
+		stats.damage = 20 + user.GetComponent<Character>().stats.coordination;
 		stats.maxChgTime = 2.0f;
 		
 		// Bull Pattern L originally
 		//rifle(L,2) + pistol (L,1)
-		variance = 22f;
-		kick = 2f;
+		variance = 10f;
+		kick = 0.5f;
 
 		spray = user.transform.rotation;
 		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(12f-user.stats.coordination)+user.transform.eulerAngles.y,(12f-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));

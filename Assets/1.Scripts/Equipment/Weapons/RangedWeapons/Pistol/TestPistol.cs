@@ -12,7 +12,7 @@ public class TestPistol : Pistol {
 	protected override void setInitValues() {
 		base.setInitValues();
 		stats.atkSpeed = 2.0f;
-		stats.damage = 1;
+		stats.damage = 2 + user.GetComponent<Character>().stats.coordination;
 		stats.maxChgTime = 2.0f;
 		
 		spray = user.transform.rotation;

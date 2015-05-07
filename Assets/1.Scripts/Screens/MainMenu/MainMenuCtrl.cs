@@ -51,6 +51,10 @@ public class MainMenuCtrl : MonoBehaviour {
         startMenu[1, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
 			Debug.Log ("Register button pressed!");
+            //MenuSwitch(Menu.LoginForm);
+
+            Farts serv = gameObject.AddComponent<Farts>();
+            serv.login("Paradoxium", "pass");
         });
 
 		// setup login
@@ -61,15 +65,18 @@ public class MainMenuCtrl : MonoBehaviour {
         loginForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnBack");
 		loginFormAnim = GameObject.Find ("/Canvas/" + menuContainerName + "/LoginForm").GetComponent<Animator>();
 		
-		// test button press handler
-        /*loginForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		// back button
+        loginForm[2, 1].GetComponent<Button>().onClick.AddListener(() =>
         {
-			Debug.Log ("Test button pressed!");
 			MenuSwitch (Menu.StartMenu);
-        });*/
+        });
 
 		// switch to start menu
 		MenuSwitch (Menu.StartMenu);
+
+        // test
+        MenuDisable();
+        //MenuEnable();
 	}
 
 	// handles menu joystick movement control
@@ -88,6 +95,19 @@ public class MainMenuCtrl : MonoBehaviour {
                 if (locY < 0)
                 {
 					locY = currMenu.Length - 1;
+                }
+            }
+
+            if (hori > 0)
+            {
+                locX = (locX + 1) % (currMenu.GetLength(1));
+            }
+            else if (hori < 0)
+            {
+                --locX;
+                if (locX < 0)
+                {
+                    locX = currMenu.GetLength(1) - 1;
                 }
             }
 
@@ -121,10 +141,66 @@ public class MainMenuCtrl : MonoBehaviour {
 
 		// setup first button highlight and show new menu
 		var pointer = new PointerEventData(EventSystem.current);
+        ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
+        locY = 0;
+        locX = 0;
 		ExecuteEvents.Execute(currMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
 		prevBtn = currMenu[locY, locX];
 		currAnim.SetBool("show", true);
 	}
+
+    void MenuEnable() {
+        // return color to buttons
+        CanvasGroup groupContainer = GameObject.Find("/Canvas/" + menuContainerName).GetComponent<CanvasGroup>();
+        groupContainer.interactable = true;
+
+        // return color to image panel
+        Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
+        imgPanel.color = new Color32(255, 255, 255, 100);
+
+        // return text color in buttons
+        BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
+        foreach (BtnScript child in btnChild)
+        {
+            child.DehighlightTxt();
+        }
+
+        // highlight first button of currMenu
+        locX = 0;
+        locY = 0;
+        var pointer = new PointerEventData(EventSystem.current);
+        ExecuteEvents.Execute(currMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
+
+        // unlock controls
+        menuLock = false;
+    }
+
+    void MenuDisable() {
+        // grey buttons
+        CanvasGroup groupContainer = GameObject.Find("/Canvas/" + menuContainerName).GetComponent<CanvasGroup>();
+        groupContainer.interactable = false;
+
+        // grey image panel
+        Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
+        imgPanel.color = new Color(0.3f, 0.3f, 0.3f);
+
+        // grey text in buttons
+        /*BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
+        foreach (BtnScript child in btnChild)
+        {
+            child.DisableTxt();
+        }*/
+
+        // grey text
+        Text[] txtChild = this.GetComponentsInChildren<Text>();
+        foreach (Text child in txtChild)
+        {
+            child.color = new Color(0.3f, 0.3f, 0.3f);
+        }
+
+        // lock controls
+        menuLock = true;
+    }
 	
 	void Update () {
 		// check for joystick movement

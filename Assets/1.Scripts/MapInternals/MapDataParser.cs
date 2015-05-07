@@ -9,14 +9,14 @@ public static class MapDataParser {
 		MapData.ClearData();
 		string[] SaveStringLines = SaveString.Split('\n');
 		int i = 0;
-		while(SaveStringLines[i] != "Terrain") {
+		while(SaveStringLines[i] != "Terminal") {
 			i++;
 		}
 		i++;
-		while(SaveStringLines[i] != "Terminal") {
-			parseTerrain(SaveStringLines[i++]);
-		}
-		i++;
+		//while(SaveStringLines[i] != "Terminal") {
+		//	parseTerrain(SaveStringLines[i++]);
+		//}
+		//i++;
 		while(SaveStringLines[i] != "Room") {
 			parseTerminalRooms(SaveStringLines[i++]);
 		}
@@ -66,26 +66,9 @@ public static class MapDataParser {
 			Vector3 pos2 = new Vector3(float.Parse(rmParams[3]),
 			                         float.Parse(rmParams[4]),
 			                         float.Parse(rmParams[5]));
-			MapData.addRoom(pos1, pos2);           
-		}
-	}
-
-	private static void parseTerrain(string SaveString) {
-        //Debug.Log(SaveString);
-		string[] type = SaveString.Split(':');
-		string[] blocks = type[1].Trim().Split(' ');
-		foreach(string blk in blocks) {
-			string[] blkParams = blk.Split(',');
-			if(blkParams.Length != 5){
-				continue;
-			}
-            // Debug.Log(blkParams[0] + ", " + blkParams[1] + ", " + blkParams[2] + ": " + type[0]);
-			Vector3 pos = new Vector3(float.Parse(blkParams[0]),
-			                          float.Parse(blkParams[1]),
-			                          float.Parse(blkParams[2]));
-			TerrainBlock nBlk = new TerrainBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
-			nBlk.wallType = blkParams[4];
-			MapData.TerrainBlocks.add(nBlk);
+			ARTFRoom room = new ARTFRoom(pos1, pos2);
+			room.placedThisSession = true;
+			MapData.addRoom(room);
 		}
 	}
 
@@ -100,12 +83,16 @@ public static class MapDataParser {
 			Vector3 pos = new Vector3(float.Parse(blkParams[0]),
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
-			SceneryBlock nBlk = new SceneryBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
-			MapData.SceneryBlocks.add(nBlk);
-			if(type[0] == "Prefabs/PlayerStartingLocation") {
+			SceneryBlock nBlk = null;
+			if(MapData.SceneryBlocks.isAddValid(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]))){
+				nBlk = new SceneryBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
+				nBlk.BlockInfo.placedThisSession = true;
+				MapData.SceneryBlocks.add(nBlk);
+			}
+			if(type[0] == "LevelEditor/Other/PlayerStartingLocation") {
 				start = nBlk;
 			}
-			if(type[0] == "Prefabs/PlayerEndingLocation") {
+			if(type[0] == "LevelEditor/Other/PlayerEndingLocation") {
 				end = nBlk;
 			}
 		}
@@ -123,13 +110,13 @@ public static class MapDataParser {
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
 			MonsterBlock nBlk = new MonsterBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
-			nBlk.Tier = Convert.ToInt32(blkParams[4]);
+			nBlk.BlockInfo.placedThisSession = true;
+			nBlk.BlockInfo.Tier = Convert.ToInt32(blkParams[4]);
 			MapData.MonsterBlocks.add(nBlk);
 		}
 	}
 
 	private static void parseTerminalRooms(string SaveString) {
-		Debug.Log(SaveString);
 		string[] rms = SaveString.Split(' ');
 		string[] rmParams = rms[0].Split(',');
 		Vector3 pos1 = new Vector3(float.Parse(rmParams[0]),
@@ -139,6 +126,7 @@ public static class MapDataParser {
 			                           float.Parse(rmParams[4]),
 			                           float.Parse(rmParams[5]));
 		ARTFTerminalRoom rm = new ARTFTerminalRoom(pos1, pos2);
+		rm.placedThisSession = true;
 		MapData.StartingRoom = rm;
 		MapData.TheFarRooms.add(rm);
 
@@ -150,6 +138,7 @@ public static class MapDataParser {
 		                           float.Parse(rmParams[4]),
 		                           float.Parse(rmParams[5]));
 		rm = new ARTFTerminalRoom(pos1, pos2);
+		rm.placedThisSession = true;
 		MapData.EndingRoom = rm;
 		MapData.TheFarRooms.add(rm);
 	}

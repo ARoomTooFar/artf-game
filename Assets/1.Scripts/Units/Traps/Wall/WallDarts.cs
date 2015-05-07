@@ -4,27 +4,19 @@ using System.Collections.Generic;
 
 public class WallDarts : Traps {
 
-	// In seconds
-	public int dartInterval;
+	public Animator animator;
 
 	private Knockback debuff;
-
-	protected float timeSinceLastFire;
-
-	// protected List<Character> unitsInTrap;
 	protected AoETargetting aoe;
 	protected ParticleSystem darts;
-	protected bool firing;
 	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
 		darts = GetComponent<ParticleSystem> ();
-		aoe = GetComponent<AoETargetting>();
+		aoe = this.GetComponent<AoETargetting>();
 		aoe.affectEnemies = true;
 		aoe.affectPlayers = true;
-		// unitsInTrap = new List<Character>();
-		firing = true;
 		debuff = new Knockback();
 	}
 	
@@ -43,54 +35,17 @@ public class WallDarts : Traps {
 		base.Update ();
 	}
 
-	protected virtual void fireDarts() {
-		if (firing) {
-			darts.Emit (50);
-			firing = false;
-			timeSinceLastFire = 0.0f;
-
-			if (this.gameObject.activeSelf) {
-				StartCoroutine(countDown());
-			}
-		}
-	}
-
-	protected virtual IEnumerator countDown() {
-		while (timeSinceLastFire < dartInterval) {
-			timeSinceLastFire += Time.deltaTime;
-			yield return null;
-		}
-		firing = true;
-		if (aoe.unitsInRange.Count > 0) fireDarts ();
+	public virtual void fireDarts() {
+		darts.Emit (50);
 	}
 
 
 	public void unitEntered(Character entered) {
-		this.fireDarts();
+		this.animator.SetBool ("Fire", true);//this.fireDarts();
 	}
-
-	/*
-	void OnTriggerEnter(Collider other) {
-		Character enemy = other.GetComponent<Character>();
-		
-		if (enemy != null) {
-			unitsInTrap.Add(enemy);
-			fireDarts ();
-		}
-	}
-
-	void OnTriggerExit(Collider other) {
-		Character enemy = other.GetComponent<Character>();
-		
-		if (enemy != null) {
-			if (unitsInTrap.Contains(enemy)) {
-				unitsInTrap.Remove (enemy);
-			}
-		}
-	}*/
 
 	void OnParticleCollision(GameObject other) {
-		IDamageable<int, Character> component = (IDamageable<int, Character>) other.GetComponent( typeof(IDamageable<int, Character>) );
+		IDamageable<int, Transform, GameObject> component = (IDamageable<int, Transform, GameObject>) other.GetComponent( typeof(IDamageable<int, Transform, GameObject>) );
 		IForcible<Vector3, float> component2 = (IForcible<Vector3, float>) other.GetComponent( typeof(IForcible<Vector3, float>) );
 		Character enemy = other.GetComponent<Character>();
 		if( component != null && enemy != null) {
@@ -103,9 +58,6 @@ public class WallDarts : Traps {
 	}
 
 	void OnEnable() {
-		if (aoe.unitsInRange != null) {
-			aoe.unitsInRange.Clear();
-		}
-		firing = true;
+		if (aoe != null && aoe.unitsInRange != null) aoe.unitsInRange.Clear();
 	}
 }

@@ -6,16 +6,28 @@ using System.Collections.Generic;
 /*
  * Object to represent a room within the mapdata
  */
-public partial class ARTFRoom {
+public partial class ARTFRoom : Square {
 
 	#region PrivateVariables
-	private static string defaultBlockID = "LevelEditor/Rooms/floortile";
 	private static string defaultFloor = "{0}/Floors/IndustrialFloor1";
+	private static string roomCornerId = "LevelEditor/Other/RoomCorner";
+	private static string wallType = "{0}/Rooms/wallstoneend";
 	#endregion PrivateVariables
 
 	#region Properties
-	//A list of the TerrainBlocks contained within the room
-	public List<TerrainBlock> Blocks {
+	public bool placedThisSession = true;
+
+	public List<SceneryBlock> Walls {
+		get;
+		private set;
+	}
+
+	public List<SceneryBlock> Scenery {
+		get;
+		private set;
+	}
+
+	public List<MonsterBlock> Monster {
 		get;
 		private set;
 	}
@@ -37,6 +49,12 @@ public partial class ARTFRoom {
 		private set;
 	}
 
+	public int CurrentPoints {
+		get;
+		private set;
+	}
+
+
 	//Stored paths to get from point A to point B. Primarily for storing paths from one door to another
 	public Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>> RoomPaths {
 		get;
@@ -44,52 +62,11 @@ public partial class ARTFRoom {
 	}
 
 	#region Corners
-	//Lower Left Corner
-	public Vector3 LLCorner {
-		get;
-		private set;
-	}
-
-	//Upper Right Corner
-	public Vector3 URCorner {
-		get;
-		private set;
-	}
-
-	//Lower Right Corner
-	public Vector3 LRCorner {
-		get { return new Vector3(URCorner.x, URCorner.y, LLCorner.z); }
-	}
-
-	//Upper Right Corner
-	public Vector3 ULCorner {
-		get { return new Vector3(LLCorner.x, URCorner.y, URCorner.z); }
-	}
-
-	//A list of all four corners
-	public List<Vector3> Corners {
-		get {
-			List<Vector3> retVal = new List<Vector3>();
-			retVal.Add(LLCorner);
-			retVal.Add(URCorner);
-			retVal.Add(LRCorner);
-			retVal.Add(ULCorner);
-			return retVal;
-		}
-	}
-
-	//Center of the room. May be on the edge of two blocks in even sized rooms
-	public Vector3 Center {
-		get { return (LLCorner + URCorner) / 2; }
-	}
-
 	public GameObject LLMarker { get; protected set; }
 	public GameObject URMarker { get; protected set; }
 	public GameObject LRMarker { get; protected set; }
 	public GameObject ULMarker { get; protected set; }
-
-
-
+	
 	public virtual void updateMarkerPositions(){
 		LLMarker.transform.root.position = LLCorner;
 		URMarker.transform.root.position = URCorner;
@@ -105,25 +82,6 @@ public partial class ARTFRoom {
 	}
 	#endregion Corners
 
-	#region SquareProperties
-	public float Area {
-		get { return Length * Height; }
-	}
-
-	public float Perimeter {
-		get { return 2 * (Length + Height); }
-	}
-
-	//Add 1 because a grid with corners in the same position has Length/Height == 1
-	public float Height {
-		get { return 1 + URCorner.z - LLCorner.z; }
-	}
-
-	public float Length {
-		get { return 1 + URCorner.x - LLCorner.x; }
-	}
-	#endregion SquareProperties
-
 	public string SaveString {
 		get{ return LLCorner.toCSV() + "," + URCorner.toCSV();}
 	}
@@ -132,91 +90,24 @@ public partial class ARTFRoom {
 	/*
 	 * Constructor
 	 */
-	public ARTFRoom(Vector3 pos1, Vector3 pos2) {
-		this.LLCorner = pos1.getMinVals(pos2);
-		this.URCorner = pos1.getMaxVals(pos2);
-		this.Blocks = new List<TerrainBlock>();
-
+	public ARTFRoom(Vector3 pos1, Vector3 pos2) : base(pos1, pos2) {
 		this.Floor = GameObjectResourcePool.getResource(defaultFloor, this.LLCorner, Vector3.zero);
 		setFloor();
-
 		this.LinkedRooms = new Dictionary<SceneryBlock, ARTFRoom>();
+		this.Scenery = new List<SceneryBlock> ();
+		this.Walls = new List<SceneryBlock>();
+		setWalls();
+		this.Monster = new List<MonsterBlock> ();
 		this.Doors = new List<SceneryBlock>();
 		this.RoomPaths = new Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>>();
 		if(Global.inLevelEditor) {
-			this.URMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", URCorner, Vector3.zero);
-			this.LLMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LLCorner, Vector3.zero);
-			this.ULMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", ULCorner, Vector3.zero);
-			this.LRMarker = GameObjectResourcePool.getResource("Prefabs/RoomCorner", LRCorner, Vector3.zero);
+			this.URMarker = GameObjectResourcePool.getResource(roomCornerId, URCorner, Vector3.zero);
+			this.LLMarker = GameObjectResourcePool.getResource(roomCornerId, LLCorner, Vector3.zero);
+			this.ULMarker = GameObjectResourcePool.getResource(roomCornerId, ULCorner, Vector3.zero);
+			this.LRMarker = GameObjectResourcePool.getResource(roomCornerId, LRCorner, Vector3.zero);
 			setMarkerActive(Mode.isRoomMode());
 		}
 	}
-
-	#region (un)linkTerrain
-	/*
-	 * public void linkTerrain() 
-	 * 
-	 * Grabs any existing terrain that falls within the
-	 * room's boundries and links them.
-	 * 
-	 * Creates new terrain using a default block if it
-	 * does not already exist.
-	 */
-	public void linkTerrain() {
-		//Undo all extant links to terrain
-		unlinkTerrain();
-		TerrainBlock blk;
-		Vector3 pos = new Vector3();
-		//for each coordinate in this room
-		for(int i = 0; i < Length; ++i) {
-			for(int j = 0; j < Height; ++j) {
-				//set a Vector3 to the correct position
-				pos.Set(i + LLCorner.x, 0, j + LLCorner.z);
-				//try to find an existing block at that coordinate
-				blk = MapData.TerrainBlocks.find(pos);
-				//if it doesn't exist
-				if(blk == null) {
-					//create a new one
-					blk = new TerrainBlock(defaultBlockID, pos, DIRECTION.North);
-					//and add it to the MapData
-					MapData.TerrainBlocks.add(blk);
-				}
-				//link the block to the room
-				Blocks.Add(blk);
-				//and link the room to the block
-				blk.Room = this;
-				//If the block is along the edge, give it a wall prefab
-				if(this.isEdge(blk.Position)) {
-					blk.addWall(getWallSide(blk.Position));
-				}
-			}
-		}
-		//For each block in the room, reevaluate its neighbor links
-		foreach(TerrainBlock blks in Blocks) {
-			MapData.TerrainBlocks.relinkNeighbors(blks);
-		}
-	}
-
-	/*
-	 * public void unlinkTerrain()
-	 * 
-	 * Breaks any links between the room and its
-	 * currently linked blocks
-	 */
-	public void unlinkTerrain() {
-		//for each linked block
-		foreach(TerrainBlock blk in Blocks) {
-			//unlink the room from the block
-			blk.Room = null;
-			//if the room has a wall, return it to the resource pool
-			if(blk.Wall != null) {
-				blk.removeWall();
-			}
-		}
-		//remove all the links to terrain
-		Blocks.Clear();
-	}
-	#endregion (un)linkTerrain
 
 	/*
 	 * public void linkRoomsViaDoors()
@@ -270,10 +161,9 @@ public partial class ARTFRoom {
 				if(path == null){
 					continue;
 				}
-				//path.Insert(0, kvp1.Key.doorCheckPosition);
-				//path.Insert(path.Count, kvp2.Key.doorCheckPosition);
+				try{
 				RoomPaths.Add(new KeyValuePair<Vector3, Vector3>(kvp1.Key.Position, kvp2.Key.Position),
-				              path);
+					              path);} catch{}
 			}
 		}
 	} 
@@ -282,7 +172,7 @@ public partial class ARTFRoom {
 
 	public void setFloor(){
 		Vector3 p = this.Center;
-		this.Floor.transform.position = new Vector3(p.x, -.01f, p.z);
+		this.Floor.transform.position = new Vector3(p.x, -.03f, p.z);
 		Vector3 scale = this.Floor.transform.localScale;
 		scale.x = this.Length;
 		scale.z = this.Height;
@@ -296,15 +186,19 @@ public partial class ARTFRoom {
 	 * Moves a room in the x/y/z direction specified
 	 * by the offset Vector3
 	 */
-	public void move(Vector3 offset) {
-		//Shift the LowerLeft and UpperRight corners by offset
-		LLCorner = LLCorner + offset;
-		URCorner = URCorner + offset;
+	public override void move(Vector3 offset) {
+		base.move(offset);
 		//move each block by offset
-		foreach(TerrainBlock blk in Blocks) {
+		foreach (SceneryBlock blk in Scenery) {
+			blk.move (offset);
+		}
+		foreach(MonsterBlock blk in Monster) {
 			blk.move(offset);
 		}
 		setFloor();
+		foreach(SceneryBlock wall in Walls){
+			wall.move(offset);
+		}
 		updateMarkerPositions();
 	}
 
@@ -313,31 +207,13 @@ public partial class ARTFRoom {
 	 * 
 	 * Resizes a room by moving one corner to a new position
 	 */
-	public void resize(Vector3 oldCor, Vector3 newCor) {
+	public override void resize(Vector3 oldCor, Vector3 newCor) {
 		//Make sure that the old corner is actually a corner
 		if(!isCorner(oldCor)) {
 			return;
 		}
-		//get the offset
-		Vector3 offset = newCor - oldCor;
-		//determine which corner to move in the x direction
-		if(oldCor.x == LLCorner.x) {
-			LLCorner += new Vector3(offset.x, 0, 0);
-		} else {
-			URCorner += new Vector3(offset.x, 0, 0);
-		}
-		//determine which corner to move in the z direction
-		if(oldCor.z == LLCorner.z) {
-			LLCorner += new Vector3(0, 0, offset.z);
-		} else {
-			URCorner += new Vector3(0, 0, offset.z);
-		}
-		//remove blocks no longer in room
-		foreach(TerrainBlock blk in Blocks) {
-			if(!inRoom(blk.Position)) {
-				MapData.TerrainBlocks.remove(blk);
-			}
-		}
+		base.resize(oldCor, newCor);
+	
 		List<SceneryBlock> remDoor = new List<SceneryBlock> ();
 		foreach (SceneryBlock door in Doors) {
 			if(!isEdge(door.Position)){
@@ -348,12 +224,9 @@ public partial class ARTFRoom {
 			Doors.Remove(door);
 			MapData.SceneryBlocks.remove(door);
 		}
-		//relink blocks to this room
-		linkTerrain();
 
 		setFloor();
-
-
+		setWalls();
 		updateMarkerPositions();
 	}
 
@@ -363,32 +236,32 @@ public partial class ARTFRoom {
 	 * Removes all linked blocks from MapData
 	 */
 	public void remove() {
-		foreach(TerrainBlock blk in this.Blocks) {
-			MapData.TerrainBlocks.remove(blk);
+		foreach(SceneryBlock scn in Scenery) {
+			scn.remove();
+		}
+		foreach(MonsterBlock mon in Monster) {
+			mon.remove();
+		}
+		foreach(SceneryBlock wall in Walls) {
+			wall.remove();
 		}
 		GameObjectResourcePool.returnResource(defaultFloor, Floor);
-		this.Blocks.Clear();
+		if(LLMarker != null) {
+			GameObjectResourcePool.returnResource(roomCornerId, LLMarker);
+		}
+		if(URMarker != null) {
+			GameObjectResourcePool.returnResource(roomCornerId, URMarker);
+		}
+		if(ULMarker != null) {
+			GameObjectResourcePool.returnResource(roomCornerId, ULMarker);
+		}
+		if(LRMarker != null) {
+			GameObjectResourcePool.returnResource(roomCornerId, LRMarker);
+		}
 	}
 	#endregion ManipulationFunctions
 
 	#region PositionChecks
-	/*
-	 * public bool isCorner(Vector3 pos)
-	 * 
-	 * Check if a position is a corner position
-	 */
-	public bool isCorner(Vector3 pos) {
-		if(LLCorner.Equals(pos))
-			return true;
-		if(URCorner.Equals(pos))
-			return true;
-		if(LRCorner.Equals(pos))
-			return true;
-		if(ULCorner.Equals(pos))
-			return true;
-		return false;
-	}
-
 	/*
 	 * public bool isEdge(Vector3 pos)
 	 * 
@@ -411,74 +284,29 @@ public partial class ARTFRoom {
 	/*
 	 * check if we're close to the edge of a room
 	 */ 
-	public bool isCloseToEdge(Vector3 pos, float thresh){
+	public bool isNearEdge(Vector3 pos, float thresh){
 		if(Math.Abs(pos.z - LLCorner.z) <= thresh || Math.Abs(URCorner.z - pos.z) <= thresh) {
 			return true;
 		}
-
 		if(Math.Abs(pos.x - LLCorner.x) <= thresh || Math.Abs(URCorner.x - pos.x) <= thresh) {
 			return true;
 		}
-
 		return false;
 	}
-
 
 	/*
 	 * return edge the mouse is nearest
 	 */ 
-	public Vector3 getNearestEdgePosition(Vector3 pos){
-		float zDistLL;
-		float xDistLL;
-		float zDistUR;
-		float xDistUR;
+	public Vector3 nearEdgePosition(Vector3 pos){
+		float leftXDist = Mathf.Abs(pos.x - LLCorner.x);
+		float rightXDist = Mathf.Abs(pos.x - URCorner.x);
+		float leftZDist = Mathf.Abs(pos.z - LLCorner.z);
+		float rightZDist = Mathf.Abs(pos.z - URCorner.z);
 
-		Vector3 returnPos = new Vector3();
+		float x = leftXDist < rightXDist ? LLCorner.x : URCorner.x;
+		float z = leftZDist < rightZDist ? LLCorner.z : URCorner.z;
 
-		zDistLL = Mathf.Abs(pos.z - LLCorner.z);
-		xDistLL = Mathf.Abs(pos.x - LLCorner.x);
-		zDistUR = Mathf.Abs(pos.z - URCorner.z);
-		xDistUR = Mathf.Abs(pos.x - URCorner.x);
-
-		bool zURSmallest = false;
-		if(zDistUR < zDistLL){
-			zURSmallest = true;
-		}
-
-		bool xURSmallest = false;
-		if(xDistUR < xDistLL){
-			xURSmallest = true;
-		}
-
-
-		if(zURSmallest && xURSmallest){
-			if(zDistUR < xDistUR){
-				returnPos = new Vector3(pos.x, 0f, URCorner.z);
-			}else{
-				returnPos = new Vector3(URCorner.x, 0f, pos.z);
-			}
-		}else if (zURSmallest && !xURSmallest){
-			if(zDistUR < xDistLL){
-				returnPos = new Vector3(pos.x, 0f, URCorner.z);
-			}else{
-				returnPos = new Vector3(LLCorner.x, 0f, pos.z);
-			}
-		}else if (!zURSmallest && !xURSmallest){
-			if(zDistLL < xDistLL){
-				returnPos = new Vector3(pos.x, 0f, LLCorner.z);
-			}else{
-				returnPos = new Vector3(LLCorner.x, 0f, pos.z);
-			}
-		}else if (!zURSmallest && xURSmallest){
-			if(zDistLL < xDistUR){
-				returnPos = new Vector3(pos.x, 0f, LLCorner.z);
-			}else{
-				returnPos = new Vector3(URCorner.x, 0f, pos.z);
-			}
-		}
-
-//		Debug.Log (returnPos);
-		return (returnPos);
+		return Mathf.Min(leftXDist, rightXDist) < Mathf.Min(leftZDist, rightZDist) ? new Vector3(x, 0f, pos.z) : new Vector3(pos.x, 0f, z);
 	}
 
 	/*
@@ -530,5 +358,57 @@ public partial class ARTFRoom {
 			pos.z >= LLCorner.z &&
 			pos.z <= URCorner.z;
 	}
+
+	public bool isWalkable(Vector3 pos){
+		if(!inRoom(pos)) {
+			return false;
+		}
+		foreach(SceneryBlock blk in Scenery) {
+			if(blk.Coordinates.Contains(pos)){
+				return blk.Walkable;
+			}
+		}
+		return true;
+	}
+
+	public bool isPathable(Vector3 pos){
+		if(!inRoom(pos)) {
+			return false;
+		}
+		foreach(SceneryBlock blk in Scenery) {
+			if(blk.Coordinates.Contains(pos)){
+				return blk.Pathable;
+			}
+		}
+		return true;
+	}
+
+	public void addMonster(MonsterBlock mon){
+		CurrentPoints += mon.BlockInfo.Points;
+		Monster.Add(mon);
+	}
+
+	public void removeMonster(MonsterBlock mon){
+		CurrentPoints -= mon.BlockInfo.Points;
+		Monster.Remove(mon);
+	}
+
+	public void setWalls(){
+		foreach(SceneryBlock wall in Walls) {
+			wall.remove();
+		}
+		Walls.Clear();
+		Vector3 vec;
+		for(float i = LLCorner.x; i <= URCorner.x; ++i) {
+			for(float j = LLCorner.z; j <= URCorner.z; ++j){
+				vec = new Vector3(i,0,j);
+				if(!isEdge(vec)){
+					continue;
+				}
+				Walls.Add(new SceneryBlock(wallType, vec, DIRECTION.North));
+			}
+		}
+	}
+
 	#endregion PositionChecks
 }
