@@ -89,6 +89,7 @@ public class FileIO : MonoBehaviour
         {
             txtDlLvl.enabled = false;
 			try{
+				//throw new Exception();
 				MapDataParser.ParseSaveString(lvlData);
             	Debug.Log("LVL DL SUCCESS: " + lvlData);
 			} catch (Exception ex){
@@ -122,7 +123,7 @@ public class FileIO : MonoBehaviour
 		// Use the returned data from update level request's coroutine
 		if (udLvlReq != null)
 		{
-			if (udLvlReq.isDone && udLvlReq.error == null)
+			if ((udLvlReq.isDone && udLvlReq.error == null))
 			{
 				txtUdLvl.enabled = false;
 				Debug.Log("UPDATE SUCCEEDED: " + udLvlReq.text);

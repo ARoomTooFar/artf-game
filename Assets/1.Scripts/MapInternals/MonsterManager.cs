@@ -16,6 +16,7 @@ public class MonsterManager {
 				remove(blk);
 			}
 		}
+		dictionary.Clear ();
 	}
 
 	#region Manipulation
