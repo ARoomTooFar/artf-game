@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class MainMenuCtrl : MonoBehaviour {
     public Controls controls;
     public string menuContainerName;
+	public string menuPopUpName;
 
     // UI state
     private bool menuMoved = false;
@@ -31,6 +32,12 @@ public class MainMenuCtrl : MonoBehaviour {
     private int loginFormWidth = 2;
     private int loginFormHeight = 3;
 	private Animator loginFormAnim;
+
+	// keypad
+	private GameObject[,] popUp;
+	private int popUpWidth = 1;
+	private int popUpHeight = 1;
+	private Animator popUpAnim;
 
 	void Start () {
         // setup start menu
@@ -64,13 +71,29 @@ public class MainMenuCtrl : MonoBehaviour {
         loginForm[2, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnLogin");
         loginForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnBack");
 		loginFormAnim = GameObject.Find ("/Canvas/" + menuContainerName + "/LoginForm").GetComponent<Animator>();
-		
+
+		// acct name field
+		loginForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			PopUpEnable ();
+		});
+
 		// back button
         loginForm[2, 1].GetComponent<Button>().onClick.AddListener(() =>
         {
 			MenuSwitch (Menu.StartMenu);
-			MenuDisable ();
         });
+
+		// setup keypad
+		popUp = new GameObject[popUpHeight, popUpWidth];
+		popUp[0, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/BtnKeyPrefab");
+		popUpAnim = GameObject.Find ("/Canvas/" + menuPopUpName).GetComponent<Animator>();
+
+		// key button
+		popUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			Debug.Log ("eh");
+		});
 
 		// switch to start menu
 		MenuSwitch (Menu.StartMenu);
@@ -144,6 +167,12 @@ public class MainMenuCtrl : MonoBehaviour {
 		ExecuteEvents.Execute(currMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
 		prevBtn = currMenu[locY, locX];
 		currAnim.SetBool("show", true);
+	}
+
+	void PopUpEnable() {
+		Debug.Log ("called");
+		MenuDisable ();
+		popUpAnim.SetBool("show", true);
 	}
 
     void MenuEnable() {
