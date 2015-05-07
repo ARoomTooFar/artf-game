@@ -7,7 +7,7 @@ public class NewFoliantFodder: NewMobileEnemy {
 	
 	protected MonsterLunge lunge;
 	
-	public FoliantHive hive;
+	public NewFoliantHive hive;
 	public bool hiveMind;
 	
 	protected override void Awake () {
@@ -80,11 +80,11 @@ public class NewFoliantFodder: NewMobileEnemy {
 
 
 //	Add this back in when everything else is done	
-/*	//------------------//
+	//------------------//
 	// Public Functions //
 	//------------------//
 	
-	public virtual void setHive(FoliantHive parent)
+	public virtual void setHive(NewFoliantHive parent)
 	{
 		hiveMind = true;
 		hive = parent;
@@ -114,7 +114,7 @@ public class NewFoliantFodder: NewMobileEnemy {
 		base.die ();
 	}
 	
-	//--------------------------------//*/
+	//--------------------------------//
 	
 	
 	
