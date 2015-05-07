@@ -6,6 +6,7 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class MeleeWeapons : Weapons {
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -17,6 +18,14 @@ public class MeleeWeapons : Weapons {
 	
 	public override void initAttack() {
 		base.initAttack();
+	}
+
+	public override void AttackStart() {
+		this.col.enabled = true;
+	}
+	
+	public override void AttackEnd() {
+		this.col.enabled = false;
 	}
 
 	// Does something when opponent is hit

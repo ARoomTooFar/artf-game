@@ -55,7 +55,7 @@ public class MonsterWeapons : Weapons {
 		this.col.enabled = false;
 	}
 
-	public override void specialAttack() {
+	public override void SpecialAttack() {
 	}
 	
 	//-----------------------//

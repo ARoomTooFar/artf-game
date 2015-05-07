@@ -15,7 +15,7 @@ public class CryControls {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : Character, IMoveable, IHealable<int>{
+public class Player : Character, IHealable<int>{
 	public string nameTag;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart, inGrey;
@@ -105,13 +105,13 @@ public class Player : Character, IMoveable, IHealable<int>{
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
 			
 			if (isGrounded) {
-				actionCommands ();
-				moveCommands ();
+				ActionCommands ();
+				MoveCommands ();
 			} else {
 				falling();
 			}
 			
-			animationUpdate ();
+			AnimationUpdate ();
 		}
 	}
 	
@@ -119,7 +119,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	// Action interface implementation //
 	//---------------------------------//
 	
-	public override void actionCommands() {
+	protected override void ActionCommands() {
 		// Invokes an action/animation
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
@@ -166,10 +166,10 @@ public class Player : Character, IMoveable, IHealable<int>{
 	}
 	
 	// Constant animation updates (Main loop for characters movement/actions)
-	public override void animationUpdate() {
+	protected override void AnimationUpdate() {
 		if (attacking&&!stats.isDead) {
 		} else {
-			movementAnimation();
+			MovementAnimation();
 		}
 	}
 	
@@ -180,7 +180,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	//-----------------------------------//
 	
 	// Might separate commands into a protected function and just have a movement function
-	public virtual void moveCommands() {
+	protected virtual void MoveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 		Vector3 camAngle = Camera.main.transform.eulerAngles;
 

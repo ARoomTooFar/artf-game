@@ -91,7 +91,7 @@ public class Enemy : Character {
 
 
 			if (isGrounded) {
-				movementAnimation ();
+				MovementAnimation ();
 				sM.Update ();
 			} else {
 				falling ();

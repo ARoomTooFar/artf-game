@@ -246,11 +246,11 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 
 			if (isGrounded) {
-				actionCommands ();
+				ActionCommands ();
 			} else {
 				falling();
 			}
-			animationUpdate ();
+			AnimationUpdate ();
 		}
 	}
 
@@ -258,27 +258,23 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 	// Action interface implementation //
 	//---------------------------------//
 
-	public virtual void setActable(bool canAct) {
-		actable = canAct;
-	}
-
-	public virtual void actionCommands() {
+	protected virtual void ActionCommands() {
 
 	}
 
 	// Constant animation updates (Main loop for characters movement/actions)
-	public virtual void animationUpdate() {
+	protected virtual void AnimationUpdate() {
 		if (attacking) {
 
 		} else {
-			movementAnimation();
+			MovementAnimation();
 		}
 	}
 	//-------------------------------------------//
 
 	// Animation helper functions
 
-	protected virtual void movementAnimation() {
+	protected virtual void MovementAnimation() {
 		// animator.speed = 1; // Change animation speed back for other animations
 		if (this.rb.velocity != Vector3.zero && facing != Vector3.zero) {
 			animator.SetBool("Moving", true);
@@ -292,14 +288,6 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 	//----------------------------------//
 	// Falling Interface Implementation //
 	//----------------------------------//
-
-	public virtual void colliderStart() {
-		gear.weapon.collideOn ();
-	}
-	
-	public virtual void colliderEnd() {
-		gear.weapon.collideOff ();
-	}
 
 	public virtual void falling() {
 		// fake gravity
@@ -323,8 +311,8 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 
 	}
 
-	public virtual void specialAttack() {
-		gear.weapon.specialAttack ();
+	public virtual void SpecialAttack() {
+		gear.weapon.SpecialAttack ();
 	}
 	
 	//---------------------------------//

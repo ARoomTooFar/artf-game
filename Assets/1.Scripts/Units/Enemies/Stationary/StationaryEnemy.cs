@@ -224,7 +224,7 @@ public class StationaryEnemy : Enemy {
 	// Inherited Functions //
 	//---------------------//
 
-	protected override void movementAnimation() {
+	protected override void MovementAnimation() {
 		transform.localRotation = Quaternion.LookRotation(facing);
 	}
 

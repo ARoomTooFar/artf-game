@@ -157,11 +157,11 @@ public class NewBullyTrunk: NewMobileEnemy {
 	// These are here because for some reason I can't find the inherited collider functions from the animation events thing
 	// Fuck Unity, such a tease
 	protected virtual void SmashNow() {
-		this.colliderStart();
+		this.AttackStart();
 	}
 
 	protected virtual void SmashOver() {
-		this.colliderEnd();
+		this.AttackEnd();
 	}
 
 	//-------------------//

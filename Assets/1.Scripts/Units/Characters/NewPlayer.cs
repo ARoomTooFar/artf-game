@@ -27,8 +27,7 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 	
 	protected override void Awake() {
 		base.Awake();
-		//opposition = Type.GetType("NewEnemy");
-		opposition = Type.GetType("NewEnemy"); //Use this if going after testable opponents
+		opposition = Type.GetType("NewEnemy");
 	}
 	
 	// Use this for initialization
@@ -82,25 +81,26 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 		this.animator.SetBool("Actable", this.actable);
 
 		if (!actable) return;
-		actionCommands ();
-		moveCommands ();
-		animationUpdate ();
+		ActionCommands ();
+		MoveCommands ();
+		AnimationUpdate ();
 	}
 	
-	//---------------------------------//
-	// Action interface implementation //
-	//---------------------------------//
+	//-------------------------------//
+	// Player Command Implementation //
+	//-------------------------------//
 	
-	public override void actionCommands() {
+	protected override void ActionCommands() {
 		// Invokes an action/animation
 		if (actable) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
 				if(currDoor!=null){
 					currDoor.GetComponent<Door>().toggleOpen();
 					currDoor = null;
+				} else {
+					this.animator.SetBool("Charging", true);
+					this.animator.SetTrigger("Attack");
 				}
-				animator.SetBool("Charging", true);
-				gear.weapon.initAttack();
 			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
@@ -112,7 +112,6 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 			} else if(Input.GetKeyDown (controls.cycItem) || Input.GetButtonDown(controls.joyCycItem)) {
 				inventory.cycItems();
 			}
-			// Continues with what is happening
 		} else {
 			
 			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
@@ -128,23 +127,12 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 			}
 		}
 	}
-	
-	// Constant animation updates (Main loop for characters movement/actions, sets important parameters in the animator)
-	public override void animationUpdate() {
-		movementAnimation();
-	}
-	
-	//-------------------------------------------//
-	
-	//-----------------------------------//
-	// Movement interface implementation //
-	//-----------------------------------//
-	
+
 	// Might separate commands into a protected function and just have a movement function
-	public virtual void moveCommands() {
+	protected virtual void MoveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 		Vector3 camAngle = Camera.main.transform.eulerAngles;
-
+		
 		if (actable || animator.GetBool("Charging")) {
 			float x;
 			float z;
@@ -185,8 +173,16 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 			this.rb.velocity = Vector3.zero;
 		}
 	}
-	//-------------------------------------//
 	
+	// Constant animation updates (Main loop for characters movement/actions, sets important parameters in the animator)
+	protected override void AnimationUpdate() {
+		MovementAnimation();
+	}
+	
+	//-------------------------------------------//
+
+
+
 	//---------------------------------//
 	// Damage Interface Implementation //
 	//---------------------------------//

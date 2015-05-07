@@ -103,14 +103,36 @@ public class Weapons : Equipment {
 
 	// A unique attack command called from thje animator
 	//     eg. Shockwave
-	public virtual void specialAttack() {
+	public virtual void SpecialAttack() {
 	}
 
 	//-----------------------//
 
+
+
 	//----------------------------//
 	// Weapon Attacking Functions //
 	//----------------------------//
+
+	// These are called by the animator
+	//     For melee, these will essentiually turn the colliders on and off
+	//     For ranged, these will shoot bullets, attack end probably won't do much for those
+	public virtual void AttackStart() {
+	}
+
+	public virtual void AttackEnd() {
+	}
+
+
+
+
+
+
+
+
+	//--------------------------------//
+	// Old Weapon Attacking Functions //
+	//--------------------------------//
 
 
 	// Start by initiateing attack animation

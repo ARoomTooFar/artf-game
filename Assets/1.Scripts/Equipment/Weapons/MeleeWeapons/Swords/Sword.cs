@@ -34,7 +34,7 @@ public class Sword : MeleeWeapons {
 		base.initAttack();
 	}
 
-	public override void specialAttack() {
+	public override void SpecialAttack() {
 		GameObject wave = (GameObject)Instantiate(shockwave, user.transform.position, user.transform.rotation);
 		wave.GetComponent<Shockwave>().setInitValues(user, opposition, stats.damage + stats.chgDamage, false, null);
 	}
