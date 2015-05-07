@@ -43,8 +43,8 @@ public class MainMenuCtrl : MonoBehaviour {
         startMenu[0, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
 			MenuSwitch (Menu.LoginForm);
+			//MenuDisable();
             //GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
-            //menuLock = true;
         });
 
         // register button press handler
@@ -69,14 +69,11 @@ public class MainMenuCtrl : MonoBehaviour {
         loginForm[2, 1].GetComponent<Button>().onClick.AddListener(() =>
         {
 			MenuSwitch (Menu.StartMenu);
+			MenuDisable ();
         });
 
 		// switch to start menu
 		MenuSwitch (Menu.StartMenu);
-
-        // test
-        MenuDisable();
-        //MenuEnable();
 	}
 
 	// handles menu joystick movement control
@@ -160,13 +157,6 @@ public class MainMenuCtrl : MonoBehaviour {
         // return color to image panel
         Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
         imgPanel.color = new Color32(255, 255, 255, 100);
-
-        /*// return text color in buttons
-        BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
-        foreach (BtnScript child in btnChild)
-        {
-            child.DehighlightTxt();
-        }*/
 
 		// return color to text
 		Text[] txtChild = this.GetComponentsInChildren<Text>();
