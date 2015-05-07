@@ -28,10 +28,7 @@ public class PlayerUI : MonoBehaviour {
 	}
 
 	void setUpPlayerUIPane(string pl){
-		//Debug.Log (pl);
-		PlayerUIPane playerPane = new PlayerUIPane();
-		playerPane = transform.Find(pl).gameObject.AddComponent<PlayerUIPane>();
+		PlayerUIPane playerPane = transform.Find(pl).gameObject.AddComponent<PlayerUIPane>();
 		playerPane.initVals(pl);
-
 	}
 }
