@@ -18,7 +18,7 @@ public class Controls {
 public class NewPlayer : NewCharacter, IHealable<int>{
 	public string nameTag;
 	public int greyDamage;
-	public bool testable, isReady, atEnd, atStart, inGrey;
+	public bool testable, isReady, atEnd, atStart;
 	
 	public UIActive UI;
 	public Controls controls;
@@ -46,7 +46,6 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 		stats.coordination=0;
 		stats.speed=10;
 		stats.luck=0;
-		inGrey = false;
 		greyDamage = 0;
 	}
 	//Set cooldown bars to current items. 
@@ -157,8 +156,6 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 		Vector3 camAngle = Camera.main.transform.eulerAngles;
 
 		if (actable || animator.GetBool("Charging")) {
-			//"Up" key assign pressed
-			
 			float x;
 			float z;
 			if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
@@ -242,6 +239,7 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 		base.die();
 
 		stats.health = 0;
+		this.greyDamage = 0;
 		if(UI!=null) UI.hpBar.current = 0;
 
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
@@ -264,7 +262,7 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 			if(stats.health > stats.maxHealth){
 				stats.health = stats.maxHealth;
 			}
-		}//prior heal base
+		}
 		//UI.hpBar.current = stats.health;
 		if(greyDamage > 0){
 			greyDamage--;
@@ -276,7 +274,7 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 		if(stats.isDead){
 			stats.isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
-			if(UI!=null) UI.hpBar.current = stats.health;
+			// if(UI!=null) UI.hpBar.current = stats.health;
 			stats.rezCount++;
 		}
 		//GetComponent<Collider> ().isTrigger = false;
@@ -291,63 +289,31 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 	
 	
 	// Grey Health functions
-	public virtual int greyTest(int damage){
-		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){
-			return damage;
+	private int greyTest(int damage){
+		// If grey damage plus damage kills, we kill them off
+		if((greyDamage + damage) > stats.health) {
+			StopCoroutine("RegenGrey");
+			return damage + greyDamage;
 		}
-		if(((greyDamage + damage) >= stats.maxHealth) && stats.health == stats.maxHealth){
-			stats.health = 1;
-			greyDamage = stats.maxHealth - 1;
-			inGrey = true;
-			return 0;
-		}
-		if((damage > (stats.maxHealth/5)) && !inGrey){
-			int tempDmg = greyDamage;
-			if(inGrey){
-				greyDamage = damage - stats.maxHealth/5;
-				StopCoroutine("RegenWait");
-				if(inGrey &&!stats.isDead){
-					StartCoroutine("RegenWait");
-				}
-				return damage + tempDmg;
-			}else{
-				inGrey = true;
-				greyDamage = damage - stats.maxHealth/5;
-				StopCoroutine("RegenWait");
-				if(inGrey &&!stats.isDead){
-					StartCoroutine("RegenWait");
-				}
-				return damage;
-			}
-		} else if(inGrey && !(damage > (stats.maxHealth/5))){
-			inGrey = false;
-			int tempDmg = greyDamage;
+		
+		int tempDmg = greyDamage;
+		StopCoroutine("RegenGrey");
+		
+		if (damage > (stats.maxHealth/5)) {
+			greyDamage = damage - stats.maxHealth/5;
+			StartCoroutine("RegenGrey");
+		} else {
 			greyDamage = 0;
-			return damage + tempDmg;
-		} else{
-			inGrey = false;
-			return damage;
 		}
+		
+		return damage + tempDmg;
 	}
-	private IEnumerator Wait(float duration){
-		for (float timer = 0; timer < duration; timer += Time.deltaTime){
-			yield return 0;
-		}
-	}
-	private IEnumerator RegenWait(){
-		yield return new WaitForSeconds(1);
-		if(inGrey && !stats.isDead){
-			// print("Healed Grey and True");
-			stats.health++;
-			greyDamage--;
-			//UI.hpBar.current = stats.health;
-			//UI.greyBar.current = greyDamage+stats.health;
-			if(greyDamage == 0){
-				inGrey = false;
-			}
-			if(greyDamage > 0){
-				StartCoroutine("RegenWait");
-			}
+
+	private IEnumerator RegenGrey(){
+		while (greyDamage > 0) {
+			yield return new WaitForSeconds(1);
+			this.stats.health++;
+			this.greyDamage--;
 		}
 		yield return 0;
 	}
@@ -357,8 +323,9 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 			currDoor = other.GetComponent<Door>();
 		}
 	}
+	
 	private void OnTriggerExit(Collider other){
-		if(other.gameObject == this.currDoor.gameObject){
+		if(this.currDoor != null && other.gameObject == this.currDoor.gameObject){
 			currDoor = null;
 		}
 	}

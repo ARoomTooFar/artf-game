@@ -76,7 +76,7 @@ public class NewMirage : NewStationaryEnemy {
 		stats.maxHealth = 35;
 		stats.health = stats.maxHealth;
 		stats.armor = 1;
-		stats.strength = 10;
+		stats.strength = 8;
 		stats.coordination=0;
 		stats.speed=4;
 		stats.luck=0;
