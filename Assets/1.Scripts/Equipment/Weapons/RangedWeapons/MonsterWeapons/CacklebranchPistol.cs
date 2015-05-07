@@ -23,7 +23,9 @@ public class CacklebranchPistol : RangedWeapons {
 	
 	// Update is called once per frame
 	protected override void Update () {
-		Debug.Log("FIX THE WARNING ON THIS -> public virtual IEnumerator Shoot(int count)");
+		//commented this out since it was lagging the console
+		//Debug.Log("FIX THE WARNING ON THIS -> public virtual IEnumerator Shoot(int count)");
+
 		//Assets/1.Scripts/Equipment/Weapons/RangedWeapons/MonsterWeapons/CacklebranchPistol.cs(34,36):
 		//warning CS0114: `CacklebranchPistol.Shoot(int)' hides inherited member `RangedWeapons.Shoot(int)'.
 		//To make the current member override that implementation, add the override keyword. Otherwise add the new keyword
