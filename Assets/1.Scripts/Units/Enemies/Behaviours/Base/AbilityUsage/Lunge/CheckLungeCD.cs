@@ -9,9 +9,9 @@ public class CheckLungeCD : LungeBehaviour {
 		float dis = Vector3.Distance(this.unit.transform.position, this.unit.target.transform.position);
 		if (dis >= 5) 
 		{
-			animator.SetBool ("InChargeRange", true);
+			animator.SetBool ("InLungeRange", true);
 		} else {
-			animator.SetBool ("InChargeRange", false);
+			animator.SetBool ("InLungeRange", false);
 		}
 	}
 	
@@ -21,21 +21,21 @@ public class CheckLungeCD : LungeBehaviour {
 		float dis = Vector3.Distance(this.unit.transform.position, this.unit.target.transform.position);
 		if (dis >= 5) 
 		{
-			animator.SetBool ("InChargeRange", true);
+			animator.SetBool ("InLungeRange", true);
 		} else {
-			animator.SetBool ("InChargeRange", false);
+			animator.SetBool ("InLungeRange", false);
 		}
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		if (lunge.curCoolDown <= 0) animator.SetTrigger("LungeOffCD");
-		Debug.Log ("checking lunge");
 		float dis = Vector3.Distance(this.unit.transform.position, this.unit.target.transform.position);
 		if (dis >= 5) 
 		{
-			animator.SetBool ("InChargeRange", true);
+			Debug.Log ("should lunge");
+			animator.SetBool ("InLungeRange", true);
 		} else {
-			animator.SetBool ("InChargeRange", false);
+			animator.SetBool ("InLungeRange", false);
 		}
 	}
 }

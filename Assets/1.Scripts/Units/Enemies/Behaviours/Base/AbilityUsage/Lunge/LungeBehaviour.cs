@@ -8,5 +8,6 @@ public class LungeBehaviour : EnemyBehaviour {
 
 	public virtual void SetVar(MonsterLunge lunge) {
 		this.lunge = lunge;
+		Debug.Log ("Set lunge");
 	}
 }

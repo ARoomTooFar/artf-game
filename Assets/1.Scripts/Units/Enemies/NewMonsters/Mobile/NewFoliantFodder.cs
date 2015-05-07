@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class NewFoliantFodder: NewMobileEnemy {
 	
-	protected Roll roll;
+	protected MonsterLunge lunge;
 	
 	public FoliantHive hive;
 	public bool hiveMind;
@@ -38,15 +38,19 @@ public class NewFoliantFodder: NewMobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 2;
+		tier = 0;
 		base.SetTierData (tier);
 		
 		this.stats.speed = tier < 3 ? 9 : 12;
 		
 		if (tier > 0) {
 			
-			roll = this.inventory.items[inventory.selected].GetComponent<Roll>();
-			if (roll == null) Debug.LogWarning ("FoliantFodder does not have lunge equipped");
+			lunge = this.inventory.items[inventory.selected].GetComponent<MonsterLunge>();
+			if (lunge == null) Debug.LogWarning ("FoliantFodder does not have lunge equipped");
+
+			foreach(LungeBehaviour behaviour in this.animator.GetBehaviours<LungeBehaviour>()) {
+				behaviour.SetVar(this.lunge);
+			}
 			
 			/*foreach(Roll behaviour in this.animator.GetBehaviours<Roll>()) {
 				behaviour.roll = this.roll;
