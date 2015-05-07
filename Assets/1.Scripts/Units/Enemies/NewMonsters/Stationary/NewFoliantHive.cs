@@ -22,8 +22,6 @@ public class NewFoliantHive : NewStationaryEnemy {
 		base.Start ();
 		hiveMindAggro = base.aggroT;
 		currentSpawn = 0;
-		nextUse = Time.time + spawnCD;
-		
 	}
 	
 	protected override void Update() {
@@ -52,56 +50,14 @@ public class NewFoliantHive : NewStationaryEnemy {
 		if (this.spawn == null) print("Foliant Hive has no spawner detected");
 			
 		foreach(SpawnBehaviour behaviour in this.animator.GetBehaviours<SpawnBehaviour>()) {
-			behaviour.SetVar(this.spawn);
+			behaviour.SetVar(this.spawn, this);
 		}
 	}
 
 
+
 	
 	//----------------------//
-	// Transition Functions //
-	//----------------------//
-	
-	//Checks if it is allowed to spawn more fodder
-	
-	protected virtual bool canSpawn(){
-		
-		if (currentSpawn < maxSpawn && spawnOffCD ()){
-			return true;
-		}
-		
-		return false;
-	}
-	
-	//Add in code if we want Hive to return to rest state
-	protected virtual bool canRest(){
-		return false;
-	}
-	
-	protected virtual bool spawnOffCD(){
-		if (Time.time >= nextUse) {
-			return true;
-		}
-		return false;
-	}
-	
-	//----------------------//
-	
-	
-	//-------------------//
-	// Actions Functions //
-	//-------------------//
-	
-	
-	protected virtual void doSpawn() {
-		if (canSpawn()) {
-			nextUse = Time.time + spawnCD;
-			spawn.useItem();
-		}
-	}
-	
-	protected virtual void doRest(){
-	}
 	
 	//-------------------//
 	
@@ -117,6 +73,10 @@ public class NewFoliantHive : NewStationaryEnemy {
 	public virtual void removeFodder(NewFoliantFodder deadFodder){
 		fodderList.Remove (deadFodder);
 		currentSpawn = fodderList.Count;
+	}
+
+	public virtual bool canSpawn(){
+		return (currentSpawn < maxSpawn);
 	}
 	
 	//----------------//

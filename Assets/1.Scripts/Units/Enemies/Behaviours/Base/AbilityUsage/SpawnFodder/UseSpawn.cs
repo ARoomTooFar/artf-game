@@ -7,7 +7,7 @@ public class UseSpawn : SpawnBehaviour {
 	// This will be called when the animator first transitions to this state.
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		this.unit.inventory.keepItemActive = true;
-		this.spawn.useItem();
+		if(spawn.curCoolDown <= 0 && hive.canSpawn ()) this.spawn.useItem();
 	}
 	
 	// This will be called once the animator has transitioned out of the state.
