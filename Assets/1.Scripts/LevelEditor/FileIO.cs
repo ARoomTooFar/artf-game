@@ -55,12 +55,18 @@ public class FileIO : MonoBehaviour
 	public void getIds(string inputIds)
     {
         #if UNITY_EDITOR
-        GSManager gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		GSManager gsManager = null;
+		WWW www = serv.getLvlWww(dummyLvlId);
+		try{
+			gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		} catch{}
+		if(gsManager != null){
 		Debug.Log (gsManager);
 		Debug.Log ("id: " + gsManager.currLevelId);
-		WWW www = serv.getLvlWww(dummyLvlId);
+
 		if(gsManager.currLevelId != "") {
 			www = serv.getLvlWww(gsManager.currLevelId);
+		}
 		}
         #else
         string[] ids = inputIds.Split(',');
