@@ -13,6 +13,7 @@ public class PlayerRewardPanel : MonoBehaviour {
 	List<string> loot;
 	public List<GameObject> highlights;
 	public int activeEntry;
+	public RectTransform scrollView;
 
 	void Start () {
 		lootList = transform.Find("LootScroller/ScrollView/LootList");
@@ -21,7 +22,6 @@ public class PlayerRewardPanel : MonoBehaviour {
 		highlights = new List<GameObject>();
 
 		//hardcoded for now
-		loot.Add("testIcon1");
 		loot.Add("testIcon1");
 		loot.Add("testIcon1");
 		loot.Add("testIcon1");
