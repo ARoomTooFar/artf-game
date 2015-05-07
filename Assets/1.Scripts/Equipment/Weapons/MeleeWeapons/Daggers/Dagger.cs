@@ -18,9 +18,9 @@ public class Dagger : MeleeWeapons {
 		stats.weapType = 1;
 		stats.weapTypeName = "dagger";
 		stats.atkSpeed = 2.0f;
-		stats.damage = (int)(2 + 0.75f * user.GetComponent<Character>().stats.strength);
+		stats.damage = (int)(10);
 		
-		stats.maxChgTime = 1;
+		stats.maxChgTime = 2;
 
 		stats.chgLevels = 0.2f;
 		stats.timeForChgAttack = 0.2f;
