@@ -14,6 +14,7 @@ public class VinePull : Approach {
 	private Player p;
 	bool onCoolDown;
 	float currTime, waitUntil;
+	protected int layerMask = 1 << 9;
 
 	// This will be called when the animator first transitions to this state.
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
@@ -59,9 +60,20 @@ public class VinePull : Approach {
 
 		if (!feeler.Hooked ()) {
 			Vector3 direction = unit.target.transform.position - unit.transform.position;
+			float angle = Vector3.Angle(direction, unit.facing);
+			float dis = Vector3.Distance(unit.transform.position, unit.target.transform.position);
 
+			RaycastHit hit;
 			transform.localRotation = Quaternion.LookRotation(unit.facing, Vector3.forward);
-			transform.localScale += new Vector3(0, 0.01f, 0);
+
+			if (Physics.Raycast (unit.transform.position + unit.transform.up, direction.normalized, out hit, dis, layerMask)) {
+				if(hit.distance > 10){
+					if(transform.localScale.y < 1){
+						transform.localScale += new Vector3(0, 0.01f, 0);
+					}
+				}
+			}
+
 		} else if (MyMawPos != null) {
 			unit.target.transform.position = unit.target.transform.position - pullVelocity (MyMawPos.transform.position);
 			if (unit.actable && !unit.attacking){
