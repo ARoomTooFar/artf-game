@@ -12,14 +12,21 @@ public class PlayerRewardPanel : MonoBehaviour {
 	public Sprite icon;
 	List<string> loot;
 	public List<GameObject> highlights;
+	public List<int> points;
+	public List<Text> pointsText;
 	public int activeEntry;
 	public RectTransform scrollView;
+	public int total;
+	public Text totalText;
 
 	void Start () {
 		lootList = transform.Find("LootScroller/ScrollView/LootList");
 		lootListRect = lootList.GetComponent<RectTransform>();
 		loot = new List<string>();
 		highlights = new List<GameObject>();
+		points = new List<int>();
+		pointsText = new List<Text>();
+		totalText = transform.Find("Title/Text").GetComponent<Text>() as Text;
 
 		//hardcoded for now
 		loot.Add("testIcon1");
@@ -36,6 +43,9 @@ public class PlayerRewardPanel : MonoBehaviour {
 		iconDimens = newLootItem.GetComponent<RectTransform>().sizeDelta;
 		Destroy (newLootItem);
 
+		total = 34;
+		totalText.text = total.ToString();
+
 		//populate list with looted items
 		newRowYPos = 0f - iconDimens.y / 2 - 5f;
 //		newRowYPos = 0f;
@@ -45,6 +55,10 @@ public class PlayerRewardPanel : MonoBehaviour {
 		}
 		highlights[0].SetActive(true);
 		activeEntry = 0;
+
+		for(int i = 0; i < points.Count; i++){
+			pointsText[i].text = "0";
+		}
 	}
 
 	void Update(){
@@ -56,6 +70,14 @@ public class PlayerRewardPanel : MonoBehaviour {
 				activeEntry -= 1;
 		}
 
+		if(Input.GetKeyDown(KeyCode.A)){
+			points[activeEntry] += 1;
+			total -= 1;
+		}else if(Input.GetKeyDown(KeyCode.S)){
+			total += 1;
+			points[activeEntry] -= 1;
+		}
+
 		for(int i = 0; i < highlights.Count; i++){
 			if(i != activeEntry){
 				highlights[i].SetActive(false);
@@ -63,8 +85,16 @@ public class PlayerRewardPanel : MonoBehaviour {
 				highlights[i].SetActive(true);
 			}
 		}
-	}
 
+		updateTexts();
+
+	}
+	void updateTexts(){
+		pointsText[activeEntry].text = points[activeEntry].ToString();
+		totalText.text = total.ToString();
+	}
+		
+		
 	void makeNewEntry(string itemName){
 		GameObject newLootItem = Instantiate(Resources.Load("RewardScreen/LootEntry")) as GameObject;
 		RectTransform lootItemRect = newLootItem.GetComponent<RectTransform>();
@@ -84,6 +114,10 @@ public class PlayerRewardPanel : MonoBehaviour {
 
 		//add entry's height to list for highlighting
 		highlights.Add(newLootItem.transform.Find("Selector").gameObject);
+
+		//add points text to list for them
+		pointsText.Add(newLootItem.transform.Find("Points/Text").gameObject.GetComponent<Text>() as Text);
+		points.Add(0);
 
 		//increment y position for next iteration
 		newRowYPos -= iconDimens.y;
