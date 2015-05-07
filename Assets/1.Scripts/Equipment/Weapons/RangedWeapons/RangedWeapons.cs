@@ -135,6 +135,6 @@ public class RangedWeapons : Weapons {
 	
 	protected void fireProjectile() {
 		Projectile newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 2, spray)).GetComponent<Projectile>();
-		newBullet.setInitValues(user, opposition, particles.startSpeed, user.luckCheck(), stats.debuff);
+		newBullet.setInitValues(user, opposition, particles.startSpeed, this.stats.debuff != null, stats.debuff);
 	}
 }

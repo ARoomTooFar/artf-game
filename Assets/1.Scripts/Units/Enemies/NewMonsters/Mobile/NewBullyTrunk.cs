@@ -88,7 +88,6 @@ public class NewBullyTrunk: NewMobileEnemy {
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=6;
-		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
 		this.maxAtkRadius = 4.0f;

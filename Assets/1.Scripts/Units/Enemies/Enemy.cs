@@ -114,7 +114,6 @@ public class Enemy : Character {
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=4;
-		stats.luck=0;
 		setAnimHash ();
 	}
 	

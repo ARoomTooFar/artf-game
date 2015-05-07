@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HealRadius : MonoBehaviour,IFallable {
+public class HealRadius : MonoBehaviour {
 	public float gravity = 2.0f;
 	public bool isGrounded = false;
 	public float decSpeed;

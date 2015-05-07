@@ -21,7 +21,7 @@ public class MeleeWeapons : Weapons {
 
 	// Does something when opponent is hit
 	protected virtual void onHit(Character enemy) {
-		if(user.luckCheck() && stats.debuff != null){
+		if(stats.debuff != null){
 			if(stats.buffDuration > 0){
 				enemy.BDS.addBuffDebuff(stats.debuff, this.gameObject, stats.buffDuration);
 			}else{

@@ -10,7 +10,7 @@ using System;
 public class Stats{
 	//Base Stats
 	public int health, armor,maxHealth,rezCount;
-	public int strength, coordination, speed, luck;
+	public int strength, coordination, speed;
 	public bool isDead;
 
 	/*
@@ -31,7 +31,7 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallable, IDamageable<int, Transform, GameObject>, IStunable, IForcible<Vector3, float> {
+public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>, IStunable, IForcible<Vector3, float> {
 
 	public bool testControl;
 
@@ -232,16 +232,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	protected virtual void FixedUpdate() {
 
 	}
-	public virtual bool luckCheck(){
-		int luckCap = 10;
-		float r = UnityEngine.Random.Range(0,luckCap);
-		//Debug.Log(r);
-		if(r < stats.luck){
-			//Debug.Log("Y");
-			return true;
-		}
-		return false;
-	}
 	
 	// Update is called once per frame
 	protected virtual void Update () {
@@ -279,9 +269,7 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	// Constant animation updates (Main loop for characters movement/actions)
 	public virtual void animationUpdate() {
 		if (attacking) {
-			if(luckCheck()){
-			}
-			attackAnimation();
+
 		} else {
 			movementAnimation();
 		}
@@ -289,8 +277,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	//-------------------------------------------//
 
 	// Animation helper functions
-	protected virtual void attackAnimation() {
-	}
 
 	protected virtual void movementAnimation() {
 		// animator.speed = 1; // Change animation speed back for other animations

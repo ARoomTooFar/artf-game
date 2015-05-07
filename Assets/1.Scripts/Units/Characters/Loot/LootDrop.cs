@@ -46,9 +46,11 @@ public class LootDrop : MonoBehaviour {
 		if (other.tag == "Player"){
 			target = other.gameObject;
 			//Debug.Log("Looted, bitch");//Get the loot, homie
+
+			/*
 			if(other.GetComponent<Player>().luckCheck()){
 				value += value/2; //Luck buff on drops :D
-			}
+			}*/
 			GetComponent<Collider>().enabled = false;//Turn of collider so loot doesn't intercept to another unit. 
 		}
 	}

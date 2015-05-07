@@ -32,8 +32,8 @@ public class Projectile : MonoBehaviour {
 		castEffect = effect;
 		debuff = hinder;
 		if(particles !=null){
-		particles.startSpeed = partSpeed;
-		particles.Play();
+			particles.startSpeed = partSpeed;
+			particles.Play();
 		}
 	}
 

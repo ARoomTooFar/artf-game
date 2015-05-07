@@ -45,7 +45,6 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=10;
-		stats.luck=0;
 		greyDamage = 0;
 	}
 	//Set cooldown bars to current items. 
@@ -65,16 +64,11 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 	
 	// Update is called once per frame
 	protected override void Update () {
-		if(UI!=null){
-			if(!UI.onState) {
-				ItemCooldowns();
-			}
-		}
-
 		if(isDead) return;
 
 		if(UI!=null){
 			if(UI.onState){
+				ItemCooldowns();
 				UI.hpBar.max = stats.maxHealth;
 				UI.greyBar.max = stats.maxHealth;
 				UI.greyBar.current = stats.health+greyDamage;
@@ -135,13 +129,9 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 		}
 	}
 	
-	// Constant animation updates (Main loop for characters movement/actions)
+	// Constant animation updates (Main loop for characters movement/actions, sets important parameters in the animator)
 	public override void animationUpdate() {
-		if (attacking) {
-			attackAnimation();
-		} else {
-			movementAnimation();
-		}
+		movementAnimation();
 	}
 	
 	//-------------------------------------------//
@@ -189,7 +179,7 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 			}
 			
 			this.rb.velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
-		} else if (freeAnim){
+		} else {
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this
 			this.rb.velocity = Vector3.zero;
@@ -286,7 +276,10 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 	}
 	
 	//----------------------------------//
-	
+
+	//-------------//
+	// Grey Health //
+	//-------------//
 	
 	// Grey Health functions
 	private int greyTest(int damage){
@@ -317,6 +310,12 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 		}
 		yield return 0;
 	}
+
+	//---------------//
+
+	//-------//
+	// Doors //
+	//-------//
 
 	private void OnTriggerEnter(Collider other){
 		if(other.tag == "Door"){

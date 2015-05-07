@@ -49,7 +49,6 @@ public class Player : Character, IMoveable, IHealable<int>{
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=10;
-		stats.luck=0;
 		inGrey = false;
 		greyDamage = 0;
 		//testable = true;
@@ -169,7 +168,6 @@ public class Player : Character, IMoveable, IHealable<int>{
 	// Constant animation updates (Main loop for characters movement/actions)
 	public override void animationUpdate() {
 		if (attacking&&!stats.isDead) {
-			attackAnimation();
 		} else {
 			movementAnimation();
 		}

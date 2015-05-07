@@ -29,7 +29,6 @@ public class CackleBranch: MobileEnemy {
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=7;
-		stats.luck=0;
 		
 		this.minAtkRadius = 40.0f;
 		this.maxAtkRadius = 100.0f;

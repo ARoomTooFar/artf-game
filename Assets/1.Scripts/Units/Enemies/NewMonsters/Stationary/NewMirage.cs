@@ -79,7 +79,6 @@ public class NewMirage : NewStationaryEnemy {
 		stats.strength = 8;
 		stats.coordination=0;
 		stats.speed=4;
-		stats.luck=0;
 		setAnimHash ();
 		
 		this.minAtkRadius = 0.0f;
