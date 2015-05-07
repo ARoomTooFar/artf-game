@@ -36,11 +36,22 @@ public static class MapDataParser {
 			Mode.setTileMode();
 		} else {
             Debug.Log(Resources.Load("Player1"));
-
+			/*
 			GameObject p1 = GameObject.Instantiate(Resources.Load("Player1"), start.Coordinates[0], Quaternion.identity) as GameObject;
             GameObject p2 = GameObject.Instantiate(Resources.Load("Player2"), start.Coordinates[1], Quaternion.identity) as GameObject;
             GameObject p3 = GameObject.Instantiate(Resources.Load("Player3"), start.Coordinates[2], Quaternion.identity) as GameObject;
             GameObject p4 = GameObject.Instantiate(Resources.Load("Player4"), start.Coordinates[3], Quaternion.identity) as GameObject;
+*/
+
+			GameObject p1 = GameObject.Find("Player1");
+			GameObject p2 = GameObject.Find("Player2");
+			GameObject p3 = GameObject.Find("Player3");
+			GameObject p4 = GameObject.Find("Player4");
+
+			p1.transform.position = start.Coordinates[0];
+			p2.transform.position = start.Coordinates[1];
+			p3.transform.position = start.Coordinates[2];
+			p4.transform.position = start.Coordinates[3];
 
             Loadgear loadgear = GameObject.Find("/Loadgear").GetComponent<Loadgear>();
             loadgear.players[0] = p1.GetComponent<Character>();

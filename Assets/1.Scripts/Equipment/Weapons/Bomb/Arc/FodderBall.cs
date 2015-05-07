@@ -9,7 +9,7 @@ using System;
 public class FodderBall: MonoBehaviour {
 	
 	// Units to be spawned
-	public FoliantHive hive;
+	public NewFoliantHive hive;
 	public GameObject foliantFodder;
 	public AoETargetting aoe;
 
@@ -93,7 +93,7 @@ public class FodderBall: MonoBehaviour {
 	protected virtual void spawn() {
 		// Create explosion while removing self
 		// BombExplosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<BombExplosion>();
-		FoliantFodder newFodder = (Instantiate(foliantFodder, transform.position, transform.rotation) as GameObject).GetComponent<FoliantFodder>();
+		NewFoliantFodder newFodder = (Instantiate(foliantFodder, transform.position, transform.rotation) as GameObject).GetComponent<NewFoliantFodder>();
 		//Sets fodder to be in hiveMind mode
 		newFodder.setHive (hive);
 		hive.addFodder (newFodder);
