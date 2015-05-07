@@ -10,6 +10,8 @@ public class MeleeWeapons : Weapons {
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
+		this.stats.debuff = new Knockback();
+		this.stats.buffDuration = 0.75f;
 	}
 	
 	protected override void setInitValues() {

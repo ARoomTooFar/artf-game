@@ -33,6 +33,10 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
+
+		foreach(PlayerBehaviour behaviour in this.animator.GetBehaviours<PlayerBehaviour>()) {
+			behaviour.SetVar(this.GetComponent<NewPlayer>());
+		}
 	}
 	
 	protected override void setInitValues() {
@@ -54,7 +58,6 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 		for(int i = 0; i < inventory.items.Count; i++){
 			UI.coolDowns[i].onState = 3;
 			inventory.items[i].cdBar=UI.coolDowns[i];
-			//inventory.items[i].cdBar = UI.getComponent("LifeBar");//coolDowns[i];
 		}
 		if(gear.weapon is RangedWeapons){
 			gear.weapon.GetComponent<RangedWeapons>().loadData(UI.ammoBar);
@@ -65,22 +68,19 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 	protected override void Update () {
 		if(isDead) return;
 
-		if(UI!=null){
-			if(UI.onState){
-				ItemCooldowns();
-				UI.hpBar.max = stats.maxHealth;
-				UI.greyBar.max = stats.maxHealth;
-				UI.greyBar.current = stats.health+greyDamage;
-				UI.hpBar.current = stats.health;
-			}
+		if(UI != null && UI.onState){
+			ItemCooldowns();
+			UI.hpBar.max = stats.maxHealth;
+			UI.greyBar.max = stats.maxHealth;
+			UI.greyBar.current = stats.health+greyDamage;
+			UI.hpBar.current = stats.health;
 		}
 
-		freeAnim = !stunned && !knockedback && !animationLock;
+		freeAnim = !stunned && !knockedback && !animationLock && !this.animator.GetBool ("IsInAttackAnimation");
 		actable = freeAnim;
 
 		this.animator.SetBool("Actable", this.actable);
-
-		if (!actable) return;
+		
 		ActionCommands ();
 		MoveCommands ();
 		AnimationUpdate ();
@@ -92,7 +92,7 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 	
 	protected override void ActionCommands() {
 		// Invokes an action/animation
-		if (actable) {
+		if (actable && !this.animator.GetBool ("Charging")) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
 				if(currDoor!=null){
 					currDoor.GetComponent<Door>().toggleOpen();
@@ -113,7 +113,6 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 				inventory.cycItems();
 			}
 		} else {
-			
 			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
 				animator.SetBool ("Charging", false);
 			}
@@ -133,7 +132,7 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 		Vector3 newMoveDir = Vector3.zero;
 		Vector3 camAngle = Camera.main.transform.eulerAngles;
 		
-		if (actable || animator.GetBool("Charging")) {
+		if (actable) {
 			float x;
 			float z;
 			if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {

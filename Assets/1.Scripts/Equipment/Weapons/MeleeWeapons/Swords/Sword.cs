@@ -18,9 +18,9 @@ public class Sword : MeleeWeapons {
 		stats.weapType = 0;
 		stats.weapTypeName = "sword";
 		stats.atkSpeed = 1.0f;
-		stats.damage = 2 + user.GetComponent<Character>().stats.strength;
+		stats.damage = 12;//  + user.GetComponent<Character>().stats.strength;
 
-		stats.maxChgTime = 2.0f;
+		stats.maxChgTime = 3;
 
 		stats.chgLevels = 0.4f;
 	}
@@ -32,6 +32,21 @@ public class Sword : MeleeWeapons {
 
 	public override void initAttack() {
 		base.initAttack();
+	}
+
+	// Does something when opponent is hit
+	protected override void onHit(Character enemy) {
+
+		this.stats.buffDuration = user.animator.GetFloat ("ChargeTime") < 0.5f ? 0.75f : 1.25f;
+
+		if(stats.debuff != null){
+			if(stats.buffDuration > 0){
+				enemy.BDS.addBuffDebuff(stats.debuff, this.user.gameObject, stats.buffDuration);
+			}else{
+				enemy.BDS.addBuffDebuff(stats.debuff, this.user.gameObject);
+			}
+		}
+		enemy.damage(stats.damage + stats.chgDamage, user.transform, user.gameObject);
 	}
 
 	public override void SpecialAttack() {

@@ -16,7 +16,7 @@ public class FlameThrowerShootVersion : RangedWeapons {
 		loadSpeed = 5f;
 		stats.atkSpeed = 2.0f;
 		stats.damage = 1;
-		stats.maxChgTime = 2.0f;
+		stats.maxChgTime = 2;
 		// Bull Pattern L originally
 		//rifle(L,2) + pistol (L,1)
 		variance = 22f;

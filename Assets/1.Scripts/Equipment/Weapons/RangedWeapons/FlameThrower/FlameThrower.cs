@@ -19,7 +19,7 @@ public class FlameThrower : RangedWeapons {
 		stats.atkSpeed = 3.0f;
 		loadSpeed = 5f;
 		stats.damage = 10;
-		stats.maxChgTime = 3.0f;
+		stats.maxChgTime = 3;
 		stats.timeForChgAttack = 0.5f;
 		
 		stats.chgLevels = 0.5f;

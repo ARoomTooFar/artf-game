@@ -21,7 +21,7 @@ public class Spear: MeleeWeapons {
 		stats.atkSpeed = 1.0f;
 		stats.damage = (int)(10 + 1.5f * user.GetComponent<Character>().stats.strength);
 		
-		stats.maxChgTime = 2.0f;
+		stats.maxChgTime = 2;
 		
 		stats.chgLevels = 0.5f;
 	}

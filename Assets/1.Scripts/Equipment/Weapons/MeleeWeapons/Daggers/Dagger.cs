@@ -20,7 +20,7 @@ public class Dagger : MeleeWeapons {
 		stats.atkSpeed = 2.0f;
 		stats.damage = (int)(2 + 0.75f * user.GetComponent<Character>().stats.strength);
 		
-		stats.maxChgTime = 1.0f;
+		stats.maxChgTime = 1;
 
 		stats.chgLevels = 0.2f;
 		stats.timeForChgAttack = 0.2f;
