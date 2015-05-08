@@ -16,6 +16,8 @@ public class Spear: MeleeWeapons {
 	protected override void setInitValues() {
 		base.setInitValues();
 
+		stats.chargeSlow = new Slow(1.0f);
+
 		stats.weapType = 2;
 		stats.weapTypeName = "spear";
 		this.stats.buffDuration = 1.25f;

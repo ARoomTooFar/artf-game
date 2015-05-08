@@ -7,6 +7,7 @@ public class WeaponStats {
 
 	// New
 	public float chargeMultiplier;
+	public Slow chargeSlow;
 
 	// Keep
 	[Range(0.5f, 2.0f)]
@@ -66,6 +67,7 @@ public class Weapons : Equipment {
 
 		// New
 		stats.chargeMultiplier = 1.5f;
+		stats.chargeSlow = new Slow(0.5f);
 
 		// Keep
 		stats.weapType = 0;

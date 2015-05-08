@@ -39,7 +39,7 @@ public class MirageWeapon : MeleeWeapons {
 		this.user.animator.SetBool ("HitEnemy", true);
 	}
 	
-	void OnTriggerEnter(Collider other) {
+	protected override void OnTriggerEnter(Collider other) {
 		IDamageable<int, Transform, GameObject> component = (IDamageable<int, Transform, GameObject>) other.GetComponent( typeof(IDamageable<int, Transform, GameObject>) );
 		Character enemy = (Character) other.GetComponent(opposition);
 		if( component != null && enemy != null) {
