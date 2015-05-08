@@ -42,7 +42,7 @@ public class Bomb : MonoBehaviour {
 
 		if (this.aoe == null) Debug.LogWarning ("AoE object not set in the inspector of a bomb");
 		else {
-			if (opposition == typeof(Enemy)) this.aoe.affectEnemies = true;
+			if (opposition == typeof(Enemy) || opposition == typeof(NewEnemy)) this.aoe.affectEnemies = true;
 			if (opposition == typeof(Player)) this.aoe.affectPlayers = true;
 		}
 

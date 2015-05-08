@@ -181,7 +181,6 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 	//-------------------------------------------//
 
 
-
 	//---------------------------------//
 	// Damage Interface Implementation //
 	//---------------------------------//
