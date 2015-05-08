@@ -66,6 +66,7 @@ public class TitleHand : MonoBehaviour {
 		btnGoToLevel.GetComponent<Button>().onClick.AddListener (() =>
 		    {
 				hideLevelSelect();
+				gsManager.currLevelId = fieldLevelId.GetComponent<InputField> ().text;
 				gsManager.LoadLevel (fieldLevelId.GetComponent<InputField> ().text);
 			}
 		);
