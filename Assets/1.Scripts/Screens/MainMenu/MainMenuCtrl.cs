@@ -36,11 +36,14 @@ public class MainMenuCtrl : MonoBehaviour {
     private int loginFormHeight = 3;
 	private Animator loginFormAnim;
 
-	// keypad
+	// pop-up
 	private GameObject[,] popUp;
 	private int popUpWidth = 3;
 	private int popUpHeight = 5;
 	private Animator popUpAnim;
+
+    // keypad
+    private Text txtFieldAcctName;
 
 	void Start () {
         // setup start menu
@@ -103,8 +106,21 @@ public class MainMenuCtrl : MonoBehaviour {
         popUp[3, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySwap");
         popUp[4, 0] = popUp[4, 1] = popUp[4, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/BtnSubmit");
 		popUpAnim = GameObject.Find ("/Canvas/" + menuPopUpName).GetComponent<Animator>();
+        txtFieldAcctName = GameObject.Find("/Canvas/" + menuPopUpName + "/DisplayAcctName/TxtFieldAcctName").GetComponent<Text>();
 
-		// key button
+        popUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+            KeyInput(new char[4] { '@', '.', '-', '_' }
+        ));
+
+        popUp[0, 1].GetComponent<Button>().onClick.AddListener(() =>
+            KeyInput(new char[3] { 'A', 'B', 'C' }
+        ));
+
+        popUp[0, 2].GetComponent<Button>().onClick.AddListener(() =>
+            KeyInput(new char[3] { 'D', 'E', 'F' }
+        ));
+
+		// submit button
 		popUp[4, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
             PopUpDisable();
@@ -150,6 +166,7 @@ public class MainMenuCtrl : MonoBehaviour {
             ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
             ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
             prevBtn = currMenuPtr[locY, locX];
+            prevKey = ""; // reset keypad on move
         }
     }
 
@@ -201,6 +218,44 @@ public class MainMenuCtrl : MonoBehaviour {
         MenuSwitch(prevMenu);
     }
 
+    private string currKey = "";
+    private string prevKey = "";
+    private float pressTime;
+    private string tmpCharName;
+    private int charArrLoc = 0;
+
+    void KeyInput(char[] chars)
+    {
+        currKey = ConcatCharArray(chars);
+        if (currKey != prevKey)
+        {
+            pressTime = Time.time;
+            charArrLoc = 0;
+            tmpCharName = txtFieldAcctName.text;
+            txtFieldAcctName.text = tmpCharName + chars[charArrLoc];
+        }
+        else
+        {
+            if ((Time.time - pressTime) < 1.0)
+            {
+                txtFieldAcctName.text = tmpCharName + chars[charArrLoc];
+                pressTime = Time.time;
+            }
+            else
+            {
+                pressTime = Time.time;
+                charArrLoc = 0;
+                tmpCharName = txtFieldAcctName.text;
+                txtFieldAcctName.text = tmpCharName + chars[charArrLoc];
+            }
+        }
+
+        ++charArrLoc;
+        if (charArrLoc >= chars.Length)
+            charArrLoc = 0;
+        prevKey = currKey;
+    }
+
     void MenuEnable() {
 		// unlock controls
 		//menuLock = false;
@@ -245,6 +300,16 @@ public class MainMenuCtrl : MonoBehaviour {
         {
             child.color = new Color(0.3f, 0.3f, 0.3f);
         }
+    }
+
+    string ConcatCharArray(char[] chars)
+    {
+        string retVal = "";
+        foreach (char c in chars)
+        {
+            retVal += c;
+        }
+        return retVal;
     }
 	
 	void Update () {
