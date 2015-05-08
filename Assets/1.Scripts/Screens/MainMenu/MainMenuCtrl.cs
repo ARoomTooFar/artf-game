@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class MainMenuCtrl : MonoBehaviour {
     public Controls controls;
     public string menuContainerName;
+	public string menuPopUpName;
 
     // UI state
     private bool menuMoved = false;
@@ -32,6 +33,12 @@ public class MainMenuCtrl : MonoBehaviour {
     private int loginFormHeight = 3;
 	private Animator loginFormAnim;
 
+	// keypad
+	private GameObject[,] popUp;
+	private int popUpWidth = 1;
+	private int popUpHeight = 1;
+	private Animator popUpAnim;
+
 	void Start () {
         // setup start menu
         startMenu = new GameObject[startMenuHeight, startMenuWidth];
@@ -43,8 +50,8 @@ public class MainMenuCtrl : MonoBehaviour {
         startMenu[0, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
 			MenuSwitch (Menu.LoginForm);
+			//MenuDisable();
             //GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
-            //menuLock = true;
         });
 
         // register button press handler
@@ -64,19 +71,32 @@ public class MainMenuCtrl : MonoBehaviour {
         loginForm[2, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnLogin");
         loginForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnBack");
 		loginFormAnim = GameObject.Find ("/Canvas/" + menuContainerName + "/LoginForm").GetComponent<Animator>();
-		
+
+		// acct name field
+		loginForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			PopUpEnable ();
+		});
+
 		// back button
         loginForm[2, 1].GetComponent<Button>().onClick.AddListener(() =>
         {
 			MenuSwitch (Menu.StartMenu);
         });
 
+		// setup keypad
+		popUp = new GameObject[popUpHeight, popUpWidth];
+		popUp[0, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/BtnKeyPrefab");
+		popUpAnim = GameObject.Find ("/Canvas/" + menuPopUpName).GetComponent<Animator>();
+
+		// key button
+		popUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			Debug.Log ("eh");
+		});
+
 		// switch to start menu
 		MenuSwitch (Menu.StartMenu);
-
-        // test
-        MenuDisable();
-        //MenuEnable();
 	}
 
 	// handles menu joystick movement control
@@ -149,7 +169,16 @@ public class MainMenuCtrl : MonoBehaviour {
 		currAnim.SetBool("show", true);
 	}
 
+	void PopUpEnable() {
+		Debug.Log ("called");
+		MenuDisable ();
+		popUpAnim.SetBool("show", true);
+	}
+
     void MenuEnable() {
+		// unlock controls
+		menuLock = false;
+
         // return color to buttons
         CanvasGroup groupContainer = GameObject.Find("/Canvas/" + menuContainerName).GetComponent<CanvasGroup>();
         groupContainer.interactable = true;
@@ -158,24 +187,24 @@ public class MainMenuCtrl : MonoBehaviour {
         Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
         imgPanel.color = new Color32(255, 255, 255, 100);
 
-        // return text color in buttons
-        BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
-        foreach (BtnScript child in btnChild)
-        {
-            child.DehighlightTxt();
-        }
+		// return color to text
+		Text[] txtChild = this.GetComponentsInChildren<Text>();
+		foreach (Text child in txtChild)
+		{
+			child.color = new Color32(152, 213, 217, 255);
+		}
 
         // highlight first button of currMenu
         locX = 0;
         locY = 0;
         var pointer = new PointerEventData(EventSystem.current);
         ExecuteEvents.Execute(currMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
-
-        // unlock controls
-        menuLock = false;
     }
 
     void MenuDisable() {
+		// lock controls
+		menuLock = true;
+
         // grey buttons
         CanvasGroup groupContainer = GameObject.Find("/Canvas/" + menuContainerName).GetComponent<CanvasGroup>();
         groupContainer.interactable = false;
@@ -184,22 +213,12 @@ public class MainMenuCtrl : MonoBehaviour {
         Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
         imgPanel.color = new Color(0.3f, 0.3f, 0.3f);
 
-        // grey text in buttons
-        /*BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
-        foreach (BtnScript child in btnChild)
-        {
-            child.DisableTxt();
-        }*/
-
         // grey text
         Text[] txtChild = this.GetComponentsInChildren<Text>();
         foreach (Text child in txtChild)
         {
             child.color = new Color(0.3f, 0.3f, 0.3f);
         }
-
-        // lock controls
-        menuLock = true;
     }
 	
 	void Update () {
