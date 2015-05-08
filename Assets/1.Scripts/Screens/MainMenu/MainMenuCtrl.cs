@@ -38,8 +38,8 @@ public class MainMenuCtrl : MonoBehaviour {
 
 	// keypad
 	private GameObject[,] popUp;
-	private int popUpWidth = 1;
-	private int popUpHeight = 1;
+	private int popUpWidth = 3;
+	private int popUpHeight = 5;
 	private Animator popUpAnim;
 
 	void Start () {
@@ -89,11 +89,23 @@ public class MainMenuCtrl : MonoBehaviour {
 
 		// setup keypad
 		popUp = new GameObject[popUpHeight, popUpWidth];
-		popUp[0, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/BtnKeyPrefab");
+        popUp[0, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySymbol");
+        popUp[0, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyABC");
+        popUp[0, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyDEF");
+        popUp[1, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyGHI");
+        popUp[1, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyJKL");
+        popUp[1, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyMNO");
+        popUp[2, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyPQRS");
+        popUp[2, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyTUV");
+        popUp[2, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyWXYZ");
+        popUp[3, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyDel");
+        popUp[3, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySpace");
+        popUp[3, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySwap");
+        popUp[4, 0] = popUp[4, 1] = popUp[4, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/BtnSubmit");
 		popUpAnim = GameObject.Find ("/Canvas/" + menuPopUpName).GetComponent<Animator>();
 
 		// key button
-		popUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		popUp[4, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
             PopUpDisable();
 		});
