@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Pistol : RangedWeapons {
 
+	public GameObject explosiveRound;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -26,9 +28,10 @@ public class Pistol : RangedWeapons {
 	}
 
 	public override void SpecialAttack() {
-		this.fireProjectile();
+		ExplosiveRound newBullet = ((GameObject)Instantiate(this.explosiveRound, this.transform.position + this.user.facing * 2, this.user.transform.rotation)).GetComponent<ExplosiveRound>();
+		newBullet.setInitValues(user, opposition, this.stats.damage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration * 3);
 	}
-	
+
 	public override void initAttack() {
 		base.initAttack();
 	}
