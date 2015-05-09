@@ -30,6 +30,10 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public UIActive UI;
 	public Controls controls;
 
+	bool sparksDone = true;
+	GameObject sparks = null;
+
+
 	// New Aggro system does not need these
 	// Events for death
 	// public delegate void DieBroadcast(GameObject dead);
@@ -37,8 +41,8 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	protected override void Awake() {
 		base.Awake();
-		opposition = Type.GetType("NewEnemy");
-		//opposition = Type.GetType("Enemy"); //Use this if going after testable opponents
+		//opposition = Type.GetType("Enemy");
+		opposition = Type.GetType("NewEnemy"); //Use this if going after testable opponents
 	}
 	
 	// Use this for initialization
@@ -215,7 +219,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	
 	// Constant animation updates (Main loop for characters movement/actions)
 	public override void animationUpdate() {
-		if (attacking) {
+		if (attacking&&!stats.isDead) {
 			attackAnimation();
 		} else {
 			movementAnimation();
@@ -287,7 +291,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
 		this.damage (dmgTaken, atkPosition);
 	}
-	
+
 	public override void damage(int dmgTaken, Transform atkPosition) {
 		if (invincible || stats.isDead) return;
 		
@@ -300,6 +304,18 @@ public class Player : Character, IMoveable, IHealable<int>{
 		splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
 		theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
 		Destroy (theSplat, 2);
+
+		//particle effects
+		if(sparks == null){
+			sparks = Instantiate(Resources.Load("Sparks"), transform.position, Quaternion.identity) as GameObject;
+			Material particleMat = Resources.Load("Materials/" + this.gameObject.name + "Sparks", typeof(Material)) as Material;
+			sparks.GetComponent<ParticleRenderer>().material = particleMat;
+			Destroy (sparks, 1);
+		}
+
+		hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
+		BDS.addBuffDebuff(hitConfirm,gameObject,.5f);
+
 	}
 	
 	public override void damage(int dmgTaken) {
@@ -314,8 +330,15 @@ public class Player : Character, IMoveable, IHealable<int>{
 		theSplat.adjuster = (float) ((stats.maxHealth-stats.health)/stats.maxHealth);
 		Destroy (theSplat, 2);
 
+		//particle effects
+		if(sparks == null){
+			sparks = Instantiate(Resources.Load("Sparks"), transform.position, Quaternion.identity) as GameObject;
+			Material particleMat = Resources.Load("Materials/" + this.gameObject.name + "Sparks", typeof(Material)) as Material;
+			sparks.GetComponent<ParticleRenderer>().material = particleMat;
+			Destroy (sparks, 1);
+		}
 	}
-	
+
 	public override void die() {
 		Debug.Log("IsDead");
 		base.die();
@@ -327,6 +350,7 @@ public class Player : Character, IMoveable, IHealable<int>{
 		stats.health = 0;
 		
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
+		//GetComponent<Collider> ().isTrigger = true;
 		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
@@ -352,18 +376,19 @@ public class Player : Character, IMoveable, IHealable<int>{
 			UI.greyBar.current = stats.health + greyDamage;
 		}
 	}
-	
+
 	public override void rez(){
 		if(stats.isDead){
 			stats.isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
 			stats.rezCount++;
-		}else{
+		}/*else{
 			heal(stats.maxHealth/(2+2*stats.rezCount));
-		}//if and else are the 'base' rez from prior
+		}*///if and else are the 'base' rez from prior
+		//GetComponent<Collider> ().isTrigger = false;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		foreach (Renderer r in rs) {
-			if(GetComponent<Renderer>().gameObject.tag != "Item")
+			if(r.GetComponent<Renderer>().gameObject.tag != "Item")
 				r.enabled = true;
 		}
 		//UI.hpBar.current = stats.health;

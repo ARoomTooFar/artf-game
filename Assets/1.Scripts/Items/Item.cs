@@ -8,6 +8,7 @@ public class Item : MonoBehaviour {
 
 	public Character user;
 	public Type opposition;
+	public char itemType;
 
 	// protected float cooldown;
 

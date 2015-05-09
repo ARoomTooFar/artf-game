@@ -3,12 +3,12 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class EnemyHealthRingController : MonoBehaviour {
-	public MobileEnemy enemy;
+	public NewEnemy enemy;
 	public Image ring1;
 	public Image ring2;
 
 	void Start () {
-		enemy = transform.parent.gameObject.GetComponent<MobileEnemy>();
+		enemy = transform.parent.gameObject.GetComponent<NewEnemy>();
 		ring1 = transform.Find("Ring1").GetComponent<Image>();
 		ring2 = transform.Find("Ring2").GetComponent<Image>();
 	}

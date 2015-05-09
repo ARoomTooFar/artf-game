@@ -151,7 +151,7 @@ public class UpgradeUI : MonoBehaviour
 	{
 		tier = Math.Min(tier + 1, maxTier);
 		updateMonsterStatText ();
-		parentObject.GetComponent<MonsterData>().tier = tier;
+		parentObject.GetComponent<MonsterData>().Tier = tier;
 		updateTiers();
 	}
 	
@@ -159,7 +159,7 @@ public class UpgradeUI : MonoBehaviour
 	{
 		tier = Math.Max(0, tier - 1);
 		updateMonsterStatText ();
-		parentObject.GetComponent<MonsterData>().tier = tier;
+		parentObject.GetComponent<MonsterData>().Tier = tier;
 		updateTiers();
 	}
 
@@ -192,5 +192,4 @@ public class UpgradeUI : MonoBehaviour
 		else 
 			return true;
 	}
-	
 }

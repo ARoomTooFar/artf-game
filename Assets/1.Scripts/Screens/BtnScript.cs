@@ -16,7 +16,6 @@ public class BtnScript : MonoBehaviour {
         Text[] txtChild = this.GetComponentsInChildren<Text>();
         foreach (Text child in txtChild)
         {
-            
             child.color = new Color32(152, 213, 217, 255);
         }
     }

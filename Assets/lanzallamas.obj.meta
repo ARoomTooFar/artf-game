@@ -63,7 +63,7 @@ ModelImporter:
     4300018: cylinder2_extract11_default2
     4300020: cylinder2_extract3_default2
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:

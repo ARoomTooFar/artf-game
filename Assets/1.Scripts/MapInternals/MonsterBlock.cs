@@ -13,11 +13,6 @@ public class MonsterBlock {
 	public MonsterData BlockInfo {
 		get { return GameObj.GetComponent<MonsterData>(); }
 	}
-
-	public int Tier{
-		get{ return BlockInfo.tier; }
-		set{ BlockInfo.tier = value; }
-	}
 	
 	public Vector3 Position {
 		get;
@@ -30,7 +25,7 @@ public class MonsterBlock {
 	}
 
 	public string SaveString{
-		get{ return Position.toCSV () + "," + Orientation.ToString() + ", " + Tier; }
+		get{ return Position.toCSV () + "," + Orientation.ToString() + "," + BlockInfo.Tier; }
 	}
 
 	public GameObject GameObj {
@@ -57,7 +52,7 @@ public class MonsterBlock {
 			//get the local coordinates this piece of scenery occupies in a given rotation
 			List<Vector3> retVal = new List<Vector3>();
 			//for each coordinate
-			foreach(Vector3 vec in BlockInfo.RadiusCoordinates(Orientation)){
+			foreach(Vector3 vec in BlockInfo.LocalRadiusCoordinates(Orientation)){
 				//shift it to the global coordinate
 				retVal.Add(vec + Position);
 			}

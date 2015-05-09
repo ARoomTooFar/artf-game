@@ -38,6 +38,7 @@ public class Weapons : Equipment {
 	public WeaponStats stats;
 	public AudioClip charge;
 	public AudioClip action;
+	public AudioClip chargeAttack;
 	public bool playSound;
 	public float soundDur;
 

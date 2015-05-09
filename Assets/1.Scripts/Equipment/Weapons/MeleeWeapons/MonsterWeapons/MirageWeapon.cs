@@ -34,7 +34,7 @@ public class MirageWeapon : MeleeWeapons {
 	
 	// Does something when opponent is hit
 	protected virtual void OnHit(Character enemy) {
-		Debug.Log (stats.damage);
+		//Debug.Log (stats.damage);
 		enemy.damage(stats.damage, user.transform, user.gameObject);
 		this.user.animator.SetBool ("HitEnemy", true);
 	}

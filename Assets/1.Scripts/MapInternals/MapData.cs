@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public static class MapData {
 
 	static MapData() {
-		TerrainBlocks = new TerrainManager();
 		SceneryBlocks = new SceneryManager();
 		MonsterBlocks = new MonsterManager();
 		TheFarRooms = new ARTFRoomManager();
@@ -14,13 +13,7 @@ public static class MapData {
 	public static void ClearData() {
 		SceneryBlocks.clear();
 		MonsterBlocks.clear();
-		TerrainBlocks.clear();
 		TheFarRooms.clear();
-	}
-
-	public static TerrainManager TerrainBlocks {
-		get;
-		private set;
 	}
 
 	public static SceneryManager SceneryBlocks {
@@ -45,8 +38,8 @@ public static class MapData {
 	public static string SaveString {
 		get {
 			string retVal = "MapData\n";
-			retVal += "Terrain\n";
-			retVal += TerrainBlocks.SaveString;
+			//retVal += "Terrain\n";
+			//retVal += TerrainBlocks.SaveString;
 			retVal += "Terminal\n";
 			retVal += StartingRoom.SaveString + " " + EndingRoom.SaveString + "\n";
 			retVal += "Room\n";
@@ -60,10 +53,18 @@ public static class MapData {
 	}
 
 	#region Rooms
-	public static void addRoom(Vector3 pos1, Vector3 pos2) {
-		if(TheFarRooms.isAddValid(pos1, pos2)) {
-			TheFarRooms.add(pos1, pos2);
+	public static bool addRoom(ARTFRoom rm){
+		if(TheFarRooms.isAddValid(rm)) {
+			TheFarRooms.add(rm);
+		} else {
+			rm.remove();
+			return false;
 		}
+		return true;
+	}
+
+	public static bool addRoom(Vector3 pos1, Vector3 pos2) {
+		return addRoom(new ARTFRoom(pos1, pos2));
 	}
 
 	public static void moveRoom(Vector3 oldPos, Vector3 newPos) {
@@ -103,16 +104,23 @@ public static class MapData {
 		return false;
 	}
 
-	public static void dragObject(GameObject obj, Vector3 pos, Vector3 offset) {
-		BlockData data = obj.GetComponent<BlockData>();
-
-		if(data is WallCornerData) {
+	public static void resizeRoom(GameObject obj, Vector3 pos, Vector3 offset){
+		WallCornerData data = obj.GetComponent <WallCornerData>();
+		
+		if(data != null) {
 			if(TheFarRooms.isResizeValid(pos, pos + offset)) {
+				int oldCost = TheFarRooms.find(pos).Cost;
 				TheFarRooms.resize(pos, pos + offset);
+				int newCost = TheFarRooms.find(pos+offset).Cost;
+				Money.buy(newCost - oldCost);
 			}
 			LevelPathCheck.checkPath();
 			return;
 		}
+	}
+
+	public static void dragObject(GameObject obj, Vector3 pos, Vector3 offset) {
+		BlockData data = obj.GetComponent <BlockData>();
 
 		if(data is SceneryData) {
 			if(SceneryBlocks.isMoveValid(pos, offset)) {

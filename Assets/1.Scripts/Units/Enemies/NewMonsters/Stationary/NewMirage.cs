@@ -67,12 +67,13 @@ public class NewMirage : NewStationaryEnemy {
 
 	public override void SetTierData(int tier) {
 		tier = 2;
+
 		base.SetTierData (tier);
 	}
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 5;
+		stats.maxHealth = 35;
 		stats.health = stats.maxHealth;
 		stats.armor = 1;
 		stats.strength = 10;
@@ -82,7 +83,7 @@ public class NewMirage : NewStationaryEnemy {
 		setAnimHash ();
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 4.0f;
+		this.maxAtkRadius = 3.5f;
 	}
 	
 	//-------------//
@@ -178,6 +179,7 @@ public class NewMirage : NewStationaryEnemy {
 			foreach (MirageImage im in this.blink.mirrors) {
 				if (im != null) im.die(); //Destroy(im.gameObject);
 			}
+			this.isDead = true;
 			this.deathTarget.BDS.rmvBuffDebuff(this.mark, this.gameObject);
 			animator.SetTrigger("Died");
 		}

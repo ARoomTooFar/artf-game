@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine;
 using System.Collections;
 
-public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHandler,*/ IPointerClickHandler {
+public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 	TileMapController tilemapcont;
 	static Camera UICamera;
 	string connectedPrefab = "";
@@ -21,6 +21,8 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	
 	void Start() {
 
+		/*amountText = this.transform.Find("AmountText").gameObject.GetComponent<Text>();
+		priceText = this.transform.Find("PriceText").gameObject.GetComponent<Text>();*/
 		amountText = this.transform.Find("AmountText").gameObject.GetComponent("Text") as Text;
 		priceText = this.transform.Find("PriceText").gameObject.GetComponent("Text") as Text;
 		UICamera = Camera.main.GetComponent<Camera>();
@@ -28,7 +30,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	}
 
 	void Update() {
-
 		amountText.text = "x" + (Money.money / price).ToString();
 		priceText.text = "$" + price;
 
@@ -54,16 +55,16 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 		//get bgButton from resources and child it to the itemList we're in
 		buttonBG = Instantiate(Resources.Load("bgButton")) as GameObject;
 		buttonBG.transform.SetParent(butt.transform.parent);
-		RectTransform bgRect = buttonBG.GetComponent("RectTransform") as RectTransform;
+		RectTransform bgRect = buttonBG.GetComponent<RectTransform>();
 		
 		//set its position and scale to be slightly bigger than the button
-		RectTransform thisRect = butt.GetComponent("RectTransform") as RectTransform;
+		RectTransform thisRect = butt.GetComponent<RectTransform>();
 		bgRect.anchoredPosition = new Vector2(thisRect.anchoredPosition.x, thisRect.anchoredPosition.y);
 		bgRect.sizeDelta = new Vector2(thisRect.sizeDelta.x, thisRect.sizeDelta.y);
 		
 		
 		//set its color
-		Button buttonOfBG = buttonBG.GetComponent("Button") as Button;
+		Button buttonOfBG = buttonBG.GetComponent<Button>();
 		buttonOfBG.image.color = Color.yellow;
 		
 		//make it so it's just an outline
@@ -96,7 +97,6 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 				Color trans;
 				//update the item object things
 				//shader has to be set in this loop, or transparency won't work
-				//itemObjectCopy.gameObject.GetComponentInChildren<Renderer>().material.shader = focusedShader;
 				if(itemObjectCopy.GetComponentsInChildren<Renderer>() != null){
 					foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
 						foreach(Material mat in rend.materials) {
@@ -210,7 +210,7 @@ public class Event_ItemButtons : MonoBehaviour,/* IBeginDragHandler, IEndDragHan
 	}
 
 	public void setButtonImage(string icon) {
-		Image im = this.GetComponent("Image") as Image;
+		Image im = this.GetComponent<Image>();
 		Sprite sp = Resources.Load <Sprite>("LevelEditorIcons/" + icon);
 		im.sprite = sp;
 	}

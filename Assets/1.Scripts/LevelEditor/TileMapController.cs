@@ -22,7 +22,7 @@ public class TileMapController : MonoBehaviour {
 	public float secondZ;
 	public bool suppressDragSelecting;
 	Vector3 clickOrigin = Global.nullVector3;
-	Vector3 lastClick = Global.nullVector3;
+	public Vector3 lastClick = Global.nullVector3;
 	
 	void Start() {	
 		UICamera = Camera.main;
@@ -103,7 +103,9 @@ public class TileMapController : MonoBehaviour {
 	}
 
 	public void fillInRoom() {
-		MapData.addRoom(shiftOrigin, lastClick);
+		if(MapData.addRoom(shiftOrigin, lastClick)) {
+			Money.buy(MapData.TheFarRooms.find(shiftOrigin).Cost);
+		}
 	}
 
 	/* Add selected tile index to a list to be access by the camera script for rendering 

@@ -9,44 +9,6 @@ public class DragableObject : ClickEvent {
 	Camera UICamera;
 	TileMapController tilemapcont;
 
-	GameObject tt;
-
-	void OnMouseEnter(){
-		if(this.gameObject.name != "Copy"){
-			if(tt == null && gameObject.name == "CackleBranch(Clone)"){
-				instantiateToolTip("Cackle Branch");
-			} else if(gameObject.name == "FoliantFodder(Clone)"){
-				instantiateToolTip("Foliant Fodder");
-			} else if(gameObject.name == "Artilitree(Clone)"){
-				instantiateToolTip("Artilitree");
-			}
-		}
-	}
-
-	void OnMouseExit(){
-		Destroy(tt);
-	}
-
-	void Update () {
-		makeToolTipFollowMouse();
-	}
-
-	void makeToolTipFollowMouse(){
-		if (tt != null){
-			Vector2 screenPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-			tt.transform.position = screenPos;
-		}
-	}
-	
-	void instantiateToolTip(string s){
-		tt = Instantiate (Resources.Load ("ScreenUI/ToolTip")) as GameObject;
-		tt.transform.SetParent(GameObject.Find("ScreenUI").transform);
-		Vector2 screenPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-		tt.transform.position = screenPos;
-		Text t = tt.transform.Find("Text").GetComponent<Text>() as Text;
-		t.text = s;
-	}
-	
 	void Start() {
 		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = Camera.main;
@@ -67,6 +29,7 @@ public class DragableObject : ClickEvent {
 		while(Input.GetMouseButton(0)) { 
 			//if user wants to cancel the drag
 			if(Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButton(1)) {
+				Debug.Log("canceled");
 				Destroy(itemObjectCopy);
 				return false;
 			}
@@ -97,7 +60,7 @@ public class DragableObject : ClickEvent {
 							foreach(Material mat in rend.materials) {
 								if(mat.HasProperty("_Color")){
 									trans = mat.color;
-									trans.a = .5f;
+									trans.a *= .5f;
 									mat.color = trans;
 								}
 							}
@@ -115,7 +78,11 @@ public class DragableObject : ClickEvent {
 		}
 		
 		tilemapcont.suppressDragSelecting = false;
-		
+
+		if(itemObjectCopy == null) {
+			return false;
+		}
+
 		//destroy the copy
 		Destroy(itemObjectCopy);
 		tilemapcont.deselect(getPosition());

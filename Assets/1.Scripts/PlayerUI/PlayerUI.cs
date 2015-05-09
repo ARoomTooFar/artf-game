@@ -10,13 +10,13 @@ public class PlayerUI : MonoBehaviour {
 		//hardcoded just for the test scene
 		//PlayerUIPane playerPane = new PlayerUIPane();
 		//playerPane = transform.Find("Player1").gameObject.AddComponent<PlayerUIPane>();
-		//playerPane.initVals("Player1");
 
 		//for scenes with all 4 players
 		setUpPlayerUIPane("Player1");
 		setUpPlayerUIPane("Player2");
 		setUpPlayerUIPane("Player3");
 		setUpPlayerUIPane("Player4");
+
 
 		//PlayerUIPane playerPane = new PlayerUIPane();
 		//playerPane = transform.Find("Player5").gameObject.AddComponent<PlayerUIPane>();
@@ -25,14 +25,10 @@ public class PlayerUI : MonoBehaviour {
 		//playerPane = new PlayerUIPane();
 		//playerPane = transform.Find("Player2").gameObject.AddComponent<PlayerUIPane>();
 		//playerPane.initVals("Player2");
-
 	}
 
 	void setUpPlayerUIPane(string pl){
-		Debug.Log (pl);
-		PlayerUIPane playerPane = new PlayerUIPane();
-		playerPane = transform.Find(pl).gameObject.AddComponent<PlayerUIPane>();
+		PlayerUIPane playerPane = transform.Find(pl).gameObject.AddComponent<PlayerUIPane>();
 		playerPane.initVals(pl);
-
 	}
 }

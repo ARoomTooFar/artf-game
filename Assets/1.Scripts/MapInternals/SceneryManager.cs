@@ -16,6 +16,7 @@ public class SceneryManager {
 				blk.remove();
 			}
 		}
+		dictionary.Clear();
 	}
 
 	#region (un)linkTerrain
@@ -85,9 +86,10 @@ public class SceneryManager {
 			}
 			rm.Doors.Add(blk);
 
-			//aaron - gets wall tiles that are replaced by door
-			foreach(Vector3 pos in blk.Coordinates){
-				MapData.TerrainBlocks.find(pos).removeWall();
+			foreach(SceneryBlock wall in rm.Walls){
+				if(blk.Coordinates.Contains(wall.Position)){
+					wall.GameObj.SetActive(false);
+				}
 			}
 		}
 
@@ -140,8 +142,10 @@ public class SceneryManager {
 			ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
 			if(rm != null) {
 				rm.Doors.Remove(blk);
-				foreach(Vector3 pos in blk.Coordinates) {
-					MapData.TerrainBlocks.find(pos).addWall(rm.getWallSide(pos));
+				foreach(SceneryBlock wall in rm.Walls){
+					if(blk.Coordinates.Contains(wall.Position)){
+						wall.GameObj.SetActive(true);
+					}
 				}
 			}
 		}

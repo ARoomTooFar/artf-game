@@ -13,7 +13,7 @@ public class MonsterManager {
 	public void clear(){
 		foreach(List<MonsterBlock> lst in dictionary.Values){
 			foreach(MonsterBlock blk in lst){
-				blk.remove();
+				remove(blk);
 			}
 		}
 	}
@@ -28,7 +28,7 @@ public class MonsterManager {
 	 */
 	public void add(MonsterBlock blk) {
 		ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
-		rm.Monster.Add(blk);
+		rm.addMonster(blk);
 		//get the list for the block type
 		List<MonsterBlock> lst;
 		try{
@@ -80,6 +80,10 @@ public class MonsterManager {
 		}
 		blk.remove();
 		//remove from list
+		ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
+		if(rm != null) {
+			rm.removeMonster(blk);
+		}
 		dictionary[blk.BlockInfo.BlockID].Remove(blk);
 	}
 	#endregion Remove
@@ -131,15 +135,26 @@ public class MonsterManager {
 		if(rm == null) {
 			return false;
 		}
+		// If the room does not already contain this monster
+		if(!rm.Monster.Contains(mon)) {
+			// Check if the remaining number of points can handle adding the monster
+			if(rm.Points-rm.CurrentPoints < mon.BlockInfo.Points){
+				return false;
+			}
+		}
+		// Check each coordinate the monster occupies
+		// and see if they're all in the same room
 		foreach(Vector3 vec in mon.Coordinates) {
 			if(!rm.inRoom(vec)){
 				return false;
 			}
 		}
+		// For all the monsters in the room
 		foreach(MonsterBlock other in rm.Monster) {
 			if(other == mon){
 				continue;
 			}
+			// If they share any radius coordinates, the monster is invalid
 			if(mon.RadiusCoordinates.Intersect(other.RadiusCoordinates).Count() != 0){
 				return false;
 			}

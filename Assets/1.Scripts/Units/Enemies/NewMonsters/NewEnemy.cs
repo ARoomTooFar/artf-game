@@ -37,6 +37,9 @@ public class NewEnemy : NewCharacter {
 	protected int layerMask = 1 << 9;
 	
 	protected float aggroTimer = 5.0f;
+
+	bool sparksDone = true;
+	GameObject sparks = null;
 	
 	protected override void Awake() {
 		base.Awake();
@@ -228,16 +231,40 @@ public class NewEnemy : NewCharacter {
 		this.damage(dmgTaken, atkPosition);
 		aggroT.AddAggro(source, dmgTaken);
 		isHit = true;
+
+		//particle effects
+		if(sparks == null){
+			sparks = Instantiate(Resources.Load("Sparks"), transform.position, Quaternion.identity) as GameObject;
+			Material particleMat = Resources.Load("Materials/EnemySparks", typeof(Material)) as Material;
+			sparks.GetComponent<ParticleRenderer>().material = particleMat;
+			Destroy (sparks, 1);
+		}
 	}
 	
 	public override void damage(int dmgTaken, Transform atkPosition) {
 		base.damage(dmgTaken, atkPosition);
 		isHit = true;
+
+
+		//particle effects
+		if(sparks == null){
+			sparks = Instantiate(Resources.Load("Sparks"), transform.position, Quaternion.identity) as GameObject;
+			Material particleMat = Resources.Load("Materials/EnemySparks", typeof(Material)) as Material;
+			sparks.GetComponent<ParticleRenderer>().material = particleMat;
+			Destroy (sparks, 1);
+		}
 	}
 	
 	public override void damage(int dmgTaken) {
 		base.damage(dmgTaken);
-		isHit = true;
+
+		//particle effects
+		if(sparks == null){
+			sparks = Instantiate(Resources.Load("Sparks"), transform.position, Quaternion.identity) as GameObject;
+			Material particleMat = Resources.Load("Materials/EnemySparks", typeof(Material)) as Material;
+			sparks.GetComponent<ParticleRenderer>().material = particleMat;
+			Destroy (sparks, 1);
+		}
 	}
 	
 	public override void die() {
