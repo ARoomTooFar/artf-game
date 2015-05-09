@@ -64,9 +64,6 @@ public class Player : Character, IHealable<int>{
 			inventory.items[i].cdBar=UI.coolDowns[i];
 			//inventory.items[i].cdBar = UI.getComponent("LifeBar");//coolDowns[i];
 		}
-		if(gear.weapon is RangedWeapons){
-			gear.weapon.GetComponent<RangedWeapons>().loadData(UI.ammoBar);
-		}
 	}
 	
 	// Update is called once per frame

@@ -3,7 +3,6 @@
 using UnityEngine;
 
 public class ChargeTimer : PlayerBehaviour {
-
 	protected int maxChargeTime;
 	protected Weapons weapon;
 	protected Slow debuff;

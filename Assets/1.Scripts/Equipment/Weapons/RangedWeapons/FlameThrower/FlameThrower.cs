@@ -10,14 +10,11 @@ public class FlameThrower : RangedWeapons {
 	}
 	protected override void setInitValues() {
 		base.setInitValues();
-		maxAmmo = 99;
 		immobil = new Immobilize();
-		currAmmo = maxAmmo;
 		// Use sword animations for now
 		stats.weapType = 2;
 		stats.weapTypeName = "chainsaw";
 		stats.atkSpeed = 3.0f;
-		loadSpeed = 5f;
 		stats.damage = 10;
 		stats.maxChgTime = 3;
 		stats.timeForChgAttack = 0.5f;
@@ -147,40 +144,24 @@ public class FlameThrower : RangedWeapons {
 		}
 	}
 	
-	protected override IEnumerator Shoot(int count)
-	{
-		if(!reload){
-			variance = 22f;
+	protected override IEnumerator Shoot(int count) {
+		variance = 22f;
 
-			if(count == 0){
-				count = 1;
-			}
+		if(count == 0){
+			count = 1;
+		}
 
 		//High cap for basic is 12f variance, low cap for shotty is 22f
-			spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination)+user.transform.eulerAngles.y,(variance-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
-				StartCoroutine(makeSound(action,playSound,action.length));
-				fireFlame(true);
-				currAmmo--;
-				if(currAmmo<=0){
-					reload = true;
-					StartCoroutine(loadAmmo());
-				}
-				yield return StartCoroutine(Wait(.05f));
-				spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y-kick),spray.eulerAngles.z);
-				fireFlame(false);
-				currAmmo--;
-				if(currAmmo<=0){
-					reload = true;
-					StartCoroutine(loadAmmo());
-				}
-				spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+kick*2),spray.eulerAngles.z);
-				fireFlame(false);
-				currAmmo--;
-				if(currAmmo<=0){
-					reload = true;
-					StartCoroutine(loadAmmo());
-				}
-				kick = 15f;
-			}
+		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination)+user.transform.eulerAngles.y,(variance-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
+		StartCoroutine(makeSound(action,playSound,action.length));
+		fireFlame(true);
+	
+		yield return StartCoroutine(Wait(.05f));
+		spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y-kick),spray.eulerAngles.z);
+		fireFlame(false);
+		spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+kick*2),spray.eulerAngles.z);
+		fireFlame(false);
+
+		kick = 15f;
 	}
 }

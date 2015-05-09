@@ -9,12 +9,9 @@ public class Shotgun : RangedWeapons {
 	}
 	protected override void setInitValues() {
 		base.setInitValues();
-		maxAmmo = 30;
-		currAmmo = maxAmmo;
 		// Use sword animations for now
 		stats.weapType = 0;
 		stats.weapTypeName = "sword";
-		loadSpeed = 0f;
 		stats.atkSpeed = 1.0f;
 		stats.damage = 15 + user.GetComponent<Character>().stats.coordination;
 		stats.maxChgTime = 5;
@@ -38,22 +35,15 @@ public class Shotgun : RangedWeapons {
 	}
 	
 	protected override IEnumerator Shoot(int count) {
-		if(!reload || !needReload){
-			//High cap for shotty is 27f variance, low cap for shotty is 47f
-			float origVariance = variance;
-			StartCoroutine(makeSound(action,playSound,action.length));
-			for (int i = 0; i < count*(int)Random.Range(3,5); i++) {
-				yield return 0;
-				spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y,(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
-				fireProjectile();
-				currAmmo--;
-				if(currAmmo<=0 && needReload){
-					reload = true;
-					StartCoroutine(loadAmmo());
-				}
-				variance += 2;
-			}
-			variance = origVariance;
+		//High cap for shotty is 27f variance, low cap for shotty is 47f
+		float origVariance = variance;
+		StartCoroutine(makeSound(action,playSound,action.length));
+		for (int i = 0; i < count*(int)Random.Range(3,5); i++) {
+			yield return 0;
+			spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y,(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
+			fireProjectile();
+			variance += 2;
 		}
+		variance = origVariance;
 	}
 }

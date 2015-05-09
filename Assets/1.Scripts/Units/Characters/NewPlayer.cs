@@ -59,9 +59,6 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 			UI.coolDowns[i].onState = 3;
 			inventory.items[i].cdBar=UI.coolDowns[i];
 		}
-		if(gear.weapon is RangedWeapons){
-			gear.weapon.GetComponent<RangedWeapons>().loadData(UI.ammoBar);
-		}
 	}
 	
 	// Update is called once per frame

@@ -56,19 +56,14 @@ public class Projectile : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if (other.tag == "Wall" || other.tag == "Door") {
+		if (other.tag == "Wall" || other.tag == "Door" || other.tag == "Prop") {
+			if (other.tag == "Prop") other.GetComponent<Prop>().damage(damage);
 			if(particles !=null){
 				particles.Stop();
 			}
 			Destroy(gameObject);
 		}
-		if (other.tag == "Prop") {
-			other.GetComponent<Prop>().damage(damage);
-			if(particles !=null){
-				particles.Stop();
-			}
-			Destroy(gameObject);
-		}
+
 		IDamageable<int, Transform, GameObject> component = (IDamageable<int, Transform, GameObject>) other.GetComponent( typeof(IDamageable<int, Transform, GameObject>) );
 		Character enemy = (Character) other.GetComponent(opposition);
 		if( component != null && enemy != null) {
