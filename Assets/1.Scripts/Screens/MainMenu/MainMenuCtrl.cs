@@ -23,6 +23,7 @@ public class MainMenuCtrl : MonoBehaviour {
 	}
     private Menu currMenu;
     private Menu prevMenu;
+    private Text currFieldPtr;
 
     // start menu
     private GameObject[,] startMenu;
@@ -35,6 +36,7 @@ public class MainMenuCtrl : MonoBehaviour {
     private int loginFormWidth = 2;
     private int loginFormHeight = 3;
 	private Animator loginFormAnim;
+    private Text txtFieldAcctName;
 
 	// pop-up
 	private GameObject[,] popUp;
@@ -43,7 +45,7 @@ public class MainMenuCtrl : MonoBehaviour {
 	private Animator popUpAnim;
 
     // keypad
-    private Text txtFieldAcctName;
+    private Text txtDisplayAcctName;
 
 	void Start () {
         // setup start menu
@@ -73,6 +75,7 @@ public class MainMenuCtrl : MonoBehaviour {
 		// setup login
 		loginForm = new GameObject[loginFormHeight, loginFormWidth];
 		loginForm[0, 0] = loginForm[0, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName");
+        txtFieldAcctName = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName/TxtFieldAcctName").GetComponent<Text>();
         loginForm[1, 0] = loginForm[1, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldPasscode");
         loginForm[2, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnLogin");
         loginForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnBack");
@@ -106,7 +109,7 @@ public class MainMenuCtrl : MonoBehaviour {
         popUp[3, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySwap");
         popUp[4, 0] = popUp[4, 1] = popUp[4, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/BtnSubmit");
 		popUpAnim = GameObject.Find ("/Canvas/" + menuPopUpName).GetComponent<Animator>();
-        txtFieldAcctName = GameObject.Find("/Canvas/" + menuPopUpName + "/DisplayAcctName/TxtFieldAcctName").GetComponent<Text>();
+        txtDisplayAcctName = GameObject.Find("/Canvas/" + menuPopUpName + "/DisplayAcctName/TxtDisplayAcctName").GetComponent<Text>();
 
         popUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
             KeyInput(new char[4] { '@', '.', '-', '_' }
@@ -124,6 +127,7 @@ public class MainMenuCtrl : MonoBehaviour {
 		popUp[4, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
             PopUpDisable();
+            txtFieldAcctName.text = txtDisplayAcctName.text;
 		});
 
 		// switch to start menu
@@ -140,12 +144,12 @@ public class MainMenuCtrl : MonoBehaviour {
 
             if (vert < 0)
             {
-                locY = (locY + 1) % (currMenuPtr.Length);
+                locY = (locY + 1) % (currMenuPtr.GetLength(0));
             } else if (vert > 0) {
                 --locY;
                 if (locY < 0)
                 {
-					locY = currMenuPtr.Length - 1;
+                    locY = currMenuPtr.GetLength(0) - 1;
                 }
             }
 
@@ -167,6 +171,9 @@ public class MainMenuCtrl : MonoBehaviour {
             ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
             prevBtn = currMenuPtr[locY, locX];
             prevKey = ""; // reset keypad on move
+
+            Debug.Log(locX + "," + locY);
+            Debug.Log(currMenuPtr.GetLength(0) + "," + currMenuPtr.GetLength(1));
         }
     }
 
@@ -231,22 +238,22 @@ public class MainMenuCtrl : MonoBehaviour {
         {
             pressTime = Time.time;
             charArrLoc = 0;
-            tmpCharName = txtFieldAcctName.text;
-            txtFieldAcctName.text = tmpCharName + chars[charArrLoc];
+            tmpCharName = txtDisplayAcctName.text;
+            txtDisplayAcctName.text = tmpCharName + chars[charArrLoc];
         }
         else
         {
             if ((Time.time - pressTime) < 1.0)
             {
-                txtFieldAcctName.text = tmpCharName + chars[charArrLoc];
+                txtDisplayAcctName.text = tmpCharName + chars[charArrLoc];
                 pressTime = Time.time;
             }
             else
             {
                 pressTime = Time.time;
                 charArrLoc = 0;
-                tmpCharName = txtFieldAcctName.text;
-                txtFieldAcctName.text = tmpCharName + chars[charArrLoc];
+                tmpCharName = txtDisplayAcctName.text;
+                txtDisplayAcctName.text = tmpCharName + chars[charArrLoc];
             }
         }
 
@@ -321,6 +328,17 @@ public class MainMenuCtrl : MonoBehaviour {
         {
             var pointer = new PointerEventData(EventSystem.current);
             ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.submitHandler);
+        }
+        
+
+        if (Input.GetButtonUp(controls.joySecItem) && currMenu == Menu.PopUp)
+        {
+            if (txtDisplayAcctName.text.Length > 0)
+            {
+                txtDisplayAcctName.text = txtDisplayAcctName.text.Remove(txtDisplayAcctName.text.Length - 1);
+                charArrLoc = 0;
+                prevKey = "";
+            }
         }
 	}
 }
