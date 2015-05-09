@@ -6,19 +6,24 @@ using UnityEngine.EventSystems;
 public class MainMenuCtrl : MonoBehaviour {
     public Controls controls;
     public string menuContainerName;
+	public string menuPopUpName;
 
     // UI state
     private bool menuMoved = false;
     private bool menuLock = false;
     private GameObject prevBtn;
-	private GameObject[,] currMenu;
+	private GameObject[,] currMenuPtr;
 	private Animator currAnim;
     private int locX = 0;
     private int locY = 0;
 	private enum Menu {
 		StartMenu,
-		LoginForm
+		LoginForm,
+        PopUp
 	}
+    private Menu currMenu;
+    private Menu prevMenu;
+    private Text currFieldPtr;
 
     // start menu
     private GameObject[,] startMenu;
@@ -31,6 +36,16 @@ public class MainMenuCtrl : MonoBehaviour {
     private int loginFormWidth = 2;
     private int loginFormHeight = 3;
 	private Animator loginFormAnim;
+    private Text txtFieldAcctName;
+
+	// pop-up
+	private GameObject[,] popUp;
+	private int popUpWidth = 3;
+	private int popUpHeight = 5;
+	private Animator popUpAnim;
+
+    // keypad
+    private Text txtDisplayAcctName;
 
 	void Start () {
         // setup start menu
@@ -43,8 +58,8 @@ public class MainMenuCtrl : MonoBehaviour {
         startMenu[0, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
 			MenuSwitch (Menu.LoginForm);
+			//MenuDisable();
             //GameObject.Find("/Main Camera").GetComponent<MainMenuCamera>().slideDown = true;
-            //menuLock = true;
         });
 
         // register button press handler
@@ -60,23 +75,63 @@ public class MainMenuCtrl : MonoBehaviour {
 		// setup login
 		loginForm = new GameObject[loginFormHeight, loginFormWidth];
 		loginForm[0, 0] = loginForm[0, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName");
+        txtFieldAcctName = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName/TxtFieldAcctName").GetComponent<Text>();
         loginForm[1, 0] = loginForm[1, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldPasscode");
         loginForm[2, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnLogin");
         loginForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnBack");
 		loginFormAnim = GameObject.Find ("/Canvas/" + menuContainerName + "/LoginForm").GetComponent<Animator>();
-		
+
+		// acct name field
+		loginForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			PopUpEnable ();
+		});
+
 		// back button
         loginForm[2, 1].GetComponent<Button>().onClick.AddListener(() =>
         {
 			MenuSwitch (Menu.StartMenu);
         });
 
+		// setup keypad
+		popUp = new GameObject[popUpHeight, popUpWidth];
+        popUp[0, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySymbol");
+        popUp[0, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyABC");
+        popUp[0, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyDEF");
+        popUp[1, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyGHI");
+        popUp[1, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyJKL");
+        popUp[1, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyMNO");
+        popUp[2, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyPQRS");
+        popUp[2, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyTUV");
+        popUp[2, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyWXYZ");
+        popUp[3, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyDel");
+        popUp[3, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySpace");
+        popUp[3, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySwap");
+        popUp[4, 0] = popUp[4, 1] = popUp[4, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/BtnSubmit");
+		popUpAnim = GameObject.Find ("/Canvas/" + menuPopUpName).GetComponent<Animator>();
+        txtDisplayAcctName = GameObject.Find("/Canvas/" + menuPopUpName + "/DisplayAcctName/TxtDisplayAcctName").GetComponent<Text>();
+
+        popUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+            KeyInput(new char[4] { '@', '.', '-', '_' }
+        ));
+
+        popUp[0, 1].GetComponent<Button>().onClick.AddListener(() =>
+            KeyInput(new char[3] { 'A', 'B', 'C' }
+        ));
+
+        popUp[0, 2].GetComponent<Button>().onClick.AddListener(() =>
+            KeyInput(new char[3] { 'D', 'E', 'F' }
+        ));
+
+		// submit button
+		popUp[4, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+            PopUpDisable();
+            txtFieldAcctName.text = txtDisplayAcctName.text;
+		});
+
 		// switch to start menu
 		MenuSwitch (Menu.StartMenu);
-
-        // test
-        MenuDisable();
-        //MenuEnable();
 	}
 
 	// handles menu joystick movement control
@@ -89,67 +144,129 @@ public class MainMenuCtrl : MonoBehaviour {
 
             if (vert < 0)
             {
-                locY = (locY + 1) % (currMenu.Length);
+                locY = (locY + 1) % (currMenuPtr.GetLength(0));
             } else if (vert > 0) {
                 --locY;
                 if (locY < 0)
                 {
-					locY = currMenu.Length - 1;
+                    locY = currMenuPtr.GetLength(0) - 1;
                 }
             }
 
             if (hori > 0)
             {
-                locX = (locX + 1) % (currMenu.GetLength(1));
+                locX = (locX + 1) % (currMenuPtr.GetLength(1));
             }
             else if (hori < 0)
             {
                 --locX;
                 if (locX < 0)
                 {
-                    locX = currMenu.GetLength(1) - 1;
+                    locX = currMenuPtr.GetLength(1) - 1;
                 }
             }
 
             var pointer = new PointerEventData(EventSystem.current);
             ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
-            ExecuteEvents.Execute(currMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
-            prevBtn = currMenu[locY, locX];
+            ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
+            prevBtn = currMenuPtr[locY, locX];
+            prevKey = ""; // reset keypad on move
+
+            Debug.Log(locX + "," + locY);
+            Debug.Log(currMenuPtr.GetLength(0) + "," + currMenuPtr.GetLength(1));
         }
     }
 
 	// handles menu switching (ex: start menu transition to login form)
 	void MenuSwitch (Menu menuToSwitchTo) {
 		// hide current menu
-		if(currAnim != null)
+        if (currAnim != null) {
 			currAnim.SetBool("show", false);
+            prevMenu = currMenu;
+        }
 
 		// switch to new menu
 		switch (menuToSwitchTo) {
 		case Menu.StartMenu:
-			currMenu = startMenu;
+			currMenuPtr = startMenu;
 			currAnim = startMenuAnim;
 			break;
 		case Menu.LoginForm:
-			currMenu = loginForm;
+			currMenuPtr = loginForm;
 			currAnim = loginFormAnim;
 			break;
+        case Menu.PopUp:
+            currMenuPtr = popUp;
+            currAnim = popUpAnim;
+            break;
 		default:
 			Debug.Log ("Menu switch case invalid!");
 			break;
 		}
 
 		// setup first button highlight and show new menu
+        currMenu = menuToSwitchTo;
 		var pointer = new PointerEventData(EventSystem.current);
         ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
         locY = 0;
         locX = 0;
-		ExecuteEvents.Execute(currMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
-		prevBtn = currMenu[locY, locX];
+		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
+		prevBtn = currMenuPtr[locY, locX];
 		currAnim.SetBool("show", true);
 	}
 
+	void PopUpEnable() {
+		MenuDisable ();
+        MenuSwitch(Menu.PopUp);
+	}
+
+    void PopUpDisable() {
+        MenuEnable();
+        MenuSwitch(prevMenu);
+    }
+
+    private string currKey = "";
+    private string prevKey = "";
+    private float pressTime;
+    private string tmpCharName;
+    private int charArrLoc = 0;
+
+    void KeyInput(char[] chars)
+    {
+        currKey = ConcatCharArray(chars);
+        if (currKey != prevKey)
+        {
+            pressTime = Time.time;
+            charArrLoc = 0;
+            tmpCharName = txtDisplayAcctName.text;
+            txtDisplayAcctName.text = tmpCharName + chars[charArrLoc];
+        }
+        else
+        {
+            if ((Time.time - pressTime) < 1.0)
+            {
+                txtDisplayAcctName.text = tmpCharName + chars[charArrLoc];
+                pressTime = Time.time;
+            }
+            else
+            {
+                pressTime = Time.time;
+                charArrLoc = 0;
+                tmpCharName = txtDisplayAcctName.text;
+                txtDisplayAcctName.text = tmpCharName + chars[charArrLoc];
+            }
+        }
+
+        ++charArrLoc;
+        if (charArrLoc >= chars.Length)
+            charArrLoc = 0;
+        prevKey = currKey;
+    }
+
     void MenuEnable() {
+		// unlock controls
+		//menuLock = false;
+
         // return color to buttons
         CanvasGroup groupContainer = GameObject.Find("/Canvas/" + menuContainerName).GetComponent<CanvasGroup>();
         groupContainer.interactable = true;
@@ -158,24 +275,24 @@ public class MainMenuCtrl : MonoBehaviour {
         Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
         imgPanel.color = new Color32(255, 255, 255, 100);
 
-        // return text color in buttons
-        BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
-        foreach (BtnScript child in btnChild)
-        {
-            child.DehighlightTxt();
-        }
+		// return color to text
+		Text[] txtChild = this.GetComponentsInChildren<Text>();
+		foreach (Text child in txtChild)
+		{
+			child.color = new Color32(152, 213, 217, 255);
+		}
 
-        // highlight first button of currMenu
+        // highlight first button of currMenuPtr
         locX = 0;
         locY = 0;
         var pointer = new PointerEventData(EventSystem.current);
-        ExecuteEvents.Execute(currMenu[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
-
-        // unlock controls
-        menuLock = false;
+        ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
     }
 
     void MenuDisable() {
+		// lock controls
+		//menuLock = true;
+
         // grey buttons
         CanvasGroup groupContainer = GameObject.Find("/Canvas/" + menuContainerName).GetComponent<CanvasGroup>();
         groupContainer.interactable = false;
@@ -184,22 +301,22 @@ public class MainMenuCtrl : MonoBehaviour {
         Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
         imgPanel.color = new Color(0.3f, 0.3f, 0.3f);
 
-        // grey text in buttons
-        /*BtnScript[] btnChild = this.GetComponentsInChildren<BtnScript>();
-        foreach (BtnScript child in btnChild)
-        {
-            child.DisableTxt();
-        }*/
-
         // grey text
         Text[] txtChild = this.GetComponentsInChildren<Text>();
         foreach (Text child in txtChild)
         {
             child.color = new Color(0.3f, 0.3f, 0.3f);
         }
+    }
 
-        // lock controls
-        menuLock = true;
+    string ConcatCharArray(char[] chars)
+    {
+        string retVal = "";
+        foreach (char c in chars)
+        {
+            retVal += c;
+        }
+        return retVal;
     }
 	
 	void Update () {
@@ -210,7 +327,18 @@ public class MainMenuCtrl : MonoBehaviour {
         if (Input.GetButtonUp(controls.joyAttack) && menuLock == false)
         {
             var pointer = new PointerEventData(EventSystem.current);
-            ExecuteEvents.Execute(currMenu[locY, locX], pointer, ExecuteEvents.submitHandler);
+            ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.submitHandler);
+        }
+        
+
+        if (Input.GetButtonUp(controls.joySecItem) && currMenu == Menu.PopUp)
+        {
+            if (txtDisplayAcctName.text.Length > 0)
+            {
+                txtDisplayAcctName.text = txtDisplayAcctName.text.Remove(txtDisplayAcctName.text.Length - 1);
+                charArrLoc = 0;
+                prevKey = "";
+            }
         }
 	}
 }
