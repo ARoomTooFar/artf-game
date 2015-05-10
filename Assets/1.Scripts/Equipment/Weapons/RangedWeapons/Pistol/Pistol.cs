@@ -12,10 +12,11 @@ public class Pistol : RangedWeapons {
 	protected override void setInitValues() {
 		base.setInitValues();
 
-		stats.weapType = 4;
-		stats.weapTypeName = "pistol";
-		stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
-		stats.maxChgTime = 5;
+		this.stats.weapType = 4;
+		this.stats.weapTypeName = "pistol";
+		this.stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
+		this.stats.maxChgTime = 5;
+		this.stats.buffDuration = 0.4f;
 	}
 	
 	// Update is called once per frame
@@ -29,7 +30,7 @@ public class Pistol : RangedWeapons {
 
 	public override void SpecialAttack() {
 		ExplosiveRound newBullet = ((GameObject)Instantiate(this.explosiveRound, this.transform.position + this.user.facing * 2, this.user.transform.rotation)).GetComponent<ExplosiveRound>();
-		newBullet.setInitValues(user, opposition, this.stats.damage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration * 3);
+		newBullet.setInitValues(user, opposition, this.stats.damage + this.stats.chgDamage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration * 3);
 	}
 
 	public override void initAttack() {

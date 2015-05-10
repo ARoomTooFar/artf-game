@@ -51,6 +51,9 @@ public class Weapons : Equipment {
 	protected override void Start () {
 		base.Start ();
 		this.col = this.GetComponent<Collider>();
+
+		this.stats.debuff = new Knockback();
+		this.stats.buffDuration = 0.75f;
 	}
 
 	public virtual void equip(Character u, Type ene) {
