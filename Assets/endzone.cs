@@ -4,20 +4,15 @@ using System.Collections;
 //If a player enters the end zone it will add 1 to the number of players in the endzone.
 //If a player leaves the end zone it will subtract 1 from the number of players in the endzone.
 //It will move on to the reward scene if all the players that are alive have entered the end zone.
+//FOR THIS SCRIPT ALL PLAYERS MUST BE TAGED AS "Player"
 public class endzone : MonoBehaviour {
 	//
-	public int numbPlayers = 4;
+	public int numbPlayers;
 	public int numbPlayersInZone = 0;
-	public int numbPlayersAlive = 4;
-	public GameObject[] plrs;
-
-	//private Player player;
-
-	//void Awake
-	//{
-	//	player =  GetComponent<Player>();
-	//}
-
+	public int numbPlayersAlive;
+	public GameObject[] players;
+	public string endScene = "TitleScreen2";
+	private Character character;
 
 	//-----------------------------------------
 	//OnTriggerEnter()
@@ -26,27 +21,29 @@ public class endzone : MonoBehaviour {
 	//-----------------------------------------
 	void OnTriggerEnter(Collider other) 
 	{
-		//the tag of the thing colliding.
-		string t = other.GetComponent<Collider>().tag;
-
 		//if the list of players for the scene is not initialized.
-		if (plrs == null) 
+		if (players == null || players.Length == 0) 
 		{
-			plrs = GameObject.FindGameObjectsWithTag ("Player"); //finds all objects in the scene with the "Player" tag and typecasts them as player.
-			numbPlayers = plrs.Length;
+			print ("Checked if null...");
+			players = GameObject.FindGameObjectsWithTag ("Player"); //finds all objects in the scene with the "Player" tag and typecasts them as player.
+			numbPlayers = players.Length;
 			print ("Initializing player list, numbPlayers is: " + numbPlayers);
 		}
 
-		if (t == "Player") 
+		string t = other.GetComponent<Collider>().tag;
+		checkAlive();
+
+		if (t == "Player" || t == "Player1" || t == "Player2" || t == "Player3" || t == "Player4") 
 		{
 			numbPlayersInZone ++;
 			print ("+Number of Players in end zone: " + numbPlayersInZone + ".");
+			if (numbPlayersAlive == numbPlayersInZone) 
+			{
+				print("ALL PLAYERS ALIVE AT END.");
+				Application.LoadLevel(endScene);
+			}
+		}
 
-		}
-		if (numbPlayers == numbPlayersInZone) 
-		{
-			print("All Players are in the End Zone.");
-		}
 	}
 	//---------------------------------------
 	//OnTriggerExit(Collider other)
@@ -56,7 +53,7 @@ public class endzone : MonoBehaviour {
 	void OnTriggerExit(Collider other)
 	{
 		string t = other.GetComponent<Collider>().tag;
-		if (t == "Player") 
+		if (t == "Player" || t == "Player1" || t == "Player2" || t == "Player3" || t == "Player4") 
 		{
 			numbPlayersInZone --;
 			print ("-Number of Players in end zone: " + numbPlayersInZone + ".");
@@ -70,18 +67,21 @@ public class endzone : MonoBehaviour {
 	//---------------------------------------
 	void checkAlive ()
 	{
+		print ("Bring out yer dead!!!");
 		numbPlayersAlive = 0;
-
-		for(int i = 0; i <= plrs.Length; i++)
+		for(int i = 0; i < players.Length; i++)
 		{
+			//this gets the character component of the player
+			character = players[i].GetComponent<Character>();
 
-			//plr = gameObject.GetComponent<Player>();
-
-			//if(plr != null && !plr.isDead)
-			//{
-			//		numbPlayersAlive++;
-			//}
-			
+			//checks if the character is dead or not
+			if(character != null && !character.isDead)
+			{
+					//if not add to number of players alive.
+					numbPlayersAlive++;
+			}
+			//print("There are " + numbPlayersAlive + " Players alive.");
 		}
+		print("eThere are " + numbPlayersAlive + " Players alive.");
 	}
 }
