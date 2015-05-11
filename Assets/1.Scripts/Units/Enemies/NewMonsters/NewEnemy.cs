@@ -81,7 +81,7 @@ public class NewEnemy : NewCharacter {
 		base.Update();
 		this.TargetFunction();
 
-		if (alerted)
+		if ((target != null || alerted))
 			;
 		/*
 		if (!stats.isDead) {
