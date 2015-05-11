@@ -161,16 +161,9 @@ public class Player : NewCharacter, IHealable<int>{
 				newMoveDir += new Vector3(x, 0, z);
 			}
 			
-			if (this.lockRotation) {
-				Vector3 check1 = Quaternion.AngleAxis(90, Vector3.up) * this.facing;
-				Vector3 check2 = Quaternion.AngleAxis(-90, Vector3.up) * this.facing;
-				
-				if (newMoveDir != check1 && newMoveDir != check2) newMoveDir = Vector3.zero;
-			} else {
-				if (newMoveDir != Vector3.zero) {
-					newMoveDir.y = 0.0f;
-					facing = newMoveDir;
-				}
+			if (!this.lockRotation && newMoveDir != Vector3.zero) {
+				newMoveDir.y = 0.0f;
+				facing = newMoveDir;
 			}
 			
 			this.rb.velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
@@ -254,6 +247,7 @@ public class Player : NewCharacter, IHealable<int>{
 	}
 	
 	public virtual void Death() {
+		this.isDead = true;
 		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {

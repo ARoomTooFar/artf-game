@@ -314,6 +314,14 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 
 	}
 
+	public virtual void colliderStart() {
+		this.gear.weapon.collideOn ();
+	}
+
+	public virtual void colliderEnd() {
+		this.gear.weapon.collideOff ();
+	}
+
 	public virtual void SpecialAttack() {
 		gear.weapon.SpecialAttack ();
 	}
