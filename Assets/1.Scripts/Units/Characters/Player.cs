@@ -243,7 +243,7 @@ public class Player : NewCharacter, IHealable<int>{
 		if(UI!=null) UI.hpBar.current = 0;
 
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		this.animator.SetInteger("Killed", (int) UnityEngine.Random.Range(1.1f, 2.9f));		
+		this.animator.SetInteger("Killed", (int) UnityEngine.Random.Range(1.1f, 2.9f));	
 	}
 	
 	public virtual void Death() {
@@ -252,6 +252,10 @@ public class Player : NewCharacter, IHealable<int>{
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
 			r.enabled = false;
+		}
+		//this will go to the end screen when all the players in the party are dead.
+		if (!checkPartyAlive ()) {
+			Application.LoadLevel("TitleScreen2");
 		}
 	}
 	
@@ -344,4 +348,42 @@ public class Player : NewCharacter, IHealable<int>{
 		}
 	}
 	//----------------------------------//
+
+	//---------------------------------------
+	//checkAlive()
+	//---------------------------------------
+	//
+	//Checks to see how many players are still alive in the scene, if there is more than 1 then it will return true
+	//If all the players are dead then it will return false. 
+	//THIS FUNCTION NEEDS PLAYERS TO BE TAGGED AS PLAYERS
+	//---------------------------------------
+	private bool checkPartyAlive ()
+	{
+		int numbPlayersAlive = 0;
+		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+		int numbPlayers = players.Length;
+		Character character;
+
+		for(int i = 0; i < players.Length; i++)
+		{
+			//this gets the character component of the player
+			character = players[i].GetComponent<Character>();
+			
+			//checks if the character is dead or not
+			if(character != null && !character.isDead)
+			{
+				//if not add to number of players alive.
+				numbPlayersAlive++;
+			}
+
+		}
+		print("pdThere are " + numbPlayersAlive + " Players alive.");
+
+		if (numbPlayersAlive == 0 && numbPlayers != 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 }
