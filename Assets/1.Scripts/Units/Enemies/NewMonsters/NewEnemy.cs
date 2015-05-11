@@ -29,6 +29,7 @@ public class NewEnemy : NewCharacter {
 	protected float lastSeenSet = 0.0f;
 	protected AggroTable aggroT;
 	protected bool targetchanged;
+	protected GameObject MusicPlayer;
 
 	public Vector3 targetDir;
 	public Vector3 resetpos;
@@ -70,6 +71,8 @@ public class NewEnemy : NewCharacter {
 		foreach(EnemyBehaviour behaviour in this.animator.GetBehaviours<EnemyBehaviour>()) {
 			behaviour.SetVar(this.GetComponent<NewEnemy>());
 		}
+
+		MusicPlayer = GameObject.Find ("MusicPlayer");
 	}
 	
 	// Update is called once per frame
@@ -77,6 +80,9 @@ public class NewEnemy : NewCharacter {
 		if (stats.isDead) return;
 		base.Update();
 		this.TargetFunction();
+
+		if (alerted)
+			;
 		/*
 		if (!stats.isDead) {
 			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
