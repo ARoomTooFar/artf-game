@@ -1,19 +1,19 @@
 fileFormatVersion: 2
-guid: 22a317ad7bbc7164ca36d1be5ffb193d
-timeCreated: 1430392261
+guid: cae08f251cfba5a4f98e03e828d8047d
+timeCreated: 1431382258
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: Dart_Plant_Bone_Structure
-    100004: Dart_Plant_Ground
-    100006: Dart_Plant_Growth
-    100008: Main_Growth_01
-    100010: Main_Growth_02
-    100012: Main_Growth_03
-    100014: Main_Growth_05
-    100016: Main_grwoth_04
+    100000: Dart_Plant_Bone_Structure
+    100002: Dart_Plant_Ground
+    100004: Dart_Plant_Growth
+    100006: Main_Growth_01
+    100008: Main_Growth_02
+    100010: Main_Growth_03
+    100012: Main_Growth_05
+    100014: Main_grwoth_04
+    100016: //RootNode
     100018: Tentacle_1_1
     100020: Tentacle_1_2
     100022: Tentacle_1_3
@@ -24,15 +24,15 @@ ModelImporter:
     100032: Tentacle_2_4
     100034: Tentacle_2_5
     100036: Tentacle_2_6
-    400000: //RootNode
-    400002: Dart_Plant_Bone_Structure
-    400004: Dart_Plant_Ground
-    400006: Dart_Plant_Growth
-    400008: Main_Growth_01
-    400010: Main_Growth_02
-    400012: Main_Growth_03
-    400014: Main_Growth_05
-    400016: Main_grwoth_04
+    400000: Dart_Plant_Bone_Structure
+    400002: Dart_Plant_Ground
+    400004: Dart_Plant_Growth
+    400006: Main_Growth_01
+    400008: Main_Growth_02
+    400010: Main_Growth_03
+    400012: Main_Growth_05
+    400014: Main_grwoth_04
+    400016: //RootNode
     400018: Tentacle_1_1
     400020: Tentacle_1_2
     400022: Tentacle_1_3
@@ -49,8 +49,9 @@ ModelImporter:
     4300002: Dart_Plant_Ground
     7400000: Default Take
     7400002: attack1
-    7400004: idle_loop
-    7400006: PoseLib
+    7400004: death
+    7400006: idle_loop
+    7400008: PoseLib
     9500000: //RootNode
     13700000: Dart_Plant_Growth
   materials:

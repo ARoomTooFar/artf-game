@@ -94,10 +94,6 @@ public class NewMirage : NewStationaryEnemy {
 	//---------//
 	// Actions //
 	//---------//
-	
-	public override void initAttack() {
-		this.animator.SetTrigger("Attack");
-	}
 
 	protected virtual void LeftClawiderOn() {
 		this.leftClaw.collideOn();
