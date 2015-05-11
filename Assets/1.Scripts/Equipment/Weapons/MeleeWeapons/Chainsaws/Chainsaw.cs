@@ -80,6 +80,7 @@ public class Chainsaw : MeleeWeapons {
 	}
 
 	public override void SpecialAttack() {
+		particles.startSpeed = 0;
 		this.StartCoroutine (this.dismember());
 	}
 
@@ -118,6 +119,7 @@ public class Chainsaw : MeleeWeapons {
 			chained.Clear();	
 		}
 		cropping.Clear ();
+		particles.startSpeed = 0;
 	}
 
 	protected override void OnTriggerEnter(Collider other) {

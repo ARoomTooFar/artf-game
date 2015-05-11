@@ -49,7 +49,7 @@ public class CacklebranchPistol : RangedWeapons {
 
 			StartCoroutine(makeSound(action,playSound,action.length));
 			yield return StartCoroutine(Wait(.08f));
-			fireProjectile();
+			FireProjectile();
 			spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
 			kick += .2f;
 			if(kick >= 5f){

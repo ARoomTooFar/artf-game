@@ -7,8 +7,8 @@ using System.Collections;
 public class RangedWeapons : Weapons {
 
 	public GameObject projectile;
-	//for inaccuracy
-
+	protected int spread;
+	
 	protected Quaternion spray;
 	protected float variance;
 	protected float kick;
@@ -23,6 +23,8 @@ public class RangedWeapons : Weapons {
 
 	protected override void setInitValues() {
 		base.setInitValues();
+		
+		this.spread = 15;
 	}
 
 	public override void AttackStart() {
@@ -90,8 +92,10 @@ public class RangedWeapons : Weapons {
 		user.animator.speed = 1.0f;
 	}
 	
-	protected void fireProjectile() {
-		Projectile newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 2, this.user.transform.rotation)).GetComponent<Projectile>();
+	protected virtual void FireProjectile() {
+		Quaternion spreadAngle = Quaternion.AngleAxis(Random.Range (-this.spread, this.spread), Vector3.up); // Calculated quaternion that will rotate the bullet and its velocity
+		Projectile newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 2, this.user.transform.rotation * spreadAngle)).GetComponent<Projectile>();
 		newBullet.setInitValues(user, opposition, this.stats.damage + this.stats.chgDamage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration);
+		newBullet.rb.velocity =  spreadAngle * newBullet.rb.velocity;
 	}
 }

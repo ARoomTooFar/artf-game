@@ -3,26 +3,25 @@ using System.Collections;
 
 public class AssaultRifle : RangedWeapons {
 	
+	protected int baseSpread, maxSpread;
+	protected float lastFireTime, curDuration, lastDmgTime;
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
 	}
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.weapType = 0;
-		stats.weapTypeName = "sword";
+		this.stats.weapType = 6;
+		this.stats.weapTypeName = "assaultRifle";
 		
-		stats.atkSpeed = 2.0f;
-		stats.damage = 15 + user.GetComponent<Character>().stats.coordination;
-		stats.maxChgTime = 2;
+		this.stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
+		this.stats.maxChgTime = 5;
 		
-		// Bull Pattern M originally
-		//machine gun
-		variance = 15f;
-		kick = 5f;
-
-		spray = user.transform.rotation;
-		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(12f-user.stats.coordination)+user.transform.eulerAngles.y,(12f-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
+		this.spread = 10;
+		this.maxSpread = 60;
+		this.baseSpread = spread;
+		this.lastFireTime = Time.time;
 	}
 	
 	// Update is called once per frame
@@ -30,25 +29,36 @@ public class AssaultRifle : RangedWeapons {
 		base.Update();
 	}
 	
-	public override void initAttack() {
-		base.initAttack();
+	public override void AttackStart() {
+		particles.startSpeed = 0;
+		if ((Time.time - lastFireTime) > 1) this.spread = this.baseSpread;
+		else this.spread = Mathf.Clamp(this.spread + this.baseSpread, baseSpread, this.maxSpread);
+		this.FireProjectile();
 	}
 	
-	protected override IEnumerator Shoot(int count) {
-		if(count == 0){
-			count = 2;
-		}
-
-		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination)+user.transform.eulerAngles.y,(variance-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
-		StartCoroutine(makeSound(action,playSound,action.length));
-		for (int i = 0; i < count*count; i++) {
-			yield return StartCoroutine(Wait(.01f));
-			fireProjectile();
-			spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
-			kick += .2f;
-			if(kick >= 6f){
-				kick = 5f;
+	public override void SpecialAttack() {
+		this.StartCoroutine(this.SprayAndPray());
+	}
+	
+	protected virtual IEnumerator SprayAndPray() {
+		curDuration = this.stats.maxChgTime;
+		lastDmgTime = Time.time;
+		while(user.animator.GetBool("Charging") && curDuration > 0) {
+			stats.chgDamage = (int) (user.animator.GetFloat ("ChargeTime") * this.stats.chargeMultiplier);
+			particles.startSpeed = stats.chgDamage;
+			curDuration -= Time.deltaTime;
+			
+			if (Time.time - lastDmgTime >= curDuration/(this.stats.maxChgTime * 4)) {
+				lastDmgTime = Time.time;
+				this.FireProjectile();
 			}
+			
+			yield return null;
 		}
+		user.animator.SetBool("Charging", false);
+	}
+	
+	public override void initAttack() {
+		base.initAttack();
 	}
 }

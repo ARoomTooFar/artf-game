@@ -89,14 +89,14 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 	
 	protected override void ActionCommands() {
 		// Invokes an action/animation
-		if (actable && !this.animator.GetBool ("Charging")) {
+		if (actable && !this.animator.GetBool ("Attack")) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
 				if(currDoor!=null){
 					currDoor.GetComponent<Door>().toggleOpen();
 					currDoor = null;
 				} else {
 					this.animator.SetBool("Charging", true);
-					this.animator.SetTrigger("Attack");
+					this.animator.SetBool("Attack", true);
 				}
 			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {

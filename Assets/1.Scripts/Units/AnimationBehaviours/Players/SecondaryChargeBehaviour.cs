@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class SecondaryChargeBehaviour : ChargeTimer {
 	
-	protected int maxChargeTime;
-	protected Weapons weapon;
-	protected Slow debuff;
-	
 	public override void SetVar (NewPlayer unit) {
 		base.SetVar (unit);
 		this.weapon = unit.gear.weapon;

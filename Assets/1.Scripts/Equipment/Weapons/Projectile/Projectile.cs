@@ -8,7 +8,7 @@ using System;
 public class Projectile : MonoBehaviour {
 	public ParticleSystem particles;
 
-	protected Rigidbody rb;
+	public Rigidbody rb;
 	protected int damage;
 	protected float speed, duration;
 	protected bool castEffect;

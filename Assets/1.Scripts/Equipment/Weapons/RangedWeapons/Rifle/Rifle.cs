@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Rifle : RangedWeapons {
@@ -26,7 +26,7 @@ public class Rifle : RangedWeapons {
 	}
 	
 	public override void AttackStart() {
-		this.fireProjectile();
+		this.FireProjectile();
 	}
 	
 	public override void SpecialAttack() {

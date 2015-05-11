@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Shotgun : RangedWeapons {
@@ -41,7 +41,7 @@ public class Shotgun : RangedWeapons {
 		for (int i = 0; i < count*(int)Random.Range(3,5); i++) {
 			yield return 0;
 			spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y,(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
-			fireProjectile();
+			FireProjectile();
 			variance += 2;
 		}
 		variance = origVariance;

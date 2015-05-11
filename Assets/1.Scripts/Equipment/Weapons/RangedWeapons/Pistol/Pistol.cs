@@ -17,6 +17,8 @@ public class Pistol : RangedWeapons {
 		this.stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
 		this.stats.maxChgTime = 5;
 		this.stats.buffDuration = 0.4f;
+		
+		this.spread = 0;// Pistols have no spread
 	}
 	
 	// Update is called once per frame
@@ -25,7 +27,7 @@ public class Pistol : RangedWeapons {
 	}
 
 	public override void AttackStart() {
-		this.fireProjectile();
+		this.FireProjectile();
 	}
 
 	public override void SpecialAttack() {
