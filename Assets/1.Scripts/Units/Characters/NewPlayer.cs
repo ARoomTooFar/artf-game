@@ -18,6 +18,7 @@ public class Controls {
 public class NewPlayer : NewCharacter, IHealable<int>{
 	public string nameTag;
 	public int greyDamage;
+	
 	public bool testable, isReady, atEnd, atStart;
 	
 	public UIActive UI;
@@ -156,10 +157,16 @@ public class NewPlayer : NewCharacter, IHealable<int>{
 				newMoveDir += new Vector3(x, 0, z);
 			}
 			
-			// facing = newMoveDir;
-			if (newMoveDir != Vector3.zero) {
-				newMoveDir.y = 0.0f;
-				facing = newMoveDir;
+			if (this.lockRotation) {
+				Vector3 check1 = Quaternion.AngleAxis(90, Vector3.up) * this.facing;
+				Vector3 check2 = Quaternion.AngleAxis(-90, Vector3.up) * this.facing;
+				
+				if (newMoveDir != check1 && newMoveDir != check2) newMoveDir = Vector3.zero;
+			} else {
+				if (newMoveDir != Vector3.zero) {
+					newMoveDir.y = 0.0f;
+					facing = newMoveDir;
+				}
 			}
 			
 			this.rb.velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;

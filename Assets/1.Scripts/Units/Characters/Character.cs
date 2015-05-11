@@ -33,6 +33,9 @@ public class Stats{
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>, IStunable, IForcible<Vector3, float> {
 
+
+	public bool lockRotation = false;
+
 	public bool testControl;
 
 	protected float gravity = 50.0f;

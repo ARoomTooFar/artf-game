@@ -41,6 +41,7 @@ public class AssaultRifle : RangedWeapons {
 	}
 	
 	protected virtual IEnumerator SprayAndPray() {
+		this.user.lockRotation = true;
 		curDuration = this.stats.maxChgTime;
 		lastDmgTime = Time.time;
 		while(user.animator.GetBool("Charging") && curDuration > 0) {
@@ -56,6 +57,7 @@ public class AssaultRifle : RangedWeapons {
 			yield return null;
 		}
 		user.animator.SetBool("Charging", false);
+		this.user.lockRotation = false;
 	}
 	
 	public override void initAttack() {
