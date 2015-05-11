@@ -65,7 +65,7 @@ public class FolderBarController : MonoBehaviour {
 	void Update() {
 		if(lerpingFolderClosed == true) {
 			currentPosX = Mathf.MoveTowards(folderBar.anchoredPosition.x, closePosX, Time.deltaTime * 600f);
-			currentPos = new Vector3(currentPosX, -245.5f, 0f);
+			currentPos = new Vector3(currentPosX, folderBar.anchoredPosition.y, 0f);
 			folderBar.anchoredPosition = currentPos;
 			
 			if(folderBar.anchoredPosition.x == closePosX) {
@@ -75,7 +75,7 @@ public class FolderBarController : MonoBehaviour {
 		
 		if(lerpingFolderOpen == true) {
 			currentPosX = Mathf.MoveTowards(folderBar.anchoredPosition.x, openPosX, Time.deltaTime * 600f);
-			currentPos = new Vector3(currentPosX, -245.5f, 0f);
+			currentPos = new Vector3(currentPosX, folderBar.anchoredPosition.y, 0f);
 			folderBar.anchoredPosition = currentPos;
 			
 			if(folderBar.anchoredPosition.x == openPosX) {

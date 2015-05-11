@@ -239,12 +239,15 @@ public partial class ARTFRoom : Square {
 		foreach(SceneryBlock scn in Scenery) {
 			scn.remove();
 		}
+		Scenery.Clear ();
 		foreach(MonsterBlock mon in Monster) {
 			mon.remove();
 		}
+		Monster.Clear ();
 		foreach(SceneryBlock wall in Walls) {
 			wall.remove();
 		}
+		Walls.Clear ();
 		GameObjectResourcePool.returnResource(defaultFloor, Floor);
 		if(LLMarker != null) {
 			GameObjectResourcePool.returnResource(roomCornerId, LLMarker);

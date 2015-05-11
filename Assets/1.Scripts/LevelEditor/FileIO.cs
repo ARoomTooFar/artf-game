@@ -55,12 +55,18 @@ public class FileIO : MonoBehaviour
 	public void getIds(string inputIds)
     {
         #if UNITY_EDITOR
-        GSManager gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		GSManager gsManager = null;
+		WWW www = serv.getLvlWww(dummyLvlId);
+		try{
+			gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		} catch{}
+		if(gsManager != null){
 		Debug.Log (gsManager);
 		Debug.Log ("id: " + gsManager.currLevelId);
-		WWW www = serv.getLvlWww(dummyLvlId);
+
 		if(gsManager.currLevelId != "") {
 			www = serv.getLvlWww(gsManager.currLevelId);
+		}
 		}
         #else
         string[] ids = inputIds.Split(',');
@@ -83,6 +89,7 @@ public class FileIO : MonoBehaviour
         {
             txtDlLvl.enabled = false;
 			try{
+				//throw new Exception();
 				MapDataParser.ParseSaveString(lvlData);
             	Debug.Log("LVL DL SUCCESS: " + lvlData);
 			} catch (Exception ex){
@@ -116,7 +123,7 @@ public class FileIO : MonoBehaviour
 		// Use the returned data from update level request's coroutine
 		if (udLvlReq != null)
 		{
-			if (udLvlReq.isDone && udLvlReq.error == null)
+			if ((udLvlReq.isDone && udLvlReq.error == null))
 			{
 				txtUdLvl.enabled = false;
 				Debug.Log("UPDATE SUCCEEDED: " + udLvlReq.text);
