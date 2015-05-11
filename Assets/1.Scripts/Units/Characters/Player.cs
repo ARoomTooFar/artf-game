@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System;
 
 [System.Serializable]
-public class CryControls {
+public class Controls {
 	//First 7 are Keys, last 2 are joystick axis
 	public string up, down, left, right, attack, secItem, cycItem, hori, vert, joyAttack, joySecItem, joyCycItem;
 	//0 for Joystick off, 1 for Joystick on and no keys
@@ -15,33 +15,33 @@ public class CryControls {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : Character, IHealable<int>{
+public class Player : NewCharacter, IHealable<int>{
 	public string nameTag;
 	public int greyDamage;
-	public bool testable, isReady, atEnd, atStart, inGrey;
-	public GameObject currDoor;
+	
+	public bool testable, isReady, atEnd, atStart;
 	
 	public UIActive UI;
-	public CryControls controls;
+	public Controls controls;
 
 	bool sparksDone = true;
 	GameObject sparks = null;
 
-
-	// New Aggro system does not need these
-	// Events for death
-	// public delegate void DieBroadcast(GameObject dead);
-	// public static event DieBroadcast OnDeath;
+	private Door currDoor;
 	
 	protected override void Awake() {
 		base.Awake();
-		//opposition = Type.GetType("Enemy");
-		opposition = Type.GetType("NewEnemy"); //Use this if going after testable opponents
+		opposition = Type.GetType("NewEnemy");
 	}
 	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
+
+		foreach(PlayerBehaviour behaviour in this.animator.GetBehaviours<PlayerBehaviour>()) {
+			behaviour.SetVar(this.GetComponent<Player>());
+		}
+		
 	}
 	
 	protected override void setInitValues() {
@@ -53,87 +53,55 @@ public class Player : Character, IHealable<int>{
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=10;
-		inGrey = false;
 		greyDamage = 0;
-		//testable = true;
-		
 	}
 	//Set cooldown bars to current items. 
-	void ItemCooldowns(){
+	void ItemCooldowns() {
 		UI.onState = true;
 		UI.hpBar.onState =1;
 		UI.greyBar.onState =1;
 		for(int i = 0; i < inventory.items.Count; i++){
 			UI.coolDowns[i].onState = 3;
 			inventory.items[i].cdBar=UI.coolDowns[i];
-			//inventory.items[i].cdBar = UI.getComponent("LifeBar");//coolDowns[i];
 		}
 	}
 	
 	// Update is called once per frame
 	protected override void Update () {
-		if(UI!=null){
-			if(!UI.onState){
-				ItemCooldowns();
-			}
-			//testable = false;
+		if(isDead) return;
+
+		if(UI != null && UI.onState){
+			ItemCooldowns();
+			UI.hpBar.max = stats.maxHealth;
+			UI.greyBar.max = stats.maxHealth;
+			UI.greyBar.current = stats.health+greyDamage;
+			UI.hpBar.current = stats.health;
 		}
-		if(stats.health <= 0){
-			
-			isDead = true;
-			if(UI!=null) UI.hpBar.current = 0;
-		} else {
-			if(UI!=null){
-				if(UI.onState){
-					UI.hpBar.max = stats.maxHealth;
-					UI.greyBar.max = stats.maxHealth;
-					UI.greyBar.current = stats.health+greyDamage;
-					UI.hpBar.current = stats.health;
-				}
-			}
-			isDead = false;
-		}
-		if(!isDead) {
-			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
-			
-			animSteInfo = animator.GetCurrentAnimatorStateInfo(0);
-			animSteHash = animSteInfo.fullPathHash;
-			
-			freeAnim = !stunned && !knockedback;
-			
-			
-			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
-			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
-			
-			if (isGrounded) {
-				ActionCommands ();
-				MoveCommands ();
-			} else {
-				falling();
-			}
-			
-			AnimationUpdate ();
-		}
+
+		freeAnim = !stunned && !knockedback && !animationLock && !this.animator.GetBool ("IsInAttackAnimation");
+		actable = freeAnim;
+
+		this.animator.SetBool("Actable", this.actable);
+		
+		ActionCommands ();
+		MoveCommands ();
+		AnimationUpdate ();
 	}
 	
-	//---------------------------------//
-	// Action interface implementation //
-	//---------------------------------//
+	//-------------------------------//
+	// Player Command Implementation //
+	//-------------------------------//
 	
 	protected override void ActionCommands() {
 		// Invokes an action/animation
-		if (actable) {
+		if (actable && !this.animator.GetBool ("Attack")) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
 				if(currDoor!=null){
 					currDoor.GetComponent<Door>().toggleOpen();
 					currDoor = null;
-					animator.SetBool("Charging", true);
-					//Debug.Log(luckCheck());
-					gear.weapon.initAttack();
-				}else{
-					animator.SetBool("Charging", true);
-					//Debug.Log(luckCheck());
-					gear.weapon.initAttack();
+				} else {
+					this.animator.SetBool("Charging", true);
+					this.animator.SetBool("Attack", true);
 				}
 			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
@@ -146,15 +114,10 @@ public class Player : Character, IHealable<int>{
 			} else if(Input.GetKeyDown (controls.cycItem) || Input.GetButtonDown(controls.joyCycItem)) {
 				inventory.cycItems();
 			}
-			// Continues with what is happening
 		} else {
-			
 			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
 				animator.SetBool ("Charging", false);
 			}
-			/*else if (animSteInfo.nameHash == rollHash) { for later
-			}
-			*/
 		}
 		
 		
@@ -165,30 +128,13 @@ public class Player : Character, IHealable<int>{
 			}
 		}
 	}
-	
-	// Constant animation updates (Main loop for characters movement/actions)
-	protected override void AnimationUpdate() {
-		if (attacking&&!stats.isDead) {
-		} else {
-			MovementAnimation();
-		}
-	}
-	
-	//-------------------------------------------//
-	
-	//-----------------------------------//
-	// Movement interface implementation //
-	//-----------------------------------//
-	
+
 	// Might separate commands into a protected function and just have a movement function
 	protected virtual void MoveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
 		Vector3 camAngle = Camera.main.transform.eulerAngles;
-
 		
-		if (!stats.isDead&&actable || (animator.GetBool("Charging") && (animSteHash == atkHashCharge || animSteHash == atkHashChgSwing) && this.testControl)) {//gear.weapon.stats.curChgAtkTime > 0) { // Better Check here
-			//"Up" key assign pressed
-
+		if (actable) {
 			float x;
 			float z;
 			if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
@@ -215,21 +161,34 @@ public class Player : Character, IHealable<int>{
 				newMoveDir += new Vector3(x, 0, z);
 			}
 			
-			// facing = newMoveDir;
-			if (newMoveDir != Vector3.zero) {
-				newMoveDir.y = 0.0f;
-				facing = newMoveDir;
+			if (this.lockRotation) {
+				Vector3 check1 = Quaternion.AngleAxis(90, Vector3.up) * this.facing;
+				Vector3 check2 = Quaternion.AngleAxis(-90, Vector3.up) * this.facing;
+				
+				if (newMoveDir != check1 && newMoveDir != check2) newMoveDir = Vector3.zero;
+			} else {
+				if (newMoveDir != Vector3.zero) {
+					newMoveDir.y = 0.0f;
+					facing = newMoveDir;
+				}
 			}
 			
 			this.rb.velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
-		} else if (freeAnim){
+		} else {
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this
 			this.rb.velocity = Vector3.zero;
 		}
 	}
-	//-------------------------------------//
 	
+	// Constant animation updates (Main loop for characters movement/actions, sets important parameters in the animator)
+	protected override void AnimationUpdate() {
+		MovementAnimation();
+	}
+	
+	//-------------------------------------------//
+
+
 	//---------------------------------//
 	// Damage Interface Implementation //
 	//---------------------------------//
@@ -237,7 +196,7 @@ public class Player : Character, IHealable<int>{
 	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
 		this.damage (dmgTaken, atkPosition);
 	}
-
+	
 	public override void damage(int dmgTaken, Transform atkPosition) {
 		if (invincible || stats.isDead) return;
 		
@@ -250,7 +209,7 @@ public class Player : Character, IHealable<int>{
 		splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
 		theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
 		Destroy (theSplat, 2);
-
+		
 		//particle effects
 		if(sparks == null){
 			sparks = Instantiate(Resources.Load("Sparks"), transform.position, Quaternion.identity) as GameObject;
@@ -258,23 +217,23 @@ public class Player : Character, IHealable<int>{
 			sparks.GetComponent<ParticleRenderer>().material = particleMat;
 			Destroy (sparks, 1);
 		}
-
+		
 		hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
 		BDS.addBuffDebuff(hitConfirm,gameObject,.5f);
-
+		
 	}
 	
 	public override void damage(int dmgTaken) {
 		if (invincible || stats.isDead) return;
 		
 		stats.health -= greyTest(dmgTaken);
-		if (stats.health <= 0) this.die();
+		if (stats.health <= 0) base.die();
 		
 		if(splatter == null) return;
 		splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
 		theSplat.adjuster = (float) ((stats.maxHealth-stats.health)/stats.maxHealth);
 		Destroy (theSplat, 2);
-
+		
 		//particle effects
 		if(sparks == null){
 			sparks = Instantiate(Resources.Load("Sparks"), transform.position, Quaternion.identity) as GameObject;
@@ -283,19 +242,18 @@ public class Player : Character, IHealable<int>{
 			Destroy (sparks, 1);
 		}
 	}
-
+	
 	public override void die() {
-		Debug.Log("IsDead");
-		base.die();
-
-		/*
-		if (OnDeath != null) {
-			OnDeath (this.gameObject);
-		}*/
+		base.die ();
 		stats.health = 0;
-		
+		this.greyDamage = 0;
+		if(UI!=null) UI.hpBar.current = 0;
+
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		//GetComponent<Collider> ().isTrigger = true;
+		this.animator.SetInteger("Killed", (int) UnityEngine.Random.Range(1.1f, 2.9f));		
+	}
+	
+	public virtual void Death() {
 		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
@@ -314,109 +272,80 @@ public class Player : Character, IHealable<int>{
 			if(stats.health > stats.maxHealth){
 				stats.health = stats.maxHealth;
 			}
-		}//prior heal base
+		}
 		//UI.hpBar.current = stats.health;
 		if(greyDamage > 0){
 			greyDamage--;
 			UI.greyBar.current = stats.health + greyDamage;
 		}
 	}
-
+	
 	public override void rez(){
 		if(stats.isDead){
 			stats.isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
+			// if(UI!=null) UI.hpBar.current = stats.health;
 			stats.rezCount++;
-		}/*else{
-			heal(stats.maxHealth/(2+2*stats.rezCount));
-		}*///if and else are the 'base' rez from prior
+			this.animator.SetInteger ("Killed", 0);
+		}
 		//GetComponent<Collider> ().isTrigger = false;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		foreach (Renderer r in rs) {
 			if(r.GetComponent<Renderer>().gameObject.tag != "Item")
 				r.enabled = true;
 		}
-		//UI.hpBar.current = stats.health;
 	}
 	
 	//----------------------------------//
 
-
+	//-------------//
+	// Grey Health //
+	//-------------//
+	
 	// Grey Health functions
-	public virtual int greyTest(int damage){
-		if(((greyDamage + damage) > stats.health) && ((greyDamage + damage) < stats.maxHealth)){
-			return damage;
+	private int greyTest(int damage){
+		// If grey damage plus damage kills, we kill them off
+		if((greyDamage + damage) > stats.health) {
+			StopCoroutine("RegenGrey");
+			return damage + greyDamage;
 		}
-		if(((greyDamage + damage) >= stats.maxHealth) && stats.health == stats.maxHealth){
-			stats.health = 1;
-			greyDamage = stats.maxHealth - 1;
-			inGrey = true;
-			return 0;
-		}
-		if((damage > (stats.maxHealth/5)) && !inGrey){
-			//print("Got Here"+(stats.maxHealth/20)+":"+damage);
-			int tempDmg = greyDamage;
-			if(inGrey){
-				greyDamage = damage - stats.maxHealth/5;
-				print("Grey!:"+tempDmg);
-				StopCoroutine("RegenWait");
-				if(inGrey &&!stats.isDead){
-					StartCoroutine("RegenWait");
-				}
-				//print("True!WGAT:"+(stats.maxHealth/20 + tempDmg));
-				return damage + tempDmg;
-			}else{
-				inGrey = true;
-				greyDamage = damage - stats.maxHealth/5;
-				//print("Grey!:"+(damage - stats.maxHealth/20));
-				//print("True!NGAT:"+stats.maxHealth/20);
-				StopCoroutine("RegenWait");
-				if(inGrey &&!stats.isDead){
-					StartCoroutine("RegenWait");
-				}
-				return damage;
-			}
-		} else if(inGrey && !(damage > (stats.maxHealth/5))){
-			inGrey = false;
-			int tempDmg = greyDamage;
+		
+		int tempDmg = greyDamage;
+		StopCoroutine("RegenGrey");
+		
+		if (damage > (stats.maxHealth/5)) {
+			greyDamage = damage - stats.maxHealth/5;
+			StartCoroutine("RegenGrey");
+		} else {
 			greyDamage = 0;
-			//print("True!WGBT:"+(damage + greyDamage));
-			return damage + tempDmg;
-		} else{
-			inGrey = false;
-			//print("True!NG:"+damage);
-			return damage;
 		}
+		
+		return damage + tempDmg;
 	}
-	private IEnumerator Wait(float duration){
-		for (float timer = 0; timer < duration; timer += Time.deltaTime){
-			yield return 0;
-		}
-	}
-	private IEnumerator RegenWait(){
-		yield return new WaitForSeconds(1);
-		if(inGrey && !stats.isDead){
-			// print("Healed Grey and True");
-			stats.health++;
-			greyDamage--;
-			//UI.hpBar.current = stats.health;
-			//UI.greyBar.current = greyDamage+stats.health;
-			if(greyDamage == 0){
-				inGrey = false;
-			}
-			if(greyDamage > 0){
-				StartCoroutine("RegenWait");
-			}
+
+	private IEnumerator RegenGrey(){
+		while (greyDamage > 0) {
+			yield return new WaitForSeconds(1);
+			this.stats.health++;
+			this.greyDamage--;
 		}
 		yield return 0;
 	}
+
+	//---------------//
+
+	//-------//
+	// Doors //
+	//-------//
+
 	private void OnTriggerEnter(Collider other){
 		if(other.tag == "Door"){
-			currDoor = other.gameObject;
+			currDoor = other.GetComponent<Door>();
 		}
 	}
+	
 	private void OnTriggerExit(Collider other){
-		if(other.tag == "Door"){
+		if(this.currDoor != null && other.gameObject == this.currDoor.gameObject){
 			currDoor = null;
 		}
 	}

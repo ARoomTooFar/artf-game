@@ -7,7 +7,7 @@ public class ChargeTimer : PlayerBehaviour {
 	protected Weapons weapon;
 	protected Slow debuff;
 
-	public override void SetVar (NewPlayer unit) {
+	public override void SetVar (Player unit) {
 		base.SetVar (unit);
 		this.weapon = unit.gear.weapon;
 		this.maxChargeTime = this.weapon.stats.maxChgTime;

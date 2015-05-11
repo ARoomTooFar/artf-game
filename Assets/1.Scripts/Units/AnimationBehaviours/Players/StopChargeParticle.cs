@@ -6,7 +6,7 @@ public class StopChargeParticle : PlayerBehaviour {
 
 	private Weapons weapon;
 	
-	public override void SetVar (NewPlayer unit) {
+	public override void SetVar (Player unit) {
 		base.SetVar (unit);
 		this.weapon = unit.gear.weapon;
 	}

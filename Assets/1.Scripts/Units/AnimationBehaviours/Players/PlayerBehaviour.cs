@@ -4,9 +4,9 @@
 using UnityEngine;
 
 public class PlayerBehaviour : StateMachineBehaviour {
-	protected NewPlayer unit;
+	protected Player unit;
 	
-	public virtual void SetVar(NewPlayer unit) {
+	public virtual void SetVar(Player unit) {
 		this.unit = unit;
 	}
 }

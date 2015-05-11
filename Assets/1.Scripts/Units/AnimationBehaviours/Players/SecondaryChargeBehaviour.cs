@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SecondaryChargeBehaviour : ChargeTimer {
 	
-	public override void SetVar (NewPlayer unit) {
+	public override void SetVar (Player unit) {
 		base.SetVar (unit);
 		this.weapon = unit.gear.weapon;
 		this.maxChargeTime = this.weapon.stats.maxChgTime;
