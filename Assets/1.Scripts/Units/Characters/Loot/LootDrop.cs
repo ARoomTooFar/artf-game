@@ -3,18 +3,21 @@ using System.Collections;
 using System;
 
 public class LootDrop : MonoBehaviour {
-	public float value,high,low;
+	public float value,high,low,top;
+    public Transform starter;
 	public int rating;
 	public LootSystem lootage;
 	public GameObject target;
 	// Use this for initialization
 	void Start () {
+        starter = transform;
 		lootage = (LootSystem) FindObjectOfType(typeof(LootSystem));
 		/*if(lootage){//Used as a debug check for looting~
 			Debug.Log("LootSystem");
 		}else{
 			Debug.Log("NoLootSystem");
 		}*/
+        top = 20;
 		setInitValues(0);//To be removed soon(Just for base test)
 	}
 	
@@ -30,6 +33,25 @@ public class LootDrop : MonoBehaviour {
 			}
 		}
 	}
+    protected virtual void spiralOut()
+    {
+        float x = 0, y = 0;
+        float dx, dy;
+        for (float i = 0; i < top; i+=.1f)
+        {
+            if((-transform.position.x/2 < x <= transform.position.x/2) && (-transform.position.y/2 < y <= transform.position.x/2))
+            {
+                print (x,y);
+            }
+            if ((x == y)||(x<0 &&x==-y)||(x>0 && x== 1-y))
+            {
+                dx = -dy;
+                dy = dx;
+            }
+            x = x + dx;
+            y = y + dy;
+        }
+    }
 	protected virtual void setInitValues(int rating){//0-10
 		high = .5f + .25f*rating;
 		if(high - .5f < 0){
