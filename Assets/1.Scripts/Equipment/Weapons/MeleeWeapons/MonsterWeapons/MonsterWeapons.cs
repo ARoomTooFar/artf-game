@@ -24,9 +24,8 @@ public class MonsterWeapons : Weapons {
 		stats.weapType = 0;
 		stats.atkSpeed = 1.0f;
 		stats.damage = 5;
-		stats.multHit = 0;
 		
-		stats.maxChgTime = 3.0f;
+		stats.maxChgTime = 3;
 		stats.curChgAtkTime = -1.0f;
 		stats.curChgDuration = 0.0f;
 		stats.chgLevels = 0.4f;
@@ -55,7 +54,7 @@ public class MonsterWeapons : Weapons {
 		this.col.enabled = false;
 	}
 
-	public override void specialAttack() {
+	public override void SpecialAttack() {
 	}
 	
 	//-----------------------//

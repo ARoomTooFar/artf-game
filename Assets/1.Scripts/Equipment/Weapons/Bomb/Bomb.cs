@@ -42,7 +42,7 @@ public class Bomb : MonoBehaviour {
 
 		if (this.aoe == null) Debug.LogWarning ("AoE object not set in the inspector of a bomb");
 		else {
-			if (opposition == typeof(Enemy)) this.aoe.affectEnemies = true;
+			if (opposition == typeof(Enemy) || opposition == typeof(NewEnemy)) this.aoe.affectEnemies = true;
 			if (opposition == typeof(Player)) this.aoe.affectPlayers = true;
 		}
 
@@ -67,7 +67,7 @@ public class Bomb : MonoBehaviour {
 	//---------------------//
 
 	protected virtual void explode() {
-			// Create explosion while removing self
+		// Create explosion while removing self
 		// BombExplosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<BombExplosion>();
 		if(this.damage == 0){
 			Instantiate(expDeath, transform.position+new Vector3(0,.5f,0), transform.rotation);

@@ -8,9 +8,8 @@ public class Bullet : Projectile {
 		base.Start();
 	}
 
-	public override void setInitValues(Character player, Type opposition, float partSpeed,bool effect,BuffsDebuffs hinder) {
-		base.setInitValues(player, opposition, partSpeed, effect, hinder);
-		this.speed = 1f;
+	public override void setInitValues(Character player, Type opposition, int damage, float partSpeed, bool effect, BuffsDebuffs hinder, float durations) {
+		base.setInitValues(player, opposition, damage, partSpeed, effect, hinder, duration);
 		// Set stats here is each bullet will have its own properties
 	}
 

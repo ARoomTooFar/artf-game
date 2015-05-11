@@ -76,10 +76,9 @@ public class NewMirage : NewStationaryEnemy {
 		stats.maxHealth = 35;
 		stats.health = stats.maxHealth;
 		stats.armor = 1;
-		stats.strength = 10;
+		stats.strength = 8;
 		stats.coordination=0;
 		stats.speed=4;
-		stats.luck=0;
 		setAnimHash ();
 		
 		this.minAtkRadius = 0.0f;
@@ -168,19 +167,17 @@ public class NewMirage : NewStationaryEnemy {
 	//---------------------//
 	
 	public override void die() {
-		if (tier > 1) {
-			if (this.blink.mirrors.Count > 0) {
-				MirageImage imageToBe = this.blink.mirrors[(int)(Random.value * this.blink.mirrors.Count)];
-				this.tier--;
-				this.transform.position = imageToBe.transform.position;
-				imageToBe.die ();
-			}
+		if (tier > 1 && this.blink.mirrors.Count > 0) {
+			MirageImage imageToBe = this.blink.mirrors[(int)(Random.value * this.blink.mirrors.Count)];
+			this.tier--;
+			this.transform.position = imageToBe.transform.position;
+			imageToBe.die ();
 		} else {
 			foreach (MirageImage im in this.blink.mirrors) {
 				if (im != null) im.die(); //Destroy(im.gameObject);
 			}
 			this.isDead = true;
-			this.deathTarget.BDS.rmvBuffDebuff(this.mark, this.gameObject);
+			if (this.deathTarget != null) this.deathTarget.BDS.rmvBuffDebuff(this.mark, this.gameObject);
 			animator.SetTrigger("Died");
 		}
 		

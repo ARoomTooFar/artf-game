@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NetRadius : MonoBehaviour,IFallable {
+public class NetRadius : MonoBehaviour {
 	public float gravity = 1.0f;
 	public bool isGrounded = false;
 	public float decSpeed;

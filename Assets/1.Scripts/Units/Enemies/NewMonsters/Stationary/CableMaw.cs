@@ -24,7 +24,6 @@ public class CableMaw : NewStationaryEnemy {
 		stats.strength = 5;
 		stats.coordination = 0;
 		stats.speed = 0;
-		stats.luck = 0;
 		setAnimHash ();
 		
 		this.minAtkRadius = 0.0f;

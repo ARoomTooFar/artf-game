@@ -38,7 +38,6 @@ public class NewCackleBranch: NewRangedEnemy {
 		stats.strength = 10;
 		stats.coordination=5;
 		stats.speed=7;
-		stats.luck=0;
 		
 		this.minAtkRadius = 8.0f;
 		this.maxAtkRadius = 40.0f;

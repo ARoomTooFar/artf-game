@@ -6,6 +6,7 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class MeleeWeapons : Weapons {
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -19,9 +20,17 @@ public class MeleeWeapons : Weapons {
 		base.initAttack();
 	}
 
+	public override void AttackStart() {
+		this.col.enabled = true;
+	}
+	
+	public override void AttackEnd() {
+		this.col.enabled = false;
+	}
+
 	// Does something when opponent is hit
 	protected virtual void onHit(Character enemy) {
-		if(user.luckCheck() && stats.debuff != null){
+		if(stats.debuff != null){
 			if(stats.buffDuration > 0){
 				enemy.BDS.addBuffDebuff(stats.debuff, this.gameObject, stats.buffDuration);
 			}else{
@@ -32,7 +41,7 @@ public class MeleeWeapons : Weapons {
 	}
 
 	// only capsule collider should be checked in this function
-	void OnTriggerEnter(Collider other) {
+	protected virtual void OnTriggerEnter(Collider other) {
 		IDamageable<int, Transform, GameObject> component = (IDamageable<int, Transform, GameObject>) other.GetComponent( typeof(IDamageable<int, Transform, GameObject>) );
 		Character enemy = (Character) other.GetComponent(opposition);
 		if( component != null && enemy != null) {

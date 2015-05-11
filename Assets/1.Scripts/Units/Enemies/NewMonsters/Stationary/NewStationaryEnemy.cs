@@ -37,7 +37,6 @@ public class NewStationaryEnemy : NewEnemy  {
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=9;
-		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
 		this.maxAtkRadius = 4.0f;

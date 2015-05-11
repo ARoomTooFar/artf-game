@@ -1,0 +1,149 @@
+fileFormatVersion: 2
+guid: c235146312b8adc41acd3505e1c0dd66
+timeCreated: 1430963863
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Character
+    100002: Character_Bone_Structure
+    100004: Head
+    100006: Left_Ankle
+    100008: Left_Arm_1
+    100010: Left_Arm_2
+    100012: Left_Foot
+    100014: Left_Hand_1
+    100016: Left_Hand_2
+    100018: Left_Hand_3
+    100020: Left_Leg_1
+    100022: Left_Leg_2
+    100024: Left_Pelvis
+    100026: Left_Shoulder
+    100028: Left_Thumb_1
+    100030: Left_Thumb_2
+    100032: Left_Toes
+    100034: Left_Wrist
+    100036: Lower_Spine
+    100038: Middle_Spine
+    100040: Neck
+    100042: Right_Ankle
+    100044: Right_Arm_1
+    100046: Right_Arm_2
+    100048: Right_Foot
+    100050: RIght_Hand_1
+    100052: Right_Hand_2
+    100054: RIght_Hand_3
+    100056: Right_Leg_1
+    100058: Right_Leg_2
+    100060: Right_Pelvis
+    100062: RIght_Shoulder
+    100064: Right_Thumb_1
+    100066: Right_Thumb_2
+    100068: Right_Toes
+    100070: Right_Wrist
+    100072: //RootNode
+    100074: Trash_Armor
+    100076: Upper_Spine
+    400000: Character
+    400002: Character_Bone_Structure
+    400004: Head
+    400006: Left_Ankle
+    400008: Left_Arm_1
+    400010: Left_Arm_2
+    400012: Left_Foot
+    400014: Left_Hand_1
+    400016: Left_Hand_2
+    400018: Left_Hand_3
+    400020: Left_Leg_1
+    400022: Left_Leg_2
+    400024: Left_Pelvis
+    400026: Left_Shoulder
+    400028: Left_Thumb_1
+    400030: Left_Thumb_2
+    400032: Left_Toes
+    400034: Left_Wrist
+    400036: Lower_Spine
+    400038: Middle_Spine
+    400040: Neck
+    400042: Right_Ankle
+    400044: Right_Arm_1
+    400046: Right_Arm_2
+    400048: Right_Foot
+    400050: RIght_Hand_1
+    400052: Right_Hand_2
+    400054: RIght_Hand_3
+    400056: Right_Leg_1
+    400058: Right_Leg_2
+    400060: Right_Pelvis
+    400062: RIght_Shoulder
+    400064: Right_Thumb_1
+    400066: Right_Thumb_2
+    400068: Right_Toes
+    400070: Right_Wrist
+    400072: //RootNode
+    400074: Trash_Armor
+    400076: Upper_Spine
+    4300000: Trash_Armor
+    4300002: Character
+    7400000: Default Take
+    9500000: //RootNode
+    13700000: Character
+    13700002: Trash_Armor
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -14,7 +14,6 @@ public class TestAssaultRifle : AssaultRifle {
 		
 		stats.atkSpeed = 2.0f;
 		stats.damage = 1;
-		stats.maxChgTime = 2.0f;
 		
 		spray = user.transform.rotation;
 		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(12f-user.stats.coordination)+user.transform.eulerAngles.y,(12f-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));

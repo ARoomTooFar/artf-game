@@ -10,7 +10,7 @@ using System;
 public class Stats{
 	//Base Stats
 	public int health, armor,maxHealth,rezCount;
-	public int strength, coordination, speed, luck;
+	public int strength, coordination, speed;
 	public bool isDead;
 
 	/*
@@ -31,7 +31,10 @@ public class Stats{
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallable, IDamageable<int, Transform, GameObject>, IStunable, IForcible<Vector3, float> {
+public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>, IStunable, IForcible<Vector3, float> {
+
+
+	public bool lockRotation = false;
 
 	public bool testControl;
 
@@ -232,16 +235,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	protected virtual void FixedUpdate() {
 
 	}
-	public virtual bool luckCheck(){
-		int luckCap = 10;
-		float r = UnityEngine.Random.Range(0,luckCap);
-		//Debug.Log(r);
-		if(r < stats.luck){
-			//Debug.Log("Y");
-			return true;
-		}
-		return false;
-	}
 	
 	// Update is called once per frame
 	protected virtual void Update () {
@@ -256,11 +249,11 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd ;
 
 			if (isGrounded) {
-				actionCommands ();
+				ActionCommands ();
 			} else {
 				falling();
 			}
-			animationUpdate ();
+			AnimationUpdate ();
 		}
 	}
 
@@ -268,31 +261,23 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	// Action interface implementation //
 	//---------------------------------//
 
-	public virtual void setActable(bool canAct) {
-		actable = canAct;
-	}
-
-	public virtual void actionCommands() {
+	protected virtual void ActionCommands() {
 
 	}
 
 	// Constant animation updates (Main loop for characters movement/actions)
-	public virtual void animationUpdate() {
+	protected virtual void AnimationUpdate() {
 		if (attacking) {
-			if(luckCheck()){
-			}
-			attackAnimation();
+
 		} else {
-			movementAnimation();
+			MovementAnimation();
 		}
 	}
 	//-------------------------------------------//
 
 	// Animation helper functions
-	protected virtual void attackAnimation() {
-	}
 
-	protected virtual void movementAnimation() {
+	protected virtual void MovementAnimation() {
 		// animator.speed = 1; // Change animation speed back for other animations
 		if (this.rb.velocity != Vector3.zero && facing != Vector3.zero) {
 			animator.SetBool("Moving", true);
@@ -306,14 +291,6 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 	//----------------------------------//
 	// Falling Interface Implementation //
 	//----------------------------------//
-
-	public virtual void colliderStart() {
-		gear.weapon.collideOn ();
-	}
-	
-	public virtual void colliderEnd() {
-		gear.weapon.collideOff ();
-	}
 
 	public virtual void falling() {
 		// fake gravity
@@ -337,8 +314,8 @@ public class Character : MonoBehaviour, IActionable<bool>, IAttackable, IFallabl
 
 	}
 
-	public virtual void specialAttack() {
-		gear.weapon.specialAttack ();
+	public virtual void SpecialAttack() {
+		gear.weapon.SpecialAttack ();
 	}
 	
 	//---------------------------------//

@@ -88,7 +88,6 @@ public class NewBullyTrunk: NewMobileEnemy {
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=6;
-		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
 		this.maxAtkRadius = 4.0f;
@@ -158,11 +157,11 @@ public class NewBullyTrunk: NewMobileEnemy {
 	// These are here because for some reason I can't find the inherited collider functions from the animation events thing
 	// Fuck Unity, such a tease
 	protected virtual void SmashNow() {
-		this.colliderStart();
+		this.AttackStart();
 	}
 
 	protected virtual void SmashOver() {
-		this.colliderEnd();
+		this.AttackEnd();
 	}
 
 	//-------------------//

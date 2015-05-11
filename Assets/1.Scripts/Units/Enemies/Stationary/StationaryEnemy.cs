@@ -29,7 +29,6 @@ public class StationaryEnemy : Enemy {
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=4;
-		stats.luck=0;
 		setAnimHash ();
 
 		this.minAtkRadius = 0.0f;
@@ -225,7 +224,7 @@ public class StationaryEnemy : Enemy {
 	// Inherited Functions //
 	//---------------------//
 
-	protected override void movementAnimation() {
+	protected override void MovementAnimation() {
 		transform.localRotation = Quaternion.LookRotation(facing);
 	}
 

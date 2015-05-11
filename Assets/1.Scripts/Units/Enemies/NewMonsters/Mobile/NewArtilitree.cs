@@ -35,7 +35,6 @@ public class NewArtilitree: NewRangedEnemy {
 		stats.strength = 10;
 		stats.coordination=10;
 		stats.speed=2;
-		stats.luck=0;
 
 		this.minAtkRadius = 4.0f;
 		this.maxAtkRadius = 40.0f;

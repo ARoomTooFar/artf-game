@@ -58,7 +58,6 @@ public class NewBushman : NewMobileEnemy {
 		stats.strength = 6;
 		stats.coordination=0;
 		stats.speed=4;
-		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
 		this.maxAtkRadius = 2.0f;
