@@ -255,6 +255,7 @@ public class Player : NewCharacter, IHealable<int>{
 		}
 		//this will go to the end screen when all the players in the party are dead.
 		if (!checkPartyAlive ()) {
+			//THIS WILL NEED TO USE THE GSmanager HERE
 			Application.LoadLevel("TitleScreen2");
 		}
 	}
