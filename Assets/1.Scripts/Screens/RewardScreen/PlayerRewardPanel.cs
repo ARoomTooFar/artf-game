@@ -3,6 +3,9 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
+
+
+
 //controls reward panel for each player
 public class PlayerRewardPanel : MonoBehaviour {
 	public List<string> loot; //list of looted items
@@ -24,12 +27,17 @@ public class PlayerRewardPanel : MonoBehaviour {
 	KeyCode add;
 	KeyCode subtract;
 
+	Controls controls;
+
+
+
 	//joystick/button input setup
-	public void setUpInputs(string upString, string downString, string addString, string subtractString){
+	public void setUpInputs(string upString, string downString, string addString, string subtractString, Controls c){
 		up = (KeyCode)System.Enum.Parse(typeof(KeyCode), upString);
 		down = (KeyCode)System.Enum.Parse(typeof(KeyCode), downString);
 		add = (KeyCode)System.Enum.Parse(typeof(KeyCode), addString);
 		subtract = (KeyCode)System.Enum.Parse(typeof(KeyCode), subtractString);
+		controls = c;
 	}
 
 	void Start () {
@@ -87,27 +95,63 @@ public class PlayerRewardPanel : MonoBehaviour {
 
 	void takeInputs(){
 
-		//moves selector up and down list
-		if(Input.GetKeyDown(down)){
-			if(activeEntry < highlights.Count - 1)
-				activeEntry += 1;
-		}else if(Input.GetKeyDown(up)){
+		//
+		//Arcade controls
+		//
+		//"Up" key assign pressed
+		//moves selector up  list
+		if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
 			if(activeEntry > 0)
 				activeEntry -= 1;
 		}
+		//"Down" key assign pressed
+		//moves selector down list
+		if (Input.GetKey(controls.down) || Input.GetAxis(controls.vert) < 0) {
+			if(activeEntry < highlights.Count - 1)
+				activeEntry += 1;
+		}
 
-		//adds or subtracts points from an item
-		if(Input.GetKeyDown(add)){
+		//adds points from an item
+		if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
 			if(total > 0){
 				points[activeEntry] += 1;
 				total -= 1;
 			}
-		}else if(Input.GetKeyDown(subtract)){
+		}
+
+		//subtracts points from an item
+		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
 			if(points[activeEntry] > 0){
 				total += 1;
 				points[activeEntry] -= 1;
 			}
 		}
+
+
+		//
+		//Keyboard controls
+		//
+		//moves selector up and down list
+//		if(Input.GetKeyDown(down)){
+//			if(activeEntry < highlights.Count - 1)
+//				activeEntry += 1;
+//		}else if(Input.GetKeyDown(up)){
+//			if(activeEntry > 0)
+//				activeEntry -= 1;
+//		}
+//
+//		//adds or subtracts points from an item
+//		if(Input.GetKeyDown(add)){
+//			if(total > 0){
+//				points[activeEntry] += 1;
+//				total -= 1;
+//			}
+//		}else if(Input.GetKeyDown(subtract)){
+//			if(points[activeEntry] > 0){
+//				total += 1;
+//				points[activeEntry] -= 1;
+//			}
+//		}
 	}
 
 	void updateTexts(){
