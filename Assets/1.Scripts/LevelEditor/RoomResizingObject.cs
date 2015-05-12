@@ -22,6 +22,7 @@ public class RoomResizingObject : ClickEvent {
 		
 		//for the ghost-duplicate
 		GameObject itemObjectCopy = null;
+		Transform thing = this.transform;
 		Vector3 position = this.gameObject.transform.position;
 		UICamera.GetComponent<CameraDraws>().room = MapData.TheFarRooms.find(position);
 		UICamera.GetComponent<CameraDraws>().roomResizeOrigin = position;
@@ -83,10 +84,10 @@ public class RoomResizingObject : ClickEvent {
 	}
 	
 	public Vector3 getPosition() {
-		return this.gameObject.transform.root.position;
+		return this.transform.position;
 	}
 	
 	public Quaternion getRotation() {
-		return this.gameObject.transform.rotation;
+		return this.transform.rotation;
 	}
 }

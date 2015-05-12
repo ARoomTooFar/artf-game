@@ -91,7 +91,7 @@ public class DragableObject : ClickEvent {
 	}
 
 	public Vector3 getPosition() {
-		return this.gameObject.transform.root.position;
+		return this.gameObject.transform.position;
 	}
 	
 	public Quaternion getRotation() {

@@ -56,6 +56,9 @@ public class SceneryManager {
 	 */
 	private void unlinkTerrain(SceneryBlock blk) {
 		ARTFRoom rm = MapData.TheFarRooms.find (blk.Position);
+		if (rm == null) {
+			return;
+		}
 		rm.Scenery.Remove (blk);
 	}
 	#endregion (un)linkTerrain
@@ -173,9 +176,7 @@ public class SceneryManager {
 	}
 
 	public void rotate(SceneryBlock blk, bool goClockwise = true) {
-		unlinkTerrain(blk);
 		blk.rotate(goClockwise);
-		linkTerrain(blk);
 	}
 	#endregion Rotate
 	#endregion Manipulation
