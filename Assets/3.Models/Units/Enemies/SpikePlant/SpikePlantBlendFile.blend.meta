@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: fffca4014e55e52469dc67d34a26aad4
-timeCreated: 1430535716
+guid: a0dd9b28511172c4aa72322c8d023009
+timeCreated: 1431383570
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -21,63 +21,60 @@ ModelImporter:
     100026: Bone_012
     100028: Bone_2
     100030: Branch
-    100032: Camera
-    100034: Hemi
-    100036: Lamp
-    100038: leaf10
-    100040: leaf11
-    100042: leaf12
-    100044: leaf13
-    100046: leaf14
-    100048: leaf15
-    100050: leaf16
-    100052: leaf17
-    100054: leaf18
-    100056: leaf19
-    100058: leaf20
-    100060: leaf21
-    100062: leaf22
-    100064: leaf23
-    100066: leaf24
-    100068: leaf25
-    100070: leaf26
-    100072: leaf27
-    100074: leaf3
-    100076: leaf3_005
-    100078: leaf4
-    100080: leaf5
-    100082: leaf6
-    100084: leaf7
-    100086: leaf8
-    100088: leaf9
-    100090: leaf_000
-    100092: leaf_001
-    100094: leaf_002
-    100096: leaf_003
-    100098: leaf_1
-    100100: leaf_10
-    100102: leaf_11
-    100104: leaf_12
-    100106: leaf_2
-    100108: leaf_3
-    100110: leaf_4
-    100112: leaf_5
-    100114: leaf_6
-    100116: leaf_7
-    100118: leaf_8
-    100120: leaf_9
-    100122: Mouth
-    100124: Sphere
-    100126: Sphere_0
-    100128: Sphere_1
-    100130: Sphere_2
-    100132: Sphere_3
-    100134: spike1
-    100136: spike2
-    100138: spike3
-    100140: spike4
-    100142: spike5
-    100144: //RootNode
+    100032: leaf10
+    100034: leaf11
+    100036: leaf12
+    100038: leaf13
+    100040: leaf14
+    100042: leaf15
+    100044: leaf16
+    100046: leaf17
+    100048: leaf18
+    100050: leaf19
+    100052: leaf20
+    100054: leaf21
+    100056: leaf22
+    100058: leaf23
+    100060: leaf24
+    100062: leaf25
+    100064: leaf26
+    100066: leaf27
+    100068: leaf3
+    100070: leaf3_005
+    100072: leaf4
+    100074: leaf5
+    100076: leaf6
+    100078: leaf7
+    100080: leaf8
+    100082: leaf9
+    100084: leaf_000
+    100086: leaf_001
+    100088: leaf_002
+    100090: leaf_003
+    100092: leaf_1
+    100094: leaf_10
+    100096: leaf_11
+    100098: leaf_12
+    100100: leaf_2
+    100102: leaf_3
+    100104: leaf_4
+    100106: leaf_5
+    100108: leaf_6
+    100110: leaf_7
+    100112: leaf_8
+    100114: leaf_9
+    100116: Mouth
+    100118: Sphere
+    100120: Sphere_0
+    100122: Sphere_1
+    100124: Sphere_2
+    100126: Sphere_3
+    100128: spike1
+    100130: spike2
+    100132: spike3
+    100134: spike4
+    100136: spike5
+    100138: //RootNode
     400000: Bone
     400002: Bone_0
     400004: Bone_001
@@ -94,63 +91,60 @@ ModelImporter:
     400026: Bone_012
     400028: Bone_2
     400030: Branch
-    400032: Camera
-    400034: Hemi
-    400036: Lamp
-    400038: leaf10
-    400040: leaf11
-    400042: leaf12
-    400044: leaf13
-    400046: leaf14
-    400048: leaf15
-    400050: leaf16
-    400052: leaf17
-    400054: leaf18
-    400056: leaf19
-    400058: leaf20
-    400060: leaf21
-    400062: leaf22
-    400064: leaf23
-    400066: leaf24
-    400068: leaf25
-    400070: leaf26
-    400072: leaf27
-    400074: leaf3
-    400076: leaf3_005
-    400078: leaf4
-    400080: leaf5
-    400082: leaf6
-    400084: leaf7
-    400086: leaf8
-    400088: leaf9
-    400090: leaf_000
-    400092: leaf_001
-    400094: leaf_002
-    400096: leaf_003
-    400098: leaf_1
-    400100: leaf_10
-    400102: leaf_11
-    400104: leaf_12
-    400106: leaf_2
-    400108: leaf_3
-    400110: leaf_4
-    400112: leaf_5
-    400114: leaf_6
-    400116: leaf_7
-    400118: leaf_8
-    400120: leaf_9
-    400122: Mouth
-    400124: Sphere
-    400126: Sphere_0
-    400128: Sphere_1
-    400130: Sphere_2
-    400132: Sphere_3
-    400134: spike1
-    400136: spike2
-    400138: spike3
-    400140: spike4
-    400142: spike5
-    400144: //RootNode
+    400032: leaf10
+    400034: leaf11
+    400036: leaf12
+    400038: leaf13
+    400040: leaf14
+    400042: leaf15
+    400044: leaf16
+    400046: leaf17
+    400048: leaf18
+    400050: leaf19
+    400052: leaf20
+    400054: leaf21
+    400056: leaf22
+    400058: leaf23
+    400060: leaf24
+    400062: leaf25
+    400064: leaf26
+    400066: leaf27
+    400068: leaf3
+    400070: leaf3_005
+    400072: leaf4
+    400074: leaf5
+    400076: leaf6
+    400078: leaf7
+    400080: leaf8
+    400082: leaf9
+    400084: leaf_000
+    400086: leaf_001
+    400088: leaf_002
+    400090: leaf_003
+    400092: leaf_1
+    400094: leaf_10
+    400096: leaf_11
+    400098: leaf_12
+    400100: leaf_2
+    400102: leaf_3
+    400104: leaf_4
+    400106: leaf_5
+    400108: leaf_6
+    400110: leaf_7
+    400112: leaf_8
+    400114: leaf_9
+    400116: Mouth
+    400118: Sphere
+    400120: Sphere_0
+    400122: Sphere_1
+    400124: Sphere_2
+    400126: Sphere_3
+    400128: spike1
+    400130: spike2
+    400132: spike3
+    400134: spike4
+    400136: spike5
+    400138: //RootNode
     2300000: Branch
     2300002: spike1
     2300004: spike2
@@ -199,8 +193,9 @@ ModelImporter:
     4300066: leaf25
     4300068: leaf26
     4300070: leaf27
-    7400000: leaf3Action
-    7400002: MouthAction
+    7400000: Default Take
+    7400002: leaf3Action
+    7400004: MouthAction
     9500000: //RootNode
     13700000: leaf10
     13700002: leaf11
@@ -271,7 +266,7 @@ ModelImporter:
     splitTangentsAcrossUV: 1
     normalImportMode: 0
     tangentImportMode: 1
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     human: []
