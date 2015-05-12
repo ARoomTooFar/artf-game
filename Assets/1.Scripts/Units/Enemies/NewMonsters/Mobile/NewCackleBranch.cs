@@ -32,11 +32,11 @@ public class NewCackleBranch: NewRangedEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 30;
+		stats.maxHealth = 60;
 		stats.health = stats.maxHealth;
 		stats.armor = 1;
-		stats.strength = 10;
-		stats.coordination=5;
+		stats.strength = 0;
+		stats.coordination= 10;
 		stats.speed=7;
 		
 		this.minAtkRadius = 8.0f;
@@ -45,7 +45,7 @@ public class NewCackleBranch: NewRangedEnemy {
 
 
 	public override void SetTierData(int tier) {
-		tier = 5;
+		tier = 0;
 		base.SetTierData (tier);
 	}
 

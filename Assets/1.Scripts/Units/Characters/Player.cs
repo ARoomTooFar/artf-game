@@ -47,11 +47,11 @@ public class Player : NewCharacter, IHealable<int>{
 	protected override void setInitValues() {
 		base.setInitValues();
 		//Testing with base 0-10 on stats with 10 being 100/cap%
-		stats.maxHealth = 60;
+		stats.maxHealth = 100;
 		stats.health = stats.maxHealth;
 		stats.armor = 0;
 		stats.strength = 10;
-		stats.coordination=0;
+		stats.coordination= 10;
 		stats.speed=10;
 		greyDamage = 0;
 	}
