@@ -11,7 +11,7 @@ public class CacklebranchPistol : RangedWeapons {
 		base.setInitValues();
 		stats.weapTypeName = "";
 		stats.atkSpeed = 2.0f;
-		stats.damage = 20 + user.GetComponent<Character>().stats.coordination;
+		stats.damage = 5 + user.GetComponent<Character>().stats.coordination;
 
 		variance = 10f;
 		kick = 0.5f;

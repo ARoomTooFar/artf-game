@@ -66,17 +66,17 @@ public class NewMirage : NewStationaryEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 2;
+		tier = 0;
 
 		base.SetTierData (tier);
 	}
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 35;
+		stats.maxHealth = 75;
 		stats.health = stats.maxHealth;
-		stats.armor = 1;
-		stats.strength = 8;
+		stats.armor = 0;
+		stats.strength = 45;
 		stats.coordination=0;
 		stats.speed=4;
 		setAnimHash ();

@@ -40,6 +40,7 @@ public class endzone : MonoBehaviour {
 			if (numbPlayersAlive == numbPlayersInZone) 
 			{
 				print("ALL PLAYERS ALIVE AT END.");
+				//THIS NEEDS TO USE THE GSmanager HERE
 				Application.LoadLevel(endScene);
 			}
 		}
