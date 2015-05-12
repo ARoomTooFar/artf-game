@@ -112,16 +112,52 @@ public class MainMenuCtrl : MonoBehaviour {
         txtDisplayAcctName = GameObject.Find("/Canvas/" + menuPopUpName + "/DisplayAcctName/TxtDisplayAcctName").GetComponent<Text>();
 
         popUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
-            KeyInput(new char[4] { '@', '.', '-', '_' }
-        ));
+            KeyInput(new char[4] { '@', '.', '-', '_' })
+		);
 
         popUp[0, 1].GetComponent<Button>().onClick.AddListener(() =>
-            KeyInput(new char[3] { 'A', 'B', 'C' }
-        ));
+            KeyInput(new char[3] { 'A', 'B', 'C' })
+		);
 
         popUp[0, 2].GetComponent<Button>().onClick.AddListener(() =>
-            KeyInput(new char[3] { 'D', 'E', 'F' }
-        ));
+            KeyInput(new char[3] { 'D', 'E', 'F' })
+		);
+
+		popUp[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[3] { 'G', 'H', 'I' })
+		);
+
+		popUp[1, 1].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[3] { 'J', 'K', 'L' })
+		);
+
+		popUp[1, 2].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[3] { 'M', 'N', 'O' })
+		);
+
+		popUp[2, 0].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[4] { 'P', 'Q', 'R', 'S' })
+		);
+
+		popUp[2, 1].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[3] { 'T', 'U', 'V' })
+		);
+
+		popUp[2, 2].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[4] { 'W', 'X', 'Y', 'Z' })
+		);
+
+		popUp[3, 0].GetComponent<Button>().onClick.AddListener(() =>
+		    DeleteChar()
+		);
+
+		popUp[3, 1].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[1] { ' ' })
+		);
+
+		popUp[3, 2].GetComponent<Button>().onClick.AddListener(() =>
+			Debug.Log ("Swap pressed")
+		);
 
 		// submit button
 		popUp[4, 0].GetComponent<Button>().onClick.AddListener(() =>
@@ -172,8 +208,7 @@ public class MainMenuCtrl : MonoBehaviour {
             prevBtn = currMenuPtr[locY, locX];
             prevKey = ""; // reset keypad on move
 
-            Debug.Log(locX + "," + locY);
-            Debug.Log(currMenuPtr.GetLength(0) + "," + currMenuPtr.GetLength(1));
+            //Debug.Log(locX + "," + locY);
         }
     }
 
@@ -318,7 +353,16 @@ public class MainMenuCtrl : MonoBehaviour {
         }
         return retVal;
     }
-	
+
+	void DeleteChar() {
+		if (txtDisplayAcctName.text.Length > 0)
+		{
+			txtDisplayAcctName.text = txtDisplayAcctName.text.Remove(txtDisplayAcctName.text.Length - 1);
+			charArrLoc = 0;
+			prevKey = "";
+		}
+	}
+
 	void Update () {
 		// check for joystick movement
         MenuMove(Input.GetAxisRaw(controls.hori), Input.GetAxisRaw(controls.vert));
@@ -333,12 +377,7 @@ public class MainMenuCtrl : MonoBehaviour {
 
         if (Input.GetButtonUp(controls.joySecItem) && currMenu == Menu.PopUp)
         {
-            if (txtDisplayAcctName.text.Length > 0)
-            {
-                txtDisplayAcctName.text = txtDisplayAcctName.text.Remove(txtDisplayAcctName.text.Length - 1);
-                charArrLoc = 0;
-                prevKey = "";
-            }
+			DeleteChar();
         }
 	}
 }
