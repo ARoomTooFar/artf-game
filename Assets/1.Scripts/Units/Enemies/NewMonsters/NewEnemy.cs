@@ -38,7 +38,7 @@ public class NewEnemy : NewCharacter {
 	
 	protected float aggroTimer = 5.0f;
 
-	bool sparksDone = true;
+	// bool sparksDone = true;
 	GameObject sparks = null;
 	
 	protected override void Awake() {
@@ -162,7 +162,7 @@ public class NewEnemy : NewCharacter {
 	//-----------------------//
 	// Calculation Functions //
 	//-----------------------//
-	
+
 	public virtual bool canSeePlayer(GameObject p) {
 		if (p == null) {
 			this.animator.SetBool("CanSeeTarget", false);

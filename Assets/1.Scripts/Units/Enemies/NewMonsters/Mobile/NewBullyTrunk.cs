@@ -164,6 +164,18 @@ public class NewBullyTrunk: NewMobileEnemy {
 		this.AttackEnd();
 	}
 
+	protected virtual void PummelRightNow() {
+	}
+
+	protected virtual void PummelRightOver() {
+	}
+
+	protected virtual void PummelLeftNow() {
+	}
+
+	protected virtual void PummelLeftOver() {
+	}
+
 	//-------------------//
 	
 	

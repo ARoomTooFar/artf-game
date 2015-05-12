@@ -24,7 +24,7 @@ public class Player : NewCharacter, IHealable<int>{
 	public UIActive UI;
 	public Controls controls;
 
-	bool sparksDone = true;
+	// bool sparksDone = true;
 	GameObject sparks = null;
 
 	private Door currDoor;
@@ -242,7 +242,7 @@ public class Player : NewCharacter, IHealable<int>{
 		this.greyDamage = 0;
 		if(UI!=null) UI.hpBar.current = 0;
 
-		Renderer[] rs = GetComponentsInChildren<Renderer>();
+		// Renderer[] rs = GetComponentsInChildren<Renderer>();
 		this.animator.SetInteger("Killed", (int) UnityEngine.Random.Range(1.1f, 2.9f));	
 	}
 	
