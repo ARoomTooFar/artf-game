@@ -68,10 +68,10 @@ public partial class ARTFRoom : Square {
 	public GameObject ULMarker { get; protected set; }
 	
 	public virtual void updateMarkerPositions(){
-		LLMarker.transform.root.position = LLCorner;
-		URMarker.transform.root.position = URCorner;
-		LRMarker.transform.root.position = LRCorner;
-		ULMarker.transform.root.position = ULCorner;
+		LLMarker.transform.position = LLCorner;
+		URMarker.transform.position = URCorner;
+		LRMarker.transform.position = LRCorner;
+		ULMarker.transform.position = ULCorner;
 	}
 
 	public virtual void setMarkerActive(bool active){
@@ -214,15 +214,35 @@ public partial class ARTFRoom : Square {
 		}
 		base.resize(oldCor, newCor);
 	
-		List<SceneryBlock> remDoor = new List<SceneryBlock> ();
+		List<SceneryBlock> remScn = new List<SceneryBlock> ();
 		foreach (SceneryBlock door in Doors) {
 			if(!isEdge(door.Position)){
-				remDoor.Add(door);
+				remScn.Add(door);
 			}
 		}
-		foreach (SceneryBlock door in remDoor) {
+		foreach (SceneryBlock door in remScn) {
 			Doors.Remove(door);
 			MapData.SceneryBlocks.remove(door);
+		}
+		remScn.Clear ();
+		foreach (SceneryBlock scn in Scenery) {
+			if(!inRoom (scn.Position)){
+				remScn.Add(scn);
+			}
+		}
+		foreach (SceneryBlock scn in remScn) {
+			Scenery.Remove(scn);
+			MapData.SceneryBlocks.remove(scn);
+		}
+		List<MonsterBlock> remMon = new List<MonsterBlock> ();
+		foreach (MonsterBlock mon in Monster) {
+			if(!inRoom (mon.Position)){
+				remMon.Add(mon);
+			}
+		}
+		foreach (MonsterBlock mon in remMon) {
+			Monster.Remove(mon);
+			MapData.MonsterBlocks.remove(mon);
 		}
 
 		setFloor();
