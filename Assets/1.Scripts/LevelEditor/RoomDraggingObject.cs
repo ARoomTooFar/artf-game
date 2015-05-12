@@ -67,7 +67,7 @@ public class RoomDraggingObject : ClickEvent {
 	}
 
 	public Vector3 getPosition() {
-		return this.gameObject.transform.root.position.Round();
+		return this.gameObject.transform.position.Round();
 	}
 	
 	public Quaternion getRotation() {
