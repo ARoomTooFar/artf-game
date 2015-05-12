@@ -90,7 +90,7 @@ public class NewBullyTrunk: NewMobileEnemy {
 		stats.speed=6;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 5.5f;
+		this.maxAtkRadius = 3.5f;
 	}
 
 	public override void SetTierData(int tier) {
