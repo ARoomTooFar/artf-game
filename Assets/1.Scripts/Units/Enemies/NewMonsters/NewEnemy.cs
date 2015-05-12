@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class NewEnemy : NewCharacter {
 
@@ -32,7 +33,7 @@ public class NewEnemy : NewCharacter {
 
 	public Vector3 targetDir;
 	public Vector3 resetpos;
-	
+
 	
 	protected int layerMask = 1 << 9;
 	
@@ -40,6 +41,8 @@ public class NewEnemy : NewCharacter {
 
 	bool sparksDone = true;
 	GameObject sparks = null;
+	
+	public MonsterLoot monsterLoot;
 	
 	protected override void Awake() {
 		base.Awake();
@@ -116,6 +119,7 @@ public class NewEnemy : NewCharacter {
 	public virtual void SetTierData(int tier) {
 		this.tier = tier;
 		this.animator.SetInteger("Tier", this.tier);
+		monsterLoot = this.gameObject.AddComponent<MonsterLoot>();
 	}
 
 	//-----------//

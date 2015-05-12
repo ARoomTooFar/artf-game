@@ -97,6 +97,8 @@ public class NewBullyTrunk: NewMobileEnemy {
 		tier = 1;
 		base.SetTierData (tier);
 
+		monsterLoot.initializeLoot("BullyTrunk", tier);
+
 		this.stats.speed = tier < 3 ? 7 : 10;
 
 		if (tier > 0) {

@@ -47,6 +47,8 @@ public class NewCackleBranch: NewRangedEnemy {
 	public override void SetTierData(int tier) {
 		tier = 5;
 		base.SetTierData (tier);
+
+		monsterLoot.initializeLoot("CackleBranch", tier);
 	}
 
 	

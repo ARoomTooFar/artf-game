@@ -39,6 +39,8 @@ public class NewFoliantFodder: NewMobileEnemy {
 	public override void SetTierData(int tier) {
 		tier = 0;
 		base.SetTierData (tier);
+
+		monsterLoot.initializeLoot("FoliantFodder", tier);
 		
 		this.stats.speed = tier < 3 ? 9 : 12;
 		

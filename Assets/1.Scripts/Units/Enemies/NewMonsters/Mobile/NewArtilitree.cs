@@ -43,6 +43,8 @@ public class NewArtilitree: NewRangedEnemy {
 	public override void SetTierData(int tier) {
 		tier = 5;
 		base.SetTierData(tier);
+
+		monsterLoot.initializeLoot("Artilitree", tier);
 		
 		if (tier < 1) stats.speed = 2;
 		else if (tier > 0 && tier < 5) stats.speed = 3;
