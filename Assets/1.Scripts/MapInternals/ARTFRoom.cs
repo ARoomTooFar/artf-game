@@ -9,9 +9,9 @@ using System.Collections.Generic;
 public partial class ARTFRoom : Square {
 
 	#region PrivateVariables
-	private static string defaultFloor = "{0}/Floors/IndustrialFloor1";
-	private static string roomCornerId = "LevelEditor/Other/RoomCorner";
-	private static string wallType = "{0}/Rooms/wallstoneend";
+	private string floorType = "{0}/Floors/IndustrialFloor1";
+	private string roomCornerId = "LevelEditor/Other/RoomCorner";
+	private string wallType = "{0}/Rooms/wallstoneend";
 	#endregion PrivateVariables
 
 	#region Properties
@@ -86,12 +86,16 @@ public partial class ARTFRoom : Square {
 		get{ return LLCorner.toCSV() + "," + URCorner.toCSV();}
 	}
 	#endregion Properties
-	
-	/*
+
+	/* 	
 	 * Constructor
 	 */
-	public ARTFRoom(Vector3 pos1, Vector3 pos2) : base(pos1, pos2) {
-		this.Floor = GameObjectResourcePool.getResource(defaultFloor, this.LLCorner, Vector3.zero);
+	public ARTFRoom(Vector3 pos1, Vector3 pos2,
+	                string floor = "{0}/Floors/IndustrialFloor1",
+	                string wall = "{0}/Rooms/wallstoneend") : base(pos1, pos2) {
+		floorType = floor;
+		wallType = wall;
+		this.Floor = GameObjectResourcePool.getResource(floorType, this.LLCorner, Vector3.zero);
 		setFloor();
 		this.LinkedRooms = new Dictionary<SceneryBlock, ARTFRoom>();
 		this.Scenery = new List<SceneryBlock> ();
@@ -268,7 +272,7 @@ public partial class ARTFRoom : Square {
 			wall.remove();
 		}
 		Walls.Clear ();
-		GameObjectResourcePool.returnResource(defaultFloor, Floor);
+		GameObjectResourcePool.returnResource(floorType, Floor);
 		if(LLMarker != null) {
 			GameObjectResourcePool.returnResource(roomCornerId, LLMarker);
 		}
