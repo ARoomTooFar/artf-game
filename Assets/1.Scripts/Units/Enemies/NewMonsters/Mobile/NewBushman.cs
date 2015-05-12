@@ -54,7 +54,7 @@ public class NewBushman : NewMobileEnemy {
 		base.setInitValues();
 		stats.maxHealth = 100;
 		stats.health = stats.maxHealth;
-		stats.armor = 5;
+		stats.armor = 3;
 		stats.strength = 6;
 		stats.coordination=0;
 		stats.speed=4;

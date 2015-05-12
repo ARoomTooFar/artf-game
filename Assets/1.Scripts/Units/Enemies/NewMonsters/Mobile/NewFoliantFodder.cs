@@ -25,10 +25,10 @@ public class NewFoliantFodder: NewMobileEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 25;
+		stats.maxHealth = 50;
 		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 5;
+		stats.armor = 1;
+		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=9;
 		
@@ -37,7 +37,7 @@ public class NewFoliantFodder: NewMobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 0;
+		tier = 5;
 		base.SetTierData (tier);
 
 		monsterLoot.initializeLoot("FoliantFodder", tier);
