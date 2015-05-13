@@ -20,6 +20,9 @@ public class MonsterLoot : MonoBehaviour {
 			print ("No loot table information for " + this.gameObject.name + " of tier " + tier);
 		}
 
+
 	} 
 	
 }
+
+
