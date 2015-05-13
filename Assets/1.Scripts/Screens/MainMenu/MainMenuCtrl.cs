@@ -101,6 +101,7 @@ public class MainMenuCtrl : MonoBehaviour {
         loginForm[2, 1].GetComponent<Button>().onClick.AddListener(() =>
         {
 			MenuSwitch (Menu.StartMenu);
+			MenuReset ();
         });
 
 		// setup keypad
@@ -359,6 +360,11 @@ public class MainMenuCtrl : MonoBehaviour {
             child.color = new Color(0.3f, 0.3f, 0.3f);
         }
     }
+
+	void MenuReset() {
+		txtFieldAcctName.text = "Enter an account name...";
+		txtFieldPasscode.text = "Enter your passcode...";
+	}
 
     string ConcatCharArray(char[] chars)
     {
