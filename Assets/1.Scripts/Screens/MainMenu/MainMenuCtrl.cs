@@ -37,6 +37,7 @@ public class MainMenuCtrl : MonoBehaviour {
     private int loginFormHeight = 3;
 	private Animator loginFormAnim;
     private Text txtFieldAcctName;
+	private Text txtFieldPasscode;
 
 	// pop-up
 	private GameObject[,] popUp;
@@ -76,6 +77,7 @@ public class MainMenuCtrl : MonoBehaviour {
 		loginForm = new GameObject[loginFormHeight, loginFormWidth];
 		loginForm[0, 0] = loginForm[0, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName");
         txtFieldAcctName = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName/TxtFieldAcctName").GetComponent<Text>();
+		txtFieldPasscode = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldPasscode/TxtFieldPasscode").GetComponent<Text>();
         loginForm[1, 0] = loginForm[1, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldPasscode");
         loginForm[2, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnLogin");
         loginForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnBack");
@@ -84,6 +86,14 @@ public class MainMenuCtrl : MonoBehaviour {
 		// acct name field
 		loginForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
+			currFieldPtr = txtFieldAcctName;
+			PopUpEnable ();
+		});
+
+		// passcode field
+		loginForm[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+        {
+			currFieldPtr = txtFieldPasscode;
 			PopUpEnable ();
 		});
 
@@ -163,7 +173,7 @@ public class MainMenuCtrl : MonoBehaviour {
 		popUp[4, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
             PopUpDisable();
-            txtFieldAcctName.text = txtDisplayAcctName.text;
+            currFieldPtr.text = txtDisplayAcctName.text;
 		});
 
 		// switch to start menu
@@ -232,6 +242,7 @@ public class MainMenuCtrl : MonoBehaviour {
 			break;
         case Menu.PopUp:
             currMenuPtr = popUp;
+			txtDisplayAcctName.text = currFieldPtr.text;
             currAnim = popUpAnim;
             break;
 		default:
@@ -268,6 +279,11 @@ public class MainMenuCtrl : MonoBehaviour {
 
     void KeyInput(char[] chars)
     {
+		if (txtDisplayAcctName.text == "Enter an account name..." || txtDisplayAcctName.text == "Enter your passcode...") {
+			txtDisplayAcctName.text = "";
+			txtDisplayAcctName.color = Color.white;
+		}
+
         currKey = ConcatCharArray(chars);
         if (currKey != prevKey)
         {
