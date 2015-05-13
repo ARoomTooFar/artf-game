@@ -41,12 +41,18 @@ public class MainMenuCtrl : MonoBehaviour {
 
 	// pop-up
 	private GameObject[,] popUp;
+	private GameObject[,] numPad;
 	private int popUpWidth = 3;
 	private int popUpHeight = 5;
 	private Animator popUpAnim;
 
     // keypad
-    private Text txtDisplayAcctName;
+	private string currKey = "";
+	private string prevKey = "";
+	private float pressTime;
+	private string tmpCharName;
+	private int charArrLoc = 0;
+	private Text txtDisplayField;
 
 	void Start () {
         // setup start menu
@@ -104,7 +110,7 @@ public class MainMenuCtrl : MonoBehaviour {
 			MenuReset ();
         });
 
-		// setup keypad
+		// setup keypad (caps)
 		popUp = new GameObject[popUpHeight, popUpWidth];
         popUp[0, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySymbol");
         popUp[0, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyABC");
@@ -120,9 +126,31 @@ public class MainMenuCtrl : MonoBehaviour {
         popUp[3, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySwap");
         popUp[4, 0] = popUp[4, 1] = popUp[4, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/BtnSubmit");
 		popUpAnim = GameObject.Find ("/Canvas/" + menuPopUpName).GetComponent<Animator>();
-        txtDisplayAcctName = GameObject.Find("/Canvas/" + menuPopUpName + "/DisplayAcctName/TxtDisplayAcctName").GetComponent<Text>();
+        txtDisplayField = GameObject.Find("/Canvas/" + menuPopUpName + "/DisplayField/TxtDisplayField").GetComponent<Text>();
 
-        popUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		// setup number keypad
+		numPad = new GameObject[popUpHeight, popUpWidth];
+		numPad[0, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key1");
+		numPad[0, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key2");
+		numPad[0, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key3");
+		numPad[1, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key4");
+		numPad[1, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key5");
+		numPad[1, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key6");
+		numPad[2, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key7");
+		numPad[2, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key8");
+		numPad[2, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key9");
+		numPad[3, 0] = popUp[3, 0];
+		numPad[3, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key0");
+		numPad[3, 2] = popUp[3, 2];
+		numPad[4, 0] = numPad[4, 1] = numPad[4, 2] = popUp[4, 0];
+
+		foreach (GameObject child in numPad) {
+			if (child.name != "KeyDel" && child.name != "KeySwap" && child.name != "BtnSubmit") {
+				child.SetActive (false);
+			}
+		}
+		
+		popUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
             KeyInput(new char[4] { '@', '.', '-', '_' })
 		);
 
@@ -166,15 +194,20 @@ public class MainMenuCtrl : MonoBehaviour {
 		    KeyInput(new char[1] { ' ' })
 		);
 
-		popUp[3, 2].GetComponent<Button>().onClick.AddListener(() =>
-			Debug.Log ("Swap pressed")
-		);
+		// swap button
+		popUp[3, 2].GetComponent<Button>().onClick.AddListener(() => {
+			if (currMenuPtr == popUp) {
+				Debug.Log ("Currently on popUp");
+			} else {
+
+			}
+		});
 
 		// submit button
 		popUp[4, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
             PopUpDisable();
-            currFieldPtr.text = txtDisplayAcctName.text;
+			KeypadSubmit();
 		});
 
 		// switch to start menu
@@ -243,7 +276,7 @@ public class MainMenuCtrl : MonoBehaviour {
 			break;
         case Menu.PopUp:
             currMenuPtr = popUp;
-			txtDisplayAcctName.text = currFieldPtr.text;
+			txtDisplayField.text = currFieldPtr.text;
             currAnim = popUpAnim;
             break;
 		default:
@@ -272,17 +305,11 @@ public class MainMenuCtrl : MonoBehaviour {
         MenuSwitch(prevMenu);
     }
 
-    private string currKey = "";
-    private string prevKey = "";
-    private float pressTime;
-    private string tmpCharName;
-    private int charArrLoc = 0;
-
     void KeyInput(char[] chars)
     {
-		if (txtDisplayAcctName.text == "Enter an account name..." || txtDisplayAcctName.text == "Enter your passcode...") {
-			txtDisplayAcctName.text = "";
-			txtDisplayAcctName.color = Color.white;
+		if (txtDisplayField.text == "Enter an account name..." || txtDisplayField.text == "Enter your passcode...") {
+			txtDisplayField.text = "";
+			txtDisplayField.color = Color.white;
 		}
 
         currKey = ConcatCharArray(chars);
@@ -290,22 +317,22 @@ public class MainMenuCtrl : MonoBehaviour {
         {
             pressTime = Time.time;
             charArrLoc = 0;
-            tmpCharName = txtDisplayAcctName.text;
-            txtDisplayAcctName.text = tmpCharName + chars[charArrLoc];
+            tmpCharName = txtDisplayField.text;
+            txtDisplayField.text = tmpCharName + chars[charArrLoc];
         }
         else
         {
             if ((Time.time - pressTime) < 1.0)
             {
-                txtDisplayAcctName.text = tmpCharName + chars[charArrLoc];
+                txtDisplayField.text = tmpCharName + chars[charArrLoc];
                 pressTime = Time.time;
             }
             else
             {
                 pressTime = Time.time;
                 charArrLoc = 0;
-                tmpCharName = txtDisplayAcctName.text;
-                txtDisplayAcctName.text = tmpCharName + chars[charArrLoc];
+                tmpCharName = txtDisplayField.text;
+                txtDisplayField.text = tmpCharName + chars[charArrLoc];
             }
         }
 
@@ -314,6 +341,17 @@ public class MainMenuCtrl : MonoBehaviour {
             charArrLoc = 0;
         prevKey = currKey;
     }
+
+	void KeypadSubmit() {
+		if (txtDisplayField.text == "") {
+			if (currFieldPtr == txtFieldAcctName) {
+				txtDisplayField.text = "Enter an account name...";
+			} else if (currFieldPtr == txtFieldPasscode) {
+				txtDisplayField.text = "Enter your passcode...";
+			}
+		}
+		currFieldPtr.text = txtDisplayField.text;
+	}
 
     void MenuEnable() {
 		// unlock controls
@@ -377,9 +415,9 @@ public class MainMenuCtrl : MonoBehaviour {
     }
 
 	void DeleteChar() {
-		if (txtDisplayAcctName.text.Length > 0)
+		if (txtDisplayField.text.Length > 0)
 		{
-			txtDisplayAcctName.text = txtDisplayAcctName.text.Remove(txtDisplayAcctName.text.Length - 1);
+			txtDisplayField.text = txtDisplayField.text.Remove(txtDisplayField.text.Length - 1);
 			charArrLoc = 0;
 			prevKey = "";
 		}
