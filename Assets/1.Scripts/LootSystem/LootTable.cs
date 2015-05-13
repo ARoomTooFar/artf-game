@@ -3,13 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 
 
+//holds looted items so we can send it to reward system
+public static class LootedItems {
+	private static List<string> loot = new List<string>();
 
+	public static void addItemToLoot(string s){
+		loot.Add(s);
+	}
+
+	public static List<string> getList(){
+		return loot;
+	}
+}
 
 //holds list of all shit for a monster.
 //initializes all drop rates to 0.
 public class LootList{
 	//item name / drop rate
-	public Dictionary<string, float> lootList = new Dictionary<string, float>()
+	public Dictionary<string, float> thisMonster = new Dictionary<string, float>()
 	{
 		{ Items.money, 0f},
 		{ Items.sprint, 0f},
@@ -68,7 +79,7 @@ public class LootList{
 	//set which ones you want to be non-zero
 	public LootList(Dictionary<string, float> items){
 		foreach(var key in items.Keys){
-			lootList[key] = items[key];
+			thisMonster[key] = items[key];
 		}
 	}
 }
