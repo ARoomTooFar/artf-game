@@ -67,7 +67,7 @@ public class NewBushman : NewMobileEnemy {
 		tier = 1;
 		base.SetTierData (tier);
 
-		monsterLoot.initializeLoot("Bushman", tier);
+		monsterLoot.initializeLoot("Bushling", tier);
 
 		if (tier > 0) {
 			this.sprint = this.inventory.items[inventory.selected].GetComponent<Sprint>();
