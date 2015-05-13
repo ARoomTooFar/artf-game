@@ -22,7 +22,6 @@ public class RoomResizingObject : ClickEvent {
 		
 		//for the ghost-duplicate
 		GameObject itemObjectCopy = null;
-		Transform thing = this.transform;
 		Vector3 position = this.gameObject.transform.position;
 		UICamera.GetComponent<CameraDraws>().room = MapData.TheFarRooms.find(position);
 		UICamera.GetComponent<CameraDraws>().roomResizeOrigin = position;

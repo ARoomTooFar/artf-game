@@ -5,12 +5,10 @@ using UnityEngine.UI;
 
 public class DragableObject : ClickEvent {
 
-	public LayerMask draggingLayerMask;
 	Camera UICamera;
 	TileMapController tilemapcont;
 
 	void Start() {
-		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = Camera.main;
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}

@@ -1,38 +1,20 @@
 using UnityEngine;
-using System.Collections;
-using System;
-using System.IO; 
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters.Binary; 
-using System.Runtime.Serialization;
-using System.Reflection;
-using System.Text;
-using System.Linq;
 
 public class TileMapController : MonoBehaviour {
-	public int grid_x;
-	public int grid_z;
 	Camera UICamera;
 	public HashSet<Vector3> selectedTiles = new HashSet<Vector3>();
 	public Vector3 shiftOrigin = Global.nullVector3;
-	public bool placeRoomClicked = false;
-	public float secondX;
-	public float secondZ;
 	public bool suppressDragSelecting;
 	Vector3 clickOrigin = Global.nullVector3;
 	public Vector3 lastClick = Global.nullVector3;
 	
 	void Start() {	
 		UICamera = Camera.main;
-		grid_x = 100;
-		grid_z = 100;
-		//buildMesh();
 	}
 
 	void Update() {
-		//RayToScene();
 		if(EventSystem.current.IsPointerOverGameObject()) {
 			return;
 		}
@@ -118,9 +100,5 @@ public class TileMapController : MonoBehaviour {
 	/*deselects tile passed into function */
 	public void deselect(Vector3 remove) {
 		selectedTiles.Remove(remove);
-	}
-
-	public HashSet<Vector3> getSelectedTiles() {
-		return selectedTiles;
 	}
 }
