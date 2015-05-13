@@ -7,9 +7,9 @@ public class Bushman : MobileEnemy {
 
 
 	private class BMFrenzyGrowth : StatsMultiplier {
-		public float basedmg, currentdmg, dmgGrowth;
-		public float basedef, currentdef, defGrowth;
-		public float basespd, currentspd, spdGrowth;
+		public float basedmg, dmgGrowth;
+		public float basedef, defGrowth;
+		public float basespd, spdGrowth;
 
 		// variable growth
 		public StatsMultiplier FrenzyGrowth(float dmgUp, float dmgRedUp, float spdUp) {
@@ -45,7 +45,6 @@ public class Bushman : MobileEnemy {
 		// Initialize all states
 		State charging = new State("charging");
 		State charge = new State ("charge");
-//		State targetSwitch = new State ("switch target");
 		State lunge = new State ("lunge");
 		State free_anim = new State ("free anim");
 		
@@ -53,7 +52,6 @@ public class Bushman : MobileEnemy {
 		// Add all the states to the state machine
 		sM.states.Add (charging.id, charging);
 		sM.states.Add (charge.id, charge);
-//		sM.states.Add (targetSwitch.id, targetSwitch);
 		sM.states.Add (lunge.id, lunge);
 		sM.states.Add (free_anim.id, free_anim);
 		
@@ -61,7 +59,6 @@ public class Bushman : MobileEnemy {
 		// Initialize all transitions
 		Transition tCharging = new Transition(charging);
 		Transition tCharge = new Transition(charge);
-//		Transition tTargetSwitch = new Transition (targetSwitch);
 		Transition tLunge = new Transition (lunge);
 		Transition tFreeAnim = new Transition (free_anim);
 		
@@ -69,7 +66,6 @@ public class Bushman : MobileEnemy {
 		// Add all the transitions to the state machine
 		sM.transitions.Add (tCharging.targetState.id, tCharging);
 		sM.transitions.Add (tCharge.targetState.id, tCharge);
-//		sM.transitions.Add (tTargetSwitch.targetState.id, tTargetSwitch);
 		sM.transitions.Add (tLunge.targetState.id, tLunge);
 		sM.transitions.Add (tFreeAnim.targetState.id, tFreeAnim);
 		
@@ -137,26 +133,9 @@ public class Bushman : MobileEnemy {
 			health = stats.health;
 			powlvs.addRage(Mathf.CeilToInt((float)(stats.maxHealth - stats.health)/stats.maxHealth * 150));
 		}
-//		Debug.Log (stats.health);
 		powlvs.Update();
 		base.Update ();
 	}
-
-	/*
-	public override void die() {
-		Debug.Log("IsDead");
-		base.die();
-		stats.health = 0;
-		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
-		eDeath.setInitValues(this, true);
-		foreach (Renderer r in rs) {
-			r.enabled = false;
-		}
-	} 
-	 */
-
-
 
 	protected override void setInitValues() {
 		base.setInitValues();
@@ -173,13 +152,6 @@ public class Bushman : MobileEnemy {
 
 	protected void setFrenzy() {
 		powlvs = new PowerLevels (this);
-/*		StatsMultiplier stage0 = new StatsMultiplier (); stage0.dmgAmp = 0f; stage0.dmgRed = 0f; stage0.speed = 0f;
-		StatsMultiplier stage1 = new StatsMultiplier (); stage1.dmgAmp = 0.2f; stage1.dmgRed = -0.1f; stage1.speed = 0.1f;
-		StatsMultiplier stage2 = new StatsMultiplier (); stage2.dmgAmp = 0.3f; stage2.dmgRed = -0.25f; stage2.speed = 0.2f;
-		StatsMultiplier stage3 = new StatsMultiplier (); stage3.dmgAmp = 0.36f; stage3.dmgRed = -0.3f; stage3.speed = 0.25f;
-		StatsMultiplier stage4 = new StatsMultiplier (); stage4.dmgAmp = 0.5f; stage4.dmgRed = -0.35f; stage4.speed = 0.4f;
-		StatsMultiplier stage5 = new StatsMultiplier (); stage5.dmgAmp = 0.75f; stage5.dmgRed = -0.4f; stage5.speed = 0.6f;
-		StatsMultiplier stage6 = new StatsMultiplier (); stage6.dmgAmp = 1.0f; stage6.dmgRed = -0.8f; stage6.speed = 1.2f;*/
 
 		BMFrenzyGrowth bmf = new BMFrenzyGrowth ();
 		bmf.basedmg = 0f; bmf.basedef = 0f; bmf.basespd = 0f;
@@ -192,16 +164,7 @@ public class Bushman : MobileEnemy {
 		powlvs.addStage(bmf.FrenzyGrowth(5f, 3.5f, 4f), 36);
 		powlvs.addStage(bmf.FrenzyGrowth(7.5f, 8f, 6f), 45);
 		powlvs.addStage(bmf.FrenzyGrowth(10f, 8f, 12f), 60);
-
-
 	}
-
-	/*
-	protected StatsMultiplier nextLvFrenzy (StatsMultiplier baseBoost, float atk, float def, float spd){
-		baseBoost.strength = baseBoost + 1 * atk;
-		baseBoost.armor = baseBoost + 1 * def;
-		baseBoost.speed = baseBoost + 1 * spd;
-	}*/
 
 	// all floats represent percent increase
 	protected StatsMultiplier FrenzyGrowth(float dmgUp, float dmgRedUp, float spdUp, float currentGrowth) {
@@ -262,11 +225,8 @@ public class Bushman : MobileEnemy {
 	protected void freeAction() {
 
 	}
-
-	/*protected void LungeAttack(){
-
-	}*/
 	
+
 	protected virtual void doneCharge() {
 		this.inventory.keepItemActive = false;
 	}
@@ -279,7 +239,6 @@ public class Bushman : MobileEnemy {
 	}
 	
 	protected virtual void chargeEnd() {
-//		this.blast.useItem();
 	}
 
 	protected virtual void switchTarget() {

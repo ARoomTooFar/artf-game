@@ -12,7 +12,6 @@ public class CVSensor : MonoBehaviour {
 		playersHooked = new List<Player> ();
 	}
 
-
 	void OnTriggerEnter(Collider other) {
 
 		Player p = other.GetComponent<Player> ();

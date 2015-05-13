@@ -29,7 +29,6 @@ public class Player : NewCharacter, IHealable<int>{
 	public UIActive UI;
 	public Controls controls;
 
-	// bool sparksDone = true;
 	GameObject sparks = null;
 
 	private Door currDoor;

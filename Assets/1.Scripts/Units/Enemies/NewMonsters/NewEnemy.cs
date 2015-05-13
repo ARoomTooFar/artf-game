@@ -83,29 +83,6 @@ public class NewEnemy : NewCharacter {
 		if (stats.isDead) return;
 		base.Update();
 		this.TargetFunction();
-
-		if ((target != null || alerted))
-			;
-		/*
-		if (!stats.isDead) {
-			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
-			
-			animSteInfo = animator.GetCurrentAnimatorStateInfo (0);
-			animSteHash = animSteInfo.fullPathHash;
-			freeAnim = !stunned && !knockedback;
-			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
-			this.animator.SetBool("Actable", this.actable);
-			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
-			this.animator.SetBool("IsInAttackAnimation", this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge);
-			
-			
-			if (isGrounded) {
-				movementAnimation ();
-			} else {
-				falling ();
-			}
-			this.TargetFunction();
-		}*/
 	}
 
 	

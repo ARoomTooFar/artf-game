@@ -60,7 +60,6 @@ public class VinePull : Approach {
 
 		if (!feeler.Hooked ()) {
 			Vector3 direction = unit.target.transform.position - unit.transform.position;
-			float angle = Vector3.Angle(direction, unit.facing);
 			float dis = Vector3.Distance(unit.transform.position, unit.target.transform.position);
 
 			RaycastHit hit;

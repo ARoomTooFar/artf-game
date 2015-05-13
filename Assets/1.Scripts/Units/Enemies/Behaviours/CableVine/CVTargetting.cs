@@ -29,16 +29,4 @@ public class CVTargeting : MonoBehaviour {
 		}
 		if (this.unitsInRange.Count == 0) this.CancelInvoke();
 	}
-
-	
-	void OnCollisionEnter(Collision collision){
-		foreach (ContactPoint contact in collision.contacts) {
-
-		}
-	}
-
-	// Same as above, but for when stuff leave the area
-	void OnCollisionExit(Collision collision) {
-
-	}
 }

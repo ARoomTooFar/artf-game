@@ -6,11 +6,9 @@ using System;
 public class BushyApproach : Approach {
 	
 	public BullCharge charge;
-	private Player p;
 	
 	// This will be called when the animator first transitions to this state.
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		p = unit.target.GetComponent<Player> ();
 		charge = new BullCharge ();
 		unit.inventory.keepItemActive = true;
 		charge.useItem();

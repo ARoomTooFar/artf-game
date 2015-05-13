@@ -2,8 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class CableVine : StationaryEnemy {
-	
-	//protected Stun stunDebuff;
+
 	protected GenericDoT constrict;
 	bool inStealth;
 	Rigidbody joints;
@@ -14,7 +13,6 @@ public class CableVine : StationaryEnemy {
 	protected Vector3 MyMawPos;
 	GameObject tether;
 	public CVSensor feeler;
-//	CableMaw MyMum;
 
 	protected override void Awake () {
 		base.Awake();
@@ -24,7 +22,6 @@ public class CableVine : StationaryEnemy {
 		base.Start ();
 		feeler = GetComponentInChildren<CVSensor> ();
 		tether = GameObject.Find ("CVFeelers");
-		//stunDebuff = new Stun ();
 		constrict = new GenericDoT (1);
 		maxApproachRadius = GetComponentInChildren<SphereCollider> ().radius;
 		this.blink = this.inventory.items[inventory.selected].GetComponent<Blink> ();
@@ -56,19 +53,18 @@ public class CableVine : StationaryEnemy {
 
 	}
 
-	//hello
-
 	protected override void setInitValues() {
 		base.setInitValues ();
 	}
 	
 	protected override void Update () {
 		base.Update ();
-		//Debug.Log (this.stats.health);
-		//Debug.Log (this.transform.position);
 	}
 
 	protected override void Approach() {
+		/*
+		 * YO THIS BE SCREWED UP
+		 */
 		base.Approach ();
 		if (!feeler.Hooked ()) {
 			tether.transform.RotateAround (this.transform.position, Vector3.up, 50 * Time.deltaTime);
@@ -85,25 +81,18 @@ public class CableVine : StationaryEnemy {
 	protected override void Attack ()
 	{
 		base.Attack ();
-		// target.GetComponent<Player> ().BDS.addBuffDebuff (constrict, this.gameObject);
 	}
 
 	protected override void Rest() {
 		base.Rest ();
-
 	}
 
 	protected void redeploy () {
 		this.facing = this.target.transform.position - this.transform.position;
 		this.facing.y = 0.0f;
-		float wait = 1.5f;
 
 		if (this.blink.curCoolDown <= 0) {
 			do {
-				/*
-				this.facing.x =  Random.value * (this.facing.x == 0 ? (Random.value - 0.5f) : Mathf.Sign);
-				this.facing.z = Random.value * (this.facing.z == 0 ? (Random.value - 0.5f) : Mathf.Sign);*/
-	
 				this.facing.x += Mathf.Sign (this.facing.x) * Random.value * 10;
 				this.facing.z += Mathf.Sign (this.facing.z) * Random.value * 10;
 				
@@ -132,12 +121,4 @@ public class CableVine : StationaryEnemy {
 		velocity.z = dir.z / time;
 		return velocity;
 	}
-
-
-
-	protected bool hasMaw() {
-		return true;
-	}
-
-
 }

@@ -10,17 +10,10 @@ public class CVineDeploy : EnemyBehaviour {
 		unit = (NewCableVine)unit;
 
 	}
-
-	// This will be called once the animator has transitioned out of the state.
-	public override void OnStateExit (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		
-	}
-	
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		unit.facing = unit.lastSeenPosition.Value - unit.transform.position;
 		unit.facing.y = 0.0f;
-		float wait = 1.5f;
 		
 		if (blink.curCoolDown <= 0) {
 			do {
