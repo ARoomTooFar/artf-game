@@ -4,9 +4,13 @@ using System;
 
 public class BullyTrunkWeapon : MeleeWeapons {
 	
+	// private Knockback debuff;
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
+		
+		// debuff = new Knockback();
 	}
 
 	public override void equip(Character u, Type ene) {
@@ -34,11 +38,10 @@ public class BullyTrunkWeapon : MeleeWeapons {
 	
 	// Does something when opponent is hit
 	protected virtual void OnHit(Character enemy) {
-		Debug.Log (stats.damage);
 		enemy.damage(stats.damage, user.transform, user.gameObject);
 	}
 
-	void OnTriggerEnter(Collider other) {
+	protected override void OnTriggerEnter(Collider other) {
 		IDamageable<int, Transform, GameObject> component = (IDamageable<int, Transform, GameObject>) other.GetComponent( typeof(IDamageable<int, Transform, GameObject>) );
 		Character enemy = (Character) other.GetComponent(opposition);
 		if( component != null && enemy != null) {

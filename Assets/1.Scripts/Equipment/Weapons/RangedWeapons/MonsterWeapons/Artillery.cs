@@ -67,8 +67,9 @@ public class Artillery : Weapons {
 	}
 	
 	protected void fireProjectile() {
+		int damage = (int)(user.GetComponent<Character>().stats.coordination);
 		this.bullet = ((GameObject)Instantiate(projectile, user.transform.position, user.transform.rotation)).GetComponent<ArcingBomb>();
-		this.bullet.setInitValues(user, opposition, 30, false, null, this.curCircle.gameObject);
+		this.bullet.setInitValues(user, opposition, damage, false, null, this.curCircle.gameObject);
 		this.curCircle.moveable = false;
 	}
 }

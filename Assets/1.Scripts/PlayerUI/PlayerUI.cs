@@ -12,6 +12,7 @@ public class PlayerUI : MonoBehaviour {
 		//playerPane = transform.Find("Player1").gameObject.AddComponent<PlayerUIPane>();
 
 		//for scenes with all 4 players
+
 		setUpPlayerUIPane("Player1");
 		setUpPlayerUIPane("Player2");
 		setUpPlayerUIPane("Player3");

@@ -27,7 +27,7 @@ public class CameraRaycast : MonoBehaviour {
 		ray = UICamera.ScreenPointToRay(Input.mousePosition);
 		if(Physics.Raycast(ray, out hit, Mathf.Infinity, ~draggingLayerMask)) {
 			// If it hits something, get it's ClickEvent object and start it's click
-			drag = hit.collider.transform.root.GetComponentInChildren<ClickEvent>();
+			drag = hit.collider.transform.GetComponent<ClickEvent>();
 			if(drag == null || !drag.enabled) {
 				return;
 			}

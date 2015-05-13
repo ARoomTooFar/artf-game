@@ -90,7 +90,7 @@ public class Enemy : Character {
 			}*/
 
 			if (isGrounded) {
-				movementAnimation ();
+				MovementAnimation ();
 				sM.Update ();
 			} else {
 				falling ();
@@ -113,7 +113,6 @@ public class Enemy : Character {
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=4;
-		stats.luck=0;
 		setAnimHash ();
 	}
 	

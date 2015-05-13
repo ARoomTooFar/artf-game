@@ -41,7 +41,6 @@ public class NewRangedEnemy : NewMobileEnemy {
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=9;
-		stats.luck=0;
 		
 		this.minAtkRadius = 5.0f;
 		this.maxAtkRadius = 12.0f;

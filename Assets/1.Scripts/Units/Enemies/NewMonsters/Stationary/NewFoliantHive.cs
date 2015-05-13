@@ -30,13 +30,12 @@ public class NewFoliantHive : NewStationaryEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 25;
+		stats.maxHealth = 200;
 		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 5;
+		stats.armor = 5;
+		stats.strength = 0;
 		stats.coordination=0;
-		stats.speed=9;
-		stats.luck=0;
+		stats.speed=0;
 		
 		this.minAtkRadius = 0.0f;
 		this.maxAtkRadius = 3.0f;

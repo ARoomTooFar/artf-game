@@ -13,10 +13,6 @@ public static class MapDataParser {
 			i++;
 		}
 		i++;
-		//while(SaveStringLines[i] != "Terminal") {
-		//	parseTerrain(SaveStringLines[i++]);
-		//}
-		//i++;
 		while(SaveStringLines[i] != "Room") {
 			parseTerminalRooms(SaveStringLines[i++]);
 		}
@@ -36,12 +32,6 @@ public static class MapDataParser {
 			Mode.setTileMode();
 		} else {
             Debug.Log(Resources.Load("Player1"));
-			/*
-			GameObject p1 = GameObject.Instantiate(Resources.Load("Player1"), start.Coordinates[0], Quaternion.identity) as GameObject;
-            GameObject p2 = GameObject.Instantiate(Resources.Load("Player2"), start.Coordinates[1], Quaternion.identity) as GameObject;
-            GameObject p3 = GameObject.Instantiate(Resources.Load("Player3"), start.Coordinates[2], Quaternion.identity) as GameObject;
-            GameObject p4 = GameObject.Instantiate(Resources.Load("Player4"), start.Coordinates[3], Quaternion.identity) as GameObject;
-*/
 
 			GameObject p1 = GameObject.Find("Player1");
 			GameObject p2 = GameObject.Find("Player2");
@@ -79,7 +69,7 @@ public static class MapDataParser {
 			                         float.Parse(rmParams[5]));
 			ARTFRoom room = new ARTFRoom(pos1, pos2);
 			room.placedThisSession = true;
-			MapData.addRoom(room);
+			MapData.TheFarRooms.add(room);
 		}
 	}
 
@@ -97,7 +87,7 @@ public static class MapDataParser {
 			SceneryBlock nBlk = null;
 			if(MapData.SceneryBlocks.isAddValid(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]))){
 				nBlk = new SceneryBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
-				nBlk.BlockInfo.placedThisSession = true;
+				nBlk.SceneryBlockInfo.placedThisSession = true;
 				MapData.SceneryBlocks.add(nBlk);
 			}
 			if(type[0] == "LevelEditor/Other/PlayerStartingLocation") {
@@ -121,8 +111,8 @@ public static class MapDataParser {
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
 			MonsterBlock nBlk = new MonsterBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
-			nBlk.BlockInfo.placedThisSession = true;
-			nBlk.BlockInfo.Tier = Convert.ToInt32(blkParams[4]);
+			nBlk.MonsterBlockInfo.placedThisSession = true;
+			nBlk.MonsterBlockInfo.Tier = Convert.ToInt32(blkParams[4]);
 			MapData.MonsterBlocks.add(nBlk);
 		}
 	}

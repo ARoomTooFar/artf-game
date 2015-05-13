@@ -5,12 +5,10 @@ using UnityEngine.UI;
 
 public class DragableObject : ClickEvent {
 
-	public LayerMask draggingLayerMask;
 	Camera UICamera;
 	TileMapController tilemapcont;
 
 	void Start() {
-		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = Camera.main;
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}
@@ -91,7 +89,7 @@ public class DragableObject : ClickEvent {
 	}
 
 	public Vector3 getPosition() {
-		return this.gameObject.transform.root.position;
+		return this.gameObject.transform.position;
 	}
 	
 	public Quaternion getRotation() {

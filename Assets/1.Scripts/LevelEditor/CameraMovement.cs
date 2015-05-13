@@ -14,13 +14,11 @@ public class CameraMovement : MonoBehaviour {
 	static float minOrthoSize = 6;
 	private float maxY = 50;
 	private float minY = 10;
-	private Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 	private Vector3 prevMouse = Global.nullVector3;
 	private Ray ray;
 	Button btn;
 	Sprite orth;
 	Sprite pers;
-	Vector3 rotOffset;
 
 	void Start() {
 		// This should only ever be in the Level Editor, so I'm sticking a thing here to tell
@@ -55,7 +53,7 @@ public class CameraMovement : MonoBehaviour {
 	public void dragCamera() {
 		Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
 		float distance = 0;
-		groundPlane.Raycast(ray, out distance);
+		Global.ground.Raycast(ray, out distance);
 		Vector3 point = ray.GetPoint(distance).Round(1);
 		
 		if(prevMouse == Global.nullVector3) {

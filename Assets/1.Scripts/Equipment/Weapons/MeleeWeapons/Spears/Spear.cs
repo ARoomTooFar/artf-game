@@ -5,6 +5,8 @@ using System.Collections;
 
 public class Spear: MeleeWeapons {
 
+	public GameObject explosion;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
@@ -13,15 +15,17 @@ public class Spear: MeleeWeapons {
 	// Used for setting sword stats for each equipment piece
 	protected override void setInitValues() {
 		base.setInitValues();
-		
-		// Default sword stats
-		stats.weapType = 1; // Use dagger animation for now
-		stats.weapTypeName = "dagger";
+
+		stats.chargeSlow = new Slow(1.0f);
+
+		stats.weapType = 2;
+		stats.weapTypeName = "spear";
+		this.stats.buffDuration = 1.25f;
 
 		stats.atkSpeed = 1.0f;
-		stats.damage = (int)(10 + 1.5f * user.GetComponent<Character>().stats.strength);
+		stats.damage = 40; // (int)(10 + 1.5f * user.GetComponent<Character>().stats.strength);
 		
-		stats.maxChgTime = 2.0f;
+		stats.maxChgTime = 4;
 		
 		stats.chgLevels = 0.5f;
 	}
@@ -37,8 +41,10 @@ public class Spear: MeleeWeapons {
 
 	public override void collideOn () {
 		base.collideOn ();
-		if (stats.chgDamage-- == 0) { // Our multistab counter
-			user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
-		}
+	}
+
+	public override void SpecialAttack() {
+		GameObject exp = (GameObject)Instantiate(this.explosion, user.transform.position, user.transform.rotation);
+		exp.GetComponent<SpearExplosion>().setInitValues(user, opposition, stats.damage + stats.chgDamage, true, this.stats.debuff, 2.0f);
 	}
 }

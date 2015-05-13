@@ -1,7 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Shotgun : RangedWeapons {
+
+	public GameObject shockwave;
+
+	protected int sideShockWaveAngle;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -9,23 +13,14 @@ public class Shotgun : RangedWeapons {
 	}
 	protected override void setInitValues() {
 		base.setInitValues();
-		maxAmmo = 30;
-		currAmmo = maxAmmo;
-		// Use sword animations for now
-		stats.weapType = 0;
-		stats.weapTypeName = "sword";
-		loadSpeed = 0f;
-		stats.atkSpeed = 1.0f;
-		stats.damage = 15 + user.GetComponent<Character>().stats.coordination;
-		stats.maxChgTime = 5.0f;
-		
-		// Originally bull pattern S
-		//shotty
-		variance = 25f;
 
-		spray = user.transform.rotation;
-		spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(12f-user.stats.coordination)+user.transform.eulerAngles.y,(12f-user.stats.coordination)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
+		this.stats.weapType = 7;
+		this.stats.weapTypeName = "shotgun";
+		this.stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
+		this.stats.maxChgTime = 4;
 		
+		this.spread = 40;
+		this.sideShockWaveAngle = 30;
 	}
 	
 	// Update is called once per frame
@@ -33,27 +28,34 @@ public class Shotgun : RangedWeapons {
 		base.Update();
 	}
 	
-	public override void initAttack() {
-		base.initAttack();
+	public override void AttackStart() {
+		for (int i = 0; i < 5; i++) {
+			this.FireProjectile();
+		}
 	}
 	
-	protected override IEnumerator Shoot(int count) {
-		if(!reload || !needReload){
-			//High cap for shotty is 27f variance, low cap for shotty is 47f
-			float origVariance = variance;
-			StartCoroutine(makeSound(action,playSound,action.length));
-			for (int i = 0; i < count*(int)Random.Range(3,5); i++) {
-				yield return 0;
-				spray = Quaternion.Euler(new Vector3(user.transform.eulerAngles.x,Random.Range(-(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y,(variance-user.stats.coordination*1.5f)+user.transform.eulerAngles.y),user.transform.eulerAngles.z));
-				fireProjectile();
-				currAmmo--;
-				if(currAmmo<=0 && needReload){
-					reload = true;
-					StartCoroutine(loadAmmo());
-				}
-				variance += 2;
-			}
-			variance = origVariance;
+	public override void SpecialAttack() {
+		for (int i = 0; i < 5 + (int)(this.user.animator.GetFloat("ChargeTime") * 3); i++) {
+			this.FireProjectile();
 		}
+		
+		Shockwave wave1 = ((GameObject)Instantiate(shockwave, user.transform.position + new Vector3(0.0f, 3.0f, 0.0f), user.transform.rotation)).GetComponent<Shockwave>();
+		wave1.setInitValues(user, opposition, stats.damage + stats.chgDamage, false, null);
+		
+		if (this.user.animator.GetFloat("ChargeTime") < 2) return;
+		
+		Quaternion spreadAngle = Quaternion.AngleAxis(this.sideShockWaveAngle, Vector3.up);
+		Shockwave wave2 = ((GameObject)Instantiate(shockwave, user.transform.position + new Vector3(0.0f, 3.0f, 0.0f), user.transform.rotation * spreadAngle)).GetComponent<Shockwave>();
+		wave2.setInitValues(user, opposition, stats.damage + stats.chgDamage, false, null);
+		wave2.rb.velocity =  spreadAngle * wave2.rb.velocity;
+		
+		spreadAngle = Quaternion.AngleAxis(-this.sideShockWaveAngle, Vector3.up);
+		Shockwave wave3 = ((GameObject)Instantiate(shockwave, user.transform.position + new Vector3(0.0f, 3.0f, 0.0f), user.transform.rotation * spreadAngle)).GetComponent<Shockwave>();
+		wave3.setInitValues(user, opposition, stats.damage + stats.chgDamage, false, null);
+		wave3.rb.velocity =  spreadAngle * wave3.rb.velocity;
+	}
+	
+	public override void initAttack() {
+		base.initAttack();
 	}
 }

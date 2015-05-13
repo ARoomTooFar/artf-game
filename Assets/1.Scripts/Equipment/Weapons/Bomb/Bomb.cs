@@ -67,7 +67,7 @@ public class Bomb : MonoBehaviour {
 	//---------------------//
 
 	protected virtual void explode() {
-			// Create explosion while removing self
+		// Create explosion while removing self
 		// BombExplosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<BombExplosion>();
 		if(this.damage == 0){
 			Instantiate(expDeath, transform.position+new Vector3(0,.5f,0), transform.rotation);

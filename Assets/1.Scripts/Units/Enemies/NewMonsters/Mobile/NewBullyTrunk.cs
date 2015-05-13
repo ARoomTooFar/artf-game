@@ -82,21 +82,22 @@ public class NewBullyTrunk: NewMobileEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 50;
+		stats.maxHealth = 175;
 		stats.health = stats.maxHealth;
-		stats.armor = 1;
-		stats.strength = 10;
+		stats.armor = 7;
+		stats.strength = 25;
 		stats.coordination=0;
 		stats.speed=6;
-		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 4.0f;
+		this.maxAtkRadius = 3.5f;
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 1;
+		tier = 0;
 		base.SetTierData (tier);
+
+		monsterLoot.initializeLoot("BullyTrunk", tier);
 
 		this.stats.speed = tier < 3 ? 7 : 10;
 
@@ -158,11 +159,23 @@ public class NewBullyTrunk: NewMobileEnemy {
 	// These are here because for some reason I can't find the inherited collider functions from the animation events thing
 	// Fuck Unity, such a tease
 	protected virtual void SmashNow() {
-		this.colliderStart();
+		this.AttackStart();
 	}
 
 	protected virtual void SmashOver() {
-		this.colliderEnd();
+		this.AttackEnd();
+	}
+
+	protected virtual void PummelRightNow() {
+	}
+
+	protected virtual void PummelRightOver() {
+	}
+
+	protected virtual void PummelLeftNow() {
+	}
+
+	protected virtual void PummelLeftOver() {
 	}
 
 	//-------------------//

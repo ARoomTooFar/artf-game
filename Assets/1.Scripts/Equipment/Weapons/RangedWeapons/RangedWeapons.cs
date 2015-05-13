@@ -7,15 +7,11 @@ using System.Collections;
 public class RangedWeapons : Weapons {
 
 	public GameObject projectile;
-	//for inaccuracy
+	protected int spread;
+	
 	protected Quaternion spray;
 	protected float variance;
 	protected float kick;
-	public int currAmmo;
-	public int maxAmmo;
-	protected float loadSpeed;
-	protected bool reload;
-	public AmmoBar ammoBar;
 	protected Projectile bullet;
 	
 	protected bool needReload;
@@ -27,13 +23,18 @@ public class RangedWeapons : Weapons {
 
 	protected override void setInitValues() {
 		base.setInitValues();
-		reload = false;
-		if (this.user.GetComponent<Enemy>()) {
-			needReload = false;
-		} else {
-			needReload = true;
-		}
+		
+		this.spread = 15;
 	}
+
+	public override void AttackStart() {
+		this.StartCoroutine(this.Shoot(1));
+	}
+	
+	public override void AttackEnd() {
+		// this.col.enabled = false;
+	}
+
 
 	public override void collideOn() {
 	}
@@ -77,64 +78,24 @@ public class RangedWeapons : Weapons {
 		yield return 0;
 	}
 
-	public virtual void loadData(AmmoBar ammoB){
-		ammoBar = ammoB;
-		ammoBar.onState = 1;
-		ammoBar.max = maxAmmo;
-		ammoBar.current = currAmmo;
-	}
-
 	protected IEnumerator Wait(float duration){
 		for (float timer = 0; timer < duration; timer += Time.deltaTime)
 			yield return 0;
 	}
-	protected IEnumerator loadWait(float duration){
-		ammoBar.onState = 2;
-		ammoBar.max = duration;
-		for (float timer = 0; timer < duration; timer += Time.deltaTime){
-			ammoBar.current = timer;
-			yield return 0;
-		}
-		if(reload){
-				currAmmo = maxAmmo;
-				ammoBar.onState = 1;
-				ammoBar.max = maxAmmo;
-				ammoBar.current = currAmmo;
-				reload = false;
-		}
-	}
-	protected virtual IEnumerator loadAmmo(){
-		if(ammoBar != null){
-			yield return StartCoroutine(loadWait(loadSpeed));
-			/*if(reload){
-				currAmmo = maxAmmo;
-				ammoBar.onState = 1;
-				ammoBar.max = maxAmmo;
-				ammoBar.current = currAmmo;
-				reload = false;
-			}*/
-		}
-        else{
-			yield return StartCoroutine(Wait(loadSpeed));
-			if(reload){
-				reload = false;
-			}
-		}			
-	}
+
 
 	protected override IEnumerator atkFinish() {
 		while (user.animSteInfo.fullPathHash != user.atkHashEnd) {
 			yield return null;
 		}
 		particles.Stop();
-		if(ammoBar != null){
-			ammoBar.current = currAmmo;
-		}
 		user.animator.speed = 1.0f;
 	}
 	
-	protected void fireProjectile() {
-		Projectile newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 2, spray)).GetComponent<Projectile>();
-		newBullet.setInitValues(user, opposition, particles.startSpeed, user.luckCheck(), stats.debuff);
+	protected virtual void FireProjectile() {
+		Quaternion spreadAngle = Quaternion.AngleAxis(Random.Range (-this.spread, this.spread), Vector3.up); // Calculated quaternion that will rotate the bullet and its velocity
+		Projectile newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 2, this.user.transform.rotation * spreadAngle)).GetComponent<Projectile>();
+		newBullet.setInitValues(user, opposition, this.stats.damage + this.stats.chgDamage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration);
+		newBullet.rb.velocity =  spreadAngle * newBullet.rb.velocity;
 	}
 }

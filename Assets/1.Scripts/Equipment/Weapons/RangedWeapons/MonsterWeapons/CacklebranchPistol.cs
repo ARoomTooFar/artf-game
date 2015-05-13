@@ -11,7 +11,7 @@ public class CacklebranchPistol : RangedWeapons {
 		base.setInitValues();
 		stats.weapTypeName = "";
 		stats.atkSpeed = 2.0f;
-		stats.damage = 20 + user.GetComponent<Character>().stats.coordination;
+		stats.damage = 5 + user.GetComponent<Character>().stats.coordination;
 
 		variance = 10f;
 		kick = 0.5f;
@@ -36,7 +36,7 @@ public class CacklebranchPistol : RangedWeapons {
 		base.initAttack();
 	}
 	
-	public virtual IEnumerator Shoot(int count) {
+	new public virtual IEnumerator Shoot(int count) {
 		variance = 22f;
 
 		if(count == 0){
@@ -49,7 +49,7 @@ public class CacklebranchPistol : RangedWeapons {
 
 			StartCoroutine(makeSound(action,playSound,action.length));
 			yield return StartCoroutine(Wait(.08f));
-			fireProjectile();
+			FireProjectile();
 			spray = Quaternion.Euler(spray.eulerAngles.x,(spray.eulerAngles.y+Random.Range(-kick,kick)),spray.eulerAngles.z);
 			kick += .2f;
 			if(kick >= 5f){

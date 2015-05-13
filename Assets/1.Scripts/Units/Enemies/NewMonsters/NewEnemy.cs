@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class NewEnemy : NewCharacter {
 
@@ -33,14 +34,16 @@ public class NewEnemy : NewCharacter {
 
 	public Vector3 targetDir;
 	public Vector3 resetpos;
-	
+
 	
 	protected int layerMask = 1 << 9;
 	
 	protected float aggroTimer = 5.0f;
 
-	bool sparksDone = true;
+	// bool sparksDone = true;
 	GameObject sparks = null;
+	
+	public MonsterLoot monsterLoot;
 	
 	protected override void Awake() {
 		base.Awake();
@@ -115,7 +118,6 @@ public class NewEnemy : NewCharacter {
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=4;
-		stats.luck=0;
 		setAnimHash ();
 	}
 
@@ -123,6 +125,7 @@ public class NewEnemy : NewCharacter {
 	public virtual void SetTierData(int tier) {
 		this.tier = tier;
 		this.animator.SetInteger("Tier", this.tier);
+		monsterLoot = this.gameObject.AddComponent<MonsterLoot>();
 	}
 
 	//-----------//
@@ -170,13 +173,14 @@ public class NewEnemy : NewCharacter {
 	// Calculation Functions //
 	//-----------------------//
 
+
 	protected float distanceToPlayer(GameObject p) {
 		if (p == null) return 0.0f;
 		float distance = Vector3.Distance(this.transform.position, p.transform.position);
 		//Debug.Log (distance);
 		return distance;
 	}
-	
+
 	public virtual bool canSeePlayer(GameObject p) {
 		if (p == null) {
 			this.animator.SetBool("CanSeeTarget", false);

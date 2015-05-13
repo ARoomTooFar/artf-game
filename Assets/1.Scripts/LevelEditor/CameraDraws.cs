@@ -52,7 +52,7 @@ public class CameraDraws : MonoBehaviour {
 	/* select tiles using a list from the mouse manager */
 	void drawSelectedTiles ()
 	{
-		HashSet<Vector3> selTile = tilemapcont.getSelectedTiles ();
+		HashSet<Vector3> selTile = tilemapcont.selectedTiles;
 		GL.Begin (GL.QUADS);
 		Square sq = new Square(tilemapcont.shiftOrigin, tilemapcont.lastClick);
 		if(MapData.TheFarRooms.isAddValid(sq)) {

@@ -4,30 +4,31 @@ using System;
 
 [System.Serializable]
 public class WeaponStats {
+
+	// New
+	public float chargeMultiplier;
+	public Slow chargeSlow;
+
+	// Keep
 	[Range(0.5f, 2.0f)]
-	public float atkSpeed;
+	public float atkSpeed; // Find a better way for this
+	public PercentValues atkspdManip; // Maybe?
+
 	[Range(1,11)]
 	public int upgrade;
+
 	public int damage;
-	//counts number of hits so far in the multiple hit string
-	public int multHit;
-
-
 	public int weapType;
-	public string weapTypeName;
 	public BuffsDebuffs debuff;
 	public float buffDuration;
+	public int chgDamage, maxChgTime;
 
-	//This will be used to implement abilities in the spread sheet since different weapons have different effects when charged up. 
-	//For now~ Using 1 as shoot a powerful singular shot, using 2 for a line of three shots (For gun, but base case 1 is same animation more powerful damage)
+	// Old
+	public string weapTypeName;
 	public int chgType;
-	// Charge atk variables
-	public int chgDamage;
-	public float maxChgTime, chgLevels, curChgAtkTime, curChgDuration, timeForChgAttack, timeForSpecial;
 	public int specialAttackType;
-	
-	public PercentValues atkspdManip;
-	
+	public float chgLevels, curChgAtkTime, curChgDuration, timeForChgAttack, timeForSpecial;
+
 	public WeaponStats() {
 		atkspdManip = new PercentValues();
 	}
@@ -50,6 +51,9 @@ public class Weapons : Equipment {
 	protected override void Start () {
 		base.Start ();
 		this.col = this.GetComponent<Collider>();
+
+		this.stats.debuff = new Knockback();
+		this.stats.buffDuration = 0.75f;
 	}
 
 	public virtual void equip(Character u, Type ene) {
@@ -57,28 +61,40 @@ public class Weapons : Equipment {
 		u.animator.SetInteger("WeaponType", stats.weapType);
 		u.weapTypeName = stats.weapTypeName;
 		opposition = ene;
-		user.GetComponent<Character>().animator.SetInteger("ChargedAttackNum", stats.specialAttackType);
+		// user.GetComponent<Character>().animator.SetInteger("ChargedAttackNum", stats.specialAttackType);
 	}
 
 	// Used for setting stats for each weapon piece
 	protected override void setInitValues() {
 		base.setInitValues();
 
-		// default weapon stats
-		stats.weapType = 0;
-		stats.weapTypeName = "sword";
-		stats.atkSpeed = 1.0f;
-		stats.damage = 5;
-		stats.multHit = 0;
+		// New
+		stats.chargeMultiplier = 1.5f;
+		stats.chargeSlow = new Slow(0.5f);
 
-		stats.maxChgTime = 3.0f;
+		// Keep
+		stats.weapType = 0;
+		stats.atkSpeed = 1.0f; // Find a better way for this maybe
+		stats.damage = 5;
+		stats.maxChgTime = 3;
+
+		// Old
+		stats.weapTypeName = "sword";
 		stats.curChgAtkTime = -1.0f;
 		stats.curChgDuration = 0.0f;
 		stats.chgLevels = 0.4f;
+
+		// default weapon stats
+
+
+
+
+
+
 		stats.chgDamage = 0;
 		stats.timeForChgAttack = 0.8f;
 		stats.timeForSpecial = 1.6f;
-		stats.specialAttackType = 0;
+
 		soundDur = 0.1f;
 		playSound = true;
 	}
@@ -101,16 +117,55 @@ public class Weapons : Equipment {
 		this.col.enabled = false;
 	}
 
-	// A unique attack command called from thje animator
-	//     eg. Shockwave
-	public virtual void specialAttack() {
-	}
 
 	//-----------------------//
+
+
 
 	//----------------------------//
 	// Weapon Attacking Functions //
 	//----------------------------//
+
+	// These are called by the animator
+	//     For melee, these will essentiually turn the colliders on and off
+	//     For ranged, these will shoot bullets, attack end probably won't do much for those
+	public virtual void AttackStart () {
+	}
+
+	public virtual void AttackEnd () {
+	}
+
+	// A unique attack command called from thje animator
+	//     eg. Shockwave, Ground implosion, Spray
+	public virtual void SpecialAttack () {
+	}
+
+	public virtual void StartParticles () {
+		particles.startSpeed = 0;
+		this.StartCoroutine (BeginCharge());
+	}
+
+	public virtual void StopParticles () {
+		particles.Stop();
+	}
+
+	protected virtual IEnumerator BeginCharge() {
+		stats.chgDamage = 0;
+
+		while (user.animator.GetFloat ("ChargeTime") < 0.5f && user.animator.GetBool ("Charging")) yield return null;
+		if (user.animator.GetBool("Charging")) particles.Play();
+		while (user.animator.GetBool("Charging")) {
+			stats.chgDamage = (int) (user.animator.GetFloat ("ChargeTime") * this.stats.chargeMultiplier);
+			particles.startSpeed = user.animator.GetFloat ("ChargeTime") < 0.5f ? 0 : stats.chgDamage;
+			yield return null;
+		}
+	}
+
+
+
+	//--------------------------------//
+	// Old Weapon Attacking Functions // Remove when all the enemies have their animations implemented and all weapon using monsters are converted to new system
+	//--------------------------------//
 
 
 	// Start by initiateing attack animation

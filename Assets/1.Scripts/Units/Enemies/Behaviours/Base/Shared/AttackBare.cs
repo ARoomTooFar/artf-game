@@ -8,7 +8,7 @@ public class AttackBare : EnemyBehaviour {
 		this.unit.rb.velocity = Vector3.zero;
 		this.unit.getFacingTowardsTarget();
 		this.unit.transform.localRotation = Quaternion.LookRotation(unit.facing);
-		this.unit.initAttack();
+		animator.SetTrigger("Attack");
 	}
 	
 	// This will be called once the animator has transitioned out of the state.

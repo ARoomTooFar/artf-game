@@ -23,7 +23,7 @@ public class WallDarts : Traps {
 	protected override void setInitValues() {
 		base.setInitValues ();
 		
-		damage = 1;
+		damage = 10;
 	}
 	
 	protected override void FixedUpdate() {

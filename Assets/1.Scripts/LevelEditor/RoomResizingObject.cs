@@ -83,10 +83,10 @@ public class RoomResizingObject : ClickEvent {
 	}
 	
 	public Vector3 getPosition() {
-		return this.gameObject.transform.root.position;
+		return this.transform.position;
 	}
 	
 	public Quaternion getRotation() {
-		return this.gameObject.transform.rotation;
+		return this.transform.rotation;
 	}
 }

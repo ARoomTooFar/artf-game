@@ -56,7 +56,6 @@ public class Mirage : StationaryEnemy {
 		stats.strength = 20;
 		stats.coordination=0;
 		stats.speed=4;
-		stats.luck=0;
 		setAnimHash ();
 		
 		this.minAtkRadius = 0.0f;

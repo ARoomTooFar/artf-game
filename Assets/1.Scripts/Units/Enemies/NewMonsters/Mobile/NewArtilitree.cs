@@ -31,19 +31,20 @@ public class NewArtilitree: NewRangedEnemy {
 		base.setInitValues();
 		stats.maxHealth = 200;
 		stats.health = stats.maxHealth;
-		stats.armor = 6;
-		stats.strength = 10;
-		stats.coordination=10;
+		stats.armor = 15;
+		stats.strength = 0;
+		stats.coordination=60;
 		stats.speed=2;
-		stats.luck=0;
 
 		this.minAtkRadius = 4.0f;
 		this.maxAtkRadius = 40.0f;
 	}
 	
 	public override void SetTierData(int tier) {
-		tier = 5;
+		tier = 0;
 		base.SetTierData(tier);
+
+		monsterLoot.initializeLoot("Artilitree", tier);
 		
 		if (tier < 1) stats.speed = 2;
 		else if (tier > 0 && tier < 5) stats.speed = 3;

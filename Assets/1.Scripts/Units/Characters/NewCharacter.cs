@@ -225,54 +225,46 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 			actable = freeAnim;
 		}
 		this.animator.SetBool("Actable", this.actable);
-
-		// actionCommands ();
-		animationUpdate ();
+		
+		AnimationUpdate ();
 	}
 	
 	//---------------------------------//
 	// Action interface implementation //
 	//---------------------------------//
 
-	public override void colliderStart() {
-		gear.weapon.collideOn ();
-	}
-	
-	public override void colliderEnd() {
-		gear.weapon.collideOff ();
-	}
 
-	public override void actionCommands() {
+	protected override void ActionCommands() {
 		
 	}
 	
 	// Constant animation updates (Main loop for characters movement/actions)
-	public override void animationUpdate() {
+	protected override void AnimationUpdate() {
 		// print(this.rb.velocity);
 		if (this.rb.velocity != Vector3.zero && facing != Vector3.zero) animator.SetBool("Moving", true);
 		else animator.SetBool("Moving", false);
 		transform.localRotation = Quaternion.LookRotation(facing);
 	}
 	//-------------------------------------------//
+
 	
+	//------------------------------------//
+	// Attacking Function Implementations //
+	//------------------------------------//
 	
-	//---------------------------------//
-	// Attack Interface Implementation //
-	//---------------------------------//
-	
-	// Since animations are on the characters, we will use the attack methods to turn collisions on and off
-	public override void initAttack() {
+	public virtual void AttackStart() {
+		this.gear.weapon.AttackStart ();
 	}
 	
-	public override void attacks() {
-		
+	public virtual void AttackEnd() {
+		this.gear.weapon.AttackEnd ();
+	}
+
+	public override void SpecialAttack() {
+		this.gear.weapon.SpecialAttack();
 	}
 	
-	public override void specialAttack() {
-		gear.weapon.specialAttack ();
-	}
-	
-	//---------------------------------//
+	//------------------------------------//
 	
 	
 	

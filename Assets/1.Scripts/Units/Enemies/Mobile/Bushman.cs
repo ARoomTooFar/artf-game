@@ -166,7 +166,6 @@ public class Bushman : MobileEnemy {
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=6;
-		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
 		this.maxAtkRadius = 5.0f;

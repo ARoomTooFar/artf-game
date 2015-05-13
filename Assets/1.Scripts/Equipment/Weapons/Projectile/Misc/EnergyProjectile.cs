@@ -9,8 +9,8 @@ public class EnergyProjectile : MonoBehaviour {
 	public int damage;
 	public float speed;
 	protected Character user;
-	public Transform target;
 	
+	public Rigidbody rb;
 	protected Type opposition;
 	protected float lifeTime, curLifeTime;
 	
@@ -22,19 +22,21 @@ public class EnergyProjectile : MonoBehaviour {
 	public virtual void setInitValues(Character user, Type opposition, int dmg, bool effect, BuffsDebuffs hinder) {
 		this.user = user;
 		this.opposition = opposition;
+		this.rb = this.GetComponent<Rigidbody> ();
 
 		transform.Rotate(Vector3.up * 180);
 
 		damage = dmg;
-		speed = 1.0f;
-		lifeTime = dmg/100.0f;
+		speed = 30f;
+		lifeTime = dmg/20f;
 		curLifeTime = 0.0f;
+		
+		this.rb.velocity = this.user.facing * this.speed;
+		this.rb.isKinematic = false;
 	}
 
 	// Update is called once per frame
 	protected virtual void Update() {
-		transform.position = Vector3.MoveTowards (transform.position, target.position, speed);
-
 		if (this.curLifeTime >= this.lifeTime) {
 			Destroy(this.gameObject);
 		}
@@ -48,7 +50,7 @@ public class EnergyProjectile : MonoBehaviour {
 		}
 		
 		IDamageable<int, Transform, GameObject> component = (IDamageable<int, Transform, GameObject>) other.GetComponent( typeof(IDamageable<int, Transform, GameObject>) );
-		Character enemy = (Character) other.GetComponent(opposition);
+		Character enemy = opposition == null ? null : (Character) other.GetComponent(opposition);
 		if( component != null && enemy != null) {
 			enemy.damage(damage, user.transform, user.gameObject);
 		}

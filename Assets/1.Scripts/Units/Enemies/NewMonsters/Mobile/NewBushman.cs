@@ -58,11 +58,10 @@ public class NewBushman : NewMobileEnemy {
 		base.setInitValues();
 		stats.maxHealth = 100;
 		stats.health = stats.maxHealth;
-		stats.armor = 5;
+		stats.armor = 3;
 		stats.strength = 6;
 		stats.coordination=0;
 		stats.speed=4;
-		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
 		this.maxAtkRadius = 2.0f;
@@ -72,6 +71,7 @@ public class NewBushman : NewMobileEnemy {
 		tier = 1;
 		base.SetTierData (tier);
 
+		monsterLoot.initializeLoot("Bushling", tier);
 
 		if (tier > 0) {
 			this.sprint = this.inventory.items[inventory.selected].GetComponent<Sprint>();

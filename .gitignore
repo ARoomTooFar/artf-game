@@ -21,6 +21,8 @@ Thumbs.*
 /*.userprefs
 /*.pidb
 /*.booproj
+/*.fbm
+/*.fbm.meta
 <<<<<<< HEAD
 =======
 Assets/Scripts/MouseHandler_TileSelection.cs

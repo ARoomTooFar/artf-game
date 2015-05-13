@@ -42,7 +42,6 @@ public class Artilitree: MobileEnemy {
 		stats.strength = 10;
 		stats.coordination=0;
 		stats.speed=2;
-		stats.luck=0;
 
 		this.rootTime = 3;
 		this.timing = rootTime;

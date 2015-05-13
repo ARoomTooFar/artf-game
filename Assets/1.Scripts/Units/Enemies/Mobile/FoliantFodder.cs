@@ -33,7 +33,6 @@ public class FoliantFodder: MobileEnemy {
 		stats.strength = 5;
 		stats.coordination=0;
 		stats.speed=9;
-		stats.luck=0;
 		
 		this.minAtkRadius = 0.0f;
 		this.maxAtkRadius = 3.0f;
