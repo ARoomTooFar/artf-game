@@ -4,9 +4,11 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class MainMenuCtrl : MonoBehaviour {
-    public Controls controls;
+	public Controls controls;
     public string menuContainerName;
 	public string menuPopUpName;
+
+	private Farts serv;
 
     // UI state
     private bool menuMoved = false;
@@ -55,6 +57,8 @@ public class MainMenuCtrl : MonoBehaviour {
 	private Text txtDisplayField;
 
 	void Start () {
+		serv = gameObject.AddComponent<Farts>(); // add networking component
+
         // setup start menu
         startMenu = new GameObject[startMenuHeight, startMenuWidth];
         startMenu[0, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/StartMenu/BtnLogin");
@@ -75,7 +79,6 @@ public class MainMenuCtrl : MonoBehaviour {
 			Debug.Log ("Register button pressed!");
             //MenuSwitch(Menu.LoginForm);
 
-            Farts serv = gameObject.AddComponent<Farts>();
             serv.login("Paradoxium", "pass");
         });
 
@@ -101,6 +104,12 @@ public class MainMenuCtrl : MonoBehaviour {
         {
 			currFieldPtr = txtFieldPasscode;
 			PopUpEnable ();
+		});
+
+		// submit button
+		loginForm[2, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			serv.login(txtFieldAcctName.text, txtFieldPasscode.text);
 		});
 
 		// back button
