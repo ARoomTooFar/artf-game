@@ -12,6 +12,7 @@ public class Stun : Override {
 	protected override void bdEffects(BDData newData) {
 		base.bdEffects(newData);
 		newData.unit.stun();
+//		Debug.Log ("Stun");
 	}
 	
 	protected override void removeEffects (BDData oldData, GameObject source) {

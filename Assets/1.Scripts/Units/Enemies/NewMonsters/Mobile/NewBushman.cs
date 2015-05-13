@@ -39,6 +39,10 @@ public class NewBushman : NewMobileEnemy {
 	protected override void Start() {
 		base.Start ();
 		setFrenzy ();
+		this.charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
+		foreach(BushyApproach behaviour in this.animator.GetBehaviours<BushyApproach>()) {
+			behaviour.charge = this.charge;
+		}
 	}
 
 	protected override void Update() {
@@ -142,4 +146,26 @@ public class NewBushman : NewMobileEnemy {
 		nextLv.speed = spdUp * currentGrowth;
 		return nextLv;
 	}
+
+	// state machine parametric functions
+
+	protected void isTooFar () {
+
+		if (this.target != null && Vector3.Distance(this.transform.position, this.target.transform.position) > this.maxAtkRadius && this.charge.curCoolDown <= 0) {
+			this.animator.SetBool("charging", true);
+		}
+	}
+	
+	protected virtual bool isWithinCharge () {
+		if (this.target == null) {
+			return true;
+		} else {
+			Vector3 tPos = this.target.transform.position;
+			if (Vector3.Distance(this.transform.position, tPos) <= this.charge.curChgTime * 3 || Vector3.Distance(this.transform.position, tPos) >= 15 || this.charge.curChgTime >= this.charge.maxChgTime) {
+				return true;
+			}
+			return false;
+		}
+	}
+
 }

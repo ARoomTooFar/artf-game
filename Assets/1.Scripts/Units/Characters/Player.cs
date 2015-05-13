@@ -18,9 +18,14 @@ public class Controls {
 public class Player : NewCharacter, IHealable<int>{
 	public string nameTag;
 	public int greyDamage;
-	
-	public bool testable, isReady, atEnd, atStart;
-	
+	public bool testable, isReady, atEnd, atStart, inGrey;
+	public int mash_threshold;
+	public int mash_value;
+	private KeyCode kc;
+	public bool break_free;
+	public bool tapped;
+	public float last_pressed;
+
 	public UIActive UI;
 	public Controls controls;
 
@@ -55,6 +60,7 @@ public class Player : NewCharacter, IHealable<int>{
 		stats.speed=10;
 		greyDamage = 0;
 	}
+
 	//Set cooldown bars to current items. 
 	void ItemCooldowns() {
 		UI.onState = true;
@@ -68,6 +74,25 @@ public class Player : NewCharacter, IHealable<int>{
 	
 	// Update is called once per frame
 	protected override void Update () {
+
+		if (break_free)
+			break_free = false;
+
+		if (Input.GetKeyDown (kc) && stunned) {
+			tapped = true;
+
+			float now = Time.time;
+			float since = now - last_pressed;
+			last_pressed = now;
+
+			if(since > 0) {
+				float motion = 1.0f / since;
+				motion *= motion;
+				mash_value++;
+				if(mash_value > mash_threshold) break_free = true;
+			}
+		}
+
 		if(isDead) return;
 
 		if(UI != null && UI.onState){
@@ -87,6 +112,11 @@ public class Player : NewCharacter, IHealable<int>{
 		MoveCommands ();
 		AnimationUpdate ();
 	}
+
+	public bool mashed_out(){
+		return break_free;
+	}
+
 	
 	//-------------------------------//
 	// Player Command Implementation //
@@ -94,6 +124,23 @@ public class Player : NewCharacter, IHealable<int>{
 	
 	protected override void ActionCommands() {
 		// Invokes an action/animation
+		if (stunned) {
+			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
+			tapped = true;
+
+			float now = Time.time;
+			float since = now - last_pressed;
+			last_pressed = now;
+
+			if(since > 0) {
+				float motion = 1.0f / since;
+				motion *= motion;
+				mash_value++;
+				if(mash_value > mash_threshold) break_free = true;
+			}
+		}
+		}
+
 		if (actable && !this.animator.GetBool ("Attack")) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
 				if(currDoor!=null){
@@ -172,6 +219,8 @@ public class Player : NewCharacter, IHealable<int>{
 			// If we trash the rigidbody later, we won't need this
 			this.rb.velocity = Vector3.zero;
 		}
+
+		//Debug.Log(this.rb.velocity.magnitude);
 	}
 	
 	// Constant animation updates (Main loop for characters movement/actions, sets important parameters in the animator)
@@ -217,6 +266,7 @@ public class Player : NewCharacter, IHealable<int>{
 	}
 	
 	public override void damage(int dmgTaken) {
+
 		if (invincible || stats.isDead) return;
 		
 		stats.health -= greyTest(dmgTaken);
