@@ -33,10 +33,10 @@ public class MonsterManager {
 		//get the list for the block type
 		List<MonsterBlock> lst;
 		try{
-			lst = dictionary[blk.BlockInfo.BlockID];
+			lst = dictionary[blk.MonsterBlockInfo.BlockID];
 		} catch {
 			lst = new List<MonsterBlock>();
-			dictionary.Add(blk.BlockInfo.BlockID, lst);
+			dictionary.Add(blk.MonsterBlockInfo.BlockID, lst);
 		}
 
 		//add the block to the list
@@ -85,7 +85,7 @@ public class MonsterManager {
 		if(rm != null) {
 			rm.removeMonster(blk);
 		}
-		dictionary[blk.BlockInfo.BlockID].Remove(blk);
+		dictionary[blk.MonsterBlockInfo.BlockID].Remove(blk);
 	}
 	#endregion Remove
 	#endregion Manipulation
@@ -139,7 +139,7 @@ public class MonsterManager {
 		// If the room does not already contain this monster
 		if(!rm.Monster.Contains(mon)) {
 			// Check if the remaining number of points can handle adding the monster
-			if(rm.Points-rm.CurrentPoints < mon.BlockInfo.Points){
+			if(rm.Points-rm.CurrentPoints < mon.MonsterBlockInfo.Points){
 				return false;
 			}
 		}
@@ -162,7 +162,7 @@ public class MonsterManager {
 		}
 		foreach(SceneryBlock blk in rm.Scenery) {
 			if(blk.Coordinates.Intersect(mon.Coordinates).Count() != 0){
-				return blk.Walkable;
+				return blk.SceneryBlockInfo.Walkable;
 			}
 		}
 		return true;
