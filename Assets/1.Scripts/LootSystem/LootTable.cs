@@ -3,122 +3,195 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class LootList{
+//holds looted items so we can send it to reward system
+public static class LootedItems {
+	private static List<string> loot = new List<string>();
 
-	public Dictionary<string, float> lootList = new Dictionary<string, float>()
+	public static void addItemToLoot(string s){
+		loot.Add(s);
+	}
+
+	public static List<string> getList(){
+		return loot;
+	}
+}
+
+//holds list of all shit for a monster.
+//initializes all drop rates to 0.
+public class LootList{
+	//item name / drop rate
+	public Dictionary<string, float> thisMonster = new Dictionary<string, float>()
 	{
-		{"money", 0f},
-		{"sprint", 0f},
-		{"roll", 0f},
-		{"charge", 0f},
-		{"lunge", 0f},
-		{"riotShield", 0f},
-		{"nanoTriangle", 0f},
-		{"shockNet", 0f},
-		{"chainGrab", 0f},
-		{"flare", 0f},
-		{"lantern", 0f},
-		{"shiv", 0f},
-		{"utilityBlade", 0f},
-		{"pruningBlade", 0f},
-		{"sixShooter", 0f},
-		{"plasmaBlade", 0f},
-		{"rebarSword", 0f},
-		{"longSword", 0f},
-		{"machette", 0f},
-		{"thinBlade", 0f},
-		{"flamePike", 0f},
-		{"lumberSaw", 0f},
-		{"chainsawSword", 0f},
-		{"copGun", 0f},
-		{"hiCompressionPistol", 0f},
-		{"huntingRifle", 0f},
-		{"laserRifle", 0f},
-		{"machineGun", 0f},
-		{"automaticLaserRifle", 0f},
-		{"shotgun", 0f},
-		{"wallOfLead", 0f},
-		{"shirtAndPants", 0f},
-		{"poncho", 0f},
-		{"bulletProofVest", 0f},
-		{"smugglersJacket", 0f},
-		{"mixedPlateUniform", 0f},
-		{"mixedArmyUniform", 0f},
-		{"ceramicPlate", 0f},
-		{"carbonFibronicMeshSuit", 0f},
-		{"delversDuster", 0f},
-		{"trashHelmetLightBulb", 0f},
-		{"trashHelmetBucket", 0f},
-		{"trafficCone", 0f},
-		{"militarySpikeHelmet", 0f},
-		{"bikerHelmet", 0f},
-		{"policeHelmet", 0f},
-		{"comHelmet", 0f},
-		{"targetingVisor", 0f},
-		{"bionicEye", 0f},
-		{"cyberFaceRobot", 0f},
-		{"cyberFaceHorns", 0f},
-		{"brainCaseVisor", 0f}
+		{ Items.money, 0f},
+		{ Items.sprint, 0f},
+		{ Items.roll, 0f},
+		{ Items.charge, 0f},
+		{ Items.lunge, 0f} ,
+		{ Items.riotShield, 0f} ,
+		{ Items.nanoTriangle, 0f} ,
+		{ Items.shockNet, 0f} ,
+		{ Items.chainGrab, 0f} ,
+		{ Items.flare, 0f} ,
+		{ Items.lantern, 0f},
+		{ Items.shiv, 0f} ,
+		{ Items.utilityBlade, 0f} ,
+		{ Items.pruningBlade, 0f} ,
+		{ Items.sixShooter, 0f} ,
+		{ Items.plasmaBlade, 0f} ,
+		{ Items.rebarSword, 0f} ,
+		{ Items.longSword, 0f} ,
+		{ Items.machette, 0f} ,
+		{ Items.thinBlade, 0f} ,
+		{ Items.flamePike, 0f} ,
+		{ Items.lumberSaw, 0f} ,
+		{ Items.chainsawSword, 0f} ,
+		{ Items.copGun, 0f} ,
+		{ Items.hiCompressionPistol, 0f} ,
+		{ Items.huntingRifle, 0f} ,
+		{ Items.laserRifle, 0f} ,
+		{ Items.machineGun, 0f} ,
+		{ Items.automaticLaserRifle, 0f} ,
+		{ Items.shotgun, 0f} ,
+		{ Items.wallOfLead, 0f} ,
+		{ Items.shirtAndPants, 0f} ,
+		{ Items.poncho, 0f} ,
+		{ Items.bulletProofVest, 0f} ,
+		{ Items.smugglersJacket, 0f} ,
+		{ Items.mixedPlateUniform, 0f} ,
+		{ Items.mixedArmyUniform, 0f} ,
+		{ Items.ceramicPlate, 0f} ,
+		{ Items.carbonFibronicMeshSuit, 0f} ,
+		{ Items.delversDuster, 0f} ,
+		{ Items.trashHelmetLightBulb, 0f} ,
+		{ Items.trashHelmetBucket, 0f} ,
+		{ Items.trafficCone, 0f} ,
+		{ Items.militarySpikeHelmet, 0f} ,
+		{ Items.bikerHelmet, 0f} ,
+		{ Items.policeHelmet, 0f} ,
+		{ Items.comHelmet, 0f} ,
+		{ Items.targetingVisor, 0f} ,
+		{ Items.bionicEye, 0f} ,
+		{ Items.cyberFaceRobot, 0f} ,
+		{ Items.cyberFaceHorns, 0f} ,
+		{ Items.brainCaseVisor, 0f}
 	};
 
+	//set which ones you want to be non-zero
 	public LootList(Dictionary<string, float> items){
 		foreach(var key in items.Keys){
-			lootList[key] = items[key];
+			thisMonster[key] = items[key];
 		}
 	}
 }
 
+//storing item names as variables to prevent bugs stemming from typos
+public static class Items{
+	public static readonly string money = "money";
+	public static readonly string sprint = "sprint";
+	public static readonly string roll = "roll";
+	public static readonly string charge = "charge";
+	public static readonly string lunge = "lunge";
+	public static readonly string riotShield = "riotShield";
+	public static readonly string nanoTriangle = "nanoTriangle";
+	public static readonly string shockNet = "shockNet";
+	public static readonly string chainGrab = "chainGrab";
+	public static readonly string flare = "flare";
+	public static readonly string lantern = "lantern";
+	public static readonly string shiv = "shiv";
+	public static readonly string utilityBlade = "utilityBlade";
+	public static readonly string pruningBlade = "pruningBlade";
+	public static readonly string sixShooter = "sixShooter";
+	public static readonly string plasmaBlade = "plasmaBlade";
+	public static readonly string rebarSword = "rebarSword";
+	public static readonly string longSword = "longSword";
+	public static readonly string machette = "machette";
+	public static readonly string thinBlade = "thinBlade";
+	public static readonly string flamePike = "flamePike";
+	public static readonly string lumberSaw = "lumberSaw";
+	public static readonly string chainsawSword = "chainsawSword";
+	public static readonly string copGun = "copGun";
+	public static readonly string hiCompressionPistol = "hiCompressionPistol";
+	public static readonly string huntingRifle = "huntingRifle";
+	public static readonly string laserRifle = "laserRifle";
+	public static readonly string machineGun = "machineGun";
+	public static readonly string automaticLaserRifle = "automaticLaserRifle";
+	public static readonly string shotgun = "shotgun";
+	public static readonly string wallOfLead = "wallOfLead";
+	public static readonly string shirtAndPants = "shirtAndPants";
+	public static readonly string poncho = "poncho";
+	public static readonly string bulletProofVest = "bulletProofVest";
+	public static readonly string smugglersJacket = "smugglersJacket";
+	public static readonly string mixedPlateUniform = "mixedPlateUniform";
+	public static readonly string mixedArmyUniform = "mixedArmyUniform";
+	public static readonly string ceramicPlate = "ceramicPlate";
+	public static readonly string carbonFibronicMeshSuit = "carbonFibronicMeshSuit";
+	public static readonly string delversDuster = "delversDuster";
+	public static readonly string trashHelmetLightBulb = "trashHelmetLightBulb";
+	public static readonly string trashHelmetBucket = "trashHelmetBucket";
+	public static readonly string trafficCone = "trafficCone";
+	public static readonly string militarySpikeHelmet = "militarySpikeHelmet";
+	public static readonly string bikerHelmet = "bikerHelmet";
+	public static readonly string policeHelmet = "policeHelmet";
+	public static readonly string comHelmet = "comHelmet";
+	public static readonly string targetingVisor = "targetingVisor";
+	public static readonly string bionicEye = "bionicEye";
+	public static readonly string cyberFaceRobot = "cyberFaceRobot";
+	public static readonly string cyberFaceHorns = "cyberFaceHorns";
+	public static readonly string brainCaseVisor = "brainCaseVisor";
+}
+
+
+//holds permanent info
 public static class LootTable {
 
 	//what every monster of every tier drops, and the % chance to drop it
-	public static Dictionary<string, LootList> lootTable = new Dictionary<string, LootList>(){
-
+	public static readonly Dictionary<string, LootList> lootTable = new Dictionary<string, LootList>(){
 		//
 		//BULLY TRUNK
 		//
 		{"BullyTrunk0", new LootList(new Dictionary<string, float>(){
-				{"money", 100f},
-				{"shiv", 40f},
-				{"utlityBlade", 25f}
+				{Items.money, 100f},
+				{Items.shiv, 40f},
+				{Items.utilityBlade, 25f}
 			})},
 		{"BullyTrunk1", new LootList(new Dictionary<string, float>(){
-				{"money", 100f},
-				{"shiv", 24f},
-				{"utlityBlade", 24f}
+				{Items.money, 100f},
+				{Items.shiv, 40f},
+				{Items.utilityBlade, 25f}
 			})},
 		{"BullyTrunk2", new LootList(new Dictionary<string, float>(){
-				{"money", 100f},
-				{"utlityBlade", 24f},
-				{"huntingRifle", 24f}
+				{Items.money, 100f},
+				{Items.utilityBlade, 25f},
+				{Items.huntingRifle, 24f}
 			})},
 		{"BullyTrunk3", new LootList(new Dictionary<string, float>(){
-				{"money", 100f},
-				{"machineGun", 40f},
-				{"huntingRifle", 24f}
+				{Items.money, 100f},
+				{Items.machineGun, 40f},
+				{Items.huntingRifle, 24f}
 			})},
 		{"BullyTrunk4", new LootList(new Dictionary<string, float>(){
-				{"money", 100f},
-				{"machineGun", 40f},
-				{"huntingRifle", 24f}
+				{Items.money, 100f},
+				{Items.machineGun, 40f},
+				{Items.huntingRifle, 24f}
 			})},
 		{"BullyTrunk5", new LootList(new Dictionary<string, float>(){
-				{"money", 100f},
-				{"machineGun", 40f},
-				{"huntingRifle", 24f}
+				{Items.money, 100f},
+				{Items.machineGun, 40f},
+				{Items.huntingRifle, 24f}
 			})},
 
 		//
 		//FOLIANT FODDER
 		//
 		{"FoliantFodder0", new LootList(new Dictionary<string, float>(){
-				{"money", 100f},
-				{"shiv", 40f},
-				{"utlityBlade", 25f},
-				{"sixShooter", 25f},
-				{"poncho", 24f},
-				{"trashHelmetBucket", 24f},
-				{"trashHelmetLightBulb", 24f},
-				{"trafficCone", 24f}
+				{Items.money, 100f},
+				{Items.shiv, 40f},
+				{Items.utilityBlade, 25f},
+				{Items.sixShooter, 25f},
+				{Items.poncho, 24f},
+				{Items.trashHelmetBucket, 24f},
+				{Items.trashHelmetLightBulb, 24f},
+				{Items.trafficCone, 24f}
 			})},
 		{"FoliantFodder1", new LootList(new Dictionary<string, float>(){
 

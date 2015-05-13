@@ -278,6 +278,7 @@ public class NewEnemy : NewCharacter {
 	}
 	
 	public override void die() {
+		monsterLoot.lootMonster();
 		base.die ();
 		Destroy (gameObject);
 	}
