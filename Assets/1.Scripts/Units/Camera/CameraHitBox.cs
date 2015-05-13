@@ -9,6 +9,7 @@ public class CameraHitBox : MonoBehaviour {
 	public bool same;
 	public int enemyCount;
 	public AudioClip Song;
+	private AudioClip resumeSong;
 	private AudioSource Playing;
 
 	// Use this for initialization
@@ -30,10 +31,9 @@ public class CameraHitBox : MonoBehaviour {
 			}
 		}
 
-		if (enemyCount > 0 && !Playing.isPlaying) {
-			AudioClip temp = Playing.clip;
+		if (enemyCount > 0 && !(Playing.clip == Song)) {
+			resumeSong = Playing.clip;
 			Playing.clip = Song;
-			Song = temp;
 			Playing.Play ();
 		}
 
@@ -120,9 +120,7 @@ public class CameraHitBox : MonoBehaviour {
 		case "Enemy":
 			enemyCount--;
 			if(enemyCount < 1){
-				AudioClip temp = Playing.clip;
-				Playing.clip = Song;
-				Song = temp;
+				Playing.clip = resumeSong;
 				Playing.Play ();
 			}
 			break;
