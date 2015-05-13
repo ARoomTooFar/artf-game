@@ -4,14 +4,10 @@ using UnityEngine;
 public class ARTFTerminalRoom : ARTFRoom {
 	public ARTFTerminalRoom(Vector3 pos1, Vector3 pos2) : base(pos1, pos2) {
 		if(Global.inLevelEditor) {
-			GameObjectResourcePool.returnResource("Prefabs/RoomCorner", URMarker);
-			GameObjectResourcePool.returnResource("Prefabs/RoomCorner", LLMarker);
-			GameObjectResourcePool.returnResource("Prefabs/RoomCorner", ULMarker);
-			GameObjectResourcePool.returnResource("Prefabs/RoomCorner", LRMarker);
-			URMarker = null;
-			LLMarker = null;
-			ULMarker = null;
-			LRMarker = null;
+			foreach(GameObject cor in CornerMarkers) {
+				GameObjectResourcePool.returnResource(roomCornerId, cor);
+			}
+			Corners.Clear();
 		}
 	}
 

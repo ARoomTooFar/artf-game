@@ -4,9 +4,11 @@ using System.Collections.Generic;
 
 public class Square {
 
-	public Square(Vector3 llcorner, Vector3 urcorner){
-		LLCorner = llcorner.getMinVals (urcorner);
-		URCorner = llcorner.getMaxVals (urcorner);
+	public Square(Vector3 llcorner, Vector3 urcorner) {
+		LLCorner = llcorner.getMinVals(urcorner);
+		URCorner = llcorner.getMaxVals(urcorner);
+		Corners = new List<Vector3>();
+		setCorners();
 	}
 
 	#region Corners
@@ -33,16 +35,7 @@ public class Square {
 	}
 	
 	//A list of all four corners
-	public List<Vector3> Corners {
-		get {
-			List<Vector3> retVal = new List<Vector3>();
-			retVal.Add(LLCorner);
-			retVal.Add(URCorner);
-			retVal.Add(LRCorner);
-			retVal.Add(ULCorner);
-			return retVal;
-		}
-	}
+	public List<Vector3> Corners { get; protected set; }
 	
 	//Center of the room. May be on the edge of two blocks in even sized rooms
 	public Vector3 Center {
@@ -55,12 +48,12 @@ public class Square {
 		get { return Length * Height; }
 	}
 
-	public float UsableArea{
+	public float UsableArea {
 		get { return Area - Perimeter;}
 	}
 	
 	public float Perimeter {
-		get { return (2 * (Length + Height))-4; }
+		get { return (2 * (Length + Height)) - 4; }
 	}
 	
 	//Add 1 because a grid with corners in the same position has Length/Height == 1
@@ -76,8 +69,8 @@ public class Square {
 		get { return Mathf.RoundToInt((10 * Mathf.Pow(2, (Mathf.Sqrt(UsableArea)) - 7) + 25) * 10); }
 	}
 	
-	public int Points{
-		get { return Mathf.RoundToInt(Mathf.Min(Length, Height)/20*UsableArea);}
+	public int Points {
+		get { return Mathf.RoundToInt(Mathf.Min(Length, Height) / 20 * UsableArea);}
 	}
 	#endregion SquareProperties
 
@@ -102,21 +95,13 @@ public class Square {
 	public bool inSquare(Vector3 pos) {
 		return
 			pos.x >= LLCorner.x &&
-				pos.x <= URCorner.x &&
-				pos.z >= LLCorner.z &&
-				pos.z <= URCorner.z;
+			pos.x <= URCorner.x &&
+			pos.z >= LLCorner.z &&
+			pos.z <= URCorner.z;
 	}
 
 	public bool isCorner(Vector3 pos) {
-		if(LLCorner.Equals(pos))
-			return true;
-		if(URCorner.Equals(pos))
-			return true;
-		if(LRCorner.Equals(pos))
-			return true;
-		if(ULCorner.Equals(pos))
-			return true;
-		return false;
+		return Corners.Contains(pos);
 	}
 
 	public virtual void resize(Vector3 oldCor, Vector3 newCor) {
@@ -138,11 +123,21 @@ public class Square {
 		} else {
 			URCorner += new Vector3(0, 0, offset.z);
 		}
+		setCorners();
 	}
 
-	public virtual void move(Vector3 offset){
+	public virtual void move(Vector3 offset) {
 		//Debug.Log(offset);
 		LLCorner = LLCorner + offset;
 		URCorner = URCorner + offset;
+		setCorners();
+	}
+
+	public void setCorners() {
+		Corners.Clear();
+		Corners.Add(LLCorner);
+		Corners.Add(URCorner);
+		Corners.Add(LRCorner);
+		Corners.Add(ULCorner);
 	}
 }
