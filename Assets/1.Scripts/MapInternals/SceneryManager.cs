@@ -73,7 +73,7 @@ public class SceneryManager {
 	 */
 	public bool add(SceneryBlock blk) {
 		ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
-		if(blk.BlockInfo.isDoor){
+		if(blk.SceneryBlockInfo.isDoor){
 			if(rm == null){
 				blk.remove();
 				return false;
@@ -108,7 +108,7 @@ public class SceneryManager {
 		}
 		//add the block to the list
 		lst.Add(blk);
-		if(blk.BlockInfo.isDoor) {
+		if(blk.SceneryBlockInfo.isDoor) {
 			if(isAddValid(blk.BlockID, blk.doorCheckPosition, blk.Orientation.Opposite())) {
 				add(new SceneryBlock(blk.BlockID, blk.doorCheckPosition, blk.Orientation.Opposite()));
 			}
@@ -141,7 +141,7 @@ public class SceneryManager {
 			return;
 		}
 		unlinkTerrain(blk);
-		if(blk.BlockInfo.isDoor) {
+		if(blk.SceneryBlockInfo.isDoor) {
 			ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
 			if(rm != null) {
 				rm.Doors.Remove(blk);
@@ -234,7 +234,7 @@ public class SceneryManager {
 
 	public bool isAddValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North) {
 		SceneryBlock blk = new SceneryBlock(type, pos, dir);
-		if(blk.BlockInfo.isDoor) {
+		if(blk.SceneryBlockInfo.isDoor) {
 			try{
 				blk.rotate(MapData.TheFarRooms.find(pos).getWallSide(pos));
 			} catch {

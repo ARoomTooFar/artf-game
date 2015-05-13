@@ -7,44 +7,15 @@ using System.Collections.Generic;
  * Object to represent a monster on the map
  * 
  */
-public class MonsterBlock {
+public class MonsterBlock : GenericBlock {
 
 	#region Properties
-	public MonsterData BlockInfo {
+	public MonsterData MonsterBlockInfo {
 		get { return GameObj.GetComponent<MonsterData>(); }
 	}
-	
-	public Vector3 Position {
-		get;
-		private set;
-	}
 
-	public DIRECTION Orientation {
-		get;
-		private set;
-	}
-
-	public string SaveString{
-		get{ return Position.toCSV () + "," + Orientation.ToString() + "," + BlockInfo.Tier; }
-	}
-
-	public GameObject GameObj {
-		get;
-		private set;
-	}
-
-	public List<Vector3> Coordinates{
-		get{
-			//get the local coordinates this piece of scenery occupies in a given rotation
-			List<Vector3> retVal = new List<Vector3>();
-			//for each coordinate
-			foreach(Vector3 vec in BlockInfo.LocalCoordinates(Orientation)){
-				//shift it to the global coordinate
-				retVal.Add(vec + Position);
-			}
-			//return the list
-			return retVal;
-		}
+	public new string SaveString{
+		get{ return base.SaveString + ", " + MonsterBlockInfo.Tier; }
 	}
 
 	public List<Vector3> RadiusCoordinates{
@@ -52,7 +23,7 @@ public class MonsterBlock {
 			//get the local coordinates this piece of scenery occupies in a given rotation
 			List<Vector3> retVal = new List<Vector3>();
 			//for each coordinate
-			foreach(Vector3 vec in BlockInfo.LocalRadiusCoordinates(Orientation)){
+			foreach(Vector3 vec in MonsterBlockInfo.LocalRadiusCoordinates(Orientation)){
 				//shift it to the global coordinate
 				retVal.Add(vec + Position);
 			}
@@ -66,35 +37,7 @@ public class MonsterBlock {
 	/*
 	 * Constructor
 	 */
-	public MonsterBlock (string blockID, Vector3 pos, DIRECTION dir) {
-		this.Position = pos.Round ();
-		this.Orientation = dir;
-		this.GameObj = GameObjectResourcePool.getResource(blockID, pos, dir.toRotationVector());
-	}
-
-	/*
-	 * public void move(Vector3 offset)
-	 * 
-	 * Alters the position of the monster by offset
-	 */
-	public void move(Vector3 offset){
-		Position += offset;
-		GameObj.transform.position = Position;
-	}
-
-	/*
-	 * public void rotate(bool goClockwise = true)
-	 * 
-	 * Rotates the monster
-	 */
-	public void rotate(bool goClockwise = true){
-		Orientation = Orientation.QuarterTurn(goClockwise);
-		GameObj.transform.eulerAngles = Orientation.toRotationVector();
-	}
-
-	public void remove(){
-		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
-	}
+	public MonsterBlock (string blockID, Vector3 pos, DIRECTION dir) : base(blockID, pos, dir) {}
 }
 
 

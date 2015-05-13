@@ -21,10 +21,8 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 	
 	void Start() {
 
-		/*amountText = this.transform.Find("AmountText").gameObject.GetComponent<Text>();
-		priceText = this.transform.Find("PriceText").gameObject.GetComponent<Text>();*/
-		amountText = this.transform.Find("AmountText").gameObject.GetComponent("Text") as Text;
-		priceText = this.transform.Find("PriceText").gameObject.GetComponent("Text") as Text;
+		amountText = this.transform.Find("AmountText").gameObject.GetComponent<Text>();
+		priceText = this.transform.Find("PriceText").gameObject.GetComponent<Text>();
 		UICamera = Camera.main.GetComponent<Camera>();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}
@@ -34,7 +32,7 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 		priceText.text = "$" + price;
 
 		if(selectedButtonID == this.gameObject.GetInstanceID()) {		
-			if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () == false) {
+			if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
 				selectedButtonID = -1;
 				StartCoroutine(folderGhostDragging());
 			}
@@ -97,10 +95,10 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 				Color trans;
 				//update the item object things
 				//shader has to be set in this loop, or transparency won't work
-				if(itemObjectCopy.GetComponentsInChildren<Renderer>() != null){
+				if(itemObjectCopy.GetComponentsInChildren<Renderer>() != null) {
 					foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
 						foreach(Material mat in rend.materials) {
-							if(mat.HasProperty("_Color")){
+							if(mat.HasProperty("_Color")) {
 								trans = mat.color;
 								trans.a = .5f;
 								mat.color = trans;
@@ -179,18 +177,24 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 
 			//don't place item if we've click a button
 			if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
-				SceneryData sdat = itemObjectCopy.GetComponent<SceneryData>();
-				if(sdat != null && sdat.isDoor) {
-					ARTFRoom rm = MapData.TheFarRooms.find(pos);
-					if(rm != null && rm.isNearEdge(pos, 3f)) {
-						pos = MapData.TheFarRooms.find(pos).nearEdgePosition(pos);
+				LevelEditorData dat = itemObjectCopy.GetComponent<LevelEditorData>();
+				if(dat is RoomData) {
+					if(MapData.addRoom(pos - new Vector3(3, 0, 3), pos + new Vector3(3, 0, 3))) {
+						Money.buy(MapData.TheFarRooms.find(pos).Cost);
 					}
-				}
-				if(Money.money > price){
-					if(MapData.addObject(prefabLocation, pos, rot.toDirection())){
+				} else if(dat is LevelEntityData) {
+					if(dat is SceneryData) {
+						if(dat != null && (dat as SceneryData).isDoor) {
+							ARTFRoom rm = MapData.TheFarRooms.find(pos);
+							if(rm != null && rm.isNearEdge(pos, 3f)) {
+								pos = MapData.TheFarRooms.find(pos).nearEdgePosition(pos);
+							}
+						}
+					}
+					if(MapData.addObject(prefabLocation, pos, rot.toDirection())) {
 						Money.buy(price);
 					}
-				}
+				} 
 			}
 
 			//destroy the copy
