@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public static class ARTFUtilities {
 	// Checks if the the given position/vector3 is behind something at position with facing
@@ -129,5 +130,24 @@ public static class ARTFUtilities {
 		// What speed to disburse between x and z after calculating speed for y
 		float speedOverLand = Mathf.Sin (angle) * speed;
 		return new Vector3(speedOverLand * Mathf.Cos (newAngle), speed * Mathf.Cos(angle), zDir * speedOverLand * Mathf.Sin (newAngle));
+	}
+	
+	// Given a list of characters and source character, find the character in list that is closest to source character
+	public static Character FindClosestCharacter(Character unit, List<Character> units) {
+		if (unit == null || units == null || units.Count == 0) return null;
+	
+		Character closestEnemy = null;
+		float dis;
+		float distance = float.MaxValue;
+		for (int count = 0; count < units.Count; count++) {
+			dis = Vector3.Distance(unit.transform.position, units[count].transform.position);
+			if (dis >= distance) continue;
+		
+			distance = dis;
+			closestEnemy = units[count];
+		}
+		if (units.Count == 0) return null;
+		
+		return closestEnemy;
 	}
 }

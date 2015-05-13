@@ -65,8 +65,6 @@ public class Lunge : QuickItem {
 	
 	// Timer and velocity changing thing
 	protected IEnumerator LungeTimeFunction(Character target) {
-
-
 		// while (!this.user.col.bounds.Intersects(target.col.bounds)) {
 		// Problems happening with intersect and a charging bully trunk, using distance now (Might need to rig it so that it is based on enemy size and weapon range)
 		while (Vector3.Distance(this.user.transform.position, target.transform.position) > 3.0f) {

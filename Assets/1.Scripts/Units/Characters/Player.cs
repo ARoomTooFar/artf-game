@@ -243,11 +243,11 @@ public class Player : NewCharacter, IHealable<int>{
 		if(UI!=null) UI.hpBar.current = 0;
 
 		// Renderer[] rs = GetComponentsInChildren<Renderer>();
+		this.isDead = true;
 		this.animator.SetInteger("Killed", (int) UnityEngine.Random.Range(1.1f, 2.9f));	
 	}
 	
 	public virtual void Death() {
-		this.isDead = true;
 		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
