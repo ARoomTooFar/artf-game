@@ -16,70 +16,15 @@ public static class LootedItems {
 	}
 }
 
-//holds list of all shit for a monster.
-//initializes all drop rates to 0.
+//holds list of all loot on a monster.
 public class LootList{
 	//item name / drop rate
-	public Dictionary<string, float> thisMonster = new Dictionary<string, float>()
-	{
-		{ Items.money, 0f},
-		{ Items.sprint, 0f},
-		{ Items.roll, 0f},
-		{ Items.charge, 0f},
-		{ Items.lunge, 0f} ,
-		{ Items.riotShield, 0f} ,
-		{ Items.nanoTriangle, 0f} ,
-		{ Items.shockNet, 0f} ,
-		{ Items.chainGrab, 0f} ,
-		{ Items.flare, 0f} ,
-		{ Items.lantern, 0f},
-		{ Items.shiv, 0f} ,
-		{ Items.utilityBlade, 0f} ,
-		{ Items.pruningBlade, 0f} ,
-		{ Items.sixShooter, 0f} ,
-		{ Items.plasmaBlade, 0f} ,
-		{ Items.rebarSword, 0f} ,
-		{ Items.longSword, 0f} ,
-		{ Items.machette, 0f} ,
-		{ Items.thinBlade, 0f} ,
-		{ Items.flamePike, 0f} ,
-		{ Items.lumberSaw, 0f} ,
-		{ Items.chainsawSword, 0f} ,
-		{ Items.copGun, 0f} ,
-		{ Items.hiCompressionPistol, 0f} ,
-		{ Items.huntingRifle, 0f} ,
-		{ Items.laserRifle, 0f} ,
-		{ Items.machineGun, 0f} ,
-		{ Items.automaticLaserRifle, 0f} ,
-		{ Items.shotgun, 0f} ,
-		{ Items.wallOfLead, 0f} ,
-		{ Items.shirtAndPants, 0f} ,
-		{ Items.poncho, 0f} ,
-		{ Items.bulletProofVest, 0f} ,
-		{ Items.smugglersJacket, 0f} ,
-		{ Items.mixedPlateUniform, 0f} ,
-		{ Items.mixedArmyUniform, 0f} ,
-		{ Items.ceramicPlate, 0f} ,
-		{ Items.carbonFibronicMeshSuit, 0f} ,
-		{ Items.delversDuster, 0f} ,
-		{ Items.trashHelmetLightBulb, 0f} ,
-		{ Items.trashHelmetBucket, 0f} ,
-		{ Items.trafficCone, 0f} ,
-		{ Items.militarySpikeHelmet, 0f} ,
-		{ Items.bikerHelmet, 0f} ,
-		{ Items.policeHelmet, 0f} ,
-		{ Items.comHelmet, 0f} ,
-		{ Items.targetingVisor, 0f} ,
-		{ Items.bionicEye, 0f} ,
-		{ Items.cyberFaceRobot, 0f} ,
-		{ Items.cyberFaceHorns, 0f} ,
-		{ Items.brainCaseVisor, 0f}
-	};
+	public Dictionary<string, float> thisMonster = new Dictionary<string, float>();
 
-	//set which ones you want to be non-zero
+	//fill dictionary
 	public LootList(Dictionary<string, float> items){
 		foreach(var key in items.Keys){
-			thisMonster[key] = items[key];
+			thisMonster.Add(key, items[key]);
 		}
 	}
 }
