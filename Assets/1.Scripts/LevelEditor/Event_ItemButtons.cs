@@ -178,21 +178,23 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 			//don't place item if we've click a button
 			if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
 				LevelEditorData dat = itemObjectCopy.GetComponent<LevelEditorData>();
-				if(dat is SceneryData) {
-					if(dat != null && (dat as SceneryData).isDoor) {
-						ARTFRoom rm = MapData.TheFarRooms.find(pos);
-						if(rm != null && rm.isNearEdge(pos, 3f)) {
-							pos = MapData.TheFarRooms.find(pos).nearEdgePosition(pos);
+				if(dat is RoomData) {
+					if(MapData.addRoom(pos - new Vector3(3, 0, 3), pos + new Vector3(3, 0, 3))) {
+						Money.buy(MapData.TheFarRooms.find(pos).Cost);
+					}
+				} else if(dat is LevelEntityData) {
+					if(dat is SceneryData) {
+						if(dat != null && (dat as SceneryData).isDoor) {
+							ARTFRoom rm = MapData.TheFarRooms.find(pos);
+							if(rm != null && rm.isNearEdge(pos, 3f)) {
+								pos = MapData.TheFarRooms.find(pos).nearEdgePosition(pos);
+							}
 						}
 					}
 					if(MapData.addObject(prefabLocation, pos, rot.toDirection())) {
 						Money.buy(price);
 					}
-				} else if(dat is RoomData) {
-					if(MapData.addRoom(pos - new Vector3(3, 0, 3), pos+new Vector3(3, 0, 3))) {
-						Money.buy(MapData.TheFarRooms.find(pos).Cost);
-					}
-				}
+				} 
 			}
 
 			//destroy the copy

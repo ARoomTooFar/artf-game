@@ -77,6 +77,11 @@ public class GenericBlock {
 		GameObj.transform.eulerAngles = Orientation.toRotationVector();
 	}
 
+	public void rotate(DIRECTION orientation){
+		Orientation = orientation;
+		GameObj.transform.eulerAngles = Orientation.toRotationVector();
+	}
+
 	public void remove(){
 		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
 	}
