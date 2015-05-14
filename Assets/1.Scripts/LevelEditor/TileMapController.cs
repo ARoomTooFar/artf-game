@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class TileMapController : MonoBehaviour {
 	Camera UICamera;
 	CameraRaycast camCast;
-	CameraDraws camDraw;
 	public HashSet<Vector3> selectedTiles = new HashSet<Vector3>();
 	public Vector3 shiftOrigin = Global.nullVector3;
 	public bool suppressDragSelecting;
@@ -15,7 +14,6 @@ public class TileMapController : MonoBehaviour {
 	void Start() {	
 		UICamera = Camera.main;
 		camCast = UICamera.GetComponent<CameraRaycast>();
-		camDraw = UICamera.GetComponent<CameraDraws>();
 	}
 
 	void Update() {

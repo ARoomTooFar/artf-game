@@ -45,7 +45,6 @@ public class RoomDraggingObject : ClickEvent {
 				|| Math.Abs(mouseChange.z) > Global.mouseDeadZone) {
 
 				//for now y-pos remains as prefab's default.
-
 				camDraw.roomOffset = position-origin;
 			}	
 

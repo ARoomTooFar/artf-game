@@ -4,7 +4,6 @@ using System.Collections;
 
 public class CameraRaycast : MonoBehaviour {
 
-	private LayerMask draggingLayerMask;
 	private Camera UICamera;
 	private Ray ray;
 	private ClickEvent drag;
@@ -19,7 +18,6 @@ public class CameraRaycast : MonoBehaviour {
 
 	// Use this for initialization
 	void Start() {
-		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = this.gameObject.GetComponent<Camera>();
 	}
 	
