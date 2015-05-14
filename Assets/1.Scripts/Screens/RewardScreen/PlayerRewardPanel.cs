@@ -33,7 +33,7 @@ public class PlayerRewardPanel : MonoBehaviour {
 	KeyCode subtract;
 
 	public Controls controls;
-	bool joyControlsOn = false;
+	bool joyControlsOn = true;
 	bool keyboardControlsOn = true;
 
 
@@ -110,23 +110,30 @@ public class PlayerRewardPanel : MonoBehaviour {
 	//
 	//Arcade controls
 	//
-	void takeJoyInputs(){
+	bool waitingUp = false;
+	bool waitingDown = false;
 
-		//"Up" key assign pressed
-		//moves selector up  list
-		if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
+	void takeJoyInputs(){
+		//go up
+		if (waitingUp == false && Input.GetAxisRaw (controls.vert) > 0) {
 			if(activeEntry > 0)
 				activeEntry -= 1;
+			waitingUp = true;
+		}else if (waitingUp == true && !(Input.GetAxisRaw (controls.vert) > 0)){
+			waitingUp = false;
 		}
-		//"Down" key assign pressed
-		//moves selector down list
-		if (Input.GetKey(controls.down) || Input.GetAxis(controls.vert) < 0) {
+
+		//go down
+		if (waitingDown == false && Input.GetAxisRaw (controls.vert) < 0) {
 			if(activeEntry < highlights.Count - 1)
 				activeEntry += 1;
+			waitingDown = true;
+		}else if (waitingDown == true && !(Input.GetAxisRaw (controls.vert) < 0)){
+			waitingDown = false;
 		}
-		
-		//adds points from an item
-		if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
+
+		//adds points to an item
+		if (!Input.GetKeyDown(controls.attack) && (Input.GetButtonDown(controls.joyAttack))) {
 			if(total > 0){
 				points[activeEntry] += 1;
 				total -= 1;
