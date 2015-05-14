@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class Synth: NewRangedEnemy {
 	
-	protected Roll roll;
+	protected SynthKnockBack knockback;
 	protected CacklebranchPistol gun;
 	
 	protected override void Awake () {
@@ -15,11 +15,11 @@ public class Synth: NewRangedEnemy {
 	protected override void Start() {
 		base.Start ();
 		
-		this.roll = this.inventory.items[inventory.selected].GetComponent<Roll>();
-		if (this.roll == null) Debug.LogWarning ("CackleBranch does not have roll equipped");
+		this.knockback = this.inventory.items[inventory.selected].GetComponent<SynthKnockBack>();
+		if (this.knockback == null) Debug.LogWarning ("Synth does not have knockback equipped");
 		
-		foreach(CackleRoll behaviour in this.animator.GetBehaviours<CackleRoll>()) {
-			behaviour.roll = this.roll;
+		foreach(KnockBackBehaviour behaviour in this.animator.GetBehaviours<KnockBackBehaviour>()) {
+			behaviour.SetVar(knockback);
 		}
 		
 		this.gun = this.gear.weapon.GetComponent<CacklebranchPistol>();
