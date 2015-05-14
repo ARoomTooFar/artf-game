@@ -20,6 +20,9 @@ public class UpgradeUI : MonoBehaviour
 	public Camera UICamera;
 	public Camera FollowCamera;
 	public Canvas UpgradeUICanvas;
+
+	public CameraRaycast camCast;
+	public CameraDraws camDraw;
 	
 	GameObject lowerHalf;
 	GameObject tierStats;
@@ -27,7 +30,6 @@ public class UpgradeUI : MonoBehaviour
 	Vector3 mouseStartPos;
 	
 	bool rayHit = false;
-	RaycastHit hit;
 
 	void Start ()
 	{
@@ -60,6 +62,9 @@ public class UpgradeUI : MonoBehaviour
 		UICamera = GameObject.Find("UpgradeUICamera").GetComponent<Camera>();
 		FollowCamera = GameObject.Find("UICamera").GetComponent<Camera>();
 
+		camCast = FollowCamera.GetComponent<CameraRaycast>();
+		camDraw = FollowCamera.GetComponent<CameraDraws>();
+
 		//sets Render Camera if in Screen Space - Camera mode
 		//sets World Camera if in World Space mode
 		UpgradeUICanvas.worldCamera = UICamera;
@@ -73,6 +78,8 @@ public class UpgradeUI : MonoBehaviour
 		tierStats.SetActive(false);
 
 		mouseStartPos = new Vector3(0,0,0);
+
+		updateTiers();
 	}
 	
 	//Update causes itemObjectUI flickering. LateUpdate prevents it
@@ -122,8 +129,8 @@ public class UpgradeUI : MonoBehaviour
 
 		//this checks if the object this script applies to was clicked
 		if (Input.GetMouseButtonDown (0)) {
-			Physics.Raycast(UICamera.ScreenPointToRay(Input.mousePosition), out hit);
-			if (hit.collider && (hit.collider.gameObject.GetInstanceID() == parentObject.gameObject.GetInstanceID())){
+			if(camCast.hitDistance != Mathf.Infinity
+			   && camCast.hit.collider.gameObject.GetInstanceID() == parentObject.gameObject.GetInstanceID()){
 				rayHit = true;
 				mouseStartPos = Input.mousePosition;
 			}

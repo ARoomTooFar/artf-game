@@ -6,11 +6,15 @@ public class RoomResizingObject : ClickEvent {
 	
 	public LayerMask draggingLayerMask = LayerMask.GetMask("Walls");
 	Camera UICamera;
+	CameraRaycast camCast;
+	CameraDraws camDraw;
 	TileMapController tilemapcont;
 	Shader focusedShader;
 	
 	void Start() {
 		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
+		camCast = UICamera.GetComponent<CameraRaycast>();
+		camDraw = UICamera.GetComponent<CameraDraws>();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();	
 		focusedShader = Shader.Find("Transparent/Bumped Diffuse");
 	}
@@ -23,25 +27,20 @@ public class RoomResizingObject : ClickEvent {
 		//for the ghost-duplicate
 		GameObject itemObjectCopy = null;
 		Vector3 position = this.gameObject.transform.position;
-		UICamera.GetComponent<CameraDraws>().room = MapData.TheFarRooms.find(position);
-		UICamera.GetComponent<CameraDraws>().roomResizeOrigin = position;
+		camDraw.room = MapData.TheFarRooms.find(position);
+		camDraw.roomResizeOrigin = position;
 		tilemapcont.suppressDragSelecting = true;
 		while(Input.GetMouseButton(0)) { 
 			//if user wants to cancel the drag
 			if(Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButton(1)) {
-				Debug.Log("Cancel");
 				Destroy(itemObjectCopy);
 				return false;
 			}
 			
-			Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
-			float distance;
-			Global.ground.Raycast(ray, out distance);
-			
 			Vector3 mouseChange = initPosition - Input.mousePosition;
 
-			position = ray.GetPoint(distance).Round();
-				
+			position = camCast.mouseGroundPoint.Round();
+
 			//if mouse left deadzone
 			if(Math.Abs(mouseChange.x) > Global.mouseDeadZone 
 				|| Math.Abs(mouseChange.y) > Global.mouseDeadZone 
@@ -65,16 +64,16 @@ public class RoomResizingObject : ClickEvent {
 					itemObjectCopy.transform.rotation = getRotation();
 				}
 
-				UICamera.GetComponent<CameraDraws>().roomResize = position;
+				camDraw.roomResize = position;
 			}	
 
 			yield return null; 
 		}
 		
 		tilemapcont.suppressDragSelecting = false;
-		UICamera.GetComponent<CameraDraws>().room = null;
-		UICamera.GetComponent<CameraDraws>().roomResize = Global.nullVector3;
-		UICamera.GetComponent<CameraDraws>().roomResizeOrigin = Global.nullVector3;
+		camDraw.room = null;
+		camDraw.roomResize = Global.nullVector3;
+		camDraw.roomResizeOrigin = Global.nullVector3;
 		//destroy the copy
 		Destroy(itemObjectCopy);
 		tilemapcont.deselect(getPosition());
