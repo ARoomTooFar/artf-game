@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class NewEnemy : NewCharacter {
 
@@ -29,17 +30,20 @@ public class NewEnemy : NewCharacter {
 	protected float lastSeenSet = 0.0f;
 	protected AggroTable aggroT;
 	protected bool targetchanged;
+	protected GameObject MusicPlayer;
 
 	public Vector3 targetDir;
 	public Vector3 resetpos;
-	
+
 	
 	protected int layerMask = 1 << 9;
 	
 	protected float aggroTimer = 5.0f;
 
-	bool sparksDone = true;
+	// bool sparksDone = true;
 	GameObject sparks = null;
+	
+	public MonsterLoot monsterLoot;
 	
 	protected override void Awake() {
 		base.Awake();
@@ -70,6 +74,8 @@ public class NewEnemy : NewCharacter {
 		foreach(EnemyBehaviour behaviour in this.animator.GetBehaviours<EnemyBehaviour>()) {
 			behaviour.SetVar(this.GetComponent<NewEnemy>());
 		}
+
+		MusicPlayer = GameObject.Find ("MusicPlayer");
 	}
 	
 	// Update is called once per frame
@@ -77,26 +83,6 @@ public class NewEnemy : NewCharacter {
 		if (stats.isDead) return;
 		base.Update();
 		this.TargetFunction();
-		/*
-		if (!stats.isDead) {
-			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
-			
-			animSteInfo = animator.GetCurrentAnimatorStateInfo (0);
-			animSteHash = animSteInfo.fullPathHash;
-			freeAnim = !stunned && !knockedback;
-			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
-			this.animator.SetBool("Actable", this.actable);
-			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
-			this.animator.SetBool("IsInAttackAnimation", this.attacking || this.animSteHash == this.atkHashChgSwing || this.animSteHash == this.atkHashCharge);
-			
-			
-			if (isGrounded) {
-				movementAnimation ();
-			} else {
-				falling ();
-			}
-			this.TargetFunction();
-		}*/
 	}
 
 	
@@ -116,6 +102,7 @@ public class NewEnemy : NewCharacter {
 	public virtual void SetTierData(int tier) {
 		this.tier = tier;
 		this.animator.SetInteger("Tier", this.tier);
+		monsterLoot = this.gameObject.AddComponent<MonsterLoot>();
 	}
 
 	//-----------//
@@ -162,7 +149,15 @@ public class NewEnemy : NewCharacter {
 	//-----------------------//
 	// Calculation Functions //
 	//-----------------------//
-	
+
+
+	protected float distanceToPlayer(GameObject p) {
+		if (p == null) return 0.0f;
+		float distance = Vector3.Distance(this.transform.position, p.transform.position);
+		//Debug.Log (distance);
+		return distance;
+	}
+
 	public virtual bool canSeePlayer(GameObject p) {
 		if (p == null) {
 			this.animator.SetBool("CanSeeTarget", false);
@@ -222,6 +217,7 @@ public class NewEnemy : NewCharacter {
 		if (this.invincible) return;
 		this.damage(dmgTaken, atkPosition);
 		aggroT.AddAggro(source, dmgTaken);
+		isHit = true;
 
 		//particle effects
 		if(sparks == null){
@@ -234,6 +230,8 @@ public class NewEnemy : NewCharacter {
 	
 	public override void damage(int dmgTaken, Transform atkPosition) {
 		base.damage(dmgTaken, atkPosition);
+		isHit = true;
+
 
 		//particle effects
 		if(sparks == null){
@@ -257,6 +255,7 @@ public class NewEnemy : NewCharacter {
 	}
 	
 	public override void die() {
+		monsterLoot.lootMonster();
 		base.die ();
 		Destroy (gameObject);
 	}

@@ -5,16 +5,11 @@ using System.Collections.Generic;
 
 public static class LevelPathCheck {
 
-	public static List<Vector3> fullPath {
-		get;
-		private set;
-	}
-	public static List<SceneryBlock> roomPath {
-		get;
-		private set;
-	}
+	public static List<Vector3> fullPath { get; private set; }
 
-	public static void checkPath(){
+	public static List<SceneryBlock> roomPath { get; private set; }
+
+	public static void checkPath() {
 		foreach(ARTFRoom rm in MapData.TheFarRooms.roomList) {
 			rm.linkRoomsViaDoors();
 		}

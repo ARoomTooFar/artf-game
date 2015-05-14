@@ -14,6 +14,7 @@ public class Approach : EnemyBehaviour {
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		if (!unit.actable) return;
 		this.unit.canSeePlayer(unit.target);
 		this.unit.getFacingTowardsTarget();
 		this.unit.rb.velocity = this.unit.facing * this.unit.stats.speed * this.unit.stats.spdManip.speedPercent;

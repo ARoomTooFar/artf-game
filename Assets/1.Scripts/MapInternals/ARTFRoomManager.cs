@@ -54,8 +54,6 @@ public class ARTFRoomManager {
 	public void add(ARTFRoom rm) {
 		//add the new room to the list of rooms
 		roomList.Add(rm);
-		//link the needed terrain to it
-		//rm.linkTerrain();
 	}
 	#endregion Add
 
@@ -124,35 +122,12 @@ public class ARTFRoomManager {
 	#region ValidationFunctions
 	#region Intersection
 	/*
-	 * public static bool doRoomsIntersect(ARTFRoom rm1, ARTFRoom rm2)
-	 * 
-	 * Checks to see if two given rooms intersect with each other
-	 */
-	public static bool doRoomsIntersect(ARTFRoom rm1, ARTFRoom rm2) {
-		//for each corner in room1
-		foreach(Vector3 cor in rm1.Corners) {
-			//if that corner is inside room2
-			if(rm2.inRoom(cor)) {
-				return true;
-			}
-		}
-		//for each corner in room2
-		foreach(Vector3 cor in rm2.Corners) {
-			//if that corner is inside room1
-			if(rm1.inRoom(cor)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/*
 	 * public bool doAnyRoomsIntersect(ARTFRoom rm)
 	 * 
 	 * Checks to see if a given room intersects with
 	 * any rooms already in the list.
 	 */
-	public bool doAnyRoomsIntersect(ARTFRoom rm) {
+	public bool doAnyRoomsIntersect(Square rm) {
 		//for each extant room
 		foreach(ARTFRoom other in roomList) {
 			//if the room is the room we're checking, move on
@@ -160,7 +135,7 @@ public class ARTFRoomManager {
 				continue;
 
 			//if the rooms intersect
-			if(doRoomsIntersect(other, rm)) {
+			if(rm.Intersect(other)) {
 				return true;
 			}
 		}
@@ -241,13 +216,8 @@ public class ARTFRoomManager {
 		if(testSquare.Cost - rm.Cost > Money.money) {
 			return false;
 		}
-		foreach (ARTFRoom room in roomList) {
-			if(rm.LLCorner == room.LLCorner){
-				continue;
-			}
-			if(testSquare.Intersect(room)){
-				return false;
-			}
+		if(doAnyRoomsIntersect(rm)) {
+			return false;
 		}
 		return true;
 	}
@@ -263,10 +233,8 @@ public class ARTFRoomManager {
 		if(rm.Cost > Money.money) {
 			return false;
 		}
-		foreach (ARTFRoom room in roomList) {
-			if(rm.Intersect(room)){
-				return false;
-			}
+		if(doAnyRoomsIntersect(rm)) {
+			return false;
 		}
 		return true;
 	}

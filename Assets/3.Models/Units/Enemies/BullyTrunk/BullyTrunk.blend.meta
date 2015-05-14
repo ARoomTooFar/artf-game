@@ -1,0 +1,1038 @@
+fileFormatVersion: 2
+guid: 277701501fe2c2147b72e73ad219fe2a
+timeCreated: 1431391063
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: hand_l
+    100002: hand_r
+    100004: head
+    100006: leg_l
+    100008: leg_r
+    100010: lower_arm_l
+    100012: lower_arm_r
+    100014: lower_back
+    100016: lower_foot_l
+    100018: lower_foot_r
+    100020: neck
+    100022: //RootNode
+    100024: obj_bullytrunk
+    100026: obj_bullytrunk_001
+    100028: thigh_l
+    100030: thigh_r
+    100032: upper_arm_l
+    100034: upper_arm_r
+    100036: upper_back
+    100038: upper_Foot_l
+    100040: upper_Foot_r
+    400000: hand_l
+    400002: hand_r
+    400004: head
+    400006: leg_l
+    400008: leg_r
+    400010: lower_arm_l
+    400012: lower_arm_r
+    400014: lower_back
+    400016: lower_foot_l
+    400018: lower_foot_r
+    400020: neck
+    400022: //RootNode
+    400024: obj_bullytrunk
+    400026: obj_bullytrunk_001
+    400028: thigh_l
+    400030: thigh_r
+    400032: upper_arm_l
+    400034: upper_arm_r
+    400036: upper_back
+    400038: upper_Foot_l
+    400040: upper_Foot_r
+    4300000: obj_bullytrunk
+    7400000: Default Take
+    7400002: obj_bullytrunk_attack_1
+    7400004: obj_bullytrunk_attack_2
+    7400006: obj_bullytrunk_attack_3
+    7400008: obj_bullytrunk_charge_begin
+    7400010: obj_bullytrunk_charge_loop
+    7400012: obj_bullytrunk_charge_pummel
+    7400014: obj_bullytrunk_death
+    7400016: obj_bullytrunk_idle1
+    7400018: obj_bullytrunk_idle2
+    7400020: obj_bullytrunk_walk_begin
+    7400022: obj_bullytrunk_walk_loop
+    7400024: PoseLib
+    9500000: //RootNode
+    13700000: obj_bullytrunk
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Default Take
+      takeName: Default Take
+      firstFrame: 0
+      lastFrame: 49
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: -Infinity
+        functionName: NewEvent
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: obj_bullytrunk_attack_1
+      takeName: obj_bullytrunk_attack_1
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: obj_bullytrunk_attack_2
+      takeName: obj_bullytrunk_attack_2
+      firstFrame: 0
+      lastFrame: 49
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: obj_bullytrunk_attack_3
+      takeName: obj_bullytrunk_attack_3
+      firstFrame: 0
+      lastFrame: 49
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: -Infinity
+        functionName: SmashNow
+        data: 
+        objectReferenceParameter: {fileID: 171074, guid: 6f175f744b0ea6b479dbbfc9cb1a5dd4,
+          type: 2}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: -Infinity
+        functionName: SmashNow
+        data: 
+        objectReferenceParameter: {fileID: 171074, guid: 6f175f744b0ea6b479dbbfc9cb1a5dd4,
+          type: 2}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: -Infinity
+        functionName: SmashNow
+        data: 
+        objectReferenceParameter: {fileID: 171074, guid: 6f175f744b0ea6b479dbbfc9cb1a5dd4,
+          type: 2}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: obj_bullytrunk_charge_begin
+      takeName: obj_bullytrunk_charge_begin
+      firstFrame: 0
+      lastFrame: 39
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: obj_bullytrunk_charge_loop
+      takeName: obj_bullytrunk_charge_loop
+      firstFrame: 0
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: obj_bullytrunk_charge_pummel
+      takeName: obj_bullytrunk_charge_pummel
+      firstFrame: 0
+      lastFrame: 49
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: obj_bullytrunk_death
+      takeName: obj_bullytrunk_death
+      firstFrame: 0
+      lastFrame: 68
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: obj_bullytrunk_idle1
+      takeName: obj_bullytrunk_idle1
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: obj_bullytrunk_idle2
+      takeName: obj_bullytrunk_idle2
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: obj_bullytrunk_walk_begin
+      takeName: obj_bullytrunk_walk_begin
+      firstFrame: -1
+      lastFrame: 29
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: obj_bullytrunk_walk_loop
+      takeName: obj_bullytrunk_walk_loop
+      firstFrame: -1
+      lastFrame: 64
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: PoseLib
+      takeName: PoseLib
+      firstFrame: 0
+      lastFrame: 3
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: obj_bullytrunk
+        weight: 1
+      - path: obj_bullytrunk_001
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_l/leg_l/upper_Foot_l/lower_foot_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/thigh_r/leg_r/upper_Foot_r/lower_foot_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/neck/head
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_l/lower_arm_l/hand_l
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r
+        weight: 1
+      - path: obj_bullytrunk_001/lower_back/upper_back/upper_arm_r/lower_arm_r/hand_r
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class ExplosiveRound : Projectile {	
+public class ExplosiveRound : HomingBullet {	
 
 	public GameObject expDeath;
 	public AoETargetting aoe;
@@ -16,6 +16,11 @@ public class ExplosiveRound : Projectile {
 		if (opposition == typeof(Enemy) || opposition == typeof(NewEnemy)) this.aoe.affectEnemies = true;
 		if (opposition == typeof(Player)) this.aoe.affectPlayers = true;
 		base.setInitValues(player, opposition, damage, partSpeed, effect, hinder, duration);
+	}
+	
+	public override void setInitValues(Character player, Type opposition, int damage, float partSpeed, bool effect, BuffsDebuffs hinder, float durations, Character target) {
+		this.target = target;
+		this.setInitValues(player, opposition, damage, partSpeed, effect, hinder, duration);
 	}
 	
 	// Update is called once per frame

@@ -10,6 +10,8 @@ public class TrapRegenerator : MonoBehaviour, IDamageable<int, Traps, GameObject
 	public int maxHealth;
 	public int health;
 
+	protected Animator anim;
+
 	// Use this for initialization
 	void Start () {
 		health = maxHealth;
@@ -45,6 +47,7 @@ public class TrapRegenerator : MonoBehaviour, IDamageable<int, Traps, GameObject
 			this.GetComponent<Collider>().enabled = false;
 			
 			StartCoroutine(regen());
+			this.GetComponent<Animator>().SetBool("Killed", true);
 		}
 	}
 	
@@ -60,6 +63,7 @@ public class TrapRegenerator : MonoBehaviour, IDamageable<int, Traps, GameObject
 		this.GetComponent<Collider>().enabled = true;
 
 		health = maxHealth;
+		this.GetComponent<Animator>().SetBool("Killed", false);
 	}
 
 	private IEnumerator regen() {

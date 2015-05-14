@@ -3,12 +3,20 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
+
+
+
 //controls reward panel for each player
 public class PlayerRewardPanel : MonoBehaviour {
+
+	//must get from gamestate manager
 	public List<string> loot; //list of looted items
+
+	//get from somewhere
 	public int total; //total points player has for voting
+
+
 	public List<int> points; //points player has allocated to each item
-	
 	Transform lootList;
 	RectTransform lootListRect;
 	float newRowYPos;
@@ -24,15 +32,26 @@ public class PlayerRewardPanel : MonoBehaviour {
 	KeyCode add;
 	KeyCode subtract;
 
+	public Controls controls;
+	bool joyControlsOn = false;
+	bool keyboardControlsOn = true;
+
+	private GSManager gsManager;
+
+
 	//joystick/button input setup
-	public void setUpInputs(string upString, string downString, string addString, string subtractString){
+	public void setUpInputs(string upString, string downString, string addString, string subtractString, Controls c){
 		up = (KeyCode)System.Enum.Parse(typeof(KeyCode), upString);
 		down = (KeyCode)System.Enum.Parse(typeof(KeyCode), downString);
 		add = (KeyCode)System.Enum.Parse(typeof(KeyCode), addString);
 		subtract = (KeyCode)System.Enum.Parse(typeof(KeyCode), subtractString);
+		controls = c;
+
+		controls.joyUsed = true;
 	}
 
 	void Start () {
+		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
 		lootList = transform.Find("LootScroller/ScrollView/LootList");
 		lootListRect = lootList.GetComponent<RectTransform>();
 		loot = new List<string>();
@@ -43,24 +62,32 @@ public class PlayerRewardPanel : MonoBehaviour {
 
 		//HARD-CODED SECTION
 		//REPLACE WITH THINGS FROM OTHER SCRIPTS
-		loot.Add("testIcon1");
-		loot.Add("testIcon2");
-		loot.Add("testIcon3");
-		loot.Add("testIcon4");
-		loot.Add("testIcon5");
-		loot.Add("testIcon6");
-		loot.Add("testIcon7");
-		loot.Add("testIcon8");
-		total = 13;
+//		loot.Add("flamePike");
+//		loot.Add("rebarSword");
+//		loot.Add("utilityBlade");
+//		loot.Add("testIcon4");
+//		loot.Add("testIcon5");
+//		loot.Add("testIcon6");
+//		loot.Add("testIcon7");
+//		loot.Add("testIcon8");
+//		total = 13;
 		//END HARDCODED SECTION
 
-		populateList();
+		//GSMANAGER IMPORT OF LOOTED ITEMS
+		loot = gsManager.loot;
+		//END GSMANAGER IMPORT OF LOOTED ITEMS
 
-		highlights[0].SetActive(true); //initialize top entry to be highlighted
-		activeEntry = 0;
+		if(loot.Count == 0){
+			print ("Loot list empty");
+		}else{
+			populateList();
 
-		for(int i = 0; i < points.Count; i++){
-			pointsText[i].text = "0";
+			highlights[0].SetActive(true); //initialize top entry to be highlighted
+			activeEntry = 0;
+			
+			for(int i = 0; i < points.Count; i++){
+				pointsText[i].text = "0";
+			}
 		}
 	}
 
@@ -74,18 +101,66 @@ public class PlayerRewardPanel : MonoBehaviour {
 		//create y-position of top entry
 		newRowYPos = 0f - iconDimens.y / 2 - 5f;
 		for(int i = 0; i < loot.Count; i++){
-			makeNewEntry(loot[i]);
-			highlights[i].SetActive(false);
+
+			//must remove money from loot table eventually
+			if(loot[i] != Items.money){
+				makeNewEntry(loot[i]);
+				highlights[i].SetActive(false);
+			}
 		}
 	}
 
 	void Update(){
-		takeInputs();
-		updateHighlightedEntry();
-		updateTexts();
+		if(loot.Count != 0){
+			if(joyControlsOn)
+				takeJoyInputs();
+			if(keyboardControlsOn)
+				takeKeyboardInputs();
+
+			updateHighlightedEntry();
+			updateTexts();
+		}
 	}
 
-	void takeInputs(){
+	//
+	//Arcade controls
+	//
+	void takeJoyInputs(){
+
+		//"Up" key assign pressed
+		//moves selector up  list
+		if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
+			if(activeEntry > 0)
+				activeEntry -= 1;
+		}
+		//"Down" key assign pressed
+		//moves selector down list
+		if (Input.GetKey(controls.down) || Input.GetAxis(controls.vert) < 0) {
+			if(activeEntry < highlights.Count - 1)
+				activeEntry += 1;
+		}
+		
+		//adds points from an item
+		if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
+			if(total > 0){
+				points[activeEntry] += 1;
+				total -= 1;
+			}
+		}
+		
+		//subtracts points from an item
+		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
+			if(points[activeEntry] > 0){
+				total += 1;
+				points[activeEntry] -= 1;
+			}
+		}
+	}
+
+	//
+	//Keyboard controls
+	//
+	void takeKeyboardInputs(){
 
 		//moves selector up and down list
 		if(Input.GetKeyDown(down)){
@@ -141,6 +216,8 @@ public class PlayerRewardPanel : MonoBehaviour {
 
 		//give it the proper icon
 		icon = Resources.Load<Sprite>("RewardScreen/" + itemName);
+		if(icon == null)
+			icon = Resources.Load<Sprite>("RewardScreen/cyberFaceHorns");
 		newLootItem.transform.Find("Icon").GetComponent<Image>().sprite = icon;
 
 		//add entry's height to list for highlighting

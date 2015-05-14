@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class NewBullyTrunk: NewMobileEnemy {
 
+	public BullyTrunkPummelWeapon rightPaw, leftPaw;
+
 	protected BullCharge charge;
 	protected BullyTrunkBlast blast;
 	protected RockHead rockHead;
@@ -82,20 +84,22 @@ public class NewBullyTrunk: NewMobileEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 50;
+		stats.maxHealth = 175;
 		stats.health = stats.maxHealth;
-		stats.armor = 1;
-		stats.strength = 10;
+		stats.armor = 7;
+		stats.strength = 25;
 		stats.coordination=0;
 		stats.speed=6;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 4.0f;
+		this.maxAtkRadius = 3.5f;
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 1;
+		tier = 2;
 		base.SetTierData (tier);
+
+		monsterLoot.initializeLoot("BullyTrunk", tier);
 
 		this.stats.speed = tier < 3 ? 7 : 10;
 
@@ -129,6 +133,9 @@ public class NewBullyTrunk: NewMobileEnemy {
 			foreach(Pummel behaviour in this.animator.GetBehaviours<Pummel>()) {
 				behaviour.trunk = this.gear.weapon.GetComponent<MeleeWeapons>();
 			}
+			
+			this.rightPaw.equip(this, this.opposition);
+			this.leftPaw.equip(this, this.opposition);
 		}
 
 		if (tier > 3) {
@@ -162,6 +169,22 @@ public class NewBullyTrunk: NewMobileEnemy {
 
 	protected virtual void SmashOver() {
 		this.AttackEnd();
+	}
+
+	protected virtual void PummelRightNow() {
+		this.rightPaw.AttackStart();
+	}
+
+	protected virtual void PummelRightOver() {
+		this.rightPaw.AttackEnd();
+	}
+
+	protected virtual void PummelLeftNow() {
+		this.leftPaw.AttackStart();
+	}
+
+	protected virtual void PummelLeftOver() {
+		this.leftPaw.AttackEnd();
 	}
 
 	//-------------------//

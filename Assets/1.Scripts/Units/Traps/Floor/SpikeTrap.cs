@@ -4,10 +4,11 @@ using System.Collections;
 public class SpikeTrap : Traps {
 	
 	public GameObject spike;
+	public AoETargetting aoe;
 
+	protected Animator animator;
 	protected float timeToReset;
 	protected Vector3 spikeInitial;
-	protected int unitsInTrap;
 	protected bool firing;
 
 	// Use this for initialization
@@ -15,8 +16,13 @@ public class SpikeTrap : Traps {
 		base.Start ();
 
 		firing = true;
-		unitsInTrap = 0;
+		this.aoe = this.GetComponent<AoETargetting>();
+		this.aoe.affectEnemies = true;
+		this.aoe.affectPlayers = true;
 		spikeInitial = spike.transform.localPosition;
+
+		this.animator = this.GetComponent<Animator>();
+		this.animator.GetBehaviour<SpikeTrapIdleBehaviour>().SetVar(this);
 	}
 	
 	protected override void setInitValues() {
@@ -34,18 +40,15 @@ public class SpikeTrap : Traps {
 	protected override void Update () {
 		base.Update ();
 	}
-	
-	protected virtual void spikeRise() {
-		if (firing) {
-			firing = false;
-			StartCoroutine(riseUp());
-		}
+
+	public void RaiseSpike() {
+		StartCoroutine(riseUp());
 	}
 
 	protected virtual IEnumerator riseUp() {
-		Vector3 newPos = spike.transform.localPosition + new Vector3 (0f, 10f, 0f);
+		Vector3 newPos = spike.transform.localPosition + new Vector3 (0f, 3f, 0f);
 		while (spike.transform.localPosition.y <= newPos.y - .1) {
-			spike.transform.localPosition = Vector3.MoveTowards(spike.transform.localPosition, newPos, Time.deltaTime * 60);
+			spike.transform.localPosition = Vector3.MoveTowards(spike.transform.localPosition, newPos, Time.deltaTime * 30);
 			yield return null;
 		}
 		StartCoroutine(lower());
@@ -53,7 +56,7 @@ public class SpikeTrap : Traps {
 
 	protected virtual IEnumerator lower() {
 		while (spike.transform.localPosition.y >= spikeInitial.y + .1) {
-			spike.transform.localPosition = Vector3.MoveTowards(spike.transform.localPosition, spikeInitial, Time.deltaTime * 5);
+			spike.transform.localPosition = Vector3.MoveTowards(spike.transform.localPosition, spikeInitial, Time.deltaTime * 30);
 			yield return null;
 		}
 		StartCoroutine (countDown ());
@@ -65,16 +68,11 @@ public class SpikeTrap : Traps {
 			timeToReset += Time.deltaTime;
 			yield return null;
 		}
-		firing = true;
-		if (unitsInTrap > 0) spikeRise ();
+		this.animator.SetBool("DoneFire", true);
 	}
 
-	void OnTriggerEnter(Collider other) {
-		unitsInTrap++;
-		spikeRise ();
+	public void unitEntered(Character entered) {
+		this.animator.SetBool ("Fire", true);
 	}
-	
-	void OnTriggerExit(Collider other) {
-		unitsInTrap--;
-	}
+
 }

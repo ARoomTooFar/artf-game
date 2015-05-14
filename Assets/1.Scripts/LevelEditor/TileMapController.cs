@@ -1,38 +1,22 @@
 using UnityEngine;
-using System.Collections;
-using System;
-using System.IO; 
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters.Binary; 
-using System.Runtime.Serialization;
-using System.Reflection;
-using System.Text;
-using System.Linq;
 
 public class TileMapController : MonoBehaviour {
-	public int grid_x;
-	public int grid_z;
 	Camera UICamera;
+	CameraRaycast camCast;
 	public HashSet<Vector3> selectedTiles = new HashSet<Vector3>();
 	public Vector3 shiftOrigin = Global.nullVector3;
-	public bool placeRoomClicked = false;
-	public float secondX;
-	public float secondZ;
 	public bool suppressDragSelecting;
 	Vector3 clickOrigin = Global.nullVector3;
 	public Vector3 lastClick = Global.nullVector3;
 	
 	void Start() {	
 		UICamera = Camera.main;
-		grid_x = 100;
-		grid_z = 100;
-		//buildMesh();
+		camCast = UICamera.GetComponent<CameraRaycast>();
 	}
 
 	void Update() {
-		//RayToScene();
 		if(EventSystem.current.IsPointerOverGameObject()) {
 			return;
 		}
@@ -42,19 +26,29 @@ public class TileMapController : MonoBehaviour {
 			return;
 		}
 		//raycast
-		Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hitInfo;
-		float distance;
-		Global.ground.Raycast(ray, out distance);
-		Physics.Raycast(ray, out hitInfo, distance);
+		//Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
+		//RaycastHit hitInfo;
+		//float distance;
+		//Global.ground.Raycast(ray, out distance);
+		//Physics.Raycast(ray, out hitInfo, distance);
 			
 		/* check whether the ray hits an object or the tile map */
-		if(hitInfo.collider != null) {
+		/*if(hitInfo.collider != null) {
 			point = hitInfo.collider.transform.position.Round();
 			point.y = 0;
 		} else {
 			point = ray.GetPoint(distance).Round();
+		}*/
+
+
+		if(camCast.hitDistance < camCast.mouseDistance
+		   && camCast.hit.transform != null){
+			point = camCast.hit.transform.position.Round();
+			point.y = 0;
+		} else {
+			point = camCast.mouseGroundPoint.Round();
 		}
+		 
 		if(clickOrigin == Global.nullVector3) {
 			clickOrigin = point;
 		}
@@ -118,9 +112,5 @@ public class TileMapController : MonoBehaviour {
 	/*deselects tile passed into function */
 	public void deselect(Vector3 remove) {
 		selectedTiles.Remove(remove);
-	}
-
-	public HashSet<Vector3> getSelectedTiles() {
-		return selectedTiles;
 	}
 }
