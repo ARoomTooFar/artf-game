@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class NewBullyTrunk: NewMobileEnemy {
 
+	public BullyTrunkPummelWeapon rightPaw, leftPaw;
+
 	protected BullCharge charge;
 	protected BullyTrunkBlast blast;
 	protected RockHead rockHead;
@@ -94,7 +96,7 @@ public class NewBullyTrunk: NewMobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 0;
+		tier = 2;
 		base.SetTierData (tier);
 
 		monsterLoot.initializeLoot("BullyTrunk", tier);
@@ -131,6 +133,9 @@ public class NewBullyTrunk: NewMobileEnemy {
 			foreach(Pummel behaviour in this.animator.GetBehaviours<Pummel>()) {
 				behaviour.trunk = this.gear.weapon.GetComponent<MeleeWeapons>();
 			}
+			
+			this.rightPaw.equip(this, this.opposition);
+			this.leftPaw.equip(this, this.opposition);
 		}
 
 		if (tier > 3) {
@@ -167,15 +172,19 @@ public class NewBullyTrunk: NewMobileEnemy {
 	}
 
 	protected virtual void PummelRightNow() {
+		this.rightPaw.AttackStart();
 	}
 
 	protected virtual void PummelRightOver() {
+		this.rightPaw.AttackEnd();
 	}
 
 	protected virtual void PummelLeftNow() {
+		this.leftPaw.AttackStart();
 	}
 
 	protected virtual void PummelLeftOver() {
+		this.leftPaw.AttackEnd();
 	}
 
 	//-------------------//

@@ -1,22 +1,21 @@
-// AI approach state, when they have a target, this is when they move towards their target if they are out of range
+// Charge state of bully trunk, when enemy is out of attackRange it will charge BullRush
 
 using UnityEngine;
 
-public class Approach : EnemyBehaviour {
-
+public class ChargeAnimOver : ChargeBehaviour {
 	// This will be called when the animator first transitions to this state.
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		this.unit.animationLock = true;
+		this.unit.rb.velocity = Vector3.zero;
 	}
 	
 	// This will be called once the animator has transitioned out of the state.
 	public override void OnStateExit (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		
+		animator.SetBool("StartCharge", false);
+		// this.unit.animationLock = false;
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		if (!unit.actable) return;
-		this.unit.canSeePlayer(unit.target);
-		this.unit.getFacingTowardsTarget();
-		this.unit.rb.velocity = this.unit.facing * this.unit.stats.speed * this.unit.stats.spdManip.speedPercent;
+		if (stateInfo.normalizedTime >= 0.99f) animator.SetTrigger ("ShouldCharge");
 	}
 }

@@ -31,7 +31,7 @@ public class CameraHitBox : MonoBehaviour {
 			}
 		}
 
-		if (enemyCount > 0 && !(Playing.clip == Song)) {
+		if (enemyCount > 0 && Playing != null && !(Playing.clip == Song)) {
 			resumeSong = Playing.clip;
 			Playing.clip = Song;
 			Playing.Play ();
