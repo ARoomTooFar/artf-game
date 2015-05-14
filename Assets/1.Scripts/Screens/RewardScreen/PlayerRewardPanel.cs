@@ -33,8 +33,10 @@ public class PlayerRewardPanel : MonoBehaviour {
 	KeyCode subtract;
 
 	public Controls controls;
-	bool joyControlsOn = true;
+	bool joyControlsOn = false;
 	bool keyboardControlsOn = true;
+
+	private GSManager gsManager;
 
 
 	//joystick/button input setup
@@ -49,6 +51,7 @@ public class PlayerRewardPanel : MonoBehaviour {
 	}
 
 	void Start () {
+		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
 		lootList = transform.Find("LootScroller/ScrollView/LootList");
 		lootListRect = lootList.GetComponent<RectTransform>();
 		loot = new List<string>();
@@ -59,26 +62,33 @@ public class PlayerRewardPanel : MonoBehaviour {
 
 		//HARD-CODED SECTION
 		//REPLACE WITH THINGS FROM OTHER SCRIPTS
-		loot.Add("testIcon1");
-		loot.Add("testIcon2");
-		loot.Add("testIcon3");
-		loot.Add("testIcon4");
-		loot.Add("testIcon5");
-		loot.Add("testIcon6");
-		loot.Add("testIcon7");
-		loot.Add("testIcon8");
-		total = 13;
+//		loot.Add("testIcon1");
+//		loot.Add("testIcon2");
+//		loot.Add("testIcon3");
+//		loot.Add("testIcon4");
+//		loot.Add("testIcon5");
+//		loot.Add("testIcon6");
+//		loot.Add("testIcon7");
+//		loot.Add("testIcon8");
+//		total = 13;
 		//END HARDCODED SECTION
 
-		populateList();
+		//GSMANAGER IMPORT OF LOOTED ITEMS
+		loot = gsManager.loot;
+		//END GSMANAGER IMPORT OF LOOTED ITEMS
 
-		highlights[0].SetActive(true); //initialize top entry to be highlighted
-		activeEntry = 0;
+		if(loot.Count == 0){
+			print ("Loot list empty");
+		}else{
+			populateList();
 
-		for(int i = 0; i < points.Count; i++){
-			pointsText[i].text = "0";
+			highlights[0].SetActive(true); //initialize top entry to be highlighted
+			activeEntry = 0;
+			
+			for(int i = 0; i < points.Count; i++){
+				pointsText[i].text = "0";
+			}
 		}
-
 	}
 
 	//populate list with looted items
@@ -97,43 +107,37 @@ public class PlayerRewardPanel : MonoBehaviour {
 	}
 
 	void Update(){
-		if(joyControlsOn)
-			takeJoyInputs();
-		if(keyboardControlsOn)
-			takeKeyboardInputs();
+		if(loot.Count != 0){
+			if(joyControlsOn)
+				takeJoyInputs();
+			if(keyboardControlsOn)
+				takeKeyboardInputs();
 
-		updateHighlightedEntry();
-		updateTexts();
-
+			updateHighlightedEntry();
+			updateTexts();
+		}
 	}
 
 	//
 	//Arcade controls
 	//
-	bool waitingUp = false;
-	bool waitingDown = false;
-
 	void takeJoyInputs(){
-		//go up
-		if (waitingUp == false && Input.GetAxisRaw (controls.vert) > 0) {
+
+		//"Up" key assign pressed
+		//moves selector up  list
+		if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
 			if(activeEntry > 0)
 				activeEntry -= 1;
-			waitingUp = true;
-		}else if (waitingUp == true && !(Input.GetAxisRaw (controls.vert) > 0)){
-			waitingUp = false;
 		}
-
-		//go down
-		if (waitingDown == false && Input.GetAxisRaw (controls.vert) < 0) {
+		//"Down" key assign pressed
+		//moves selector down list
+		if (Input.GetKey(controls.down) || Input.GetAxis(controls.vert) < 0) {
 			if(activeEntry < highlights.Count - 1)
 				activeEntry += 1;
-			waitingDown = true;
-		}else if (waitingDown == true && !(Input.GetAxisRaw (controls.vert) < 0)){
-			waitingDown = false;
 		}
-
-		//adds points to an item
-		if (!Input.GetKeyDown(controls.attack) && (Input.GetButtonDown(controls.joyAttack))) {
+		
+		//adds points from an item
+		if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
 			if(total > 0){
 				points[activeEntry] += 1;
 				total -= 1;

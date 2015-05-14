@@ -11,8 +11,14 @@ public class endzone : MonoBehaviour {
 	public int numbPlayersInZone = 0;
 	public int numbPlayersAlive;
 	public GameObject[] players;
-	public string endScene = "TitleScreen2";
+	public string endScene = "RewardScreen";
 	private Character character;
+
+	private GSManager gsManager;
+
+	void Start(){
+		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+	}
 
 	//-----------------------------------------
 	//OnTriggerEnter()
@@ -41,7 +47,8 @@ public class endzone : MonoBehaviour {
 			{
 				print("ALL PLAYERS ALIVE AT END.");
 				//THIS NEEDS TO USE THE GSmanager HERE
-				Application.LoadLevel(endScene);
+//				Application.LoadLevel(endScene);
+				gsManager.LoadScene("RewardScreen");
 			}
 		}
 

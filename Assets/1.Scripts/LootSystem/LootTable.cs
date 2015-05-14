@@ -8,7 +8,12 @@ public static class LootedItems {
 	private static List<string> loot = new List<string>();
 
 	public static void addItemToLoot(string s){
+
+		//may remove if gsManager doesn't neet
 		loot.Add(s);
+
+		//gsManager add
+		GameObject.Find("GSManager").GetComponent<GSManager>().loot.Add(s);
 	}
 
 	public static List<string> getList(){
@@ -118,6 +123,7 @@ public static class LootTable {
 				{Items.money, 100f},
 				{Items.machineGun, 40f},
 				{Items.huntingRifle, 24f}
+
 			})},
 		{"BullyTrunk5", new LootList(new Dictionary<string, float>(){
 				{Items.money, 100f},
