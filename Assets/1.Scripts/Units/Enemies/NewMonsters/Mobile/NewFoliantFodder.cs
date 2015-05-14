@@ -33,7 +33,7 @@ public class NewFoliantFodder: NewMobileEnemy {
 		stats.speed=9;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 3.0f;
+		this.maxAtkRadius = 4.0f;
 	}
 
 	public override void SetTierData(int tier) {
