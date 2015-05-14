@@ -241,7 +241,7 @@ public class Weapons : Equipment {
 	//-------------------------//
 	
 	public virtual IEnumerator makeSound(AudioClip sound, bool play, float duration){
-		AudioSource.PlayClipAtPoint (sound, transform.position);
+		AudioSource.PlayClipAtPoint (sound, transform.position, 0.5f);
 		play = false;
 		yield return new WaitForSeconds (duration);
 		play = true;
