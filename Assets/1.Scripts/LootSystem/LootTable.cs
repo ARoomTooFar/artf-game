@@ -112,13 +112,13 @@ public static class LootTable {
 				{Items.utilityBlade, 25f}
 			})},
 		{"BullyTrunk2", new LootList(new Dictionary<string, float>(){
-				{Items.money, 100f},
-				{Items.utilityBlade, 25f},
-				{Items.huntingRifle, 24f},
+				{Items.money, 0f},
+				{Items.utilityBlade,  100f},
+				{Items.huntingRifle,  100f},
 
 				{Items.flamePike, 100f},
-				{Items.longSword, 40f},
-				{Items.pruningBlade, 25f},
+				{Items.longSword, 100f},
+				{Items.pruningBlade,  100f},
 //				{Items.trashHelmetBucket, 25f},
 //				{Items.trashHelmetLightBulb, 24f},
 //				{Items.longSword, 24f},
