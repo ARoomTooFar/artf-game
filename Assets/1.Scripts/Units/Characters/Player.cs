@@ -26,7 +26,7 @@ public class Player : NewCharacter, IHealable<int>{
 	public bool tapped;
 	public float last_pressed;
 
-	public UIActive UI;
+	//public UIActive UI;
 	public Controls controls;
 
 	GameObject sparks = null;
@@ -60,17 +60,6 @@ public class Player : NewCharacter, IHealable<int>{
 		greyDamage = 0;
 	}
 
-	//Set cooldown bars to current items. 
-	void ItemCooldowns() {
-		UI.onState = true;
-		UI.hpBar.onState =1;
-		UI.greyBar.onState =1;
-		for(int i = 0; i < inventory.items.Count; i++){
-			UI.coolDowns[i].onState = 3;
-			inventory.items[i].cdBar=UI.coolDowns[i];
-		}
-	}
-	
 	// Update is called once per frame
 	protected override void Update () {
 
@@ -93,14 +82,6 @@ public class Player : NewCharacter, IHealable<int>{
 		}
 
 		if(isDead) return;
-
-		if(UI != null && UI.onState){
-			ItemCooldowns();
-			UI.hpBar.max = stats.maxHealth;
-			UI.greyBar.max = stats.maxHealth;
-			UI.greyBar.current = stats.health+greyDamage;
-			UI.hpBar.current = stats.health;
-		}
 
 		freeAnim = !stunned && !knockedback && !animationLock && !this.animator.GetBool ("IsInAttackAnimation");
 		actable = freeAnim;
@@ -289,7 +270,6 @@ public class Player : NewCharacter, IHealable<int>{
 		base.die ();
 		stats.health = 0;
 		this.greyDamage = 0;
-		if(UI!=null) UI.hpBar.current = 0;
 
 		// Renderer[] rs = GetComponentsInChildren<Renderer>();
 		this.isDead = true;
@@ -321,10 +301,8 @@ public class Player : NewCharacter, IHealable<int>{
 				stats.health = stats.maxHealth;
 			}
 		}
-		//UI.hpBar.current = stats.health;
 		if(greyDamage > 0){
 			greyDamage--;
-			UI.greyBar.current = stats.health + greyDamage;
 		}
 	}
 	
@@ -332,7 +310,6 @@ public class Player : NewCharacter, IHealable<int>{
 		if(stats.isDead){
 			stats.isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
-			// if(UI!=null) UI.hpBar.current = stats.health;
 			stats.rezCount++;
 			this.animator.SetInteger ("Killed", 0);
 		}

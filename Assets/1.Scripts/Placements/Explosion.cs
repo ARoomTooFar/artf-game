@@ -5,7 +5,7 @@ public class Explosion : MonoBehaviour {
 	public float lifetime;
 	public bool charDeath;
 	public GameObject grave;
-	public LootDrop lootDrop;
+	public GameObject lootDrop;
 	public Character unit;
 	protected Quaternion spray;
 	protected float variance;
@@ -13,9 +13,10 @@ public class Explosion : MonoBehaviour {
 	//protected 
 	// Use this for initialization
 	void Start () {
+		lootDrop = unit.drop;
 		variance = 45f;
 		localTarget = this.transform;
-		localTarget.position = new Vector3(localTarget.position.x,localTarget.position.y,localTarget.position.z);
+		//localTarget.position = new Vector3(localTarget.position.x,localTarget.position.y,localTarget.position.z);
 		savedSpot = localTarget;
 		if(unit!=null){
 			spray = Quaternion.Euler(new Vector3(unit.transform.eulerAngles.x,Random.Range(-variance+unit.transform.eulerAngles.y,variance+unit.transform.eulerAngles.y),unit.transform.eulerAngles.z));
@@ -31,20 +32,13 @@ public class Explosion : MonoBehaviour {
 	void Update () {
 		Destroy (gameObject, lifetime);
 	}
-	/*public void lootBoom(){
-		if(unit.drop !=null){
-			for(int i = 0; i<4; i++){//Four is replaceable
-				localTarget.position = savedSpot.position;
-				spray = Quaternion.Euler(new Vector3(localTarget.transform.eulerAngles.x,-variance*2+localTarget.transform.eulerAngles.y,localTarget.transform.eulerAngles.z));
-				localTarget.rotation = spray;//
-				localTarget.position = Vector3.MoveTowards(localTarget.position, localTarget.position+localTarget.transform.forward*8, 10);
-				lootDrop = ((GameObject)Instantiate(unit.drop, unit.transform.position, unit.transform.rotation)).GetComponent<LootDrop>();
-				lootDrop.shoot (lootDrop.transform.AngledArcTrajectory(localTarget.transform.position,10));
-				spray = Quaternion.Euler(new Vector3(localTarget.transform.eulerAngles.x,-variance*2+localTarget.transform.eulerAngles.y,localTarget.transform.eulerAngles.z));
-				//localTarget.rotation = spray;//
-			}
+	public void lootBoom(){
+		if(lootDrop !=null){
+			LootDrop loot = ((GameObject)Instantiate (lootDrop, this.transform.position, this.transform.rotation)).GetComponent<LootDrop>();
+			loot.starter = transform;
+			loot.starter.Translate (Vector3.forward *15);
 		}
-	}*/
+	}
 	
 	private IEnumerator Wait(float duration){
 		for (float timer = 0; timer < duration; timer += Time.deltaTime){
@@ -55,6 +49,8 @@ public class Explosion : MonoBehaviour {
 				Grave g = ((GameObject)Instantiate(grave, this.transform.position, this.transform.rotation)).GetComponent<Grave>();
 				g.setInitValues((Player)unit);
 				//lootBoom();
+			}else{
+				lootBoom ();
 			}
 			//Instantiate(grave,transform.position+grave.transform.position,transform.rotation);
 		}
