@@ -21,7 +21,6 @@ public class Player : NewCharacter, IHealable<int>{
 	public bool testable, isReady, atEnd, atStart, inGrey;
 	public int mash_threshold;
 	public int mash_value;
-	private KeyCode kc;
 	public bool break_free;
 	public bool tapped;
 	public float last_pressed;
@@ -77,7 +76,7 @@ public class Player : NewCharacter, IHealable<int>{
 		if (break_free)
 			break_free = false;
 
-		if (Input.GetKeyDown (kc) && stunned) {
+		if (stunned) {
 			tapped = true;
 
 			float now = Time.time;

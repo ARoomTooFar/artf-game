@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class TileMapController : MonoBehaviour {
 	Camera UICamera;
+	CameraRaycast camCast;
 	public HashSet<Vector3> selectedTiles = new HashSet<Vector3>();
 	public Vector3 shiftOrigin = Global.nullVector3;
 	public bool suppressDragSelecting;
@@ -12,6 +13,7 @@ public class TileMapController : MonoBehaviour {
 	
 	void Start() {	
 		UICamera = Camera.main;
+		camCast = UICamera.GetComponent<CameraRaycast>();
 	}
 
 	void Update() {
@@ -24,19 +26,29 @@ public class TileMapController : MonoBehaviour {
 			return;
 		}
 		//raycast
-		Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hitInfo;
-		float distance;
-		Global.ground.Raycast(ray, out distance);
-		Physics.Raycast(ray, out hitInfo, distance);
+		//Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
+		//RaycastHit hitInfo;
+		//float distance;
+		//Global.ground.Raycast(ray, out distance);
+		//Physics.Raycast(ray, out hitInfo, distance);
 			
 		/* check whether the ray hits an object or the tile map */
-		if(hitInfo.collider != null) {
+		/*if(hitInfo.collider != null) {
 			point = hitInfo.collider.transform.position.Round();
 			point.y = 0;
 		} else {
 			point = ray.GetPoint(distance).Round();
+		}*/
+
+
+		if(camCast.hitDistance < camCast.mouseDistance
+		   && camCast.hit.transform != null){
+			point = camCast.hit.transform.position.Round();
+			point.y = 0;
+		} else {
+			point = camCast.mouseGroundPoint.Round();
 		}
+		 
 		if(clickOrigin == Global.nullVector3) {
 			clickOrigin = point;
 		}

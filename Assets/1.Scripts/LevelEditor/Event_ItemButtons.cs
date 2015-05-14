@@ -107,16 +107,10 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 				//break out of while loop
 				break;
 			}
-			
-			Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
-			float distance;
-			Global.ground.Raycast(ray, out distance);
-
-			int x = Mathf.RoundToInt(ray.GetPoint(distance).x);
-			int z = Mathf.RoundToInt(ray.GetPoint(distance).z);
 
 			//postion holder for inside this loop
-			Vector3 movePos = new Vector3(x, 0f, z);
+			Vector3 movePos = UICamera.GetComponent<CameraRaycast>().mouseGroundPoint.Round();
+			movePos.y = 0;
 
 			//for final placement of object, after we break from this loop
 			newp = movePos;

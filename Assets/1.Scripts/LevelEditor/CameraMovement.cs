@@ -8,10 +8,11 @@ using System.Collections.Generic;
 using System.Text;
 
 public class CameraMovement : MonoBehaviour {
-	static Camera mainCam;
-	static float orthoZoomSpeed = 2f;
-	static float maxOrthoSize = 30;
-	static float minOrthoSize = 6;
+	private Camera mainCam;
+	private CameraRaycast camCast;
+	private float orthoZoomSpeed = 2f;
+	private float maxOrthoSize = 30;
+	private float minOrthoSize = 6;
 	private float maxY = 50;
 	private float minY = 10;
 	private Vector3 prevMouse = Global.nullVector3;
@@ -26,6 +27,7 @@ public class CameraMovement : MonoBehaviour {
 		Global.inLevelEditor = true;
 
 		mainCam = Camera.main;
+		camCast = mainCam.GetComponent<CameraRaycast>();
 
 		foreach(Camera cam in Camera.allCameras) {
 			cam.transform.position = Global.initCameraPosition;
@@ -51,11 +53,8 @@ public class CameraMovement : MonoBehaviour {
 	}
 	
 	public void dragCamera() {
-		Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
-		float distance = 0;
-		Global.ground.Raycast(ray, out distance);
-		Vector3 point = ray.GetPoint(distance).Round(1);
-		
+		Vector3 point = camCast.mouseGroundPoint.Round(1);
+
 		if(prevMouse == Global.nullVector3) {
 			prevMouse = point;
 		}

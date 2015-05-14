@@ -5,11 +5,15 @@ using System.Collections;
 public class RoomDraggingObject : ClickEvent {
 	public LayerMask draggingLayerMask;
 	Camera UICamera;
+	CameraDraws camDraw;
+	CameraRaycast camCast;
 	TileMapController tilemapcont;
 
 	void Start() {
 		draggingLayerMask = LayerMask.GetMask("Walls");
 		UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
+		camCast = UICamera.GetComponent<CameraRaycast>();
+		camDraw = UICamera.GetComponent<CameraDraws>();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}
 		
@@ -18,12 +22,8 @@ public class RoomDraggingObject : ClickEvent {
 			return false;
 		}
 
-		Ray ray = UICamera.ScreenPointToRay(initPosition);
-		float distance;
-		Global.ground.Raycast(ray, out distance);
-
-		Vector3 origin = ray.GetPoint(distance).Round();
-		UICamera.GetComponent<CameraDraws>().room = MapData.TheFarRooms.find(origin);
+		Vector3 origin = camCast.mouseGroundPoint.Round();
+		camDraw.room = MapData.TheFarRooms.find(origin);
 
 		//for the ghost-duplicate
 		Vector3 position = origin;
@@ -35,28 +35,24 @@ public class RoomDraggingObject : ClickEvent {
 				return false;
 			}
 
-			ray = UICamera.ScreenPointToRay(Input.mousePosition);
-			Global.ground.Raycast(ray, out distance);
-			
 			Vector3 mouseChange = initPosition - Input.mousePosition;
 
-			position = ray.GetPoint(distance).Round();
-					
+			position = camCast.mouseGroundPoint.Round();
+
 			//if mouse left deadzone
 			if(Math.Abs(mouseChange.x) > Global.mouseDeadZone 
 				|| Math.Abs(mouseChange.y) > Global.mouseDeadZone 
 				|| Math.Abs(mouseChange.z) > Global.mouseDeadZone) {
 
 				//for now y-pos remains as prefab's default.
-
-				UICamera.GetComponent<CameraDraws>().roomOffset = position-origin;
+				camDraw.roomOffset = position-origin;
 			}	
 
 			yield return null; 
 		}
 
-		UICamera.GetComponent<CameraDraws>().room = null;
-		UICamera.GetComponent<CameraDraws>().roomOffset = Global.nullVector3;
+		camDraw.room = null;
+		camDraw.roomOffset = Global.nullVector3;
 
 
 		tilemapcont.suppressDragSelecting = false;

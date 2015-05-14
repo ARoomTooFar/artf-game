@@ -108,6 +108,9 @@ public class FileIO : MonoBehaviour
 	
 	public void saveFile ()
 	{
+		if(LevelPathCheck.fullPath == null) {
+			return;
+		}
         #if UNITY_EDITOR
         udLvlReq = serv.updateLvl(dummyLvlId, dummyGameAcctId, MapData.SaveString, "draftleveldataisbutts");
         #else

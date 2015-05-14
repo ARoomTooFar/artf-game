@@ -16,6 +16,7 @@ public class CameraDraws : MonoBehaviour {
 	public Vector3 roomResize = Global.nullVector3;
 
 	private Camera cam;
+	private CameraRaycast camCast;
 
 	public Material singleColorTransMat;
 	public Color normalColor;
@@ -26,6 +27,7 @@ public class CameraDraws : MonoBehaviour {
 		roomResizeOrigin = Global.nullVector3;
 		roomResize = Global.nullVector3;
 		cam = this.gameObject.GetComponent<Camera> ();
+		camCast = cam.GetComponent<CameraRaycast>();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
 		normalColor = new Color(0f, .5f, 1f, .5f);
 		invalidColor = new Color(1f, 0f, 0f, .4f);
@@ -69,18 +71,14 @@ public class CameraDraws : MonoBehaviour {
 	}
 	
 	void drawMouseSquare(){
-		Ray ray = cam.ScreenPointToRay (Input.mousePosition);
-		float distance;
-		Global.ground.Raycast(ray, out distance);
-		RaycastHit hitInfo;
-		Physics.Raycast (ray, out hitInfo, distance);
+
 		Vector3 point;
-		
-		if (hitInfo.collider != null) {
-			point = hitInfo.transform.position.Round ();
+		if(camCast.hitDistance < camCast.mouseDistance
+		   && camCast.hit.transform != null){
+			point = camCast.hit.transform.position.Round();
 			point.y = 0;
 		} else {
-			point = ray.GetPoint(distance).Round();
+			point = camCast.mouseGroundPoint.Round();
 		}
 
 		GL.Begin (GL.QUADS);
@@ -132,14 +130,8 @@ public class CameraDraws : MonoBehaviour {
 	/* draw the grid lines */
 	void drawGrid ()
 	{
-		Camera UICamera = Camera.main;
-		Ray ray = new Ray(UICamera.transform.position, UICamera.transform.forward);
-		float distance;
 		Vector3 camFocus = Vector3.zero;
-		if(Global.ground.Raycast(ray, out distance)) {
-			camFocus = ray.GetPoint(distance).Round();
-		}
-
+		camFocus = camCast.camFocusPoint.Round();
 		GL.Begin (GL.LINES);
 		singleColorTransMat.color = normalColor;
 		singleColorTransMat.SetPass(0);

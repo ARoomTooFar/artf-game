@@ -6,10 +6,12 @@ using UnityEngine.UI;
 public class DragableObject : ClickEvent {
 
 	Camera UICamera;
+	CameraRaycast camCast;
 	TileMapController tilemapcont;
 
 	void Start() {
 		UICamera = Camera.main;
+		camCast = UICamera.GetComponent<CameraRaycast>();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}
 		
@@ -22,7 +24,6 @@ public class DragableObject : ClickEvent {
 		GameObject itemObjectCopy = null;
 		Vector3 position = this.gameObject.transform.position;
 		tilemapcont.suppressDragSelecting = true;
-		Ray ray;
 		Vector3 mouseChange; 
 		while(Input.GetMouseButton(0)) { 
 			//if user wants to cancel the drag
@@ -32,13 +33,10 @@ public class DragableObject : ClickEvent {
 				return false;
 			}
 			
-			ray = UICamera.ScreenPointToRay(Input.mousePosition);
-			float distance;
-			Global.ground.Raycast(ray, out distance);
-			
 			mouseChange = initPosition - Input.mousePosition;
 
-			position = ray.GetPoint(distance).Round();
+			//position = ray.GetPoint(distance).Round();
+			position = camCast.mouseGroundPoint.Round();
 
 			//if mouse left deadzone
 			if(Math.Abs(mouseChange.x) > Global.mouseDeadZone 
