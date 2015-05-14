@@ -105,6 +105,7 @@ public class StateMachine {
 
 	public StateMachine() {
 		states = new Dictionary<string, State>();
+		Debug.Log ("SM created");
 		transitions = new Dictionary<string, Transition>();
 	}
 
@@ -123,7 +124,7 @@ public class StateMachine {
 
 		foreach (Transition t in transList) {
 			if(t.isTriggered()) {
-//				Debug.Log (t.targetState.id);
+				//Debug.Log (t.targetState.id);
 				triggeredTransition = t;
 				currState.onExit();
 				break;

@@ -3,12 +3,20 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
+
+
+
 //controls reward panel for each player
 public class PlayerRewardPanel : MonoBehaviour {
+
+	//must get from gamestate manager
 	public List<string> loot; //list of looted items
+
+	//get from somewhere
 	public int total; //total points player has for voting
+
+
 	public List<int> points; //points player has allocated to each item
-	
 	Transform lootList;
 	RectTransform lootListRect;
 	float newRowYPos;
@@ -24,12 +32,20 @@ public class PlayerRewardPanel : MonoBehaviour {
 	KeyCode add;
 	KeyCode subtract;
 
+	public Controls controls;
+	bool joyControlsOn = true;
+	bool keyboardControlsOn = true;
+
+
 	//joystick/button input setup
-	public void setUpInputs(string upString, string downString, string addString, string subtractString){
+	public void setUpInputs(string upString, string downString, string addString, string subtractString, Controls c){
 		up = (KeyCode)System.Enum.Parse(typeof(KeyCode), upString);
 		down = (KeyCode)System.Enum.Parse(typeof(KeyCode), downString);
 		add = (KeyCode)System.Enum.Parse(typeof(KeyCode), addString);
 		subtract = (KeyCode)System.Enum.Parse(typeof(KeyCode), subtractString);
+		controls = c;
+
+		controls.joyUsed = true;
 	}
 
 	void Start () {
@@ -62,6 +78,7 @@ public class PlayerRewardPanel : MonoBehaviour {
 		for(int i = 0; i < points.Count; i++){
 			pointsText[i].text = "0";
 		}
+
 	}
 
 	//populate list with looted items
@@ -80,12 +97,62 @@ public class PlayerRewardPanel : MonoBehaviour {
 	}
 
 	void Update(){
-		takeInputs();
+		if(joyControlsOn)
+			takeJoyInputs();
+		if(keyboardControlsOn)
+			takeKeyboardInputs();
+
 		updateHighlightedEntry();
 		updateTexts();
+
 	}
 
-	void takeInputs(){
+	//
+	//Arcade controls
+	//
+	bool waitingUp = false;
+	bool waitingDown = false;
+
+	void takeJoyInputs(){
+		//go up
+		if (waitingUp == false && Input.GetAxisRaw (controls.vert) > 0) {
+			if(activeEntry > 0)
+				activeEntry -= 1;
+			waitingUp = true;
+		}else if (waitingUp == true && !(Input.GetAxisRaw (controls.vert) > 0)){
+			waitingUp = false;
+		}
+
+		//go down
+		if (waitingDown == false && Input.GetAxisRaw (controls.vert) < 0) {
+			if(activeEntry < highlights.Count - 1)
+				activeEntry += 1;
+			waitingDown = true;
+		}else if (waitingDown == true && !(Input.GetAxisRaw (controls.vert) < 0)){
+			waitingDown = false;
+		}
+
+		//adds points to an item
+		if (!Input.GetKeyDown(controls.attack) && (Input.GetButtonDown(controls.joyAttack))) {
+			if(total > 0){
+				points[activeEntry] += 1;
+				total -= 1;
+			}
+		}
+		
+		//subtracts points from an item
+		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
+			if(points[activeEntry] > 0){
+				total += 1;
+				points[activeEntry] -= 1;
+			}
+		}
+	}
+
+	//
+	//Keyboard controls
+	//
+	void takeKeyboardInputs(){
 
 		//moves selector up and down list
 		if(Input.GetKeyDown(down)){

@@ -39,6 +39,10 @@ public class NewBushman : NewMobileEnemy {
 	protected override void Start() {
 		base.Start ();
 		setFrenzy ();
+		this.charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
+		foreach(BushyApproach behaviour in this.animator.GetBehaviours<BushyApproach>()) {
+			behaviour.charge = this.charge;
+		}
 	}
 
 	protected override void Update() {
@@ -54,7 +58,7 @@ public class NewBushman : NewMobileEnemy {
 		base.setInitValues();
 		stats.maxHealth = 100;
 		stats.health = stats.maxHealth;
-		stats.armor = 5;
+		stats.armor = 3;
 		stats.strength = 6;
 		stats.coordination=0;
 		stats.speed=4;
@@ -67,6 +71,7 @@ public class NewBushman : NewMobileEnemy {
 		tier = 1;
 		base.SetTierData (tier);
 
+		monsterLoot.initializeLoot("Bushling", tier);
 
 		if (tier > 0) {
 			this.sprint = this.inventory.items[inventory.selected].GetComponent<Sprint>();
@@ -141,4 +146,26 @@ public class NewBushman : NewMobileEnemy {
 		nextLv.speed = spdUp * currentGrowth;
 		return nextLv;
 	}
+
+	// state machine parametric functions
+
+	protected void isTooFar () {
+
+		if (this.target != null && Vector3.Distance(this.transform.position, this.target.transform.position) > this.maxAtkRadius && this.charge.curCoolDown <= 0) {
+			this.animator.SetBool("charging", true);
+		}
+	}
+	
+	protected virtual bool isWithinCharge () {
+		if (this.target == null) {
+			return true;
+		} else {
+			Vector3 tPos = this.target.transform.position;
+			if (Vector3.Distance(this.transform.position, tPos) <= this.charge.curChgTime * 3 || Vector3.Distance(this.transform.position, tPos) >= 15 || this.charge.curChgTime >= this.charge.maxChgTime) {
+				return true;
+			}
+			return false;
+		}
+	}
+
 }

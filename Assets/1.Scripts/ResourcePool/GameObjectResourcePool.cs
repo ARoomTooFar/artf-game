@@ -8,6 +8,7 @@ public static class GameObjectResourcePool
 	public static int Growth{ get; set; }
 
 	private static Dictionary<string, Stack<GameObject>> pools = new Dictionary<string, Stack<GameObject>> ();
+	private static Dictionary<string, GameObject> parents = new Dictionary<string, GameObject>();
 
 	static GameObjectResourcePool ()
 	{
@@ -55,10 +56,23 @@ public static class GameObjectResourcePool
 		return stk;
 	}
 
+	private static GameObject getParent(string type){
+		GameObject obj;
+		try{
+			obj = parents[type];
+		}catch(Exception){
+			obj = new GameObject();
+			obj.name = type;
+			parents.Add (type, obj);
+		}
+		return obj;
+	}
+
 	private static GameObject getNewInstance (string type)
 	{
 		//GameObject temp = GameObject.Instantiate (Resources.Load(type), new Vector3 (1, 0, 1), new Quaternion ()) as GameObject;
 		GameObject temp = GameObject.Instantiate (Resources.Load(type)) as GameObject;
+		temp.transform.parent = getParent (type).transform;
 		temp.SetActive (false);
 		return temp;
 	}

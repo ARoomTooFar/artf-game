@@ -87,7 +87,7 @@ public static class MapDataParser {
 			SceneryBlock nBlk = null;
 			if(MapData.SceneryBlocks.isAddValid(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]))){
 				nBlk = new SceneryBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
-				nBlk.BlockInfo.placedThisSession = true;
+				nBlk.SceneryBlockInfo.placedThisSession = true;
 				MapData.SceneryBlocks.add(nBlk);
 			}
 			if(type[0] == "LevelEditor/Other/PlayerStartingLocation") {
@@ -111,8 +111,8 @@ public static class MapDataParser {
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
 			MonsterBlock nBlk = new MonsterBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
-			nBlk.BlockInfo.placedThisSession = true;
-			nBlk.BlockInfo.Tier = Convert.ToInt32(blkParams[4]);
+			nBlk.MonsterBlockInfo.placedThisSession = true;
+			nBlk.MonsterBlockInfo.Tier = Convert.ToInt32(blkParams[4]);
 			MapData.MonsterBlocks.add(nBlk);
 		}
 	}

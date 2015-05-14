@@ -7,6 +7,11 @@ public class CameraHitBox : MonoBehaviour {
 	public Player[] allPlayers;
 	public float avgX,avgZ,totalX,totalZ;
 	public bool same;
+	public int enemyCount;
+	public AudioClip Song;
+	private AudioClip resumeSong;
+	private AudioSource Playing;
+
 	// Use this for initialization
 	void Start () {
 		GetComponent<Transform>();
@@ -14,6 +19,7 @@ public class CameraHitBox : MonoBehaviour {
 		for(int x = 0; x < allPlayers.Length; x++){
 			areaUnits.Add(allPlayers[x]);
 		}
+		Playing = transform.parent.gameObject.GetComponentInChildren<AudioSource> ();
 	}
 	
 	// Update is called once per frame
@@ -24,6 +30,14 @@ public class CameraHitBox : MonoBehaviour {
 				i--;
 			}
 		}
+
+		if (enemyCount > 0 && Playing != null && !(Playing.clip == Song)) {
+			resumeSong = Playing.clip;
+			Playing.clip = Song;
+			Playing.Play ();
+		}
+
+		
 		avgMake();
 	}
 	void avgMake(){
@@ -46,22 +60,26 @@ public class CameraHitBox : MonoBehaviour {
 			areaUnits.Add (unit);
 		}
 		*/
-		if(other.tag == "Wall"){
+
+		switch (other.tag) {
+		case "Wall":
 			if(other.transform.parent != null){
 				Wall wallSpot = other.transform.parent.GetComponent<Wall>();
 				if(wallSpot != null){
 					wallSpot.toggleShow();
-				//Debug.Log("Here");
+					//Debug.Log("Here");
 				}
 			}else{
 				Wall wallSpot = other.gameObject.GetComponent<Wall>();
 				if(wallSpot != null){
 					wallSpot.toggleShow();
-				//Debug.Log("Here");
+					//Debug.Log("Here");
 				}
 			}
-			//Debug.Log("Here");
-		//Wall wallSpot = other.GetComponent<Wall>();
+			break;
+		case "Enemy":
+			enemyCount++;
+			break;
 		}
 
 }
@@ -90,5 +108,23 @@ public class CameraHitBox : MonoBehaviour {
 			}
 		}
 
+	}
+	void OnTriggerExit (Collider other) {
+		/*Character unit = other.GetComponent<Character>();
+		if(unit != null) {
+			areaUnits.Add (unit);
+		}
+		*/
+		
+		switch (other.tag) {
+		case "Enemy":
+			enemyCount--;
+			if(enemyCount < 1){
+				Playing.clip = resumeSong;
+				Playing.Play ();
+			}
+			break;
+		}
+		
 	}
 }

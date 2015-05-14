@@ -25,6 +25,7 @@ public class Wall : MonoBehaviour {
 			StartCoroutine("revWait",disappear);
 		}
 	}
+
 	protected virtual void Update(){
 	
 	}

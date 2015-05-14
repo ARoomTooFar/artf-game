@@ -18,13 +18,16 @@ public class Controls {
 public class Player : NewCharacter, IHealable<int>{
 	public string nameTag;
 	public int greyDamage;
-	
-	public bool testable, isReady, atEnd, atStart;
-	
+	public bool testable, isReady, atEnd, atStart, inGrey;
+	public int mash_threshold;
+	public int mash_value;
+	public bool break_free;
+	public bool tapped;
+	public float last_pressed;
+
 	public UIActive UI;
 	public Controls controls;
 
-	bool sparksDone = true;
 	GameObject sparks = null;
 
 	private Door currDoor;
@@ -47,14 +50,15 @@ public class Player : NewCharacter, IHealable<int>{
 	protected override void setInitValues() {
 		base.setInitValues();
 		//Testing with base 0-10 on stats with 10 being 100/cap%
-		stats.maxHealth = 60;
+		stats.maxHealth = 100;
 		stats.health = stats.maxHealth;
 		stats.armor = 0;
 		stats.strength = 10;
-		stats.coordination=0;
+		stats.coordination= 10;
 		stats.speed=10;
 		greyDamage = 0;
 	}
+
 	//Set cooldown bars to current items. 
 	void ItemCooldowns() {
 		UI.onState = true;
@@ -68,6 +72,25 @@ public class Player : NewCharacter, IHealable<int>{
 	
 	// Update is called once per frame
 	protected override void Update () {
+
+		if (break_free)
+			break_free = false;
+
+		if (stunned) {
+			tapped = true;
+
+			float now = Time.time;
+			float since = now - last_pressed;
+			last_pressed = now;
+
+			if(since > 0) {
+				float motion = 1.0f / since;
+				motion *= motion;
+				mash_value++;
+				if(mash_value > mash_threshold) break_free = true;
+			}
+		}
+
 		if(isDead) return;
 
 		if(UI != null && UI.onState){
@@ -87,6 +110,11 @@ public class Player : NewCharacter, IHealable<int>{
 		MoveCommands ();
 		AnimationUpdate ();
 	}
+
+	public bool mashed_out(){
+		return break_free;
+	}
+
 	
 	//-------------------------------//
 	// Player Command Implementation //
@@ -94,6 +122,23 @@ public class Player : NewCharacter, IHealable<int>{
 	
 	protected override void ActionCommands() {
 		// Invokes an action/animation
+		if (stunned) {
+			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
+			tapped = true;
+
+			float now = Time.time;
+			float since = now - last_pressed;
+			last_pressed = now;
+
+			if(since > 0) {
+				float motion = 1.0f / since;
+				motion *= motion;
+				mash_value++;
+				if(mash_value > mash_threshold) break_free = true;
+			}
+		}
+		}
+
 		if (actable && !this.animator.GetBool ("Attack")) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
 				if(currDoor!=null){
@@ -172,6 +217,8 @@ public class Player : NewCharacter, IHealable<int>{
 			// If we trash the rigidbody later, we won't need this
 			this.rb.velocity = Vector3.zero;
 		}
+
+		//Debug.Log(this.rb.velocity.magnitude);
 	}
 	
 	// Constant animation updates (Main loop for characters movement/actions, sets important parameters in the animator)
@@ -217,6 +264,7 @@ public class Player : NewCharacter, IHealable<int>{
 	}
 	
 	public override void damage(int dmgTaken) {
+
 		if (invincible || stats.isDead) return;
 		
 		stats.health -= greyTest(dmgTaken);
@@ -242,12 +290,12 @@ public class Player : NewCharacter, IHealable<int>{
 		this.greyDamage = 0;
 		if(UI!=null) UI.hpBar.current = 0;
 
-		Renderer[] rs = GetComponentsInChildren<Renderer>();
+		// Renderer[] rs = GetComponentsInChildren<Renderer>();
+		this.isDead = true;
 		this.animator.SetInteger("Killed", (int) UnityEngine.Random.Range(1.1f, 2.9f));	
 	}
 	
 	public virtual void Death() {
-		this.isDead = true;
 		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<Explosion>();
 		eDeath.setInitValues(this, true);
 		foreach (Renderer r in rs) {
@@ -255,6 +303,7 @@ public class Player : NewCharacter, IHealable<int>{
 		}
 		//this will go to the end screen when all the players in the party are dead.
 		if (!checkPartyAlive ()) {
+			//THIS WILL NEED TO USE THE GSmanager HERE
 			Application.LoadLevel("TitleScreen2");
 		}
 	}

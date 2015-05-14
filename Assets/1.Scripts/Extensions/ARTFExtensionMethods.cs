@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public static class ARTFExtensionMethods {
 	public static bool IsBehind(this Transform pos, Vector3 tarFacing, Vector3 tarPosition) {
@@ -27,5 +28,9 @@ public static class ARTFExtensionMethods {
 	
 	public static Vector3 SpeedArcTrajectory (this Transform start, Vector3 destination, float speed) {
 		return ARTFUtilities.SpeedArcTrajectory (start.position, destination, speed);
+	}
+	
+	public static Character FindClosestCharacter(this Character unit, List<Character> units) {
+		return ARTFUtilities.FindClosestCharacter(unit, units);
 	}
 }

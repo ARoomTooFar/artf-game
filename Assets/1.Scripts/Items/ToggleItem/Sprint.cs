@@ -17,7 +17,7 @@ public class Sprint : ToggleItem {
 		
 		public Sprinting(float speedValue) {
 			name = "Sprinting";
-			spdPercent = speedValue;
+			spdPercent = speedValue/2;
 		}
 		
 		protected override void bdEffects(BDData newData) {
@@ -45,7 +45,7 @@ public class Sprint : ToggleItem {
 		base.setInitValues();
 
 		cooldown = 10.0f;
-		maxDuration = 10;
+		maxDuration = 5;
 	}
 
 	// Update is called once per frame

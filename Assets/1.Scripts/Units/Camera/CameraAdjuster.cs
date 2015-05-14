@@ -10,6 +10,7 @@ public class CameraAdjuster : MonoBehaviour {
 	//Base X,Y,Z (To be adjusted by the multiplier Value)
     //Value of Adjustment
 	public Vector3 diffSpot;
+	public GameObject[] visibleEnemies;
 	//public float avgX,avgZ,baseY,baseX,baseZ,adjVal,supBaseY,avgNum,avgPX,avgPZ;
 	// Use this for initialization
 	void Start () {

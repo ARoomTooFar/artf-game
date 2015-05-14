@@ -211,7 +211,7 @@ public class FolderBarController : MonoBehaviour {
 
 					
 					//set it's type name, for buying/selling
-					uih.itemType = prefabType;
+					//uih.itemType = prefabType;
 					uih.price = (prefabs[prefabCounter] as GameObject).GetComponent<LevelEditorData>().baseCost;
 
 					prefabCounter++;

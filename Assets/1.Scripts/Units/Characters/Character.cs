@@ -42,6 +42,7 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 	public bool isDead = false;
 	protected bool isGrounded = false;
 	public bool actable = true; // Boolean to show if a unit can act or is stuck in an animation
+	public bool isHit = false;
 	
 	public Vector3 facing; // Direction unit is facing
 	
@@ -353,6 +354,8 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 			BDS.addBuffDebuff(hitConfirm,gameObject,.5f);
 
 			stats.health -= dmgTaken;
+			isHit = true;
+			//print ("Fuck: " + dmgTaken + " Damage taken");
 
 			if (stats.health <= 0) this.die();
 		}
@@ -367,6 +370,7 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 			}
 			//hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(dmgTaken/stats.maxHealth)*5.0f);
 			stats.health -= dmgTaken;
+			isHit = true;
 
 			if (stats.health <= 0) die();
 		}

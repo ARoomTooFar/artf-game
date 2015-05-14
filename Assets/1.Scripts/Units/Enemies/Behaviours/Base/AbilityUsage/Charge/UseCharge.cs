@@ -16,8 +16,8 @@ public class UseCharge : ChargeBehaviour {
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		float dis = Vector3.Distance(this.unit.transform.position, this.unit.target.transform.position);
-		if (dis <= this.charge.curChgTime * 3 || dis >= 22 || this.charge.curChgTime >= this.charge.maxChgTime) {
-			animator.SetTrigger("ShouldCharge");
+		if (dis <= this.charge.curChgTime * 3 || dis >= 22 || this.charge.curChgTime >= this.charge.maxChgTime || !animator.GetBool("Target")) {
+			animator.SetBool("StartCharge", true);
 		}
 	}
 }
