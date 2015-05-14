@@ -206,9 +206,29 @@ public class MainMenuCtrl : MonoBehaviour {
 		// swap button
 		popUp[3, 2].GetComponent<Button>().onClick.AddListener(() => {
 			if (currMenuPtr == popUp) {
-				Debug.Log ("Currently on popUp");
-			} else {
+				foreach (GameObject child in popUp) {
+					child.SetActive (false);
+				}
 
+				foreach (GameObject child in numPad) {
+					child.SetActive (true);
+				}
+
+				currMenuPtr = numPad;
+				var pointer = new PointerEventData(EventSystem.current);
+				ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
+			} else {
+				foreach (GameObject child in numPad) {
+					child.SetActive (false);
+				}
+
+				foreach (GameObject child in popUp) {
+					child.SetActive (true);
+				}
+
+				currMenuPtr = popUp;
+				var pointer = new PointerEventData(EventSystem.current);
+				ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 			}
 		});
 
@@ -218,6 +238,46 @@ public class MainMenuCtrl : MonoBehaviour {
             PopUpDisable();
 			KeypadSubmit();
 		});
+
+		numPad[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[1] { '1' })
+		);
+
+		numPad[0, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '2' })
+		                                                        );
+
+		numPad[0, 2].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '3' })
+		                                                        );
+
+		numPad[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '4' })
+		                                                        );
+
+		numPad[1, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '5' })
+		                                                        );
+
+		numPad[1, 2].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '6' })
+		                                                        );
+
+		numPad[2, 0].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '7' })
+		                                                        );
+
+		numPad[2, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '8' })
+		                                                        );
+
+		numPad[2, 2].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '9' })
+		                                                        );
+
+		numPad[3, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '0' })
+		                                                        );
 
 		// switch to start menu
 		MenuSwitch (Menu.StartMenu);
