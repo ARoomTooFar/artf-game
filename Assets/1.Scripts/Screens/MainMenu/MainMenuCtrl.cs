@@ -4,9 +4,11 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class MainMenuCtrl : MonoBehaviour {
-    public Controls controls;
+	public Controls controls;
     public string menuContainerName;
 	public string menuPopUpName;
+
+	private Farts serv;
 
     // UI state
     private bool menuMoved = false;
@@ -37,17 +39,27 @@ public class MainMenuCtrl : MonoBehaviour {
     private int loginFormHeight = 3;
 	private Animator loginFormAnim;
     private Text txtFieldAcctName;
+	private Text txtFieldPasscode;
 
 	// pop-up
 	private GameObject[,] popUp;
+	private GameObject[,] lowerPad;
+	private GameObject[,] numPad;
 	private int popUpWidth = 3;
 	private int popUpHeight = 5;
 	private Animator popUpAnim;
 
-    // keypad
-    private Text txtDisplayAcctName;
+    // keypad state
+	private string currKey = "";
+	private string prevKey = "";
+	private float pressTime;
+	private string tmpCharName;
+	private int charArrLoc = 0;
+	private Text txtDisplayField;
 
 	void Start () {
+		serv = gameObject.AddComponent<Farts>(); // add networking component
+
         // setup start menu
         startMenu = new GameObject[startMenuHeight, startMenuWidth];
         startMenu[0, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/StartMenu/BtnLogin");
@@ -68,7 +80,6 @@ public class MainMenuCtrl : MonoBehaviour {
 			Debug.Log ("Register button pressed!");
             //MenuSwitch(Menu.LoginForm);
 
-            Farts serv = gameObject.AddComponent<Farts>();
             serv.login("Paradoxium", "pass");
         });
 
@@ -76,6 +87,7 @@ public class MainMenuCtrl : MonoBehaviour {
 		loginForm = new GameObject[loginFormHeight, loginFormWidth];
 		loginForm[0, 0] = loginForm[0, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName");
         txtFieldAcctName = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName/TxtFieldAcctName").GetComponent<Text>();
+		txtFieldPasscode = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldPasscode/TxtFieldPasscode").GetComponent<Text>();
         loginForm[1, 0] = loginForm[1, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldPasscode");
         loginForm[2, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnLogin");
         loginForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnBack");
@@ -84,16 +96,31 @@ public class MainMenuCtrl : MonoBehaviour {
 		// acct name field
 		loginForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
+			currFieldPtr = txtFieldAcctName;
 			PopUpEnable ();
+		});
+
+		// passcode field
+		loginForm[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+        {
+			currFieldPtr = txtFieldPasscode;
+			PopUpEnable ();
+		});
+
+		// login button
+		loginForm[2, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			serv.login(txtFieldAcctName.text, txtFieldPasscode.text);
 		});
 
 		// back button
         loginForm[2, 1].GetComponent<Button>().onClick.AddListener(() =>
         {
 			MenuSwitch (Menu.StartMenu);
+			MenuReset ();
         });
 
-		// setup keypad
+		// setup keypad (caps)
 		popUp = new GameObject[popUpHeight, popUpWidth];
         popUp[0, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySymbol");
         popUp[0, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyABC");
@@ -109,29 +136,186 @@ public class MainMenuCtrl : MonoBehaviour {
         popUp[3, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySwap");
         popUp[4, 0] = popUp[4, 1] = popUp[4, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/BtnSubmit");
 		popUpAnim = GameObject.Find ("/Canvas/" + menuPopUpName).GetComponent<Animator>();
-        txtDisplayAcctName = GameObject.Find("/Canvas/" + menuPopUpName + "/DisplayAcctName/TxtDisplayAcctName").GetComponent<Text>();
+        txtDisplayField = GameObject.Find("/Canvas/" + menuPopUpName + "/DisplayField/TxtDisplayField").GetComponent<Text>();
 
-        popUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
-            KeyInput(new char[4] { '@', '.', '-', '_' }
-        ));
+		// setup lowercase keypad
+		lowerPad = new GameObject[popUpHeight, popUpWidth];
+		lowerPad [0, 0] = popUp [0, 0];
+		lowerPad[0, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLABC");
+		lowerPad[0, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLDEF");
+		lowerPad[1, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLGHI");
+		lowerPad[1, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLJKL");
+		lowerPad[1, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLMNO");
+		lowerPad[2, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLPQRS");
+		lowerPad[2, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLTUV");
+		lowerPad[2, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLWXYZ");
+		lowerPad [3, 0] = popUp [3, 0];
+		lowerPad [3, 1] = popUp [3, 1];
+		lowerPad [3, 2] = popUp [3, 2];
+		lowerPad[4, 0] = lowerPad[4, 1] = lowerPad[4, 2] = popUp[4, 0];
+		
+		// setup number keypad
+		numPad = new GameObject[popUpHeight, popUpWidth];
+		numPad[0, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key1");
+		numPad[0, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key2");
+		numPad[0, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key3");
+		numPad[1, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key4");
+		numPad[1, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key5");
+		numPad[1, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key6");
+		numPad[2, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key7");
+		numPad[2, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key8");
+		numPad[2, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key9");
+		numPad[3, 0] = popUp[3, 0];
+		numPad[3, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key0");
+		numPad[3, 2] = popUp[3, 2];
+		numPad[4, 0] = numPad[4, 1] = numPad[4, 2] = popUp[4, 0];
+		
+		popUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+            KeyInput(new char[4] { '@', '.', '-', '_' })
+		);
 
         popUp[0, 1].GetComponent<Button>().onClick.AddListener(() =>
-            KeyInput(new char[3] { 'A', 'B', 'C' }
-        ));
+            KeyInput(new char[3] { 'A', 'B', 'C' })
+		);
 
         popUp[0, 2].GetComponent<Button>().onClick.AddListener(() =>
-            KeyInput(new char[3] { 'D', 'E', 'F' }
-        ));
+            KeyInput(new char[3] { 'D', 'E', 'F' })
+		);
+
+		popUp[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[3] { 'G', 'H', 'I' })
+		);
+
+		popUp[1, 1].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[3] { 'J', 'K', 'L' })
+		);
+
+		popUp[1, 2].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[3] { 'M', 'N', 'O' })
+		);
+
+		popUp[2, 0].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[4] { 'P', 'Q', 'R', 'S' })
+		);
+
+		popUp[2, 1].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[3] { 'T', 'U', 'V' })
+		);
+
+		popUp[2, 2].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[4] { 'W', 'X', 'Y', 'Z' })
+		);
+
+		popUp[3, 0].GetComponent<Button>().onClick.AddListener(() =>
+		    DeleteChar()
+		);
+
+		popUp[3, 1].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[1] { ' ' })
+		);
+
+		// swap button
+		popUp[3, 2].GetComponent<Button>().onClick.AddListener(() => {
+			if (currMenuPtr == popUp) {
+				HideUpperPad();
+				ShowPad (lowerPad);
+				currMenuPtr = lowerPad;
+			} else if (currMenuPtr == lowerPad) {
+				HideLowerPad ();
+				ShowPad (numPad);
+				currMenuPtr = numPad;
+			} else {
+				HideNumPad ();
+				ShowPad (popUp);
+				currMenuPtr = popUp;
+			}
+
+			var pointer = new PointerEventData(EventSystem.current);
+			ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
+		});
 
 		// submit button
 		popUp[4, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
             PopUpDisable();
-            txtFieldAcctName.text = txtDisplayAcctName.text;
+			KeypadSubmit();
 		});
+		
+		lowerPad[0, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[3] { 'a', 'b', 'c' })
+		                                                       );
+		
+		lowerPad[0, 2].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[3] { 'd', 'e', 'f' })
+		                                                       );
+		
+		lowerPad[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[3] { 'g', 'h', 'i' })
+		                                                       );
+		
+		lowerPad[1, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[3] { 'j', 'k', 'l' })
+		                                                       );
+		
+		lowerPad[1, 2].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[3] { 'm', 'n', 'o' })
+		                                                       );
+		
+		lowerPad[2, 0].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[4] { 'p', 'q', 'r', 's' })
+		                                                       );
+		
+		lowerPad[2, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[3] { 't', 'u', 'v' })
+		                                                       );
+		
+		lowerPad[2, 2].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[4] { 'w', 'x', 'y', 'z' })
+		                                                       );
 
-		// switch to start menu
+		numPad[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		    KeyInput(new char[1] { '1' })
+		);
+
+		numPad[0, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '2' })
+		                                                        );
+
+		numPad[0, 2].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '3' })
+		                                                        );
+
+		numPad[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '4' })
+		                                                        );
+
+		numPad[1, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '5' })
+		                                                        );
+
+		numPad[1, 2].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '6' })
+		                                                        );
+
+		numPad[2, 0].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '7' })
+		                                                        );
+
+		numPad[2, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '8' })
+		                                                        );
+
+		numPad[2, 2].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '9' })
+		                                                        );
+
+		numPad[3, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                        KeyInput(new char[1] { '0' })
+		                                                        );
+
+		// switch to start menu and setup the keypad
 		MenuSwitch (Menu.StartMenu);
+		SetupKeypad ();
 	}
 
 	// handles menu joystick movement control
@@ -172,8 +356,7 @@ public class MainMenuCtrl : MonoBehaviour {
             prevBtn = currMenuPtr[locY, locX];
             prevKey = ""; // reset keypad on move
 
-            Debug.Log(locX + "," + locY);
-            Debug.Log(currMenuPtr.GetLength(0) + "," + currMenuPtr.GetLength(1));
+            //Debug.Log(locX + "," + locY);
         }
     }
 
@@ -197,7 +380,10 @@ public class MainMenuCtrl : MonoBehaviour {
 			break;
         case Menu.PopUp:
             currMenuPtr = popUp;
+			txtDisplayField.text = currFieldPtr.text;
             currAnim = popUpAnim;
+			ShowPad (popUp);
+			SetupKeypad();
             break;
 		default:
 			Debug.Log ("Menu switch case invalid!");
@@ -225,35 +411,34 @@ public class MainMenuCtrl : MonoBehaviour {
         MenuSwitch(prevMenu);
     }
 
-    private string currKey = "";
-    private string prevKey = "";
-    private float pressTime;
-    private string tmpCharName;
-    private int charArrLoc = 0;
-
     void KeyInput(char[] chars)
     {
+		if (txtDisplayField.text == "Enter an account name..." || txtDisplayField.text == "Enter your passcode...") {
+			txtDisplayField.text = "";
+			txtDisplayField.color = Color.white;
+		}
+
         currKey = ConcatCharArray(chars);
         if (currKey != prevKey)
         {
             pressTime = Time.time;
             charArrLoc = 0;
-            tmpCharName = txtDisplayAcctName.text;
-            txtDisplayAcctName.text = tmpCharName + chars[charArrLoc];
+            tmpCharName = txtDisplayField.text;
+            txtDisplayField.text = tmpCharName + chars[charArrLoc];
         }
         else
         {
             if ((Time.time - pressTime) < 1.0)
             {
-                txtDisplayAcctName.text = tmpCharName + chars[charArrLoc];
+                txtDisplayField.text = tmpCharName + chars[charArrLoc];
                 pressTime = Time.time;
             }
             else
             {
                 pressTime = Time.time;
                 charArrLoc = 0;
-                tmpCharName = txtDisplayAcctName.text;
-                txtDisplayAcctName.text = tmpCharName + chars[charArrLoc];
+                tmpCharName = txtDisplayField.text;
+                txtDisplayField.text = tmpCharName + chars[charArrLoc];
             }
         }
 
@@ -262,6 +447,56 @@ public class MainMenuCtrl : MonoBehaviour {
             charArrLoc = 0;
         prevKey = currKey;
     }
+
+	void KeypadSubmit() {
+		if (txtDisplayField.text == "") {
+			if (currFieldPtr == txtFieldAcctName) {
+				txtDisplayField.text = "Enter an account name...";
+			} else if (currFieldPtr == txtFieldPasscode) {
+				txtDisplayField.text = "Enter your passcode...";
+			}
+		}
+		currFieldPtr.text = txtDisplayField.text;
+	}
+
+	void SetupKeypad() {
+		HideNumPad ();
+		foreach (GameObject child in lowerPad) {
+			if (child.name != "KeySymbol" && child.name != "KeySpace" && child.name != "KeyDel" && child.name != "KeySwap" && child.name != "BtnSubmit") {
+				child.SetActive (false);
+			}
+		}
+	}
+
+	void ShowPad(GameObject[,] inputPad) {
+		foreach (GameObject child in inputPad) {
+			child.SetActive (true);
+		}
+	}
+
+	void HideUpperPad() {
+		foreach (GameObject child in popUp) {
+			if (child.name != "KeySymbol" && child.name != "KeySpace" && child.name != "KeyDel" && child.name != "KeySwap" && child.name != "BtnSubmit") {
+				child.SetActive (false);
+			}
+		}
+	}
+
+	void HideLowerPad() {
+		foreach (GameObject child in lowerPad) {
+			if (child.name != "KeyDel" && child.name != "KeySwap" && child.name != "BtnSubmit") {
+				child.SetActive (false);
+			}
+		}
+	}
+
+	void HideNumPad() {
+		foreach (GameObject child in numPad) {
+			if (child.name != "KeyDel" && child.name != "KeySwap" && child.name != "BtnSubmit") {
+				child.SetActive (false);
+			}
+		}
+	}
 
     void MenuEnable() {
 		// unlock controls
@@ -309,6 +544,11 @@ public class MainMenuCtrl : MonoBehaviour {
         }
     }
 
+	void MenuReset() {
+		txtFieldAcctName.text = "Enter an account name...";
+		txtFieldPasscode.text = "Enter your passcode...";
+	}
+
     string ConcatCharArray(char[] chars)
     {
         string retVal = "";
@@ -318,7 +558,16 @@ public class MainMenuCtrl : MonoBehaviour {
         }
         return retVal;
     }
-	
+
+	void DeleteChar() {
+		if (txtDisplayField.text.Length > 0)
+		{
+			txtDisplayField.text = txtDisplayField.text.Remove(txtDisplayField.text.Length - 1);
+			charArrLoc = 0;
+			prevKey = "";
+		}
+	}
+
 	void Update () {
 		// check for joystick movement
         MenuMove(Input.GetAxisRaw(controls.hori), Input.GetAxisRaw(controls.vert));
@@ -333,12 +582,7 @@ public class MainMenuCtrl : MonoBehaviour {
 
         if (Input.GetButtonUp(controls.joySecItem) && currMenu == Menu.PopUp)
         {
-            if (txtDisplayAcctName.text.Length > 0)
-            {
-                txtDisplayAcctName.text = txtDisplayAcctName.text.Remove(txtDisplayAcctName.text.Length - 1);
-                charArrLoc = 0;
-                prevKey = "";
-            }
+			DeleteChar();
         }
 	}
 }
