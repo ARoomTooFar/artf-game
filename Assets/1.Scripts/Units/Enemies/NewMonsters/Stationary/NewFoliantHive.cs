@@ -78,6 +78,10 @@ public class NewFoliantHive : NewStationaryEnemy {
 		return (currentSpawn < maxSpawn);
 	}
 	
+	protected virtual void Spawn() {
+		this.spawn.useItem();
+	}
+	
 	//----------------//
 	
 	//--------------------------------//

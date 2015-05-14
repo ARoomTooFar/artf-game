@@ -16,6 +16,8 @@ public class UseLunge : LungeBehaviour {
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		if (this.unit.target == null) return;
+		
 		float dis = Vector3.Distance(this.unit.transform.position, this.unit.target.transform.position);
 		if (dis >= 10) {
 			animator.SetTrigger("ShouldCharge");

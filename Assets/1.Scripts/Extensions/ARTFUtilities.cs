@@ -140,6 +140,7 @@ public static class ARTFUtilities {
 		float dis;
 		float distance = float.MaxValue;
 		for (int count = 0; count < units.Count; count++) {
+			if (units[count] == null) continue;
 			dis = Vector3.Distance(unit.transform.position, units[count].transform.position);
 			if (dis >= distance) continue;
 		
