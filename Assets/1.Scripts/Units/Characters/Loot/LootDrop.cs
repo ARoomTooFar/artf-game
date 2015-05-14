@@ -3,9 +3,9 @@ using System.Collections;
 using System;
 
 public class LootDrop : MonoBehaviour {
-	public float value,high,low,top;
+	public float value,high,low,growth,transition, gx, gz;
     public Transform starter;
-	public int rating;
+	public int rating,direction;
 	public LootSystem lootage;
 	public GameObject target;
 	// Use this for initialization
@@ -17,7 +17,8 @@ public class LootDrop : MonoBehaviour {
 		}else{
 			Debug.Log("NoLootSystem");
 		}*/
-        top = 20;
+        direction = 0;
+        growth = .005f;
 		setInitValues(0);//To be removed soon(Just for base test)
 	}
 	
@@ -31,25 +32,96 @@ public class LootDrop : MonoBehaviour {
 					Destroy(gameObject);
 				}
 			}
-		}
-	}
-    protected virtual void spiralOut()
-    {
-        float x = 0, y = 0;
-        float dx, dy;
-        for (float i = 0; i < top; i+=.1f)
+        }
+        else
         {
-            if((-transform.position.x/2 < x <= transform.position.x/2) && (-transform.position.y/2 < y <= transform.position.x/2))
+            if (direction == 0)
             {
-                print (x,y);
+                transition += growth;
+                gx = transition;
+                gz = transition;
+                transform.position = new Vector3(transform.position.x + transition, transform.position.y, transform.position.z + transition);
             }
-            if ((x == y)||(x<0 &&x==-y)||(x>0 && x== 1-y))
+            else if (direction == 1)
             {
-                dx = -dy;
-                dy = dx;
+                transition += growth;
+                transform.position = new Vector3(transform.position.x - transition, transform.position.y, transform.position.z + transition);
+                //transform.position.x -= transition;
+                // transform.position.z += transition;
+            }//
+            else if (direction == 2)
+            {
+                transition += growth;
+                transform.position = new Vector3(transform.position.x - transition, transform.position.y, transform.position.z - transition);
+                //transform.position.x -= transition;
+                //transform.position.z += transition;
             }
-            x = x + dx;
-            y = y + dy;
+            else if (direction == 3)
+            {
+                transition += growth;
+                transform.position = new Vector3(transform.position.x + transition, transform.position.y, transform.position.z - transition);
+                //transform.position.x -= transition;
+                //transform.position.z -= transition;
+            }
+            else{
+                transition = 0;
+            }
+            if (transition > growth*30)
+            {
+                transition = 0;
+                direction++;
+                if (direction == 4)
+                {
+                    direction = 0;
+                }
+            }
+        }
+	}
+    /*protected virtual void spiralOut()
+    {
+        int direction = 0;//Should be 1-4
+        while(direction < 4){
+            
+        }
+    }*/
+    protected virtual void moveHere()
+    {
+        while (transition < 5 && direction < 5)
+        {
+            if (direction == 0)
+            {
+                transition += 0.01f;
+                transform.position = new Vector3(transform.position.x+transition,transform.position.y,transform.position.z+transition);
+            }
+            else if (direction == 1)
+            {
+                transition += 0.01f;
+                transform.position = new Vector3(transform.position.x - transition, transform.position.y, transform.position.z + transition);
+                //transform.position.x -= transition;
+               // transform.position.z += transition;
+            }//
+            else if (direction == 2)
+            {
+                transition += 0.01f;
+                transform.position = new Vector3(transform.position.x - transition, transform.position.y, transform.position.z - transition);
+                //transform.position.x -= transition;
+                //transform.position.z += transition;
+            }
+            else if (direction == 3)
+            {
+                transition += 0.01f;
+                transform.position = new Vector3(transform.position.x + transition, transform.position.y, transform.position.z - transition);
+                //transform.position.x -= transition;
+                //transform.position.z -= transition;
+            }
+            else//larger than 4
+            {
+                
+            }
+        }
+        if(transition >= 5){
+            direction++;
+            transition = 0;
         }
     }
 	protected virtual void setInitValues(int rating){//0-10
