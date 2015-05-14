@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: b32d2d7eab55d6148844d3b8bf043f04
-timeCreated: 1430391764
+guid: 0cb8da5f9f7e9614793f8befb32e537e
+timeCreated: 1431570064
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -13,8 +13,8 @@ ModelImporter:
     100010: back_leg_middle_r
     100012: back_leg_upper_l
     100014: back_leg_upper_r
-    100016: //RootNode
-    100018: foliant_fodder_01
+    100016: foliant_fodder_01
+    100018: //RootNode
     100020: front_leg_lower_l
     100022: front_leg_lower_r
     100024: front_leg_middle_l
@@ -40,8 +40,8 @@ ModelImporter:
     400010: back_leg_middle_r
     400012: back_leg_upper_l
     400014: back_leg_upper_r
-    400016: //RootNode
-    400018: foliant_fodder_01
+    400016: foliant_fodder_01
+    400018: //RootNode
     400020: front_leg_lower_l
     400022: front_leg_lower_r
     400024: front_leg_middle_l
@@ -69,7 +69,7 @@ ModelImporter:
     9500000: //RootNode
     13700000: foliant_fodder_01
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -107,7 +107,7 @@ ModelImporter:
     splitTangentsAcrossUV: 1
     normalImportMode: 0
     tangentImportMode: 1
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     human: []
