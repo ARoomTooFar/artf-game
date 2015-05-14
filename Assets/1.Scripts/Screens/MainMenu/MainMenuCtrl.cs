@@ -43,12 +43,13 @@ public class MainMenuCtrl : MonoBehaviour {
 
 	// pop-up
 	private GameObject[,] popUp;
+	private GameObject[,] lowerPad;
 	private GameObject[,] numPad;
 	private int popUpWidth = 3;
 	private int popUpHeight = 5;
 	private Animator popUpAnim;
 
-    // keypad
+    // keypad state
 	private string currKey = "";
 	private string prevKey = "";
 	private float pressTime;
@@ -106,7 +107,7 @@ public class MainMenuCtrl : MonoBehaviour {
 			PopUpEnable ();
 		});
 
-		// submit button
+		// login button
 		loginForm[2, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
 			serv.login(txtFieldAcctName.text, txtFieldPasscode.text);
@@ -137,6 +138,22 @@ public class MainMenuCtrl : MonoBehaviour {
 		popUpAnim = GameObject.Find ("/Canvas/" + menuPopUpName).GetComponent<Animator>();
         txtDisplayField = GameObject.Find("/Canvas/" + menuPopUpName + "/DisplayField/TxtDisplayField").GetComponent<Text>();
 
+		// setup lowercase keypad
+		lowerPad = new GameObject[popUpHeight, popUpWidth];
+		lowerPad [0, 0] = popUp [0, 0];
+		lowerPad[0, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLABC");
+		lowerPad[0, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLDEF");
+		lowerPad[1, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLGHI");
+		lowerPad[1, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLJKL");
+		lowerPad[1, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLMNO");
+		lowerPad[2, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLPQRS");
+		lowerPad[2, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLTUV");
+		lowerPad[2, 2] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLWXYZ");
+		lowerPad [3, 0] = popUp [3, 0];
+		lowerPad [3, 1] = popUp [3, 1];
+		lowerPad [3, 2] = popUp [3, 2];
+		lowerPad[4, 0] = lowerPad[4, 1] = lowerPad[4, 2] = popUp[4, 0];
+		
 		// setup number keypad
 		numPad = new GameObject[popUpHeight, popUpWidth];
 		numPad[0, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key1");
@@ -152,12 +169,6 @@ public class MainMenuCtrl : MonoBehaviour {
 		numPad[3, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key0");
 		numPad[3, 2] = popUp[3, 2];
 		numPad[4, 0] = numPad[4, 1] = numPad[4, 2] = popUp[4, 0];
-
-		foreach (GameObject child in numPad) {
-			if (child.name != "KeyDel" && child.name != "KeySwap" && child.name != "BtnSubmit") {
-				child.SetActive (false);
-			}
-		}
 		
 		popUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
             KeyInput(new char[4] { '@', '.', '-', '_' })
@@ -206,30 +217,21 @@ public class MainMenuCtrl : MonoBehaviour {
 		// swap button
 		popUp[3, 2].GetComponent<Button>().onClick.AddListener(() => {
 			if (currMenuPtr == popUp) {
-				foreach (GameObject child in popUp) {
-					child.SetActive (false);
-				}
-
-				foreach (GameObject child in numPad) {
-					child.SetActive (true);
-				}
-
+				HideUpperPad();
+				ShowPad (lowerPad);
+				currMenuPtr = lowerPad;
+			} else if (currMenuPtr == lowerPad) {
+				HideLowerPad ();
+				ShowPad (numPad);
 				currMenuPtr = numPad;
-				var pointer = new PointerEventData(EventSystem.current);
-				ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 			} else {
-				foreach (GameObject child in numPad) {
-					child.SetActive (false);
-				}
-
-				foreach (GameObject child in popUp) {
-					child.SetActive (true);
-				}
-
+				HideNumPad ();
+				ShowPad (popUp);
 				currMenuPtr = popUp;
-				var pointer = new PointerEventData(EventSystem.current);
-				ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 			}
+
+			var pointer = new PointerEventData(EventSystem.current);
+			ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 		});
 
 		// submit button
@@ -238,6 +240,38 @@ public class MainMenuCtrl : MonoBehaviour {
             PopUpDisable();
 			KeypadSubmit();
 		});
+		
+		lowerPad[0, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[3] { 'a', 'b', 'c' })
+		                                                       );
+		
+		lowerPad[0, 2].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[3] { 'd', 'e', 'f' })
+		                                                       );
+		
+		lowerPad[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[3] { 'g', 'h', 'i' })
+		                                                       );
+		
+		lowerPad[1, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[3] { 'j', 'k', 'l' })
+		                                                       );
+		
+		lowerPad[1, 2].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[3] { 'm', 'n', 'o' })
+		                                                       );
+		
+		lowerPad[2, 0].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[4] { 'p', 'q', 'r', 's' })
+		                                                       );
+		
+		lowerPad[2, 1].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[3] { 't', 'u', 'v' })
+		                                                       );
+		
+		lowerPad[2, 2].GetComponent<Button>().onClick.AddListener(() =>
+		                                                       KeyInput(new char[4] { 'w', 'x', 'y', 'z' })
+		                                                       );
 
 		numPad[0, 0].GetComponent<Button>().onClick.AddListener(() =>
 		    KeyInput(new char[1] { '1' })
@@ -279,8 +313,9 @@ public class MainMenuCtrl : MonoBehaviour {
 		                                                        KeyInput(new char[1] { '0' })
 		                                                        );
 
-		// switch to start menu
+		// switch to start menu and setup the keypad
 		MenuSwitch (Menu.StartMenu);
+		SetupKeypad ();
 	}
 
 	// handles menu joystick movement control
@@ -347,6 +382,8 @@ public class MainMenuCtrl : MonoBehaviour {
             currMenuPtr = popUp;
 			txtDisplayField.text = currFieldPtr.text;
             currAnim = popUpAnim;
+			ShowPad (popUp);
+			SetupKeypad();
             break;
 		default:
 			Debug.Log ("Menu switch case invalid!");
@@ -420,6 +457,45 @@ public class MainMenuCtrl : MonoBehaviour {
 			}
 		}
 		currFieldPtr.text = txtDisplayField.text;
+	}
+
+	void SetupKeypad() {
+		HideNumPad ();
+		foreach (GameObject child in lowerPad) {
+			if (child.name != "KeySymbol" && child.name != "KeySpace" && child.name != "KeyDel" && child.name != "KeySwap" && child.name != "BtnSubmit") {
+				child.SetActive (false);
+			}
+		}
+	}
+
+	void ShowPad(GameObject[,] inputPad) {
+		foreach (GameObject child in inputPad) {
+			child.SetActive (true);
+		}
+	}
+
+	void HideUpperPad() {
+		foreach (GameObject child in popUp) {
+			if (child.name != "KeySymbol" && child.name != "KeySpace" && child.name != "KeyDel" && child.name != "KeySwap" && child.name != "BtnSubmit") {
+				child.SetActive (false);
+			}
+		}
+	}
+
+	void HideLowerPad() {
+		foreach (GameObject child in lowerPad) {
+			if (child.name != "KeyDel" && child.name != "KeySwap" && child.name != "BtnSubmit") {
+				child.SetActive (false);
+			}
+		}
+	}
+
+	void HideNumPad() {
+		foreach (GameObject child in numPad) {
+			if (child.name != "KeyDel" && child.name != "KeySwap" && child.name != "BtnSubmit") {
+				child.SetActive (false);
+			}
+		}
 	}
 
     void MenuEnable() {
