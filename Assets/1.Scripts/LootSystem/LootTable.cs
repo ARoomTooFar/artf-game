@@ -14,6 +14,8 @@ public static class LootedItems {
 
 		//gsManager add
 		GameObject.Find("GSManager").GetComponent<GSManager>().loot.Add(s);
+
+		Debug.Log("Looted: " + s);
 	}
 
 	public static List<string> getList(){
@@ -112,7 +114,15 @@ public static class LootTable {
 		{"BullyTrunk2", new LootList(new Dictionary<string, float>(){
 				{Items.money, 100f},
 				{Items.utilityBlade, 25f},
-				{Items.huntingRifle, 24f}
+				{Items.huntingRifle, 24f},
+
+				{Items.flamePike, 100f},
+				{Items.longSword, 40f},
+				{Items.pruningBlade, 25f},
+//				{Items.trashHelmetBucket, 25f},
+//				{Items.trashHelmetLightBulb, 24f},
+//				{Items.longSword, 24f},
+//				{Items.chainsawSword, 24f}
 			})},
 		{"BullyTrunk3", new LootList(new Dictionary<string, float>(){
 				{Items.money, 100f},
@@ -130,7 +140,7 @@ public static class LootTable {
 				{Items.machineGun, 40f},
 				{Items.huntingRifle, 24f}
 			})},
-
+		
 		//
 		//FOLIANT FODDER
 		//

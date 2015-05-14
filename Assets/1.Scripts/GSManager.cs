@@ -54,7 +54,8 @@ public class GSManager : MonoBehaviour {
 		
 		while (!loadProgress.isDone)
 		{
-			loadingBar.value = loadProgress.progress;
+			if(loadingBar != null)
+				loadingBar.value = loadProgress.progress;
 			yield return null;
 		}
 

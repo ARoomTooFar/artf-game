@@ -62,9 +62,9 @@ public class PlayerRewardPanel : MonoBehaviour {
 
 		//HARD-CODED SECTION
 		//REPLACE WITH THINGS FROM OTHER SCRIPTS
-//		loot.Add("testIcon1");
-//		loot.Add("testIcon2");
-//		loot.Add("testIcon3");
+//		loot.Add("flamePike");
+//		loot.Add("rebarSword");
+//		loot.Add("utilityBlade");
 //		loot.Add("testIcon4");
 //		loot.Add("testIcon5");
 //		loot.Add("testIcon6");
@@ -101,8 +101,12 @@ public class PlayerRewardPanel : MonoBehaviour {
 		//create y-position of top entry
 		newRowYPos = 0f - iconDimens.y / 2 - 5f;
 		for(int i = 0; i < loot.Count; i++){
-			makeNewEntry(loot[i]);
-			highlights[i].SetActive(false);
+
+			//must remove money from loot table eventually
+			if(loot[i] != Items.money){
+				makeNewEntry(loot[i]);
+				highlights[i].SetActive(false);
+			}
 		}
 	}
 
@@ -212,6 +216,8 @@ public class PlayerRewardPanel : MonoBehaviour {
 
 		//give it the proper icon
 		icon = Resources.Load<Sprite>("RewardScreen/" + itemName);
+		if(icon == null)
+			icon = Resources.Load<Sprite>("RewardScreen/cyberFaceHorns");
 		newLootItem.transform.Find("Icon").GetComponent<Image>().sprite = icon;
 
 		//add entry's height to list for highlighting
