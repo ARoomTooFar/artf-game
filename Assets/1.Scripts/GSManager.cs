@@ -1,17 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class GSManager : MonoBehaviour {
     // persistent data
     public static GSManager gsManager;
 	public string currLevelId = "";
     public string currLevelData = "";
+	public List<string> loot; //holds looted items
 
     private Farts serv;
 	private GameObject loadingBG;
 	private Slider loadingBar;
 	private AsyncOperation loadProgress;
+
+
 
 	void Awake ()
 	{
@@ -30,13 +34,17 @@ public class GSManager : MonoBehaviour {
 	void Start ()
 	{
         serv = gameObject.AddComponent<Farts>();
+
 		loadingBG = GameObject.Find("LoadingBG");
-		loadingBar = GameObject.Find("LoadingBar").GetComponent<Slider>();
+
+		if(GameObject.Find("LoadingBar") != null)
+			loadingBar = GameObject.Find("LoadingBar").GetComponent<Slider>();
 	}
 
 	public void LoadScene (string sceneName)
 	{
-		loadingBG.SetActive(true);
+		if(loadingBG != null)
+			loadingBG.SetActive(true);
 		StartCoroutine(LoadSceneAsync(sceneName));
 	}
 
