@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 // Inherits from mirage just to get enemy component
-public class MirageImage : NewMirage {
+public class MirageImage : Mirage {
 	
 	public MirageBlink spawnedBy;
-	public NewMirage user;
+	public Mirage user;
 
 	public int hitsToKill;
 

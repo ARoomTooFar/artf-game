@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class NewCableVine : NewStationaryEnemy {
+public class NewCableVine : StationaryEnemy {
 
 	protected GenericDoT constrict;
 	bool inStealth;

@@ -34,7 +34,7 @@ public class Player : NewCharacter, IHealable<int>{
 	
 	protected override void Awake() {
 		base.Awake();
-		opposition = Type.GetType("NewEnemy");
+		opposition = Type.GetType("Enemy");
 	}
 	
 	// Use this for initialization

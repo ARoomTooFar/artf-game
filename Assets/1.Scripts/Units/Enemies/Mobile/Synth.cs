@@ -3,25 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class NewCackleBranch: NewRangedEnemy {
+public class Synth: RangedEnemy {
 	
-	protected Roll roll;
+	protected SynthKnockBack kb;
 	protected CacklebranchPistol gun;
-
+	
 	protected override void Awake () {
 		base.Awake();
 	}
 	
 	protected override void Start() {
 		base.Start ();
-
-		this.roll = this.inventory.items[inventory.selected].GetComponent<Roll>();
-		if (this.roll == null) Debug.LogWarning ("CackleBranch does not have roll equipped");
-
-		foreach(CackleRoll behaviour in this.animator.GetBehaviours<CackleRoll>()) {
-			behaviour.roll = this.roll;
+		
+		this.kb = this.inventory.items[inventory.selected].GetComponent<SynthKnockBack>();
+		if (this.kb == null) Debug.LogWarning ("Synth does not have knockback equipped");
+		
+		foreach(KnockBackBehaviour behaviour in this.animator.GetBehaviours<KnockBackBehaviour>()) {
+			behaviour.SetVar(this.kb);
 		}
-
+		
 		this.gun = this.gear.weapon.GetComponent<CacklebranchPistol>();
 		
 	}
@@ -32,25 +32,23 @@ public class NewCackleBranch: NewRangedEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 60;
+		stats.maxHealth = 30;
 		stats.health = stats.maxHealth;
 		stats.armor = 1;
-		stats.strength = 0;
-		stats.coordination= 10;
+		stats.strength = 10;
+		stats.coordination=5;
 		stats.speed=7;
 		
 		this.minAtkRadius = 8.0f;
 		this.maxAtkRadius = 40.0f;
 	}
-
-
+	
+	
 	public override void SetTierData(int tier) {
-		tier = 0;
+		tier = 5;
 		base.SetTierData (tier);
-
-		monsterLoot.initializeLoot("CackleBranch", tier);
 	}
-
+	
 	
 	//----------------------//
 	// Transition Functions //
@@ -62,11 +60,11 @@ public class NewCackleBranch: NewRangedEnemy {
 	//-------------------//
 	// Actions Functions //
 	//-------------------//
-
+	
 	public virtual void Shoot(int count) {
 		this.StartCoroutine(this.gun.Shoot(count));
 	}
-
+	
 	public override void die() {
 		this.isDead = true;
 		animator.SetTrigger("Died");
@@ -76,14 +74,14 @@ public class NewCackleBranch: NewRangedEnemy {
 	public virtual void Death() {
 		base.die ();
 	}
-
+	
 	//-------------------//
 	
 	
 	//------------//
 	// Coroutines //
 	//------------//
-
+	
 	
 	
 	//------------//

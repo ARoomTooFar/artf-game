@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class NewBushman : NewMobileEnemy {
+public class Bushling : MobileEnemy {
 	
 	private class BMFrenzyGrowth : StatsMultiplier {
 		protected StatsMultiplier FrenzyGrowth(float dmgUp, float dmgRedUp, float spdUp, float currentGrowth) {

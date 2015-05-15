@@ -1,8 +1,11 @@
+// Enemies that can move
+
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class NewStationaryEnemy : NewEnemy  {
-
+public class SwordEnemy : MobileEnemy {
+	
 	//-------------------//
 	// Primary Functions //
 	//-------------------//
@@ -14,19 +17,10 @@ public class NewStationaryEnemy : NewEnemy  {
 	
 	protected override void Start() {
 		base.Start ();
-		this.rb.isKinematic = true;
 	}
 	
 	protected override void Update() {
 		base.Update ();
-		
-		if (this.target != null && this.target.GetComponent<Player>() != null) {
-			this.targetDir = this.target.GetComponent<Player>().facing;
-		}
-		
-		if (!this.lastSeenPosition.HasValue) {
-			this.animator.SetBool ("HasLastSeenPosition", false);
-		}
 	}
 	
 	protected override void setInitValues() {
@@ -43,4 +37,34 @@ public class NewStationaryEnemy : NewEnemy  {
 	}
 	
 	//----------------------//
+	
+	//----------------------//
+	// Transition Functions //
+	//----------------------//
+	
+	
+	//---------------------//
+	
+	
+	//------------------//
+	// Action Functions //
+	//------------------//
+	
+	
+	//------------------//
+	
+	
+	
+	//-----------------------------//
+	// Coroutines for timing stuff //
+	//-----------------------------//
+	
+	//-----------------------------//
+	
+	
+	//-----------------------//
+	// Calculation Functions //
+	//-----------------------//
+	
+	//-----------------//
 }

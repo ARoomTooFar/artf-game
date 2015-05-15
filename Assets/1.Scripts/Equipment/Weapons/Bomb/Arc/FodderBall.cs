@@ -1,4 +1,4 @@
-﻿// Bomb parent class
+// Bomb parent class
 //     For things that do a disjointed explosion
 
 using UnityEngine;
@@ -9,7 +9,7 @@ using System;
 public class FodderBall: MonoBehaviour {
 	
 	// Units to be spawned
-	public NewFoliantHive hive;
+	public FoliantHive hive;
 	public GameObject foliantFodder;
 	public AoETargetting aoe;
 
@@ -97,7 +97,7 @@ public class FodderBall: MonoBehaviour {
 		// BombExplosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<BombExplosion>();
 		Vector3 fodderPos = this.transform.position;
 		fodderPos.y = 0.0f;
-		NewFoliantFodder newFodder = (Instantiate(foliantFodder, fodderPos, transform.rotation) as GameObject).GetComponent<NewFoliantFodder>();
+		FoliantFodder newFodder = (Instantiate(foliantFodder, fodderPos, transform.rotation) as GameObject).GetComponent<FoliantFodder>();
 		//Sets fodder to be in hiveMind mode
 		newFodder.setHive (hive);
 		hive.addFodder (newFodder);
