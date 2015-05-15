@@ -15,7 +15,7 @@ public class MonsterBlock : GenericBlock {
 	}
 
 	public new string SaveString{
-		get{ return base.SaveString + ", " + MonsterBlockInfo.Tier; }
+		get{ return base.SaveString + "," + MonsterBlockInfo.Tier; }
 	}
 
 	public List<Vector3> RadiusCoordinates{
