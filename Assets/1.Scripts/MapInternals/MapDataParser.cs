@@ -31,7 +31,7 @@ public static class MapDataParser {
 		if(Global.inLevelEditor) {
 			Mode.setTileMode();
 		} else {
-            Debug.Log(Resources.Load("Player1"));
+//            Debug.Log(Resources.Load("Player1"));
 
 			GameObject p1 = GameObject.Find("Player1");
 			GameObject p2 = GameObject.Find("Player2");

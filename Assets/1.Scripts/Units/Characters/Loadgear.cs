@@ -21,7 +21,7 @@ public class Loadgear : MonoBehaviour {
 	void loadPlayers(){
 		for (int i = 0; i < players.Count; i++) {
 			if(players[i] != null){
-				Debug.Log("P" + (i+1).ToString());
+//				Debug.Log("P" + (i+1).ToString());
 				loadFromText("P" + (i + 1).ToString());
 				players[i].equipTest(equipment.ToArray(), abilities.ToArray());
 				equipment.Clear();
