@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CameraAdjuster : MonoBehaviour {
 	//public Player p1; //
@@ -12,7 +13,11 @@ public class CameraAdjuster : MonoBehaviour {
 	public Vector3 diffSpot;
 	public GameObject[] visibleEnemies;
 	//public float avgX,avgZ,baseY,baseX,baseZ,adjVal,supBaseY,avgNum,avgPX,avgPZ;
-	// Use this for initialization
+
+
+	public List<GameObject> playerList;
+
+
 	void Start () {
 		//layerMask = ~layerMask; //Inverse bits
 		//Debug.Log(layerMask);
@@ -33,6 +38,12 @@ public class CameraAdjuster : MonoBehaviour {
 		//Average the x's and z's for the target location of the camera's focus
 		//avgX = (p1.transform.position.x + p2.transform.position.x + p3.transform.position.x + p4.transform.position.x)/4 + baseX; // 
 		//avgZ = (p1.transform.position.z + p2.transform.position.z + p3.transform.position.z + p4.transform.position.z)/4 + baseZ; //
+	
+		playerList = new List<GameObject>();
+		playerList.Add(GameObject.Find("Player1"));
+		playerList.Add(GameObject.Find("Player2"));
+		playerList.Add(GameObject.Find("Player3"));
+		playerList.Add(GameObject.Find("Player4"));
 	}
 	/*void seeable(Character target){
 		RaycastHit hit;
@@ -68,8 +79,48 @@ public class CameraAdjuster : MonoBehaviour {
 	}*/
 	// Update is called once per frame
 	void Update () {
+
+		List<float> xs = new List<float>();
+		List<float> zs = new List<float>();
+		for(int i = 0; i < playerList.Count; i++){
+			xs.Add(playerList[i].transform.position.x);
+			zs.Add(playerList[i].transform.position.z);
+		}
+		
+		xs.Sort();
+		zs.Sort();
+		
+		float minX = xs[xs.Count - 1];
+		float maxX = xs[0];
+		
+		float minZ = zs[zs.Count - 1];
+		float maxZ = zs[0];
+
+		float xRange = Mathf.Abs (maxX - minX);
+		float zRange = Mathf.Abs (maxZ - minZ);
+
+		float zoomFactor = Mathf.Max(xRange, zRange);
+
+		float orthoSize = this.gameObject.GetComponent<Camera>().orthographicSize;
+		float minAllowedOrthoSize = 6f;
+
+		print (zoomFactor + ", " + minAllowedOrthoSize);
+
+		if(zoomFactor > minAllowedOrthoSize){
+			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, zoomFactor, Time.deltaTime);
+//			GameObject.Find("UICamera").gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, zoomFactor, Time.deltaTime);
+		}else{
+			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, minAllowedOrthoSize, Time.deltaTime);
+//			GameObject.Find("UICamera").gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, minAllowedOrthoSize, Time.deltaTime);
+
+		}
+
+//		Vector3 heightAdd = new Vector3(0f, heightFactor, 0f);
+
 		transform.position = camHitBox.transform.position + diffSpot;
 		diffSpot = transform.position - camHitBox.transform.position;
+
+
 	}
 	void avgMake(){
 		

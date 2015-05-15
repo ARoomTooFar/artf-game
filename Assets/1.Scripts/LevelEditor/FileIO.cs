@@ -29,8 +29,8 @@ public class FileIO : MonoBehaviour
 
     #if UNITY_EDITOR
     private string dummyGameAcctId = "5750085036015616";
-    private string dummyLvlId = "6215736263442432";
-    #endif
+	private string dummyLvlId = "4909654157033472";
+	#endif
 	
 	void Start ()
 	{
