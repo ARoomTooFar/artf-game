@@ -72,7 +72,7 @@ public class Loadgear : MonoBehaviour {
 		} else if (code[0] == ('H')) { // Helmet Items
 			equipment.Add (data.hats[index].gameObject);
 		} else if (code[0] == ('W')) { // Weapon Items
-			equipment.Add (data.weaponry[index].gameObject);
+			//equipment.Add (data.weaponry[index].gameObject);
 		} else if (code[0] == ('I')) { // Ability Items
 			abilities.Add (data.inventory[index].gameObject);
 		} else {

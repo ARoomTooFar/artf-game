@@ -18,7 +18,7 @@ public class Hook : ChargeItem {
 	public Character foe;
 	private Stun debuff;
 	private Immobilize immobil;
-	public GameObject hook;
+	//public GameObject hook;
 	private Collider col;
 	private Renderer ren;
 	private Rigidbody rb;
@@ -27,12 +27,12 @@ public class Hook : ChargeItem {
 	protected override void Start () {
 		base.Start ();
 
-		col = hook.GetComponent<Collider>();
-		hook.GetComponent<HookHelper> ().spawner = this;
-		col.enabled = false;
+		//col = hook.GetComponent<Collider>();
+		//hook.GetComponent<HookHelper> ().spawner = this;
+		//col.enabled = false;
 
-		ren = hook.GetComponent<Renderer>();
-		rb = hook.GetComponent<Rigidbody>();
+		//ren = hook.GetComponent<Renderer>();
+		//rb = hook.GetComponent<Rigidbody>();
 
 		debuff = new Stun();
 		immobil = new Immobilize();
