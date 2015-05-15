@@ -69,7 +69,7 @@ public class NewBushman : NewMobileEnemy {
 		stats.speed=4;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 3.0f;
+		this.maxAtkRadius = 1.75f;
 	}
 
 	public override void SetTierData(int tier) {

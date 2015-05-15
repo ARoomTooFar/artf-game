@@ -124,23 +124,26 @@ public class Player : NewCharacter, IHealable<int>{
 		// Invokes an action/animation
 		if (stunned) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
-			tapped = true;
+				tapped = true;
+	
+				float now = Time.time;
+				float since = now - last_pressed;
+				last_pressed = now;
 
-			float now = Time.time;
-			float since = now - last_pressed;
-			last_pressed = now;
-
-			if(since > 0) {
-				float motion = 1.0f / since;
-				motion *= motion;
-				mash_value++;
-				if(mash_value > mash_threshold) break_free = true;
+				if(since > 0) {
+					float motion = 1.0f / since;
+					motion *= motion;
+					mash_value++;
+					if(mash_value > mash_threshold) break_free = true;
+				}
 			}
-		}
 		}
 
 		if (actable && !this.animator.GetBool ("Attack")) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
+				if (this.tag == "Player2") {
+					this.damage (100);
+				}
 				if(currDoor!=null){
 					currDoor.GetComponent<Door>().toggleOpen();
 					currDoor = null;
@@ -270,7 +273,7 @@ public class Player : NewCharacter, IHealable<int>{
 		if (invincible || stats.isDead) return;
 		
 		stats.health -= greyTest(dmgTaken);
-		if (stats.health <= 0) base.die();
+		if (stats.health <= 0) this.die();
 		
 		if(splatter == null) return;
 		splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position-new Vector3(0,.5f,0), Quaternion.identity)).GetComponent<splatCore>();
@@ -316,6 +319,7 @@ public class Player : NewCharacter, IHealable<int>{
 	// Heal Interface Implementation //
 	//---------------------------------//
 	public override void heal(int healTaken){
+		print ("Healing");
 		if(stats.health < stats.maxHealth){
 			stats.health+=healTaken;
 			if(stats.health > stats.maxHealth){
@@ -330,13 +334,12 @@ public class Player : NewCharacter, IHealable<int>{
 	}
 	
 	public override void rez(){
-		if(stats.isDead){
-			stats.isDead = false;
-			stats.health = stats.maxHealth/(2+2*stats.rezCount);
-			// if(UI!=null) UI.hpBar.current = stats.health;
-			stats.rezCount++;
-			this.animator.SetInteger ("Killed", 0);
-		}
+		stats.isDead = false;
+		this.isDead = false;
+		stats.health = stats.maxHealth/(2+2*stats.rezCount);
+		// if(UI!=null) UI.hpBar.current = stats.health;
+		stats.rezCount++;
+		this.animator.SetInteger ("Killed", 0);
 		//GetComponent<Collider> ().isTrigger = false;
 		Renderer[] rs = GetComponentsInChildren<Renderer>();
 		foreach (Renderer r in rs) {

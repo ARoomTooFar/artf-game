@@ -104,7 +104,7 @@ public class CameraAdjuster : MonoBehaviour {
 		float orthoSize = this.gameObject.GetComponent<Camera>().orthographicSize;
 		float minAllowedOrthoSize = 6f;
 
-		print (zoomFactor + ", " + minAllowedOrthoSize);
+		// print (zoomFactor + ", " + minAllowedOrthoSize);
 
 		if(zoomFactor > minAllowedOrthoSize){
 			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, zoomFactor, Time.deltaTime);
