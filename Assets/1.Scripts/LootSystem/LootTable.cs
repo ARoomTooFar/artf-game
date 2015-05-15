@@ -243,6 +243,145 @@ public static class LootTable {
 			})},
 		
 		//
+		//FOLIANT HIVE
+		//
+		{"FoliantHive0", new LootList(new Dictionary<string, float>(){
+				{Items.money, 100f},
+				{Items.shiv, 40f},
+				{Items.poncho, 24f},
+				{Items.trashHelmetLightBulb, 26f},
+				{Items.trashHelmetBucket, 24f},
+				{Items.riotShield, 24f},
+				{Items.nanoTriage, 24f},
+				{Items.shockNet, 24f},
+				{Items.chainGrab, 24f},
+				{Items.flare, 24f},
+				{Items.lantern, 24f}
+			})},
+		{"FoliantHive1", new LootList(new Dictionary<string, float>(){
+				{Items.money, 100f},
+				{Items.shiv, 40f},
+				{Items.lumberSaw, 25f},
+				{Items.poncho, 24f},
+				{Items.bulletProofVest, 26f},
+				{Items.trashHelmetLightBulb, 26f},
+				{Items.trashHelmetBucket, 24f},
+				{Items.riotShield, 24f},
+				{Items.nanoTriage, 24f},
+				{Items.shockNet, 24f},
+				{Items.chainGrab, 24f},
+				{Items.flare, 24f},
+				{Items.lantern, 24f}
+
+			})},
+		{"FoliantHive2", new LootList(new Dictionary<string, float>(){
+				{Items.money, 100f},
+				{Items.shiv, 40f},
+				{Items.utilityBlade, 40f},
+				{Items.machette, 40f},
+				{Items.lumberSaw, 25f},
+				{Items.huntingRifle, 40f},
+				{Items.machineGun, 40f},
+				{Items.poncho, 24f},
+				{Items.bulletProofVest, 26f},
+				{Items.trashHelmetLightBulb, 26f},
+				{Items.trashHelmetBucket, 24f},
+				{Items.trafficCone, 24f},
+				{Items.militarySpikeHelmet, 24f},
+				{Items.bikerHelmet, 24f},
+				{Items.riotShield, 24f},
+				{Items.nanoTriage, 24f},
+				{Items.shockNet, 24f},
+				{Items.chainGrab, 24f},
+				{Items.flare, 24f},
+				{Items.lantern, 24f}
+
+
+			})},
+		{"FoliantHive3", new LootList(new Dictionary<string, float>(){
+				{Items.money, 100f},
+				{Items.shiv, 40f},
+				{Items.utilityBlade, 40f},
+				{Items.pruningBlade, 40f},
+				{Items.machette, 40f},
+				{Items.lumberSaw, 25f},
+				{Items.huntingRifle, 40f},
+				{Items.machineGun, 40f},
+				{Items.shotgun, 40f},
+				{Items.bulletProofVest, 26f},
+				{Items.smugglersJacket, 40f},
+				{Items.trafficCone, 24f},
+				{Items.militarySpikeHelmet, 24f},
+				{Items.bikerHelmet, 24f},
+				{Items.policeHelmet, 40f},
+				{Items.comHelmet, 40f},
+				{Items.riotShield, 24f},
+				{Items.nanoTriage, 24f},
+				{Items.shockNet, 24f},
+				{Items.chainGrab, 24f},
+				{Items.flare, 24f},
+				{Items.lantern, 24f}
+			})},
+		{"FoliantHive4", new LootList(new Dictionary<string, float>(){
+				{Items.money, 100f},
+				{Items.utilityBlade, 40f},
+				{Items.pruningBlade, 40f},
+				{Items.thinBlade, 40f},
+				{Items.lumberSaw, 25f},
+				{Items.chainsawSword, 25f},
+				{Items.huntingRifle, 40f},
+				{Items.laserRifle, 25f},
+				{Items.machineGun, 40f},
+				{Items.automaticLaserRifle, 25f},
+				{Items.shotgun, 40f},
+				{Items.wallOfLead, 25f},
+				{Items.bulletProofVest, 26f},
+				{Items.smugglersJacket, 40f},
+				{Items.mixedArmyUniform, 25f},
+				{Items.mixedPlateUniform, 25f},
+				{Items.trafficCone, 24f},
+				{Items.militarySpikeHelmet, 24f},
+				{Items.bikerHelmet, 24f},
+				{Items.policeHelmet, 40f},
+				{Items.comHelmet, 40f},
+				{Items.targetingVisor, 25f},
+				{Items.bionicEye, 25f},
+				{Items.riotShield, 24f},
+				{Items.nanoTriage, 24f},
+				{Items.shockNet, 24f},
+				{Items.chainGrab, 24f},
+				{Items.flare, 24f},
+				{Items.lantern, 24f}
+
+			})},
+		{"FoliantHive5", new LootList(new Dictionary<string, float>(){
+				{Items.money, 100f},
+				{Items.pruningBlade, 40f},
+				{Items.thinBlade, 40f},
+				{Items.chainsawSword, 25f},
+				{Items.laserRifle, 25f},
+				{Items.automaticLaserRifle, 25f},
+				{Items.wallOfLead, 25f},
+				{Items.mixedArmyUniform, 25f},
+				{Items.mixedPlateUniform, 25f},
+				{Items.ceramicPlate, 25f},
+				{Items.carbonFibronicMeshSuit, 25f},
+				{Items.comHelmet, 40f},
+				{Items.targetingVisor, 25f},
+				{Items.bionicEye, 25f},
+				{Items.cyberFaceRobot, 25f},
+				{Items.cyberFaceHorns, 25f},
+				{Items.brainCaseVisor, 25f},
+				{Items.riotShield, 24f},
+				{Items.nanoTriage, 24f},
+				{Items.shockNet, 24f},
+				{Items.chainGrab, 24f},
+				{Items.flare, 24f},
+				{Items.lantern, 24f}
+
+			})},
+
+		//
 		//FOLIANT FODDER
 		//
 		{"FoliantFodder0", new LootList(new Dictionary<string, float>(){
@@ -255,7 +394,7 @@ public static class LootTable {
 				{Items.lunge, 24f},
 				{Items.riotShield, 24f},
 				{Items.lantern, 24f}
-
+				
 			})},
 		{"FoliantFodder1", new LootList(new Dictionary<string, float>(){
 				{Items.money, 100f},
@@ -267,7 +406,7 @@ public static class LootTable {
 				{Items.lunge, 24f},
 				{Items.riotShield, 24f},
 				{Items.lantern, 24f}
-
+				
 			})},
 		{"FoliantFodder2", new LootList(new Dictionary<string, float>(){
 				{Items.money, 100f},
@@ -282,7 +421,7 @@ public static class LootTable {
 				{Items.lunge, 24f},
 				{Items.riotShield, 24f},
 				{Items.lantern, 24f}
-
+				
 			})},
 		{"FoliantFodder3", new LootList(new Dictionary<string, float>(){
 				{Items.money, 100f},
@@ -320,7 +459,7 @@ public static class LootTable {
 				{Items.lunge, 24f},
 				{Items.riotShield, 24f},
 				{Items.lantern, 24f}
-
+				
 			})},
 		{"FoliantFodder5", new LootList(new Dictionary<string, float>(){
 				{Items.money, 100f},
@@ -351,7 +490,7 @@ public static class LootTable {
 				{Items.lunge, 24f},
 				{Items.riotShield, 24f},
 				{Items.lantern, 24f}
-
+				
 			})},
 
 
