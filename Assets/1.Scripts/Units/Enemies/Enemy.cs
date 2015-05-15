@@ -1,15 +1,19 @@
-﻿// Parent scripts for enemy units
+// Parent scripts for enemy units
 
 using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
-public class Enemy : Character {
+public class Enemy : NewCharacter {
 
-	//Aggro Variables
-	public float dmgTimer = 0f;
-	public bool aggro = false;
+	protected float lastSawTargetCount;
 
+	//Is this unit part of the hive mind?
+	public bool swarmBool = false;
+	//Object which holds hivemind aggrotable
+	public Swarm swarm;
+	
 	public int tier;
 	public AoETargetting aRange;
 	protected StateMachine sM;
@@ -18,92 +22,70 @@ public class Enemy : Character {
 	protected float lineofsight = 15f;
 	public float maxAtkRadius, minAtkRadius;
 	
+
 	// Variables for use in player detection
 	protected bool alerted = false;
 	public GameObject target;
-	protected Vector3? lastSeenPosition = null;
+	public Vector3? lastSeenPosition = null;
+	protected float lastSeenSet = 0.0f;
 	protected AggroTable aggroT;
 	protected bool targetchanged;
-	public EnemyHealthBar hpBar;
+	protected GameObject MusicPlayer;
 
+	public Vector3 targetDir;
+	public Vector3 resetpos;
 
+	
 	protected int layerMask = 1 << 9;
-
-	protected float aggroTimer = 7.0f;
-
-	/*
-	void OnEnable()
-	{
-		Player.OnDeath += playerDied;
-	}
 	
-	
-	void OnDisable()
-	{
-		Player.OnDeath -= playerDied;
-	}*/
+	protected float aggroTimer = 5.0f;
 
+	// bool sparksDone = true;
+	GameObject sparks = null;
+	
+	public MonsterLoot monsterLoot;
+	
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType ("Player");
-		hpBar = gameObject.GetComponentInChildren<EnemyHealthBar>();
-		if(hpBar != null){
-			hpBar.health = stats.health/stats.maxHealth;
-		}
+		
 		facing = Vector3.back;
 		targetchanged = false;
-
+		
 		// aRange.opposition = this.opposition;
 		aRange.affectPlayers = true;
-		
-		//State machine initialization
-		if (testing) {
-			sM = new StateMachine ();
-			initStates ();
-			sM.Start ();
-		}
 	}
-
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
-
-		aggroT = new AggroTable();
 		
-	}
+		//Uses swarm aggro table if this unit swarms
+		if(swarmBool){
+			aggroT = swarm.aggroTable;
+		} else {
+			aggroT = new AggroTable();
+		}
 
+		if (this.testing) {
+			this.SetTierData(0);
+		}
+
+		foreach(EnemyBehaviour behaviour in this.animator.GetBehaviours<EnemyBehaviour>()) {
+			behaviour.SetVar(this.GetComponent<Enemy>());
+		}
+
+		MusicPlayer = GameObject.Find ("MusicPlayer");
+	}
+	
 	// Update is called once per frame
 	protected override void Update () {
-		if (!stats.isDead) {
-			isGrounded = Physics.Raycast (transform.position, -Vector3.up, minGroundDistance);
-
-			animSteInfo = animator.GetCurrentAnimatorStateInfo (0);
-			animSteHash = animSteInfo.fullPathHash;
-			actable = (animSteHash == runHash || animSteHash == idleHash) && freeAnim;
-			attacking = animSteHash == atkHashStart || animSteHash == atkHashSwing || animSteHash == atkHashEnd;
-			
-			
-			//If aggro'd, will chase, and if not attacked for 5 seconds, will deaggro
-			//If we want a deaggro function, change the if statement to require broken line of sight to target
-			/*if (aggro == true) {
-				fAggro ();
-			}*/
-
-			if (isGrounded) {
-				MovementAnimation ();
-				sM.Update ();
-			} else {
-				falling ();
-			}
-
-			// if (target != null)
-			//	target = aggroT.getTarget ();
-			target = aggroT.GetTopAggro();
-			
-		}
+		if (stats.isDead) return;
+		base.Update();
+		this.TargetFunction();
 	}
 
-
+	
 	protected override void setInitValues() {
 		base.setInitValues();
 		//Testing with base 0-10 on stats with 10 being 100/cap%
@@ -115,182 +97,175 @@ public class Enemy : Character {
 		stats.speed=4;
 		setAnimHash ();
 	}
-	
-	protected virtual void initStates() {
+
+	// Things that are tier specific should be set here
+	public virtual void SetTierData(int tier) {
+		this.tier = tier;
+		this.animator.SetInteger("Tier", this.tier);
+		monsterLoot = this.gameObject.AddComponent<MonsterLoot>();
 	}
 
-	protected virtual void SetStates() {
-	}
+	//-----------//
+	// Functions //
+	//-----------//
 
-	// For subclasses that want to add transitions to existing states
-	protected void addTransitionToExisting(string stateId, Transition t) {
-		State tempState; // For getting States that already exist within the State Machine
-
-		if (this.sM.states.TryGetValue(stateId, out tempState)) {
-			tempState.addTransition(t);
-		}
-	}
-
-	// For subclasses that want to transition to old states from new states
-	protected void addTransitionToNew(string stateId, State s) {
-		Transition tempTransition; // For getting States that already exist within the State Machine
-
-		if (this.sM.transitions.TryGetValue(stateId, out tempTransition)) {
-			s.addTransition(tempTransition);
-		}
-	}
-	
-	protected void removeTransitionFromExisting(string stateId, string transitionStateId) {
-		Transition tempTransition;
-		State tempState;
-		
-		if (this.sM.transitions.TryGetValue(transitionStateId, out tempTransition)) {
-			if (this.sM.states.TryGetValue(stateId, out tempState)) {
-				tempState.removeTransition(tempTransition);
+	protected virtual void TargetFunction() {
+		target = aggroT.GetTopAggro ();
+		if (target != null) {
+			this.animator.SetBool ("Target", true);
+			if (this.canSeePlayer(target)) {
+				this.lastSawTargetCount = 0.0f;
+				float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
+				this.animator.SetBool ("InAttackRange", distance < this.maxAtkRadius && distance >= this.minAtkRadius);
+			} else {
+				this.lastSawTargetCount += Time.deltaTime;
+				this.target = null;
+				this.animator.SetBool ("Target", false);
+				if (this.lastSawTargetCount > this.aggroTimer) {
+					this.aggroT.RemoveUnit(this.aggroT.GetTopAggro());
+					this.lastSawTargetCount = 2;
+				}
+			}
+		} else {
+			this.animator.SetBool ("Target", false);
+			if (aRange.unitsInRange.Count > 0) {
+				foreach(Character tars in aRange.unitsInRange) {
+					if (this.canSeePlayer(tars.gameObject) && !tars.isDead) {
+						aggroT.AddAggro(tars.gameObject, 1);
+						target = tars.gameObject;
+						this.animator.SetBool("Target", true);
+						this.alerted = true;
+						this.animator.SetBool("Alerted", true);
+						break;
+					}
+				}
 			}
 		}
 	}
+
+	//-----------//
+
 
 	//-----------------------//
 	// Calculation Functions //
 	//-----------------------//
-	
+
+
 	protected float distanceToPlayer(GameObject p) {
 		if (p == null) return 0.0f;
-		Vector3 distance = p.transform.position - this.transform.position;
-		return distance.sqrMagnitude;
+		float distance = Vector3.Distance(this.transform.position, p.transform.position);
+		//Debug.Log (distance);
+		return distance;
 	}
 
-	protected virtual bool canSeePlayer(GameObject p) {
-		if (p == null) return false;
-	
-		// Check angle of forward direction vector against the vector of enemy position relative to player position
-		Vector3 direction = p.transform.position - transform.position;
-		float angle = Vector3.Angle(direction, this.facing);
-		
-		if (angle < fov) {
-			RaycastHit hit;
-			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, lineofsight, layerMask)) {
-
-				return false;
-
-			}else{
-				Player addable = p.GetComponent<Player>();
-				if(!addable.invis){
-					// aggroT.add(p,1);
-					aggroT.AddAggro(p, 1);
-					lastSeenPosition = p.transform.position;
-					alerted = true;
-				}else{
-					return false;
-				}
-				return true;
-	
-			}
+	public virtual bool canSeePlayer(GameObject p) {
+		if (p == null) {
+			this.animator.SetBool("CanSeeTarget", false);
+			return false;
 		}
 		
+		// Check angle of forward direction vector against the vector of enemy position relative to player position
+		Vector3 direction = p.transform.position - transform.position;
+		direction.y = 0.0f;
+		float angle = Vector3.Angle(direction, this.facing);
+
+		float dis = Vector3.Distance(this.transform.position, p.transform.position);
+
+		if (angle < fov) {
+			RaycastHit hit;
+			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, dis, layerMask)) {
+				this.animator.SetBool("CanSeeTarget", false);
+				return false;
+			} else {
+				lastSeenPosition = p.transform.position;
+				this.animator.SetBool ("HasLastSeenPosition", true);
+				this.lastSeenSet = 3.0f;
+				alerted = true;
+				this.animator.SetBool("Alerted", true);
+				this.animator.SetBool("CanSeeTarget", true);
+				return true;
+				
+			}
+		}
+		this.animator.SetBool("CanSeeTarget", false);
 		return false;
 	}
 	
 	// Will change units facing to be towards their target. If new facing is zero it doesn't changes
-	protected virtual void getFacingTowardsTarget() {
+	//     Move to ultilties if we find more uses for this outside of AI
+	public virtual void getFacingTowardsTarget() {
 		Vector3 newFacing = Vector3.zero;
-
-		if (this.target != null) {
+		
+		if (this.target != null && this.actable) {
 			newFacing = this.target.transform.position - this.transform.position;
 			newFacing.y = 0.0f;
-			if (newFacing != Vector3.zero) this.facing = newFacing.normalized;
+			if (newFacing != Vector3.zero) {
+				this.facing = newFacing.normalized;
+				this.transform.localRotation = Quaternion.LookRotation(facing);	
+			}
 		}
 	}
 	
 	//----------------------//
-
-
+	
+	
 	//-------------------------------//
 	// Character Inherited Functions //
 	//-------------------------------//
-
+	
 	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
 		if (this.invincible) return;
 		this.damage(dmgTaken, atkPosition);
 		aggroT.AddAggro(source, dmgTaken);
 		isHit = true;
-	}
 
+		//particle effects
+		if(sparks == null){
+			sparks = Instantiate(Resources.Load("Sparks"), transform.position, Quaternion.identity) as GameObject;
+			Material particleMat = Resources.Load("Materials/EnemySparks", typeof(Material)) as Material;
+			sparks.GetComponent<ParticleRenderer>().material = particleMat;
+			Destroy (sparks, 1);
+		}
+	}
+	
 	public override void damage(int dmgTaken, Transform atkPosition) {
 		base.damage(dmgTaken, atkPosition);
-		if(hpBar != null){
-			Debug.Log((float)stats.health/stats.maxHealth);
-			hpBar.health = (float)stats.health/stats.maxHealth;
-		}
-		if (aggro == false) {
-			aggro = true;
-			dmgTimer = 0f;
-		}
-
 		isHit = true;
 
+
+		//particle effects
+		if(sparks == null){
+			sparks = Instantiate(Resources.Load("Sparks"), transform.position, Quaternion.identity) as GameObject;
+			Material particleMat = Resources.Load("Materials/EnemySparks", typeof(Material)) as Material;
+			sparks.GetComponent<ParticleRenderer>().material = particleMat;
+			Destroy (sparks, 1);
+		}
 	}
 	
 	public override void damage(int dmgTaken) {
-		//aggro is on and timer reset if attacked
-		if (aggro == false) {
-			aggro = true;
-			dmgTimer = 0f;
-		}
-
 		base.damage(dmgTaken);
-		if(hpBar != null){
-			Debug.Log((float)stats.health/stats.maxHealth);
-			hpBar.health =(float) stats.health/stats.maxHealth;
+
+		//particle effects
+		if(sparks == null){
+			sparks = Instantiate(Resources.Load("Sparks"), transform.position, Quaternion.identity) as GameObject;
+			Material particleMat = Resources.Load("Materials/EnemySparks", typeof(Material)) as Material;
+			sparks.GetComponent<ParticleRenderer>().material = particleMat;
+			Destroy (sparks, 1);
 		}
-
-		isHit = true;
 	}
-
+	
 	public override void die() {
+		monsterLoot.lootMonster();
 		base.die ();
-		stats.health = 0;
-		//UI.hpBar.current = 0;
-		Renderer[] rs = GetComponentsInChildren<Renderer>();
-		Explosion eDeath = ((GameObject)Instantiate(expDeath, transform.position-new Vector3(0,6,0), transform.rotation)).GetComponent<Explosion>();
-		eDeath.setInitValues(this, true);
-		foreach (Renderer r in rs) {
-			r.enabled = false;
-		}
+		Destroy (gameObject);
 	}
-
+	
 	//-------------------------------//
-
+	
 	//-----------------//
 	// Aggro Functions //
 	//-----------------//
 
-	public virtual void fAggro(){
-		if (dmgTimer < 5f)
-		{
-			dmgTimer += Time.deltaTime;
-		}
-		else if (dmgTimer >= 5f)
-		{
-			resetAggro ();
-			dmgTimer = 0f;
-		}
-	}
-	
-	public virtual void resetAggro(){
-		dmgTimer = 0f;
-		aggro = false;
-		target = null;
-	}
-
-	/*
-	public virtual void playerDied(GameObject dead){
-		if (aggroT != null) {
-			aggroT.RemoveUnit(dead);
-		}
-	}*/
-	
 	public virtual void playerVanished(GameObject dead){
 		if (aggroT != null) {
 			aggroT.RemoveUnit(dead);
@@ -303,6 +278,6 @@ public class Enemy : Character {
 			aggroT.AddAggro(taunter,aggroT.GetAggro()*2);
 		}
 	}
-	
+
 	//---------------//
 }

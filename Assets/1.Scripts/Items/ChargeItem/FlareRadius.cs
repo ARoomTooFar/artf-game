@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class FlareRadius : MonoBehaviour {
@@ -88,7 +88,7 @@ public class FlareRadius : MonoBehaviour {
 			used = true;
 			//Destroy(gameObject);
 		}*/
-		NewEnemy foe = other.GetComponent<NewEnemy>();
+		Enemy foe = other.GetComponent<Enemy>();
 		Enemy enemy = other.GetComponent<Enemy>();
 		if (enemy != null) {
 			decSpeed = decSpeed*4;
@@ -102,7 +102,7 @@ public class FlareRadius : MonoBehaviour {
 	}
 	void OnTriggerExit (Collider other) {
 		Enemy enemy = other.GetComponent<Enemy>();
-		NewEnemy foe = other.GetComponent<NewEnemy>();
+		Enemy foe = other.GetComponent<Enemy>();
 		if (enemy != null || foe != null) {
 			decSpeed = decSpeed/4;
 			//enemy.BDS.timedRemoval(debuff, this.gameObject,duration);

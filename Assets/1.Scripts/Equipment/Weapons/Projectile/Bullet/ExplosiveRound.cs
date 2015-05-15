@@ -13,7 +13,7 @@ public class ExplosiveRound : HomingBullet {
 	}
 	
 	public override void setInitValues(Character player, Type opposition, int damage, float partSpeed, bool effect, BuffsDebuffs hinder, float durations) {
-		if (opposition == typeof(Enemy) || opposition == typeof(NewEnemy)) this.aoe.affectEnemies = true;
+		if (opposition == typeof(Enemy) || opposition == typeof(Enemy)) this.aoe.affectEnemies = true;
 		if (opposition == typeof(Player)) this.aoe.affectPlayers = true;
 		base.setInitValues(player, opposition, damage, partSpeed, effect, hinder, duration);
 	}

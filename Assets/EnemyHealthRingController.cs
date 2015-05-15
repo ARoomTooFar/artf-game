@@ -1,14 +1,14 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
 public class EnemyHealthRingController : MonoBehaviour {
-	public NewEnemy enemy;
+	public Enemy enemy;
 	public Image ring1;
 	public Image ring2;
 
 	void Start () {
-		enemy = transform.parent.gameObject.GetComponent<NewEnemy>();
+		enemy = transform.parent.gameObject.GetComponent<Enemy>();
 		ring1 = transform.Find("Ring1").GetComponent<Image>();
 		ring2 = transform.Find("Ring2").GetComponent<Image>();
 	}

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ShieldsDown : EnemyBehaviour {
 	
-	protected NewBullyTrunk bt;
+	protected BullyTrunk bt;
 	
-	public virtual void SetVar(NewBullyTrunk bt) {
+	public virtual void SetVar(BullyTrunk bt) {
 		this.bt = bt;
 	}
 	

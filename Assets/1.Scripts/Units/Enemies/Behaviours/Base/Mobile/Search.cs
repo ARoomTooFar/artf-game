@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Search : EnemyBehaviour {
 
-	private NewMobileEnemy mUnit;
+	private MobileEnemy mUnit;
 
-	public override void SetVar(NewEnemy unit) {
+	public override void SetVar(Enemy unit) {
 		base.SetVar (unit);
-		this.mUnit = unit.GetComponent<NewMobileEnemy>();
+		this.mUnit = unit.GetComponent<MobileEnemy>();
 	}
 
 	// This will be called when the animator first transitions to this state.
