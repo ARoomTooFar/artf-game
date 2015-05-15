@@ -179,7 +179,7 @@ public class NewMirage : NewStationaryEnemy {
 		
 	}
 
-	public virtual void Death() {
+	protected virtual void Death() {
 		base.die ();
 	}
 	

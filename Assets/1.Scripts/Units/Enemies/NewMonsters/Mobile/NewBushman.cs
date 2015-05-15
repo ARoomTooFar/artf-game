@@ -15,6 +15,8 @@ public class NewBushman : NewMobileEnemy {
 		}
 	}
 
+	public BushlingClaw rightPaw, leftPaw;
+
 	protected GameObject oldTarget; // Needs to know when it switches targets
 
 	protected Sprint sprint;
@@ -43,6 +45,9 @@ public class NewBushman : NewMobileEnemy {
 		foreach(BushyApproach behaviour in this.animator.GetBehaviours<BushyApproach>()) {
 			behaviour.charge = this.charge;
 		}
+		
+		this.rightPaw.equip(this, this.opposition);
+		this.leftPaw.equip(this, this.opposition);
 	}
 
 	protected override void Update() {
@@ -59,12 +64,12 @@ public class NewBushman : NewMobileEnemy {
 		stats.maxHealth = 100;
 		stats.health = stats.maxHealth;
 		stats.armor = 3;
-		stats.strength = 6;
+		stats.strength = 5;
 		stats.coordination=0;
 		stats.speed=4;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 2.0f;
+		this.maxAtkRadius = 3.0f;
 	}
 
 	public override void SetTierData(int tier) {
@@ -147,6 +152,23 @@ public class NewBushman : NewMobileEnemy {
 		return nextLv;
 	}
 
+	protected virtual void RightPawNow() {
+		this.rightPaw.AttackStart();
+	}
+	
+	protected virtual void RightPawOver() {
+		this.rightPaw.AttackEnd();
+	}
+	
+	protected virtual void LeftPawNow() {
+		this.leftPaw.AttackStart();
+	}
+	
+	protected virtual void LeftPawOver() {
+		this.leftPaw.AttackEnd();
+	}
+	
+
 	// state machine parametric functions
 
 	protected void isTooFar () {
@@ -167,5 +189,14 @@ public class NewBushman : NewMobileEnemy {
 			return false;
 		}
 	}
+	
+	public override void die() {
+		animator.SetTrigger("Died");
+	}
+	
+	protected virtual void Death() {
+		base.die ();
+	}
+	
 
 }

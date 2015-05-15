@@ -1,0 +1,197 @@
+fileFormatVersion: 2
+guid: f9532c296f9115d4d9fe3dc58dde4057
+timeCreated: 1431651701
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Back_Left_Foot_01
+    100002: Back_Left_Foot_02
+    100004: Back_Left_Leg_01
+    100006: Back_Left_Leg_02
+    100008: Back_Left_Leg_03
+    100010: Back_Left_Leg_04
+    100012: Back_Left_Leg_05
+    100014: Back_Right_Leg_01
+    100016: Back_Right_Leg_02
+    100018: Back_Right_Leg_03
+    100020: Back_Right_Leg_04
+    100022: Back_Right_Leg_05
+    100024: Back_Right_Leg_06
+    100026: Back_Right_Leg_07
+    100028: Bushling
+    100030: Bushling_Rig
+    100032: //RootNode
+    100034: Double_Arm_Controller
+    100036: Front_Left_Foot_01
+    100038: Front_Left_Foot_02
+    100040: Front_Left_Leg_01
+    100042: Front_Left_Leg_02
+    100044: Front_Left_Leg_03
+    100046: Front_Right_Foot_01
+    100048: Front_Right_Foot_02
+    100050: Front_Right_Leg_01
+    100052: Front_Right_Leg_02
+    100054: Front_Right_Leg_03
+    100056: Head
+    100058: Left_Arm_01
+    100060: Left_Arm_02
+    100062: Left_Arm_03
+    100064: Lower_Spine
+    100066: Neck_01
+    100068: Neck_02
+    100070: Neck_03
+    100072: Right_Arm_01
+    100074: RIght_Arm_02
+    100076: RIght_Arm_03
+    100078: Tail_01
+    100080: Tail_02
+    100082: Tail_03
+    100084: Tail_04
+    100086: Tail_05
+    100088: Tail_06
+    100090: Tail_07
+    100092: Tail_08
+    100094: Tail_09
+    100096: Tail_10
+    100098: Tail_11
+    100100: Tail_12
+    100102: Tail_13
+    100104: Tail_14
+    100106: Tail_15
+    100108: Tail_16
+    100110: Tail_17
+    100112: Tail_18
+    100114: Tail_19
+    100116: Upper_Spine
+    100118: Z-Ground
+    400000: Back_Left_Foot_01
+    400002: Back_Left_Foot_02
+    400004: Back_Left_Leg_01
+    400006: Back_Left_Leg_02
+    400008: Back_Left_Leg_03
+    400010: Back_Left_Leg_04
+    400012: Back_Left_Leg_05
+    400014: Back_Right_Leg_01
+    400016: Back_Right_Leg_02
+    400018: Back_Right_Leg_03
+    400020: Back_Right_Leg_04
+    400022: Back_Right_Leg_05
+    400024: Back_Right_Leg_06
+    400026: Back_Right_Leg_07
+    400028: Bushling
+    400030: Bushling_Rig
+    400032: //RootNode
+    400034: Double_Arm_Controller
+    400036: Front_Left_Foot_01
+    400038: Front_Left_Foot_02
+    400040: Front_Left_Leg_01
+    400042: Front_Left_Leg_02
+    400044: Front_Left_Leg_03
+    400046: Front_Right_Foot_01
+    400048: Front_Right_Foot_02
+    400050: Front_Right_Leg_01
+    400052: Front_Right_Leg_02
+    400054: Front_Right_Leg_03
+    400056: Head
+    400058: Left_Arm_01
+    400060: Left_Arm_02
+    400062: Left_Arm_03
+    400064: Lower_Spine
+    400066: Neck_01
+    400068: Neck_02
+    400070: Neck_03
+    400072: Right_Arm_01
+    400074: RIght_Arm_02
+    400076: RIght_Arm_03
+    400078: Tail_01
+    400080: Tail_02
+    400082: Tail_03
+    400084: Tail_04
+    400086: Tail_05
+    400088: Tail_06
+    400090: Tail_07
+    400092: Tail_08
+    400094: Tail_09
+    400096: Tail_10
+    400098: Tail_11
+    400100: Tail_12
+    400102: Tail_13
+    400104: Tail_14
+    400106: Tail_15
+    400108: Tail_16
+    400110: Tail_17
+    400112: Tail_18
+    400114: Tail_19
+    400116: Upper_Spine
+    400118: Z-Ground
+    2300000: Z-Ground
+    3300000: Z-Ground
+    4300000: Z-Ground
+    4300002: Bushling
+    7400000: Default Take
+    7400002: Attack__On_Hind_Legs_
+    7400004: Death
+    7400006: Idle
+    7400008: Reaction
+    7400010: Running
+    9500000: //RootNode
+    13700000: Bushling
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

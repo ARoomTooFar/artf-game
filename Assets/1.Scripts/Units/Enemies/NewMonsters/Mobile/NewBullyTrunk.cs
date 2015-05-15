@@ -186,9 +186,17 @@ public class NewBullyTrunk: NewMobileEnemy {
 	protected virtual void PummelLeftOver() {
 		this.leftPaw.AttackEnd();
 	}
+	
+	protected virtual void Death() {
+		base.die ();
+	}
 
 	//-------------------//
 	
+	
+	public override void die() {
+		animator.SetTrigger("Died");
+	}
 	
 	//------------//
 	// Coroutines //

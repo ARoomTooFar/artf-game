@@ -47,7 +47,7 @@ public class MirageImage : NewMirage {
 		this.animator.SetTrigger("IllusionOut");
 	}
 
-	public override void Death() {
+	protected override void Death() {
 		spawnedBy.mirrors.Remove(this);
 		Destroy(this.gameObject);
 	}
