@@ -11,7 +11,7 @@ public static class Money {
 	public static Text moneyDisplay;
 
 	static Money() {
-		money = 3000;
+		money = 30000000;
 	}
 
 	public static void updateMoneyDisplay() {

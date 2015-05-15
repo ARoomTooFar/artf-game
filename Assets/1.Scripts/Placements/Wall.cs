@@ -6,6 +6,7 @@ public class Wall : MonoBehaviour {
 	public bool show;
 	public float disappear;
 	public GameObject stand;
+	public GameObject wall;
 	protected virtual void Start(){
 		show = true;
 		disappear = 3f;
@@ -19,7 +20,7 @@ public class Wall : MonoBehaviour {
 			if(stand !=null){
 				stand.GetComponent<Renderer>().enabled = true;
 			}
-			GetComponent<Renderer>().enabled = false;
+			wall.GetComponent<Renderer>().enabled = false;
 			// GetComponent<Collider>().enabled = false;
 			StopCoroutine("revWait");
 			StartCoroutine("revWait",disappear);
@@ -34,7 +35,7 @@ public class Wall : MonoBehaviour {
 			//testable = true;
 			if(timer > duration -1f){
 				show = true;
-				GetComponent<Collider>().enabled = true;
+				wall.GetComponent<Collider>().enabled = true;
 			}
 			yield return 0;
 		}
@@ -43,6 +44,6 @@ public class Wall : MonoBehaviour {
 			stand.GetComponent<Renderer>().enabled = false;
 		}
 		//GetComponent<Collider>().enabled = true;
-		GetComponent<Renderer>().enabled = true;
+		wall.GetComponent<Renderer>().enabled = true;
 	}
 }

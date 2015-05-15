@@ -61,7 +61,7 @@ public class FileIO : MonoBehaviour
 			gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
 		} catch{}
 		if(gsManager != null){
-		Debug.Log (gsManager);
+//		Debug.Log (gsManager);
 		Debug.Log ("id: " + gsManager.currLevelId);
 
 		if(gsManager.currLevelId != "") {
