@@ -32,10 +32,11 @@ public class ShootFodderBall : QuickItem {
 	}
 	
 	protected virtual void shootBall(){
-		curCircle = ((GameObject)Instantiate(targetCircle, new Vector3(user.transform.position.x, 0.0f, user.transform.position.z), user.transform.rotation)).GetComponent<TargetCircle>();
+		Vector3 tarPos = Quaternion.AngleAxis(Random.Range (0f, 360f), Vector3.up) * (Vector3.right * 5f);
+		curCircle = ((GameObject)Instantiate(targetCircle, this.transform.position + tarPos + targetCircle.transform.position, user.transform.rotation)).GetComponent<TargetCircle>();
 		curCircle.setValues (this.user);
 
-		this.bullet = ((GameObject)Instantiate(projectile, user.transform.position, user.transform.rotation)).GetComponent<FodderBall>();
+		this.bullet = ((GameObject)Instantiate(projectile, user.transform.position + Vector3.up, user.transform.rotation)).GetComponent<FodderBall>();
 		this.bullet.setTarget (this.curCircle.gameObject);
 		this.bullet.hive = (NewFoliantHive)this.user;
 		this.curCircle.moveable = false;

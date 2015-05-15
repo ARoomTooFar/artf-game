@@ -14,7 +14,7 @@ public class FodderBall: MonoBehaviour {
 	public AoETargetting aoe;
 
 	//Protected variables
-	protected float speed = 15.0f;
+	protected float angle = 25.0f;
 	protected GameObject targetLocation;
 	
 	
@@ -39,7 +39,7 @@ public class FodderBall: MonoBehaviour {
 
 	public void setTarget(GameObject loc){
 		targetLocation = loc;
-		this.shoot (loc.transform.position);
+		this.shoot (this.transform.AngledArcTrajectory(targetLocation.transform.position, angle));
 	}
 
 	//-------------------------//
@@ -58,6 +58,7 @@ public class FodderBall: MonoBehaviour {
 	// Calculation Functions //
 	//-----------------------//
 	
+	/*
 	protected virtual Vector3 calculateTrajectory(Vector3 location) {
 		// Calculates distance from source to target. removes height from calculation
 		location.y = 0.0f;
@@ -82,6 +83,7 @@ public class FodderBall: MonoBehaviour {
 		float speedOverLand = Mathf.Sin (angle) * this.speed;
 		return new Vector3(speedOverLand * Mathf.Cos (newAngle), this.speed * Mathf.Cos(angle), zDir * speedOverLand * Mathf.Sin (newAngle));
 	}
+	*/
 	
 	//-----------------------//
 	
@@ -93,7 +95,9 @@ public class FodderBall: MonoBehaviour {
 	protected virtual void spawn() {
 		// Create explosion while removing self
 		// BombExplosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<BombExplosion>();
-		NewFoliantFodder newFodder = (Instantiate(foliantFodder, transform.position, transform.rotation) as GameObject).GetComponent<NewFoliantFodder>();
+		Vector3 fodderPos = this.transform.position;
+		fodderPos.y = 0.0f;
+		NewFoliantFodder newFodder = (Instantiate(foliantFodder, fodderPos, transform.rotation) as GameObject).GetComponent<NewFoliantFodder>();
 		//Sets fodder to be in hiveMind mode
 		newFodder.setHive (hive);
 		hive.addFodder (newFodder);
