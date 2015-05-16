@@ -141,9 +141,6 @@ public class Player : NewCharacter, IHealable<int>{
 
 		if (actable && !this.animator.GetBool ("Attack")) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
-				if (this.tag == "Player2") {
-					this.damage (100);
-				}
 				if(currDoor!=null){
 					currDoor.GetComponent<Door>().toggleOpen();
 					currDoor = null;
@@ -319,7 +316,6 @@ public class Player : NewCharacter, IHealable<int>{
 	// Heal Interface Implementation //
 	//---------------------------------//
 	public override void heal(int healTaken){
-		print ("Healing");
 		if(stats.health < stats.maxHealth){
 			stats.health+=healTaken;
 			if(stats.health > stats.maxHealth){
