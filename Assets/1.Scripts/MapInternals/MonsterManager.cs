@@ -11,11 +11,22 @@ public class MonsterManager {
 	}
 
 	public void clear(){
-		foreach(List<MonsterBlock> lst in dictionary.Values){
-			foreach(MonsterBlock blk in lst){
-				remove(blk);
+
+		for (int i = 0; i < dictionary.Count; i++) {
+			var item = dictionary.ElementAt(i);
+			var itemKey = item.Key;
+			var itemValue = item.Value;
+
+			for (int j = 0; j < dictionary[itemKey].Count; j++) {
+				remove (dictionary[itemKey].ElementAt(j));
 			}
 		}
+
+//		foreach(List<MonsterBlock> lst in dictionary.Values){
+//			foreach(MonsterBlock blk in lst){
+//				remove(blk);
+//			}
+//		}
 		dictionary.Clear ();
 	}
 
@@ -30,6 +41,7 @@ public class MonsterManager {
 	public void add(MonsterBlock blk) {
 		ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
 		rm.addMonster(blk);
+//		Debug.Log (blk.BlockID);
 		//get the list for the block type
 		List<MonsterBlock> lst;
 		try{

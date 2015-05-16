@@ -176,6 +176,7 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 						}
 					}
 					if(MapData.addObject(prefabLocation, pos, rot.toDirection())) {
+
 						Money.buy(price);
 					}
 				} 
