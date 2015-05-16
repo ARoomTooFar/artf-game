@@ -18,7 +18,8 @@ public class CheckLungeCD : LungeBehaviour {
 	}
 	
 	protected void LungeChecker(Animator animator) {
-		if (lunge.curCoolDown <= 0) animator.SetTrigger("LungeOffCD");
+		if (lunge.curCoolDown <= 0) animator.SetBool("LungeOffCD", true);
+		else animator.SetBool ("LungeOffCD", false);
 		
 		if (this.unit.target == null) return;
 		

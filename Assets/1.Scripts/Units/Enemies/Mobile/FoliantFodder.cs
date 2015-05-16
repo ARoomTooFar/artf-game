@@ -53,14 +53,7 @@ public class FoliantFodder: MobileEnemy {
 				behaviour.SetVar(this.lunge);
 			}
 			
-			/*foreach(Roll behaviour in this.animator.GetBehaviours<Roll>()) {
-				behaviour.roll = this.roll;
-			}
-			
-			foreach(FodderApproach behaviour in this.animator.GetBehaviours<FodderApproach>()) {
-				behaviour.charge = this.charge;
-			}
-			*/
+			lunge.SetUp();
 		}
 	}
 	

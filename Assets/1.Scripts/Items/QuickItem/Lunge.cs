@@ -47,12 +47,12 @@ public class Lunge : QuickItem {
 		if (this.enemiesInRange.Count == 0) return;
 
 		curCoolDown = cooldown;
-		user.stunned = true;
+		user.animationLock = true;
 		this.StartCoroutine(LungeFunction(closestEnemy));
 	}
 	
 	protected override void animDone() {
-		user.stunned = false;
+		user.animationLock = false;
 		base.animDone ();
 	}
 
@@ -67,7 +67,7 @@ public class Lunge : QuickItem {
 	protected IEnumerator LungeTimeFunction(Character target) {
 		// while (!this.user.col.bounds.Intersects(target.col.bounds)) {
 		// Problems happening with intersect and a charging bully trunk, using distance now (Might need to rig it so that it is based on enemy size and weapon range)
-		while (Vector3.Distance(this.user.transform.position, target.transform.position) > 3.0f) {
+		while (target != null && Vector3.Distance(this.user.transform.position, target.transform.position) > 3.0f && Vector3.Distance(this.user.transform.position, target.transform.position) < 14.0f) {
 			this.user.facing = this.user.GetFacingTowardsObject(target.gameObject);
 			this.user.transform.localRotation = Quaternion.LookRotation(this.user.facing);	
 			this.user.rb.velocity = user.facing.normalized * 60f;
