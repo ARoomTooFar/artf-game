@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class Artilitree: RangedEnemy {
 	
 	protected RootRing roots;
+	protected RootCage cage;
 	protected Artillery artillery;
 
 	protected override void Awake () {
@@ -41,7 +42,7 @@ public class Artilitree: RangedEnemy {
 	}
 	
 	public override void SetTierData(int tier) {
-		tier = 0;
+		tier = 6;
 		base.SetTierData(tier);
 
 		monsterLoot.initializeLoot("Artilitree", tier);
@@ -61,6 +62,17 @@ public class Artilitree: RangedEnemy {
 			
 			foreach(RootSelf behaviour in this.animator.GetBehaviours<RootSelf>()) {
 				behaviour.SetVar(this.roots);
+			}
+		}
+		
+		if (tier == 6) {
+			this.inventory.cycItems();
+			this.cage = this.inventory.items[inventory.selected].GetComponent<RootCage>();
+			if (this.cage == null) Debug.LogWarning ("Artilitree does not have root cage equipped");
+			this.cage.eUser = this.GetComponent<Enemy>();
+			
+			foreach(RootCageBehaviour behaviour in this.animator.GetBehaviours<RootCageBehaviour>()) {
+				behaviour.SetVar(this.cage);
 			}
 		}
 	}

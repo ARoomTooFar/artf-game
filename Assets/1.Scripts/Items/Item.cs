@@ -55,7 +55,6 @@ public class Item : MonoBehaviour {
 				cdBar.current = curCoolDown;
 			}
 			curCoolDown -= Time.deltaTime;
-			print (curCoolDown);
 			yield return null;
 		}
 		/*
