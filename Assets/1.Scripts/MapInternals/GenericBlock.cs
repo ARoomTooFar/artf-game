@@ -55,6 +55,7 @@ public class GenericBlock {
 		this.Position = pos.Round ();
 		this.Orientation = dir;
 		this.GameObj = GameObjectResourcePool.getResource(blockID, pos, dir.toRotationVector());
+//		Debug.Log("this game obj: " + this.GameObj);
 	}
 
 	/*

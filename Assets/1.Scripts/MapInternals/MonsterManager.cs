@@ -12,15 +12,21 @@ public class MonsterManager {
 
 	public void clear(){
 
+		//prevents "InvalidOperationException: Collection was modified" error
 		for (int i = 0; i < dictionary.Count; i++) {
 			var item = dictionary.ElementAt(i);
 			var itemKey = item.Key;
-			var itemValue = item.Value;
+//			var itemValue = item.Value;
 
 			for (int j = 0; j < dictionary[itemKey].Count; j++) {
+//			for (int j = 0; j < item.Count; j++) {
 				remove (dictionary[itemKey].ElementAt(j));
+//				remove (item.ElementAt(j));
 			}
 		}
+
+
+
 
 //		foreach(List<MonsterBlock> lst in dictionary.Values){
 //			foreach(MonsterBlock blk in lst){
@@ -41,7 +47,6 @@ public class MonsterManager {
 	public void add(MonsterBlock blk) {
 		ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
 		rm.addMonster(blk);
-//		Debug.Log (blk.BlockID);
 		//get the list for the block type
 		List<MonsterBlock> lst;
 		try{

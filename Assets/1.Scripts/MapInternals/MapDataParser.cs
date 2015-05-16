@@ -103,6 +103,8 @@ public static class MapDataParser {
 		string[] type = SaveString.Split(':');
 		string[] blocks = type[1].Trim().Split(' ');
 		foreach(string blk in blocks) {
+//			Debug.Log(type[0] + " ; " + type[1] + ": " + blk);
+
 			string[] blkParams = blk.Split(',');
 			if(blkParams.Length != 5){
 				continue;
@@ -111,9 +113,16 @@ public static class MapDataParser {
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
 			MonsterBlock nBlk = new MonsterBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
-			nBlk.MonsterBlockInfo.placedThisSession = true;
-			nBlk.MonsterBlockInfo.Tier = Convert.ToInt32(blkParams[4]);
-			MapData.MonsterBlocks.add(nBlk);
+//			Debug.Log("nBlk: " + nBlk.MonsterBlockInfo);
+
+			//MonsterBlockInfo is null for some prefabs for some reason.
+			//Using this check to allow levels to load properly.
+			if(nBlk.MonsterBlockInfo != null){
+				nBlk.MonsterBlockInfo.placedThisSession = true;
+				nBlk.MonsterBlockInfo.Tier = Convert.ToInt32(blkParams[4]);
+				MapData.MonsterBlocks.add(nBlk);
+			}
+
 		}
 	}
 

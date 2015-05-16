@@ -25,6 +25,7 @@ public static class GameObjectResourcePool
 		retVal.transform.position = pos;
 		retVal.transform.eulerAngles = dir;
 		retVal.SetActive (true);
+//		Debug.Log("retval: " + retVal);
 		return retVal;
 	}
 
