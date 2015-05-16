@@ -8,9 +8,9 @@ public class CameraHitBox : MonoBehaviour {
 	public float avgX,avgZ,totalX,totalZ;
 	public bool same;
 	public int enemyCount;
-	public AudioClip Song;
-	private AudioClip resumeSong;
-	private AudioSource Playing;
+
+	private AudioSource battle;
+	private AudioSource environment;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +19,9 @@ public class CameraHitBox : MonoBehaviour {
 		for(int x = 0; x < allPlayers.Length; x++){
 			areaUnits.Add(allPlayers[x]);
 		}
-		Playing = transform.parent.gameObject.GetComponentInChildren<AudioSource> ();
+		environment = GameObject.Find ("MusicPlayer").GetComponent<AudioSource> ();
+		battle = GetComponent<AudioSource> ();
+
 	}
 	
 	// Update is called once per frame
@@ -31,10 +33,9 @@ public class CameraHitBox : MonoBehaviour {
 			}
 		}
 
-		if (enemyCount > 0 && !(Playing.clip == Song)) {
-			resumeSong = Playing.clip;
-			Playing.clip = Song;
-			Playing.Play ();
+		if (enemyCount > 0 && !battle.isPlaying) {
+			environment.Pause();
+			battle.Play();
 		}
 
 		
@@ -120,8 +121,8 @@ public class CameraHitBox : MonoBehaviour {
 		case "Enemy":
 			enemyCount--;
 			if(enemyCount < 1){
-				Playing.clip = resumeSong;
-				Playing.Play ();
+				battle.Pause();
+				environment.Play();
 			}
 			break;
 		}
