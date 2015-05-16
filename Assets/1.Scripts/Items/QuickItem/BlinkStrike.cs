@@ -5,7 +5,7 @@ using System.Collections;
 
 public class BlinkStrike : QuickItem {
 
-	public NewMirage mirage;
+	public Mirage mirage;
 
 	// Use this for initialization
 	protected override void Start () {

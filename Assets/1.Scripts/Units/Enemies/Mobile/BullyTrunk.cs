@@ -5,14 +5,16 @@ using System.Collections.Generic;
 
 public class BullyTrunk: MobileEnemy {
 
+	public BullyTrunkPummelWeapon rightPaw, leftPaw;
+
 	protected BullCharge charge;
 	protected BullyTrunkBlast blast;
 	protected RockHead rockHead;
 	protected RockArms rockArms;
-
+	
 	protected float headReduction, sideReduction, headSlow, sideSlow;
-
-
+	
+	
 	// The front and side versions of riot shield for the bully trunk (Differing values and directional effects
 	protected class RockHead : Singular {
 		
@@ -40,10 +42,10 @@ public class BullyTrunk: MobileEnemy {
 			base.purgeBD (unit, source);
 		}
 	}
-
+	
 	protected class RockArms : Singular {
 		private float spdPercent, redPercent;
-
+		
 		public RockArms(float speedValue, float reduxValue) {
 			name = "RockArms";
 			spdPercent = speedValue;
@@ -68,29 +70,12 @@ public class BullyTrunk: MobileEnemy {
 	}
 
 	protected override void Awake () {
-		base.Awake ();
+		base.Awake();
 	}
 	
 	protected override void Start() {
 		base.Start ();
-		charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
-		if (charge == null) Debug.LogWarning ("BullyTrunk does not have charge equipped");
 
-		this.inventory.cycItems ();
-
-		blast = this.inventory.items[inventory.selected].GetComponent<BullyTrunkBlast>();
-		if (blast == null) Debug.LogWarning ("BullyTrunk does not have blast equipped");
-
-
-		headReduction = 0.9f;
-		sideReduction = 0.45f;
-		headSlow = 0.1f;
-		sideSlow = 0.5f;
-		this.rockHead = new RockHead (headSlow, headReduction);
-		this.rockArms = new RockArms (sideSlow, sideReduction);
-
-		this.BDS.addBuffDebuff (this.rockHead, this.gameObject);
-		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
 	}
 	
 	protected override void Update() {
@@ -99,125 +84,120 @@ public class BullyTrunk: MobileEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 40;
+		stats.maxHealth = 175;
 		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 10;
+		stats.armor = 7;
+		stats.strength = 25;
 		stats.coordination=0;
-		stats.speed=9;
+		stats.speed=6;
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 3.0f;
+		this.maxAtkRadius = 3.5f;
 	}
 
-	protected override void initStates() {
-		base.initStates();
+	public override void SetTierData(int tier) {
+		tier = 2;
+		base.SetTierData (tier);
 
-		// Initialize all states
-		State charging = new State("charging");
-		State charge = new State ("charge");
+		monsterLoot.initializeLoot("BullyTrunk", tier);
 
+		this.stats.speed = tier < 3 ? 7 : 10;
 
-		// Add all the states to the state machine
-		sM.states.Add (charging.id, charging);
-		sM.states.Add (charge.id, charge);
+		if (tier > 0) {
+			charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
+			if (charge == null) Debug.LogWarning ("BullyTrunk does not have charge equipped");
 
+			foreach(ChargeBehaviour behaviour in this.animator.GetBehaviours<ChargeBehaviour>()) {
+				behaviour.SetVar(this.charge);
+			}
+			
+			foreach(ShieldsDown behaviour in this.animator.GetBehaviours<ShieldsDown>()) {
+				behaviour.SetVar(this);
+			}
 
-		// Initialize all transitions
-		Transition tCharging = new Transition(charging);
-		Transition tCharge = new Transition(charge);
-
-
-		// Add all the transitions to the state machine
-		sM.transitions.Add (tCharging.targetState.id, tCharging);
-		sM.transitions.Add (tCharge.targetState.id, tCharge);
-
-
-		// Set conditions for the transitions
-		tCharging.addCondition(this.isTooFar);
-		tCharge.addCondition (this.isWithinCharge);
+			this.charge.chargeSpeed = tier < 5 ? 3 : 4;
 
 
-		// Set actions for the states
-		charging.addAction (this.chargingCharge);
-		charge.addAction (this.chargingIntoSucker);
+			headReduction = 0.9f;
+			sideReduction = tier < 3 ? 0.45f : 0.9f;
+			headSlow = tier < 6 ? 0.1f : 0.0f;
+			sideSlow = tier < 3 ? 0.5f : 0.25f;
+			this.rockHead = new RockHead (headSlow, headReduction);
+			this.rockArms = new RockArms (sideSlow, sideReduction);
+			
+			this.BDS.addBuffDebuff (this.rockHead, this.gameObject);
+			this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
+		}
 
+		if (tier > 1) {
+			foreach(Pummel behaviour in this.animator.GetBehaviours<Pummel>()) {
+				behaviour.trunk = this.gear.weapon.GetComponent<MeleeWeapons>();
+			}
+			
+			this.rightPaw.equip(this, this.opposition);
+			this.leftPaw.equip(this, this.opposition);
+		}
 
-		// Sets exit actions for states
-		charging.addExitAction (this.doneCharge);
-		charge.addExitAction (this.chargeEnd);
-
-
-		// Set the transitions for the states
-		charging.addTransition(tCharge);
-
-
-		// Adds transitions to old States
-		this.addTransitionToExisting("approach", tCharging);
-
-		// Adds old transitiont to new States
-		this.addTransitionToNew("approach", charge);
-		this.addTransitionToNew("attack", charge);
-		this.addTransitionToNew("search", charge);
+		if (tier > 3) {
+			this.inventory.cycItems ();
+			
+			blast = this.inventory.items[inventory.selected].GetComponent<BullyTrunkBlast>();
+			if (blast == null) Debug.LogWarning ("BullyTrunk does not have blast equipped");
+			
+			foreach(TrunkBlast behaviour in this.animator.GetBehaviours<TrunkBlast>()) {
+				behaviour.SetVar(this.blast);
+			}
+		}
 	}
-
+	
 	//----------------------//
 	// Transition Functions //
 	//----------------------//
-
-	// Bully Trunk charging code
-	protected virtual bool isTooFar () {
-		if (this.target != null && Vector3.Distance(this.transform.position, this.target.transform.position) > this.maxAtkRadius && this.charge.curCoolDown <= 0) {
-			this.inventory.keepItemActive = true;
-			charge.useItem();
-			return true;
-		}
-		return false;
-	}
-
-	protected virtual bool isWithinCharge () {
-		if (this.target == null) {
-			return true;
-		} else {
-			Vector3 tPos = this.target.transform.position;
-			if (Vector3.Distance(this.transform.position, tPos) <= this.charge.curChgTime * 3 || Vector3.Distance(this.transform.position, tPos) >= 15 || this.charge.curChgTime >= this.charge.maxChgTime) {
-				return true;
-			}
-			return false;
-		}
-	}
-
+	
 	//----------------------//
-
-
+	
+	
 	//-------------------//
 	// Actions Functions //
 	//-------------------//
 
-	protected virtual void chargingCharge () {
-		this.getFacingTowardsTarget();
-		this.GetComponent<Rigidbody>().velocity = (this.facing.normalized * stats.speed * stats.spdManip.speedPercent);
-		this.transform.localRotation = Quaternion.LookRotation(facing);
+	// These are here because for some reason I can't find the inherited collider functions from the animation events thing
+	// Fuck Unity, such a tease
+	protected virtual void SmashNow() {
+		this.AttackStart();
 	}
 
-	protected virtual void doneCharge() {
-		this.inventory.keepItemActive = false;
+	protected virtual void SmashOver() {
+		this.AttackEnd();
 	}
 
-	protected virtual void chargingIntoSucker () {
-		if (this.target != null) {
-			this.lastSeenPosition = this.target.transform.position;
-		}
+	protected virtual void PummelRightNow() {
+		this.rightPaw.AttackStart();
 	}
 
-	protected virtual void chargeEnd() {
-		StartCoroutine(this.shieldsDown ());
-		this.blast.useItem();
+	protected virtual void PummelRightOver() {
+		this.rightPaw.AttackEnd();
+	}
+
+	protected virtual void PummelLeftNow() {
+		this.leftPaw.AttackStart();
+	}
+
+	protected virtual void PummelLeftOver() {
+		this.leftPaw.AttackEnd();
+	}
+	
+	protected virtual void Death() {
+		base.die ();
 	}
 
 	//-------------------//
-
-
+	
+	
+	public override void die() {
+		animator.SetTrigger("Died");
+	}
+	
 	//------------//
 	// Coroutines //
 	//------------//
@@ -229,14 +209,13 @@ public class BullyTrunk: MobileEnemy {
 		this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
 	}
 
-
+	
 	//------------//
-
-
+	
+	
 	//------------------//
 	// Helper Functions //
 	//------------------//
-
 
 	//------------------//
 }

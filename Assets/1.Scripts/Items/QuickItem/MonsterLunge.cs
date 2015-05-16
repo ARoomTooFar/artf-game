@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class MonsterLunge : Lunge {
 
-	protected NewEnemy bushy;
+	protected Enemy bushy;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -19,7 +19,7 @@ public class MonsterLunge : Lunge {
 	}
 
 	public virtual void SetUp() {
-		this.bushy = this.user.GetComponent<NewEnemy>();
+		this.bushy = this.user.GetComponent<Enemy>();
 		InvokeRepeating("CheckEnemies", 0f, 0.1f);
 	}
 
