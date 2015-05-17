@@ -60,7 +60,7 @@ public class TitleHand : MonoBehaviour {
 			{
 				hideLevelSelect ();
 				//gsManager.LoadLevel("aaron-MultiRoomTest");
-				Application.LoadLevel("aaron-MultiRoomTest");
+				Application.LoadLevel("loot-test-MultiRoomTest");
 			}
 		);
 

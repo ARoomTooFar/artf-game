@@ -37,10 +37,11 @@ public class endzone : MonoBehaviour {
 		}
 
 		string t = other.GetComponent<Collider>().tag;
-		checkAlive();
+
 
 		if (t == "Player" || t == "Player1" || t == "Player2" || t == "Player3" || t == "Player4") 
 		{
+			checkAlive();
 			numbPlayersInZone ++;
 			print ("+Number of Players in end zone: " + numbPlayersInZone + ".");
 			if (numbPlayersAlive == numbPlayersInZone) 
@@ -51,7 +52,7 @@ public class endzone : MonoBehaviour {
 				gsManager.LoadScene("RewardScreen");
 			}
 		}
-
+		checkAlive();
 	}
 	//---------------------------------------
 	//OnTriggerExit(Collider other)
