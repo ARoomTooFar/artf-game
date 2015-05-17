@@ -16,6 +16,7 @@ public class ChargeAnimOver : ChargeBehaviour {
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		if (stateInfo.normalizedTime >= 0.99f) animator.SetTrigger ("ShouldCharge");
+		if (stateInfo.normalizedTime >= 0.99f || this.unit.target == null) animator.SetTrigger ("ShouldCharge");
+	
 	}
 }
