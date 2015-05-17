@@ -11,11 +11,28 @@ public class MonsterManager {
 	}
 
 	public void clear(){
-		foreach(List<MonsterBlock> lst in dictionary.Values){
-			foreach(MonsterBlock blk in lst){
-				remove(blk);
+
+		//prevents "InvalidOperationException: Collection was modified" error
+		for (int i = 0; i < dictionary.Count; i++) {
+			var item = dictionary.ElementAt(i);
+			var itemKey = item.Key;
+//			var itemValue = item.Value;
+
+			for (int j = 0; j < dictionary[itemKey].Count; j++) {
+//			for (int j = 0; j < item.Count; j++) {
+				remove (dictionary[itemKey].ElementAt(j));
+//				remove (item.ElementAt(j));
 			}
 		}
+
+
+
+
+//		foreach(List<MonsterBlock> lst in dictionary.Values){
+//			foreach(MonsterBlock blk in lst){
+//				remove(blk);
+//			}
+//		}
 		dictionary.Clear ();
 	}
 

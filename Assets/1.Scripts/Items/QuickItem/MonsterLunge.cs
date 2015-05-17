@@ -30,8 +30,9 @@ public class MonsterLunge : Lunge {
 	}
 
 	public override void useItem() {
-		base.useItem ();
-		user.stunned = true;
+		// base.useItem ();
+		curCoolDown = cooldown;
+		user.animationLock = true;
 		this.StartCoroutine(LungeFunction(bushy.target.GetComponent<Character>()));
 	}
 }

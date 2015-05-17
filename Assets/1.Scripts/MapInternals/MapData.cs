@@ -12,7 +12,9 @@ public static class MapData {
 
 	public static void ClearData() {
 		SceneryBlocks.clear();
+
 		MonsterBlocks.clear();
+
 		TheFarRooms.clear();
 	}
 

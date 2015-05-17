@@ -87,11 +87,14 @@ public class FileIO : MonoBehaviour
         Debug.Log(www.url);
         if (serv.dataCheck(lvlData))
         {
-            txtDlLvl.enabled = false;
+
+			MapDataParser.ParseSaveString(lvlData);
+			Debug.Log("LVL DL SUCCESS: " + lvlData);
+
+			txtDlLvl.enabled = false;
 			try{
 				//throw new Exception();
-				MapDataParser.ParseSaveString(lvlData);
-            	Debug.Log("LVL DL SUCCESS: " + lvlData);
+
 			} catch (Exception ex){
 				Debug.Log(ex.Message);
 				Debug.Log(ex.StackTrace);
