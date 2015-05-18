@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LeanTestHand : MonoBehaviour {
+public class LeanTestCtrl : MonoBehaviour {
 	private Farts serv;
 	private string charDataEx = "80PercentLean,123,456,789,9001,0,1,2,3";
 
@@ -21,10 +21,5 @@ public class LeanTestHand : MonoBehaviour {
 		foreach (int data in playerData.inventory) {
 			Debug.Log (data);
 		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

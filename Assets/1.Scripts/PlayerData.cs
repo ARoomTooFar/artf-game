@@ -7,5 +7,5 @@ public class PlayerData : MonoBehaviour {
 	public int hair_id;
 	public int voice_id;
 	public int money;
-	public int[] inventory;
+	public int[] inventory = new int[10]; //size needs to be changed to final inventory size
 }

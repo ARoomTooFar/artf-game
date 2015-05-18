@@ -8,6 +8,7 @@ public class MainMenuCtrl : MonoBehaviour {
     public string menuContainerName;
 	public string menuPopUpName;
 
+	private GSManager gsManager;
 	private Farts serv;
 
     // UI state
@@ -58,8 +59,10 @@ public class MainMenuCtrl : MonoBehaviour {
 	private Text txtDisplayField;
 
 	void Start () {
+		gsManager = GameObject.Find("/GSManager").GetComponent<GSManager>();
 		serv = gameObject.AddComponent<Farts>(); // add networking component
-
+		Debug.Log (gameObject.name + ": " + gsManager);
+		Debug.Log (gameObject.name + ": " + serv);
         // setup start menu
         startMenu = new GameObject[startMenuHeight, startMenuWidth];
         startMenu[0, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/StartMenu/BtnLogin");
