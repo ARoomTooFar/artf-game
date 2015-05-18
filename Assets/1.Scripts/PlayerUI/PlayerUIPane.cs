@@ -48,7 +48,7 @@ public class PlayerUIPane : MonoBehaviour
 		hp.fillAmount = normalizeForFilling (pl.stats.health);
 		greyhp.fillAmount = normalizeForFilling (pl.stats.health) + normalizeForFilling (pl.greyDamage);
 		
-		if (pl.stats.isDead) {
+		if (pl.isDead) {
 			hp.fillAmount = 0f;
 			greyhp.fillAmount = 0f;
 		}

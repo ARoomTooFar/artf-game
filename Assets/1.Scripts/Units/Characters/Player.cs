@@ -35,6 +35,7 @@ public class Player : NewCharacter, IHealable<int>{
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType("Enemy");
+		setInitValues();
 	}
 	
 	// Use this for initialization
@@ -238,7 +239,7 @@ public class Player : NewCharacter, IHealable<int>{
 	}
 	
 	public override void damage(int dmgTaken, Transform atkPosition) {
-		if (invincible || stats.isDead) return;
+		if (invincible || isDead) return;
 		
 //		print (dmgTaken);
 		
@@ -267,7 +268,7 @@ public class Player : NewCharacter, IHealable<int>{
 	
 	public override void damage(int dmgTaken) {
 
-		if (invincible || stats.isDead) return;
+		if (invincible || isDead) return;
 		
 		stats.health -= greyTest(dmgTaken);
 		if (stats.health <= 0) this.die();
@@ -330,8 +331,7 @@ public class Player : NewCharacter, IHealable<int>{
 	}
 	
 	public override void rez(){
-		stats.isDead = false;
-		this.isDead = false;
+		isDead = false;
 		stats.health = stats.maxHealth/(2+2*stats.rezCount);
 		// if(UI!=null) UI.hpBar.current = stats.health;
 		stats.rezCount++;
