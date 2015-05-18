@@ -8,6 +8,7 @@ public class MainMenuCtrl : MonoBehaviour {
     public string menuContainerName;
 	public string menuPopUpName;
 
+	private int playerNum;
 	private GSManager gsManager;
 	private Farts serv;
 	private WWW loginReq;
@@ -62,6 +63,19 @@ public class MainMenuCtrl : MonoBehaviour {
 	void Start () {
 		gsManager = GameObject.Find("/GSManager").GetComponent<GSManager>();
 		serv = gameObject.AddComponent<Farts>(); // add networking component
+
+		// get player number
+		if (menuContainerName == "P1MenuContainer") {
+			playerNum = 0;
+		} else if (menuContainerName == "P2MenuContainer") {
+			playerNum = 1;
+		} else if (menuContainerName == "P3MenuContainer") {
+			playerNum = 2;
+		} else if (menuContainerName == "P4MenuContainer") {
+			playerNum = 3;
+		} else {
+			Debug.LogError ("Invalid menu container name. Can't assign player number for UI!");
+		}
 
         // setup start menu
         startMenu = new GameObject[startMenuHeight, startMenuWidth];
@@ -556,6 +570,7 @@ public class MainMenuCtrl : MonoBehaviour {
     }
 
 	void MenuReset() {
+		gsManager.leaderList.Remove (playerNum);
 		txtFieldAcctName.text = "Enter an account name...";
 		txtFieldPasscode.text = "Enter your passcode...";
 	}
@@ -606,9 +621,13 @@ public class MainMenuCtrl : MonoBehaviour {
 			MenuEnable ();
 			prevBtn = currMenuPtr[locY, locX];
 
-			Debug.Log ("login complete");
 			Debug.Log (loginReq.text);
-			Debug.Log (serv.dataCheck(loginReq.text));
+			if (serv.dataCheck(loginReq.text)) {
+				Debug.Log ("login success");
+				gsManager.leaderList.Add (playerNum);
+			} else {
+				Debug.Log ("login failure");
+			}
 			loginReq = null;
 		}
 	}
