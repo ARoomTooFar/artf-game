@@ -10,6 +10,7 @@ public class MainMenuCtrl : MonoBehaviour {
 
 	private GSManager gsManager;
 	private Farts serv;
+	private WWW loginReq;
 
     // UI state
     private bool menuMoved = false;
@@ -61,15 +62,14 @@ public class MainMenuCtrl : MonoBehaviour {
 	void Start () {
 		gsManager = GameObject.Find("/GSManager").GetComponent<GSManager>();
 		serv = gameObject.AddComponent<Farts>(); // add networking component
-		Debug.Log (gameObject.name + ": " + gsManager);
-		Debug.Log (gameObject.name + ": " + serv);
+
         // setup start menu
         startMenu = new GameObject[startMenuHeight, startMenuWidth];
         startMenu[0, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/StartMenu/BtnLogin");
         startMenu[1, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/StartMenu/BtnRegister");
 		startMenuAnim = GameObject.Find ("/Canvas/" + menuContainerName + "/StartMenu").GetComponent<Animator>();
 		
-		// login button press handler
+		// login form switch button
         startMenu[0, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
 			MenuSwitch (Menu.LoginForm);
@@ -113,8 +113,16 @@ public class MainMenuCtrl : MonoBehaviour {
 		// login button
 		loginForm[2, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
-			serv.login(txtFieldAcctName.text, txtFieldPasscode.text);
+			menuLock = true;
+			MenuDisable();
+			loginReq = serv.loginWWW(txtFieldAcctName.text, txtFieldPasscode.text);
 		});
+
+		Debug.Log (gsManager.players);
+		foreach (PlayerData test in gsManager.players) {
+			Debug.Log (test);
+		}
+		Debug.Log (gsManager.players.Length);
 
 		// back button
         loginForm[2, 1].GetComponent<Button>().onClick.AddListener(() =>
@@ -245,76 +253,76 @@ public class MainMenuCtrl : MonoBehaviour {
 		});
 		
 		lowerPad[0, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[3] { 'a', 'b', 'c' })
-		                                                       );
+			KeyInput(new char[3] { 'a', 'b', 'c' })
+		);
 		
 		lowerPad[0, 2].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[3] { 'd', 'e', 'f' })
-		                                                       );
+			KeyInput(new char[3] { 'd', 'e', 'f' })
+		);
 		
 		lowerPad[1, 0].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[3] { 'g', 'h', 'i' })
-		                                                       );
+			KeyInput(new char[3] { 'g', 'h', 'i' })
+		);
 		
 		lowerPad[1, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[3] { 'j', 'k', 'l' })
-		                                                       );
+			KeyInput(new char[3] { 'j', 'k', 'l' })
+		);
 		
 		lowerPad[1, 2].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[3] { 'm', 'n', 'o' })
-		                                                       );
+			KeyInput(new char[3] { 'm', 'n', 'o' })
+		);
 		
 		lowerPad[2, 0].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[4] { 'p', 'q', 'r', 's' })
-		                                                       );
+			KeyInput(new char[4] { 'p', 'q', 'r', 's' })
+		);
 		
 		lowerPad[2, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[3] { 't', 'u', 'v' })
-		                                                       );
+			KeyInput(new char[3] { 't', 'u', 'v' })
+		);
 		
 		lowerPad[2, 2].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[4] { 'w', 'x', 'y', 'z' })
-		                                                       );
+			KeyInput(new char[4] { 'w', 'x', 'y', 'z' })
+		);
 
 		numPad[0, 0].GetComponent<Button>().onClick.AddListener(() =>
 		    KeyInput(new char[1] { '1' })
 		);
 
 		numPad[0, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '2' })
-		                                                        );
+			KeyInput(new char[1] { '2' })
+		);
 
 		numPad[0, 2].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '3' })
-		                                                        );
+			KeyInput(new char[1] { '3' })
+		);
 
 		numPad[1, 0].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '4' })
-		                                                        );
+			KeyInput(new char[1] { '4' })
+		);
 
 		numPad[1, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '5' })
-		                                                        );
+			KeyInput(new char[1] { '5' })
+		);
 
 		numPad[1, 2].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '6' })
-		                                                        );
+			KeyInput(new char[1] { '6' })
+		);
 
 		numPad[2, 0].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '7' })
-		                                                        );
+			KeyInput(new char[1] { '7' })
+		);
 
 		numPad[2, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '8' })
-		                                                        );
+			KeyInput(new char[1] { '8' })
+		);
 
 		numPad[2, 2].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '9' })
-		                                                        );
+			KeyInput(new char[1] { '9' })
+		);
 
 		numPad[3, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '0' })
-		                                                        );
+			KeyInput(new char[1] { '0' })
+		);
 
 		// switch to start menu and setup the keypad
 		MenuSwitch (Menu.StartMenu);
@@ -572,20 +580,36 @@ public class MainMenuCtrl : MonoBehaviour {
 	}
 
 	void Update () {
-		// check for joystick movement
-        MenuMove(Input.GetAxisRaw(controls.hori), Input.GetAxisRaw(controls.vert));
+		if (menuLock == false) {
+			// check for joystick movement
+			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
 
-		// check for button press
-        if (Input.GetButtonUp(controls.joyAttack) && menuLock == false)
-        {
-            var pointer = new PointerEventData(EventSystem.current);
-            ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.submitHandler);
-        }
+			// check for button presses
+			if (Input.GetButtonUp (controls.joyAttack)) {
+				var pointer = new PointerEventData (EventSystem.current);
+				ExecuteEvents.Execute (currMenuPtr [locY, locX], pointer, ExecuteEvents.submitHandler);
+			}
         
+			if (Input.GetButtonUp (controls.joySecItem) && currMenu == Menu.PopUp) {
+				DeleteChar ();
+			}
+		}
 
-        if (Input.GetButtonUp(controls.joySecItem) && currMenu == Menu.PopUp)
-        {
-			DeleteChar();
-        }
+		// show login loading msg
+		if (loginReq != null && loginReq.isDone == false) {
+			Debug.Log ("login progress");
+		} else if (loginReq != null && loginReq.isDone) {
+			// reset highlighted UI ele
+			var pointer = new PointerEventData(EventSystem.current);
+			ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler);
+			menuLock = false;
+			MenuEnable ();
+			prevBtn = currMenuPtr[locY, locX];
+
+			Debug.Log ("login complete");
+			Debug.Log (loginReq.text);
+			Debug.Log (serv.dataCheck(loginReq.text));
+			loginReq = null;
+		}
 	}
 }

@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PlayerData : MonoBehaviour {
-	public string name;
+	public string char_name;
 	public int char_id;
 	public int hair_id;
 	public int voice_id;
