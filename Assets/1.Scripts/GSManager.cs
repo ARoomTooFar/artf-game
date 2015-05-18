@@ -15,8 +15,6 @@ public class GSManager : MonoBehaviour {
 	private Slider loadingBar;
 	private AsyncOperation loadProgress;
 
-
-
 	void Awake ()
 	{
         // ensure gsManager is a singleton
