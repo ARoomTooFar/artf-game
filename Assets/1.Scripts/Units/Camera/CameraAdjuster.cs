@@ -85,6 +85,7 @@ public class CameraAdjuster : MonoBehaviour {
 		List<float> xs = new List<float>();
 		List<float> zs = new List<float>();
 		for(int i = 0; i < playerList.Length; i++){
+			if(playerList[i] == null) continue;
 			xs.Add(playerList[i].transform.position.x);
 			zs.Add(playerList[i].transform.position.z);
 		}
