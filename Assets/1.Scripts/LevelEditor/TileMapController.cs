@@ -25,21 +25,6 @@ public class TileMapController : MonoBehaviour {
 			clickOrigin = Global.nullVector3;
 			return;
 		}
-		//raycast
-		//Ray ray = UICamera.ScreenPointToRay(Input.mousePosition);
-		//RaycastHit hitInfo;
-		//float distance;
-		//Global.ground.Raycast(ray, out distance);
-		//Physics.Raycast(ray, out hitInfo, distance);
-			
-		/* check whether the ray hits an object or the tile map */
-		/*if(hitInfo.collider != null) {
-			point = hitInfo.collider.transform.position.Round();
-			point.y = 0;
-		} else {
-			point = ray.GetPoint(distance).Round();
-		}*/
-
 
 		if(camCast.hitDistance < camCast.mouseDistance
 		   && camCast.hit.transform != null){
@@ -65,16 +50,17 @@ public class TileMapController : MonoBehaviour {
 				return;
 			}*/
 
+			/*
 			if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
 				if(shiftOrigin == Global.nullVector3) {
 					shiftOrigin = point;
 				}
 				selectBlock(shiftOrigin, point);
 				return;
-			}
+			}*/
 
 			selectedTiles.Clear();
-			selectedTiles.Add(point);
+			selectTile(point);
 			shiftOrigin = point;
 
 			return;
@@ -105,12 +91,41 @@ public class TileMapController : MonoBehaviour {
 	/* Add selected tile index to a list to be access by the camera script for rendering 
 	 * and update the last selected tile in case of shift click */
 	public void selectTile(Vector3 add) {
+		GenericBlock blk = MapData.SceneryBlocks.find(add);
+		if(blk != null){
+			selectTiles(blk.Coordinates);
+		}
+		blk = MapData.MonsterBlocks.find(add);
+		if(blk != null){
+			selectTiles(blk.Coordinates);
+		}
+
 		selectedTiles.Add(add);
 		shiftOrigin = add;
 	}
 
+	public void selectTiles(List<Vector3> add){
+		foreach(Vector3 vec in add) {
+			selectedTiles.Add(vec);
+		}
+	}
+
 	/*deselects tile passed into function */
 	public void deselect(Vector3 remove) {
+		GenericBlock blk = MapData.SceneryBlocks.find(remove);
+		if(blk != null){
+			deselectTiles(blk.Coordinates);
+		}
+		blk = MapData.MonsterBlocks.find(remove);
+		if(blk != null){
+			deselectTiles(blk.Coordinates);
+		}
 		selectedTiles.Remove(remove);
+	}
+
+	public void deselectTiles(List<Vector3> remove){
+		foreach(Vector3 vec in remove) {
+			selectedTiles.Remove(vec);
+		}
 	}
 }
