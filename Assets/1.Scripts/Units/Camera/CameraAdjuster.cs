@@ -15,7 +15,7 @@ public class CameraAdjuster : MonoBehaviour {
 	//public float avgX,avgZ,baseY,baseX,baseZ,adjVal,supBaseY,avgNum,avgPX,avgPZ;
 
 
-	public GameObject[] playerList;
+	public List<GameObject> playerList;
 
 
 	void Start () {
@@ -39,8 +39,11 @@ public class CameraAdjuster : MonoBehaviour {
 		//avgX = (p1.transform.position.x + p2.transform.position.x + p3.transform.position.x + p4.transform.position.x)/4 + baseX; // 
 		//avgZ = (p1.transform.position.z + p2.transform.position.z + p3.transform.position.z + p4.transform.position.z)/4 + baseZ; //
 	
-
-		playerList = GameObject.FindGameObjectsWithTag ("Player");
+		playerList = new List<GameObject>();
+		playerList.Add(GameObject.Find("Player1"));
+		playerList.Add(GameObject.Find("Player2"));
+		playerList.Add(GameObject.Find("Player3"));
+		playerList.Add(GameObject.Find("Player4"));
 	}
 	/*void seeable(Character target){
 		RaycastHit hit;
@@ -79,7 +82,7 @@ public class CameraAdjuster : MonoBehaviour {
 
 		List<float> xs = new List<float>();
 		List<float> zs = new List<float>();
-		for(int i = 0; i < playerList.Length; i++){
+		for(int i = 0; i < playerList.Count; i++){
 			xs.Add(playerList[i].transform.position.x);
 			zs.Add(playerList[i].transform.position.z);
 		}
