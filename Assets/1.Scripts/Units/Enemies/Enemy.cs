@@ -58,21 +58,24 @@ public class Enemy : NewCharacter {
 	
 	// Use this for initialization
 	protected override void Start () {
-		base.Start();
-		
+		foreach (CharacterBehaviour behaviour in this.animator.GetBehaviours<CharacterBehaviour>()) {
+			behaviour.SetVar(this);
+		}
+	
 		//Uses swarm aggro table if this unit swarms
 		if(swarmBool){
 			aggroT = swarm.aggroTable;
 		} else {
 			aggroT = new AggroTable();
 		}
-
-		if (this.testing) {
-			this.SetTierData(0);
-		}
-
+		
 		foreach(EnemyBehaviour behaviour in this.animator.GetBehaviours<EnemyBehaviour>()) {
 			behaviour.SetVar(this.GetComponent<Enemy>());
+		}
+
+		if (testing) {
+			inventory.equipItems(this, opposition);
+			this.SetTierData(0);
 		}
 
 		MusicPlayer = GameObject.Find ("MusicPlayer");
@@ -80,22 +83,31 @@ public class Enemy : NewCharacter {
 	
 	// Update is called once per frame
 	protected override void Update () {
-		if (stats.isDead) return;
+		if (isDead) return;
 		base.Update();
 		this.TargetFunction();
 	}
 
-	
-	protected override void setInitValues() {
-		base.setInitValues();
-		//Testing with base 0-10 on stats with 10 being 100/cap%
-		stats.maxHealth = 40;
-		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 10;
-		stats.coordination=0;
-		stats.speed=4;
-		setAnimHash ();
+	// Called by the animator when it transition out of initial and into a tier behaviour
+	public virtual void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
+		stats.maxHealth = health;
+		stats.health = health;
+		stats.strength = strength;
+		stats.coordination = coordination;
+		stats.armor = armor;
+		stats.speed = speed;
+		
+		if (testing) {
+			gear.equipGear(this, opposition);
+			
+			// Used so our old units still work, onc we have all models and animations, scrap this crap
+			if (this.weapTypeName.Length > 0) {
+				setAnimHash(); // Remove this later
+				this.usingAnimHash = true;
+			} else {
+				this.usingAnimHash = false;
+			}
+		}
 	}
 
 	// Things that are tier specific should be set here

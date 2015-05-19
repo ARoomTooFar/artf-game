@@ -22,25 +22,13 @@ public class CackleBranch: RangedEnemy {
 			behaviour.roll = this.roll;
 		}
 
-		this.gun = this.gear.weapon.GetComponent<CacklebranchPistol>();
 		
+		this.minAtkRadius = 8.0f;
+		this.maxAtkRadius = 40.0f;
 	}
 	
 	protected override void Update() {
 		base.Update ();
-	}
-	
-	protected override void setInitValues() {
-		base.setInitValues();
-		stats.maxHealth = 60;
-		stats.health = stats.maxHealth;
-		stats.armor = 1;
-		stats.strength = 0;
-		stats.coordination= 10;
-		stats.speed=7;
-		
-		this.minAtkRadius = 8.0f;
-		this.maxAtkRadius = 40.0f;
 	}
 
 
@@ -51,7 +39,11 @@ public class CackleBranch: RangedEnemy {
 		monsterLoot.initializeLoot("CackleBranch", tier);
 	}
 
-	
+	public override void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
+		base.SetInitValues(health, strength, coordination, armor, speed);
+		this.gun = this.gear.weapon.GetComponent<CacklebranchPistol>();
+	}
+
 	//----------------------//
 	// Transition Functions //
 	//----------------------//

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pummel : Approach {
 
-	public MeleeWeapons trunk;
+	// public MeleeWeapons trunk;
 
 	// This will be called when the animator first transitions to this state.
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

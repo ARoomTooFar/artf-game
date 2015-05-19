@@ -147,6 +147,7 @@ public class Weapons : Equipment {
 
 	public virtual void StopParticles () {
 		particles.Stop();
+		user.animator.SetFloat("ChargeTime", 0.0f);
 	}
 
 	protected virtual IEnumerator BeginCharge() {

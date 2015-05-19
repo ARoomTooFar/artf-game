@@ -13,6 +13,9 @@ public class FoliantFodder: MobileEnemy {
 	protected override void Awake () {
 		hiveMind = false;
 		base.Awake ();
+		
+		this.minAtkRadius = 0.0f;
+		this.maxAtkRadius = 4.0f;
 	}
 	
 	protected override void Start() {
@@ -22,19 +25,6 @@ public class FoliantFodder: MobileEnemy {
 	protected override void Update() {
 		base.Update ();
 	}
-	
-	protected override void setInitValues() {
-		base.setInitValues();
-		stats.maxHealth = 50;
-		stats.health = stats.maxHealth;
-		stats.armor = 1;
-		stats.strength = 10;
-		stats.coordination=0;
-		stats.speed=9;
-		
-		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 4.0f;
-	}
 
 	public override void SetTierData(int tier) {
 		tier = 5;
@@ -42,7 +32,7 @@ public class FoliantFodder: MobileEnemy {
 
 		monsterLoot.initializeLoot("FoliantFodder", tier);
 		
-		this.stats.speed = tier < 3 ? 9 : 12;
+		// this.stats.speed = tier < 3 ? 9 : 12;
 		
 		if (tier > 0) {
 			

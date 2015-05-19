@@ -9,9 +9,9 @@ using System;
 [System.Serializable]
 public class Stats{
 	//Base Stats
-	public int health, armor,maxHealth,rezCount;
-	public int strength, coordination, speed;
-	public bool isDead;
+	public int health, strength, coordination, armor, armorBonus;
+	public float speed;
+	[HideInInspector] public int maxHealth, rezCount;
 
 	/*
 	*Health: Health is the amount of damage a player can take before dying.
@@ -199,7 +199,7 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 		freeAnim = true;
 		playSound = true;
 		stunned = knockedback = false;
-		setInitValues();
+		// setInitValues();
 		this.testControl = true;
 		skins = gameObject.GetComponentsInChildren<Cloak>();
 	}
@@ -343,7 +343,7 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 	}
 	
 	public virtual void damage(int dmgTaken, Transform atkPosition) {
-		if (!invincible && !stats.isDead) {
+		if (!invincible && !isDead) {
 			dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(atkPosition.position, facing, transform.position)), 1, 100000);
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position, Quaternion.identity)).GetComponent<splatCore>();
@@ -365,7 +365,7 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 	}
 	
 	public virtual void damage(int dmgTaken) {
-		if (!invincible && !stats.isDead) {
+		if (!invincible && !isDead) {
 			if(splatter != null){
 				splatCore theSplat = ((GameObject)Instantiate (splatter, transform.position, Quaternion.identity)).GetComponent<splatCore>();
 				theSplat.adjuster = (float) dmgTaken/stats.maxHealth;
@@ -382,7 +382,7 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 	// Add logic to this in the future
 	//     ie: Removing actions, player from camera etc
 	public virtual void die() {
-		stats.isDead = true;
+		isDead = true;
 		actable = false;
 		freeAnim = false;
 		Debug.Log ("should be displaying 2nd");
@@ -395,9 +395,9 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 	}
 
 	public virtual void rez(){
-		if(stats.isDead){
+		if(isDead){
 			//GetComponent<Collider>().isTrigger = false;
-			stats.isDead = false;
+			isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
 			stats.rezCount++;
 		}else{

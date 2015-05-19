@@ -4,13 +4,9 @@ using System;
 
 public class BullyTrunkWeapon : MeleeWeapons {
 	
-	// private Knockback debuff;
-	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
-		
-		// debuff = new Knockback();
 	}
 
 	public override void equip(Character u, Type ene) {

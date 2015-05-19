@@ -1,22 +1,25 @@
-// Charge state of bully trunk, when enemy is out of attackRange it will charge BullRush
-
+// Sets the stats of the enemies when they start up
 using UnityEngine;
 
-public class ChargeAnimOver : ChargeBehaviour {
+public class SetStats : EnemyBehaviour {
+
+	public Stats stat = new Stats();
+
 	// This will be called when the animator first transitions to this state.
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		this.unit.animationLock = true;
-		this.unit.rb.velocity = Vector3.zero;
 	}
 	
 	// This will be called once the animator has transitioned out of the state.
 	public override void OnStateExit (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		animator.SetBool("StartCharge", false);
-		// this.unit.animationLock = false;
+		this.unit.SetInitValues (
+			this.stat.health * (animator.GetInteger("Tier") + 1),
+			this.stat.strength * (animator.GetInteger("Tier") + 1),
+			this.stat.coordination * (animator.GetInteger("Tier") + 1),
+			this.stat.armor + this.stat.armorBonus * (animator.GetInteger("Tier") + 1),
+			this.stat.speed * (animator.GetInteger("Tier") + 1)
+		);
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		if (stateInfo.normalizedTime >= 0.99f || this.unit.target == null) animator.SetTrigger ("ShouldCharge");
-	
 	}
 }
