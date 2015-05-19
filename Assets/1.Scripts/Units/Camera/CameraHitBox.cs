@@ -122,7 +122,7 @@ public class CameraHitBox : MonoBehaviour {
 		case "Enemy":
 			enemyCount--;
 			if(enemyCount < 1){
-				battle.Pause();
+				battle.Stop();
 				environment.Play();
 			}
 			break;
