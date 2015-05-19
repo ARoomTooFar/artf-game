@@ -64,11 +64,12 @@ public class TileMapController : MonoBehaviour {
 			shiftOrigin = point;
 
 			return;
-		}  
+		}
+		/*
 		if(Input.GetMouseButton(0) && clickOrigin != point && !suppressDragSelecting) {
 			selectBlock(shiftOrigin, point);
 			lastClick = point;
-		}
+		}*/
 	}
 
 	private void selectBlock(Vector3 vec1, Vector3 vec2){
