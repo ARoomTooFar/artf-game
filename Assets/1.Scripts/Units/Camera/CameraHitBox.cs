@@ -36,6 +36,7 @@ public class CameraHitBox : MonoBehaviour {
 
 		if (enemyCount > 0 && !battle.isPlaying) {
 			environment.Pause();
+			environment.volume = 0;
 			battle.Play();
 		}
 
@@ -122,11 +123,25 @@ public class CameraHitBox : MonoBehaviour {
 		case "Enemy":
 			enemyCount--;
 			if(enemyCount < 1){
-				battle.Stop();
-				environment.Play();
+				bool fadeout = FadeOut(battle);
+				if(fadeout) {
+					battle.Stop();
+					environment.Play();
+				}
 			}
 			break;
-		}
-		
+		}		
 	}
+
+	bool FadeOut(AudioSource musik){
+		if(musik.volume > 0.1f) musik.volume -= 0.1f * Time.deltaTime;
+		return musik.volume < 0.1f;
+	}
+
+	bool FadeIn(AudioSource musik){
+		if(musik.volume < 1) musik.volume+= 0.1f * Time.deltaTime;
+		return musik.volume > 1;
+	}
+
+
 }
