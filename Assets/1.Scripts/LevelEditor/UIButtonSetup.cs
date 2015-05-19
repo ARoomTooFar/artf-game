@@ -9,11 +9,11 @@ public class UIButtonSetup : MonoBehaviour {
 		Button btn;
 		CameraMovement move = Camera.main.GetComponent<CameraMovement>();
 
-		btn = GameObject.Find("Button_Room").GetComponent("Button") as Button;
-		btn.onClick.AddListener(() => {
-			Camera.main.GetComponent<TileMapController>().fillInRoom();
-		});
-		
+//		btn = GameObject.Find("Button_Room").GetComponent("Button") as Button;
+//		btn.onClick.AddListener(() => {
+//			Camera.main.GetComponent<TileMapController>().fillInRoom();
+//		});
+//		
 		btn = GameObject.Find("Button_ZoomOut").GetComponent("Button") as Button;
 		btn.onClick.AddListener(() => {
 			move.zoomCamIn();
