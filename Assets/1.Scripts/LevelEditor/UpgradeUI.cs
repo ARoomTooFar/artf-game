@@ -122,10 +122,10 @@ public class UpgradeUI : MonoBehaviour
 	void Update(){
 
 		//keeps canvas stuck on world object. for when canvas is in Screen Space - Overlay mode
-		stickScreenSpaceOverlayCameraToObject();
+//		stickScreenSpaceOverlayCameraToObject();
 
 		//resizes canvas according to camera zoom, for when canvas is in World Space mode
-		//scaleWorldSpaceCanvas();
+		scaleWorldSpaceCanvas();
 
 		//this checks if the object this script applies to was clicked
 		if (Input.GetMouseButtonDown (0)) {

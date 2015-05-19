@@ -35,8 +35,8 @@ public class CameraMovement : MonoBehaviour {
 		}
 
 		btn = GameObject.Find("Button_CameraToggle").GetComponent("Button") as Button;
-		orth = Resources.Load <Sprite>("LevelEditorIcons/orthog");
-		pers = Resources.Load <Sprite>("LevelEditorIcons/perspe");
+		orth = Resources.Load <Sprite>("LEUI-V2/Editor-Top-Down-Perspective-Icon");
+		pers = Resources.Load <Sprite>("LEUI-V2/Editor-Isometric-Perspective-Icon");
 	}
 	
 	void Update() {
