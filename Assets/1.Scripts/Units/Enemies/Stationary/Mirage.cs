@@ -66,7 +66,7 @@ public class Mirage : StationaryEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 5;
+		tier = 0;
 
 		base.SetTierData (tier);
 	}

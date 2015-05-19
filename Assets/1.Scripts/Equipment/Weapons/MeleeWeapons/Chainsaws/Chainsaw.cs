@@ -81,6 +81,7 @@ public class Chainsaw : MeleeWeapons {
 
 	public override void SpecialAttack() {
 		particles.startSpeed = 0;
+		StartCoroutine(makeSound(action,playSound,action.length));
 		this.StartCoroutine (this.dismember());
 	}
 
