@@ -143,7 +143,7 @@ public class MonsterManager {
 		// If the room does not already contain this monster
 		if(!rm.Monster.Contains(mon)) {
 			// Check if the remaining number of points can handle adding the monster
-			if(rm.Points-rm.CurrentPoints < mon.MonsterBlockInfo.Points){
+			if(rm.Points-rm.CurrentPoints < mon.MonsterBlockInfo.basePoints){
 				return false;
 			}
 		}
