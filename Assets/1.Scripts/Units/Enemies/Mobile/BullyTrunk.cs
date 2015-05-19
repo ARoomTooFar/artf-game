@@ -129,14 +129,14 @@ public class BullyTrunk: MobileEnemy {
 			this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
 		}
 
-		if (tier > 1) {
-			foreach(Pummel behaviour in this.animator.GetBehaviours<Pummel>()) {
-				behaviour.trunk = this.gear.weapon.GetComponent<MeleeWeapons>();
-			}
-			
-			this.rightPaw.equip(this, this.opposition);
-			this.leftPaw.equip(this, this.opposition);
-		}
+//		if (tier > 1) {
+//			foreach(Pummel behaviour in this.animator.GetBehaviours<Pummel>()) {
+//				behaviour.trunk = this.gear.weapon.GetComponent<MeleeWeapons>();
+//			}
+//			
+//			this.rightPaw.equip(this, this.opposition);
+//			this.leftPaw.equip(this, this.opposition);
+//		}
 
 		if (tier > 3) {
 			this.inventory.cycItems ();

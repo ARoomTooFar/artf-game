@@ -309,10 +309,11 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	}
 	
 	public override void rez(){
-		if(stats.isDead){
-			stats.isDead = false;
+		if(isDead){
+			isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
 			stats.rezCount++;
+		
 		}else{
 			heal(stats.maxHealth/(2+2*stats.rezCount));
 		}
