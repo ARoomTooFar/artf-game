@@ -16,40 +16,22 @@ public class Artilitree: RangedEnemy {
 	protected override void Start() {
 		base.Start ();
 		
-		this.artillery = this.gear.weapon.GetComponent<Artillery>();
-		if (this.artillery == null) print("Artilitree has no artillery equipped");
-		
-		foreach(ArtilleryBehaviour behaviour in this.animator.GetBehaviours<ArtilleryBehaviour>()) {
-			behaviour.SetVar(this.artillery);
-		}
+		this.minAtkRadius = 4.0f;
+		this.maxAtkRadius = 40.0f;
 	}
 	
 	protected override void Update() {
 		base.Update ();
 	}
 	
-	protected override void setInitValues() {
-		base.setInitValues();
-		stats.maxHealth = 200;
-		stats.health = stats.maxHealth;
-		stats.armor = 15;
-		stats.strength = 0;
-		stats.coordination=60;
-		stats.speed=2;
-
-		this.minAtkRadius = 4.0f;
-		this.maxAtkRadius = 40.0f;
-	}
-	
 	public override void SetTierData(int tier) {
 		tier = 6;
-		base.SetTierData(tier);
-
-		monsterLoot.initializeLoot("Artilitree", tier);
 		
+		/*
 		if (tier < 1) stats.speed = 2;
 		else if (tier > 0 && tier < 5) stats.speed = 3;
 		else stats.speed = 4;
+		*/
 		
 		foreach(Rooting behaviour in this.animator.GetBehaviours<Rooting>()) {
 			if (tier < 3) behaviour.SetVar(3);
@@ -75,7 +57,24 @@ public class Artilitree: RangedEnemy {
 				behaviour.SetVar(this.cage);
 			}
 		}
+		
+		base.SetTierData(tier);
+		
+		monsterLoot.initializeLoot("Artilitree", tier);
 	}
+	
+	public override void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
+		base.SetInitValues(health, strength, coordination, armor, speed);
+	
+		this.artillery = this.gear.weapon.GetComponent<Artillery>();
+		if (this.artillery == null) print("Artilitree has no artillery equipped");
+		
+		foreach(ArtilleryBehaviour behaviour in this.animator.GetBehaviours<ArtilleryBehaviour>()) {
+			behaviour.SetVar(this.artillery);
+		}
+	}
+	
+	
 	
 	//---------------------//
 	// Character Functions //

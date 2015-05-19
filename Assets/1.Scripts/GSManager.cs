@@ -9,13 +9,13 @@ public class GSManager : MonoBehaviour {
 	public string currLevelId = "";
     public string currLevelData = "";
 	public List<string> loot; //holds looted items
+	public PlayerData[] players = new PlayerData[4];
+	public int leader = -1;
 
     private Farts serv;
 	private GameObject loadingBG;
 	private Slider loadingBar;
 	private AsyncOperation loadProgress;
-
-
 
 	void Awake ()
 	{

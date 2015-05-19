@@ -71,7 +71,7 @@ public class Spear: MeleeWeapons {
 	
 	protected IEnumerator Rush() {
 		Vector3 facing = this.user.facing;
-		Vector3 spd = this.user.facing * 25f;
+		Vector3 spd = this.user.facing * (user.animator.GetFloat ("ChargeTime") < 0.5f ? 25f : 30f + (10f * user.animator.GetFloat ("ChargeTime")/4));
 		while (facing == this.user.facing && spd.magnitude > 0.5f) {
 			this.user.rb.velocity = spd;
 			spd = spd - (spd.normalized * (Time.deltaTime * 75f));

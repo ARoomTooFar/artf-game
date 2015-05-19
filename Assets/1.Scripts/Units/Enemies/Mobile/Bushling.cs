@@ -46,8 +46,8 @@ public class Bushling : MobileEnemy {
 			behaviour.charge = this.charge;
 		}
 		
-		this.rightPaw.equip(this, this.opposition);
-		this.leftPaw.equip(this, this.opposition);
+		this.minAtkRadius = 0.0f;
+		this.maxAtkRadius = 1.75f;
 	}
 
 	protected override void Update() {
@@ -59,24 +59,8 @@ public class Bushling : MobileEnemy {
 		base.Update ();
 	}
 
-	protected override void setInitValues() {
-		base.setInitValues();
-		stats.maxHealth = 100;
-		stats.health = stats.maxHealth;
-		stats.armor = 3;
-		stats.strength = 5;
-		stats.coordination=0;
-		stats.speed=4;
-		
-		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 1.75f;
-	}
-
 	public override void SetTierData(int tier) {
 		tier = 1;
-		base.SetTierData (tier);
-
-		monsterLoot.initializeLoot("Bushling", tier);
 
 		if (tier > 0) {
 			this.sprint = this.inventory.items[inventory.selected].GetComponent<Sprint>();
@@ -116,6 +100,15 @@ public class Bushling : MobileEnemy {
 		} else {
 			this.inventory.items[inventory.selected].GetComponent<MonsterLunge>().gameObject.SetActive(false);
 		}
+		
+		base.SetTierData (tier);
+		monsterLoot.initializeLoot("Bushling", tier);
+	}
+
+	public override void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
+		base.SetInitValues(health, strength, coordination, armor, speed);
+		this.rightPaw.equip(this, this.opposition);
+		this.leftPaw.equip(this, this.opposition);
 	}
 
 	protected override void TargetFunction() {

@@ -39,6 +39,9 @@ public class Mirage : StationaryEnemy {
 		
 		this.deathTarget = null;
 		this.mark = new MarkOfDeath();
+		
+		this.minAtkRadius = 0.0f;
+		this.maxAtkRadius = 3.5f;
 	}
 	
 	protected override void Start() {
@@ -61,8 +64,7 @@ public class Mirage : StationaryEnemy {
 			behaviour.SetVar (this.blinkStrike);
 		}
 
-		leftClaw.equip (this, opposition);
-		rightClaw.equip (this, opposition);
+		
 	}
 
 	public override void SetTierData(int tier) {
@@ -71,19 +73,12 @@ public class Mirage : StationaryEnemy {
 		base.SetTierData (tier);
 	}
 	
-	protected override void setInitValues() {
-		base.setInitValues();
-		stats.maxHealth = 75;
-		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 45;
-		stats.coordination=0;
-		stats.speed=4;
-		setAnimHash ();
-		
-		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 3.5f;
+	public override void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
+		base.SetInitValues(health, strength, coordination, armor, speed);
+		leftClaw.equip (this, opposition);
+		rightClaw.equip (this, opposition);
 	}
+	
 	
 	//-------------//
 	// Transitions //

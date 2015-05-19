@@ -24,23 +24,12 @@ public class Synth: RangedEnemy {
 		
 		this.gun = this.gear.weapon.GetComponent<CacklebranchPistol>();
 		
+		this.minAtkRadius = 8.0f;
+		this.maxAtkRadius = 40.0f;
 	}
 	
 	protected override void Update() {
 		base.Update ();
-	}
-	
-	protected override void setInitValues() {
-		base.setInitValues();
-		stats.maxHealth = 30;
-		stats.health = stats.maxHealth;
-		stats.armor = 1;
-		stats.strength = 10;
-		stats.coordination=5;
-		stats.speed=7;
-		
-		this.minAtkRadius = 8.0f;
-		this.maxAtkRadius = 40.0f;
 	}
 	
 	
