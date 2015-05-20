@@ -43,11 +43,11 @@ public static class MapDataParser {
 			p3.transform.position = start.Coordinates[2];
 			p4.transform.position = start.Coordinates[3];
 
-            Loadgear loadgear = GameObject.Find("/Loadgear").GetComponent<Loadgear>();
-            loadgear.players[0] = p1.GetComponent<Character>();
-            loadgear.players[1] = p2.GetComponent<Character>();
-            loadgear.players[2] = p3.GetComponent<Character>();
-            loadgear.players[3] = p4.GetComponent<Character>();
+			Loadgear loadgear = GameObject.Find("/Loadgear").GetComponent<Loadgear>();
+			loadgear.players[0] = p1.GetComponent<Character>();
+			loadgear.players[1] = p2.GetComponent<Character>();
+			loadgear.players[2] = p3.GetComponent<Character>();
+			loadgear.players[3] = p4.GetComponent<Character>();
 		}
 		LevelPathCheck.checkPath();
 	}
@@ -57,7 +57,7 @@ public static class MapDataParser {
 		string[] rooms = type[1].Trim().Split(' ');
 		foreach(string rm in rooms) {
 			string[] rmParams = rm.Split(',');
-			if(rmParams.Length != 6){
+			if(rmParams.Length != 6) {
 				continue;
 			}
 
@@ -78,14 +78,14 @@ public static class MapDataParser {
 		string[] blocks = type[1].Trim().Split(' ');
 		foreach(string blk in blocks) {
 			string[] blkParams = blk.Split(',');
-			if(blkParams.Length != 4){
+			if(blkParams.Length != 4) {
 				continue;
 			}
 			Vector3 pos = new Vector3(float.Parse(blkParams[0]),
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
 			SceneryBlock nBlk = null;
-			if(MapData.SceneryBlocks.isAddValid(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]))){
+			if(MapData.SceneryBlocks.isAddValid(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]))) {
 				nBlk = new SceneryBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
 				nBlk.SceneryBlockInfo.placedThisSession = true;
 				MapData.SceneryBlocks.add(nBlk);
@@ -103,26 +103,17 @@ public static class MapDataParser {
 		string[] type = SaveString.Split(':');
 		string[] blocks = type[1].Trim().Split(' ');
 		foreach(string blk in blocks) {
-//			Debug.Log(type[0] + " ; " + type[1] + ": " + blk);
-
 			string[] blkParams = blk.Split(',');
-			if(blkParams.Length != 5){
+			if(blkParams.Length != 5) {
 				continue;
 			}
 			Vector3 pos = new Vector3(float.Parse(blkParams[0]),
 			                          float.Parse(blkParams[1]),
 			                          float.Parse(blkParams[2]));
 			MonsterBlock nBlk = new MonsterBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
-//			Debug.Log("nBlk: " + nBlk.MonsterBlockInfo);
-
-			//MonsterBlockInfo is null for some prefabs for some reason.
-			//Using this check to allow levels to load properly.
-			if(nBlk.MonsterBlockInfo != null){
-				nBlk.MonsterBlockInfo.placedThisSession = true;
-				nBlk.MonsterBlockInfo.Tier = Convert.ToInt32(blkParams[4]);
-				MapData.MonsterBlocks.add(nBlk);
-			}
-
+			nBlk.MonsterBlockInfo.placedThisSession = true;
+			nBlk.MonsterBlockInfo.Tier = Convert.ToInt32(blkParams[4]);
+			MapData.MonsterBlocks.add(nBlk);
 		}
 	}
 

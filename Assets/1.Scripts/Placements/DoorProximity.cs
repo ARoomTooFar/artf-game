@@ -20,10 +20,17 @@ public class DoorProximity : MonoBehaviour {
 	void Update () {
 		Vector3 doorPos =  this.gameObject.transform.parent.position;
 
+		//If there is no door on the other side, return and do nothing;
+		SceneryBlock dr = MapData.SceneryBlocks.find(new Vector3(doorPos.x, 0, doorPos.z));
+		if(MapData.SceneryBlocks.find(dr.doorCheckPosition) == null) {
+			return;
+		}
+
 		bool playerNear = false;
 		for(int i = 0; i < playerList.Count; i++){
 			if(Vector3.Distance(playerList[i].transform.position, doorStartPos) < 3f){
 				playerNear = true;
+				break;
 			}
 		}
 

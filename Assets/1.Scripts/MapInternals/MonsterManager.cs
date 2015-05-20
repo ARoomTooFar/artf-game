@@ -11,28 +11,15 @@ public class MonsterManager {
 	}
 
 	public void clear(){
-
-		//prevents "InvalidOperationException: Collection was modified" error
-		for (int i = 0; i < dictionary.Count; i++) {
-			var item = dictionary.ElementAt(i);
-			var itemKey = item.Key;
-//			var itemValue = item.Value;
-
-			for (int j = 0; j < dictionary[itemKey].Count; j++) {
-//			for (int j = 0; j < item.Count; j++) {
-				remove (dictionary[itemKey].ElementAt(j));
-//				remove (item.ElementAt(j));
+		foreach(List<MonsterBlock> lst in dictionary.Values){
+			foreach(MonsterBlock blk in lst){
+				//make the block clean itself up
+				blk.remove();
+				//remove it from any rooms it's in
+				ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
+				if(rm != null) { rm.removeMonster(blk); }
 			}
 		}
-
-
-
-
-//		foreach(List<MonsterBlock> lst in dictionary.Values){
-//			foreach(MonsterBlock blk in lst){
-//				remove(blk);
-//			}
-//		}
 		dictionary.Clear ();
 	}
 
@@ -156,7 +143,7 @@ public class MonsterManager {
 		// If the room does not already contain this monster
 		if(!rm.Monster.Contains(mon)) {
 			// Check if the remaining number of points can handle adding the monster
-			if(rm.Points-rm.CurrentPoints < mon.MonsterBlockInfo.Points){
+			if(rm.Points-rm.CurrentPoints < mon.MonsterBlockInfo.basePoints){
 				return false;
 			}
 		}

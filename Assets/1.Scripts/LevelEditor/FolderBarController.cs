@@ -9,7 +9,8 @@ using System.Collections.Generic;
 public class FolderBarController : MonoBehaviour {
 	//default color for the folder buttons
 	Color buttonColor;
-	Color selectedButtonColor = Color.cyan;
+	public Color selectedButtonColor;
+
 	
 	//setup for the scrollviews for folders
 	public GameObject[] folders;
@@ -55,7 +56,7 @@ public class FolderBarController : MonoBehaviour {
 		//shove all of the folder button into the array we have for them
 		for(int i = 0; i < numberOfbuttons; i++) {
 			buttons[i] = buttonObject.gameObject.transform.GetChild(i).gameObject;
-			Image img = buttons[i].GetComponent<Image>();
+			Image img = buttons[i].transform.Find("Panel").gameObject.GetComponent<Image>();
 			img.color = buttonColor;
 		}
 
@@ -139,7 +140,7 @@ public class FolderBarController : MonoBehaviour {
 		//change its color to grey. otherwise, set it to black 
 		for(int i = 0; i < numberOfbuttons; i++) {
 			if(String.Equals(buttons[i].name, currentButton)) {
-				Image img = buttons[i].GetComponent<Image>();
+				Image img = buttons[i].transform.Find("Panel").gameObject.GetComponent<Image>();
 				img.color = selectedButtonColor;
 				
 				//if the folder bar is going into its closed state, 
@@ -148,7 +149,7 @@ public class FolderBarController : MonoBehaviour {
 					img.color = buttonColor;
 				}
 			} else {
-				Image img = buttons[i].GetComponent<Image>();
+				Image img = buttons[i].transform.Find("Panel").gameObject.GetComponent<Image>();
 				img.color = buttonColor;
 			}
 		}
