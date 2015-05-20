@@ -565,6 +565,7 @@ public class MainMenuCtrl : MonoBehaviour {
 
 	void MenuReset() {
 		gsManager.leaderList.Remove (playerNum);
+		gsManager.players [playerNum] = null;
 		txtFieldAcctName.text = "Enter an account name...";
 		txtFieldPasscode.text = "Enter your passcode...";
 	}
@@ -580,8 +581,7 @@ public class MainMenuCtrl : MonoBehaviour {
     }
 
 	void DeleteChar() {
-		if (txtDisplayField.text.Length > 0)
-		{
+		if (txtDisplayField.text.Length > 0 && txtDisplayField.text != "Enter an account name..." && txtDisplayField.text != "Enter your passcode...") {
 			txtDisplayField.text = txtDisplayField.text.Remove(txtDisplayField.text.Length - 1);
 			charArrLoc = 0;
 			prevKey = "";
@@ -604,6 +604,7 @@ public class MainMenuCtrl : MonoBehaviour {
 	}
 
 	void Update () {
+		// UI controls
 		if (menuLock == false) {
 			// check for joystick movement
 			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
@@ -619,9 +620,9 @@ public class MainMenuCtrl : MonoBehaviour {
 			}
 		}
 
-		// show login loading msg
+		// login loading
 		if (loginReq != null && loginReq.isDone == false) {
-			Debug.Log ("login progress");
+			//Debug.Log ("login progress"); // show login loading msg
 		} else if (loginReq != null && loginReq.isDone) {
 			// reset highlighted UI ele
 			var pointer = new PointerEventData(EventSystem.current);
