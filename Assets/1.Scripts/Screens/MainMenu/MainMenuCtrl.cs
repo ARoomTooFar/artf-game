@@ -132,12 +132,6 @@ public class MainMenuCtrl : MonoBehaviour {
 			loginReq = serv.loginWWW(txtFieldAcctName.text, txtFieldPasscode.text);
 		});
 
-		Debug.Log (gsManager.players);
-		foreach (PlayerData test in gsManager.players) {
-			Debug.Log (test);
-		}
-		Debug.Log (gsManager.players.Length);
-
 		// back button
         loginForm[2, 1].GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -594,6 +588,21 @@ public class MainMenuCtrl : MonoBehaviour {
 		}
 	}
 
+	// handles login function call
+	void LoginHand () {
+		if (serv.dataCheck(loginReq.text)) {
+			Debug.Log ("login success");
+
+			// add player data to player list
+			PlayerData playerData = serv.parseCharData(loginReq.text);
+			gsManager.players[playerNum] = playerData;
+			gsManager.leaderList.Add (playerNum);
+			gsManager.players[playerNum].PrintData();
+		} else {
+			Debug.Log ("login failure");
+		}
+	}
+
 	void Update () {
 		if (menuLock == false) {
 			// check for joystick movement
@@ -621,13 +630,7 @@ public class MainMenuCtrl : MonoBehaviour {
 			MenuEnable ();
 			prevBtn = currMenuPtr[locY, locX];
 
-			Debug.Log (loginReq.text);
-			if (serv.dataCheck(loginReq.text)) {
-				Debug.Log ("login success");
-				gsManager.leaderList.Add (playerNum);
-			} else {
-				Debug.Log ("login failure");
-			}
+			LoginHand();
 			loginReq = null;
 		}
 	}
