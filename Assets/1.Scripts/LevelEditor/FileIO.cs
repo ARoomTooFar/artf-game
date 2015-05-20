@@ -111,7 +111,7 @@ public class FileIO : MonoBehaviour
 	
 	public void saveFile ()
 	{
-		if(LevelPathCheck.fullPath == null) {
+		if(LevelPathCheck.roomPath == null) {
 			return;
 		}
         #if UNITY_EDITOR
