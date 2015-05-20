@@ -16,8 +16,7 @@ public class PointUpdater : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		rm = MapData.TheFarRooms.find(camCast.mouseGroundPoint);
-		Debug.Log(rm == null? "--" : rm.CurrentPoints.ToString());
+		rm = MapData.TheFarRooms.find(camCast.mouseGroundPoint.Round());
 		txt.text = rm == null ? "--/--" : rm.PointString;
 	}
 }
