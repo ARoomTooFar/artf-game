@@ -72,7 +72,6 @@ public static class GameObjectResourcePool
 	private static GameObject getNewInstance (string type)
 	{
 		//GameObject temp = GameObject.Instantiate (Resources.Load(type), new Vector3 (1, 0, 1), new Quaternion ()) as GameObject;
-		Debug.Log(type);
 		GameObject temp = GameObject.Instantiate (Resources.Load(type)) as GameObject;
 		temp.transform.parent = getParent (type).transform;
 		temp.SetActive (false);

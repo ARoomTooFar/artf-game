@@ -140,6 +140,9 @@ public class MonsterManager {
 		if(rm == null) {
 			return false;
 		}
+		if(rm == MapData.StartingRoom || rm == MapData.EndingRoom) {
+			return false;
+		}	
 		// If the room does not already contain this monster
 		if(!rm.Monster.Contains(mon)) {
 			// Check if the remaining number of points can handle adding the monster
