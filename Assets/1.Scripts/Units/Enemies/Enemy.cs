@@ -185,7 +185,8 @@ public class Enemy : NewCharacter {
 
 		if (angle < fov) {
 			RaycastHit hit;
-			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, dis, layerMask)) {
+			// Debug.DrawRay(transform.position + new Vector3(0f, 2f, 0f), direction.normalized * dis);
+			if (Physics.Raycast (transform.position + new Vector3(0f, 2f, 0f), direction.normalized, out hit, dis, layerMask)) {
 				this.animator.SetBool("CanSeeTarget", false);
 				return false;
 			} else {
