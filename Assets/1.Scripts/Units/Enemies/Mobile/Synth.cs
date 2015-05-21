@@ -29,11 +29,16 @@ public class Synth: RangedEnemy {
 	
 	protected override void Update() {
 		base.Update ();
+		
+		if (this.target != null && this.canSeePlayer(this.target)) {
+			float distance = Vector3.Distance(this.transform.position, this.target.transform.position);
+			this.animator.SetBool ("ChargedShot", distance > this.maxAtkRadius/4);
+		}
 	}
 	
 	
 	public override void SetTierData(int tier) {
-		tier = 4;
+		tier = 5;
 		base.SetTierData (tier);
 	}
 	
@@ -58,6 +63,11 @@ public class Synth: RangedEnemy {
 		this.gun.AttackStart();
 	}
 	
+	public virtual void SprayAndPray() {
+		this.animator.SetBool("Charging", true);
+		this.gun.SpecialAttack();
+	}
+
 	public override void die() {
 		this.isDead = true;
 		animator.SetTrigger("Died");
