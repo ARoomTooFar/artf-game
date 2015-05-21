@@ -18,6 +18,19 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 		{"Button_ZoomIn", "Zoom In:Zoom the camera in."},
 		{"Button_Delete", "Delete:Delete selected object (hotkey: delete)."},
 		{"Button_CameraToggle", "Toggle Camera Mode:Toggle the camera between top-down mode and perspective mode."},
+		{"Button_Rooms", "Rooms Folder:Contains objects that assist you in building rooms, such as doors, individual wall tiles, and starter rooms."},
+		{"Button_Misc", "Environment Folder:Contains scenery and decorative objects."},
+		{"Button_Enemies", "Enemies Folder:Contains enemies and traps."},
+
+		{"Shop", "Bank Account:This is the amount of money you have to spend on items."},
+
+		{"BullyTrunk(Clone)", "Bully Trunk:The Bully Trunk is a kojrgk aerg kjefgo efgmskegt jker gkjnerkjgarlfg skefgjsekj" +
+			"srkjgskejrg sdfjkgsejkrg nkjerngnsergnkejsrg ."},
+		{"Bushling(Clone)", "Bushling:Bushling is a gjkds dfg js ksdfkj sdjkf jkdfg kdfg jker."},
+		{"CackleBranch(Clone)", "Cackle Branch:The CackleBranch isf gjsdfk kjsfks kr ."},
+		{"FoliantFodder(Clone)", "Foliant Fodder:The Foliant Fodder is fikdfgksdfgk sjkd fklsdf klasdfk askjf ."},
+		{"FoliantHive(Clone)", "Foliant Hive:The Foliant Hive is fie kdwfgweksdfgk se  fklsdf klasdfk askjf ."},
+		{"Mirage(Clone)", "Mirage:The Mirage is efwef wefwe err e  wewe wefwsjkd fwe kwe lwedf klasdfk askjf ."},
 	};
 
 	GameObject tt;
@@ -47,6 +60,9 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 				tipTextText =
 					tipTextTable[this.gameObject.name].Substring(tipTextTable[this.gameObject.name].IndexOf(":") + 1);
 			}
+
+			tipTitle.text = "";
+			tipText.text = "";
 		}
 	}
 
@@ -81,8 +97,11 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 		if(usingMouseFollowToolTip){
 			tt.SetActive(false);
 		}else{
-			tipTitle.text = "";
-			tipText.text = "";
+			//resource pool objects don't get these, so they throw errors
+			if(tipTitle != null && tipText != null){
+				tipTitle.text = "";
+				tipText.text = "";
+			}
 		}
 	}
 
