@@ -56,6 +56,7 @@ public class Synth: RangedEnemy {
 	
 	public override void die() {
 		this.isDead = true;
+		deathNoise ();
 		animator.SetTrigger("Died");
 		
 	}

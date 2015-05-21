@@ -94,6 +94,7 @@ public class FoliantFodder: MobileEnemy {
 		if (hiveMind) {
 			hive.removeFodder(this);
 		}
+		deathNoise ();
 		
 		base.die ();
 	}
