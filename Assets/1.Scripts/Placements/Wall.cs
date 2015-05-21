@@ -7,7 +7,6 @@ public class Wall : MonoBehaviour {
 	public float disappear;
 	public float timeElapsed;
 	public GameObject stand;
-	public GameObject wall;
 
 	protected virtual void Start() {
 		show = true;
@@ -19,13 +18,15 @@ public class Wall : MonoBehaviour {
 	}
 
 	public virtual void toggleShow() {
+		if(this.gameObject.transform.Find("Wall") != null){
+			GameObject wall = this.gameObject.transform.Find("Wall").gameObject;
 
-		foreach(Material mat in wall.GetComponent<Renderer>().materials) {
-	
-			if(mat.HasProperty("_Color")) {
-				Color trans = mat.color;
-				trans.a = .2f;
-				mat.color = trans;
+			foreach(Material mat in wall.GetComponent<Renderer>().materials) {
+				if(mat.HasProperty("_Color")) {
+					Color trans = mat.color;
+					trans.a = .2f;
+					mat.color = trans;
+				}
 			}
 		}
 
@@ -36,11 +37,15 @@ public class Wall : MonoBehaviour {
 		if(timeElapsed < disappear) {
 			timeElapsed += Time.deltaTime;
 		} else {
-			foreach(Material mat in wall.GetComponent<Renderer>().materials) {
-				if(mat.HasProperty("_Color")) {
-					Color trans = mat.color;
-					trans.a = 1f;
-					mat.color = trans;
+			if(this.gameObject.transform.Find("Wall") != null){
+				GameObject wall = this.gameObject.transform.Find("Wall").gameObject;
+
+				foreach(Material mat in wall.GetComponent<Renderer>().materials) {
+					if(mat.HasProperty("_Color")) {
+						Color trans = mat.color;
+						trans.a = 1f;
+						mat.color = trans;
+					}
 				}
 			}
 		}
