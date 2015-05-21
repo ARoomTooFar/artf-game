@@ -7,6 +7,9 @@ using System.Collections.Generic;
 public class WallDartBase : MonoBehaviour {
 	public WallDarts wall;
 
+	public AudioClip hurt, victory, failure;
+	public bool playSound = true;
+
 	private Animator animator;
 
 	private void Awake() {
@@ -15,6 +18,7 @@ public class WallDartBase : MonoBehaviour {
 
 	private void Start() {
 		this.animator.GetBehaviour<WallDartIdleBehaviour>().SetVar(this.wall);
+		wall.setSounds (hurt, victory, failure, playSound);
 	}
 
 	private void Update() {

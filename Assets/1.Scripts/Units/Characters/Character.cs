@@ -391,7 +391,6 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 
 	protected virtual void deathNoise(){	
 		StartCoroutine (makeSound (failure, playSound, failure.length));
-		Debug.Log ("should be making noise");
 	}
 
 	public virtual void rez(){
