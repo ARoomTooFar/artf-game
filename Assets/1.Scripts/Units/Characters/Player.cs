@@ -213,7 +213,7 @@ public class Player : NewCharacter, IHealable<int>{
 			}
 			
 			this.rb.velocity = newMoveDir.normalized * stats.speed * stats.spdManip.speedPercent;
-		} else {
+		} else if (!this.knockedback) {
 			// Right now this stops momentum when performing an action
 			// If we trash the rigidbody later, we won't need this
 			this.rb.velocity = Vector3.zero;

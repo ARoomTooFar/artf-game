@@ -35,15 +35,6 @@ public class RangedEnemy : MobileEnemy {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.maxHealth = 40;
-		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 10;
-		stats.coordination=0;
-		stats.speed=9;
-		
-		this.minAtkRadius = 5.0f;
-		this.maxAtkRadius = 12.0f;
 	}
 	
 	//----------------------//
