@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class Synth: RangedEnemy {
 	
 	protected SynthKnockBack kb;
-	protected CacklebranchPistol gun;
+	protected SynthAssaultRifle gun;
 	
 	protected override void Awake () {
 		base.Awake();
@@ -17,14 +17,13 @@ public class Synth: RangedEnemy {
 		
 		this.kb = this.inventory.items[inventory.selected].GetComponent<SynthKnockBack>();
 		if (this.kb == null) Debug.LogWarning ("Synth does not have knockback equipped");
+		this.kb.eUser = this.GetComponent<Enemy>();
 		
 		foreach(KnockBackBehaviour behaviour in this.animator.GetBehaviours<KnockBackBehaviour>()) {
 			behaviour.SetVar(this.kb);
 		}
 		
-		this.gun = this.gear.weapon.GetComponent<CacklebranchPistol>();
-		
-		this.minAtkRadius = 8.0f;
+		this.minAtkRadius = 5.0f;
 		this.maxAtkRadius = 40.0f;
 	}
 	
@@ -34,8 +33,13 @@ public class Synth: RangedEnemy {
 	
 	
 	public override void SetTierData(int tier) {
-		tier = 5;
+		tier = 4;
 		base.SetTierData (tier);
+	}
+	
+	public override void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
+		base.SetInitValues(health, strength, coordination, armor, speed);
+		this.gun = this.gear.weapon.GetComponent<SynthAssaultRifle>();
 	}
 	
 	
@@ -50,8 +54,8 @@ public class Synth: RangedEnemy {
 	// Actions Functions //
 	//-------------------//
 	
-	public virtual void Shoot(int count) {
-		this.StartCoroutine(this.gun.Shoot(count));
+	public virtual void Shoot() {
+		this.gun.AttackStart();
 	}
 	
 	public override void die() {
