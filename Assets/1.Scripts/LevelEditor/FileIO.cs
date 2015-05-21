@@ -88,13 +88,13 @@ public class FileIO : MonoBehaviour
         if (serv.dataCheck(lvlData))
         {
 
-			MapDataParser.ParseSaveString(lvlData);
-			Debug.Log("LVL DL SUCCESS: " + lvlData);
+
 
 			txtDlLvl.enabled = false;
 			try{
+				MapDataParser.ParseSaveString(lvlData);
+				Debug.Log("LVL DL SUCCESS: " + lvlData);
 				//throw new Exception();
-
 			} catch (Exception ex){
 				Debug.Log(ex.Message);
 				Debug.Log(ex.StackTrace);
@@ -111,7 +111,7 @@ public class FileIO : MonoBehaviour
 	
 	public void saveFile ()
 	{
-		if(LevelPathCheck.fullPath == null) {
+		if(LevelPathCheck.roomPath == null) {
 			return;
 		}
         #if UNITY_EDITOR

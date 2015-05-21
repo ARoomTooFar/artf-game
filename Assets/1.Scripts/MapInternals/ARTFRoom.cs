@@ -11,7 +11,7 @@ public partial class ARTFRoom : Square {
 	#region PrivateVariables
 	protected string floorType = "{0}/Floors/IndustrialFloor1";
 	protected string roomCornerId = "LevelEditor/Other/RoomCorner";
-	protected string wallType = "{0}/Rooms/wallstoneend";
+	protected string wallType = "{0}/Other/wallstoneend";
 	#endregion PrivateVariables
 
 	#region Properties
@@ -32,6 +32,8 @@ public partial class ARTFRoom : Square {
 	public List<SceneryBlock> Doors { get; private set; }
 
 	public int CurrentPoints { get; private set; }
+
+	public string PointString{ get { return String.Format("{0}/{1}", CurrentPoints, Points); } }
 	
 	//Stored paths to get from point A to point B. Primarily for storing paths from one door to another
 	public Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>> RoomPaths { get; private set; }
@@ -62,7 +64,7 @@ public partial class ARTFRoom : Square {
 	 */
 	public ARTFRoom(Vector3 pos1, Vector3 pos2,
 	                string floor = "{0}/Floors/IndustrialFloor1",
-	                string wall = "{0}/Rooms/wallstoneend") : base(pos1, pos2) {
+	                string wall = "{0}/Other/wallstoneend") : base(pos1, pos2) {
 		floorType = floor;
 		wallType = wall;
 		this.Floor = GameObjectResourcePool.getResource(floorType, this.LLCorner, Vector3.zero);
@@ -147,12 +149,12 @@ public partial class ARTFRoom : Square {
 	#region Monsters
 	
 	public void addMonster(MonsterBlock mon) {
-		CurrentPoints += mon.MonsterBlockInfo.Points;
+		CurrentPoints += mon.MonsterBlockInfo.basePoints;
 		Monster.Add(mon);
 	}
 	
 	public void removeMonster(MonsterBlock mon) {
-		CurrentPoints -= mon.MonsterBlockInfo.Points;
+		CurrentPoints -= mon.MonsterBlockInfo.basePoints;
 		Monster.Remove(mon);
 	}
 	#endregion Monsters
@@ -394,8 +396,5 @@ public partial class ARTFRoom : Square {
 		}
 		return true;
 	}
-
-
-
 	#endregion PositionChecks
 }

@@ -10,11 +10,6 @@ public class MonsterData : LevelEntityData {
 	// The tier of the monster
 	public int Tier {get; set;}
 
-	public int Points {
-		get;
-		private set;
-	}
-
 	public List<Vector3> RadiusCoordinates;
 	
 	// Base cost of monster which is multiplied by the rank of monster+1

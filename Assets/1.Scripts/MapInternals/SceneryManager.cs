@@ -13,7 +13,11 @@ public class SceneryManager {
 	public void clear(){
 		foreach(List<SceneryBlock> lst in dictionary.Values){
 			foreach(SceneryBlock blk in lst){
+				//make the block clean itself up
 				blk.remove();
+				//remove it from any rooms it's in
+				ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
+				if(rm != null) { rm.Scenery.Remove(blk); }
 			}
 		}
 		dictionary.Clear();
