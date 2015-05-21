@@ -12,7 +12,7 @@ public class LeanTestCtrl : MonoBehaviour {
 
 		playerData = serv.parseCharData(charDataEx);
 
-		Debug.Log (playerData.name);
+		Debug.Log (playerData.char_name);
 		Debug.Log (playerData.char_id);
 		Debug.Log (playerData.hair_id);
 		Debug.Log (playerData.voice_id);

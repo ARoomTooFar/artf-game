@@ -10,7 +10,7 @@ public class GSManager : MonoBehaviour {
     public string currLevelData = "";
 	public List<string> loot; //holds looted items
 	public PlayerData[] players = new PlayerData[4];
-	public int leader = -1;
+	public List<int> leaderList = new List<int>();
 
     private Farts serv;
 	private GameObject loadingBG;

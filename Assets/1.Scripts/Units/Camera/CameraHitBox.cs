@@ -65,21 +65,6 @@ public class CameraHitBox : MonoBehaviour {
 		*/
 
 		switch (other.tag) {
-		case "Wall":
-			if(other.transform.parent != null){
-				Wall wallSpot = other.transform.parent.GetComponent<Wall>();
-				if(wallSpot != null){
-					wallSpot.toggleShow();
-					//Debug.Log("Here");
-				}
-			}else{
-				Wall wallSpot = other.gameObject.GetComponent<Wall>();
-				if(wallSpot != null){
-					wallSpot.toggleShow();
-					//Debug.Log("Here");
-				}
-			}
-			break;
 		case "Enemy":
 			enemyCount++;
 			break;
@@ -101,15 +86,6 @@ public class CameraHitBox : MonoBehaviour {
 			same = false;
 		}
 		*/
-		if(other.tag == "Wall"){
-			Wall wallSpot = other.transform.parent.GetComponent<Wall>();
-			//Debug.Log("Here");
-		//Wall wallSpot = other.GetComponent<Wall>();
-			if(wallSpot != null){
-				wallSpot.toggleShow();
-				//Debug.Log("Here");
-			}
-		}
 
 	}
 	void OnTriggerExit (Collider other) {
