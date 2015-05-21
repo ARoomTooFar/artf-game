@@ -13,8 +13,7 @@ public class Farts : MonoBehaviour
 	// Checks if returned data is valid or not. Returns true if the data is valid, false otherwise.
 	public bool dataCheck(string levelData)
 	{
-		if (levelData == "error") return false;
-		// need to also check if string contains "<html>" tag because Unity 5's networking code returns HTML when it downloads a 404
+		if (levelData == "error" || levelData == "") return false;
 		return true;
 	}
 	
@@ -23,22 +22,7 @@ public class Farts : MonoBehaviour
 		WWW www = new WWW(SERVERURI + LVLPATH + levelId);
 		return www;
 	}
-	
-	public WWW newLvlWww(string gameAcctId, string machId, string liveLvlData = "", string draftLvlData = "")
-	{
-		WWWForm form = new WWWForm();
-		form.AddField("game_acct_id", gameAcctId);
-		form.AddField("mach_id", machId);
-		if (liveLvlData != "")
-			form.AddField("live_level_data", liveLvlData);
-		if (draftLvlData != "")
-			form.AddField("draft_level_data", draftLvlData);
-		
-		WWW www = new WWW(SERVERURI + LVLPATH, form);
-		
-		return www;
-	}
-	
+
 	public string getLvl(string levelId)
 	{
 		WWW www = new WWW(SERVERURI + LVLPATH + levelId);
@@ -57,6 +41,20 @@ public class Farts : MonoBehaviour
 		}
 		
 		return www.text;
+	}
+	
+	public WWW newLvlWww(string gameAcctId, string machId, string liveLvlData = "", string draftLvlData = "")
+	{
+		WWWForm form = new WWWForm();
+		form.AddField("game_acct_id", gameAcctId);
+		form.AddField("mach_id", machId);
+		if (liveLvlData != "")
+			form.AddField("live_level_data", liveLvlData);
+		if (draftLvlData != "")
+			form.AddField("draft_level_data", draftLvlData);
+		WWW www = new WWW(SERVERURI + LVLPATH, form);
+		
+		return www;
 	}
 	
 	public string newLvl(string gameAcctId, string machId, string liveLvlData = "", string draftLvlData = "")
@@ -152,6 +150,17 @@ public class Farts : MonoBehaviour
 
 		return www.text;
 	}
+
+	public WWW loginWWW (string gameAcctName, string gameAcctPass) {
+		WWWForm form = new WWWForm();
+		form.AddField("game_acct_name", gameAcctName);
+		form.AddField("game_acct_password", gameAcctPass);
+
+		WWW www = new WWW(SERVERURI + GAMEACCTPATH + "login", form);
+		StartCoroutine(httpRequest(www));
+		
+		return www;
+	}
 	
 	public string login(string gameAcctName, string gameAcctPass)
 	{
@@ -160,7 +169,7 @@ public class Farts : MonoBehaviour
 		form.AddField("game_acct_password", gameAcctPass);
 		
 		WWW www = new WWW(SERVERURI + GAMEACCTPATH + "login", form);
-        Debug.Log(SERVERURI + GAMEACCTPATH + "login");
+        //Debug.Log(SERVERURI + GAMEACCTPATH + "login");
 		StartCoroutine(httpRequest(www));
 		
 		float timeStart = Time.realtimeSinceStartup;
@@ -175,7 +184,7 @@ public class Farts : MonoBehaviour
 			//Debug.Log("HTTP request time elapsed: " + (Time.realtimeSinceStartup - timeStart));
 		}
 
-        Debug.Log(www.text);
+        Debug.Log(www.text); // display char data
 		return www.text;
 	}
 

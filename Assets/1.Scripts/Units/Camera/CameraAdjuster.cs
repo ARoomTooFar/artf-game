@@ -39,8 +39,13 @@ public class CameraAdjuster : MonoBehaviour {
 		//avgX = (p1.transform.position.x + p2.transform.position.x + p3.transform.position.x + p4.transform.position.x)/4 + baseX; // 
 		//avgZ = (p1.transform.position.z + p2.transform.position.z + p3.transform.position.z + p4.transform.position.z)/4 + baseZ; //
 	
-
-		playerList = GameObject.FindGameObjectsWithTag ("Player");
+//		playerList = new List<GameObject>();
+//		playerList = GameObject.FindGameObjectsWithTag ("Player");
+		playerList = new GameObject[4];
+		playerList[0] = GameObject.FindGameObjectWithTag ("Player1");
+		playerList[1] = GameObject.FindGameObjectWithTag ("Player2");
+		playerList[2] = GameObject.FindGameObjectWithTag ("Player3");
+		playerList[3] = GameObject.FindGameObjectWithTag ("Player4");
 	}
 	/*void seeable(Character target){
 		RaycastHit hit;
@@ -80,6 +85,7 @@ public class CameraAdjuster : MonoBehaviour {
 		List<float> xs = new List<float>();
 		List<float> zs = new List<float>();
 		for(int i = 0; i < playerList.Length; i++){
+			if(playerList[i] == null) continue;
 			xs.Add(playerList[i].transform.position.x);
 			zs.Add(playerList[i].transform.position.z);
 		}

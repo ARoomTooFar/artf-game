@@ -5,45 +5,50 @@ public class Wall : MonoBehaviour {
 
 	public bool show;
 	public float disappear;
+	public float timeElapsed;
 	public GameObject stand;
-	public GameObject wall;
-	protected virtual void Start(){
+
+	protected virtual void Start() {
 		show = true;
-		disappear = 3f;
-	}
-	protected virtual void Awake () {
+		disappear = .01f;
+		timeElapsed = 4;
 	}
 
-	public virtual void toggleShow(){
-		if(show){
-			show = false;
-			if(stand !=null){
-				stand.GetComponent<Renderer>().enabled = true;
+	protected virtual void Awake() {
+	}
+
+	public virtual void toggleShow() {
+		if(this.gameObject.transform.Find("Wall") != null){
+			GameObject wall = this.gameObject.transform.Find("Wall").gameObject;
+
+			foreach(Material mat in wall.GetComponent<Renderer>().materials) {
+				if(mat.HasProperty("_Color")) {
+					Color trans = mat.color;
+					trans.a = .2f;
+					mat.color = trans;
+				}
 			}
-			wall.GetComponent<Renderer>().enabled = false;
-			// GetComponent<Collider>().enabled = false;
-			StopCoroutine("revWait");
-			StartCoroutine("revWait",disappear);
+		}
+
+		timeElapsed = 0;
+	}
+
+	protected virtual void Update() {
+		if(timeElapsed < disappear) {
+			timeElapsed += Time.deltaTime;
+		} else {
+			if(this.gameObject.transform.Find("Wall") != null){
+				GameObject wall = this.gameObject.transform.Find("Wall").gameObject;
+
+				foreach(Material mat in wall.GetComponent<Renderer>().materials) {
+					if(mat.HasProperty("_Color")) {
+						Color trans = mat.color;
+						trans.a = 1f;
+						mat.color = trans;
+					}
+				}
+			}
 		}
 	}
-
-	protected virtual void Update(){
 	
-	}
-	private IEnumerator revWait(float duration){
-		for (float timer = 0; timer < duration; timer += Time.deltaTime){
-			//testable = true;
-			if(timer > duration -1f){
-				show = true;
-				wall.GetComponent<Collider>().enabled = true;
-			}
-			yield return 0;
-		}
-		show = true;
-		if(stand !=null){
-			stand.GetComponent<Renderer>().enabled = false;
-		}
-		//GetComponent<Collider>().enabled = true;
-		wall.GetComponent<Renderer>().enabled = true;
-	}
 }

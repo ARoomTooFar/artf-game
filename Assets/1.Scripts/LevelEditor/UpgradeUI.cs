@@ -31,6 +31,87 @@ public class UpgradeUI : MonoBehaviour
 	
 	bool rayHit = false;
 
+	//health, armor, strength, coordination, damage
+	static int[,] FoliantFodderStats = new int[6,5]{
+		{50, 1, 10, 0, 10}, 
+		{100, 3, 20, 0, 20},
+		{150, 5, 30, 0, 30},
+		{200, 7, 40, 0, 40},
+		{250, 9, 50, 0, 50},
+		{300, 11, 60, 0, 60}};
+	static int[,] FoliantHiveStats = new int[6,5]{
+		{50, 1, 10, 0, 10}, 
+		{100, 3, 20, 0, 20},
+		{150, 5, 30, 0, 30},
+		{200, 7, 40, 0, 40},
+		{250, 9, 50, 0, 50},
+		{300, 11, 60, 0, 60}};
+	static int[,] CackleBranchStats = new int[6,5]{
+		{50, 1, 10, 0, 10}, 
+		{100, 3, 20, 0, 20},
+		{150, 5, 30, 0, 30},
+		{200, 7, 40, 0, 40},
+		{250, 9, 50, 0, 50},
+		{300, 11, 60, 0, 60}};
+	static int[,] BullyTrunkStats = new int[6,5]{
+		{50, 1, 10, 0, 10}, 
+		{100, 3, 20, 0, 20},
+		{150, 5, 30, 0, 30},
+		{200, 7, 40, 0, 40},
+		{250, 9, 50, 0, 50},
+		{300, 11, 60, 0, 60}};
+	static int[,] BushlingStats = new int[6,5]{
+		{50, 1, 10, 0, 10}, 
+		{100, 3, 20, 0, 20},
+		{150, 5, 30, 0, 30},
+		{200, 7, 40, 0, 40},
+		{250, 9, 50, 0, 50},
+		{300, 11, 60, 0, 60}};
+	static int[,] ArtilitreeStats = new int[6,5]{
+		{50, 1, 10, 0, 10}, 
+		{100, 3, 20, 0, 20},
+		{150, 5, 30, 0, 30},
+		{200, 7, 40, 0, 40},
+		{250, 9, 50, 0, 50},
+		{300, 11, 60, 0, 60}};
+	static int[,] MirageStats = new int[6,5]{
+		{50, 1, 10, 0, 10}, 
+		{100, 3, 20, 0, 20},
+		{150, 5, 30, 0, 30},
+		{200, 7, 40, 0, 40},
+		{250, 9, 50, 0, 50},
+		{300, 11, 60, 0, 60}};
+	static int[,] SynthStats = new int[6,5]{
+		{50, 1, 10, 0, 10}, 
+		{100, 3, 20, 0, 20},
+		{150, 5, 30, 0, 30},
+		{200, 7, 40, 0, 40},
+		{250, 9, 50, 0, 50},
+		{300, 11, 60, 0, 60}};
+	static int[,] DartPlantStats = new int[6,5]{
+		{50, 1, 10, 0, 10}, 
+		{100, 3, 20, 0, 20},
+		{150, 5, 30, 0, 30},
+		{200, 7, 40, 0, 40},
+		{250, 9, 50, 0, 50},
+		{300, 11, 60, 0, 60}};
+
+	//for updating stat value text on ui panel
+	Dictionary<string, int[,]> MonsterStats = new Dictionary<string, int[,]>(){
+		{"FoliantFodder", FoliantFodderStats},
+		{"FoliantHive", FoliantHiveStats},
+		{"CackleBranch", CackleBranchStats},
+		{"BullyTrunk", BullyTrunkStats},
+		{"Bushling", BushlingStats},
+		{"Artilitree", ArtilitreeStats},
+		{"Mirage", MirageStats},
+		{"Synth", FoliantFodderStats},
+		{"DartPlant", DartPlantStats}
+
+	};
+
+
+
 	void Start ()
 	{
 		Button btn;
@@ -93,16 +174,33 @@ public class UpgradeUI : MonoBehaviour
 		}
 	}
 
-	//turn tiers gray that aren't applied. turn tiers green that are applied
+	//updates tier-related info
 	void updateTiers(){
+		//turn tiers gray that aren't applied. turn tiers green that are applied
 		foreach(Transform thing in tierStats.transform) {
-			if(!thing.name.Contains("Tier")){
-				continue;
+			if(thing.name.Contains("Tier")){
+				if(Convert.ToInt32(thing.name[thing.name.Length-1])-Convert.ToInt32('0') <= tier){
+					thing.GetComponent<Text>().color = Color.green;
+				} else {
+					thing.GetComponent<Text>().color = Color.gray;
+				}
 			}
-			if(Convert.ToInt32(thing.name[thing.name.Length-1])-Convert.ToInt32('0') <= tier){
-				thing.GetComponent<Text>().color = Color.green;
-			} else {
-				thing.GetComponent<Text>().color = Color.gray;
+
+			//if it has a (Clone) in the name (which it probahly should), get rid of
+			//the clone text
+			string monsterName = this.parentObject.gameObject.name;
+			if(monsterName.Contains("(Clone)")){
+				monsterName = monsterName.Substring(0, monsterName.IndexOf("("));
+			}
+
+			//update stat values
+			if(thing.name.Contains("StatValues") && tier < maxTier && monsterName != "Copy"){
+				thing.GetComponent<Text>().text = 
+						"Health: " + MonsterStats[monsterName][tier,0].ToString() +
+						"\nArmor: " + MonsterStats[monsterName][tier,1].ToString() + "%" +
+						"\nStrength: " + MonsterStats[monsterName][tier,2].ToString() +
+						"\nCoordination: " + MonsterStats[monsterName][tier,3].ToString() +
+						"\nDamage: " + MonsterStats[monsterName][tier,4].ToString();
 			}
 		}
 	}
@@ -122,10 +220,10 @@ public class UpgradeUI : MonoBehaviour
 	void Update(){
 
 		//keeps canvas stuck on world object. for when canvas is in Screen Space - Overlay mode
-		stickScreenSpaceOverlayCameraToObject();
+//		stickScreenSpaceOverlayCameraToObject();
 
 		//resizes canvas according to camera zoom, for when canvas is in World Space mode
-		//scaleWorldSpaceCanvas();
+		scaleWorldSpaceCanvas();
 
 		//this checks if the object this script applies to was clicked
 		if (Input.GetMouseButtonDown (0)) {

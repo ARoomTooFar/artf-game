@@ -8,8 +8,10 @@ public class MainMenuCtrl : MonoBehaviour {
     public string menuContainerName;
 	public string menuPopUpName;
 
+	private int playerNum;
 	private GSManager gsManager;
 	private Farts serv;
+	private WWW loginReq;
 
     // UI state
     private bool menuMoved = false;
@@ -61,15 +63,27 @@ public class MainMenuCtrl : MonoBehaviour {
 	void Start () {
 		gsManager = GameObject.Find("/GSManager").GetComponent<GSManager>();
 		serv = gameObject.AddComponent<Farts>(); // add networking component
-		Debug.Log (gameObject.name + ": " + gsManager);
-		Debug.Log (gameObject.name + ": " + serv);
+
+		// get player number
+		if (menuContainerName == "P1MenuContainer") {
+			playerNum = 0;
+		} else if (menuContainerName == "P2MenuContainer") {
+			playerNum = 1;
+		} else if (menuContainerName == "P3MenuContainer") {
+			playerNum = 2;
+		} else if (menuContainerName == "P4MenuContainer") {
+			playerNum = 3;
+		} else {
+			Debug.LogError ("Invalid menu container name. Can't assign player number for UI!");
+		}
+
         // setup start menu
         startMenu = new GameObject[startMenuHeight, startMenuWidth];
         startMenu[0, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/StartMenu/BtnLogin");
         startMenu[1, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/StartMenu/BtnRegister");
 		startMenuAnim = GameObject.Find ("/Canvas/" + menuContainerName + "/StartMenu").GetComponent<Animator>();
 		
-		// login button press handler
+		// login form switch button
         startMenu[0, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
 			MenuSwitch (Menu.LoginForm);
@@ -113,7 +127,9 @@ public class MainMenuCtrl : MonoBehaviour {
 		// login button
 		loginForm[2, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
-			serv.login(txtFieldAcctName.text, txtFieldPasscode.text);
+			menuLock = true;
+			MenuDisable();
+			loginReq = serv.loginWWW(txtFieldAcctName.text, txtFieldPasscode.text);
 		});
 
 		// back button
@@ -245,76 +261,76 @@ public class MainMenuCtrl : MonoBehaviour {
 		});
 		
 		lowerPad[0, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[3] { 'a', 'b', 'c' })
-		                                                       );
+			KeyInput(new char[3] { 'a', 'b', 'c' })
+		);
 		
 		lowerPad[0, 2].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[3] { 'd', 'e', 'f' })
-		                                                       );
+			KeyInput(new char[3] { 'd', 'e', 'f' })
+		);
 		
 		lowerPad[1, 0].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[3] { 'g', 'h', 'i' })
-		                                                       );
+			KeyInput(new char[3] { 'g', 'h', 'i' })
+		);
 		
 		lowerPad[1, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[3] { 'j', 'k', 'l' })
-		                                                       );
+			KeyInput(new char[3] { 'j', 'k', 'l' })
+		);
 		
 		lowerPad[1, 2].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[3] { 'm', 'n', 'o' })
-		                                                       );
+			KeyInput(new char[3] { 'm', 'n', 'o' })
+		);
 		
 		lowerPad[2, 0].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[4] { 'p', 'q', 'r', 's' })
-		                                                       );
+			KeyInput(new char[4] { 'p', 'q', 'r', 's' })
+		);
 		
 		lowerPad[2, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[3] { 't', 'u', 'v' })
-		                                                       );
+			KeyInput(new char[3] { 't', 'u', 'v' })
+		);
 		
 		lowerPad[2, 2].GetComponent<Button>().onClick.AddListener(() =>
-		                                                       KeyInput(new char[4] { 'w', 'x', 'y', 'z' })
-		                                                       );
+			KeyInput(new char[4] { 'w', 'x', 'y', 'z' })
+		);
 
 		numPad[0, 0].GetComponent<Button>().onClick.AddListener(() =>
 		    KeyInput(new char[1] { '1' })
 		);
 
 		numPad[0, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '2' })
-		                                                        );
+			KeyInput(new char[1] { '2' })
+		);
 
 		numPad[0, 2].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '3' })
-		                                                        );
+			KeyInput(new char[1] { '3' })
+		);
 
 		numPad[1, 0].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '4' })
-		                                                        );
+			KeyInput(new char[1] { '4' })
+		);
 
 		numPad[1, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '5' })
-		                                                        );
+			KeyInput(new char[1] { '5' })
+		);
 
 		numPad[1, 2].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '6' })
-		                                                        );
+			KeyInput(new char[1] { '6' })
+		);
 
 		numPad[2, 0].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '7' })
-		                                                        );
+			KeyInput(new char[1] { '7' })
+		);
 
 		numPad[2, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '8' })
-		                                                        );
+			KeyInput(new char[1] { '8' })
+		);
 
 		numPad[2, 2].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '9' })
-		                                                        );
+			KeyInput(new char[1] { '9' })
+		);
 
 		numPad[3, 1].GetComponent<Button>().onClick.AddListener(() =>
-		                                                        KeyInput(new char[1] { '0' })
-		                                                        );
+			KeyInput(new char[1] { '0' })
+		);
 
 		// switch to start menu and setup the keypad
 		MenuSwitch (Menu.StartMenu);
@@ -548,6 +564,8 @@ public class MainMenuCtrl : MonoBehaviour {
     }
 
 	void MenuReset() {
+		gsManager.leaderList.Remove (playerNum);
+		gsManager.players [playerNum] = null;
 		txtFieldAcctName.text = "Enter an account name...";
 		txtFieldPasscode.text = "Enter your passcode...";
 	}
@@ -563,29 +581,58 @@ public class MainMenuCtrl : MonoBehaviour {
     }
 
 	void DeleteChar() {
-		if (txtDisplayField.text.Length > 0)
-		{
+		if (txtDisplayField.text.Length > 0 && txtDisplayField.text != "Enter an account name..." && txtDisplayField.text != "Enter your passcode...") {
 			txtDisplayField.text = txtDisplayField.text.Remove(txtDisplayField.text.Length - 1);
 			charArrLoc = 0;
 			prevKey = "";
 		}
 	}
 
+	// handles login function call
+	void LoginHand () {
+		if (serv.dataCheck(loginReq.text)) {
+			Debug.Log ("login success");
+
+			// add player data to player list
+			PlayerData playerData = serv.parseCharData(loginReq.text);
+			gsManager.players[playerNum] = playerData;
+			gsManager.leaderList.Add (playerNum);
+			gsManager.players[playerNum].PrintData();
+		} else {
+			Debug.Log ("login failure");
+		}
+	}
+
 	void Update () {
-		// check for joystick movement
-        MenuMove(Input.GetAxisRaw(controls.hori), Input.GetAxisRaw(controls.vert));
+		// UI controls
+		if (menuLock == false) {
+			// check for joystick movement
+			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
 
-		// check for button press
-        if (Input.GetButtonUp(controls.joyAttack) && menuLock == false)
-        {
-            var pointer = new PointerEventData(EventSystem.current);
-            ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.submitHandler);
-        }
+			// check for button presses
+			if (Input.GetButtonUp (controls.joyAttack)) {
+				var pointer = new PointerEventData (EventSystem.current);
+				ExecuteEvents.Execute (currMenuPtr [locY, locX], pointer, ExecuteEvents.submitHandler);
+			}
         
+			if (Input.GetButtonUp (controls.joySecItem) && currMenu == Menu.PopUp) {
+				DeleteChar ();
+			}
+		}
 
-        if (Input.GetButtonUp(controls.joySecItem) && currMenu == Menu.PopUp)
-        {
-			DeleteChar();
-        }
+		// login loading
+		if (loginReq != null && loginReq.isDone == false) {
+			//Debug.Log ("login progress"); // show login loading msg
+		} else if (loginReq != null && loginReq.isDone) {
+			// reset highlighted UI ele
+			var pointer = new PointerEventData(EventSystem.current);
+			ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler);
+			menuLock = false;
+			MenuEnable ();
+			prevBtn = currMenuPtr[locY, locX];
+
+			LoginHand();
+			loginReq = null;
+		}
 	}
 }

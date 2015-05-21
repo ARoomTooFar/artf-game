@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public static class LevelPathCheck {
 
-	public static List<Vector3> fullPath { get; private set; }
+	//public static List<Vector3> fullPath { get; private set; }
 
 	public static List<SceneryBlock> roomPath { get; private set; }
 
@@ -14,10 +14,10 @@ public static class LevelPathCheck {
 			rm.linkRoomsViaDoors();
 		}
 		roomPath = Pathfinder.getRoomPath(MapData.StartingRoom, MapData.EndingRoom);
-		fullPath = Pathfinder.getPath(MapDataParser.start.Position, MapDataParser.end.Position);
+		//fullPath = Pathfinder.getPath(MapDataParser.start.Position, MapDataParser.end.Position);
 		GameObject obj = GameObject.Find("LevelCheck");
 		if(obj != null) {
-			obj.GetComponent<Text>().enabled = (fullPath == null);
+			obj.GetComponent<Text>().enabled = (roomPath == null);
 		}
 	}
 }
