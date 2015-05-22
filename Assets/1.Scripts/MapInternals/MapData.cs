@@ -44,9 +44,9 @@ public static class MapData {
 
 	public static string SaveString {
 		get {
-			string retVal = "";
+			string retVal = "Name:";
 			retVal += GameObject.Find("InputField_Save").GetComponent<InputField>().text;
-			retVal += " " + Difficulty + "\n";
+			retVal += "\t" + Difficulty + "\n";
 			//retVal += "Terrain\n";
 			//retVal += TerrainBlocks.SaveString;
 			retVal += "Terminal\n";
