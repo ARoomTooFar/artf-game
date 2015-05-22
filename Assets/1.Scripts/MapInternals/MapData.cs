@@ -39,7 +39,7 @@ public static class MapData {
 	public static ARTFTerminalRoom EndingRoom;// = new ARTFTerminalRoom(new Vector3(0, 0, 8), new Vector3(7, 0, 15));
 
 	public static float Difficulty{
-		get{ return (float)MonsterBlocks.allMonsters/TheFarRooms.roomList.Count;}
+		get{ return (float)MonsterBlocks.allMonsters().Count/TheFarRooms.roomList.Count;}
 	}
 
 	public static string SaveString {
