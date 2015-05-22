@@ -76,7 +76,7 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 		}
 	}
 
-	//sets the tip tet text and the tip text title using the tip text table
+	//sets the tip text text and the tip text title using the tip text table
 	void setTipTextTextAndTipTextTitleFromTipTextTable(string type){
 		tipTitleText =
 			tipTextTable[type].Substring(0, tipTextTable[type].IndexOf(":"));
