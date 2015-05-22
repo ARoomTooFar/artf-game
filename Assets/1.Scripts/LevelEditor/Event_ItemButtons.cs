@@ -10,23 +10,22 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 	static Camera UICamera;
 	string connectedPrefab = "";
 	Vector3 newp;
-	static GameObject buttonBG;
 	static int selectedButtonID;
 	static GameObject itemObjectCopy = null;
-//	Text amountText;
 	public int price;
 	Text priceText;
 	public string itemType;
+	GameObject select;
 	
 	void Start() {
-//		amountText = this.transform.Find("AmountText").gameObject.GetComponent<Text>();
 		priceText = this.transform.Find("PriceText").gameObject.GetComponent<Text>();
 		UICamera = Camera.main.GetComponent<Camera>();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
+		select = transform.Find("Select").gameObject;
+		select.SetActive(false);
 	}
 
 	void Update() {
-//		amountText.text = "x" + (Money.money / price).ToString();
 		priceText.text = "$" + price;
 
 		if(selectedButtonID == this.gameObject.GetInstanceID()) {		
@@ -34,6 +33,8 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 				selectedButtonID = -1;
 				StartCoroutine(folderGhostDragging());
 			}
+		}else{
+			select.SetActive(false);
 		}
 	}
 
@@ -46,21 +47,11 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 	}
 
 	public void selectButton(GameObject butt) {
-		if(buttonBG == null) {
-			buttonBG = Instantiate(Resources.Load("LevelEditor/Other/buttonHighlight")) as GameObject;
-		}
-
-		buttonBG.SetActive(true);
-		buttonBG.transform.SetParent(butt.transform.parent);
-		RectTransform thisRect = butt.GetComponent<RectTransform>();
-		RectTransform bgRect = buttonBG.GetComponent<RectTransform>();
-		//set its position to be slightly bigger than the button
-		bgRect.anchoredPosition = thisRect.anchoredPosition;
+		select.SetActive(true);
 	}
 
 	IEnumerator folderGhostDragging() { 
 		string prefabLocation = "LevelEditor/" + connectedPrefab;
-
 
 		//for the ghost-duplicate
 		itemObjectCopy = null;
@@ -151,8 +142,7 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 		
 		//if move was cancelled, we don't perform an update on the item object's position
 		if(cancellingMove == true) {
-			//Destroy(buttonBG);
-			buttonBG.SetActive(false);
+			select.SetActive(false);
 			selectedButtonID = -1;
 		} else {
 
@@ -186,9 +176,8 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 			Destroy(itemObjectCopy);
 			itemObjectCopy = null;
 
-			//Destroy(buttonBG);
-			buttonBG.SetActive(false);
-			selectedButtonID = -1;
+			//unselect button
+			select.SetActive(false);
 		
 		}
 
