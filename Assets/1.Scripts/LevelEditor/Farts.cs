@@ -190,7 +190,7 @@ public class Farts : MonoBehaviour
 
 	public PlayerData parseCharData(string charData) {
 		PlayerData playerData = gameObject.AddComponent<PlayerData>();
-		int[] inventory = new int[10];
+		int[] inventory = new int[52];
 		string[] parsedData = charData.Split (',');
 
 		playerData.name = parsedData[0];
@@ -206,6 +206,22 @@ public class Farts : MonoBehaviour
 		playerData.inventory = inventory;
 
 		return playerData;
+	}
+
+	public string stringifyCharData(PlayerData playerData) {
+		string newCharData = "";
+		
+		newCharData += playerData.name;
+		newCharData += "," + playerData.char_id.ToString ();
+		newCharData += "," + playerData.hair_id.ToString ();
+		newCharData += "," + playerData.voice_id.ToString ();
+		newCharData += "," + playerData.money.ToString ();
+
+		for (int i = 0; i < playerData.inventory.Length; ++i) {
+			newCharData += "," + playerData.inventory[i];
+		}
+
+		return newCharData;
 	}
 	
 	public string getChar(string charId)
