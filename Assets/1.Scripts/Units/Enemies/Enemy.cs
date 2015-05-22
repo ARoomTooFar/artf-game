@@ -268,9 +268,9 @@ public class Enemy : NewCharacter {
 	}
 	
 	public override void die() {
-		monsterLoot.lootMonster();
 		base.die ();
 		Destroy (gameObject);
+		monsterLoot.lootMonster();
 	}
 	
 	//-------------------------------//
