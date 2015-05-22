@@ -11,7 +11,7 @@ public partial class ARTFRoom : Square {
 	#region PrivateVariables
 	protected string floorType = "{0}/Floors/IndustrialFloor1";
 	protected string roomCornerId = "LevelEditor/Other/RoomCorner";
-	protected string wallType = "{0}/Rooms/wallstoneend";
+	protected string wallType = "{0}/Other/wallstoneend";
 	#endregion PrivateVariables
 
 	#region Properties
@@ -64,7 +64,7 @@ public partial class ARTFRoom : Square {
 	 */
 	public ARTFRoom(Vector3 pos1, Vector3 pos2,
 	                string floor = "{0}/Floors/IndustrialFloor1",
-	                string wall = "{0}/Rooms/wallstoneend") : base(pos1, pos2) {
+	                string wall = "{0}/Other/wallstoneend") : base(pos1, pos2) {
 		floorType = floor;
 		wallType = wall;
 		this.Floor = GameObjectResourcePool.getResource(floorType, this.LLCorner, Vector3.zero);
@@ -185,6 +185,9 @@ public partial class ARTFRoom : Square {
 		}
 		foreach(SceneryBlock wall in Walls) {
 			wall.move(offset);
+		}
+		foreach(SceneryBlock dr in (new List<SceneryBlock>(Doors))) {
+			MapData.SceneryBlocks.remove(dr);
 		}
 		setFloor();
 		updateMarkerPositions();

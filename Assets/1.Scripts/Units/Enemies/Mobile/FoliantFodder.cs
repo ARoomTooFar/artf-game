@@ -27,7 +27,7 @@ public class FoliantFodder: MobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 5;
+		tier = 0;
 		base.SetTierData (tier);
 
 		monsterLoot.initializeLoot("FoliantFodder", tier);

@@ -185,7 +185,8 @@ public class Enemy : NewCharacter {
 
 		if (angle < fov) {
 			RaycastHit hit;
-			if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, dis, layerMask)) {
+			// Debug.DrawRay(transform.position + new Vector3(0f, 2f, 0f), direction.normalized * dis);
+			if (Physics.Raycast (transform.position + new Vector3(0f, 2f, 0f), direction.normalized, out hit, dis, layerMask)) {
 				this.animator.SetBool("CanSeeTarget", false);
 				return false;
 			} else {
@@ -208,7 +209,7 @@ public class Enemy : NewCharacter {
 	public virtual void getFacingTowardsTarget() {
 		Vector3 newFacing = Vector3.zero;
 		
-		if (this.target != null && this.actable) {
+		if (this.target != null && this.actable && !this.lockRotation) {
 			newFacing = this.target.transform.position - this.transform.position;
 			newFacing.y = 0.0f;
 			if (newFacing != Vector3.zero) {
@@ -267,9 +268,9 @@ public class Enemy : NewCharacter {
 	}
 	
 	public override void die() {
-		monsterLoot.lootMonster();
 		base.die ();
 		Destroy (gameObject);
+		monsterLoot.lootMonster();
 	}
 	
 	//-------------------------------//

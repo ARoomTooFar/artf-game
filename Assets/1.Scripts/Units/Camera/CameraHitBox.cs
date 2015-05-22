@@ -25,21 +25,7 @@ public class CameraHitBox : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		for(int i = 0; i < areaUnits.Count; i++) {
-			if(areaUnits[i].isDead){
-				areaUnits.Remove(areaUnits[i]);
-				i--;
-			}
-		}
-
-
-		if (enemyCount > 0 && !battle.isPlaying) {
-			environment.Pause();
-			battle.Play();
-		}
-
-		
+	void Update () {		
 		avgMake();
 	}
 	void avgMake(){
@@ -56,53 +42,24 @@ public class CameraHitBox : MonoBehaviour {
 			transform.position = new Vector3(avgX,transform.position.y,avgZ);
 		}
 	}
-	void OnTriggerEnter (Collider other) {
-		/*Character unit = other.GetComponent<Character>();
-		if(unit != null) {
-			areaUnits.Add (unit);
-		}
-		*/
 
-		switch (other.tag) {
-		case "Enemy":
-			enemyCount++;
-			break;
-		}
-
-}
-	void OnTriggerStay (Collider other) {
-		/*
-		Character unit = other.GetComponent<Character>();
-		if(unit != null) {
-			foreach(Character thingie in areaUnits) {
-				if(thingie == unit){
-					same = true;
-				}					
-			}
-			if(!same){
-				areaUnits.Add (unit);
-			}
-			same = false;
-		}
-		*/
-
+	bool TransitionIn(AudioSource musik, float rate, float done) {
+		if(musik.volume < 0.2f) musik.volume += 0.1f * Time.deltaTime;
+		else if (musik.volume < done) musik.volume += rate * Time.deltaTime;
+		return musik.volume >= done;
 	}
-	void OnTriggerExit (Collider other) {
-		/*Character unit = other.GetComponent<Character>();
-		if(unit != null) {
-			areaUnits.Add (unit);
+
+	bool TransitionOut(AudioSource musik, float rate, float done) {
+		if (musik.volume > 0.2f) musik.volume -= rate * Time.deltaTime;
+		else if (musik.volume > done) musik.volume -= 0.1f * Time.deltaTime;
+
+		if(musik.volume <= done) {
+			musik.Stop();
+			musik.volume = 1;
+			return true;
 		}
-		*/
-		
-		switch (other.tag) {
-		case "Enemy":
-			enemyCount--;
-			if(enemyCount < 1){
-				battle.Stop();
-				environment.Play();
-			}
-			break;
-		}
-		
+		return false;
 	}
+
+
 }
