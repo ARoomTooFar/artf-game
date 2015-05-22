@@ -24,13 +24,22 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
 		{"Shop", "Bank Account:This is the amount of money you have to spend on items."},
 
-		{"BullyTrunk(Clone)", "Bully Trunk:The Bully Trunk is a kojrgk aerg kjefgo efgmskegt jker gkjnerkjgarlfg skefgjsekj" +
-			"srkjgskejrg sdfjkgsejkrg nkjerngnsergnkejsrg ."},
-		{"Bushling(Clone)", "Bushling:Bushling is a gjkds dfg js ksdfkj sdjkf jkdfg kdfg jker."},
-		{"CackleBranch(Clone)", "Cackle Branch:The CackleBranch isf gjsdfk kjsfks kr ."},
-		{"FoliantFodder(Clone)", "Foliant Fodder:The Foliant Fodder is fikdfgksdfgk sjkd fklsdf klasdfk askjf ."},
-		{"FoliantHive(Clone)", "Foliant Hive:The Foliant Hive is fie kdwfgweksdfgk se  fklsdf klasdfk askjf ."},
-		{"Mirage(Clone)", "Mirage:The Mirage is efwef wefwe err e  wewe wefwsjkd fwe kwe lwedf klasdfk askjf ."},
+		{"BullyTrunk(Clone)", "Bully Trunk:A beast of wood and steal. Charges delvers before pummling them into the ground."},
+		{"Bushling(Clone)", "Bushling:An agile creature of vine, will use whatever means necessary to slice delvers appart. "},
+		{"CackleBranch(Clone)", "Cackle Branch:A living shrub. With a gun and a bad attitude."},
+		{"FoliantFodder(Clone)", "Foliant Fodder:A small, swarming bug, that craves human flesh."},
+		{"FoliantHive(Clone)", "Foliant Hive:The favored nest of the Folaint Fodder, will launch endless waves of Foliant Fodder at unsuspecting delvers."},
+		{"Mirage(Clone)", "Mirage:A manifestation of pure malice and cunning. Creates mirror images of itself to confuse and disrupt player. Strikes with deadly power."},
+		{"Artilitree(Clone)", "Artilitree:Our most advanced weaponry, turned back against it's creators. Mostly stationary, launches barages of deadly gases."},
+		{"Synth(Clone)", "Synth:A robotic husk, now a slave to the jungle. Will send delvers running under a hail of bullets."},
+		{"DartPlant(Clone)", "DartPlant:A friendly flower, with a bite."},
+		{"SpikeTrap(Clone)", "SpikeTrap:Stabs you."},
+		{"StunTrap(Clone)", "StunTrap:Stuns you."},
+		{"SlowField(Clone)", "SlowField:Slows you."},
+
+		{"treeAndLamp(Clone)", "Tree and Lamp:A tree with a lamp."},
+		{"TrashCan(Clone)", "Trash Can:A container for household refuse."},
+		{"plantlight(Clone)", "Plant Light:A plant with a light."},
 
 		{"folderButton(Clone)", "Mirage:The Mirage is efwef wefwe err e  wewe wefwsjkd fwe kwe lwedf klasdfk askjf ."},
 	};
