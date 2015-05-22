@@ -32,12 +32,15 @@ public class MusicController: MonoBehaviour {
 		if (actives > 0 && !battle.isPlaying) {
 			environment.Pause ();
 			environment.volume = 0;
+			battle.volume = 0;
 			battle.Play ();
 		} else if (actives == 0 && battle.isPlaying) {
 			if (TransitionOut (battle, 0.7f, 0))
 				environment.UnPause ();
 		} else if (environment.volume < 1 && environment.isPlaying) {
-			TransitionIn(environment, 0.3f, 1);
+			TransitionIn (environment, 0.3f, 1);
+		} else if (battle.volume < 1 && battle.isPlaying) {
+			TransitionIn (battle, 0.3f, 1);
 		}
 	}
 
@@ -60,11 +63,11 @@ public class MusicController: MonoBehaviour {
 		return numberofmonsters;
 	}
 
-	void setBattle(AudioClip clip){
+	public void setBattle(AudioClip clip){
 		battle.clip = clip;
 	}
 
-	void setEnvironment(AudioClip clip){
+	public void setEnvironment(AudioClip clip){
 		environment.clip = clip;
 	}
 
