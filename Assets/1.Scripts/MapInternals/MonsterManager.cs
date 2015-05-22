@@ -23,6 +23,16 @@ public class MonsterManager {
 		dictionary.Clear ();
 	}
 
+	public List<GameObject> allMonsters(){
+		List<GameObject> retVal = new List<GameObject> ();
+		foreach (List<MonsterBlock> lst in dictionary.Values) {
+			foreach(MonsterBlock blk in lst){
+				retVal.Add (blk.GameObj);
+			}
+		}
+		return retVal;
+	}
+
 	#region Manipulation
 	/*
 	 * public bool addBlock (MonsterBlock block)
