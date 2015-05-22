@@ -13,20 +13,20 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 	static GameObject buttonBG;
 	static int selectedButtonID;
 	static GameObject itemObjectCopy = null;
-	Text amountText;
+//	Text amountText;
 	public int price;
 	Text priceText;
 	public string itemType;
 	
 	void Start() {
-		amountText = this.transform.Find("AmountText").gameObject.GetComponent<Text>();
+//		amountText = this.transform.Find("AmountText").gameObject.GetComponent<Text>();
 		priceText = this.transform.Find("PriceText").gameObject.GetComponent<Text>();
 		UICamera = Camera.main.GetComponent<Camera>();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
 	}
 
 	void Update() {
-		amountText.text = "x" + (Money.money / price).ToString();
+//		amountText.text = "x" + (Money.money / price).ToString();
 		priceText.text = "$" + price;
 
 		if(selectedButtonID == this.gameObject.GetInstanceID()) {		
