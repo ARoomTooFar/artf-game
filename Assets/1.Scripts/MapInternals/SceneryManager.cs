@@ -79,21 +79,8 @@ public class SceneryManager {
 	public bool add(SceneryBlock blk) {
 		ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
 		if(blk.SceneryBlockInfo.isDoor) {
-			if(rm == null) {
-				blk.remove();
-				return false;
-			}
-			if(!rm.isEdge(blk.Position)) {
-				blk.remove();
-				return false;
-			}
 			blk.rotate(rm.getWallSide(blk.Position));
-			if(!blk.Orientation.isCardinal()) {
-				blk.remove();
-				return false;
-			}
 			rm.Doors.Add(blk);
-
 			foreach(SceneryBlock wall in rm.Walls) {
 				if(blk.Coordinates.Contains(wall.Position)) {
 					wall.GameObj.SetActive(false);
@@ -265,6 +252,21 @@ public class SceneryManager {
 		ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
 		if(rm == null) {
 			return false;
+		}
+
+		if(blk.SceneryBlockInfo.isDoor) {
+			if(!rm.isEdge(blk.Position)) {
+				return false;
+			}
+			blk.rotate(rm.getWallSide(blk.Position));
+			if(!blk.Orientation.isCardinal()) {
+				return false;
+			}
+			foreach(Vector3 vec in blk.Coordinates){
+				if(rm.isCorner(vec)){
+					return false;
+				}
+			}
 		}
 
 		if(rm == MapData.StartingRoom || rm == MapData.EndingRoom) {

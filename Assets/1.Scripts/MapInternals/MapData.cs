@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public static class MapData {
 
@@ -37,9 +38,15 @@ public static class MapData {
 
 	public static ARTFTerminalRoom EndingRoom;// = new ARTFTerminalRoom(new Vector3(0, 0, 8), new Vector3(7, 0, 15));
 
+	public static float Difficulty{
+		get{ return (float)MonsterBlocks.allMonsters/TheFarRooms.roomList.Count;}
+	}
+
 	public static string SaveString {
 		get {
-			string retVal = "MapData\n";
+			string retVal = "";
+			retVal += GameObject.Find("InputField_Save").GetComponent<InputField>().text;
+			retVal += " " + Difficulty + "\n";
 			//retVal += "Terrain\n";
 			//retVal += TerrainBlocks.SaveString;
 			retVal += "Terminal\n";
@@ -70,6 +77,9 @@ public static class MapData {
 	}
 
 	public static void moveRoom(Vector3 oldPos, Vector3 newPos) {
+		if(oldPos.Equals(newPos)) {
+			return;
+		}
 		if(TheFarRooms.isMoveValid(oldPos, newPos)){
 			TheFarRooms.move(oldPos, newPos - oldPos);
 		}
