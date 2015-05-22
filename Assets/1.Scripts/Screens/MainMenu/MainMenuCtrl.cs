@@ -28,8 +28,7 @@ public class MainMenuCtrl : MonoBehaviour {
 	}
     private Menu currMenu;
     private Menu prevMenu;
-    private Text currFieldPtr;
-
+    
     // start menu
     private GameObject[,] startMenu;
     private int startMenuWidth = 1;
@@ -59,6 +58,7 @@ public class MainMenuCtrl : MonoBehaviour {
 	private string tmpCharName;
 	private int charArrLoc = 0;
 	private Text txtDisplayField;
+	private Text currFieldPtr;
 
 	void Start () {
 		gsManager = GameObject.Find("/GSManager").GetComponent<GSManager>();
