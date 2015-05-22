@@ -31,6 +31,8 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 		{"FoliantFodder(Clone)", "Foliant Fodder:The Foliant Fodder is fikdfgksdfgk sjkd fklsdf klasdfk askjf ."},
 		{"FoliantHive(Clone)", "Foliant Hive:The Foliant Hive is fie kdwfgweksdfgk se  fklsdf klasdfk askjf ."},
 		{"Mirage(Clone)", "Mirage:The Mirage is efwef wefwe err e  wewe wefwsjkd fwe kwe lwedf klasdfk askjf ."},
+
+		{"folderButton(Clone)", "Mirage:The Mirage is efwef wefwe err e  wewe wefwsjkd fwe kwe lwedf klasdfk askjf ."},
 	};
 
 	GameObject tt;
@@ -54,19 +56,33 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 			tipText = GameObject.Find("ScreenToolTipText").GetComponent<Text>();
 			tipTitle = GameObject.Find("ScreenToolTipTitle").GetComponent<Text>();
 
+			//if its a folder button, get it name from its sprite.
+			//if its an object in the world, gets its name from its name.
 			if(tipTextTable.ContainsKey(this.gameObject.name)){
-				tipTitleText =
-					tipTextTable[this.gameObject.name].Substring(0, tipTextTable[this.gameObject.name].IndexOf(":"));
-				tipTextText =
-					tipTextTable[this.gameObject.name].Substring(tipTextTable[this.gameObject.name].IndexOf(":") + 1);
+				if(this.gameObject.name == "folderButton(Clone)"){
+					string typeButtonRefersTo = this.gameObject.GetComponent<Image>().sprite.name + "(Clone)";
+
+					if(tipTextTable.ContainsKey(typeButtonRefersTo)){
+						setTipTextTextAndTipTextTitleFromTipTextTable(typeButtonRefersTo);
+					}
+				}else{
+					setTipTextTextAndTipTextTitleFromTipTextTable(this.gameObject.name);
+				}
 			}
 
+			//initialize the fields to be blank
 			tipTitle.text = "";
 			tipText.text = "";
 		}
 	}
 
-
+	//sets the tip text text and the tip text title using the tip text table
+	void setTipTextTextAndTipTextTitleFromTipTextTable(string type){
+		tipTitleText =
+			tipTextTable[type].Substring(0, tipTextTable[type].IndexOf(":"));
+		tipTextText =
+			tipTextTable[type].Substring(tipTextTable[type].IndexOf(":") + 1);
+	}
 	
 	void Update() {
 		if(usingMouseFollowToolTip){
