@@ -47,10 +47,10 @@ public class RiotShield : ToggleItem {
 	protected override void setInitValues() {
 		base.setInitValues();
 
-		cooldown = 10.0f;
+		cooldown = 5.0f;
 		maxDuration = 5;
 		dmgReduction = 1.0f;
-		userSlow = 0.75f;
+		userSlow = 0.6f;
 		debuff = new FreedomController (userSlow, dmgReduction);
 	}
 	
@@ -62,6 +62,7 @@ public class RiotShield : ToggleItem {
 	
 	// Called when character with an this item selected uses their item key
 	public override void useItem() {
+		this.user.lockRotation = true;
 		base.useItem();
 
 		// user.animator.SetTrigger("Sprint"); Set speed var in animator once we have the animation
@@ -75,6 +76,7 @@ public class RiotShield : ToggleItem {
 	}
 	
 	public override void deactivateItem() {
+		this.user.lockRotation = false;
 		base.deactivateItem();
 	}
 
