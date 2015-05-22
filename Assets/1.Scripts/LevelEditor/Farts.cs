@@ -9,14 +9,59 @@ public class Farts : MonoBehaviour
 	const string GAMEACCTPATH = "/gameaccts/";
 	const string CHARPATH = "/characters/";
 	const float timeoutTime = 60f; //HTTP requests timeout after 1 minute
-	
+
+
+	/* DATA MANAGEMENT */
 	// Checks if returned data is valid or not. Returns true if the data is valid, false otherwise.
 	public bool dataCheck(string levelData)
 	{
 		if (levelData == "error" || levelData == "") return false;
 		return true;
 	}
+
+	public PlayerData parseCharData(string charData) {
+		PlayerData playerData = gameObject.AddComponent<PlayerData>();
+		int[] inventory = new int[52];
+		string[] parsedData = charData.Split (',');
+		
+		playerData.name = parsedData[0];
+		playerData.char_id = int.Parse(parsedData [1]);
+		playerData.hair_id = int.Parse(parsedData [2]);
+		playerData.voice_id = int.Parse(parsedData [3]);
+		playerData.money = int.Parse(parsedData [4]);
+		
+		for (int i = 5; i < parsedData.Length; ++i) {
+			inventory[i - 5] = int.Parse(parsedData[i]);
+		}
+		
+		playerData.inventory = inventory;
+		
+		return playerData;
+	}
 	
+	public string stringifyCharData(PlayerData playerData) {
+		string newCharData = "";
+		
+		newCharData += playerData.name;
+		newCharData += "," + playerData.char_id.ToString ();
+		newCharData += "," + playerData.hair_id.ToString ();
+		newCharData += "," + playerData.voice_id.ToString ();
+		newCharData += "," + playerData.money.ToString ();
+		
+		for (int i = 0; i < playerData.inventory.Length; ++i) {
+			newCharData += "," + playerData.inventory[i];
+		}
+		
+		return newCharData;
+	}
+
+	public string[] parseListLevelData (string levelListData) {
+		string[] parsedData = levelListData.Split (',');
+		return parsedData;
+	}
+	
+
+	/* NETWORKING */
 	public WWW getLvlWww(string levelId)
 	{
 		WWW www = new WWW(SERVERURI + LVLPATH + levelId);
@@ -188,42 +233,6 @@ public class Farts : MonoBehaviour
 		return www.text;
 	}
 
-	public PlayerData parseCharData(string charData) {
-		PlayerData playerData = gameObject.AddComponent<PlayerData>();
-		int[] inventory = new int[52];
-		string[] parsedData = charData.Split (',');
-
-		playerData.name = parsedData[0];
-		playerData.char_id = int.Parse(parsedData [1]);
-		playerData.hair_id = int.Parse(parsedData [2]);
-		playerData.voice_id = int.Parse(parsedData [3]);
-		playerData.money = int.Parse(parsedData [4]);
-
-		for (int i = 5; i < parsedData.Length; ++i) {
-			inventory[i - 5] = int.Parse(parsedData[i]);
-		}
-
-		playerData.inventory = inventory;
-
-		return playerData;
-	}
-
-	public string stringifyCharData(PlayerData playerData) {
-		string newCharData = "";
-		
-		newCharData += playerData.name;
-		newCharData += "," + playerData.char_id.ToString ();
-		newCharData += "," + playerData.hair_id.ToString ();
-		newCharData += "," + playerData.voice_id.ToString ();
-		newCharData += "," + playerData.money.ToString ();
-
-		for (int i = 0; i < playerData.inventory.Length; ++i) {
-			newCharData += "," + playerData.inventory[i];
-		}
-
-		return newCharData;
-	}
-	
 	public string getChar(string charId)
 	{
 		WWW www = new WWW(SERVERURI + CHARPATH + charId);
