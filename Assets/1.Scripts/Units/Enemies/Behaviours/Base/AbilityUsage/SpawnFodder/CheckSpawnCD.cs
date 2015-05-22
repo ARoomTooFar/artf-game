@@ -1,8 +1,16 @@
 ﻿// Checks lunge cd and tells when it is off 
 
 using UnityEngine;
+using System.Collections.Generic;
 
 public class CheckSpawnCD : SpawnBehaviour {
+	
+	protected List<GameObject> fodder;
+	
+	public override void SetVar(ShootFodderBall spawn, FoliantHive hive) {
+		this.fodder = new List<GameObject>();
+		base.SetVar(spawn, hive);
+	}
 	
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		this.CheckSpawn(animator);
