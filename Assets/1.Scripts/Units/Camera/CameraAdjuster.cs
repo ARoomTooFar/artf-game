@@ -107,6 +107,7 @@ public class CameraAdjuster : MonoBehaviour {
 		float orthoSize = this.gameObject.GetComponent<Camera>().orthographicSize;
 		float minAllowedOrthoSize = 13f;
 
+
 //		print (zoomFactor + ", " + minAllowedOrthoSize);
 
 		if(zoomFactor > minAllowedOrthoSize){

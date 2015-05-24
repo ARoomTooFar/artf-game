@@ -86,6 +86,8 @@ public class FoliantHive : StationaryEnemy {
 		foreach (FoliantFodder f in fodderList) {
 			f.hiveDied();
 		}
+
+		deathNoise ();
 		
 		base.die ();
 	}

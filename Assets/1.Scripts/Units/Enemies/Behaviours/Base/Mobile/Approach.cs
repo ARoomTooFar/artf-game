@@ -14,7 +14,7 @@ public class Approach : EnemyBehaviour {
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		this.unit.transform.position = this.unit.transform.position - new Vector3 (0f, -this.unit.transform.position.y, 0f);
+		this.unit.transform.position = this.unit.transform.position - new Vector3 (0f, this.unit.transform.position.y, 0f);
 		if (!unit.actable) return;
 		this.unit.canSeePlayer(unit.target);
 		this.unit.getFacingTowardsTarget();

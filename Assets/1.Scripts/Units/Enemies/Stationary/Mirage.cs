@@ -169,6 +169,7 @@ public class Mirage : StationaryEnemy {
 			}
 			this.isDead = true;
 			if (this.deathTarget != null) this.deathTarget.BDS.rmvBuffDebuff(this.mark, this.gameObject);
+			deathNoise ();
 			animator.SetTrigger("Died");
 		}
 		
