@@ -8,6 +8,7 @@ public class Farts : MonoBehaviour
 	const string LVLPATH = "/levels/";
 	const string GAMEACCTPATH = "/gameaccts/";
 	const string CHARPATH = "/characters/";
+	const string MATCHMAKEPATH = "/matchmake/";
 	const float timeoutTime = 60f; //HTTP requests timeout after 1 minute
 
 
@@ -275,6 +276,12 @@ public class Farts : MonoBehaviour
 		}
 		
 		return www.text;
+	}
+
+	public WWW matchmakeWWW (double difficulty) {
+		double matchmakeVal = System.Math.Floor (difficulty);
+		WWW www = new WWW(SERVERURI + MATCHMAKEPATH + matchmakeVal);
+		return www;
 	}
 	
 	IEnumerator httpRequest(WWW www)

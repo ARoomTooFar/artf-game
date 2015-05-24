@@ -6,6 +6,7 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 	public Controls controls;
 
 	private string testLevelListData = "1,3,2,4,5";
+	private WWW matchmakeReq;
 
 	// UI state
 	private bool menuMoved = false;
@@ -50,6 +51,8 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 		ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
 		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 		prevBtn = currMenuPtr[locY, locX];
+
+		matchmakeReq = serv.matchmakeWWW (5);
 	}
 
 	// handles menu joystick movement control
@@ -104,6 +107,15 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 				var pointer = new PointerEventData (EventSystem.current);
 				ExecuteEvents.Execute (currMenuPtr [locY, locX], pointer, ExecuteEvents.submitHandler);
 			}
+		}
+
+		// matchmake loading
+		if (matchmakeReq != null && matchmakeReq.isDone == false) {
+			//Debug.Log ("login progress"); // show login loading msg
+		} else if (matchmakeReq != null && matchmakeReq.isDone) {
+			Debug.Log (matchmakeReq.url);
+			Debug.Log (matchmakeReq.text);
+			matchmakeReq = null;
 		}
 	}
 }
