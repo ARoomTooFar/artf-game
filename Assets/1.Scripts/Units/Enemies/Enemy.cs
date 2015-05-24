@@ -45,6 +45,8 @@ public class Enemy : NewCharacter {
 	
 	public MonsterLoot monsterLoot;
 	
+	public FlockDar flockDar;
+	
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType ("Player");
@@ -79,6 +81,8 @@ public class Enemy : NewCharacter {
 		}
 
 		MusicPlayer = GameObject.Find ("MusicPlayer");
+		
+		if (this.flockDar != null) this.flockDar.InstantiateFlockingDar(this);
 	}
 	
 	// Update is called once per frame
