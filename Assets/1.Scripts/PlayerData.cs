@@ -7,7 +7,7 @@ public class PlayerData : MonoBehaviour {
 	public int hair_id;
 	public int voice_id;
 	public int money;
-	public int[] inventory = new int[52]; //size needs to be changed to final inventory size
+	public int[] inventory = new int[52];
 
 	public void PrintData() {
 		Debug.Log ("// -- START PRINT PLAYER DATA -- //");

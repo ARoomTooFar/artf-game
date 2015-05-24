@@ -42,6 +42,8 @@ public class FoliantHive : StationaryEnemy {
 		foreach(SpawnBehaviour behaviour in this.animator.GetBehaviours<SpawnBehaviour>()) {
 			behaviour.SetVar(this.spawn, this);
 		}
+		
+		this.maxSpawn = tier < 3 ? tier + 2 : tier + 1;
 	}
 
 
@@ -84,6 +86,8 @@ public class FoliantHive : StationaryEnemy {
 		foreach (FoliantFodder f in fodderList) {
 			f.hiveDied();
 		}
+
+		deathNoise ();
 		
 		base.die ();
 	}

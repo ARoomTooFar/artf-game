@@ -1,16 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class KeyboardInputs : MonoBehaviour {	
 
 	CameraMovement move;
+	InputField name;
 
 	void Start(){
 		move = Camera.main.GetComponent<CameraMovement>();
+		name = GameObject.Find("InputField_Save").GetComponent<InputField>();
 	}
 	// Update is called once per frame
 	void Update () {
+		if(name.isFocused) {
+			return;
+		}
 
 		if(Input.GetAxis("Mouse ScrollWheel") < 0) {
 			move.zoomCamIn();

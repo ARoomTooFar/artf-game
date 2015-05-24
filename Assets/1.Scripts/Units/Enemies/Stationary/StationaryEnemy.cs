@@ -41,6 +41,7 @@ public class StationaryEnemy : Enemy  {
 		this.minAtkRadius = 0.0f;
 		this.maxAtkRadius = 4.0f;
 	}
+
 	
 	//----------------------//
 }

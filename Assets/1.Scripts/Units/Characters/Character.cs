@@ -53,6 +53,8 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 
 	public bool testing, invis; // Whether it takes gear in automatically or lets the gear loader to it
 
+	public bool playSound;
+
 	public bool invincible = false;
 	public GameObject drop;
 	public GameObject splatter;
@@ -195,6 +197,7 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 		facing = Vector3.forward;
 		isDead = false;
 		freeAnim = true;
+		playSound = true;
 		stunned = knockedback = false;
 		// setInitValues();
 		this.testControl = true;
@@ -382,9 +385,14 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 		isDead = true;
 		actable = false;
 		freeAnim = false;
+		Debug.Log ("should be displaying 2nd");
 		//GetComponent<Collider> ().isTrigger = true;
 	}
-	
+
+	protected virtual void deathNoise(){	
+		StartCoroutine (makeSound (failure, playSound, failure.length));
+	}
+
 	public virtual void rez(){
 		if(isDead){
 			//GetComponent<Collider>().isTrigger = false;
@@ -451,5 +459,12 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 	}
 	
 	//--------------------------------//
+
+	public virtual IEnumerator makeSound(AudioClip sound, bool play, float duration){
+		AudioSource.PlayClipAtPoint (sound, transform.position, 0.5f);
+		play = false;
+		yield return new WaitForSeconds (duration);
+		play = true;
+	}
 
 }

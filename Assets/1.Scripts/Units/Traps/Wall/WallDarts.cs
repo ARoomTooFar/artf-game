@@ -9,6 +9,10 @@ public class WallDarts : Traps {
 	private Knockback debuff;
 	protected AoETargetting aoe;
 	protected ParticleSystem darts;
+
+	
+	public AudioClip hurt, victory, failure;
+	public bool playSound;
 	
 	// Use this for initialization
 	protected override void Start () {
@@ -35,8 +39,20 @@ public class WallDarts : Traps {
 		base.Update ();
 	}
 
+	//Used to set sound effects
+	public virtual void setSounds(AudioClip hurt, AudioClip victory, AudioClip failure, bool playSound){
+		this.hurt = hurt;
+		this.victory = victory;
+		this.failure = failure;
+		this.playSound = playSound;
+	}
+
 	public virtual void fireDarts() {
 		darts.Emit (50);
+	}
+
+	public virtual void deathSound(){
+		StartCoroutine (makeSound (failure, playSound, failure.length));
 	}
 
 
@@ -59,5 +75,12 @@ public class WallDarts : Traps {
 
 	void OnEnable() {
 		if (aoe != null && aoe.unitsInRange != null) aoe.unitsInRange.Clear();
+	}
+
+	public virtual IEnumerator makeSound(AudioClip sound, bool play, float duration){
+		AudioSource.PlayClipAtPoint (sound, transform.position, 0.5f);
+		play = false;
+		yield return new WaitForSeconds (duration);
+		play = true;
 	}
 }

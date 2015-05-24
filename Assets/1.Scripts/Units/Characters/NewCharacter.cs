@@ -22,7 +22,7 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	
 	public bool freeAnim, attacking, stunned, knockedback;
 	public AudioClip hurt, victory, failure;
-	
+
 	public bool testing, invis; // Whether it takes gear in automatically or lets the gear loader to it
 	
 	public bool invincible = false;
@@ -156,7 +156,6 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	}
 
 	*/
-	
 	protected override void Awake() {
 		opposition = Type.GetType ("Player");
 		BDS = new BuffDebuffSystem(this);
@@ -168,7 +167,7 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 		facing = Vector3.forward;
 		isDead = false;
 		stunned = knockedback = animationLock = false;
-		// setInitValues();
+		setInitValues();
 		this.testControl = true;
 		skins = gameObject.GetComponentsInChildren<Cloak>();
 	}
@@ -187,7 +186,6 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 			}
 
 		}
-		
 		foreach (CharacterBehaviour behaviour in this.animator.GetBehaviours<CharacterBehaviour>()) {
 			behaviour.SetVar(this);
 		}
@@ -195,7 +193,7 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	}
 	
 	protected override void setInitValues() {
-		
+		playSound = true;
 	}
 
 	public virtual void SetGearAndAbilities() {
@@ -307,9 +305,7 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	// Add logic to this in the future
 	//     ie: Removing actions, player from camera etc
 	public override void die() {
-		isDead = true;
-		actable = false;
-		freeAnim = false;
+		base.die ();
 	}
 	
 	public override void rez(){
@@ -317,6 +313,7 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 			isDead = false;
 			stats.health = stats.maxHealth/(2+2*stats.rezCount);
 			stats.rezCount++;
+		
 		}else{
 			heal(stats.maxHealth/(2+2*stats.rezCount));
 		}
@@ -376,5 +373,7 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	}
 	
 	//--------------------------------//
+
 	
+
 }

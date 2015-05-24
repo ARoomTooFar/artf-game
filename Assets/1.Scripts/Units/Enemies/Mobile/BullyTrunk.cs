@@ -75,22 +75,38 @@ public class BullyTrunk: MobileEnemy {
 	
 	protected override void Start() {
 		base.Start ();
-		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 3.5f;
+
 	}
 	
 	protected override void Update() {
 		base.Update ();
 	}
 	
+	protected override void setInitValues() {
+		base.setInitValues();
+		stats.maxHealth = 175;
+		stats.health = stats.maxHealth;
+		stats.armor = 7;
+		stats.strength = 25;
+		stats.coordination=0;
+		stats.speed=6;
+		
+		this.minAtkRadius = 0.0f;
+		this.maxAtkRadius = 3.5f;
+	}
 
 	public override void SetTierData(int tier) {
-		tier = 2;
-		
+		tier = 0;
+		base.SetTierData (tier);
+
+		monsterLoot.initializeLoot("BullyTrunk", tier);
+
+		this.stats.speed = tier < 3 ? 7 : 10;
+
 		if (tier > 0) {
 			charge = this.inventory.items[inventory.selected].GetComponent<BullCharge>();
 			if (charge == null) Debug.LogWarning ("BullyTrunk does not have charge equipped");
-			
+
 			foreach(ChargeBehaviour behaviour in this.animator.GetBehaviours<ChargeBehaviour>()) {
 				behaviour.SetVar(this.charge);
 			}
@@ -98,10 +114,10 @@ public class BullyTrunk: MobileEnemy {
 			foreach(ShieldsDown behaviour in this.animator.GetBehaviours<ShieldsDown>()) {
 				behaviour.SetVar(this);
 			}
-			
+
 			this.charge.chargeSpeed = tier < 5 ? 3 : 4;
-			
-			
+
+
 			headReduction = 0.9f;
 			sideReduction = tier < 3 ? 0.45f : 0.9f;
 			headSlow = tier < 6 ? 0.1f : 0.0f;
@@ -112,7 +128,16 @@ public class BullyTrunk: MobileEnemy {
 			this.BDS.addBuffDebuff (this.rockHead, this.gameObject);
 			this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
 		}
-		
+
+//		if (tier > 1) {
+//			foreach(Pummel behaviour in this.animator.GetBehaviours<Pummel>()) {
+//				behaviour.trunk = this.gear.weapon.GetComponent<MeleeWeapons>();
+//			}
+//			
+//			this.rightPaw.equip(this, this.opposition);
+//			this.leftPaw.equip(this, this.opposition);
+//		}
+
 		if (tier > 3) {
 			this.inventory.cycItems ();
 			
@@ -123,20 +148,6 @@ public class BullyTrunk: MobileEnemy {
 				behaviour.SetVar(this.blast);
 			}
 		}
-		
-		base.SetTierData (tier);
-
-		monsterLoot.initializeLoot("BullyTrunk", tier);
-
-		// this.stats.speed = tier < 3 ? 7 : 10;
-
-		
-	}
-	
-	public override void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
-		base.SetInitValues(health, strength, coordination, armor, speed);
-		this.rightPaw.equip(this, this.opposition);
-		this.leftPaw.equip(this, this.opposition);
 	}
 	
 	//----------------------//
