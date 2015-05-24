@@ -21,5 +21,8 @@ public class LeanTestCtrl : MonoBehaviour {
 		foreach (int data in playerData.inventory) {
 			Debug.Log (data);
 		}
+
+		string stringifiedCharData = serv.stringifyCharData (playerData);
+		Debug.Log (stringifiedCharData);
 	}
 }
