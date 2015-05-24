@@ -7,14 +7,15 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Collider))]
 public class FlockDar : MonoBehaviour {
 
+	public List<Collider> objectsInRange;
+
 	protected Enemy user;
-	protected List<GameObject> objectsInRange;
 	
 	public void Start() {}
 	
 	public virtual void InstantiateFlockingDar(Enemy user) {
 		this.user = user;
-		this.objectsInRange = new List<GameObject>();
+		this.objectsInRange = new List<Collider>();
 	}
 	
 	
@@ -33,18 +34,18 @@ public class FlockDar : MonoBehaviour {
 	protected virtual void OnTriggerEnter(Collider other) {
 		if (other.tag == "Wall" || other.tag == "Enemy") {
 			if (this.objectsInRange.Count == 0) this.InvokeRepeating("CleanList", 3.0f, 3.0f);
-			this.objectsInRange.Add(other.gameObject);
+			this.objectsInRange.Add(other);
 		} else if (other.GetComponent<Player>() != null) {
 			if (other.gameObject != this.user.target) {
 				if (this.objectsInRange.Count == 0) this.InvokeRepeating("CleanList", 3.0f, 3.0f);
-				this.objectsInRange.Add(other.gameObject);
+				this.objectsInRange.Add(other);
 			}
 		}
 	}
 	
 	// Same as above, but for when stuff leave the area
 	protected virtual void OnTriggerExit(Collider other) {
-		this.objectsInRange.Remove (other.gameObject);
+		this.objectsInRange.Remove (other);
 		if (this.objectsInRange.Count == 0) this.CancelInvoke();
 	}
 }

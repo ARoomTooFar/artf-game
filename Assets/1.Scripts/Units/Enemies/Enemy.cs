@@ -88,6 +88,9 @@ public class Enemy : NewCharacter {
 	// Update is called once per frame
 	protected override void Update () {
 		if (isDead) return;
+		
+		// Keeps this unit at y position 0;
+		this.transform.position = this.transform.position - new Vector3 (0f, this.transform.position.y, 0f);
 		base.Update();
 		this.TargetFunction();
 	}
@@ -160,6 +163,11 @@ public class Enemy : NewCharacter {
 	}
 
 	//-----------//
+
+	// Primary function for movement (Unit will find all obstacles around it and change its current facing to avoid obstacles)
+	public virtual void MoveForward() {
+		
+	}
 
 
 	//-----------------------//

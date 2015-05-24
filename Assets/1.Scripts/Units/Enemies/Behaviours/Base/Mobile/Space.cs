@@ -16,9 +16,9 @@ public class Space : EnemyBehaviour {
 	}
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		this.unit.transform.position = this.unit.transform.position - new Vector3 (0f, this.unit.transform.position.y, 0f);
 		this.unit.facing = (this.unit.lastSeenPosition.Value - this.unit.transform.position) * -1;
 		this.unit.facing.y = 0.0f;
-		this.unit.rb.velocity = this.unit.facing.normalized * this.unit.stats.speed * this.unit.stats.spdManip.speedPercent;
+		this.unit.MoveForward();
+		// this.unit.rb.velocity = this.unit.facing * this.unit.stats.speed * this.unit.stats.spdManip.speedPercent;
 	}
 }

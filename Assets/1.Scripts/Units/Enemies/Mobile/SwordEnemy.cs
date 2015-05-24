@@ -23,19 +23,6 @@ public class SwordEnemy : MobileEnemy {
 		base.Update ();
 	}
 	
-	protected override void setInitValues() {
-		base.setInitValues();
-		stats.maxHealth = 40;
-		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 10;
-		stats.coordination=0;
-		stats.speed=9;
-		
-		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 4.0f;
-	}
-	
 	//----------------------//
 	
 	//----------------------//

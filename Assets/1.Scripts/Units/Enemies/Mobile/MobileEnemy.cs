@@ -38,24 +38,7 @@ public class MobileEnemy : Enemy {
 		}
 	}
 	
-	protected override void setInitValues() {
-		base.setInitValues();
-		stats.maxHealth = 40;
-		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 10;
-		stats.coordination=0;
-		stats.speed=9;
-	}
-	
 	//----------------------//
-	
-	//----------------------//
-	// Transition Functions //
-	//----------------------//
-
-	
-	//---------------------//
 	
 	
 	//------------------//
@@ -71,11 +54,34 @@ public class MobileEnemy : Enemy {
 	//------------------//
 	
 	
+	//----------------//
+	// Avoidance Code //
+	//----------------//
 	
-	//-----------------------------//
-	// Coroutines for timing stuff //
-	//-----------------------------//
+	public override void MoveForward() {
+		Vector3 generalDir = Vector3.zero;
+		foreach (Collider cols in this.flockDar.objectsInRange) {
+			if (cols.gameObject == null) continue;
+			Vector3 point = cols.bounds.ClosestPoint(this.transform.position);
+			point.y = 0f;
+			generalDir += point - this.transform.position;
+		}
+		generalDir /= flockDar.objectsInRange.Count;
+		generalDir *= -1;
+		generalDir.Normalize();
+		
+		this.facing = Vector3.Slerp (this.facing, generalDir, 0.15f);
+		transform.localRotation = Quaternion.LookRotation(facing);
+		this.rb.velocity = this.facing * this.stats.speed * this.stats.spdManip.speedPercent;
+	}
 	
+	//----------------//
+	
+	
+	//------------//
+	// Coroutines //
+	//------------//
+
 	protected IEnumerator moveToPosition(Vector3 position) {
 		float moveToTime = 1.0f;
 		while ((Vector3.Distance(this.transform.position, this.targetDir) > 0.25f && this.target == null)) {
