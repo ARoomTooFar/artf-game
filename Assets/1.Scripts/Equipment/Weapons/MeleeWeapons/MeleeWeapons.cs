@@ -21,7 +21,7 @@ public class MeleeWeapons : Weapons {
 	}
 
 	public override void AttackStart() {
-		StartCoroutine(makeSound(action,playSound,action.length));
+		if (action != null) StartCoroutine(makeSound(action,playSound,action.length));
 		this.col.enabled = true;
 	}
 	

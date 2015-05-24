@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: f9532c296f9115d4d9fe3dc58dde4057
-timeCreated: 1431651701
+guid: 6d9db3ded579fe54dbbcf99b62c13317
+timeCreated: 1432426721
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -20,8 +20,8 @@ ModelImporter:
     100024: Back_Right_Leg_06
     100026: Back_Right_Leg_07
     100028: Bushling
-    100030: Bushling_Rig
-    100032: //RootNode
+    100030: //RootNode
+    100032: Bushling_Rig
     100034: Double_Arm_Controller
     100036: Front_Left_Foot_01
     100038: Front_Left_Foot_02
@@ -80,8 +80,8 @@ ModelImporter:
     400024: Back_Right_Leg_06
     400026: Back_Right_Leg_07
     400028: Bushling
-    400030: Bushling_Rig
-    400032: //RootNode
+    400030: //RootNode
+    400032: Bushling_Rig
     400034: Double_Arm_Controller
     400036: Front_Left_Foot_01
     400038: Front_Left_Foot_02

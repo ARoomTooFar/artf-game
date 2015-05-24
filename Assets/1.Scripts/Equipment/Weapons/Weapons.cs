@@ -247,5 +247,4 @@ public class Weapons : Equipment {
 		yield return new WaitForSeconds (duration);
 		play = true;
 	}
-	
 }
