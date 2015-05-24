@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 72a719d61dba516439be35aa3a6521be
-timeCreated: 1430790904
+guid: 4c1cba160f774c940852e0e8ca877d83
+timeCreated: 1432427759
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -26,8 +26,8 @@ ModelImporter:
     100036: Leg_4_3
     100038: Lower_Back
     100040: Lower_Neck
-    100042: //RootNode
-    100044: Mirage
+    100042: Mirage
+    100044: //RootNode
     100046: Mirage_Bone_Structure
     100048: Right_Arm_1_1
     100050: RIght_Arm_1_2
@@ -58,8 +58,8 @@ ModelImporter:
     400036: Leg_4_3
     400038: Lower_Back
     400040: Lower_Neck
-    400042: //RootNode
-    400044: Mirage
+    400042: Mirage
+    400044: //RootNode
     400046: Mirage_Bone_Structure
     400048: Right_Arm_1_1
     400050: RIght_Arm_1_2
