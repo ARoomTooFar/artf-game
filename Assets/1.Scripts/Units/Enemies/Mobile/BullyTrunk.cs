@@ -75,24 +75,18 @@ public class BullyTrunk: MobileEnemy {
 	
 	protected override void Start() {
 		base.Start ();
-
+		
+		this.minAtkRadius = 0.0f;
+		this.maxAtkRadius = 3.5f;
 	}
 	
 	protected override void Update() {
 		base.Update ();
 	}
 	
-	protected override void setInitValues() {
-		base.setInitValues();
-		stats.maxHealth = 175;
-		stats.health = stats.maxHealth;
-		stats.armor = 7;
-		stats.strength = 25;
-		stats.coordination=0;
-		stats.speed=6;
-		
-		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 3.5f;
+	public override void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
+		base.SetInitValues(health, strength, coordination, armor, speed);
+		// this.trunk = this.gear.weapon.GetComponent<BullyTrunkWeapon>();
 	}
 
 	public override void SetTierData(int tier) {
