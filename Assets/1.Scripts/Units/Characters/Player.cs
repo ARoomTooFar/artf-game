@@ -261,7 +261,7 @@ public class Player : NewCharacter, IHealable<int>{
 			Destroy (sparks, 1);
 		}
 		
-		hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth*25.0f);
+		hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth * 5f);
 		BDS.addBuffDebuff(hitConfirm,gameObject,.5f);
 		
 	}

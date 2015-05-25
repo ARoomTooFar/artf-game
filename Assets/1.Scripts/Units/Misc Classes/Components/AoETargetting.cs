@@ -33,7 +33,7 @@ public class AoETargetting : MonoBehaviour {
 	//     Take care not to have multiple parents with the unit entered method unless it is what you want
 	//     "unitEntered" with a Character paramter is the method name you want for response
 	void OnTriggerEnter(Collider other) {
-		if (( (other.tag == "Enemy") && affectEnemies) || (affectPlayers && other.GetComponent<Player>() != null)) {
+		if ((affectEnemies && (other.tag == "Enemy")) || (affectPlayers && other.tag.Substring(0, other.tag.Length - 1) == "Player")) {
 			Character unit = other.GetComponent<Character>();
 			if (unitsInRange.Count == 0 && !unit.invis) this.InvokeRepeating("cleanList", 3.0f, 3.0f);
 			unitsInRange.Add(unit);

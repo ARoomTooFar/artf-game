@@ -28,8 +28,8 @@ public class FileIO : MonoBehaviour
 	public Text txtUdLvl;
 
     #if UNITY_EDITOR
-    private string dummyGameAcctId = "5750085036015616";
-	private string dummyLvlId = "4909654157033472";
+    private string dummyGameAcctId = "123";
+	private string dummyLvlId = "4867770441269248";
 	#endif
 	
 	void Start ()
