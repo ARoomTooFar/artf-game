@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class TestLevelSelectCtrl : MonoBehaviour {
 	public Controls controls;
 
-	private string testLevelListData = "1,3,2,4,5";
-	private WWW matchmakeReq;
+	private GSManager gsManager;
+	//private string testLevelListData = "1,3,2,4,5";
+	//private WWW matchmakeReq;
 
 	// UI state
 	private bool menuMoved = false;
@@ -17,21 +19,27 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 	private int locY = 0;
 	
 	void Start () {
+		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
 		Farts serv = gameObject.AddComponent<Farts>();
-		string[] test = serv.parseListLevelData(testLevelListData);
+
+		//matchmakeReq = serv.matchmakeWWW (5);
+		string matchmakeData = serv.matchmakeWWW ();
+		string[] levelList = matchmakeData.Split (',');
+
+		/*string[] test = serv.parseListLevelData(testLevelListData);
 		Debug.Log (test);
 		foreach (string data in test) {
 			Debug.Log (data);
-		}
+		}*/
 
 		// setup keypad (caps)
-		currMenuPtr = new GameObject[5, 4];
+		currMenuPtr = new GameObject[5, 1];
 		currMenuPtr[0, 0] = GameObject.Find("/Canvas/Button");
 		currMenuPtr[1, 0] = GameObject.Find("/Canvas/Button 1");
 		currMenuPtr[2, 0] = GameObject.Find("/Canvas/Button 2");
 		currMenuPtr[3, 0] = GameObject.Find("/Canvas/Button 3");
 		currMenuPtr[4, 0] = GameObject.Find("/Canvas/Button 4");
-		currMenuPtr[0, 1] = GameObject.Find("/Canvas/Button 5");
+		/*currMenuPtr[0, 1] = GameObject.Find("/Canvas/Button 5");
 		currMenuPtr[1, 1] = GameObject.Find("/Canvas/Button 6");
 		currMenuPtr[2, 1] = GameObject.Find("/Canvas/Button 7");
 		currMenuPtr[3, 1] = GameObject.Find("/Canvas/Button 8");
@@ -45,14 +53,43 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 		currMenuPtr[1, 3] = GameObject.Find("/Canvas/Button 16");
 		currMenuPtr[2, 3] = GameObject.Find("/Canvas/Button 17");
 		currMenuPtr[3, 3] = GameObject.Find("/Canvas/Button 18");
-		currMenuPtr[4, 3] = GameObject.Find("/Canvas/Button 19");
+		currMenuPtr[4, 3] = GameObject.Find("/Canvas/Button 19");*/
+
+		currMenuPtr [0, 0].GetComponent<Button>().GetComponentInChildren<Text> ().text = levelList[0];
+		currMenuPtr [1, 0].GetComponent<Button>().GetComponentInChildren<Text> ().text = levelList[1];
+		currMenuPtr [2, 0].GetComponent<Button>().GetComponentInChildren<Text> ().text = levelList[2];
+		currMenuPtr [3, 0].GetComponent<Button>().GetComponentInChildren<Text> ().text = levelList[3];
+		currMenuPtr [4, 0].GetComponent<Button>().GetComponentInChildren<Text> ().text = levelList[4];
+
+		currMenuPtr[0, 0].GetComponent<Button>().onClick.AddListener(() => {
+			gsManager.currLevelId = levelList[0];
+			gsManager.LoadLevel (levelList[0]);
+		});
+
+		currMenuPtr[1, 0].GetComponent<Button>().onClick.AddListener(() => {
+			gsManager.currLevelId = levelList[1];
+			gsManager.LoadLevel (levelList[1]);
+		});
+
+		currMenuPtr[2, 0].GetComponent<Button>().onClick.AddListener(() => {
+			gsManager.currLevelId = levelList[2];
+			gsManager.LoadLevel (levelList[2]);
+		});
+
+		currMenuPtr[3, 0].GetComponent<Button>().onClick.AddListener(() => {
+			gsManager.currLevelId = levelList[3];
+			gsManager.LoadLevel (levelList[3]);
+		});
+
+		currMenuPtr[4, 0].GetComponent<Button>().onClick.AddListener(() => {
+			gsManager.currLevelId = levelList[4];
+			gsManager.LoadLevel (levelList[4]);
+		});
 
 		var pointer = new PointerEventData(EventSystem.current);
 		ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
 		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 		prevBtn = currMenuPtr[locY, locX];
-
-		matchmakeReq = serv.matchmakeWWW (5);
 	}
 
 	// handles menu joystick movement control
@@ -109,13 +146,13 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 			}
 		}
 
-		// matchmake loading
+		/*// matchmake loading
 		if (matchmakeReq != null && matchmakeReq.isDone == false) {
 			//Debug.Log ("login progress"); // show login loading msg
 		} else if (matchmakeReq != null && matchmakeReq.isDone) {
 			Debug.Log (matchmakeReq.url);
 			Debug.Log (matchmakeReq.text);
 			matchmakeReq = null;
-		}
+		}*/
 	}
 }

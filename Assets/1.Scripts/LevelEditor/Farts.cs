@@ -278,6 +278,28 @@ public class Farts : MonoBehaviour
 		return www.text;
 	}
 
+	// get random levels from server
+	public string matchmakeWWW () {
+		WWW www = new WWW(SERVERURI + MATCHMAKEPATH + "rand");
+		StartCoroutine(httpRequest(www));
+		
+		float timeStart = Time.realtimeSinceStartup;
+		
+		while (!www.isDone)
+		{
+			if (Time.realtimeSinceStartup >= timeStart + timeoutTime)
+			{
+				Debug.LogError("ERROR: Request timeout");
+				return "";
+			}
+			//Debug.Log("HTTP request time elapsed: " + (Time.realtimeSinceStartup - timeStart));
+		}
+		
+		Debug.Log(www.text); // display matchmake data
+		return www.text;
+	}
+
+	// get levels from server that match within difficulty
 	public WWW matchmakeWWW (double difficulty) {
 		double matchmakeVal = System.Math.Floor (difficulty);
 		WWW www = new WWW(SERVERURI + MATCHMAKEPATH + matchmakeVal);
