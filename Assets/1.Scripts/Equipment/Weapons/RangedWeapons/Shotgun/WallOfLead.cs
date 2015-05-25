@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Shotgun : RangedWeapons {
+public class WallOfLead : RangedWeapons {
 
 	public GameObject shockwave;
 
@@ -16,9 +16,9 @@ public class Shotgun : RangedWeapons {
 
 		this.stats.weapType = 7;
 		this.stats.weapTypeName = "shotgun";
-		this.stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
+		this.stats.damage = 15 + user.GetComponent<Character>().stats.coordination;
 		this.stats.maxChgTime = 4;
-		this.stats.goldVal = 100;
+		this.stats.goldVal = 150;
 		this.spread = 40;
 		this.sideShockWaveAngle = 30;
 	}

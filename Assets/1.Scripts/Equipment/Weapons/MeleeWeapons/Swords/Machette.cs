@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Sword : MeleeWeapons {
+public class Machette : MeleeWeapons {
 
 	public GameObject shockwave;
 
@@ -20,8 +20,8 @@ public class Sword : MeleeWeapons {
 		stats.weapType = 0;
 		stats.weapTypeName = "sword";
 		stats.atkSpeed = 1.0f;
-		stats.damage = 12;//  + user.GetComponent<Character>().stats.strength;
-		stats.goldVal = 120;
+		stats.damage = 23;//  + user.GetComponent<Character>().stats.strength;
+		stats.goldVal = 230;
 		stats.maxChgTime = 3;
 
 		stats.chgLevels = 0.4f;

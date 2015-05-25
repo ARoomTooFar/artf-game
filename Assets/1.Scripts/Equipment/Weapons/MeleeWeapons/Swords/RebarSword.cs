@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Sword : MeleeWeapons {
+public class RebarSword : MeleeWeapons {
 
 	public GameObject shockwave;
 

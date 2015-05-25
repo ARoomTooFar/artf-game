@@ -16,7 +16,7 @@ public class WeaponStats {
 
 	[Range(1,11)]
 	public int upgrade;
-
+	public int goldVal;
 	public int damage;
 	public int weapType;
 	public BuffsDebuffs debuff;
