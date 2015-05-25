@@ -32,14 +32,10 @@ public class FlockDar : MonoBehaviour {
 	}
 	
 	protected virtual void OnTriggerEnter(Collider other) {
-		if (other.tag == "Wall" || other.tag == "Enemy") {
+		if ((other.tag.Substring(0, other.tag.Length - 1) == "Player" && other.gameObject != this.user.target) ||
+		    	other.tag == "Wall" || other.tag == "Enemy") {
 			if (this.objectsInRange.Count == 0) this.InvokeRepeating("CleanList", 3.0f, 3.0f);
 			this.objectsInRange.Add(other);
-		} else if (other.GetComponent<Player>() != null) {
-			if (other.gameObject != this.user.target) {
-				if (this.objectsInRange.Count == 0) this.InvokeRepeating("CleanList", 3.0f, 3.0f);
-				this.objectsInRange.Add(other);
-			}
 		}
 	}
 	

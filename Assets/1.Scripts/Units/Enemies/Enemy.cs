@@ -165,7 +165,7 @@ public class Enemy : NewCharacter {
 	//-----------//
 
 	// Primary function for movement (Unit will find all obstacles around it and change its current facing to avoid obstacles)
-	public virtual void MoveForward() {
+	public virtual void MoveForward(float effectivness = 1f) {
 		
 	}
 
@@ -226,7 +226,7 @@ public class Enemy : NewCharacter {
 			newFacing.y = 0.0f;
 			if (newFacing != Vector3.zero) {
 				this.facing = newFacing.normalized;
-				this.transform.localRotation = Quaternion.LookRotation(facing);	
+				// this.transform.localRotation = Quaternion.LookRotation(facing);	
 			}
 		}
 	}
