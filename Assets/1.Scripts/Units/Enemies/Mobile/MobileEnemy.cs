@@ -38,24 +38,7 @@ public class MobileEnemy : Enemy {
 		}
 	}
 	
-	protected override void setInitValues() {
-		base.setInitValues();
-		stats.maxHealth = 40;
-		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 10;
-		stats.coordination=0;
-		stats.speed=9;
-	}
-	
 	//----------------------//
-	
-	//----------------------//
-	// Transition Functions //
-	//----------------------//
-
-	
-	//---------------------//
 	
 	
 	//------------------//
@@ -71,26 +54,56 @@ public class MobileEnemy : Enemy {
 	//------------------//
 	
 	
+	//----------------//
+	// Avoidance Code //
+	//----------------//
 	
-	//-----------------------------//
-	// Coroutines for timing stuff //
-	//-----------------------------//
+	public override void MoveForward(float effectivness = 1f) {
+		Vector3 generalDir = Vector3.zero;
+		foreach (Collider cols in this.flockDar.objectsInRange) {
+			if (cols.gameObject == null) continue;
+			Vector3 point = cols.bounds.ClosestPoint(this.transform.position);
+			point.y = 0f;
+			// Vector3 pointOfContact = this.col.bounds.ClosestPoint(point);
+			// pointOfContact.y = 0f;
+			Vector3 dis = point - this.transform.position;
+			if (Vector3.Angle(dis, this.facing) < 90 || Vector3.Distance(point,this.col.bounds.ClosestPoint(point)) < 0.75f) {
+				generalDir += dis;
+			}
+		}
+		generalDir /= flockDar.objectsInRange.Count;
+		generalDir *= -1;
+		generalDir.Normalize();
+		
+		//generalDir = Vector3.Slerp (generalDir, this.facing, 0.25f);
+		this.facing = Vector3.Slerp (this.facing, generalDir, 0.15f * effectivness);
+		transform.localRotation = Quaternion.LookRotation(facing);
+		this.rb.velocity = this.facing.normalized * this.stats.speed * this.stats.spdManip.speedPercent;
+	}
 	
+	//----------------//
+	
+	
+	//------------//
+	// Coroutines //
+	//------------//
+
 	protected IEnumerator moveToPosition(Vector3 position) {
-		float moveToTime = 1.0f;
-		while ((Vector3.Distance(this.transform.position, this.targetDir) > 0.25f && this.target == null)) {
-			this.rb.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		float moveToTime = 2.0f;
+		while ((Vector3.Distance(this.transform.position, this.targetDir) > 0.1f && this.target == null && moveToTime > 0.0f)) {
+			// this.rb.velocity = this.facing.normalized * this.stats.speed * this.stats.spdManip.speedPercent;
+			this.MoveForward(0.2f);
 			moveToTime -= Time.deltaTime;
-			if (moveToTime <= 0.0f) break;
 			yield return null;
 		}
 	}
 	
 	protected IEnumerator moveToExpectedArea() {
-		this.facing = this.targetDir;
-		float moveToTime = 0.5f;
-		while (Vector3.Distance(this.transform.position, this.targetDir) > 0.1f && this.target == null && moveToTime > 0.0f) {
-			this.rb.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+		// this.facing = this.targetDir;
+		float moveToTime = 1.0f;
+		while (this.target == null && moveToTime > 0.0f) {
+			this.facing = Vector3.Slerp (this.facing, this.targetDir.normalized, 0.25f);
+			this.MoveForward();
 			moveToTime -= Time.deltaTime;
 			yield return null;
 		}
@@ -99,8 +112,8 @@ public class MobileEnemy : Enemy {
 	protected IEnumerator randomSearch() {;
 		float resetTimer = aggroTimer;
 		while(resetTimer > 0.0f && this.target == null) {
-			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f)).normalized;
-			this.rb.velocity = this.facing.normalized * stats.speed * stats.spdManip.speedPercent;
+			this.facing = new Vector3(Random.Range (-1.0f, 1.0f), 0.0f, Random.Range (-1.0f, 1.0f));
+			this.MoveForward();
 			yield return new WaitForSeconds (0.5f);
 			resetTimer -= 0.5f;
 		}
