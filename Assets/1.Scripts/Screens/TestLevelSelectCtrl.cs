@@ -7,6 +7,7 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 	public Controls controls;
 
 	private GSManager gsManager;
+	private string[] levelList;
 	//private string testLevelListData = "1,3,2,4,5";
 	//private WWW matchmakeReq;
 
@@ -24,7 +25,7 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 
 		//matchmakeReq = serv.matchmakeWWW (5);
 		string matchmakeData = serv.matchmakeWWW ();
-		string[] levelList = matchmakeData.Split (',');
+		levelList = matchmakeData.Split (',');
 
 		/*string[] test = serv.parseListLevelData(testLevelListData);
 		Debug.Log (test);
@@ -62,34 +63,34 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 		currMenuPtr [4, 0].GetComponent<Button>().GetComponentInChildren<Text> ().text = levelList[4];
 
 		currMenuPtr[0, 0].GetComponent<Button>().onClick.AddListener(() => {
-			gsManager.currLevelId = levelList[0];
-			gsManager.LoadLevel (levelList[0]);
+			BtnAction (0);
 		});
 
 		currMenuPtr[1, 0].GetComponent<Button>().onClick.AddListener(() => {
-			gsManager.currLevelId = levelList[1];
-			gsManager.LoadLevel (levelList[1]);
+			BtnAction (1);
 		});
 
 		currMenuPtr[2, 0].GetComponent<Button>().onClick.AddListener(() => {
-			gsManager.currLevelId = levelList[2];
-			gsManager.LoadLevel (levelList[2]);
+			BtnAction (2);
 		});
 
 		currMenuPtr[3, 0].GetComponent<Button>().onClick.AddListener(() => {
-			gsManager.currLevelId = levelList[3];
-			gsManager.LoadLevel (levelList[3]);
+			BtnAction (3);
 		});
 
 		currMenuPtr[4, 0].GetComponent<Button>().onClick.AddListener(() => {
-			gsManager.currLevelId = levelList[4];
-			gsManager.LoadLevel (levelList[4]);
+			BtnAction (4);
 		});
 
 		var pointer = new PointerEventData(EventSystem.current);
 		ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
 		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 		prevBtn = currMenuPtr[locY, locX];
+	}
+
+	void BtnAction (int levelListIndex) {
+		gsManager.currLevelId = levelList[levelListIndex];
+		gsManager.LoadLevel (levelList[levelListIndex]);
 	}
 
 	// handles menu joystick movement control

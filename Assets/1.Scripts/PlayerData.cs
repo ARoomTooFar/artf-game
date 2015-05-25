@@ -2,12 +2,21 @@
 using System.Collections;
 
 public class PlayerData : MonoBehaviour {
+	// parsed char data storage
 	public string char_name;
 	public int char_id;
 	public int hair_id;
 	public int voice_id;
 	public int money;
 	public int[] inventory = new int[52];
+
+	// data used to load player for gameplay
+	public int weapon;
+	public int actionslot1;
+	public int actionslot2;
+	public int actionslot3;
+	public int headgear;
+	public int armor;
 
 	public void PrintData() {
 		Debug.Log ("// -- START PRINT PLAYER DATA -- //");
