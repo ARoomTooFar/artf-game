@@ -1,143 +1,140 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Collider))]
 public class Hook : ChargeItem {
-	public int chgDist;
-	[Range(1, 4)]
-	public int chargeSpeed;
 
-	[Range(0.0f, 2.0f)]
-	public float chgLag;
-
-	[Range(0.5f, 3.0f)]
-	public float stunDuration;
-	public bool hit;
-	public bool check;
-	private Vector3 facing;
-	public Character foe;
-	private Stun debuff;
-	private Immobilize immobil;
-	//public GameObject hook;
+	public GameObject origin;
+	public int hookDist;
+	
+	private float hookSpeed;
+	private Vector3 initialPos;
 	private Collider col;
 	private Renderer ren;
 	private Rigidbody rb;
-
+	private bool hitWall;
+	private Stun debuff;
+	private Enemy ene;
+	
 	// Use this for initialization
 	protected override void Start () {
-		base.Start ();
-
-		//col = hook.GetComponent<Collider>();
-		//hook.GetComponent<HookHelper> ().spawner = this;
-		//col.enabled = false;
-
-		//ren = hook.GetComponent<Renderer>();
-		//rb = hook.GetComponent<Rigidbody>();
-
-		debuff = new Stun();
-		immobil = new Immobilize();
+		base.Start();
+		
+		this.debuff = new Stun();
+		
+		this.col = this.GetComponent<Collider>();
+		this.col.isTrigger = true;
+		this.col.enabled = false;
+		
+		this.ren = this.GetComponent<Renderer>();
+		this.ren.enabled = false;
+		
+		this.rb = this.GetComponent<Rigidbody>();
+		this.rb.isKinematic = true;
 	}
 	
 	protected override void setInitValues() {
 		base.setInitValues();
-
+		
+		hookSpeed = 30f;
 		cooldown = 5.0f;
-		chgDist = 1;
+		hookDist = 1;
 		maxChgTime = 3.0f;
-		hit = false;
+		hitWall = false;
 	}
+	
+	// Update is called once per frame
+	protected override void Update () {
+		base.Update();
+	}
+	
+	// Called when character with an this item selected uses their item key
 	public override void useItem() {
+		this.transform.position = this.origin.transform.position;
+		this.ren.enabled = true;
+		this.ene = null;
 		base.useItem ();
-
-		ren.enabled = true;
 	}
-
+	
+	
 	public override void deactivateItem() {
+		this.rb.isKinematic = false;
 		base.deactivateItem();
 	}
-
-	// Update is called once per frame
-	protected override void chgDone() {
-		// user.animator.SetTrigger("Charge Forward");
-		
-		//collider.enabled = true;
-		user.freeAnim = false;
-		facing = user.facing;
-		StartCoroutine(chargeFunc((chgDist + curChgTime) * 0.1f));
-	}
-
+	
 	protected override void animDone() {
-		user.BDS.rmvBuffDebuff(immobil,this.gameObject);
-		user.freeAnim = true;
-		col.enabled = false;
-		hit = false;
-		ren.enabled = false;
-	    rb.isKinematic = true;
-		foe = null;
-		check = true;
+		this.user.animationLock = false;
+		this.col.enabled = false;
+		this.hitWall = false;
+		this.ene = null;
+		this.ren.enabled = false;
+		this.rb.velocity = Vector3.zero;
+		this.rb.isKinematic = true;
+		
 		base.animDone ();
 	}
 	
-	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
-	private IEnumerator chargeFunc(float chgTime) {
-		rb.isKinematic = false;
-		col.enabled = true;
-		yield return StartCoroutine("chgTimeFunc",(chgTime));
-		yield return StartCoroutine("chgLagTime");
+	protected override void chgDone() {
+		// user.animator.SetTrigger("Charge Forward");
+		
+		this.col.enabled = true;
+		user.animationLock = true;
+		StartCoroutine(hookFunc((hookDist + curChgTime) * 0.1f));
+	}
+	
+	private IEnumerator hookFunc(float chgTime) {
+		yield return StartCoroutine(hookTimeFunc(chgTime));
+		this.col.enabled = false;
+		if (hitWall) yield return StartCoroutine (this.PullUser());
+		else yield return StartCoroutine (this.HookRetract());
 		animDone();
 	}
 	
+	
+	
 	// Timer and velocity changing thing
-	private IEnumerator chgTimeFunc(float chgTime) {
-		float totalTime = chgTime*2;
-		float checkTime = 0;
-		user.BDS.addBuffDebuff(immobil, this.gameObject, totalTime);
-		for (float timer = 0; timer <= totalTime; timer += Time.deltaTime) {
-			if(timer <= totalTime/2){
-				rb.velocity = facing.normalized * user.stats.speed * 1.5f * chargeSpeed;
-				if(foe!=null){
-					foe.BDS.addBuffDebuff(debuff, this.gameObject, stunDuration);
-					foe.transform.position = transform.position;
-				}
-			}else if(timer > totalTime/2){
-				if(foe!=null){
-					foe.BDS.addBuffDebuff(debuff, this.gameObject, stunDuration);
-					foe.transform.position = transform.position;
-				}
-				rb.velocity = -facing.normalized * user.stats.speed * 1.5f * chargeSpeed;	
+	private IEnumerator hookTimeFunc(float chgTime) {
+		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
+			
+			if (hitWall || this.ene != null) {
+				this.rb.velocity = Vector3.zero;
+				yield break;
 			}
-			if(hit){
-			   checkTime = (totalTime/2) - timer;
-			   timer = totalTime/2;
-			   timer += checkTime;
-			   //check = false;
-			   checkTime = 0;
-			}
-			//((IForcible<float>)foe.GetComponent(typeof(IForcible<float>))).push(0.1f);
+
+			this.rb.velocity = user.facing.normalized * hookSpeed;
 			yield return 0;
 		}
 	}
 	
-	private IEnumerator chgLagTime() {
-		for (float timer = 0; timer < chgLag; timer += Time.deltaTime) {
-			rb.velocity = Vector3.zero;
+	private IEnumerator HookRetract() {
+		while (Vector3.Distance(this.transform.position, this.origin.transform.position) > 0.5f) {
+			this.rb.velocity = (this.origin.transform.position - this.transform.position).normalized * hookSpeed;
+			
+			
+			if (ene != null) {
+				ene.transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);
+				ene.BDS.addBuffDebuff(debuff, this.user.gameObject, 0.1f);
+			}
+			
 			yield return 0;
 		}
 	}
-
-	/*void OnTriggerEnter (Collider other) {
-		if(!hit){
-			if (other.tag == "Wall") {
-				hit = true;
-				check = true;
-			}
-			IForcible<Vector3,float> component = (IForcible<Vector3,float>) other.GetComponent( typeof(IForcible<Vector3,float>) );
-			foe = other.GetComponent<Character>();
-			if( component != null && foe != null) {
-				hit = true;
-				check = true;
-				col.enabled = false;
-			}
+	
+	private IEnumerator PullUser() {
+		while (Vector3.Distance(this.transform.position, this.origin.transform.position) > 1f) {
+			this.user.rb.velocity = (this.transform.position - this.origin.transform.position).normalized * hookSpeed;
+			yield return 0;
 		}
-	}*/
+	}
+	
+	protected void OnTriggerEnter (Collider other) {
+		if (other.tag == "Wall") {
+			hitWall = true;
+		}
+
+		if(other.tag == "Enemy") {
+			this.ene = other.GetComponent<Enemy>();
+		}
+	}
 }
