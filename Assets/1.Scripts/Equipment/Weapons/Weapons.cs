@@ -32,6 +32,31 @@ public class WeaponStats {
 	public WeaponStats() {
 		atkspdManip = new PercentValues();
 	}
+
+	//returns base gold value of weapon
+	public int GoldVal{
+		get{return goldVal;}
+	}
+
+	//returns base damage value of weapon
+	public int Damage{
+		get{return damage;}
+	}
+
+	//returns weapType
+	public int WeapType{
+		get{return weapType;}
+	}
+
+	//returns upgrade value
+	public int Upgrade{
+		get{return upgrade;}
+	}
+
+	//returns upgrade value
+	public int DamageUpgrade{
+		get{return (damage * upgrade);}
+	}
 }
 
 public class Weapons : Equipment {

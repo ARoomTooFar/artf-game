@@ -79,7 +79,7 @@ public class ArmorStats {
 	}
 	//returns the gold value after upgrades
 	public int GoldValUpgrade{
-		get{return goldVal * upgrade;}
+		get{return goldVal * (upgrade+5);}
 	}
 	//Access like this
 	//ArmorStats.ArmVal;
