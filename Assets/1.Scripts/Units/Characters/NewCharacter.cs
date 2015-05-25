@@ -176,14 +176,17 @@ public class NewCharacter : Character {//MonoBehaviour, IActionable<bool>, IFall
 	protected override void Start () {
 		if (testing) {
 			this.SetGearAndAbilities();
-
+			
+			this.usingAnimHash = false;
+			
+			/*
 			// Used so our old units still work, onc we have all models and animations, scrap this crap
 			if (this.weapTypeName.Length > 0) {
 				setAnimHash(); // Remove this later
 				this.usingAnimHash = true;
 			} else {
 				this.usingAnimHash = false;
-			}
+			}*/
 
 		}
 		foreach (CharacterBehaviour behaviour in this.animator.GetBehaviours<CharacterBehaviour>()) {

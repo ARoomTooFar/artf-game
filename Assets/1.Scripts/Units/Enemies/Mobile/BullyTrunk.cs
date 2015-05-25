@@ -90,7 +90,7 @@ public class BullyTrunk: MobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 0;
+		tier = 3;
 		base.SetTierData (tier);
 
 		monsterLoot.initializeLoot("BullyTrunk", tier);
@@ -123,14 +123,11 @@ public class BullyTrunk: MobileEnemy {
 			this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
 		}
 
-//		if (tier > 1) {
-//			foreach(Pummel behaviour in this.animator.GetBehaviours<Pummel>()) {
-//				behaviour.trunk = this.gear.weapon.GetComponent<MeleeWeapons>();
-//			}
-//			
-//			this.rightPaw.equip(this, this.opposition);
-//			this.leftPaw.equip(this, this.opposition);
-//		}
+		if (tier > 1) {
+			
+			this.rightPaw.equip(this, this.opposition);
+			this.leftPaw.equip(this, this.opposition);
+		}
 
 		if (tier > 3) {
 			this.inventory.cycItems ();
