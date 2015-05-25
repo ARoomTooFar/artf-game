@@ -64,10 +64,10 @@ public class PlayerUIPane : MonoBehaviour
 			}
 			//charge.fillAmount = 0;
 		} else if (pl.animator.GetBool ("Charging")) {
-			if((pl.gear.weapon.stats.curChgDuration / pl.gear.weapon.stats.maxChgTime) <=0){
+			if((pl.animator.GetFloat("ChargeTime") / pl.gear.weapon.stats.maxChgTime) <=0){
 				chgCurr = 0;
 			}else{
-				chgCurr = (pl.gear.weapon.stats.curChgDuration / pl.gear.weapon.stats.maxChgTime);
+				chgCurr = (pl.animator.GetFloat("ChargeTime")  / pl.gear.weapon.stats.maxChgTime);
 			}
 		}else if (!pl.inventory.keepItemActive && !pl.animator.GetBool ("Charging")){
 			chgCurr = 0;

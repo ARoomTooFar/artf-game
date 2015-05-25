@@ -5,7 +5,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class Enemy : NewCharacter {
+public class Enemy : Character {
 
 	protected float lastSawTargetCount;
 
@@ -106,14 +106,6 @@ public class Enemy : NewCharacter {
 		
 		if (testing) {
 			gear.equipGear(this, opposition);
-			
-			// Used so our old units still work, onc we have all models and animations, scrap this crap
-			if (this.weapTypeName.Length > 0) {
-				setAnimHash(); // Remove this later
-				this.usingAnimHash = true;
-			} else {
-				this.usingAnimHash = false;
-			}
 		}
 	}
 

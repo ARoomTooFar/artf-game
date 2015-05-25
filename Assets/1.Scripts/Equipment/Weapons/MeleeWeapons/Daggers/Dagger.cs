@@ -16,32 +16,20 @@ public class Dagger : MeleeWeapons {
 		
 		// Default sword stats
 		stats.weapType = 1;
-		stats.weapTypeName = "dagger";
 		stats.atkSpeed = 2.0f;
 		stats.damage = (int)(10);
 		this.stats.buffDuration = 0.25f;
 		
 		stats.maxChgTime = 2;
-
-		stats.chgLevels = 0.2f;
-		stats.timeForChgAttack = 0.2f;
 	}
 	
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
 	}
-	
-	public override void initAttack() {
-		base.initAttack();
-	}
 
 	public override void collideOn () {
 		base.collideOn ();
-		/*
-		if (stats.chgDamage-- == 0) { // Our multistab counter
-			user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
-		}*/
 	}
 
 	protected override void onHit(Character enemy) {

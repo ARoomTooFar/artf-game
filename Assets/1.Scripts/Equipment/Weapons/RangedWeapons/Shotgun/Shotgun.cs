@@ -15,7 +15,6 @@ public class Shotgun : RangedWeapons {
 		base.setInitValues();
 
 		this.stats.weapType = 7;
-		this.stats.weapTypeName = "shotgun";
 		this.stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
 		this.stats.maxChgTime = 4;
 		
@@ -56,9 +55,5 @@ public class Shotgun : RangedWeapons {
 		wave3.rb.velocity =  spreadAngle * wave3.rb.velocity;
 
 
-	}
-	
-	public override void initAttack() {
-		base.initAttack();
 	}
 }

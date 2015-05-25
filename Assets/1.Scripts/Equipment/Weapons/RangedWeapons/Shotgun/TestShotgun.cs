@@ -23,8 +23,4 @@ public class TestShotgun: Shotgun {
 	protected override void Update () {
 		base.Update();
 	}
-	
-	public override void initAttack() {
-		base.initAttack();
-	}
 }

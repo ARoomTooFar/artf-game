@@ -17,13 +17,4 @@ public class TestSpear : Spear {
 	protected override void Update () {
 		base.Update();
 	}
-	
-	public override void initAttack() {
-		base.initAttack();
-	}
-	
-	// Test sword attack functions
-	protected override void attack() {
-		base.attack ();
-	}
 }

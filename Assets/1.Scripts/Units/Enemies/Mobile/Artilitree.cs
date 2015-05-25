@@ -84,7 +84,7 @@ public class Artilitree: RangedEnemy {
 
 	public override void die() {
 		if (this.tier > 3) {
-			this.artillery.initAttack();
+			animator.SetTrigger("Attack");
 			StartCoroutine(waitTillDeath());
 		} else {
 			base.die ();

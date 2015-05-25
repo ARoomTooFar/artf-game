@@ -22,8 +22,4 @@ public class TestPistol : Pistol {
 	protected override void Update () {
 		base.Update();
 	}
-	
-	public override void initAttack() {
-		base.initAttack();
-	}
 }
