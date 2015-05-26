@@ -81,7 +81,7 @@ public class GSManager : MonoBehaviour {
         {
             if (playerDataList[i] != null)
             {
-                DontDestroyOnLoad(playerDataList[i]);
+                //DontDestroyOnLoad(playerDataList[i]);
                 Debug.Log("dontdestroy: " + i);
             }
             else
@@ -89,6 +89,14 @@ public class GSManager : MonoBehaviour {
                 Debug.Log("not dontdestroy: " + i);
             }
         }
+
+        /*Debug.Log("dontdestroy");
+        foreach (PlayerData playerData in playerDataList) {
+            if (playerData != null) {
+                Debug.Log(playerData);
+                DontDestroyOnLoad(playerData);
+            }
+        }*/
 
 		loadProgress = Application.LoadLevelAsync(sceneName);
 		

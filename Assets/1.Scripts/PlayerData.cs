@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerData : MonoBehaviour {
+public class PlayerData {
 	// parsed char data storage
 	public string char_name;
 	public int char_id;

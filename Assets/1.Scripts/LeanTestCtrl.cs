@@ -7,7 +7,7 @@ public class LeanTestCtrl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		PlayerData playerData = gameObject.AddComponent<PlayerData> ();
+        PlayerData playerData = new PlayerData();
 		serv = gameObject.AddComponent<Farts> ();
 
 		playerData = serv.parseCharData(charDataEx);

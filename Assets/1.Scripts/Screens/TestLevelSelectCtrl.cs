@@ -86,9 +86,20 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 		ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
 		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 		prevBtn = currMenuPtr[locY, locX];
+
+        Debug.Log("LEADER: " + gsManager.leaderList[0]);
 	}
 
 	void BtnAction (int levelListIndex) {
+        Debug.Log("YOYOYO PERSISTENCE DAWG");
+        foreach (PlayerData playerData in gsManager.playerDataList) {
+            if (playerData != null) {
+                Debug.Log(playerData);
+                playerData.PrintData();
+            } else
+                Debug.Log("null");
+        }
+        Debug.Log(gsManager.playerDataList);
 		gsManager.currLevelId = levelList[levelListIndex];
 		gsManager.LoadLevel (levelList[levelListIndex]);
 	}
