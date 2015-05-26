@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Loadgear : MonoBehaviour {
-
+	public List<GameObject> gear;
+	
+	public List<Character> players = new List<Character>();
+	/*
 	public DataChest data;
 	public bool loaded;
 	public string[] loadData;
 	public string[] loadLine;
-	public List<Character> players = new List<Character>();
+	
 	public List<GameObject> equipment = new List<GameObject>();
 	public List<GameObject> abilities = new List<GameObject>();
 	//public List<GameObject> 
@@ -36,16 +39,6 @@ public class Loadgear : MonoBehaviour {
 		if(!loaded){
 			loadPlayers();
 		}
-		/*
-		if(Input.GetKeyDown(KeyCode.Space)) {
-
-			for (int i = 0; i < players.Count; i++) {
-				loadFromText("P" + (i + 1).ToString());
-				players[i].equipTest(equipment.ToArray(), abilities.ToArray());
-				equipment.Clear();
-				abilities.Clear();
-			}
-		}*/
 	}
 
 	private void loadFromText(string text) {
@@ -79,4 +72,5 @@ public class Loadgear : MonoBehaviour {
 			Debug.LogWarning("You fucked up, betch! Your data files are bad and you should feel bad.");
 		}
 	}
+	*/
 }
