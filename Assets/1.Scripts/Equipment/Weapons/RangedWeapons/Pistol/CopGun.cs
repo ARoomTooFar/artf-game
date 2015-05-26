@@ -16,7 +16,6 @@ public class CopGun : RangedWeapons {
 		base.setInitValues();
 
 		this.stats.weapType = 4;
-		this.stats.weapTypeName = "pistol";
 		this.stats.damage = 15 + user.GetComponent<Character>().stats.coordination;
 		this.stats.maxChgTime = 5;
 		this.stats.buffDuration = 0.4f;
@@ -45,10 +44,6 @@ public class CopGun : RangedWeapons {
 		newBullet.setInitValues(user, opposition, this.stats.damage + this.stats.chgDamage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration * 3, this.user.FindClosestCharacter(this.aoe.unitsInRange));
 	}
 
-	public override void initAttack() {
-		base.initAttack();
-	}
-	
 	protected override void FireProjectile() {
 		HomingBullet newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 2, this.user.transform.rotation)).GetComponent<HomingBullet>();
 		newBullet.setInitValues(user, opposition, this.stats.damage + this.stats.chgDamage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration, this.user.FindClosestCharacter(this.aoe.unitsInRange));

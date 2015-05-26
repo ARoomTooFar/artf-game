@@ -13,7 +13,6 @@ public class AutomaticAssaultRifle : RangedWeapons {
 	protected override void setInitValues() {
 		base.setInitValues();
 		this.stats.weapType = 6;
-		this.stats.weapTypeName = "assaultRifle";
 		
 		this.stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
 		this.stats.maxChgTime = 5;
@@ -60,8 +59,5 @@ public class AutomaticAssaultRifle : RangedWeapons {
 		user.animator.SetBool("Charging", false);
 		this.user.lockRotation = false;
 	}
-	
-	public override void initAttack() {
-		base.initAttack();
-	}
+
 }

@@ -15,7 +15,6 @@ public class WallOfLead : RangedWeapons {
 		base.setInitValues();
 
 		this.stats.weapType = 7;
-		this.stats.weapTypeName = "shotgun";
 		this.stats.damage = 15 + user.GetComponent<Character>().stats.coordination;
 		this.stats.maxChgTime = 4;
 		this.stats.goldVal = 150;
@@ -56,9 +55,5 @@ public class WallOfLead : RangedWeapons {
 		wave3.rb.velocity =  spreadAngle * wave3.rb.velocity;
 
 
-	}
-	
-	public override void initAttack() {
-		base.initAttack();
 	}
 }

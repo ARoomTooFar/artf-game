@@ -14,7 +14,6 @@ public class HuntingRifle : RangedWeapons {
 		base.setInitValues();
 		
 		stats.weapType = 5;
-		stats.weapTypeName = "rifle";
 		stats.damage = 20 + user.GetComponent<Character>().stats.coordination;
 		stats.maxChgTime = 3;
 		stats.chargeSlow = new Slow(1.0f);
@@ -43,11 +42,7 @@ public class HuntingRifle : RangedWeapons {
 		HomingBullet newBullet = ((GameObject)Instantiate(this.projectile, this.transform.position + this.user.facing * 2, this.user.transform.rotation)).GetComponent<HomingBullet>();
 		newBullet.setInitValues(user, opposition, this.stats.damage + this.stats.chgDamage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration * 2, this.user.FindClosestCharacter(this.aoe.unitsInRange));
 	}
-	
-	public override void initAttack() {
-		base.initAttack();
-	}
-	
+
 	protected override void FireProjectile() {
 		HomingBullet newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 2, this.user.transform.rotation)).GetComponent<HomingBullet>();
 		newBullet.setInitValues(user, opposition, this.stats.damage + this.stats.chgDamage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration, this.user.FindClosestCharacter(this.aoe.unitsInRange));

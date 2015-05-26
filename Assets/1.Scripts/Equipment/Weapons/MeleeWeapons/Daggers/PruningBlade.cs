@@ -16,24 +16,16 @@ public class PruningBlade : MeleeWeapons {
 		
 		// Default sword stats
 		stats.weapType = 1;
-		stats.weapTypeName = "dagger";
 		stats.atkSpeed = 2.0f;
 		stats.damage = (int)(20);
 		this.stats.buffDuration = 0.25f;
 		stats.goldVal = 200;
 		stats.maxChgTime = 2;
-
-		stats.chgLevels = 0.2f;
-		stats.timeForChgAttack = 0.2f;
 	}
 	
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
-	}
-	
-	public override void initAttack() {
-		base.initAttack();
 	}
 
 	public override void collideOn () {
