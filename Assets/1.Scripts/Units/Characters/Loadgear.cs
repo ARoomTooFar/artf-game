@@ -17,10 +17,10 @@ public class Loadgear : MonoBehaviour {
 	public void LoadPlayers() {
 		GSManager manager = GameObject.Find("GSManager").GetComponent<GSManager>();
 		
-		for (int i = 0; i < manager.players.Length; i++) {
-			if(manager.players[i] == null) continue;
+		for (int i = 0; i < manager.playerDataList.Length; i++) {
+			if(manager.playerDataList[i] == null) continue;
 			
-			PlayerData tempData = manager.players[i];
+			PlayerData tempData = manager.playerDataList[i];
 			Player tempPlayer = Instantiate (playerPrefabs[i], MapDataParser.start.Coordinates[i], Quaternion.identity) as Player;
 			
 			tempPlayer.gear.EquipWeapon(this.gear[tempData.weapon], tempPlayer.opposition, tempData.inventory[tempData.weapon]);
@@ -31,7 +31,7 @@ public class Loadgear : MonoBehaviour {
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot2], tempPlayer.opposition);
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot3], tempPlayer.opposition);
 			
-			manager.playersList[i] = tempPlayer;
+			manager.players[i] = tempPlayer;
 		}
 	}
 }
