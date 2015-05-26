@@ -10,7 +10,7 @@ public class CVineAttack : Attack {
 	
 	public override void OnStateUpdate (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		if (unit.actable && !unit.attacking){
-			unit.gear.weapon.initAttack();
+			animator.SetTrigger ("Attack");
 		}
 	}
 }

@@ -51,15 +51,11 @@ public class Chainsaw : MeleeWeapons {
 
 		// User dagger vars for now until we have chainsaw animations
 		stats.weapType = 3;
-		stats.weapTypeName = "chainsaw";
 
 		stats.atkSpeed = 3.0f;
 		stats.damage = 5;
 		
 		stats.maxChgTime = 7;
-		stats.timeForChgAttack = 0.5f;
-		
-		stats.chgLevels = 0.5f;
 
 		lastDmgTime = 0.0f;
 		curDuration = 0.0f;
@@ -150,9 +146,5 @@ public class Chainsaw : MeleeWeapons {
 				cropping.Remove(other.gameObject);
 			}
 		}
-	}
-
-	public override void initAttack() {
-		base.initAttack();
 	}
 }

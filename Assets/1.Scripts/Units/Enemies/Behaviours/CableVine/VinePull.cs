@@ -76,14 +76,14 @@ public class VinePull : Approach {
 		} else if (MyMawPos != null) {
 			unit.target.transform.position = unit.target.transform.position - pullVelocity (MyMawPos.transform.position);
 			if (unit.actable && !unit.attacking){
-				unit.gear.weapon.initAttack();
+				animator.SetTrigger("Attack");
 				p.damage(1);
 				p.BDS.addBuffDebuff (stun, unit.gameObject, 4.0f);
 			}
 		} else { 
 			unit.target.transform.position = unit.target.transform.position - pullVelocity (unit.transform.position);
 			if (unit.actable && !unit.attacking){
-				unit.gear.weapon.initAttack();
+				animator.SetTrigger("Attack");
 				p.damage(1);
 				p.BDS.addBuffDebuff (stun, unit.gameObject, 4.0f);
 			}

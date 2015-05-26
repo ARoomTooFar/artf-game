@@ -32,10 +32,6 @@ public class BullyTrunkPummelWeapon : MeleeWeapons {
 		base.Update();
 	}
 	
-	public override void initAttack() {
-		user.animator.SetTrigger("Attack");
-	}
-	
 	// Does something when opponent is hit
 	protected virtual void OnHit(Character enemy) {
 		enemy.damage(stats.damage, user.transform, user.gameObject);

@@ -11,7 +11,7 @@ public class SetStats : EnemyBehaviour {
 	
 	// This will be called once the animator has transitioned out of the state.
 	public override void OnStateExit (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		this.unit.SetInitValues (
+		if (this.unit != null) this.unit.SetInitValues (
 			this.stat.health * (animator.GetInteger("Tier") + 1),
 			this.stat.strength * (animator.GetInteger("Tier") + 1),
 			this.stat.coordination * (animator.GetInteger("Tier") + 1),

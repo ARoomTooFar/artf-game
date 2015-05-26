@@ -6,7 +6,8 @@ public class InitiateTargetting : ArtilleryBehaviour {
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		this.unit.getFacingTowardsTarget();
 		this.unit.transform.localRotation = Quaternion.LookRotation(this.unit.facing);
-		this.artillery.initAttack();
+		// this.artillery.initAttack();
+		animator.SetTrigger("Attack");
 		animator.SetBool("Charging", true);
 	}
 	

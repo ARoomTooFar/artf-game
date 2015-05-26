@@ -15,12 +15,11 @@ public class Shotgun : RangedWeapons {
 		base.setInitValues();
 
 		this.stats.weapType = 7;
-		this.stats.weapTypeName = "shotgun";
 		this.stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
 		this.stats.maxChgTime = 4;
 		
-		this.spread = 40;
-		this.sideShockWaveAngle = 30;
+		this.spread = 30;
+		this.sideShockWaveAngle = 15;
 	}
 	
 	// Update is called once per frame
@@ -30,14 +29,22 @@ public class Shotgun : RangedWeapons {
 	
 	public override void AttackStart() {
 		for (int i = 0; i < 5; i++) {
-			this.FireProjectile();
+			this.FireProjectile(5, i);
 		}
 		StartCoroutine(makeSound(action,playSound,action.length));
 	}
 	
+	protected virtual void FireProjectile(int maxShots, int shotNum) {
+		Quaternion spreadAngle = Quaternion.AngleAxis(spread - ((spread * 2)/(maxShots - 1) * shotNum), Vector3.up); // Calculated quaternion that will rotate the bullet and its velocity
+		Projectile newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 2, this.user.transform.rotation * spreadAngle)).GetComponent<Projectile>();
+		newBullet.setInitValues(user, opposition, this.stats.damage + this.stats.chgDamage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration);
+		newBullet.rb.velocity =  spreadAngle * newBullet.rb.velocity;
+	}
+	
 	public override void SpecialAttack() {
-		for (int i = 0; i < 5 + (int)(this.user.animator.GetFloat("ChargeTime") * 3); i++) {
-			this.FireProjectile();
+		int shots = 5 + (int)(this.user.animator.GetFloat("ChargeTime") * 3);
+		for (int i = 0; i < shots; i++) {
+			this.FireProjectile(shots, i);
 		}
 		StartCoroutine(makeSound(action,playSound,action.length));
 		Shockwave wave1 = ((GameObject)Instantiate(shockwave, user.transform.position + new Vector3(0.0f, 3.0f, 0.0f), user.transform.rotation)).GetComponent<Shockwave>();
@@ -56,9 +63,5 @@ public class Shotgun : RangedWeapons {
 		wave3.rb.velocity =  spreadAngle * wave3.rb.velocity;
 
 
-	}
-	
-	public override void initAttack() {
-		base.initAttack();
 	}
 }
