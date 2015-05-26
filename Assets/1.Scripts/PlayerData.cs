@@ -10,11 +10,6 @@ public class PlayerData : MonoBehaviour {
 	public int voice_id;
 	public int money;
     public int[] inventory;
-    public List<Weapons> weaponry;
-    public List<Armor> armory;
-    public List<Armor> hats;
-    public List<Item> abilities;
-    public List<GameObject> ammo;
 
 	// data used to load player for gameplay
 	public int weapon;
