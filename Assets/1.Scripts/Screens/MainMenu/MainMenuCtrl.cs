@@ -24,6 +24,8 @@ public class MainMenuCtrl : MonoBehaviour {
 	private enum Menu {
 		StartMenu,
 		LoginForm,
+        ReadyGo,
+        Ready,
         PopUp
 	}
     private Menu currMenu;
@@ -42,6 +44,18 @@ public class MainMenuCtrl : MonoBehaviour {
 	private Animator loginFormAnim;
     private Text txtFieldAcctName;
 	private Text txtFieldPasscode;
+
+    // ready go display
+    private GameObject[,] readyGoDisplay;
+    private int readyGoDisplayWidth = 1;
+    private int readyGoDisplayHeight = 3;
+    private Animator readyGoDisplayAnim;
+
+    // ready display
+    private GameObject[,] readyDisplay;
+    private int readyDisplayWidth = 1;
+    private int readyDisplayHeight = 1;
+    private Animator readyDisplayAnim;
 
 	// pop-up
 	private GameObject[,] popUp;
@@ -77,7 +91,7 @@ public class MainMenuCtrl : MonoBehaviour {
 			Debug.LogError ("Invalid menu container name. Can't assign player number for UI!");
 		}
 
-        // setup start menu
+        /* setup start menu */
         startMenu = new GameObject[startMenuHeight, startMenuWidth];
         startMenu[0, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/StartMenu/BtnLogin");
         startMenu[1, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/StartMenu/BtnRegister");
@@ -100,7 +114,7 @@ public class MainMenuCtrl : MonoBehaviour {
             serv.login("Paradoxium", "pass");
         });
 
-		// setup login
+		/* setup login form */
 		loginForm = new GameObject[loginFormHeight, loginFormWidth];
 		loginForm[0, 0] = loginForm[0, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName");
         txtFieldAcctName = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName/TxtFieldAcctName").GetComponent<Text>();
@@ -139,7 +153,20 @@ public class MainMenuCtrl : MonoBehaviour {
 			MenuReset ();
         });
 
-		// setup keypad (caps)
+        /* setup ready go display */
+        readyGoDisplay = new GameObject[readyGoDisplayHeight, readyGoDisplayWidth];
+        readyGoDisplay[0, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/ReadyGoDisplay/BtnStart");
+        readyGoDisplay[1, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/ReadyGoDisplay/BtnGetID");
+        readyGoDisplay[2, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/ReadyGoDisplay/BtnLogout");
+        readyGoDisplayAnim = GameObject.Find("/Canvas/" + menuContainerName + "/ReadyGoDisplay").GetComponent<Animator>();
+
+        readyGoDisplay[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+        {
+            MenuReset();
+            gsManager.LoadScene("TestLevelSelect");
+        });
+
+		/* setup keypad (caps) */
 		popUp = new GameObject[popUpHeight, popUpWidth];
         popUp[0, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeySymbol");
         popUp[0, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyABC");
@@ -157,7 +184,7 @@ public class MainMenuCtrl : MonoBehaviour {
 		popUpAnim = GameObject.Find ("/Canvas/" + menuPopUpName).GetComponent<Animator>();
         txtDisplayField = GameObject.Find("/Canvas/" + menuPopUpName + "/DisplayField/TxtDisplayField").GetComponent<Text>();
 
-		// setup lowercase keypad
+		/* setup lowercase keypad */
 		lowerPad = new GameObject[popUpHeight, popUpWidth];
 		lowerPad [0, 0] = popUp [0, 0];
 		lowerPad[0, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/KeyLABC");
@@ -173,7 +200,7 @@ public class MainMenuCtrl : MonoBehaviour {
 		lowerPad [3, 2] = popUp [3, 2];
 		lowerPad[4, 0] = lowerPad[4, 1] = lowerPad[4, 2] = popUp[4, 0];
 		
-		// setup number keypad
+		/* setup number keypad */
 		numPad = new GameObject[popUpHeight, popUpWidth];
 		numPad[0, 0] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key1");
 		numPad[0, 1] = GameObject.Find("/Canvas/" + menuPopUpName + "/Key2");
@@ -397,6 +424,14 @@ public class MainMenuCtrl : MonoBehaviour {
 			currMenuPtr = loginForm;
 			currAnim = loginFormAnim;
 			break;
+        case Menu.ReadyGo:
+            currMenuPtr = readyGoDisplay;
+            currAnim = readyGoDisplayAnim;
+            break;
+        case Menu.Ready:
+            currMenuPtr = readyDisplay;
+            currAnim = readyDisplayAnim;
+            break;
         case Menu.PopUp:
             currMenuPtr = popUp;
 			txtDisplayField.text = currFieldPtr.text;
@@ -595,9 +630,11 @@ public class MainMenuCtrl : MonoBehaviour {
 
 			// add player data to player list
 			PlayerData playerData = serv.parseCharData(loginReq.text);
-			gsManager.players[playerNum] = playerData;
+			gsManager.playerDataList[playerNum] = playerData;
 			gsManager.leaderList.Add (playerNum);
-			gsManager.players[playerNum].PrintData();
+			//gsManager.playerDataList[playerNum].PrintData();
+
+            MenuSwitch(Menu.ReadyGo);
 		} else {
 			Debug.Log ("login failure");
 		}
