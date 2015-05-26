@@ -26,7 +26,7 @@ public class Farts : MonoBehaviour
 		int[] inventory = new int[52];
 		string[] parsedData = charData.Split (',');
 		
-		playerData.name = parsedData[0];
+		playerData.char_name = parsedData[0];
 		playerData.char_id = int.Parse(parsedData [1]);
 		playerData.hair_id = int.Parse(parsedData [2]);
 		playerData.voice_id = int.Parse(parsedData [3]);

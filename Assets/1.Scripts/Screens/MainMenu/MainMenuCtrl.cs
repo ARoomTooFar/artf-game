@@ -626,13 +626,9 @@ public class MainMenuCtrl : MonoBehaviour {
 	// handles login function call
 	void LoginHand () {
 		if (serv.dataCheck(loginReq.text)) {
-			Debug.Log ("login success");
-
-			// add player data to player list
 			PlayerData playerData = serv.parseCharData(loginReq.text);
-			gsManager.playerDataList[playerNum] = playerData;
-			gsManager.leaderList.Add (playerNum);
-			//gsManager.playerDataList[playerNum].PrintData();
+            gsManager.playerDataList[playerNum] = playerData; //add player data to player list
+			gsManager.leaderList.Add (playerNum); //add player to leader list
 
             MenuSwitch(Menu.ReadyGo);
 		} else {
