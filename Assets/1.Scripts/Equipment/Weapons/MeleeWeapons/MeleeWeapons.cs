@@ -14,6 +14,7 @@ public class MeleeWeapons : Weapons {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
+		stats.chargeSlow = new Slow(0.0f);
 	}
 	
 

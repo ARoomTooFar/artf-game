@@ -16,14 +16,8 @@ public class Controls {
 
 [RequireComponent(typeof(Rigidbody))]
 public class Player : Character, IHealable<int>{
-	public string nameTag;
 	public int greyDamage;
-	public bool testable, isReady, atEnd, atStart, inGrey;
-	public int mash_threshold;
-	public int mash_value;
-	public bool break_free;
-	public bool tapped;
-	public float last_pressed;
+	public bool testable, isReady, atEnd, atStart;
 
 	public UIActive UI;
 	public Controls controls;
@@ -74,24 +68,6 @@ public class Player : Character, IHealable<int>{
 	// Update is called once per frame
 	protected override void Update () {
 
-		if (break_free)
-			break_free = false;
-
-		if (stunned) {
-			tapped = true;
-
-			float now = Time.time;
-			float since = now - last_pressed;
-			last_pressed = now;
-
-			if(since > 0) {
-				float motion = 1.0f / since;
-				motion *= motion;
-				mash_value++;
-				if(mash_value > mash_threshold) break_free = true;
-			}
-		}
-
 		if(isDead) return;
 
 		if(UI != null && UI.onState){
@@ -112,34 +88,18 @@ public class Player : Character, IHealable<int>{
 		AnimationUpdate ();
 	}
 
-	public bool mashed_out(){
-		return break_free;
+/*
+	public virtual void EquipGearAndAbilities(GameObject[] equip, GameObject[] abilities) {
+		gear.equipGear(this, opposition, equip);
+		inventory.equipItems(this, opposition, abilities);
 	}
-
+	*/
 	
 	//-------------------------------//
 	// Player Command Implementation //
 	//-------------------------------//
 	
 	protected override void ActionCommands() {
-		// Invokes an action/animation
-		if (stunned) {
-			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
-				tapped = true;
-	
-				float now = Time.time;
-				float since = now - last_pressed;
-				last_pressed = now;
-
-				if(since > 0) {
-					float motion = 1.0f / since;
-					motion *= motion;
-					mash_value++;
-					if(mash_value > mash_threshold) break_free = true;
-				}
-			}
-		}
-
 		if (actable && !this.animator.GetBool ("Attack")) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
 				if(currDoor!=null){

@@ -31,8 +31,6 @@ public static class MapDataParser {
 		if(Global.inLevelEditor) {
 			Mode.setTileMode();
 		} else {
-//            Debug.Log(Resources.Load("Player1"));
-			
 			Loadgear loadgear = GameObject.Find("/Loadgear").GetComponent<Loadgear>();
 			loadgear.LoadPlayers();
 			

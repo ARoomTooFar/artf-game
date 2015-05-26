@@ -107,8 +107,8 @@ public class Bushling : MobileEnemy {
 
 	public override void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
 		base.SetInitValues(health, strength, coordination, armor, speed);
-		this.rightPaw.equip(this, this.opposition);
-		this.leftPaw.equip(this, this.opposition);
+		this.rightPaw.equip(this, this.opposition, 0);
+		this.leftPaw.equip(this, this.opposition, 0);
 	}
 
 	protected override void TargetFunction() {

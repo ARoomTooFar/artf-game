@@ -12,8 +12,6 @@ public class Sword : MeleeWeapons {
 	protected override void setInitValues() {
 		base.setInitValues();
 
-		stats.chargeSlow = new Slow(0.0f);
-
 		// Default sword stats
 		stats.weapType = 0;
 		stats.atkSpeed = 1.0f;
