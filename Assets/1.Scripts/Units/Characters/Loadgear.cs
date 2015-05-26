@@ -6,9 +6,31 @@ public class Loadgear : MonoBehaviour {
 	public List<GameObject> gear;
 	
 	public List<Character> players = new List<Character>();
+	
+	// Use this for initialization
+	protected void Start () {
+		// this.LoadPlayers();
+	}
+	
+	protected void Update() {
+	}
+	
+	public void LoadPlayers() {
+		GSManager manager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		
+		manager.
+		
+		for (int i = 0; i < players.Count; i++) {
+			if(players[i] == null) continue;
+			
+			loadFromText("P" + (i + 1).ToString());
+			players[i].equipTest(equipment.ToArray(), abilities.ToArray());
+			equipment.Clear();
+			abilities.Clear();
+		}
+	}
+	
 	/*
-	public DataChest data;
-	public bool loaded;
 	public string[] loadData;
 	public string[] loadLine;
 	
@@ -17,29 +39,9 @@ public class Loadgear : MonoBehaviour {
 	//public List<GameObject> 
 	public string cName;
 
-	// Use this for initialization
-	void Start () {
-		loaded = false;
-	}
-	void loadPlayers(){
-		for (int i = 0; i < players.Count; i++) {
-			if(players[i] != null){
-//				Debug.Log("P" + (i+1).ToString());
-				loadFromText("P" + (i + 1).ToString());
-				players[i].equipTest(equipment.ToArray(), abilities.ToArray());
-				equipment.Clear();
-				abilities.Clear();
-			}
-		}
-		if(players[0] !=null){
-			loaded = true;
-		}
-	}
-	void Update() {
-		if(!loaded){
-			loadPlayers();
-		}
-	}
+	
+	
+
 
 	private void loadFromText(string text) {
 		TextAsset gearData = (TextAsset)Resources.Load("Testdata/" + text, typeof(TextAsset));
