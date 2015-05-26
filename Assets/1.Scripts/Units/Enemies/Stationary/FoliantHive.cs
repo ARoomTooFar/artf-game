@@ -87,7 +87,7 @@ public class FoliantHive : StationaryEnemy {
 			f.hiveDied();
 		}
 
-		deathNoise ();
+		if (this.failure != null) deathNoise ();
 		
 		base.die ();
 	}
