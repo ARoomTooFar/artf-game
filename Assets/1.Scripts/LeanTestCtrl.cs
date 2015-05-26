@@ -12,16 +12,6 @@ public class LeanTestCtrl : MonoBehaviour {
 
 		playerData = serv.parseCharData(charDataEx);
 
-		Debug.Log (playerData.char_name);
-		Debug.Log (playerData.char_id);
-		Debug.Log (playerData.hair_id);
-		Debug.Log (playerData.voice_id);
-		Debug.Log (playerData.money);
-		Debug.Log (playerData.inventory);
-		foreach (int data in playerData.inventory) {
-			Debug.Log (data);
-		}
-
 		string stringifiedCharData = serv.stringifyCharData (playerData);
 		Debug.Log (stringifiedCharData);
 	}

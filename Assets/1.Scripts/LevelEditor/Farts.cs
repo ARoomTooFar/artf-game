@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Farts : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class Farts : MonoBehaviour
 	public PlayerData parseCharData(string charData) {
 		PlayerData playerData = gameObject.AddComponent<PlayerData>();
 		int[] inventory = new int[52];
+        Dictionary<string, int> inventory2 = new Dictionary<string, int>;
 		string[] parsedData = charData.Split (',');
 		
 		playerData.name = parsedData[0];
@@ -32,7 +34,9 @@ public class Farts : MonoBehaviour
 		playerData.money = int.Parse(parsedData [4]);
 		
 		for (int i = 5; i < parsedData.Length; ++i) {
-			inventory[i - 5] = int.Parse(parsedData[i]);
+			//inventory[i - 5] = int.Parse(parsedData[i]);
+            /*switch () {
+            }*/
 		}
 		
 		playerData.inventory = inventory;
