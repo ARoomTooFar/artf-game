@@ -23,15 +23,12 @@ public class Spear: MeleeWeapons {
 		stats.chargeSlow = new Slow(1.0f);
 
 		stats.weapType = 2;
-		stats.weapTypeName = "spear";
 		this.stats.buffDuration = 1.25f;
 
 		stats.atkSpeed = 1.0f;
 		stats.damage = 40; // (int)(10 + 1.5f * user.GetComponent<Character>().stats.strength);
 		
 		stats.maxChgTime = 4;
-		
-		stats.chgLevels = 0.5f;
 	}
 	
 	// Update is called once per frame
@@ -39,9 +36,6 @@ public class Spear: MeleeWeapons {
 		base.Update();
 	}
 	
-	public override void initAttack() {
-		base.initAttack();
-	}
 
 	public override void collideOn () {
 		base.collideOn ();

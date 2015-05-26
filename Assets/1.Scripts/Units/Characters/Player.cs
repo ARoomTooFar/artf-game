@@ -15,7 +15,7 @@ public class Controls {
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : NewCharacter, IHealable<int>{
+public class Player : Character, IHealable<int>{
 	public string nameTag;
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart, inGrey;
@@ -224,7 +224,7 @@ public class Player : NewCharacter, IHealable<int>{
 	
 	// Constant animation updates (Main loop for characters movement/actions, sets important parameters in the animator)
 	protected override void AnimationUpdate() {
-		MovementAnimation();
+		base.AnimationUpdate();
 	}
 	
 	//-------------------------------------------//

@@ -16,9 +16,6 @@ public class MeleeWeapons : Weapons {
 		base.setInitValues();
 	}
 	
-	public override void initAttack() {
-		base.initAttack();
-	}
 
 	public override void AttackStart() {
 		if (action != null) StartCoroutine(makeSound(action,playSound,action.length));

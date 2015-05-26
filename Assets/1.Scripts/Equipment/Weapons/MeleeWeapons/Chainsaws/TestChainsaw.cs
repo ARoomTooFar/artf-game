@@ -17,12 +17,4 @@ public class TestChainsaw : Chainsaw {
 	protected override void Update () {
 		base.Update();
 	}
-	
-	public override void initAttack() {
-		base.initAttack();
-	}
-
-	protected override void attack() {
-		base.attack ();
-	}
 }

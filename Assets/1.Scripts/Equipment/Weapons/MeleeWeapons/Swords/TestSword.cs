@@ -15,20 +15,10 @@ public class TestSword : Sword {
 		//stats.damage = 4;
 		base.setInitValues();
 		stats.weapType = 0;
-		stats.specialAttackType = 1;
 	}
 
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
-	}
-
-	public override void initAttack() {
-		base.initAttack();
-	}
-
-	// Test sword attack functions
-	protected override void attack() {
-		base.attack ();
 	}
 }

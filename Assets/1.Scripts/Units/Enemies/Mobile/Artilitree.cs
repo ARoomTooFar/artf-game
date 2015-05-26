@@ -27,12 +27,6 @@ public class Artilitree: RangedEnemy {
 	public override void SetTierData(int tier) {
 		tier = 6;
 		
-		/*
-		if (tier < 1) stats.speed = 2;
-		else if (tier > 0 && tier < 5) stats.speed = 3;
-		else stats.speed = 4;
-		*/
-		
 		foreach(Rooting behaviour in this.animator.GetBehaviours<Rooting>()) {
 			if (tier < 3) behaviour.SetVar(3);
 			else behaviour.SetVar(2);
@@ -75,14 +69,22 @@ public class Artilitree: RangedEnemy {
 	}
 	
 	
+	protected virtual void StartTargetting() {
+		this.StartCoroutine(this.artillery.StartTargetting());
+	}
+	
+	protected virtual void Shoot() {
+		this.artillery.Shoot();
+	}
 	
 	//---------------------//
 	// Character Functions //
 	//---------------------//
 
+
 	public override void die() {
 		if (this.tier > 3) {
-			this.artillery.initAttack();
+			animator.SetTrigger("Attack");
 			StartCoroutine(waitTillDeath());
 		} else {
 			base.die ();
