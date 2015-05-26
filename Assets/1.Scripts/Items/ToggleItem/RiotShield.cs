@@ -6,7 +6,9 @@ using System.Collections;
 public class RiotShield : ToggleItem {
 	
 	private float dmgReduction, userSlow;
-	private MeshRenderer meshRenderer;
+	private Collider col;
+	// private MeshRenderer meshRenderer;
+	private ParticleSystem particle;
 
 	private FreedomController debuff;
 
@@ -41,7 +43,10 @@ public class RiotShield : ToggleItem {
 	protected override void Start () {
 		base.Start();
 		
-		meshRenderer = GetComponent<MeshRenderer>();
+		// meshRenderer = GetComponent<MeshRenderer>();
+		this.col = this.GetComponent<Collider>();
+		this.particle = this.GetComponent<ParticleSystem>();
+		this.particle.enableEmission = false;
 	}
 	
 	protected override void setInitValues() {
@@ -69,8 +74,9 @@ public class RiotShield : ToggleItem {
 	}
 
 	protected override IEnumerator bgnEffect() {
-		GetComponent<Collider>().enabled = true;
-		meshRenderer.enabled = true;
+		this.col.enabled = true;
+		// meshRenderer.enabled = true;
+		this.particle.enableEmission = true;
 		user.BDS.addBuffDebuff(debuff, user.gameObject);
 		return base.bgnEffect();
 	}
@@ -81,8 +87,9 @@ public class RiotShield : ToggleItem {
 	}
 
 	protected override void atvDeactivation() {
-		GetComponent<Collider>().enabled = false;
-		meshRenderer.enabled = false;
+		this.col.enabled = false;
+		// meshRenderer.enabled = false;
+		this.particle.enableEmission = false;
 		
 		user.BDS.rmvBuffDebuff(debuff, user.gameObject);
 		base.atvDeactivation();
