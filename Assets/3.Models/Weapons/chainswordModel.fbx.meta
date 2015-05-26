@@ -92,7 +92,7 @@ ModelImporter:
     4300024: handle
     4300026: handle piece
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
