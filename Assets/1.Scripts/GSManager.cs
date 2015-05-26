@@ -9,9 +9,9 @@ public class GSManager : MonoBehaviour {
 	public string currLevelId = "";
     public string currLevelData = "";
 	public List<string> loot; //holds looted items
-	public PlayerData[] playerData = new PlayerData[4];
+	public PlayerData[] players = new PlayerData[4];
 	public List<int> leaderList = new List<int>();
-    public Player[] players = new Player[4];
+    public Player[] playersList = new Player[4];
 
     private Farts serv;
 	private GameObject loadingBG;
