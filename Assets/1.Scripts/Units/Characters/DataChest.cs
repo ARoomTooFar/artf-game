@@ -7,7 +7,7 @@ public class DataChest : MonoBehaviour {
 	public List<Armor> hats;
 	public List<Item> inventory;
 	public List<Weapons> weaponry;
-	public List<GameObject> ammo;
+	
 	// Use this for initialization
 	void Start () {
 
