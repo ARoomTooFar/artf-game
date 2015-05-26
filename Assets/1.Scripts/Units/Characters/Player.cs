@@ -27,6 +27,7 @@ public class Player : Character, IHealable<int>{
 
 	public UIActive UI;
 	public Controls controls;
+	Renderer renderer;
 
 	GameObject sparks = null;
 
@@ -41,7 +42,7 @@ public class Player : Character, IHealable<int>{
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
-
+		renderer = GetComponent<Renderer> ();
 		foreach(PlayerBehaviour behaviour in this.animator.GetBehaviours<PlayerBehaviour>()) {
 			behaviour.SetVar(this.GetComponent<Player>());
 		}
@@ -236,6 +237,7 @@ public class Player : Character, IHealable<int>{
 	
 	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
 		this.damage (dmgTaken, atkPosition);
+		StartCoroutine(hitFlash (Color.red, renderer.material.color));
 	}
 	
 	public override void damage(int dmgTaken, Transform atkPosition) {
@@ -263,7 +265,9 @@ public class Player : Character, IHealable<int>{
 		
 		hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth * 5f);
 		BDS.addBuffDebuff(hitConfirm,gameObject,.5f);
-		
+
+		StartCoroutine (hitFlash (Color.red, renderer.material.color));
+
 	}
 	
 	public override void damage(int dmgTaken) {
@@ -285,6 +289,8 @@ public class Player : Character, IHealable<int>{
 			sparks.GetComponent<ParticleRenderer>().material = particleMat;
 			Destroy (sparks, 1);
 		}
+
+		StartCoroutine (hitFlash (Color.red, renderer.material.color));
 	}
 	
 	public override void die() {
@@ -434,6 +440,13 @@ public class Player : Character, IHealable<int>{
 		} else {
 			return true;
 		}
+	}
+
+	// coroutines
+	IEnumerator hitFlash(Color hit, Color normal){
+		renderer.material.color = hit;
+		yield return new WaitForSeconds(.5f);
+		renderer.material.color = normal;
 	}
 
 }
