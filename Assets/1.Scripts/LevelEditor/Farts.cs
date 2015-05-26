@@ -24,7 +24,7 @@ public class Farts : MonoBehaviour
 	public PlayerData parseCharData(string charData) {
 		PlayerData playerData = gameObject.AddComponent<PlayerData>();
 		int[] inventory = new int[52];
-        Dictionary<string, int> inventory2 = new Dictionary<string, int>;
+        Dictionary<string, int> tier = new Dictionary<string, int>();
 		string[] parsedData = charData.Split (',');
 		
 		playerData.name = parsedData[0];
