@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerData : MonoBehaviour {
 	// parsed char data storage
@@ -8,15 +9,20 @@ public class PlayerData : MonoBehaviour {
 	public int hair_id;
 	public int voice_id;
 	public int money;
-	public int[] inventory = new int[52];
+    public int[] inventory;
+    public List<Weapons> weaponry;
+    public List<Armor> armory;
+    public List<Armor> hats;
+    public List<Item> abilities;
+    public List<GameObject> ammo;
 
 	// data used to load player for gameplay
 	public int weapon;
+    public int headgear;
+    public int armor;
 	public int actionslot1;
 	public int actionslot2;
 	public int actionslot3;
-	public int headgear;
-	public int armor;
 
 	public void PrintData() {
 		Debug.Log ("// -- START PRINT PLAYER DATA -- //");
