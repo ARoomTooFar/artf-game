@@ -160,9 +160,10 @@ public class MainMenuCtrl : MonoBehaviour {
         readyGoDisplay[2, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/ReadyGoDisplay/BtnLogout");
         readyGoDisplayAnim = GameObject.Find("/Canvas/" + menuContainerName + "/ReadyGoDisplay").GetComponent<Animator>();
 
+        // start button
         readyGoDisplay[0, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
-            MenuReset();
+            Debug.Log("start");
             gsManager.LoadScene("TestLevelSelect");
         });
 
@@ -600,7 +601,7 @@ public class MainMenuCtrl : MonoBehaviour {
 
 	void MenuReset() {
 		gsManager.leaderList.Remove (playerNum);
-		gsManager.players [playerNum] = null;
+		gsManager.playerDataList [playerNum] = null;
 		txtFieldAcctName.text = "Enter an account name...";
 		txtFieldPasscode.text = "Enter your passcode...";
 	}
@@ -631,7 +632,8 @@ public class MainMenuCtrl : MonoBehaviour {
 			gsManager.leaderList.Add (playerNum); //add player to leader list
 
             MenuSwitch(Menu.ReadyGo);
-		} else {
+            //gsManager.playerDataList[playerNum].PrintData();
+        } else {
 			Debug.Log ("login failure");
 		}
 	}
