@@ -1,0 +1,129 @@
+fileFormatVersion: 2
+guid: 8e301a7b35566e34989e3f4ac69501d9
+timeCreated: 1432631607
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: _rubber__grip
+    100002: Front_Muzzle
+    100004: Grip
+    100006: Gun_Body
+    100008: Gun_Body_side
+    100010: //RootNode
+    100012: Laser_1
+    100014: laser_2
+    100016: Muzzle_1
+    100018: side
+    100020: stock_detail_1
+    100022: Trigger
+    100024: Trigger_Guard
+    400000: _rubber__grip
+    400002: Front_Muzzle
+    400004: Grip
+    400006: Gun_Body
+    400008: Gun_Body_side
+    400010: //RootNode
+    400012: Laser_1
+    400014: laser_2
+    400016: Muzzle_1
+    400018: side
+    400020: stock_detail_1
+    400022: Trigger
+    400024: Trigger_Guard
+    2300000: _rubber__grip
+    2300002: Front_Muzzle
+    2300004: Grip
+    2300006: Gun_Body
+    2300008: Gun_Body_side
+    2300010: Laser_1
+    2300012: laser_2
+    2300014: Muzzle_1
+    2300016: side
+    2300018: stock_detail_1
+    2300020: Trigger
+    2300022: Trigger_Guard
+    3300000: _rubber__grip
+    3300002: Front_Muzzle
+    3300004: Grip
+    3300006: Gun_Body
+    3300008: Gun_Body_side
+    3300010: Laser_1
+    3300012: laser_2
+    3300014: Muzzle_1
+    3300016: side
+    3300018: stock_detail_1
+    3300020: Trigger
+    3300022: Trigger_Guard
+    4300000: stock_detail_1
+    4300002: _rubber__grip
+    4300004: Gun_Body_side
+    4300006: Front_Muzzle
+    4300008: Laser_1
+    4300010: Trigger
+    4300012: side
+    4300014: laser_2
+    4300016: Trigger_Guard
+    4300018: Grip
+    4300020: Gun_Body
+    4300022: Muzzle_1
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

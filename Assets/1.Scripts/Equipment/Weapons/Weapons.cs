@@ -16,7 +16,7 @@ public class WeaponStats {
 
 	[Range(1,11)]
 	public int upgrade;
-
+	public int goldVal;
 	public int damage;
 	public int weapType;
 	public BuffsDebuffs debuff;
@@ -25,6 +25,31 @@ public class WeaponStats {
 
 	public WeaponStats() {
 		atkspdManip = new PercentValues();
+	}
+
+	//returns base gold value of weapon
+	public int GoldVal{
+		get{return goldVal;}
+	}
+
+	//returns base damage value of weapon
+	public int Damage{
+		get{return damage;}
+	}
+
+	//returns weapType
+	public int WeapType{
+		get{return weapType;}
+	}
+
+	//returns upgrade value
+	public int Upgrade{
+		get{return upgrade;}
+	}
+
+	//returns upgrade value
+	public int DamageUpgrade{
+		get{return (damage * upgrade);}
 	}
 }
 
