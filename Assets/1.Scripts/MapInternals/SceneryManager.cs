@@ -273,7 +273,6 @@ public class SceneryManager {
 			if(blk.BlockID != "LevelEditor/Other/PlayerStartingLocation" &&
 				blk.BlockID != "LevelEditor/Other/PlayerEndingLocation" &&
 			   blk.BlockID != "{0}/Rooms/doortile"){
-				Debug.Log(blk.BlockID);
 				return false;
 			}
 		}
