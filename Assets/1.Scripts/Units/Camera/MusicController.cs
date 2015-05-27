@@ -50,7 +50,7 @@ public class MusicController: MonoBehaviour {
 		}
 		List<GameObject> MonstersIndex = MapData.MonsterBlocks.allMonsters ();
 		int numberofmonsters = 0;
-
+		Debug.Log (MonstersIndex.Count);
 		// add enemy to the amount of enemies active rooms.
 		foreach (GameObject enemy in MonstersIndex) {
 			foreach(ARTFRoom room in rooms) {
@@ -58,7 +58,7 @@ public class MusicController: MonoBehaviour {
 			}
 		}
 
-//		Debug.Log(numberofmonsters);
+		//Debug.Log(numberofmonsters);
 
 		return numberofmonsters;
 	}
