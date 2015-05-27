@@ -54,9 +54,12 @@ public class MusicController: MonoBehaviour {
 		// add enemy to the amount of enemies active rooms.
 		foreach (GameObject enemy in MonstersIndex) {
 			foreach(ARTFRoom room in rooms) {
-				if(room.inRoom(enemy.transform.position)) numberofmonsters++;
+				if(room.inRoom(enemy.transform.position)) {numberofmonsters++;}
 			}
 		}
+
+//		Debug.Log(numberofmonsters);
+
 		return numberofmonsters;
 	}
 
