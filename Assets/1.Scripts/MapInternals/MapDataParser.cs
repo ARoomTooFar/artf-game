@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class MapDataParser {
 	public static SceneryBlock start;
@@ -9,6 +10,9 @@ public static class MapDataParser {
 		MapData.ClearData();
 		string[] SaveStringLines = SaveString.Split('\n');
 		int i = 0;
+		if(Global.inLevelEditor) {
+			GameObject.Find("InputField_Save").GetComponent<InputField>().text = SaveStringLines[i].Split('\t')[0].Split(':')[1];
+		}
 		while(SaveStringLines[i] != "Terminal") {
 			i++;
 		}

@@ -24,7 +24,7 @@ public class FolderBarController : MonoBehaviour {
 	
 	//holds the entire folder bar. for use with sliding it off and on screen
 	public RectTransform folderBar;
-	bool lerpingFolderClosed = false;
+	bool lerpingFolderClosed = true;
 	bool lerpingFolderOpen = false;
 	float currentPosX = 0f;
 	float openPosX = -128f;
@@ -61,6 +61,11 @@ public class FolderBarController : MonoBehaviour {
 		}
 
 		setupButtons();
+
+		//hack to fix needing to click on the folder bar twice when the editor first starts
+		foreach(GameObject fold in folders) {
+			fold.SetActive(false);
+		}
 	}
 
 	void Update() {
