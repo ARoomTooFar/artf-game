@@ -10,7 +10,7 @@ public class endzone : MonoBehaviour {
 	public int numbPlayers;
 	public int numbPlayersInZone = 0;
 	public int numbPlayersAlive;
-	public GameObject[] players;
+	public Player[] players;
 	public string endScene = "RewardScreen";
 	private Character character;
 

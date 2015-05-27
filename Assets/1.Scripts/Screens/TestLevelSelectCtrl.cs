@@ -87,7 +87,7 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 		prevBtn = currMenuPtr[locY, locX];
 
-        Debug.Log("LEADER: " + gsManager.leaderList[0]);
+        //Debug.Log("LEADER: " + gsManager.leaderList[0]);
 	}
 
 	void BtnAction (int levelListIndex) {
