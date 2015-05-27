@@ -61,7 +61,7 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 		newp = Vector3.zero;
 		bool doorRotated = false;
 		Vector3 doorWallRot = Vector3.zero;
-		
+		LevelEditorData dat;
 		while(!Input.GetMouseButton(0)) { 
 
 			//if we haven't made a copy of the object yet
@@ -108,10 +108,34 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 
 			//if copy exists
 			if(copyCreated) {
+				dat = itemObjectCopy.GetComponent<LevelEditorData>();
+
+				if((dat is SceneryData && MapData.SceneryBlocks.isAddValid(dat.BlockID, movePos, DIRECTION.North))
+				   || (dat is MonsterData && MapData.MonsterBlocks.isAddValid(dat.BlockID, movePos, DIRECTION.North))){
+					foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
+						foreach(Material mat in rend.materials) {
+							if(mat.HasProperty("_Color")) {
+								Color trans = Color.green;
+								trans.a = .5f;
+								mat.color = trans;
+							}
+						}
+					}
+				} else {
+					foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
+						foreach(Material mat in rend.materials) {
+							if(mat.HasProperty("_Color")) {
+								Color trans = Color.red;
+								trans.a = .5f;
+								mat.color = trans;
+							}
+						}
+					}
+				}
 
 				//if we got a door and it's on the edge of a room
-				if(itemObjectCopy.GetComponent<SceneryData>() != null
-					&& itemObjectCopy.GetComponent<SceneryData>().isDoor
+				if(dat is SceneryData
+					&& (dat as SceneryData).isDoor
 					&& MapData.TheFarRooms.find(movePos) != null
 						   ) {
 					//snap door to an edge if it's near it
@@ -151,7 +175,7 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 
 			//don't place item if we've click a button
 			if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
-				LevelEditorData dat = itemObjectCopy.GetComponent<LevelEditorData>();
+				dat = itemObjectCopy.GetComponent<LevelEditorData>();
 				if(dat is RoomData) {
 					if(MapData.addRoom(pos - new Vector3(3, 0, 3), pos + new Vector3(3, 0, 3))) {
 						Money.buy(MapData.TheFarRooms.find(pos).Cost);

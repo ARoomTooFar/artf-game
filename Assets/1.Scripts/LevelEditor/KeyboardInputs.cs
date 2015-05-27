@@ -6,15 +6,15 @@ using UnityEngine.UI;
 public class KeyboardInputs : MonoBehaviour {	
 
 	CameraMovement move;
-	InputField name;
+	InputField mapName;
 
 	void Start(){
 		move = Camera.main.GetComponent<CameraMovement>();
-		name = GameObject.Find("InputField_Save").GetComponent<InputField>();
+		mapName = GameObject.Find("InputField_Save").GetComponent<InputField>();
 	}
 	// Update is called once per frame
 	void Update () {
-		if(name.isFocused) {
+		if(mapName.isFocused) {
 			return;
 		}
 
@@ -61,6 +61,9 @@ public class KeyboardInputs : MonoBehaviour {
 		}
 		if(Input.GetKeyDown(KeyCode.Q)){
 			move.changeModes();
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha1)){
+			move.returnToStart();
 		}
 	}
 }

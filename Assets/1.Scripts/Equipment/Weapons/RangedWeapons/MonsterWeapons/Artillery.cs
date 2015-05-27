@@ -30,7 +30,6 @@ public class Artillery : Weapons {
 	
 	
 	public virtual IEnumerator StartTargetting() {
-		user.testControl = false;
 		curDuration = this.stats.maxChgTime;
 		Vector3 direction = user.facing.normalized * 4.0f;
 		curCircle = ((GameObject)Instantiate(targetCircle, new Vector3(user.transform.position.x + direction.x, 0.55f, user.transform.position.z + direction.z), user.transform.rotation)).GetComponent<TargetCircle>();
@@ -44,7 +43,6 @@ public class Artillery : Weapons {
 	
 	public virtual void Shoot() {
 		this.fireProjectile ();
-		user.testControl = true;
 	}
 	
 	protected void fireProjectile() {

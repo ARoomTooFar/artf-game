@@ -5,8 +5,6 @@ using System.Collections;
 
 public class Spear: MeleeWeapons {
 
-	public GameObject explosion;
-
 	protected Stun stunD;
 
 	// Use this for initialization
@@ -19,8 +17,6 @@ public class Spear: MeleeWeapons {
 	// Used for setting sword stats for each equipment piece
 	protected override void setInitValues() {
 		base.setInitValues();
-
-		stats.chargeSlow = new Slow(1.0f);
 
 		stats.weapType = 2;
 		this.stats.buffDuration = 1.25f;
@@ -56,12 +52,6 @@ public class Spear: MeleeWeapons {
 		}
 		enemy.damage(stats.damage + stats.chgDamage, user.transform, user.gameObject);
 	}
-
-	/*
-	public override void SpecialAttack() {
-		GameObject exp = (GameObject)Instantiate(this.explosion, user.transform.position, user.transform.rotation);
-		exp.GetComponent<SpearExplosion>().setInitValues(user, opposition, stats.damage + stats.chgDamage, true, this.stats.debuff, 2.0f);
-	}*/
 	
 	protected IEnumerator Rush() {
 		Vector3 facing = this.user.facing;

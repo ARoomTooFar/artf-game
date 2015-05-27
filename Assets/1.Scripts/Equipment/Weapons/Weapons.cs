@@ -75,15 +75,16 @@ public class Weapons : Equipment {
 		this.stats.buffDuration = 0.75f;
 	}
 
-	public virtual void equip(Character u, Type ene) {
-		base.equip(u);
+	public virtual void equip(Character u, Type ene, int tier) {
+		base.Equip(u, tier);
+		this.setInitValues();
 		u.animator.SetInteger("WeaponType", stats.weapType);
 		opposition = ene;
 	}
 
 	// Used for setting stats for each weapon piece
-	protected override void setInitValues() {
-		base.setInitValues();
+	protected virtual void setInitValues() {
+		// base.setInitValues();
 
 		// New
 		stats.chargeMultiplier = 1.5f;

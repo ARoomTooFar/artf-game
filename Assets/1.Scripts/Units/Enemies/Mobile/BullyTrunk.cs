@@ -125,8 +125,8 @@ public class BullyTrunk: MobileEnemy {
 
 		if (tier > 1) {
 			
-			this.rightPaw.equip(this, this.opposition);
-			this.leftPaw.equip(this, this.opposition);
+			this.rightPaw.equip(this, this.opposition, 0);
+			this.leftPaw.equip(this, this.opposition, 0);
 		}
 
 		if (tier > 3) {
