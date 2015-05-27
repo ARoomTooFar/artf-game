@@ -65,6 +65,7 @@ public static class MapData {
 	public static bool addRoom(ARTFRoom rm){
 		if(TheFarRooms.isAddValid(rm)) {
 			TheFarRooms.add(rm);
+			UndoRedoStack.newState(SaveString);
 		} else {
 			rm.remove();
 			return false;
@@ -82,6 +83,7 @@ public static class MapData {
 		}
 		if(TheFarRooms.isMoveValid(oldPos, newPos)){
 			TheFarRooms.move(oldPos, newPos - oldPos);
+			UndoRedoStack.newState(SaveString);
 		}
 		LevelPathCheck.checkPath();
 	}
@@ -103,14 +105,17 @@ public static class MapData {
 				return false;
 			}
 			LevelPathCheck.checkPath();
+			UndoRedoStack.newState(SaveString);
 			return true;
 		} 
 		if(data is MonsterData) {
 			if(MonsterBlocks.isAddValid(type, pos, dir)) {
+				UndoRedoStack.newState(SaveString);
 				MonsterBlocks.add(new MonsterBlock(type, pos, dir));
 			} else {
 				return false;
 			}
+			UndoRedoStack.newState(SaveString);
 			return true;
 		}
 		return false;
@@ -125,6 +130,7 @@ public static class MapData {
 				TheFarRooms.resize(pos, pos + offset);
 				int newCost = TheFarRooms.find(pos+offset).Cost;
 				Money.buy(newCost - oldCost);
+				UndoRedoStack.newState(SaveString);
 			}
 			LevelPathCheck.checkPath();
 			return;
@@ -137,6 +143,7 @@ public static class MapData {
 		if(data is SceneryData) {
 			if(SceneryBlocks.isMoveValid(pos, offset)) {
 				SceneryBlocks.move(pos, offset);
+				UndoRedoStack.newState(SaveString);
 			}
 			LevelPathCheck.checkPath();
 			return;
@@ -145,6 +152,7 @@ public static class MapData {
 		if(data is MonsterData) {
 			if(MonsterBlocks.isMoveValid(pos, offset)) {
 				MonsterBlocks.move(pos, offset);
+				UndoRedoStack.newState(SaveString);
 			}
 			return;
 		}
@@ -157,6 +165,7 @@ public static class MapData {
 		if(data is SceneryData) {
 			if(SceneryBlocks.isRotateValid(pos, goClockwise)) {
 				SceneryBlocks.rotate(pos, goClockwise);
+				UndoRedoStack.newState(SaveString);
 			}
 			LevelPathCheck.checkPath();
 			return;
@@ -164,6 +173,7 @@ public static class MapData {
 
 		if(data is MonsterData) {
 			MonsterBlocks.rotate(pos, goClockwise);
+			UndoRedoStack.newState(SaveString);
 			return;
 		}
 	}

@@ -8,12 +8,12 @@ public class KeyboardInputs : MonoBehaviour {
 	CameraMovement move;
 	InputField mapName;
 
-	void Start(){
+	void Start() {
 		move = Camera.main.GetComponent<CameraMovement>();
 		mapName = GameObject.Find("InputField_Save").GetComponent<InputField>();
 	}
 	// Update is called once per frame
-	void Update () {
+	void Update() {
 		if(mapName.isFocused) {
 			return;
 		}
@@ -46,11 +46,11 @@ public class KeyboardInputs : MonoBehaviour {
 			move.moveRight();
 		}
 
-		if(Input.GetKey(KeyCode.Minus) || Input.GetKey(KeyCode.KeypadMinus)){
+		if(Input.GetKey(KeyCode.Minus) || Input.GetKey(KeyCode.KeypadMinus)) {
 			move.zoomCamIn();
 		}
 
-		if(Input.GetKey(KeyCode.Equals)|| Input.GetKey(KeyCode.KeypadPlus)){
+		if(Input.GetKey(KeyCode.Equals) || Input.GetKey(KeyCode.KeypadPlus)) {
 			move.zoomCamOut();
 		}
 		if(Input.GetKeyDown(KeyCode.Tab)) {
@@ -59,11 +59,17 @@ public class KeyboardInputs : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.E)) {
 			Camera.main.GetComponent<TileMapController>().fillInRoom();
 		}
-		if(Input.GetKeyDown(KeyCode.Q)){
+		if(Input.GetKeyDown(KeyCode.Q)) {
 			move.changeModes();
 		}
-		if(Input.GetKeyDown(KeyCode.Alpha1)){
+		if(Input.GetKeyDown(KeyCode.Alpha1)) {
 			move.returnToStart();
+		}
+		if(Input.GetKeyDown(KeyCode.Z)) {
+			UndoRedoStack.Undo();
+		}
+		if(Input.GetKeyDown(KeyCode.X)) {
+			UndoRedoStack.Redo();
 		}
 	}
 }

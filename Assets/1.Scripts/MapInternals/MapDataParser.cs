@@ -34,6 +34,7 @@ public static class MapDataParser {
 		}
 		if(Global.inLevelEditor) {
 			Mode.setTileMode();
+			UndoRedoStack.currentState = SaveString;
 		} else {
 			Loadgear loadgear = GameObject.Find("/Loadgear").GetComponent<Loadgear>();
 			loadgear.LoadPlayers();
