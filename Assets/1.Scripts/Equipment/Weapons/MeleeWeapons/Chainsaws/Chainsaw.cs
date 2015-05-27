@@ -64,11 +64,6 @@ public class Chainsaw : MeleeWeapons {
 		chained = new List<Character> ();
 		cropping = new List<GameObject>();
 	}
-
-	// Move to a Coroutine during our great weapon pur-refactor
-	protected override void FixedUpdate() {
-		base.FixedUpdate ();
-	}
 	
 	// Update is called once per frame
 	protected override void Update () {

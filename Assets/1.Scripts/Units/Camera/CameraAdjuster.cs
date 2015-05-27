@@ -41,12 +41,18 @@ public class CameraAdjuster : MonoBehaviour {
 	
 //		playerList = new List<GameObject>();
 //		playerList = GameObject.FindGameObjectsWithTag ("Player");
+		
+	}
+	
+	public void InstantiatePlayers () {
 		playerList = new GameObject[4];
 		playerList[0] = GameObject.FindGameObjectWithTag ("Player1");
 		playerList[1] = GameObject.FindGameObjectWithTag ("Player2");
 		playerList[2] = GameObject.FindGameObjectWithTag ("Player3");
 		playerList[3] = GameObject.FindGameObjectWithTag ("Player4");
 	}
+	
+	
 	/*void seeable(Character target){
 		RaycastHit hit;
 		
@@ -82,6 +88,8 @@ public class CameraAdjuster : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		if (this.playerList.Length == 0) return;
+	
 		List<float> xs = new List<float>();
 		List<float> zs = new List<float>();
 		for(int i = 0; i < playerList.Length; i++){

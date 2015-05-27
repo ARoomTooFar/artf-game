@@ -75,8 +75,8 @@ public class Mirage : StationaryEnemy {
 	
 	public override void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
 		base.SetInitValues(health, strength, coordination, armor, speed);
-		leftClaw.equip (this, opposition);
-		rightClaw.equip (this, opposition);
+		leftClaw.equip (this, opposition, 0);
+		rightClaw.equip (this, opposition, 0);
 	}
 	
 	

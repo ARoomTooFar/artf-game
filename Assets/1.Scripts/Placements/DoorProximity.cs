@@ -10,11 +10,15 @@ public class DoorProximity : MonoBehaviour {
 	void Start () {
 		doorStartPos = this.gameObject.transform.parent.position;
 
+		
+	}
+
+	public void FindPlayers() {
 		playerList = new List<GameObject>();
-		playerList.Add(GameObject.Find("Player1"));
-		playerList.Add(GameObject.Find("Player2"));
-		playerList.Add(GameObject.Find("Player3"));
-		playerList.Add(GameObject.Find("Player4"));
+		playerList.Add(GameObject.FindGameObjectWithTag("Player1"));
+		playerList.Add(GameObject.FindGameObjectWithTag("Player2"));
+		playerList.Add(GameObject.FindGameObjectWithTag("Player3"));
+		playerList.Add(GameObject.FindGameObjectWithTag("Player4"));
 	}
 
 	void Update () {

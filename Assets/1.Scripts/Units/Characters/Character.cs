@@ -34,8 +34,6 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 
 	public bool lockRotation = false;
 	
-	public bool testControl;
-	
 	public bool isDead = false;
 
 	public bool isHit = false;
@@ -53,17 +51,14 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 	public bool invincible = false;
 	public GameObject drop;
 	public GameObject splatter;
-	public Collider col;
-	public Rigidbody rb;
 	public Type opposition;
 	public Renderer[] rs;
 	public GameObject expDeath;
 	public Knockback hitConfirm;
 	
-	// Animation variables
+	public Collider col;
+	public Rigidbody rb;
 	public Animator animator;
-	
-	// protected delegate void BuffDelegate(float strength);
 	
 	public BuffDebuffSystem BDS;
 	
@@ -78,6 +73,31 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 		public Chest chest;
 		public Transform weapLocation, headLocation, chestLocation;
 		
+		private Character unit;
+		
+		public void SetUnit (Character unit) {
+			this.unit = unit;
+		}
+		
+		public void EquipWeapon(GameObject weapon, Type ene, int tier) {
+			this.weapon = (Instantiate(weapon) as GameObject).GetComponent<Weapons>();
+			this.weapon.transform.SetParent(this.weapLocation, false);
+			this.weapon.equip(this.unit, ene, tier);
+		}
+		
+		public void EquipArmor(GameObject armor, int tier) {
+			this.chest = (Instantiate(armor) as GameObject).GetComponent<Chest>();
+			this.chest.transform.SetParent(this.chestLocation, false);
+			this.chest.Equip(this.unit, tier);
+		}
+		
+		public void EquipHelmet(GameObject helmet, int tier) {
+			this.helmet = (Instantiate(helmet) as GameObject).GetComponent<Helmet>();
+			this.helmet.transform.SetParent(this.headLocation, false);
+			this.helmet.Equip(this.unit, tier);
+		}
+		
+		/*
 		public void equipGear(Character player, Type ene, GameObject[] equipment) {
 			foreach (GameObject equip in equipment) {
 				if (equip.GetComponent<Weapons>()) {
@@ -98,43 +118,61 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 				}
 			}
 		}
+		*/
 		
 		// Equip method for testing purposes
-		public void equipGear(Character player, Type ene) {
+		public void equipGear(Type ene) {
 			weapon = weapLocation.GetComponentInChildren<Weapons>();
 			if (weapon) {
-				weapon.equip (player, ene);
+				weapon.equip (this.unit, ene, 0);
 			} else {
 				// Debug.LogWarning(player.gameObject.name + " does not have a weapon in the weapon slot.");
 			}
 			
 			helmet = headLocation.GetComponentInChildren<Helmet>();
 			if (helmet) {
-				helmet.equip (player);
+				helmet.Equip (this.unit, 0);
 			} else {
 				// Debug.LogWarning(player.gameObject.name + " does not have a helmet in the helmet slot.");
 			}
 			
 			chest = chestLocation.GetComponentInChildren<Chest>();
 			if (chest) {
-				chest.equip (player);
+				chest.Equip (this.unit, 0);
 			} else {
 				//Debug.LogWarning(player.gameObject.name + " does not have armor in the armor slot.");
 			}
 		}
 	}
 	
-	
 	public Inventory inventory;
 	// might move to player depending on enemy stuff or have each class also have an inventory class inheriting this inventory
 	[System.Serializable]
 	public class Inventory {
-		public int selected;
-		public bool keepItemActive;
+		public int selected = 0;
+		public bool keepItemActive = false;
 		public Transform itemLocation;
 		
 		public List<Item> items = new List<Item>();
 		
+		private Character unit;
+		
+		public void SetUnit (Character unit) {
+			this.unit = unit;
+		}
+		
+		public void EquipItems(GameObject ability, Type ene) {
+			GameObject itemObj = Instantiate(ability) as GameObject;
+			itemObj.transform.SetParent(itemLocation, false);
+			
+			Item newItem = itemObj.GetComponent<Item>();
+			if (newItem == null) newItem = itemObj.GetComponentInChildren<Item>();
+			newItem.user = this.unit;
+			newItem.opposition = ene;
+			items.Add(newItem);
+		}
+		
+		/*
 		public void equipItems(Character player, Type ene, GameObject[] abilities) {
 			foreach (GameObject item in abilities) {
 				Item newItem = (Instantiate(item) as GameObject).GetComponent<Item>();
@@ -143,27 +181,23 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 				newItem.opposition = ene;
 				items.Add(newItem);
 			}
-			
-			selected = 0;
-			keepItemActive = false;
 		}
+		*/
+	
 		
 		// Equip method for testing purposes
-		public void equipItems(Character player, Type ene) {
+		public void equipItems(Type ene) {
 			items.Clear ();
 			items.AddRange(itemLocation.GetComponentsInChildren<Item>());
 			
 			if (items.Count == 0) {
-				Debug.LogWarning(player.gameObject.name + " does not have any abilities in the item slot.");
+				Debug.LogWarning(this.unit.gameObject.name + " does not have any abilities in the item slot.");
 			}
 			
 			foreach (Item item in items) {
-				item.user = player;
+				item.user = this.unit;
 				item.opposition = ene;
 			}
-			
-			selected = 0;
-			keepItemActive = false;
 		}
 		
 		public void cycItems() {
@@ -184,6 +218,8 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 		opposition = Type.GetType ("Player");
 		BDS = new BuffDebuffSystem(this);
 		stats = new Stats();
+		this.gear.SetUnit(this);
+		this.inventory.SetUnit(this);
 		this.animator = GetComponent<Animator>();
 		this.rb = this.GetComponent<Rigidbody>();
 		this.col = this.GetComponent<Collider>();
@@ -192,7 +228,6 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 		isDead = false;
 		stunned = knockedback = animationLock = false;
 		setInitValues();
-		this.testControl = true;
 	}
 	
 	// Use this for initialization
@@ -211,13 +246,8 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 	}
 
 	public virtual void SetGearAndAbilities() {
-		gear.equipGear(this, opposition);
-		inventory.equipItems(this, opposition);
-	}
-
-	public virtual void equipTest(GameObject[] equip, GameObject[] abilities) {
-		gear.equipGear(this, opposition, equip);
-		inventory.equipItems(this, opposition, abilities);
+		gear.equipGear(opposition);
+		inventory.equipItems(opposition);
 	}
 
 	// Update is called once per frame
