@@ -127,11 +127,11 @@ public class ARTFRoomManager {
 	 * Checks to see if a given room intersects with
 	 * any rooms already in the list.
 	 */
-	public bool doAnyRoomsIntersect(Square rm) {
+	public bool doAnyRoomsIntersect(Square rm, Square ignore) {
 		//for each extant room
 		foreach(ARTFRoom other in roomList) {
 			//if the room is the room we're checking, move on
-			if(other.Equals(rm))
+			if(other.Equals(ignore))
 				continue;
 
 			//if the rooms intersect
@@ -216,7 +216,7 @@ public class ARTFRoomManager {
 		if(testSquare.Cost - rm.Cost > Money.money) {
 			return false;
 		}
-		if(doAnyRoomsIntersect(rm)) {
+		if(doAnyRoomsIntersect(testSquare, rm)) {
 			return false;
 		}
 		return true;
@@ -233,7 +233,7 @@ public class ARTFRoomManager {
 		if(rm.Cost > Money.money) {
 			return false;
 		}
-		if(doAnyRoomsIntersect(rm)) {
+		if(doAnyRoomsIntersect(rm, rm)) {
 			return false;
 		}
 		return true;

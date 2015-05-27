@@ -8,16 +8,17 @@ public class SceneryManager {
 
 	public SceneryManager() {
 	}
-
 	
-	public void clear(){
-		foreach(List<SceneryBlock> lst in dictionary.Values){
-			foreach(SceneryBlock blk in lst){
+	public void clear() {
+		foreach(List<SceneryBlock> lst in dictionary.Values) {
+			foreach(SceneryBlock blk in lst) {
 				//make the block clean itself up
 				blk.remove();
 				//remove it from any rooms it's in
 				ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
-				if(rm != null) { rm.Scenery.Remove(blk); }
+				if(rm != null) {
+					rm.Scenery.Remove(blk);
+				}
 			}
 		}
 		dictionary.Clear();
@@ -33,17 +34,17 @@ public class SceneryManager {
 	 * Returns false if a piece of terrain is already linked to scenery
 	 */
 	private bool linkTerrain(SceneryBlock blk) {
-		ARTFRoom rm = MapData.TheFarRooms.find (blk.Position);
-		if (rm == null) {
+		ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
+		if(rm == null) {
 			return false;
 		}
 		//for each coordinate this block occupies
 		foreach(Vector3 coordinate in blk.Coordinates) {
-			if(!rm.inRoom(coordinate)){
+			if(!rm.inRoom(coordinate)) {
 				return false;
 			}
-			foreach(SceneryBlock scn in rm.Scenery){
-				if (scn.Coordinates.Contains(coordinate)){
+			foreach(SceneryBlock scn in rm.Scenery) {
+				if(scn.Coordinates.Contains(coordinate)) {
 					return false;
 				}
 			}
@@ -59,11 +60,11 @@ public class SceneryManager {
 	 * 
 	 */
 	private void unlinkTerrain(SceneryBlock blk) {
-		ARTFRoom rm = MapData.TheFarRooms.find (blk.Position);
-		if (rm == null) {
+		ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
+		if(rm == null) {
 			return;
 		}
-		rm.Scenery.Remove (blk);
+		rm.Scenery.Remove(blk);
 	}
 	#endregion (un)linkTerrain
 
@@ -77,24 +78,24 @@ public class SceneryManager {
 	 */
 	public bool add(SceneryBlock blk) {
 		ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
-		if(blk.SceneryBlockInfo.isDoor){
-			if(rm == null){
+		if(blk.SceneryBlockInfo.isDoor) {
+			if(rm == null) {
 				blk.remove();
 				return false;
 			}
-			if(!rm.isEdge(blk.Position)){
+			if(!rm.isEdge(blk.Position)) {
 				blk.remove();
 				return false;
 			}
 			blk.rotate(rm.getWallSide(blk.Position));
-			if(!blk.Orientation.isCardinal()){
+			if(!blk.Orientation.isCardinal()) {
 				blk.remove();
 				return false;
 			}
 			rm.Doors.Add(blk);
 
-			foreach(SceneryBlock wall in rm.Walls){
-				if(blk.Coordinates.Contains(wall.Position)){
+			foreach(SceneryBlock wall in rm.Walls) {
+				if(blk.Coordinates.Contains(wall.Position)) {
 					wall.GameObj.SetActive(false);
 				}
 			}
@@ -103,10 +104,10 @@ public class SceneryManager {
 		rm.Scenery.Add(blk);
 		//get the list for the block type
 		List<SceneryBlock> lst;
-		try{
+		try {
 			lst = dictionary[blk.BlockID];
 		} catch {
-		//create one if needed
+			//create one if needed
 			lst = new List<SceneryBlock>();
 			dictionary.Add(blk.BlockID, lst);
 		}
@@ -149,8 +150,8 @@ public class SceneryManager {
 			ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
 			if(rm != null) {
 				rm.Doors.Remove(blk);
-				foreach(SceneryBlock wall in rm.Walls){
-					if(blk.Coordinates.Contains(wall.Position)){
+				foreach(SceneryBlock wall in rm.Walls) {
+					if(blk.Coordinates.Contains(wall.Position)) {
 						wall.GameObj.SetActive(true);
 					}
 				}
@@ -239,13 +240,13 @@ public class SceneryManager {
 	public bool isAddValid(string type, Vector3 pos, DIRECTION dir = DIRECTION.North) {
 		SceneryBlock blk = new SceneryBlock(type, pos, dir);
 		if(blk.SceneryBlockInfo.isDoor) {
-			try{
+			try {
 				blk.rotate(MapData.TheFarRooms.find(pos).getWallSide(pos));
 			} catch {
 				blk.remove();
 				return false;
 			}
-			if(blk.Orientation == DIRECTION.NonDirectional){
+			if(blk.Orientation == DIRECTION.NonDirectional) {
 				blk.remove();
 				return false;
 			}
@@ -261,19 +262,28 @@ public class SceneryManager {
 	}
 
 	public bool isBlockValid(SceneryBlock blk) {
-		ARTFRoom rm = MapData.TheFarRooms.find (blk.Position);
-		if (rm == null) {
+		ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
+		if(rm == null) {
 			return false;
 		}
-		foreach(Vector3 coor in blk.Coordinates){
-			if(!rm.inRoom(coor)){
+
+		if(rm == MapData.StartingRoom || rm == MapData.EndingRoom) {
+			if(blk.BlockID != "LevelEditor/Other/PlayerStartingLocation" &&
+				blk.BlockID != "LevelEditor/Other/PlayerEndingLocation" &&
+			   blk.BlockID != "{0}/Rooms/doortile"){
+				Debug.Log(blk.BlockID);
 				return false;
 			}
-			foreach(SceneryBlock scn in rm.Scenery){
-				if(scn == blk){
+		}
+		foreach(Vector3 coor in blk.Coordinates) {
+			if(!rm.inRoom(coor)) {
+				return false;
+			}
+			foreach(SceneryBlock scn in rm.Scenery) {
+				if(scn == blk) {
 					continue;
 				}
-				if (scn.Coordinates.Contains(coor)){
+				if(scn.Coordinates.Contains(coor)) {
 					return false;
 				}
 			}

@@ -190,6 +190,7 @@ public static class MapData {
 	}
 
 	public static void delete(){
+		Debug.Log("delete");
 		HashSet<GameObject> obs = MapData.getObjects(Camera.main.GetComponent<TileMapController>().selectedTiles);
 		
 		//refund costs

@@ -102,7 +102,7 @@ public class CameraAdjuster : MonoBehaviour {
 		float xRange = Mathf.Abs (maxX - minX);
 		float zRange = Mathf.Abs (maxZ - minZ);
 
-		float zoomFactor = Mathf.Max(xRange, zRange) / 2f;
+		float zoomFactor = Mathf.Max(xRange, zRange) / 1.5f;
 
 		float orthoSize = this.gameObject.GetComponent<Camera>().orthographicSize;
 		float minAllowedOrthoSize = 6f;
@@ -110,10 +110,10 @@ public class CameraAdjuster : MonoBehaviour {
 //		print (zoomFactor + ", " + minAllowedOrthoSize);
 
 		if(zoomFactor > minAllowedOrthoSize){
-			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, zoomFactor, Time.deltaTime);
+			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, zoomFactor, Time.deltaTime * 4f);
 //			GameObject.Find("UICamera").gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, zoomFactor, Time.deltaTime);
 		}else{
-			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, minAllowedOrthoSize, Time.deltaTime);
+			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, minAllowedOrthoSize, Time.deltaTime * 4f);
 //			GameObject.Find("UICamera").gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, minAllowedOrthoSize, Time.deltaTime);
 
 		}

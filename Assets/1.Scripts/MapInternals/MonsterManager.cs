@@ -23,6 +23,16 @@ public class MonsterManager {
 		dictionary.Clear ();
 	}
 
+	public List<GameObject> allMonsters(){
+		List<GameObject> retVal = new List<GameObject> ();
+		foreach (List<MonsterBlock> lst in dictionary.Values) {
+			foreach(MonsterBlock blk in lst){
+				retVal.Add (blk.GameObj);
+			}
+		}
+		return retVal;
+	}
+
 	#region Manipulation
 	/*
 	 * public bool addBlock (MonsterBlock block)
@@ -140,6 +150,9 @@ public class MonsterManager {
 		if(rm == null) {
 			return false;
 		}
+		if(rm == MapData.StartingRoom || rm == MapData.EndingRoom) {
+			return false;
+		}	
 		// If the room does not already contain this monster
 		if(!rm.Monster.Contains(mon)) {
 			// Check if the remaining number of points can handle adding the monster

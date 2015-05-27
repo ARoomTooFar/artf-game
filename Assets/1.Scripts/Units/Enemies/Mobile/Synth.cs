@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class Synth: RangedEnemy {
 	
 	protected SynthKnockBack kb;
-	protected CacklebranchPistol gun;
+	protected SynthAssaultRifle gun;
 	
 	protected override void Awake () {
 		base.Awake();
@@ -15,16 +15,7 @@ public class Synth: RangedEnemy {
 	protected override void Start() {
 		base.Start ();
 		
-		this.kb = this.inventory.items[inventory.selected].GetComponent<SynthKnockBack>();
-		if (this.kb == null) Debug.LogWarning ("Synth does not have knockback equipped");
-		
-		foreach(KnockBackBehaviour behaviour in this.animator.GetBehaviours<KnockBackBehaviour>()) {
-			behaviour.SetVar(this.kb);
-		}
-		
-		this.gun = this.gear.weapon.GetComponent<CacklebranchPistol>();
-		
-		this.minAtkRadius = 8.0f;
+		this.minAtkRadius = 5.0f;
 		this.maxAtkRadius = 40.0f;
 	}
 	
@@ -35,7 +26,29 @@ public class Synth: RangedEnemy {
 	
 	public override void SetTierData(int tier) {
 		tier = 5;
+		
+		if (tier > 2) {
+			this.kb = this.inventory.items[inventory.selected].GetComponent<SynthKnockBack>();
+			if (this.kb == null) Debug.LogWarning ("Synth does not have knockback equipped");
+			this.kb.eUser = this.GetComponent<Enemy>();
+			
+			foreach(KnockBackBehaviour behaviour in this.animator.GetBehaviours<KnockBackBehaviour>()) {
+				behaviour.SetVar(this.kb);
+			}
+		}
+		
 		base.SetTierData (tier);
+	}
+	
+	public override void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
+		base.SetInitValues(health, strength, coordination, armor, speed);
+		this.gun = this.gear.weapon.GetComponent<SynthAssaultRifle>();
+		
+		if (this.tier == 5) {
+			foreach(SynthChargeBehaviour behaviour in this.animator.GetBehaviours<SynthChargeBehaviour>()) {
+				behaviour.SetVar(this, this.gun);
+			}
+		}
 	}
 	
 	
@@ -50,10 +63,15 @@ public class Synth: RangedEnemy {
 	// Actions Functions //
 	//-------------------//
 	
-	public virtual void Shoot(int count) {
-		this.StartCoroutine(this.gun.Shoot(count));
+	public virtual void Shoot() {
+		this.gun.AttackStart();
 	}
 	
+	public virtual void SprayAndPray() {
+		this.animator.SetBool("Charging", true);
+		this.gun.SpecialAttack();
+	}
+
 	public override void die() {
 		this.isDead = true;
 		animator.SetTrigger("Died");

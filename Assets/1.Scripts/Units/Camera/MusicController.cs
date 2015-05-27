@@ -12,37 +12,63 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MusicController: MonoBehaviour {
-	public List<Character> areaUnits;
 	public Player[] allPlayers;
 	public bool same;
-	public int enemyCount;
 	
-	private AudioSource battle;
-	private AudioSource environment;
+	public AudioSource battle;
+	public AudioSource environment;
 
 	void Start () {
 		GetComponent<Transform>();
 		allPlayers = FindObjectsOfType(typeof(Player)) as Player[];
-		for(int x = 0; x < allPlayers.Length; x++){
-			areaUnits.Add(allPlayers[x]);
-		}
-		environment = GameObject.Find ("PerspectiveAngledCamera").GetComponent<AudioSource> ();
-		battle = GetComponent<AudioSource> ();
+
 	}
 
 	// Update is called once per frame
 	void Update () {
-		
-		if (enemyCount > 0 && !battle.isPlaying) {
+
+		int actives = EnemyInSight ();
+
+		if (actives > 0 && !battle.isPlaying) {
 			environment.Pause ();
 			environment.volume = 0;
+			battle.volume = 0;
 			battle.Play ();
-		} else if (enemyCount == 0 && battle.isPlaying) {
+		} else if (actives == 0 && battle.isPlaying) {
 			if (TransitionOut (battle, 0.7f, 0))
 				environment.UnPause ();
 		} else if (environment.volume < 1 && environment.isPlaying) {
-			TransitionIn(environment, 0.3f, 1);
+			TransitionIn (environment, 0.3f, 1);
+		} else if (battle.volume < 1 && battle.isPlaying) {
+			TransitionIn (battle, 0.3f, 1);
 		}
+	}
+
+	int EnemyInSight(){
+		HashSet<ARTFRoom> rooms = new HashSet<ARTFRoom> ();
+
+		// find all rooms that the players are in
+		foreach (Player play in allPlayers) {
+			rooms.Add (MapData.TheFarRooms.find(play.transform.position.Round()));
+		}
+		List<GameObject> MonstersIndex = MapData.MonsterBlocks.allMonsters ();
+		int numberofmonsters = 0;
+
+		// add enemy to the amount of enemies active rooms.
+		foreach (GameObject enemy in MonstersIndex) {
+			foreach(ARTFRoom room in rooms) {
+				if(room.inRoom(enemy.transform.position)) numberofmonsters++;
+			}
+		}
+		return numberofmonsters;
+	}
+
+	public void setBattle(AudioClip clip){
+		battle.clip = clip;
+	}
+
+	public void setEnvironment(AudioClip clip){
+		environment.clip = clip;
 	}
 
 	bool TransitionIn(AudioSource musik, float rate, float done) {

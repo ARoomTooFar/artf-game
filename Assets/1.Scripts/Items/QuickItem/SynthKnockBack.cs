@@ -5,10 +5,15 @@ using System.Collections.Generic;
 public class SynthKnockBack : QuickItem {
 
 	public List<Character> enemies;
+	
+	public Enemy eUser;
+	
+	protected Knockback kb;
 
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
+		this.kb = new Knockback(20);
 	}
 	
 	// Update is called once per frame
@@ -23,6 +28,7 @@ public class SynthKnockBack : QuickItem {
 
 	// Called when character with an this item selected uses their item key
 	public override void useItem() {
+		if (this.eUser.target == null) return;
 		base.useItem ();
 		this.knock ();
 		this.animDone ();  
@@ -33,29 +39,6 @@ public class SynthKnockBack : QuickItem {
 	}
 
 	protected void knock(){
-		foreach (Character ene in enemies) {
-			Vector3 newpos = (user.rb.transform.position - ene.rb.transform.position) * (-1);
-			newpos.Normalize();
-			ene.transform.position = new Vector3(ene.transform.position.x + (newpos.x * 10), ene.transform.position.y, ene.transform.position.z + (newpos.z * 10));
-		}
-	}
-
-	void OnTriggerEnter (Collider other) {
-		
-		// Will need a differentiation in the future(Or not if we want this)
-		//     I suggest having the users know what is there enemy and settign ti that way somehow
-		Character enemy = other.GetComponent<Character>();
-		IForcible<Vector3, float> component = (IForcible<Vector3, float>) other.GetComponent( typeof(IForcible<Vector3, float>));
-		if(component != null && enemy != null) {
-			enemies.Add (enemy);
-		}
-	}
-
-	void OnTriggerExit (Collider other){
-		Character enemy = other.GetComponent<Character>();
-		IForcible<Vector3, float> component = (IForcible<Vector3, float>) other.GetComponent( typeof(IForcible<Vector3, float>));
-		if(component != null && enemy != null) {
-			enemies.Remove (enemy);
-		}
+		this.eUser.target.GetComponent<Character>().BDS.addBuffDebuff(this.kb, this.eUser.gameObject, 1);
 	}
 }
