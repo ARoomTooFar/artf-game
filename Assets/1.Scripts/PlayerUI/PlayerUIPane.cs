@@ -20,7 +20,7 @@ public class PlayerUIPane : MonoBehaviour
 
 	public void initVals (string player)
 	{
-		pl = GameObject.Find (player).GetComponent ("Player") as Player;
+		pl = GameObject.FindGameObjectWithTag(player).GetComponent ("Player") as Player;
 		hp = transform.Find ("HPbar/HP").gameObject.GetComponent<Image> ();
 		greyhp = transform.Find ("HPbar/GreyHP").gameObject.GetComponent<Image> ();
 		charge = transform.Find ("ChargeBar/Charge").gameObject.GetComponent<Image> ();

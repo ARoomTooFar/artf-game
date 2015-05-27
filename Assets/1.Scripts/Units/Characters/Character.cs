@@ -162,8 +162,11 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 		}
 		
 		public void EquipItems(GameObject ability, Type ene) {
-			Item newItem = (Instantiate(ability) as GameObject).GetComponent<Item>();
-			newItem.transform.SetParent(itemLocation, false);
+			GameObject itemObj = Instantiate(ability) as GameObject;
+			itemObj.transform.SetParent(itemLocation, false);
+			
+			Item newItem = itemObj.GetComponent<Item>();
+			if (newItem == null) newItem = itemObj.GetComponentInChildren<Item>();
 			newItem.user = this.unit;
 			newItem.opposition = ene;
 			items.Add(newItem);

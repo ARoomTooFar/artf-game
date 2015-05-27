@@ -3,8 +3,8 @@ using System.Collections;
 
 [System.Serializable]
 public class ArmorStats {
-	public int armVal, goldVal, strength, coordination, health;
-	public int upgrade;
+	private int upgrade;
+	private int armVal, goldVal, strength, coordination, health;
 
 	public int ArmVal{
 		get{return armVal;}
