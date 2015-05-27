@@ -181,5 +181,10 @@ public class CameraMovement : MonoBehaviour {
 		else if(Mode.isTileMode())
 			Mode.setRoomMode();
 	}
+
+	public void returnToStart(){
+		Vector3 offset = MapData.StartingRoom.Center - camCast.camFocusPoint;
+		Camera.main.transform.position = Camera.main.transform.position + offset;
+	}
 }
 
