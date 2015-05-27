@@ -25,7 +25,6 @@ public class MainMenuCtrl : MonoBehaviour {
 		StartMenu,
 		LoginForm,
         ReadyGo,
-        Ready,
         PopUp
 	}
     private Menu currMenu;
@@ -50,12 +49,6 @@ public class MainMenuCtrl : MonoBehaviour {
     private int readyGoDisplayWidth = 1;
     private int readyGoDisplayHeight = 3;
     private Animator readyGoDisplayAnim;
-
-    // ready display
-    private GameObject[,] readyDisplay;
-    private int readyDisplayWidth = 1;
-    private int readyDisplayHeight = 1;
-    private Animator readyDisplayAnim;
 
 	// pop-up
 	private GameObject[,] popUp;
@@ -428,10 +421,6 @@ public class MainMenuCtrl : MonoBehaviour {
         case Menu.ReadyGo:
             currMenuPtr = readyGoDisplay;
             currAnim = readyGoDisplayAnim;
-            break;
-        case Menu.Ready:
-            currMenuPtr = readyDisplay;
-            currAnim = readyDisplayAnim;
             break;
         case Menu.PopUp:
             currMenuPtr = popUp;
