@@ -76,7 +76,7 @@ public class Enemy : Character {
 		}
 
 		if (testing) {
-			inventory.equipItems(this, opposition);
+			inventory.equipItems(opposition);
 			this.SetTierData(0);
 		}
 
@@ -105,7 +105,7 @@ public class Enemy : Character {
 		stats.speed = speed;
 		
 		if (testing) {
-			gear.equipGear(this, opposition);
+			gear.equipGear(opposition);
 		}
 	}
 

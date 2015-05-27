@@ -35,8 +35,11 @@ public static class MapDataParser {
 		if(Global.inLevelEditor) {
 			Mode.setTileMode();
 		} else {
-//            Debug.Log(Resources.Load("Player1"));
-
+			Loadgear loadgear = GameObject.Find("/Loadgear").GetComponent<Loadgear>();
+			loadgear.LoadPlayers();
+			
+			
+			/*
 			GameObject p1 = GameObject.Find("Player1");
 			GameObject p2 = GameObject.Find("Player2");
 			GameObject p3 = GameObject.Find("Player3");
@@ -52,6 +55,7 @@ public static class MapDataParser {
 			loadgear.players[1] = p2.GetComponent<Character>();
 			loadgear.players[2] = p3.GetComponent<Character>();
 			loadgear.players[3] = p4.GetComponent<Character>();
+			*/
 		}
 		LevelPathCheck.checkPath();
 	}

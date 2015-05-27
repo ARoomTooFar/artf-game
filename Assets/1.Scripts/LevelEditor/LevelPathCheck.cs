@@ -19,9 +19,11 @@ public static class LevelPathCheck {
 		if(obj != null) {
 			obj.GetComponent<Text>().enabled = (roomPath == null);
 		}
+		if(Global.inLevelEditor){
 		if(pdd == null) {
 			pdd = Camera.main.GetComponent<PathfinderDebugDraw>();
 		}
 		pdd.forceUpdate = true;
+		}
 	}
 }

@@ -9,7 +9,7 @@ public class MirageWeapon : MeleeWeapons {
 		base.Start ();
 	}
 	
-	public override void equip(Character u, Type ene) {
+	public override void equip(Character u, Type ene, int tier) {
 		user = u;
 		setInitValues();
 		opposition = ene;

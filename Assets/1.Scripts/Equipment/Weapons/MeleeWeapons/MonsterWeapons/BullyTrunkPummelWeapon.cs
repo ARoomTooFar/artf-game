@@ -13,7 +13,7 @@ public class BullyTrunkPummelWeapon : MeleeWeapons {
 		// debuff = new Knockback();
 	}
 	
-	public override void equip(Character u, Type ene) {
+	public override void equip(Character u, Type ene, int tier) {
 		user = u;
 		setInitValues();
 		opposition = ene;
