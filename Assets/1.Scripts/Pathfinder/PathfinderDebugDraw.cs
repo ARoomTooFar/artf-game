@@ -14,16 +14,18 @@ public class PathfinderDebugDraw : MonoBehaviour {
 	public bool viewRoomPaths = true;
 	public bool viewPath = true;
 	public Color drawColor;
+	public bool forceUpdate = false;
 
 	// Update is called once per frame
 	void Update () {
-		if(prevStart != start || prevEnd != end) {
+		if(prevStart != start || prevEnd != end || forceUpdate) {
 			prevStart = start;
 			prevEnd = end;
 			path = Pathfinder.getPath(start, end);
 			if(path == null){
 				Debug.Log("Invalid Start and/or End point");
 			}
+			forceUpdate = false;
 		}
 	}
 
