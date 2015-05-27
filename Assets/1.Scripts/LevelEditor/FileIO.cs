@@ -45,35 +45,24 @@ public class FileIO : MonoBehaviour
 		
 		serv = gameObject.AddComponent<Farts>();
 
+
+
 		#if UNITY_EDITOR
 		getIds(dummyLvlId);
 		#else
-        Application.ExternalCall("reqIds");
+		GSManager gsManager = null;
+		try{
+			gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		} catch{}
+
+		getIds (gsManager.currLevelId);
         #endif
 	}
 
 	public void getIds(string inputIds)
     {
-        #if UNITY_EDITOR
-		GSManager gsManager = null;
-		WWW www = serv.getLvlWww(dummyLvlId);
-		try{
-			gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
-		} catch{}
-		if(gsManager != null){
-//		Debug.Log (gsManager);
-		Debug.Log ("id: " + gsManager.currLevelId);
-
-		if(gsManager.currLevelId != "") {
-			www = serv.getLvlWww(gsManager.currLevelId);
-		}
-		}
-        #else
-        string[] ids = inputIds.Split(',');
-        gameAcctId = ids[0];
-        lvlId = ids[1];
-        WWW www = serv.getLvlWww(ids[1]);
-        #endif
+		WWW www = null;
+        www = serv.getLvlWww(inputIds);
 
         StartCoroutine(dlLvl(www));
     }
@@ -145,6 +134,6 @@ public class FileIO : MonoBehaviour
 	}
 
 	void LoadPlayable(){
-		Application.LoadLevel(1);
+		Application.LoadLevel("TestLevelSelect");
 	}
 }
