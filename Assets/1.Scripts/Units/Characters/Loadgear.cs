@@ -43,7 +43,6 @@ public class Loadgear : MonoBehaviour {
 			cam.GetComponent<DoorProximity>().FindPlayers();
 		}
 		
-		
 		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraAdjuster>().InstantiatePlayers();
 	}
 	
