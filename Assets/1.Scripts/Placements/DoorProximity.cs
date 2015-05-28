@@ -6,11 +6,20 @@ using System.Collections.Generic;
 public class DoorProximity : MonoBehaviour {
 	public List<GameObject> playerList;
 	public Vector3 doorStartPos;
+	public int numPlayers = 0;
+
+	public SceneryBlock door;
+	public SceneryBlock otherDoor;
+
+	public DoorProximity otherProx;
 	
 	void Start () {
 		doorStartPos = this.gameObject.transform.parent.position;
-
-		
+		door = MapData.SceneryBlocks.find(new Vector3(doorStartPos.x, 0, doorStartPos.z));
+		otherDoor = MapData.SceneryBlocks.find(door.doorCheckPosition);
+		if(otherDoor != null) {
+			otherProx = otherDoor.GameObj.GetComponentInChildren<DoorProximity>();
+		}
 	}
 
 	public void FindPlayers() {
@@ -21,29 +30,32 @@ public class DoorProximity : MonoBehaviour {
 		playerList.Add(GameObject.FindGameObjectWithTag("Player4"));
 	}
 
-	void Update () {
-		Vector3 doorPos =  this.gameObject.transform.parent.position;
+	void OnTriggerEnter(Collider other){
+		if(other.gameObject.tag.Substring(0, other.gameObject.tag.Length - 1) == "Player") {
+			numPlayers++;
+		}
+	}
 
+	void OnTriggerExit(Collider other){
+		if(other.gameObject.tag.Substring(0, other.gameObject.tag.Length - 1) == "Player") {
+			numPlayers--;
+		}
+	}
+
+	void Update () {
 		//If there is no door on the other side, return and do nothing;
-		SceneryBlock dr = MapData.SceneryBlocks.find(new Vector3(doorPos.x, 0, doorPos.z));
-		if(MapData.SceneryBlocks.find(dr.doorCheckPosition) == null) {
+		if(otherDoor == null) {
+			Debug.Log("No Partner" + this.gameObject.transform.parent.position);	
 			return;
 		}
 
-		bool playerNear = false;
-		for(int i = 0; i < playerList.Count; i++){
-			if(Vector3.Distance(playerList[i].transform.position, doorStartPos) < 3f){
-				playerNear = true;
-				break;
-			}
-		}
-
-		if(playerNear){
-			doorPos.y = Mathf.MoveTowards(doorPos.y, doorStartPos.y - 5f, Time.deltaTime * 4f);
-			this.gameObject.transform.parent.position = doorPos;
+		Vector3 doorPos =  door.GameObj.transform.position;
+		if(numPlayers + otherProx.numPlayers > 0){
+			doorPos.y = Mathf.MoveTowards(doorPos.y, doorStartPos.y - 6f, Time.deltaTime * 4f);
+			door.GameObj.transform.position = doorPos;
 		}else{
 			doorPos.y = Mathf.MoveTowards(doorPos.y, doorStartPos.y, Time.deltaTime * 4f);
-			this.gameObject.transform.parent.position = doorPos;
+			door.GameObj.transform.position = doorPos;
 		}
 	}
 }
