@@ -38,11 +38,7 @@ public class Loadgear : MonoBehaviour {
 			manager.players[i] = tempPlayer;
 			ui.setUpPlayerUIPane("Player" + (i + 1));
 		}
-		
-		foreach (GameObject cam in GameObject.FindGameObjectsWithTag("Door")) {
-			cam.GetComponent<DoorProximity>().FindPlayers();
-		}
-		
+
 		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraAdjuster>().InstantiatePlayers();
 	}
 	
