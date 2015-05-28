@@ -16,7 +16,7 @@ public class CameraWallSpherecast : MonoBehaviour{
 	RaycastHit[] hits;
 
 	void Start(){
-		allPlayers = FindObjectsOfType(typeof(Player)) as Player[];
+		allPlayers = GameObject.Find("GSManager").GetComponent<GSManager>().players;
 	}
 	void Update(){
 		foreach(Player play in allPlayers) {
