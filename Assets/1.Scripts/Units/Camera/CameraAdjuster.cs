@@ -2,16 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/*
+ * Focuses camera on rooms players are in
+ */
 public class CameraAdjuster : MonoBehaviour {
 	public CameraHitBox camHitBox;
-	Vector3 diffSpot;
 	GameObject[] playerList;
-	float minAllowedOrthoSize = 13f;
 	Dictionary<GameObject, Floor> roomMinMaxes = new Dictionary<GameObject, Floor>();
 	HashSet<GameObject> roomsThatShouldBeInViewPort = new HashSet<GameObject>();
 	List<GameObject> cameraBoundingPlanes = new List<GameObject>();
 	Camera cam;
 
+	float camStrafeSpeed = 6f;
+	float camZoomSpeed = 20f;
+	
+	/*
+	 * Holds information about an individual room that we need
+	 * in order to adjust camera zoom level and position
+	 */
 	public class Floor{
 		public float minX = 0;
 		public float maxX = 0;
@@ -36,10 +44,8 @@ public class CameraAdjuster : MonoBehaviour {
 	void Start () {
 		transform.rotation = Quaternion.Euler(Global.initCameraRotation);
 		transform.position = Global.initCameraPosition;
-		diffSpot = transform.position - camHitBox.transform.position;
 
 		StartCoroutine(updateRoomsThatShouldBeInViewport());
-		StartCoroutine(adjustCameraToEncapsulateRoomsPlayersAreIn());
 	}
 	
 	public void InstantiatePlayers () {
@@ -49,6 +55,7 @@ public class CameraAdjuster : MonoBehaviour {
 		playerList[2] = GameObject.FindGameObjectWithTag ("Player3");
 		playerList[3] = GameObject.FindGameObjectWithTag ("Player4");
 
+		//fill in dictionary that holds room corner locations
 		GameObject[] roomFloorList = GameObject.FindGameObjectsWithTag("Floor");
 		for(int i = 0; i < roomFloorList.Length; i++){
 			roomMinMaxes.Add(roomFloorList[i], new Floor(
@@ -60,50 +67,31 @@ public class CameraAdjuster : MonoBehaviour {
 		}
 
 		cam = this.gameObject.GetComponent<Camera>();
+
+	}
+
+	/*
+	 * Renders planes with colliders around edges of camera frustum.
+	 * This can be used to block players from leaving camera viewport.
+	 */
+	void renderNewFrustumPlanes(){
 		Plane[] planes = GeometryUtility.CalculateFrustumPlanes(cam);
-
-//		int h = 0;
-//		while (h < planes.Length) {
-//			GameObject p = GameObject.CreatePrimitive(PrimitiveType.Plane);
-//			p.name = "Plane " + h.ToString();
-//			p.transform.position = -planes[h].normal * planes[h].distance;
-//			p.transform.rotation = Quaternion.FromToRotation(Vector3.up, planes[h].normal);
-//			p.transform.localScale = new Vector3(50f, 50f, 50f);
-//			p.transform.SetParent(this.gameObject.transform);
-//			cameraBoundingPlanes.Add(p);
-//			h++;
-//		}
-		
-	}
-	
-	bool isAPlayerOffScreen(){
-		for(int i = 0; i < playerList.Length; i++){
-			if(playerList[i] == null) continue;
-			if(!playerList[i].GetComponent<Renderer>().isVisible)
-				return true;
-		}
-		return false;
-	}
-
-	IEnumerator adjustCameraToEncapsulateRoomsPlayersAreIn(){
-		while(true){
-			if(roomsThatShouldBeInViewPort != null){
-//				print(roomsThatShouldBeInViewPort.Count);
-//				foreach(GameObject room in roomsThatShouldBeInViewPort){
-//					print ("checking");
-//					while(!room.GetComponent<Renderer>().isVisible){
-//						print("not visible");
-//						float orthoSize = this.gameObject.GetComponent<Camera>().orthographicSize;
-//						this.gameObject.GetComponent<Camera>().orthographicSize = 
-//							Mathf.Lerp(orthoSize, orthoSize + 1f, Time.deltaTime * 4f);
-//						yield return null;
-//					}
-//				}
-			}
-			yield return null;
+		int h = 0;
+		while (h < planes.Length) {
+			GameObject p = GameObject.CreatePrimitive(PrimitiveType.Plane);
+			p.name = "Plane " + h.ToString();
+			p.transform.position = -planes[h].normal * planes[h].distance;
+			p.transform.rotation = Quaternion.FromToRotation(Vector3.up, planes[h].normal);
+			p.transform.localScale = new Vector3(50f, 50f, 50f);
+			p.transform.SetParent(this.gameObject.transform);
+			cameraBoundingPlanes.Add(p);
+			h++;
 		}
 	}
 
+	/*
+	 * Finds all rooms that any player is currently in
+	 */
 	IEnumerator updateRoomsThatShouldBeInViewport(){
 		while(true){
 			if(playerList != null){
@@ -119,10 +107,6 @@ public class CameraAdjuster : MonoBehaviour {
 						{
 							roomsPlayersAreIn.Add(key);
 						}
-
-
-						
-//						if(key.GetComponent<Renderer>().isVisible) print (key.GetInstanceID() + " is visible");
 					}
 				}
 				roomsThatShouldBeInViewPort = roomsPlayersAreIn;
@@ -133,124 +117,56 @@ public class CameraAdjuster : MonoBehaviour {
 	}
 
 	void Update () {
-
+		//if they're all dead, don't do anything
 		if (this.playerList != null && this.playerList.Length == 0) return;
 
-
-
-		float minDistanceFromEdge = 0f;
-
-//		Vector3 centroid = new Vector3();
-
 		bool needToZoomOut = false;
-//		float maxX = -9999f;
-//		float minX = 9999f;
-//		float maxZ = -9999f;
-//		float minZ = 9999f;
-		List<GameObject> rooms = new List<GameObject>();
+		bool needToZoomIn = false;
+		float mostOffCorner = 9999f;
 		Vector3 roomAvgPosition = new Vector3(0f, 0f, 0f);
-		foreach(GameObject room in roomsThatShouldBeInViewPort){
-			roomAvgPosition += room.transform.position;
-			for(int i = 0; i < roomMinMaxes[room].corners.Length; i++){
-//				if(roomMinMaxes[room].maxX > maxX)
-//					maxX = roomMinMaxes[room].maxX;
-//				if(roomMinMaxes[room].minX < minX)
-//					minX = roomMinMaxes[room].minX;
-//				if(roomMinMaxes[room].maxZ > maxZ)
-//					maxZ = roomMinMaxes[room].maxZ;
-//				if(roomMinMaxes[room].minZ < minZ)
-//					minZ = roomMinMaxes[room].minZ;
+		
+		if(roomsThatShouldBeInViewPort != null && roomsThatShouldBeInViewPort.Count != 0){
+			float mostOffCornerX = 9999f;
+			float mostOffCornerY = 9999f;
+			foreach(GameObject room in roomsThatShouldBeInViewPort){
 
-				Vector3 screenPos = cam.WorldToScreenPoint(roomMinMaxes[room].corners[i]);
+				//for finding centroid of all rooms
+				roomAvgPosition += room.transform.position;
 
-				if(screenPos.x < minDistanceFromEdge){
-					needToZoomOut = true;
-					break;
-				}else if(Screen.width - screenPos.x < minDistanceFromEdge){
-					needToZoomOut = true;
-					break;
-				}else if(Screen.height - screenPos.y < minDistanceFromEdge){
-					needToZoomOut = true;
-					break;
-				}else if(screenPos.y < minDistanceFromEdge){
-					needToZoomOut = true;
-					break;
+				//find the corner of all rooms that is the farthest off screen
+				for(int i = 0; i < roomMinMaxes[room].corners.Length; i++){
+					Vector3 screenPos = cam.WorldToScreenPoint(roomMinMaxes[room].corners[i]);
+					
+					mostOffCornerX = Mathf.Min(mostOffCornerX, screenPos.x);
+					mostOffCornerX = Mathf.Min(mostOffCornerX, Screen.width - screenPos.x);
+					
+					mostOffCornerY = Mathf.Min(mostOffCornerY, screenPos.y);
+					mostOffCornerY = Mathf.Min(mostOffCornerY, Screen.height - screenPos.y);
+					
+					mostOffCorner = Mathf.Min(mostOffCornerX, mostOffCornerY);
 				}
 			}
+
+			//take the average of all room positions and send camera there
+			roomAvgPosition /= roomsThatShouldBeInViewPort.Count;
+			roomAvgPosition.y = transform.parent.position.y;
+			transform.parent.position = Vector3.Lerp(transform.parent.position, roomAvgPosition, Time.deltaTime * camStrafeSpeed);
 		}
 
-		roomAvgPosition /= roomsThatShouldBeInViewPort.Count;
+		//determine whether we need to zoom in or out.
+		//the float value denotes the deadzone
+		if(mostOffCorner > 10f)
+			needToZoomIn = true;
+		else if(mostOffCorner < -10f)
+			needToZoomOut = true;
 
-		Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-		Plane p = new Plane(Vector3.up, Vector3.zero); 
-		float rayDistance;
-		if (p.Raycast(ray, out rayDistance)){
-			print(ray.GetPoint(rayDistance));
-		}
-		
-//		Vector3 centroid = new Vector3(maxX - minX, 0f, maxZ - minZ);
-//		Vector3 nextStep = Vector3.Lerp(ray.GetPoint(rayDistance), roomAvgPosition, Time.deltaTime * 4f);
-//		nextStep.y = transform.position.y;
-
-//		GameObject g = GameObject.Instantiate(Resources.Load("Tombstone_RIP_obj"), roomAvgPosition, Quaternion.identity) as GameObject;
-//		Vector3 nextStep = new Vector3(0f, transform.position.y, 0f);
-//		if(Mathf.Abs(roomAvgPosition.x - ray.GetPoint(rayDistance).x) > 20f || Mathf.Abs(roomAvgPosition.z - ray.GetPoint(rayDistance).z) > 20f){
-//			if(ray.GetPoint(rayDistance).x < roomAvgPosition.x){
-//				nextStep.x = Mathf.Lerp(transform.position.x, transform.position.x + 1, Time.deltaTime * 4f);
-//			}
-//			if(ray.GetPoint(rayDistance).x > roomAvgPosition.x){
-//				nextStep.x = Mathf.Lerp(transform.position.x, transform.position.x - 1, Time.deltaTime * 4f);
-//			}
-//			if(ray.GetPoint(rayDistance).z < roomAvgPosition.z){
-//				nextStep.z = Mathf.Lerp(transform.position.z, transform.position.z + 1, Time.deltaTime * 4f);
-//			}
-//			if(ray.GetPoint(rayDistance).z > roomAvgPosition.z){
-//				nextStep.z = Mathf.Lerp(transform.position.z, transform.position.z - 1, Time.deltaTime * 4f);
-//			}
-//		}
-
-		roomAvgPosition.y = transform.parent.position.y;
-//		roomAvgPosition.x -= 20f;
-//		roomAvgPosition.z -= 20f;
-		transform.parent.position = roomAvgPosition;
-
-
-
-		
-		
-		
-		//		for(int i = 0; i < playerList.Length; i++){
-//			if(playerList[i] == null) continue;
-//
-//			Vector3 screenPos = cam.WorldToScreenPoint(playerList[i].transform.position);
-//
-//			if(screenPos.x < minDistanceFromEdge){
-//				needToZoomOut = true;
-//				break;
-//			}else if(Screen.width - screenPos.x < minDistanceFromEdge){
-//				needToZoomOut = true;
-//				break;
-//			}else if(Screen.height - screenPos.y < minDistanceFromEdge){
-//				needToZoomOut = true;
-//				break;
-//			}else if(screenPos.y < minDistanceFromEdge){
-//				needToZoomOut = true;
-//				break;
-//			}
-//
-//				
-//		}
-
+		//lerp camera's orthographic size up or down
 		float orthoSize = this.gameObject.GetComponent<Camera>().orthographicSize;
 		if(needToZoomOut){
-			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, orthoSize + 1f, Time.deltaTime * 4f);
-		}else{
-//			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, orthoSize - 1f, Time.deltaTime * 4f);
+			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, orthoSize + 0.5f, Time.deltaTime * camZoomSpeed);
+		}else if(needToZoomIn){
+			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, orthoSize - 0.5f, Time.deltaTime * camZoomSpeed);
 		}
-
-//		transform.position = camHitBox.transform.position + diffSpot;
-//		diffSpot = transform.position - camHitBox.transform.position;
-
 	}
 
 }
