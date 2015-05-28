@@ -98,6 +98,7 @@ public class CameraAdjuster : MonoBehaviour {
 				HashSet<GameObject> roomsPlayersAreIn = new HashSet<GameObject>();
 
 				for(int i = 0; i < playerList.Length; i++){
+					if(playerList[i].GetComponent<Player>().isDead) continue;
 					foreach(GameObject key in roomMinMaxes.Keys){
 						if(playerList[i].transform.position.x < roomMinMaxes[key].maxX
 						   && playerList[i].transform.position.x > roomMinMaxes[key].minX
