@@ -103,13 +103,8 @@ public class Player : Character, IHealable<int>{
 	protected override void ActionCommands() {
 		if (actable && !this.animator.GetBool ("Attack")) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
-				if(currDoor!=null){
-					currDoor.GetComponent<Door>().toggleOpen();
-					currDoor = null;
-				} else {
-					this.animator.SetBool("Charging", true);
-					this.animator.SetBool("Attack", true);
-				}
+				this.animator.SetBool("Charging", true);
+				this.animator.SetBool("Attack", true);
 			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
@@ -122,10 +117,16 @@ public class Player : Character, IHealable<int>{
 				inventory.cycItems();
 			}
 		} else {
+			if ((Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) && this.animator.GetBool("Tap")) {
+				this.animator.SetBool("Attack", true);
+				this.animator.SetBool ("Tap", false);
+			}
+		
 			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
 				animator.SetBool ("Charging", false);
 			}
 		}
+		
 		
 		
 		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
@@ -134,6 +135,10 @@ public class Player : Character, IHealable<int>{
 				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
 			}
 		}
+	}
+	
+	protected void TapAttackFrame() {
+		this.animator.SetBool("Tap", true);
 	}
 
 	// Might separate commands into a protected function and just have a movement function
