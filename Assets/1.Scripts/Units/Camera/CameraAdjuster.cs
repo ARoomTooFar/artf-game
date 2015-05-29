@@ -45,7 +45,7 @@ public class CameraAdjuster : MonoBehaviour {
 		transform.rotation = Quaternion.Euler(Global.initCameraRotation);
 		transform.position = Global.initCameraPosition;
 
-		StartCoroutine(updateRoomsThatShouldBeInViewport());
+		//StartCoroutine(updateRoomsThatShouldBeInViewport());
 	}
 	
 	public void InstantiatePlayers () {
@@ -67,7 +67,6 @@ public class CameraAdjuster : MonoBehaviour {
 		}
 
 		cam = this.gameObject.GetComponent<Camera>();
-
 	}
 
 	/*
@@ -114,7 +113,27 @@ public class CameraAdjuster : MonoBehaviour {
 			}
 			yield return null;
 		}
+	}
 
+	HashSet<GameObject> getRooms(){
+		HashSet<GameObject> roomsPlayersAreIn = null;
+		if(playerList != null){
+			roomsPlayersAreIn = new HashSet<GameObject>();
+			for(int i = 0; i < playerList.Length; i++){
+				if(playerList[i].GetComponent<Player>().isDead) continue;
+				foreach(GameObject key in roomMinMaxes.Keys){
+					if(playerList[i].transform.position.x < roomMinMaxes[key].maxX
+					   && playerList[i].transform.position.x > roomMinMaxes[key].minX
+					   && playerList[i].transform.position.z < roomMinMaxes[key].maxZ
+					   && playerList[i].transform.position.z > roomMinMaxes[key].minZ
+					   )
+					{
+						roomsPlayersAreIn.Add(key);
+					}
+				}
+			}
+		}
+		return roomsPlayersAreIn;
 	}
 
 	void Update () {
@@ -125,6 +144,8 @@ public class CameraAdjuster : MonoBehaviour {
 		bool needToZoomIn = false;
 		float mostOffCorner = 9999f;
 		Vector3 roomAvgPosition = new Vector3(0f, 0f, 0f);
+
+		roomsThatShouldBeInViewPort = getRooms();
 		
 		if(roomsThatShouldBeInViewPort != null && roomsThatShouldBeInViewPort.Count != 0){
 			float mostOffCornerX = 9999f;
@@ -163,9 +184,12 @@ public class CameraAdjuster : MonoBehaviour {
 
 		//lerp camera's orthographic size up or down
 		float orthoSize = this.gameObject.GetComponent<Camera>().orthographicSize;
+		float time = Time.time;
 		if(needToZoomOut){
+//			Debug.Log("zooming in " + time + ", " + mostOffCorner);
 			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, orthoSize + 0.5f, Time.deltaTime * camZoomSpeed);
 		}else if(needToZoomIn){
+//			Debug.Log("zooming out " + time + ", " + mostOffCorner);
 			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, orthoSize - 0.5f, Time.deltaTime * camZoomSpeed);
 		}
 	}

@@ -47,5 +47,7 @@ public class DoorProximity : MonoBehaviour {
 			doorPos.y = Mathf.MoveTowards(doorPos.y, doorStartPos.y, Time.deltaTime * 4f);
 			door.GameObj.transform.position = doorPos;
 		}
+
+//		if(doorPos.y == doorStartPos.y - 6f) this.gameObject.GetComponent<Renderer>().enabled = false;
 	}
 }
