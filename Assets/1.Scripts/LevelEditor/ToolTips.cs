@@ -24,7 +24,7 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
 		{"Shop", "Bank Account:This is the amount of money you have to spend on items."},
 
-		{"BullyTrunk(Clone)", "Bully Trunk:A beast of wood and steal. Charges delvers before pummling them into the ground."},
+		{"BullyTrunk(Clone)", "Bully Trunk:A beast of wood and steal. Charges delvers before pummling them into the ground. "},
 		{"Bushling(Clone)", "Bushling:An agile creature of vine, will use whatever means necessary to slice delvers appart. "},
 		{"CackleBranch(Clone)", "Cackle Branch:A living shrub. With a gun and a bad attitude."},
 		{"FoliantFodder(Clone)", "Foliant Fodder:A small, swarming bug, that craves human flesh."},

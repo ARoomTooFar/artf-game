@@ -82,7 +82,7 @@ public class FileIO : MonoBehaviour
 			txtDlLvl.enabled = false;
 			try{
 				MapDataParser.ParseSaveString(lvlData);
-				Debug.Log("LVL DL SUCCESS: " + lvlData);
+//				Debug.Log("LVL DL SUCCESS: " + lvlData);
 				//throw new Exception();
 			} catch (Exception ex){
 				Debug.Log(ex.Message);
