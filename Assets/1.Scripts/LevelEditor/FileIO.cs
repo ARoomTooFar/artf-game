@@ -78,6 +78,71 @@ public class FileIO : MonoBehaviour
         StartCoroutine(dlLvl(www));
     }
 
+	void makeStretchyWalls(){
+		foreach(ARTFRoom room in StretchyWalls.rooms){
+			float wallHeight = 5f;
+
+			//get middles of each wall
+			Vector3 mid1 = (room.LLCorner + new Vector3(room.URCorner.x, wallHeight, room.LLCorner.z)) / 2f;
+			Vector3 mid2 = (room.LLCorner + new Vector3(room.LLCorner.x, wallHeight, room.URCorner.z)) / 2f;
+			Vector3 mid3 = (room.URCorner + new Vector3(room.URCorner.x, wallHeight, room.LLCorner.z)) / 2f;
+			Vector3 mid4 = (room.URCorner + new Vector3(room.LLCorner.x, wallHeight, room.URCorner.z)) / 2f;
+
+			GameObject wall;
+			bool mid1go = true;
+			bool mid2go = true;
+			bool mid3go = true;
+			bool mid4go = true;
+
+			//check which walls have doors
+			foreach(SceneryBlock door in room.Doors){
+				if(mid1.z == door.Position.z){
+					mid1go = false;
+				}
+				if(mid2.x == door.Position.x){
+					mid2go = false;
+				}
+				if(mid3.x == door.Position.x){
+					mid3go = false;
+				}
+				if(mid4.z == door.Position.z){
+					mid4go = false;
+				}
+			}
+
+			//instantiate the walls without doors
+			if(mid1go){
+				wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid1, Quaternion.identity) as GameObject;
+				wall.transform.localScale = new Vector3(Mathf.Abs(room.LLCorner.x - room.URCorner.x) + 1, wallHeight, 1f);
+			}else{
+
+			}
+
+
+			if(mid2go){
+				wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid2, Quaternion.identity) as GameObject;
+				wall.transform.localScale = new Vector3(1f , wallHeight, Mathf.Abs(room.LLCorner.z - room.URCorner.z) + 1);
+			}
+			if(mid3go){
+				wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid3, Quaternion.identity) as GameObject;
+				wall.transform.localScale = new Vector3(1f, wallHeight, Mathf.Abs(room.LLCorner.z - room.URCorner.z) + 1);
+			}
+			if(mid4go){
+				wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid4, Quaternion.identity) as GameObject;
+				wall.transform.localScale = new Vector3(Mathf.Abs(room.LLCorner.x - room.URCorner.x) + 1, wallHeight, 1f);
+			}
+
+
+
+
+
+
+
+		}
+
+//		for(int i = 0; i < StretchyWalls.rooms.Count
+	}
+
     public IEnumerator dlLvl(WWW www)
     {
         yield return www;
@@ -87,13 +152,11 @@ public class FileIO : MonoBehaviour
         Debug.Log(www.url);
         if (serv.dataCheck(lvlData))
         {
-
-
-
 			txtDlLvl.enabled = false;
 			try{
 				MapDataParser.ParseSaveString(lvlData);
-//				Debug.Log("LVL DL SUCCESS: " + lvlData);
+				Debug.Log("LVL DL SUCCESS: " + lvlData);
+				makeStretchyWalls();
 				//throw new Exception();
 			} catch (Exception ex){
 				Debug.Log(ex.Message);
