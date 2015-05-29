@@ -276,7 +276,8 @@ public partial class ARTFRoom : Square {
 				if(!isEdge(vec)) {
 					continue;
 				}
-				if(Global.inLevelEditor)
+
+//				if(Global.inLevelEditor)
 					Walls.Add(new SceneryBlock(wallType, vec, DIRECTION.North));
 			}
 		}
