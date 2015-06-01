@@ -54,7 +54,7 @@ public class Loadgear : MonoBehaviour {
 			
 			tempData.weapon = 12 + i * 4;
 			tempData.headgear = 41;
-			tempData.armor = 32;
+			tempData.armor = 30 + i * 2;
 			
 			if (i == 0) {
 				tempData.actionslot1 = 0;
