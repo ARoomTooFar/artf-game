@@ -53,7 +53,7 @@ public class Loadgear : MonoBehaviour {
 			}
 			
 			tempData.weapon = 12 + i * 4;
-			tempData.headgear = 41;
+			tempData.headgear = 41 + i * 2;
 			tempData.armor = 30 + i * 2;
 			
 			if (i == 0) {

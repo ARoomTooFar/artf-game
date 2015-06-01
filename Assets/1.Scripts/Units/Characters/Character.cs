@@ -61,7 +61,7 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 	[System.Serializable]
 	public class Gear {
 		public Weapons weapon;
-		public Helmet helmet;
+		public Armor helmet;
 		public Armor chest;
 		public Transform weapLocation, headLocation, chestLocation;
 		
@@ -89,9 +89,14 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 		}
 		
 		public void EquipHelmet(GameObject helmet, int tier) {
-			this.helmet = (Instantiate(helmet) as GameObject).GetComponent<Helmet>();
-			this.helmet.transform.SetParent(this.headLocation, false);
-			this.helmet.Equip(this.unit, tier);
+			Helmet helmetPiece = headLocation.GetComponentInChildren<Helmet>();
+			helmetPiece.keyHelmet = helmet.GetComponent<SkinnedMeshRenderer>();
+			
+			helmetPiece.Equip(this.unit, tier);
+			this.helmet = helmetPiece.GetComponent<Armor>();
+			// this.helmet = (Instantiate(helmet) as GameObject).GetComponent<Helmet>();
+			// this.helmet.transform.SetParent(this.headLocation, false);
+			// this.helmet.Equip(this.unit, tier);
 		}
 		
 		// Equip method for testing purposes
@@ -101,9 +106,11 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 				weapon.equip (this.unit, ene, 0);
 			}
 			
-			helmet = headLocation.GetComponentInChildren<Helmet>();
-			if (helmet) {
-				helmet.Equip (this.unit, 0);
+			Helmet helmetPiece = headLocation.GetComponentInChildren<Helmet>();
+			// helmet = headLocation.GetComponentInChildren<Helmet>();
+			if (helmetPiece) {
+				helmetPiece.Equip (this.unit, 0);
+				this.helmet = helmetPiece.GetComponent<Armor>();
 			}
 			
 			Chest chestPiece = chestLocation.GetComponentInChildren<Chest>();
@@ -184,7 +191,7 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 		facing = Vector3.forward;
 		isDead = false;
 		stunned = knockedback = animationLock = false;
-		setInitValues();
+		playSound = true;
 	}
 	
 	// Use this for initialization
@@ -196,10 +203,6 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 			behaviour.SetVar(this);
 		}
 
-	}
-	
-	protected virtual void setInitValues() {
-		playSound = true;
 	}
 
 	public virtual void SetGearAndAbilities() {

@@ -21,7 +21,7 @@ public class Player : Character, IHealable<int>{
 
 	public UIActive UI;
 	public Controls controls;
-	Renderer renderer;
+	Renderer rend;
 
 	GameObject sparks = null;
 
@@ -30,29 +30,32 @@ public class Player : Character, IHealable<int>{
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType("Enemy");
-		setInitValues();
 	}
 	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
-		renderer = GetComponent<Renderer> ();
+		rend = GetComponent<Renderer> ();
 		foreach(PlayerBehaviour behaviour in this.animator.GetBehaviours<PlayerBehaviour>()) {
 			behaviour.SetVar(this.GetComponent<Player>());
 		}
 		
 	}
 	
-	protected override void setInitValues() {
-		base.setInitValues();
+	public virtual void SetInitValues() {
 		//Testing with base 0-10 on stats with 10 being 100/cap%
-		stats.maxHealth = 100;
+		stats.maxHealth = 100 + this.gear.chest.stats.HealthUpgrade + this.gear.helmet.stats.HealthUpgrade;
 		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 10;
-		stats.coordination= 10;
-		stats.speed=10;
+		stats.armor = 0 + this.gear.chest.stats.ArmValUpgrade + this.gear.helmet.stats.ArmValUpgrade;
+		stats.strength = 10 + this.gear.chest.stats.StrengthUpgrade + this.gear.helmet.stats.StrengthUpgrade;
+		stats.coordination= 10 + this.gear.chest.stats.CoordinationUpgrade + this.gear.helmet.stats.CoordinationUpgrade;
+		stats.speed=8;
 		greyDamage = 0;
+	}
+
+	public override void SetGearAndAbilities() {
+		base.SetGearAndAbilities();
+		this.SetInitValues();
 	}
 
 	//Set cooldown bars to current items. 
@@ -88,13 +91,6 @@ public class Player : Character, IHealable<int>{
 		MoveCommands ();
 		AnimationUpdate ();
 	}
-
-/*
-	public virtual void EquipGearAndAbilities(GameObject[] equip, GameObject[] abilities) {
-		gear.equipGear(this, opposition, equip);
-		inventory.equipItems(this, opposition, abilities);
-	}
-	*/
 	
 	//-------------------------------//
 	// Player Command Implementation //
@@ -202,13 +198,13 @@ public class Player : Character, IHealable<int>{
 	
 	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
 		this.damage (dmgTaken, atkPosition);
-		StartCoroutine(hitFlash (Color.red, renderer.material.color));
+		StartCoroutine(hitFlash (Color.red, rend.material.color));
 	}
 	
 	public override void damage(int dmgTaken, Transform atkPosition) {
 		if (invincible || isDead) return;
 		
-//		print (dmgTaken);
+		dmgTaken *= (100 - stats.armor)/100;
 		
 		dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(atkPosition.position, facing, transform.position)), 1, 100000);
 		stats.health -= greyTest(dmgTaken);
@@ -231,13 +227,14 @@ public class Player : Character, IHealable<int>{
 		hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth * 5f);
 		BDS.addBuffDebuff(hitConfirm,gameObject,.5f);
 
-		StartCoroutine (hitFlash (Color.red, renderer.material.color));
+		StartCoroutine (hitFlash (Color.red, rend.material.color));
 
 	}
 	
 	public override void damage(int dmgTaken) {
-
 		if (invincible || isDead) return;
+		
+		dmgTaken *= (100 - stats.armor)/100;
 		
 		stats.health -= greyTest(dmgTaken);
 		if (stats.health <= 0) this.die();
@@ -255,7 +252,7 @@ public class Player : Character, IHealable<int>{
 			Destroy (sparks, 1);
 		}
 
-		StartCoroutine (hitFlash (Color.red, renderer.material.color));
+		StartCoroutine (hitFlash (Color.red, rend.material.color));
 	}
 	
 	public override void die() {
@@ -409,9 +406,9 @@ public class Player : Character, IHealable<int>{
 
 	// coroutines
 	IEnumerator hitFlash(Color hit, Color normal){
-		renderer.material.color = hit;
+		rend.material.color = hit;
 		yield return new WaitForSeconds(.5f);
-		renderer.material.color = normal;
+		rend.material.color = normal;
 	}
 
 }
