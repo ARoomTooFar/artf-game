@@ -82,8 +82,6 @@ public static class MapDataParser {
 
 			if(!Global.inLevelEditor)
 				StretchyWalls.rooms.Add(room);
-
-			//	GameObject.Instantiate(Resources.Load("StretchyWall"), blk.Position, Quaternion.identity);
 		}
 	}
 

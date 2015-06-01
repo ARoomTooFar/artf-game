@@ -26,12 +26,12 @@ public class Square {
 	
 	//Lower Right Corner
 	public Vector3 LRCorner {
-		get { return new Vector3(URCorner.x, URCorner.y, LLCorner.z); }
+		get { return new Vector3(LLCorner.x, URCorner.y, URCorner.z); }
 	}
 	
 	//Upper Right Corner
 	public Vector3 ULCorner {
-		get { return new Vector3(LLCorner.x, URCorner.y, URCorner.z); }
+		get { return new Vector3(URCorner.x, URCorner.y, LLCorner.z); }
 	}
 	
 	//A list of all four corners

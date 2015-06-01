@@ -82,12 +82,15 @@ public class FileIO : MonoBehaviour
 		foreach(ARTFRoom room in StretchyWalls.rooms){
 			float wallHeight = 5f;
 
-			//get middles of each wall
-			Vector3 mid1 = (room.LLCorner + new Vector3(room.URCorner.x, wallHeight, room.LLCorner.z)) / 2f;
-			Vector3 mid2 = (room.LLCorner + new Vector3(room.LLCorner.x, wallHeight, room.URCorner.z)) / 2f;
-			Vector3 mid3 = (room.URCorner + new Vector3(room.URCorner.x, wallHeight, room.LLCorner.z)) / 2f;
-			Vector3 mid4 = (room.URCorner + new Vector3(room.LLCorner.x, wallHeight, room.URCorner.z)) / 2f;
-
+			Vector3 mid1 = (room.LLCorner + room.ULCorner) / 2f;
+			mid1.y = wallHeight / 2f;
+			Vector3 mid2 = (room.LLCorner + room.LRCorner) / 2f;
+			mid2.y = wallHeight / 2f;
+			Vector3 mid3 = (room.URCorner + room.ULCorner) / 2f;
+			mid3.y = wallHeight / 2f;
+			Vector3 mid4 = (room.URCorner + room.LRCorner) / 2f;
+			mid4.y = wallHeight / 2f;
+			
 			GameObject wall;
 			bool mid1go = true;
 			bool mid2go = true;
@@ -115,10 +118,36 @@ public class FileIO : MonoBehaviour
 				wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid1, Quaternion.identity) as GameObject;
 				wall.transform.localScale = new Vector3(Mathf.Abs(room.LLCorner.x - room.URCorner.x) + 1, wallHeight, 1f);
 			}else{
+				List<Vector3> doorEnds = new List<Vector3>();
+				for(int i = 0; i < room.Doors.Count; i++){
+					Vector3 doorPos = room.Doors[i].Position;
+					doorPos.x += 2f;
+					doorEnds.Add(doorPos);
+					mid1 = (room.LLCorner + doorPos) / 2f;
+					GameObject.Instantiate(Resources.Load("StretchyWall"), mid1, Quaternion.identity);
+					doorPos.x -= 4f;
+					doorEnds.Add(doorPos);
+					mid1 = (room.LLCorner + doorPos) / 2f;
+					GameObject.Instantiate(Resources.Load("StretchyWall"), mid1, Quaternion.identity);
+				}
+
+
+//				for(int i = 0; i < room.Doors.Count; i++){
+//					room.Walls;
+//					mid1 = (room.LLCorner + room.Doors[i].Position) / 2f;
+//					mid1.y = wallHeight / 2f;
+//					mid1.x -= 1f;
+//					wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid1, Quaternion.identity) as GameObject;
+//					wall.transform.localScale = new Vector3(Mathf.Abs(room.LLCorner.x - room.Doors[i].Position.x) - 1, wallHeight, 1f);
+//					
+//					mid1 = (room.ULCorner + room.Doors[i].Position) / 2f;
+//					mid1.y = wallHeight / 2f;
+//					mid1.x += 1f;
+//					wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid1, Quaternion.identity) as GameObject;
+//					wall.transform.localScale = new Vector3(Mathf.Abs(room.ULCorner.x - room.Doors[i].Position.x) - 1, wallHeight, 1f);
+//				}
 
 			}
-
-
 			if(mid2go){
 				wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid2, Quaternion.identity) as GameObject;
 				wall.transform.localScale = new Vector3(1f , wallHeight, Mathf.Abs(room.LLCorner.z - room.URCorner.z) + 1);
@@ -132,15 +161,7 @@ public class FileIO : MonoBehaviour
 				wall.transform.localScale = new Vector3(Mathf.Abs(room.LLCorner.x - room.URCorner.x) + 1, wallHeight, 1f);
 			}
 
-
-
-
-
-
-
 		}
-
-//		for(int i = 0; i < StretchyWalls.rooms.Count
 	}
 
     public IEnumerator dlLvl(WWW www)
@@ -156,7 +177,7 @@ public class FileIO : MonoBehaviour
 			try{
 				MapDataParser.ParseSaveString(lvlData);
 				Debug.Log("LVL DL SUCCESS: " + lvlData);
-				makeStretchyWalls();
+//				makeStretchyWalls();
 				//throw new Exception();
 			} catch (Exception ex){
 				Debug.Log(ex.Message);
