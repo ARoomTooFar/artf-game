@@ -17,6 +17,8 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 		{"Button_ZoomOut", "Zoom Out:Zoom the camera out."},
 		{"Button_ZoomIn", "Zoom In:Zoom the camera in."},
 		{"Button_Delete", "Delete:Delete selected object (hotkey: delete)."},
+		{"Button_Undo", "Undo:Undo the last action (hotkey: Z)."},
+		{"Button_Redo", "Redo:Redo the last action (hotkey: X)."},
 		{"Button_CameraToggle", "Toggle Camera Mode:Toggle the camera between top-down mode and perspective mode."},
 		{"Button_Rooms", "Rooms Folder:Contains objects that assist you in building rooms, such as doors, individual wall tiles, and starter rooms."},
 		{"Button_Misc", "Environment Folder:Contains scenery and decorative objects."},

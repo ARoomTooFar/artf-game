@@ -38,5 +38,15 @@ public class UIButtonSetup : MonoBehaviour {
 		btn.onClick.AddListener(() => {
 			move.toggleCamera();
 		});
+
+		btn = GameObject.Find("Button_Undo").GetComponent("Button") as Button;
+		btn.onClick.AddListener(() => {
+			UndoRedoStack.Undo();
+		});
+
+		btn = GameObject.Find("Button_Redo").GetComponent("Button") as Button;
+		btn.onClick.AddListener(() => {
+			UndoRedoStack.Redo();
+		});
 	}
 }
