@@ -9,12 +9,9 @@ public class Roll : QuickItem {
 	// private int rollInt; Once settled
 	// private float rollSpeed; Once settled
 
-	[Range(1, 4)]
-	public int rollInt;
-	[Range(1, 4)]
-	public int rollSpeed;
-	[Range(0.1f, 0.85f)]
-	public float iFrameTime;
+	protected int rollInt = 3;
+	protected int rollSpeed = 2;
+	protected float iFrameTime = 0.8f;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -46,8 +43,12 @@ public class Roll : QuickItem {
 
 	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
 	private IEnumerator rollFunc(float rollTime) {
+		this.user.animator.SetBool("Rolling", true);
+	
 		yield return StartCoroutine(rollTimeFunc(rollTime));
 		yield return StartCoroutine(rollLagTime());
+
+		this.user.animator.SetBool("Rolling", false);
 
 		animDone();
 	}

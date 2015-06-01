@@ -1,14 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Chest : Armor {
+public class Chest : MonoBehaviour {
 
 	public SkinnedMeshRenderer keyArmor;
-
-	// Use this for initialization
-	protected override void Start () {
-		base.Start();
-
-		if (this.keyArmor != null) this.GetComponent<SkinnedMeshRenderer>().sharedMesh = this.keyArmor.sharedMesh; // When we get more armor swap this over to a init stat type thing
+	
+	public void Equip(Character u, int tier) {
+		SkinnedMeshRenderer smr = this.GetComponent<SkinnedMeshRenderer>();
+		
+		if (this.keyArmor == null) return;
+		smr.sharedMesh = this.keyArmor.sharedMesh;
+		smr.materials = this.keyArmor.sharedMaterials;
+		
+		Armor armor = this.gameObject.AddComponent(keyArmor.GetComponent<Armor>().GetType()) as Armor;
+	
+		if (armor == null) {
+			Debug.LogError(keyArmor.name + " has no armor component assigned");
+			return;
+		}
+	
+		armor.Equip(u, tier);
 	}
 }

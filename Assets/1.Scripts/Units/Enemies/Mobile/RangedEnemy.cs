@@ -33,10 +33,6 @@ public class RangedEnemy : MobileEnemy {
 		}
 	}
 	
-	protected override void setInitValues() {
-		base.setInitValues();
-	}
-	
 	//----------------------//
 	
 	//----------------------//

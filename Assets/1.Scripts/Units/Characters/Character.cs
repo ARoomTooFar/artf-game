@@ -12,14 +12,6 @@ public class Stats{
 	public float speed;
 	[HideInInspector] public int maxHealth, rezCount;
 	
-	/*
-	*Health: Health is the amount of damage a player can take before dying.
-	*Armor: Effects the amount of health that is lost when a player is hit with an attack, the higher the armor the less health is lost.
-	*Strength: The measure of how effective a player is with melee weapons. May also affect carrying speed of large objects involved in puzzles.
-	*Coordination: The measure of how effective a player is with ranged weapons. May also affect other relevant puzzle elements, like rewiring or lock picking. Influences reload time(reload has a cap).
-	*Speed: Affects the player's movement speed and recovery times after attacks. (this should have a cap)
-	*Luck: Affects the players chances at success in whatever they do. Gives players a higher critical strike chance in combat and otherwise (if relevant).
-	*/
 	public DamageManipulation dmgManip;
 	public SpeedManipulation spdManip;
 	
@@ -69,8 +61,8 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 	[System.Serializable]
 	public class Gear {
 		public Weapons weapon;
-		public Helmet helmet;
-		public Chest chest;
+		public Armor helmet;
+		public Armor chest;
 		public Transform weapLocation, headLocation, chestLocation;
 		
 		private Character unit;
@@ -86,61 +78,45 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 		}
 		
 		public void EquipArmor(GameObject armor, int tier) {
-			this.chest = (Instantiate(armor) as GameObject).GetComponent<Chest>();
-			this.chest.transform.SetParent(this.chestLocation, false);
-			this.chest.Equip(this.unit, tier);
+			Chest chestPiece = chestLocation.GetComponentInChildren<Chest>();
+			chestPiece.keyArmor = armor.GetComponent<SkinnedMeshRenderer>();
+			
+			chestPiece.Equip(this.unit, tier);
+			this.chest = chestPiece.GetComponent<Armor>();
+			//this.chest = (Instantiate(armor) as GameObject).GetComponent<Chest>();
+			//this.chest.transform.SetParent(this.chestLocation, false);
+			//this.chest.Equip(this.unit, tier);
 		}
 		
 		public void EquipHelmet(GameObject helmet, int tier) {
-			this.helmet = (Instantiate(helmet) as GameObject).GetComponent<Helmet>();
-			this.helmet.transform.SetParent(this.headLocation, false);
-			this.helmet.Equip(this.unit, tier);
+			Helmet helmetPiece = headLocation.GetComponentInChildren<Helmet>();
+			helmetPiece.keyHelmet = helmet.GetComponent<SkinnedMeshRenderer>();
+			
+			helmetPiece.Equip(this.unit, tier);
+			this.helmet = helmetPiece.GetComponent<Armor>();
+			// this.helmet = (Instantiate(helmet) as GameObject).GetComponent<Helmet>();
+			// this.helmet.transform.SetParent(this.headLocation, false);
+			// this.helmet.Equip(this.unit, tier);
 		}
-		
-		/*
-		public void equipGear(Character player, Type ene, GameObject[] equipment) {
-			foreach (GameObject equip in equipment) {
-				if (equip.GetComponent<Weapons>()) {
-					// GameObject newGear = Instantiate(equip, headLocation.position, headLocation.rotation) as GameObject;
-					weapon = (Instantiate(equip) as GameObject).GetComponent<Weapons>();
-					weapon.transform.SetParent(weapLocation, false);
-					weapon.equip(player, ene);
-				} else if (equip.GetComponent<Helmet>()) {
-					helmet = (Instantiate(equip) as GameObject).GetComponent<Helmet>();
-					helmet.transform.SetParent(headLocation, false);
-					helmet.equip(player);
-				} else if (equip.GetComponent<Chest>()) {
-					chest = (Instantiate(equip) as GameObject).GetComponent<Chest>();
-					chest.transform.SetParent(chestLocation, false);
-					chest.equip(player);
-				} else {
-					Debug.LogWarning("Non-weapon/armor passed into gear class");
-				}
-			}
-		}
-		*/
 		
 		// Equip method for testing purposes
 		public void equipGear(Type ene) {
 			weapon = weapLocation.GetComponentInChildren<Weapons>();
 			if (weapon) {
 				weapon.equip (this.unit, ene, 0);
-			} else {
-				// Debug.LogWarning(player.gameObject.name + " does not have a weapon in the weapon slot.");
 			}
 			
-			helmet = headLocation.GetComponentInChildren<Helmet>();
-			if (helmet) {
-				helmet.Equip (this.unit, 0);
-			} else {
-				// Debug.LogWarning(player.gameObject.name + " does not have a helmet in the helmet slot.");
+			Helmet helmetPiece = headLocation.GetComponentInChildren<Helmet>();
+			// helmet = headLocation.GetComponentInChildren<Helmet>();
+			if (helmetPiece) {
+				helmetPiece.Equip (this.unit, 0);
+				this.helmet = helmetPiece.GetComponent<Armor>();
 			}
 			
-			chest = chestLocation.GetComponentInChildren<Chest>();
-			if (chest) {
-				chest.Equip (this.unit, 0);
-			} else {
-				//Debug.LogWarning(player.gameObject.name + " does not have armor in the armor slot.");
+			Chest chestPiece = chestLocation.GetComponentInChildren<Chest>();
+			if (chestPiece) {
+				chestPiece.Equip (this.unit, 0);
+				this.chest = chestPiece.GetComponent<Armor>();
 			}
 		}
 	}
@@ -171,18 +147,6 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 			newItem.opposition = ene;
 			items.Add(newItem);
 		}
-		
-		/*
-		public void equipItems(Character player, Type ene, GameObject[] abilities) {
-			foreach (GameObject item in abilities) {
-				Item newItem = (Instantiate(item) as GameObject).GetComponent<Item>();
-				newItem.transform.SetParent(itemLocation, false);
-				newItem.user = player;
-				newItem.opposition = ene;
-				items.Add(newItem);
-			}
-		}
-		*/
 	
 		
 		// Equip method for testing purposes
@@ -227,7 +191,7 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 		facing = Vector3.forward;
 		isDead = false;
 		stunned = knockedback = animationLock = false;
-		setInitValues();
+		playSound = true;
 	}
 	
 	// Use this for initialization
@@ -239,10 +203,6 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 			behaviour.SetVar(this);
 		}
 
-	}
-	
-	protected virtual void setInitValues() {
-		playSound = true;
 	}
 
 	public virtual void SetGearAndAbilities() {
