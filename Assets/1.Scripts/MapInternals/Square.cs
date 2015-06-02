@@ -26,12 +26,12 @@ public class Square {
 	
 	//Lower Right Corner
 	public Vector3 LRCorner {
-		get { return new Vector3(LLCorner.x, URCorner.y, URCorner.z); }
+		get { return new Vector3(URCorner.x, URCorner.y, LLCorner.z); }
 	}
 	
-	//Upper Right Corner
+	//Upper Left Corner
 	public Vector3 ULCorner {
-		get { return new Vector3(URCorner.x, URCorner.y, LLCorner.z); }
+		get { return new Vector3(LLCorner.x, URCorner.y, URCorner.z); }
 	}
 	
 	//A list of all four corners
@@ -75,21 +75,8 @@ public class Square {
 	#endregion SquareProperties
 
 	public bool Intersect(Square that) {
-		//for each corner in room1
-		foreach(Vector3 cor in this.Corners) {
-			//if that corner is inside room2
-			if(that.inSquare(cor)) {
-				return true;
-			}
-		}
-		//for each corner in room2
-		foreach(Vector3 cor in that.Corners) {
-			//if that corner is inside room1
-			if(this.inSquare(cor)) {
-				return true;
-			}
-		}
-		return false;
+		return (this.LLCorner.x < that.URCorner.x && this.URCorner.x > that.LLCorner.x &&
+			this.LLCorner.z < that.URCorner.z && this.URCorner.z > that.LLCorner.z);
 	}
 
 	public bool inSquare(Vector3 pos) {
