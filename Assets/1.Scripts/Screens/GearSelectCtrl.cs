@@ -7,7 +7,7 @@ public class GearSelectCtrl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Sprite newSprite = Resources.Load<Sprite>("ItemFrames/LongSword");
+		Sprite newSprite = Resources.Load<Sprite>("ItemFrames/HuntersRifle");
 		Debug.Log (newSprite);
 		weaponIF = GameObject.Find ("WeaponIF").GetComponent<Image> ();
 		Debug.Log (weaponIF);
