@@ -1,0 +1,142 @@
+fileFormatVersion: 2
+guid: 56ebfd3c08ed6af428c364980993444d
+timeCreated: 1432269745
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Armature
+    100002: //RootNode
+    100004: Body
+    100006: Chest
+    100008: Head__gun_
+    100010: Left_arm
+    100012: left_foot
+    100014: Left_inner_thigh
+    100016: left_knee
+    100018: left_lower_arm
+    100020: left_lower_hand
+    100022: left_lower_leg
+    100024: Left_mid_arm
+    100026: left_mid_leg
+    100028: left_Shoulder
+    100030: left_thigh
+    100032: left_Upper_hand
+    100034: left_upper_leg
+    100036: Lower_Body
+    100038: Lower_Body_001
+    100040: Mid_Head__gun_
+    100042: Nose_gun_
+    100044: right_arm
+    100046: right_foot
+    100048: right_inner_thigh
+    100050: right_knee
+    100052: right_lower_arm
+    100054: right_lower_hand
+    100056: right_lower_leg
+    100058: right_mid_arm
+    100060: right_mid_leg
+    100062: right_shoulder
+    100064: right_thigh
+    100066: right_upper_hand
+    100068: right_upper_leg
+    100070: Upper_Head_gun_
+    400000: Armature
+    400002: //RootNode
+    400004: Body
+    400006: Chest
+    400008: Head__gun_
+    400010: Left_arm
+    400012: left_foot
+    400014: Left_inner_thigh
+    400016: left_knee
+    400018: left_lower_arm
+    400020: left_lower_hand
+    400022: left_lower_leg
+    400024: Left_mid_arm
+    400026: left_mid_leg
+    400028: left_Shoulder
+    400030: left_thigh
+    400032: left_Upper_hand
+    400034: left_upper_leg
+    400036: Lower_Body
+    400038: Lower_Body_001
+    400040: Mid_Head__gun_
+    400042: Nose_gun_
+    400044: right_arm
+    400046: right_foot
+    400048: right_inner_thigh
+    400050: right_knee
+    400052: right_lower_arm
+    400054: right_lower_hand
+    400056: right_lower_leg
+    400058: right_mid_arm
+    400060: right_mid_leg
+    400062: right_shoulder
+    400064: right_thigh
+    400066: right_upper_hand
+    400068: right_upper_leg
+    400070: Upper_Head_gun_
+    4300000: Body
+    7400000: Default Take
+    7400002: ArmatureAction
+    9500000: //RootNode
+    13700000: Body
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

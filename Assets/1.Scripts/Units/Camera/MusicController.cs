@@ -19,21 +19,23 @@ public class MusicController: MonoBehaviour {
 	public AudioSource environment;
 
 	void Start () {
-		GetComponent<Transform>();
 		allPlayers = FindObjectsOfType(typeof(Player)) as Player[];
-
 	}
 
 	// Update is called once per frame
 	void Update () {
 
+		if(allPlayers.Length == 0) allPlayers = FindObjectsOfType(typeof(Player)) as Player[];
+
 		int actives = EnemyInSight ();
 
 		if (actives > 0 && !battle.isPlaying) {
-			environment.Pause ();
-			environment.volume = 0;
-			battle.volume = 0;
-			battle.Play ();
+			//environment.Pause ();
+			//environment.volume = 0;
+			if(TransitionOut(environment, 1.2f, 0)) {
+				battle.Stop ();
+				battle.Play ();
+			}
 		} else if (actives == 0 && battle.isPlaying) {
 			if (TransitionOut (battle, 0.7f, 0))
 				environment.UnPause ();
@@ -47,27 +49,39 @@ public class MusicController: MonoBehaviour {
 	int EnemyInSight(){
 		HashSet<ARTFRoom> rooms = new HashSet<ARTFRoom> ();
 
+
 		// find all rooms that the players are in
 		foreach (Player play in allPlayers) {
+
 			rooms.Add (MapData.TheFarRooms.find(play.transform.position.Round()));
+//			Debug.Log (MapData.TheFarRooms.find(play.transform.position.Round()));
 		}
+
 		List<GameObject> MonstersIndex = MapData.MonsterBlocks.allMonsters ();
 		int numberofmonsters = 0;
 
 		// add enemy to the amount of enemies active rooms.
-		foreach (GameObject enemy in MonstersIndex) {
+		foreach (GameObject e in MonstersIndex) {
+			int hello = 0;
+			Enemy enemy = e.GetComponent<Enemy> ();
+			if(enemy.isDead) continue;
+//			Debug.Log(hello);
 			foreach(ARTFRoom room in rooms) {
-				if(room.inRoom(enemy.transform.position)) numberofmonsters++;
+
+				if(room.inRoom(e.transform.position)) {numberofmonsters++; }
 			}
 		}
+
+//		Debug.Log(numberofmonsters);
+
 		return numberofmonsters;
 	}
 
-	public void setBattle(AudioClip clip){
+	void setBattle(AudioClip clip){
 		battle.clip = clip;
 	}
 
-	public void setEnvironment(AudioClip clip){
+	void setEnvironment(AudioClip clip){
 		environment.clip = clip;
 	}
 
@@ -82,8 +96,7 @@ public class MusicController: MonoBehaviour {
 		else if (musik.volume > done) musik.volume -= 0.1f * Time.deltaTime;
 		
 		if(musik.volume <= done) {
-			musik.Stop();
-			musik.volume = 1;
+			musik.Pause();
 			return true;
 		}
 		return false;

@@ -51,15 +51,11 @@ public class Chainsaw : MeleeWeapons {
 
 		// User dagger vars for now until we have chainsaw animations
 		stats.weapType = 3;
-		stats.weapTypeName = "chainsaw";
 
 		stats.atkSpeed = 3.0f;
 		stats.damage = 5;
 		
 		stats.maxChgTime = 7;
-		stats.timeForChgAttack = 0.5f;
-		
-		stats.chgLevels = 0.5f;
 
 		lastDmgTime = 0.0f;
 		curDuration = 0.0f;
@@ -67,11 +63,6 @@ public class Chainsaw : MeleeWeapons {
 		debuff = new Dismember(slowPercent);
 		chained = new List<Character> ();
 		cropping = new List<GameObject>();
-	}
-
-	// Move to a Coroutine during our great weapon pur-refactor
-	protected override void FixedUpdate() {
-		base.FixedUpdate ();
 	}
 	
 	// Update is called once per frame
@@ -81,6 +72,7 @@ public class Chainsaw : MeleeWeapons {
 
 	public override void SpecialAttack() {
 		particles.startSpeed = 0;
+		StartCoroutine(makeSound(action,playSound,action.length));
 		this.StartCoroutine (this.dismember());
 	}
 
@@ -149,9 +141,5 @@ public class Chainsaw : MeleeWeapons {
 				cropping.Remove(other.gameObject);
 			}
 		}
-	}
-
-	public override void initAttack() {
-		base.initAttack();
 	}
 }

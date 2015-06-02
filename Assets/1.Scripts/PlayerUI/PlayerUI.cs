@@ -13,10 +13,10 @@ public class PlayerUI : MonoBehaviour {
 
 		//for scenes with all 4 players
 
-		setUpPlayerUIPane("Player1");
-		setUpPlayerUIPane("Player2");
-		setUpPlayerUIPane("Player3");
-		setUpPlayerUIPane("Player4");
+		// setUpPlayerUIPane("Player1");
+		// setUpPlayerUIPane("Player2");
+		// setUpPlayerUIPane("Player3");
+		// setUpPlayerUIPane("Player4");
 
 
 		//PlayerUIPane playerPane = new PlayerUIPane();
@@ -28,7 +28,7 @@ public class PlayerUI : MonoBehaviour {
 		//playerPane.initVals("Player2");
 	}
 
-	void setUpPlayerUIPane(string pl){
+	public void setUpPlayerUIPane(string pl){
 		PlayerUIPane playerPane = transform.Find(pl).gameObject.AddComponent<PlayerUIPane>();
 		playerPane.initVals(pl);
 	}

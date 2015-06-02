@@ -32,7 +32,6 @@ public class RangedWeapons : Weapons {
 	}
 	
 	public override void AttackEnd() {
-		// this.col.enabled = false;
 	}
 
 
@@ -42,38 +41,6 @@ public class RangedWeapons : Weapons {
 	public override void collideOff() {
 	}
 
-	public override void initAttack() {
-		base.initAttack();
-	}
-
-	protected override IEnumerator bgnAttack() {
-		return base.bgnAttack();
-	}
-
-	protected override IEnumerator bgnCharge() {
-		return base.bgnCharge();
-	}
-
-	protected override void attack() {
-		base.attack ();
-	}
-
-	protected override void basicAttack() {
-		// print("Normal Attack; Power level:" + stats.chgDamage);
-		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
-		StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
-		StartCoroutine(makeSound(action,playSound,action.length));
-		StartCoroutine(atkFinish());
-	}
-
-	protected override void chargedAttack() {
-		// print("Charged Attack; Power level:" + stats.chgDamage);
-		user.GetComponent<Character>().animator.SetBool("ChargedAttack", true);
-		StartCoroutine(Shoot((int)(stats.curChgDuration/stats.chgLevels)));
-		StartCoroutine(makeSound(chargeAttack,playSound,chargeAttack.length));
-		StartCoroutine(atkFinish());
-	}
-
 	protected virtual IEnumerator Shoot(int count) {
 		yield return 0;
 	}
@@ -81,15 +48,6 @@ public class RangedWeapons : Weapons {
 	protected IEnumerator Wait(float duration){
 		for (float timer = 0; timer < duration; timer += Time.deltaTime)
 			yield return 0;
-	}
-
-
-	protected override IEnumerator atkFinish() {
-		while (user.animSteInfo.fullPathHash != user.atkHashEnd) {
-			yield return null;
-		}
-		particles.Stop();
-		user.animator.speed = 1.0f;
 	}
 	
 	protected virtual void FireProjectile() {

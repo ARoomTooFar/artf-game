@@ -186,6 +186,9 @@ public partial class ARTFRoom : Square {
 		foreach(SceneryBlock wall in Walls) {
 			wall.move(offset);
 		}
+		foreach(SceneryBlock dr in (new List<SceneryBlock>(Doors))) {
+			MapData.SceneryBlocks.remove(dr);
+		}
 		setFloor();
 		updateMarkerPositions();
 	}
@@ -273,7 +276,9 @@ public partial class ARTFRoom : Square {
 				if(!isEdge(vec)) {
 					continue;
 				}
-				Walls.Add(new SceneryBlock(wallType, vec, DIRECTION.North));
+
+//				if(Global.inLevelEditor)
+					Walls.Add(new SceneryBlock(wallType, vec, DIRECTION.North));
 			}
 		}
 	}

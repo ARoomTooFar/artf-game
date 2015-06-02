@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class MapDataParser {
 	public static SceneryBlock start;
@@ -9,6 +10,9 @@ public static class MapDataParser {
 		MapData.ClearData();
 		string[] SaveStringLines = SaveString.Split('\n');
 		int i = 0;
+		if(Global.inLevelEditor) {
+			GameObject.Find("InputField_Save").GetComponent<InputField>().text = SaveStringLines[i].Split('\t')[0].Split(':')[1];
+		}
 		while(SaveStringLines[i] != "Terminal") {
 			i++;
 		}
@@ -30,9 +34,13 @@ public static class MapDataParser {
 		}
 		if(Global.inLevelEditor) {
 			Mode.setTileMode();
+			UndoRedoStack.currentState = SaveString;
 		} else {
-//            Debug.Log(Resources.Load("Player1"));
-
+			Loadgear loadgear = GameObject.Find("/Loadgear").GetComponent<Loadgear>();
+			loadgear.LoadPlayers();
+			
+			
+			/*
 			GameObject p1 = GameObject.Find("Player1");
 			GameObject p2 = GameObject.Find("Player2");
 			GameObject p3 = GameObject.Find("Player3");
@@ -48,6 +56,7 @@ public static class MapDataParser {
 			loadgear.players[1] = p2.GetComponent<Character>();
 			loadgear.players[2] = p3.GetComponent<Character>();
 			loadgear.players[3] = p4.GetComponent<Character>();
+			*/
 		}
 		LevelPathCheck.checkPath();
 	}
@@ -70,6 +79,9 @@ public static class MapDataParser {
 			ARTFRoom room = new ARTFRoom(pos1, pos2);
 			room.placedThisSession = true;
 			MapData.TheFarRooms.add(room);
+
+			if(!Global.inLevelEditor)
+				StretchyWalls.rooms.Add(room);
 		}
 	}
 
@@ -131,6 +143,9 @@ public static class MapDataParser {
 		MapData.StartingRoom = rm;
 		MapData.TheFarRooms.add(rm);
 
+		if(!Global.inLevelEditor)
+			StretchyWalls.rooms.Add(rm);
+
 		rmParams = rms[1].Split(',');
 		pos1 = new Vector3(float.Parse(rmParams[0]),
 		                           float.Parse(rmParams[1]),
@@ -142,5 +157,8 @@ public static class MapDataParser {
 		rm.placedThisSession = true;
 		MapData.EndingRoom = rm;
 		MapData.TheFarRooms.add(rm);
+
+		if(!Global.inLevelEditor)
+			StretchyWalls.rooms.Add(rm);
 	}
 }

@@ -10,23 +10,22 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 	static Camera UICamera;
 	string connectedPrefab = "";
 	Vector3 newp;
-	static GameObject buttonBG;
 	static int selectedButtonID;
 	static GameObject itemObjectCopy = null;
-	Text amountText;
 	public int price;
 	Text priceText;
 	public string itemType;
+	GameObject select;
 	
 	void Start() {
-		amountText = this.transform.Find("AmountText").gameObject.GetComponent<Text>();
 		priceText = this.transform.Find("PriceText").gameObject.GetComponent<Text>();
 		UICamera = Camera.main.GetComponent<Camera>();
 		tilemapcont = Camera.main.GetComponent<TileMapController>();
+		select = transform.Find("Select").gameObject;
+		select.SetActive(false);
 	}
 
 	void Update() {
-		amountText.text = "x" + (Money.money / price).ToString();
 		priceText.text = "$" + price;
 
 		if(selectedButtonID == this.gameObject.GetInstanceID()) {		
@@ -34,6 +33,8 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 				selectedButtonID = -1;
 				StartCoroutine(folderGhostDragging());
 			}
+		}else{
+			select.SetActive(false);
 		}
 	}
 
@@ -46,21 +47,11 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 	}
 
 	public void selectButton(GameObject butt) {
-		if(buttonBG == null) {
-			buttonBG = Instantiate(Resources.Load("LevelEditor/Other/buttonHighlight")) as GameObject;
-		}
-
-		buttonBG.SetActive(true);
-		buttonBG.transform.SetParent(butt.transform.parent);
-		RectTransform thisRect = butt.GetComponent<RectTransform>();
-		RectTransform bgRect = buttonBG.GetComponent<RectTransform>();
-		//set its position to be slightly bigger than the button
-		bgRect.anchoredPosition = thisRect.anchoredPosition;
+		select.SetActive(true);
 	}
 
 	IEnumerator folderGhostDragging() { 
 		string prefabLocation = "LevelEditor/" + connectedPrefab;
-
 
 		//for the ghost-duplicate
 		itemObjectCopy = null;
@@ -70,7 +61,7 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 		newp = Vector3.zero;
 		bool doorRotated = false;
 		Vector3 doorWallRot = Vector3.zero;
-		
+		LevelEditorData dat;
 		while(!Input.GetMouseButton(0)) { 
 
 			//if we haven't made a copy of the object yet
@@ -117,10 +108,34 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 
 			//if copy exists
 			if(copyCreated) {
+				dat = itemObjectCopy.GetComponent<LevelEditorData>();
+
+				if((dat is SceneryData && MapData.SceneryBlocks.isAddValid(dat.BlockID, movePos, DIRECTION.North))
+				   || (dat is MonsterData && MapData.MonsterBlocks.isAddValid(dat.BlockID, movePos, DIRECTION.North))){
+					foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
+						foreach(Material mat in rend.materials) {
+							if(mat.HasProperty("_Color")) {
+								Color trans = Color.green;
+								trans.a = .5f;
+								mat.color = trans;
+							}
+						}
+					}
+				} else {
+					foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
+						foreach(Material mat in rend.materials) {
+							if(mat.HasProperty("_Color")) {
+								Color trans = Color.red;
+								trans.a = .5f;
+								mat.color = trans;
+							}
+						}
+					}
+				}
 
 				//if we got a door and it's on the edge of a room
-				if(itemObjectCopy.GetComponent<SceneryData>() != null
-					&& itemObjectCopy.GetComponent<SceneryData>().isDoor
+				if(dat is SceneryData
+					&& (dat as SceneryData).isDoor
 					&& MapData.TheFarRooms.find(movePos) != null
 						   ) {
 					//snap door to an edge if it's near it
@@ -151,8 +166,7 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 		
 		//if move was cancelled, we don't perform an update on the item object's position
 		if(cancellingMove == true) {
-			//Destroy(buttonBG);
-			buttonBG.SetActive(false);
+			select.SetActive(false);
 			selectedButtonID = -1;
 		} else {
 
@@ -161,7 +175,7 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 
 			//don't place item if we've click a button
 			if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false) {
-				LevelEditorData dat = itemObjectCopy.GetComponent<LevelEditorData>();
+				dat = itemObjectCopy.GetComponent<LevelEditorData>();
 				if(dat is RoomData) {
 					if(MapData.addRoom(pos - new Vector3(3, 0, 3), pos + new Vector3(3, 0, 3))) {
 						Money.buy(MapData.TheFarRooms.find(pos).Cost);
@@ -186,9 +200,8 @@ public class Event_ItemButtons : MonoBehaviour, IPointerClickHandler {
 			Destroy(itemObjectCopy);
 			itemObjectCopy = null;
 
-			//Destroy(buttonBG);
-			buttonBG.SetActive(false);
-			selectedButtonID = -1;
+			//unselect button
+			select.SetActive(false);
 		
 		}
 

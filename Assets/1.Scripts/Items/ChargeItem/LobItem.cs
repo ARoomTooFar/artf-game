@@ -78,7 +78,6 @@ public class LobItem : ChargeItem {
 			yield return null;
 		}
 		user.BDS.rmvBuffDebuff(immobil, this.gameObject);
-		user.testControl = true;
 	}
 
 	// Once key to charge is released (Or other stuff like taking damage), do what are ability is
@@ -86,7 +85,6 @@ public class LobItem : ChargeItem {
 		animDone();
 	}
 	protected override IEnumerator bgnCharge() {
-		user.testControl = false;
 		user.BDS.addBuffDebuff(immobil,this.gameObject);
 		Vector3 direction = user.facing.normalized * 4.0f;
 		// this.curTCircle.transform.position = new Vector3(this.curTCircle.transform.position.x + direction.x, this.curTCircle.transform.position.y, this.curTCircle.transform.position.z + direction.z);

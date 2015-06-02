@@ -9,7 +9,7 @@ public class FoliantFodderWeapon : MeleeWeapons {
 		base.Start ();
 	}
 	
-	public override void equip(Character u, Type ene) {
+	public override void equip(Character u, Type ene, int tier) {
 		user = u;
 		setInitValues();
 		opposition = ene;
@@ -26,10 +26,6 @@ public class FoliantFodderWeapon : MeleeWeapons {
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
-	}
-	
-	public override void initAttack() {
-		user.animator.SetTrigger("Attack");
 	}
 	
 	// Does something when opponent is hit

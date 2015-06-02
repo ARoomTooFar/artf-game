@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public static class MapData {
 
@@ -37,9 +38,15 @@ public static class MapData {
 
 	public static ARTFTerminalRoom EndingRoom;// = new ARTFTerminalRoom(new Vector3(0, 0, 8), new Vector3(7, 0, 15));
 
+	public static float Difficulty{
+		get{ return (float)MonsterBlocks.allMonsters().Count/TheFarRooms.roomList.Count;}
+	}
+
 	public static string SaveString {
 		get {
-			string retVal = "MapData\n";
+			string retVal = "Name:";
+			retVal += GameObject.Find("InputField_Save").GetComponent<InputField>().text;
+			retVal += "\t" + Difficulty + "\n";
 			//retVal += "Terrain\n";
 			//retVal += TerrainBlocks.SaveString;
 			retVal += "Terminal\n";
@@ -58,6 +65,7 @@ public static class MapData {
 	public static bool addRoom(ARTFRoom rm){
 		if(TheFarRooms.isAddValid(rm)) {
 			TheFarRooms.add(rm);
+			UndoRedoStack.newState(SaveString);
 		} else {
 			rm.remove();
 			return false;
@@ -70,8 +78,12 @@ public static class MapData {
 	}
 
 	public static void moveRoom(Vector3 oldPos, Vector3 newPos) {
+		if(oldPos.Equals(newPos)) {
+			return;
+		}
 		if(TheFarRooms.isMoveValid(oldPos, newPos)){
 			TheFarRooms.move(oldPos, newPos - oldPos);
+			UndoRedoStack.newState(SaveString);
 		}
 		LevelPathCheck.checkPath();
 	}
@@ -93,14 +105,17 @@ public static class MapData {
 				return false;
 			}
 			LevelPathCheck.checkPath();
+			UndoRedoStack.newState(SaveString);
 			return true;
 		} 
 		if(data is MonsterData) {
 			if(MonsterBlocks.isAddValid(type, pos, dir)) {
+				UndoRedoStack.newState(SaveString);
 				MonsterBlocks.add(new MonsterBlock(type, pos, dir));
 			} else {
 				return false;
 			}
+			UndoRedoStack.newState(SaveString);
 			return true;
 		}
 		return false;
@@ -115,6 +130,7 @@ public static class MapData {
 				TheFarRooms.resize(pos, pos + offset);
 				int newCost = TheFarRooms.find(pos+offset).Cost;
 				Money.buy(newCost - oldCost);
+				UndoRedoStack.newState(SaveString);
 			}
 			LevelPathCheck.checkPath();
 			return;
@@ -127,6 +143,7 @@ public static class MapData {
 		if(data is SceneryData) {
 			if(SceneryBlocks.isMoveValid(pos, offset)) {
 				SceneryBlocks.move(pos, offset);
+				UndoRedoStack.newState(SaveString);
 			}
 			LevelPathCheck.checkPath();
 			return;
@@ -135,6 +152,7 @@ public static class MapData {
 		if(data is MonsterData) {
 			if(MonsterBlocks.isMoveValid(pos, offset)) {
 				MonsterBlocks.move(pos, offset);
+				UndoRedoStack.newState(SaveString);
 			}
 			return;
 		}
@@ -147,6 +165,7 @@ public static class MapData {
 		if(data is SceneryData) {
 			if(SceneryBlocks.isRotateValid(pos, goClockwise)) {
 				SceneryBlocks.rotate(pos, goClockwise);
+				UndoRedoStack.newState(SaveString);
 			}
 			LevelPathCheck.checkPath();
 			return;
@@ -154,6 +173,7 @@ public static class MapData {
 
 		if(data is MonsterData) {
 			MonsterBlocks.rotate(pos, goClockwise);
+			UndoRedoStack.newState(SaveString);
 			return;
 		}
 	}

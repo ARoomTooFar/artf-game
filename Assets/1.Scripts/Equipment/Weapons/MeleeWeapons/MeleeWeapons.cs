@@ -14,13 +14,12 @@ public class MeleeWeapons : Weapons {
 	
 	protected override void setInitValues() {
 		base.setInitValues();
+		stats.chargeSlow = new Slow(0.0f);
 	}
 	
-	public override void initAttack() {
-		base.initAttack();
-	}
 
 	public override void AttackStart() {
+		if (action != null) StartCoroutine(makeSound(action,playSound,action.length));
 		this.col.enabled = true;
 	}
 	

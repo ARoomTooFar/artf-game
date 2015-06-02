@@ -5,7 +5,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class Enemy : NewCharacter {
+public class Enemy : Character {
 
 	protected float lastSawTargetCount;
 
@@ -45,6 +45,8 @@ public class Enemy : NewCharacter {
 	
 	public MonsterLoot monsterLoot;
 	
+	public FlockDar flockDar;
+	
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType ("Player");
@@ -74,16 +76,21 @@ public class Enemy : NewCharacter {
 		}
 
 		if (testing) {
-			inventory.equipItems(this, opposition);
+			inventory.equipItems(opposition);
 			this.SetTierData(0);
 		}
 
 		MusicPlayer = GameObject.Find ("MusicPlayer");
+		
+		if (this.flockDar != null) this.flockDar.InstantiateFlockingDar(this);
 	}
 	
 	// Update is called once per frame
 	protected override void Update () {
 		if (isDead) return;
+		
+		// Keeps this unit at y position 0;
+		this.transform.position = this.transform.position - new Vector3 (0f, this.transform.position.y, 0f);
 		base.Update();
 		this.TargetFunction();
 	}
@@ -98,15 +105,7 @@ public class Enemy : NewCharacter {
 		stats.speed = speed;
 		
 		if (testing) {
-			gear.equipGear(this, opposition);
-			
-			// Used so our old units still work, onc we have all models and animations, scrap this crap
-			if (this.weapTypeName.Length > 0) {
-				setAnimHash(); // Remove this later
-				this.usingAnimHash = true;
-			} else {
-				this.usingAnimHash = false;
-			}
+			gear.equipGear(opposition);
 		}
 	}
 
@@ -156,6 +155,11 @@ public class Enemy : NewCharacter {
 	}
 
 	//-----------//
+
+	// Primary function for movement (Unit will find all obstacles around it and change its current facing to avoid obstacles)
+	public virtual void MoveForward(float effectivness = 1f) {
+		
+	}
 
 
 	//-----------------------//
@@ -214,7 +218,7 @@ public class Enemy : NewCharacter {
 			newFacing.y = 0.0f;
 			if (newFacing != Vector3.zero) {
 				this.facing = newFacing.normalized;
-				this.transform.localRotation = Quaternion.LookRotation(facing);	
+				// this.transform.localRotation = Quaternion.LookRotation(facing);	
 			}
 		}
 	}
@@ -268,9 +272,9 @@ public class Enemy : NewCharacter {
 	}
 	
 	public override void die() {
-		monsterLoot.lootMonster();
 		base.die ();
 		Destroy (gameObject);
+		monsterLoot.lootMonster();
 	}
 	
 	//-------------------------------//

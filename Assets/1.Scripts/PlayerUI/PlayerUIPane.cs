@@ -20,17 +20,15 @@ public class PlayerUIPane : MonoBehaviour
 
 	public void initVals (string player)
 	{
-		pl = GameObject.Find (player).GetComponent ("Player") as Player;
-		hp = transform.Find ("HPbar/HP").gameObject.GetComponent<Image> ();
-		greyhp = transform.Find ("HPbar/GreyHP").gameObject.GetComponent<Image> ();
-		charge = transform.Find ("ChargeBar/Charge").gameObject.GetComponent<Image> ();
-		slot1 = transform.Find ("ActionSlots/Slot1/Ring").gameObject.GetComponent<Image> ();
-		slot2 = transform.Find ("ActionSlots/Slot2/Ring").gameObject.GetComponent<Image> ();
-		slot3 = transform.Find ("ActionSlots/Slot3/Ring").gameObject.GetComponent<Image> ();
-		slot1bg = transform.Find ("ActionSlots/Slot1/RingBG").gameObject.GetComponent<Image> ();
-		slot2bg = transform.Find ("ActionSlots/Slot2/RingBG").gameObject.GetComponent<Image> ();
-		slot3bg = transform.Find ("ActionSlots/Slot3/RingBG").gameObject.GetComponent<Image> ();
-		charge.fillAmount = 0;
+		pl = GameObject.FindGameObjectWithTag(player).GetComponent ("Player") as Player;
+		hp = transform.Find ("HP").gameObject.GetComponent<Image> ();
+		greyhp = transform.Find ("GreyHP").gameObject.GetComponent<Image> ();
+		slot1 = transform.Find ("Ring1").gameObject.GetComponent<Image> ();
+		slot2 = transform.Find ("Ring1").gameObject.GetComponent<Image> ();
+		slot3 = transform.Find ("Ring1").gameObject.GetComponent<Image> ();
+		slot1bg = transform.Find ("Ring1BG").gameObject.GetComponent<Image> ();
+		slot2bg = transform.Find ("Ring2BG").gameObject.GetComponent<Image> ();
+		slot3bg = transform.Find ("Ring3BG").gameObject.GetComponent<Image> ();
 		slot1.fillAmount = 1;
 		slot2.fillAmount = 1;
 		slot3.fillAmount = 1;
@@ -47,7 +45,7 @@ public class PlayerUIPane : MonoBehaviour
 	{
 		hp.fillAmount = normalizeForFilling (pl.stats.health);
 		greyhp.fillAmount = normalizeForFilling (pl.stats.health) + normalizeForFilling (pl.greyDamage);
-		
+
 		if (pl.isDead) {
 			hp.fillAmount = 0f;
 			greyhp.fillAmount = 0f;
@@ -55,24 +53,12 @@ public class PlayerUIPane : MonoBehaviour
 	}
 	void updateChg(){
 		if (pl.inventory.keepItemActive && pl.inventory.items [pl.inventory.selected].itemType == 'C') {
-			//Debug.Log (pl.inventory.items[pl.inventory.selected].itemType);
-			//Debug.Log (pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().curChgTime);
 			if ((pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().curChgTime / pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().maxChgTime) <= 0) {
 				chgCurr = 0;
 			} else {
 				chgCurr = (pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().curChgTime / pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().maxChgTime);
 			}
-			//charge.fillAmount = 0;
-		} else if (pl.animator.GetBool ("Charging")) {
-			if((pl.gear.weapon.stats.curChgDuration / pl.gear.weapon.stats.maxChgTime) <=0){
-				chgCurr = 0;
-			}else{
-				chgCurr = (pl.gear.weapon.stats.curChgDuration / pl.gear.weapon.stats.maxChgTime);
-			}
-		}else if (!pl.inventory.keepItemActive && !pl.animator.GetBool ("Charging")){
-			chgCurr = 0;
-		}
-		charge.fillAmount = Mathf.MoveTowards (charge.fillAmount, chgCurr,1f* Time.deltaTime);
+		} 
 	}
 
 	void updateSlots ()

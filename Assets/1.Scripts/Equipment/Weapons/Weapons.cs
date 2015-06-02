@@ -16,21 +16,40 @@ public class WeaponStats {
 
 	[Range(1,11)]
 	public int upgrade;
-
+	public int goldVal;
 	public int damage;
 	public int weapType;
 	public BuffsDebuffs debuff;
 	public float buffDuration;
 	public int chgDamage, maxChgTime;
 
-	// Old
-	public string weapTypeName;
-	public int chgType;
-	public int specialAttackType;
-	public float chgLevels, curChgAtkTime, curChgDuration, timeForChgAttack, timeForSpecial;
-
 	public WeaponStats() {
 		atkspdManip = new PercentValues();
+	}
+
+	//returns base gold value of weapon
+	public int GoldVal{
+		get{return goldVal;}
+	}
+
+	//returns base damage value of weapon
+	public int Damage{
+		get{return damage;}
+	}
+
+	//returns weapType
+	public int WeapType{
+		get{return weapType;}
+	}
+
+	//returns upgrade value
+	public int Upgrade{
+		get{return upgrade;}
+	}
+
+	//returns upgrade value
+	public int DamageUpgrade{
+		get{return (damage * upgrade);}
 	}
 }
 
@@ -56,17 +75,16 @@ public class Weapons : Equipment {
 		this.stats.buffDuration = 0.75f;
 	}
 
-	public virtual void equip(Character u, Type ene) {
-		base.equip(u);
+	public virtual void equip(Character u, Type ene, int tier) {
+		base.Equip(u, tier);
+		this.setInitValues();
 		u.animator.SetInteger("WeaponType", stats.weapType);
-		u.weapTypeName = stats.weapTypeName;
 		opposition = ene;
-		// user.GetComponent<Character>().animator.SetInteger("ChargedAttackNum", stats.specialAttackType);
 	}
 
 	// Used for setting stats for each weapon piece
-	protected override void setInitValues() {
-		base.setInitValues();
+	protected virtual void setInitValues() {
+		// base.setInitValues();
 
 		// New
 		stats.chargeMultiplier = 1.5f;
@@ -77,23 +95,6 @@ public class Weapons : Equipment {
 		stats.atkSpeed = 1.0f; // Find a better way for this maybe
 		stats.damage = 5;
 		stats.maxChgTime = 3;
-
-		// Old
-		stats.weapTypeName = "sword";
-		stats.curChgAtkTime = -1.0f;
-		stats.curChgDuration = 0.0f;
-		stats.chgLevels = 0.4f;
-
-		// default weapon stats
-
-
-
-
-
-
-		stats.chgDamage = 0;
-		stats.timeForChgAttack = 0.8f;
-		stats.timeForSpecial = 1.6f;
 
 		soundDur = 0.1f;
 		playSound = true;
@@ -162,83 +163,6 @@ public class Weapons : Equipment {
 		}
 	}
 
-
-
-	//--------------------------------//
-	// Old Weapon Attacking Functions // Remove when all the enemies have their animations implemented and all weapon using monsters are converted to new system
-	//--------------------------------//
-
-
-	// Start by initiateing attack animation
-	public virtual void initAttack() {
-		user.animator.SetTrigger("Attack");
-		user.animator.speed = stats.atkSpeed * stats.atkspdManip.percentValue; // Once we have it figured out, speed can be done by animation, unless we have atacking slowing abilities
-		StartCoroutine(bgnAttack());
-	}
-
-	// Once we get into the charge animation, we set our chg data and start the next co routine
-	protected virtual IEnumerator bgnAttack() {
-		while (user.animSteInfo.fullPathHash != user.atkHashCharge) {
-			yield return null;
-		}
-
-		stats.curChgDuration = 0.0f;
-		stats.chgDamage = 0;
-		particles.startSpeed = 0;
-		StartCoroutine(bgnCharge());
-	}
-
-	// Checks for user holding down charge sets sata accordingly
-	protected virtual IEnumerator bgnCharge() {
-		if (user.animator.GetBool("Charging")) particles.Play();
-		while (user.animator.GetBool("Charging")) {
-			stats.curChgDuration = Mathf.Clamp(stats.curChgDuration + Time.deltaTime, 0.0f, stats.maxChgTime);
-			stats.chgDamage = (int) (stats.curChgDuration/stats.chgLevels);
-			particles.startSpeed = stats.chgDamage;
-			yield return null;
-		}
-		attack ();		
-	}
-
-	// When player stops holding down charge, we check parameter for what attack to perform
-	protected virtual void attack() {
-		if (stats.curChgDuration >= stats.timeForSpecial) {
-			user.GetComponent<Character>().animator.SetInteger("ChargedAttackNum", 1);
-			chargedAttack();
-		} else if (stats.curChgDuration >= stats.timeForChgAttack) {
-			user.GetComponent<Character>().animator.SetInteger("ChargedAttackNum", 0);
-			chargedAttack();
-		} else {
-			basicAttack();
-		}
-	}
-
-	// Basic attack, a normal swing/stab/fire
-	protected virtual void basicAttack() {
-		// print("Normal Attack; Power level:" + stats.chgDamage);
-		user.GetComponent<Character>().animator.SetBool("ChargedAttack", false);
-		StartCoroutine(atkFinish());
-	}
-
-	// Charged attack, something unique to the weapon type
-	protected virtual void chargedAttack() {
-		// print("Charged Attack; Power level:" + stats.chgDamage);
-		user.GetComponent<Character>().animator.SetBool("ChargedAttack", true);
-		StartCoroutine(atkFinish());
-	}
-
-	// When our attack swing finishes, remove colliders, particles, and other stuff
-	//     * Consider one more co routine after to check for when our animation is completely done
-	protected virtual IEnumerator atkFinish() {
-		while (user.animSteInfo.fullPathHash != user.atkHashEnd) {
-			yield return null;
-		}
-		
-		particles.Stop();
-		
-		user.animator.speed = 1.0f;
-	}
-	
 	//-------------------------//
 	
 	public virtual IEnumerator makeSound(AudioClip sound, bool play, float duration){
@@ -247,5 +171,4 @@ public class Weapons : Equipment {
 		yield return new WaitForSeconds (duration);
 		play = true;
 	}
-	
 }

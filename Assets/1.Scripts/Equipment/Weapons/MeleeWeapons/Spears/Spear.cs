@@ -5,8 +5,6 @@ using System.Collections;
 
 public class Spear: MeleeWeapons {
 
-	public GameObject explosion;
-
 	protected Stun stunD;
 
 	// Use this for initialization
@@ -20,18 +18,13 @@ public class Spear: MeleeWeapons {
 	protected override void setInitValues() {
 		base.setInitValues();
 
-		stats.chargeSlow = new Slow(1.0f);
-
 		stats.weapType = 2;
-		stats.weapTypeName = "spear";
 		this.stats.buffDuration = 1.25f;
 
 		stats.atkSpeed = 1.0f;
 		stats.damage = 40; // (int)(10 + 1.5f * user.GetComponent<Character>().stats.strength);
 		
 		stats.maxChgTime = 4;
-		
-		stats.chgLevels = 0.5f;
 	}
 	
 	// Update is called once per frame
@@ -39,9 +32,6 @@ public class Spear: MeleeWeapons {
 		base.Update();
 	}
 	
-	public override void initAttack() {
-		base.initAttack();
-	}
 
 	public override void collideOn () {
 		base.collideOn ();
@@ -62,12 +52,6 @@ public class Spear: MeleeWeapons {
 		}
 		enemy.damage(stats.damage + stats.chgDamage, user.transform, user.gameObject);
 	}
-
-	/*
-	public override void SpecialAttack() {
-		GameObject exp = (GameObject)Instantiate(this.explosion, user.transform.position, user.transform.rotation);
-		exp.GetComponent<SpearExplosion>().setInitValues(user, opposition, stats.damage + stats.chgDamage, true, this.stats.debuff, 2.0f);
-	}*/
 	
 	protected IEnumerator Rush() {
 		Vector3 facing = this.user.facing;

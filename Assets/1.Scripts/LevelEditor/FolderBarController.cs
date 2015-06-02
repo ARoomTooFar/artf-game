@@ -24,10 +24,10 @@ public class FolderBarController : MonoBehaviour {
 	
 	//holds the entire folder bar. for use with sliding it off and on screen
 	public RectTransform folderBar;
-	bool lerpingFolderClosed = false;
+	bool lerpingFolderClosed = true;
 	bool lerpingFolderOpen = false;
 	float currentPosX = 0f;
-	float openPosX = -48f;
+	float openPosX = -128f;
 	float closePosX = 40f;
 	Vector3 currentPos;
 	string currentButton;
@@ -61,6 +61,11 @@ public class FolderBarController : MonoBehaviour {
 		}
 
 		setupButtons();
+
+		//hack to fix needing to click on the folder bar twice when the editor first starts
+		foreach(GameObject fold in folders) {
+			fold.SetActive(false);
+		}
 	}
 
 	void Update() {
@@ -166,25 +171,36 @@ public class FolderBarController : MonoBehaviour {
 			//get ItemList gameobject under this folder
 			Transform itemList = folders[i].transform.Find("ScrollView/ItemList");
 
-			//instantiate the amount of buttons we need in
-			//a vertical column
-			float buttonY = 0;
+			//just to get dimensions
+			GameObject newButtonJustForDimensions = Instantiate(Resources.Load("folderButton")) as GameObject;
+			RectTransform newButtonJustForDimensionsRect = newButtonJustForDimensions.GetComponent<RectTransform>();
+			float buttonY = -1 * newButtonJustForDimensionsRect.sizeDelta.y / 2 - 20;
+			float buttonX = newButtonJustForDimensionsRect.sizeDelta.x / 2 - 5;
+			Destroy (newButtonJustForDimensions);
+
 			bool firstIter = true;
 			for(int j = 0; j < prefabs.Length; j++) {
-				GameObject newButt = Instantiate(Resources.Load("folderButton")) as GameObject;
+				GameObject newButts = Instantiate(Resources.Load("folderButton")) as GameObject;
+				newButts.transform.SetParent(itemList);
+				RectTransform buttRects = newButts.GetComponent<RectTransform>();
 
-				newButt.transform.SetParent(itemList);
-
-				RectTransform buttRect = newButt.GetComponent<RectTransform>();
-
-				//to make first button show up at the right height
 				if(firstIter) {
-					buttonY = -1 * buttRect.sizeDelta.y / 2 - 20;
 					firstIter = false;
 				} else {
-					buttonY -= buttRect.sizeDelta.y + 30;
+					//if wanna make new column or not
+					if(!(j%5 == 0)){
+						//continue on down
+						buttonY -= buttRects.sizeDelta.y + 30;
+					}else{
+						//reset y to top
+						buttonY = -1 * buttRects.sizeDelta.y / 2 - 20;
+
+						//move buttons over to next column
+						buttonX += buttRects.sizeDelta.x + 20;
+					}
+
 				}
-				buttRect.anchoredPosition = new Vector2(buttRect.sizeDelta.x / 2 - 5, buttonY);
+				buttRects.anchoredPosition = new Vector2(buttonX, buttonY);
 			}
 
 			int prefabCounter = 0;
@@ -195,7 +211,6 @@ public class FolderBarController : MonoBehaviour {
 				if(prefabCounter < prefabs.Length) {
 					
 					//add script to button
-
 					Event_ItemButtons uih = itemList.GetChild(h).gameObject.GetComponent<Event_ItemButtons>();
 
 					//set button's script to drop prefab

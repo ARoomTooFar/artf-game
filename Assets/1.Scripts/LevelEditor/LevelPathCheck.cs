@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public static class LevelPathCheck {
 
-	//public static List<Vector3> fullPath { get; private set; }
+	private static PathfinderDebugDraw pdd = null;
 
 	public static List<SceneryBlock> roomPath { get; private set; }
 
@@ -18,6 +18,12 @@ public static class LevelPathCheck {
 		GameObject obj = GameObject.Find("LevelCheck");
 		if(obj != null) {
 			obj.GetComponent<Text>().enabled = (roomPath == null);
+		}
+		if(Global.inLevelEditor){
+		if(pdd == null) {
+			pdd = Camera.main.GetComponent<PathfinderDebugDraw>();
+		}
+		pdd.forceUpdate = true;
 		}
 	}
 }

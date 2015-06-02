@@ -9,7 +9,7 @@ public class MirageWeapon : MeleeWeapons {
 		base.Start ();
 	}
 	
-	public override void equip(Character u, Type ene) {
+	public override void equip(Character u, Type ene, int tier) {
 		user = u;
 		setInitValues();
 		opposition = ene;
@@ -27,11 +27,7 @@ public class MirageWeapon : MeleeWeapons {
 	protected override void Update () {
 		base.Update();
 	}
-	
-	public override void initAttack() {
-		user.animator.SetTrigger("Attack");
-	}
-	
+
 	// Does something when opponent is hit
 	protected virtual void OnHit(Character enemy) {
 		//Debug.Log (stats.damage);

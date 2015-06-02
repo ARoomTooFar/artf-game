@@ -6,11 +6,11 @@ using System.Collections;
 //It will move on to the reward scene if all the players that are alive have entered the end zone.
 //FOR THIS SCRIPT ALL PLAYERS MUST BE TAGED AS "Player"
 public class endzone : MonoBehaviour {
-	//
+
 	public int numbPlayers;
 	public int numbPlayersInZone = 0;
 	public int numbPlayersAlive;
-	public GameObject[] players;
+	public Player[] players;
 	public string endScene = "RewardScreen";
 	private Character character;
 
@@ -31,27 +31,25 @@ public class endzone : MonoBehaviour {
 		if (players == null || players.Length == 0) 
 		{
 			print ("Checked if null...");
-			players = GameObject.FindGameObjectsWithTag ("Player"); //finds all objects in the scene with the "Player" tag and typecasts them as player.
+			players = gsManager.players;
 			numbPlayers = players.Length;
 			print ("Initializing player list, numbPlayers is: " + numbPlayers);
 		}
 
 		string t = other.GetComponent<Collider>().tag;
-		checkAlive();
+
 
 		if (t == "Player" || t == "Player1" || t == "Player2" || t == "Player3" || t == "Player4") 
 		{
+			checkAlive();
 			numbPlayersInZone ++;
 			print ("+Number of Players in end zone: " + numbPlayersInZone + ".");
 			if (numbPlayersAlive == numbPlayersInZone) 
 			{
-				print("ALL PLAYERS ALIVE AT END.");
-				//THIS NEEDS TO USE THE GSmanager HERE
-//				Application.LoadLevel(endScene);
 				gsManager.LoadScene("RewardScreen");
 			}
 		}
-
+		checkAlive();
 	}
 	//---------------------------------------
 	//OnTriggerExit(Collider other)

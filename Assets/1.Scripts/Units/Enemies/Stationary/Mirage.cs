@@ -41,7 +41,7 @@ public class Mirage : StationaryEnemy {
 		this.mark = new MarkOfDeath();
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 3.5f;
+		this.maxAtkRadius = 2.5f;
 	}
 	
 	protected override void Start() {
@@ -68,15 +68,15 @@ public class Mirage : StationaryEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 0;
+		tier = 3;
 
 		base.SetTierData (tier);
 	}
 	
 	public override void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
 		base.SetInitValues(health, strength, coordination, armor, speed);
-		leftClaw.equip (this, opposition);
-		rightClaw.equip (this, opposition);
+		leftClaw.equip (this, opposition, 0);
+		rightClaw.equip (this, opposition, 0);
 	}
 	
 	
@@ -169,6 +169,7 @@ public class Mirage : StationaryEnemy {
 			}
 			this.isDead = true;
 			if (this.deathTarget != null) this.deathTarget.BDS.rmvBuffDebuff(this.mark, this.gameObject);
+			deathNoise ();
 			animator.SetTrigger("Died");
 		}
 		

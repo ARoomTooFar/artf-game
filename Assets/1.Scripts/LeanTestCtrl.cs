@@ -3,11 +3,11 @@ using System.Collections;
 
 public class LeanTestCtrl : MonoBehaviour {
 	private Farts serv;
-	private string charDataEx = "80PercentLean,123,456,789,9001,0,1,2,3";
+    private string charDataEx = "80PercentLean,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
 
 	// Use this for initialization
 	void Start () {
-		PlayerData playerData = gameObject.AddComponent<PlayerData> ();
+        PlayerData playerData = new PlayerData();
 		serv = gameObject.AddComponent<Farts> ();
 
 		playerData = serv.parseCharData(charDataEx);
@@ -21,5 +21,10 @@ public class LeanTestCtrl : MonoBehaviour {
 		foreach (int data in playerData.inventory) {
 			Debug.Log (data);
 		}
+
+		string stringifiedCharData = serv.stringifyCharData (playerData);
+		Debug.Log (stringifiedCharData);
+
+        GameObject test = new GameObject("ehhhh");
 	}
 }

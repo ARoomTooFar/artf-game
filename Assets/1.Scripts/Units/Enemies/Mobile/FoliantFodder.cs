@@ -27,7 +27,7 @@ public class FoliantFodder: MobileEnemy {
 	}
 
 	public override void SetTierData(int tier) {
-		tier = 5;
+		tier = 0;
 		base.SetTierData (tier);
 
 		monsterLoot.initializeLoot("FoliantFodder", tier);
@@ -94,6 +94,7 @@ public class FoliantFodder: MobileEnemy {
 		if (hiveMind) {
 			hive.removeFodder(this);
 		}
+		if (this.failure != null) deathNoise ();
 		
 		base.die ();
 	}

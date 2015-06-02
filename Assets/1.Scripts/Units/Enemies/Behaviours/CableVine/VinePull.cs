@@ -22,8 +22,8 @@ public class VinePull : Approach {
 		tether = feeler.gameObject;
 		p = unit.target.GetComponent<Player> ();
 		stun = new Stun ();
-		p.mash_threshold = 4;
-		p.mash_value = 0;
+		//p.mash_threshold = 4;
+		//p.mash_value = 0;
 		onCoolDown = false;
 		transform = unit.transform.Find ("CVFeeler");
 	}
@@ -40,11 +40,12 @@ public class VinePull : Approach {
 			currTime += Time.deltaTime;
 			if(currTime >= waitUntil){
 				onCoolDown = false;
-				p.mash_value = 0;
+				//p.mash_value = 0;
 			}
 			return;
 		}
-
+		
+		/*
 		if (p.break_free) {
 			onCoolDown = true;
 			p.BDS.rmvBuffDebuff(stun, unit.gameObject);
@@ -52,7 +53,7 @@ public class VinePull : Approach {
 			currTime = Time.time;
 			waitUntil = Time.time + 2.0f;
 			return;
-		}
+		}*/
 
 		unit.facing = unit.target.transform.position - unit.transform.position;
 		unit.facing.y = 0.0f;
@@ -76,14 +77,14 @@ public class VinePull : Approach {
 		} else if (MyMawPos != null) {
 			unit.target.transform.position = unit.target.transform.position - pullVelocity (MyMawPos.transform.position);
 			if (unit.actable && !unit.attacking){
-				unit.gear.weapon.initAttack();
+				animator.SetTrigger("Attack");
 				p.damage(1);
 				p.BDS.addBuffDebuff (stun, unit.gameObject, 4.0f);
 			}
 		} else { 
 			unit.target.transform.position = unit.target.transform.position - pullVelocity (unit.transform.position);
 			if (unit.actable && !unit.attacking){
-				unit.gear.weapon.initAttack();
+				animator.SetTrigger("Attack");
 				p.damage(1);
 				p.BDS.addBuffDebuff (stun, unit.gameObject, 4.0f);
 			}

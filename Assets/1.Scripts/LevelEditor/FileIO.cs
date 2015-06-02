@@ -28,8 +28,8 @@ public class FileIO : MonoBehaviour
 	public Text txtUdLvl;
 
     #if UNITY_EDITOR
-    private string dummyGameAcctId = "5750085036015616";
-	private string dummyLvlId = "4909654157033472";
+    private string dummyGameAcctId = "123";
+	private string dummyLvlId = "4867770441269248";
 	#endif
 	
 	void Start ()
@@ -45,38 +45,113 @@ public class FileIO : MonoBehaviour
 		
 		serv = gameObject.AddComponent<Farts>();
 
+
+
 		#if UNITY_EDITOR
 		getIds(dummyLvlId);
 		#else
-        Application.ExternalCall("reqIds");
+		GSManager gsManager = null;
+		try{
+			gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		} catch{}
+
+		getIds (gsManager.currLevelId);
         #endif
 	}
 
 	public void getIds(string inputIds)
     {
-        #if UNITY_EDITOR
-		GSManager gsManager = null;
-		WWW www = serv.getLvlWww(dummyLvlId);
-		try{
-			gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
-		} catch{}
-		if(gsManager != null){
-//		Debug.Log (gsManager);
-		Debug.Log ("id: " + gsManager.currLevelId);
-
-		if(gsManager.currLevelId != "") {
-			www = serv.getLvlWww(gsManager.currLevelId);
-		}
-		}
-        #else
-        string[] ids = inputIds.Split(',');
-        gameAcctId = ids[0];
-        lvlId = ids[1];
-        WWW www = serv.getLvlWww(ids[1]);
-        #endif
+		WWW www = null;
+        www = serv.getLvlWww(inputIds);
 
         StartCoroutine(dlLvl(www));
     }
+
+	void makeStretchyWalls(){
+		foreach(ARTFRoom room in StretchyWalls.rooms){
+			float wallHeight = 5f;
+
+			Vector3 mid1 = (room.LLCorner + room.ULCorner) / 2f;
+			mid1.y = wallHeight / 2f;
+			Vector3 mid2 = (room.LLCorner + room.LRCorner) / 2f;
+			mid2.y = wallHeight / 2f;
+			Vector3 mid3 = (room.URCorner + room.ULCorner) / 2f;
+			mid3.y = wallHeight / 2f;
+			Vector3 mid4 = (room.URCorner + room.LRCorner) / 2f;
+			mid4.y = wallHeight / 2f;
+			
+			GameObject wall;
+			bool mid1go = true;
+			bool mid2go = true;
+			bool mid3go = true;
+			bool mid4go = true;
+
+			//check which walls have doors
+			foreach(SceneryBlock door in room.Doors){
+				if(mid1.z == door.Position.z){
+					mid1go = false;
+				}
+				if(mid2.x == door.Position.x){
+					mid2go = false;
+				}
+				if(mid3.x == door.Position.x){
+					mid3go = false;
+				}
+				if(mid4.z == door.Position.z){
+					mid4go = false;
+				}
+			}
+
+			//instantiate the walls without doors
+			if(mid1go){
+				wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid1, Quaternion.identity) as GameObject;
+				wall.transform.localScale = new Vector3(Mathf.Abs(room.LLCorner.x - room.URCorner.x) + 1, wallHeight, 1f);
+			}else{
+				List<Vector3> doorEnds = new List<Vector3>();
+				for(int i = 0; i < room.Doors.Count; i++){
+					Vector3 doorPos = room.Doors[i].Position;
+					doorPos.x += 2f;
+					doorEnds.Add(doorPos);
+					mid1 = (room.LLCorner + doorPos) / 2f;
+					GameObject.Instantiate(Resources.Load("StretchyWall"), mid1, Quaternion.identity);
+					doorPos.x -= 4f;
+					doorEnds.Add(doorPos);
+					mid1 = (room.LLCorner + doorPos) / 2f;
+					GameObject.Instantiate(Resources.Load("StretchyWall"), mid1, Quaternion.identity);
+				}
+
+
+//				for(int i = 0; i < room.Doors.Count; i++){
+//					room.Walls;
+//					mid1 = (room.LLCorner + room.Doors[i].Position) / 2f;
+//					mid1.y = wallHeight / 2f;
+//					mid1.x -= 1f;
+//					wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid1, Quaternion.identity) as GameObject;
+//					wall.transform.localScale = new Vector3(Mathf.Abs(room.LLCorner.x - room.Doors[i].Position.x) - 1, wallHeight, 1f);
+//					
+//					mid1 = (room.ULCorner + room.Doors[i].Position) / 2f;
+//					mid1.y = wallHeight / 2f;
+//					mid1.x += 1f;
+//					wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid1, Quaternion.identity) as GameObject;
+//					wall.transform.localScale = new Vector3(Mathf.Abs(room.ULCorner.x - room.Doors[i].Position.x) - 1, wallHeight, 1f);
+//				}
+
+			}
+			if(mid2go){
+				wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid2, Quaternion.identity) as GameObject;
+				wall.transform.localScale = new Vector3(1f , wallHeight, Mathf.Abs(room.LLCorner.z - room.URCorner.z) + 1);
+			}
+			if(mid3go){
+				wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid3, Quaternion.identity) as GameObject;
+				wall.transform.localScale = new Vector3(1f, wallHeight, Mathf.Abs(room.LLCorner.z - room.URCorner.z) + 1);
+			}
+			if(mid4go){
+				wall = GameObject.Instantiate(Resources.Load("StretchyWall"), mid4, Quaternion.identity) as GameObject;
+				wall.transform.localScale = new Vector3(Mathf.Abs(room.LLCorner.x - room.URCorner.x) + 1, wallHeight, 1f);
+			}
+
+		}
+	}
 
     public IEnumerator dlLvl(WWW www)
     {
@@ -87,13 +162,11 @@ public class FileIO : MonoBehaviour
         Debug.Log(www.url);
         if (serv.dataCheck(lvlData))
         {
-
-
-
 			txtDlLvl.enabled = false;
 			try{
 				MapDataParser.ParseSaveString(lvlData);
 				Debug.Log("LVL DL SUCCESS: " + lvlData);
+//				makeStretchyWalls();
 				//throw new Exception();
 			} catch (Exception ex){
 				Debug.Log(ex.Message);
@@ -145,6 +218,6 @@ public class FileIO : MonoBehaviour
 	}
 
 	void LoadPlayable(){
-		Application.LoadLevel(1);
+		Application.LoadLevel("TestLevelSelect");
 	}
 }

@@ -8,9 +8,10 @@ public class GSManager : MonoBehaviour {
     public static GSManager gsManager;
 	public string currLevelId = "";
     public string currLevelData = "";
-	public List<string> loot; //holds looted items
-	public PlayerData[] players = new PlayerData[4];
-	public List<int> leaderList = new List<int>();
+	public PlayerData[] playerDataList;
+    public Player[] players;
+    public List<int> leaderList;
+    public List<string> loot; //holds looted items
 
     private Farts serv;
 	private GameObject loadingBG;
@@ -24,6 +25,17 @@ public class GSManager : MonoBehaviour {
         {
             DontDestroyOnLoad(gameObject);  // don't destroy itself between scene loads
             gsManager = this;
+
+            playerDataList = new PlayerData[4];
+            players = new Player[4];
+            leaderList = new List<int>();
+            loot = new List<string>();
+            
+            /*for (int i = 0; i < playerDataList.Length; ++i)
+            {
+                playerDataList[i] = gameObject.AddComponent<PlayerData>();
+                DontDestroyOnLoad(playerDataList[i]);
+            }*/
         }
         else if (gsManager != this)
         {
@@ -39,17 +51,53 @@ public class GSManager : MonoBehaviour {
 
 		if(GameObject.Find("LoadingBar") != null)
 			loadingBar = GameObject.Find("LoadingBar").GetComponent<Slider>();
+
+        /*DontDestroyOnLoad(loot);
+        DontDestroyOnLoad(playerDataList);
+        DontDestroyOnLoad(leaderList);
+        DontDestroyOnLoad(players);*/
 	}
 
 	public void LoadScene (string sceneName)
 	{
 		if(loadingBG != null)
 			loadingBG.SetActive(true);
+
+        /*for (int i = 0; i < playerDataList.Length; ++i)
+        {
+            if (playerDataList[i] != null)
+            {
+                Debug.Log("called");
+                DontDestroyOnLoad(playerDataList[i]);
+            }
+        }*/
+
 		StartCoroutine(LoadSceneAsync(sceneName));
 	}
 
 	IEnumerator LoadSceneAsync (string sceneName)
 	{
+        for (int i = 0; i < playerDataList.Length; ++i)
+        {
+            if (playerDataList[i] != null)
+            {
+                //DontDestroyOnLoad(playerDataList[i]);
+                Debug.Log("dontdestroy: " + i);
+            }
+            else
+            {
+                Debug.Log("not dontdestroy: " + i);
+            }
+        }
+
+        /*Debug.Log("dontdestroy");
+        foreach (PlayerData playerData in playerDataList) {
+            if (playerData != null) {
+                Debug.Log(playerData);
+                DontDestroyOnLoad(playerData);
+            }
+        }*/
+
 		loadProgress = Application.LoadLevelAsync(sceneName);
 		
 		while (!loadProgress.isDone)

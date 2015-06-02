@@ -17,6 +17,7 @@ public class Approach : EnemyBehaviour {
 		if (!unit.actable) return;
 		this.unit.canSeePlayer(unit.target);
 		this.unit.getFacingTowardsTarget();
-		this.unit.rb.velocity = this.unit.facing * this.unit.stats.speed * this.unit.stats.spdManip.speedPercent;
+		this.unit.MoveForward();
+		// this.unit.rb.velocity = this.unit.facing * this.unit.stats.speed * this.unit.stats.spdManip.speedPercent;
 	}
 }
