@@ -9,6 +9,7 @@ public class GSManager : MonoBehaviour {
 	public string currLevelId = "";
     public string currLevelData = "";
 	public PlayerData[] playerDataList;
+	public PlayerData[] dummyPlayerDataList;
     public Player[] players;
     public List<int> leaderList;
     public List<string> loot; //holds looted items
@@ -27,6 +28,7 @@ public class GSManager : MonoBehaviour {
             gsManager = this;
 
             playerDataList = new PlayerData[4];
+			dummyPlayerDataList = new PlayerData[4];
             players = new Player[4];
             leaderList = new List<int>();
             loot = new List<string>();
@@ -51,6 +53,17 @@ public class GSManager : MonoBehaviour {
 
 		if(GameObject.Find("LoadingBar") != null)
 			loadingBar = GameObject.Find("LoadingBar").GetComponent<Slider>();
+
+		// create dummy data
+		PlayerData dummyP1Data = serv.parseCharData("80PercentLean,123,456,789,9001,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52");
+		PlayerData dummyP2Data = serv.parseCharData("Player2Dood,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+		PlayerData dummyP3Data = serv.parseCharData("Prinny,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+		PlayerData dummyP4Data = serv.parseCharData("Eyayayayaya,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+
+		dummyPlayerDataList [0] = dummyP1Data;
+		dummyPlayerDataList [1] = dummyP2Data;
+		dummyPlayerDataList [2] = dummyP3Data;
+		dummyPlayerDataList [3] = dummyP4Data;
 
         /*DontDestroyOnLoad(loot);
         DontDestroyOnLoad(playerDataList);
