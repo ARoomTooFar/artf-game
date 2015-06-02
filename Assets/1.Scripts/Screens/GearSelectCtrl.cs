@@ -21,15 +21,19 @@ public class GearSelectCtrl : MonoBehaviour {
 
 	// inventory data
 	private PlayerData playerData;
-	private int[][] items = new int[4][];
-	private int[] weapons = new int[20];
+	private int[][] items = new int[8][];
 	private int weaponsIndex = 0;
-	private int[] helmets = new int[13];
 	private int helmetsIndex = 0;
-	private int[] armors = new int[9];
 	private int armorsIndex = 0;
-	private int[] actionSlots = new int[10];
-	private int actionSlotsIndex = 0;
+	private int actionSlot1Index = 0;
+	private int actionSlot2Index = 0;
+	private int actionSlot3Index = 0;
+	private int[] weapons = new int[20];
+	private int[] helmets = new int[13];
+	private int[] armors = new int[9];
+	private int[] actionSlot1 = new int[10];
+	private int[] actionSlot2 = new int[10];
+	private int[] actionSlot3 = new int[10];
 
 	void Start () {
 		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
@@ -63,7 +67,10 @@ public class GearSelectCtrl : MonoBehaviour {
 		items [0] = weapons;
 		items [1] = helmets;
 		items [2] = armors;
-		items [3] = actionSlots;
+		items [3] = actionSlot1;
+		items [4] = actionSlot2;
+		items [5] = actionSlot3;
+		items [7] = new int[1]{0}; // empty slot to cover left and right controls on ready btn
 
 		// load weapon data
 		for (int i = 0; i < weapons.Length; ++i) {
@@ -80,13 +87,23 @@ public class GearSelectCtrl : MonoBehaviour {
 			armors[i] = playerData.inventory[i + 31];
 		}
 
-		// load action slots
-		for (int i = 0; i < actionSlots.Length; ++i) {
-			actionSlots[i] = playerData.inventory[i];
+		// load action slot 1
+		for (int i = 0; i < actionSlot1.Length; ++i) {
+			actionSlot1[i] = playerData.inventory[i];
+		}
+
+		// load action slot 2
+		for (int i = 0; i < actionSlot2.Length; ++i) {
+			actionSlot2[i] = playerData.inventory[i];
+		}
+
+		// load action slot 3
+		for (int i = 0; i < actionSlot3.Length; ++i) {
+			actionSlot3[i] = playerData.inventory[i];
 		}
 
 		// print items
-		for (int i = 0; i < items.Length; ++i) {
+		/*for (int i = 0; i < items.Length; ++i) {
 			switch (i) {
 			case 0:
 				Debug.Log ("WEAPONS");
@@ -105,7 +122,7 @@ public class GearSelectCtrl : MonoBehaviour {
 			for (int j = 0; j < items[i].Length; ++j) {
 				Debug.Log (items[i][j]);
 			}
-		}
+		}*/
 
 		currItemArr = items [locY];
 
@@ -165,6 +182,12 @@ public class GearSelectCtrl : MonoBehaviour {
 			prevBtn = currMenuPtr[locY, locX];
 			
 			//Debug.Log(locX + "," + locY);
+		}
+	}
+
+	void SlotSwap() {
+		if (locY > 3 && locY < 6) {
+
 		}
 	}
 
