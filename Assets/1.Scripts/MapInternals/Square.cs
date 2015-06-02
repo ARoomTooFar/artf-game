@@ -75,8 +75,8 @@ public class Square {
 	#endregion SquareProperties
 
 	public bool Intersect(Square that) {
-		return (this.LLCorner.x < that.URCorner.x && this.URCorner.x > that.LLCorner.x &&
-			this.LLCorner.z < that.URCorner.z && this.URCorner.z > that.LLCorner.z);
+		return (this.LLCorner.x <= that.URCorner.x && this.URCorner.x >= that.LLCorner.x &&
+			this.LLCorner.z <= that.URCorner.z && this.URCorner.z >= that.LLCorner.z);
 	}
 
 	public bool inSquare(Vector3 pos) {
