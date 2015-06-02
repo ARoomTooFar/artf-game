@@ -29,7 +29,7 @@ public class GearSelectCtrl : MonoBehaviour {
 	private int[] armors = new int[9];
 	private int armorsIndex = 0;
 	private int[] actionSlots = new int[10];
-	private int actionSlots = 0;
+	private int actionSlotsIndex = 0;
 
 	void Start () {
 		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
