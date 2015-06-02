@@ -39,7 +39,6 @@ public class Player : Character, IHealable<int>{
 		foreach(PlayerBehaviour behaviour in this.animator.GetBehaviours<PlayerBehaviour>()) {
 			behaviour.SetVar(this.GetComponent<Player>());
 		}
-		
 	}
 	
 	public virtual void SetInitValues() {
