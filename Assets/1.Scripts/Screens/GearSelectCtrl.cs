@@ -16,15 +16,20 @@ public class GearSelectCtrl : MonoBehaviour {
 	private GameObject[,] currMenuPtr;
 	private int locX = 0;
 	private int locY = 0;
-	private int itemsIndex = 0;
+	private int[] currItemArr;
+	private int currItemArrIndex = 0;
 
 	// inventory data
 	private PlayerData playerData;
 	private int[][] items = new int[4][];
 	private int[] weapons = new int[20];
+	private int weaponsIndex = 0;
 	private int[] helmets = new int[13];
+	private int helmetsIndex = 0;
 	private int[] armors = new int[9];
+	private int armorsIndex = 0;
 	private int[] actionSlots = new int[10];
+	private int actionSlots = 0;
 
 	void Start () {
 		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
@@ -102,6 +107,8 @@ public class GearSelectCtrl : MonoBehaviour {
 			}
 		}
 
+		currItemArr = items [locY];
+
 		/*Image weaponIF;
 		Sprite newSprite = Resources.Load<Sprite>("ItemFrames/HuntersRifle");
 		Debug.Log (newSprite);
@@ -123,25 +130,33 @@ public class GearSelectCtrl : MonoBehaviour {
 			if (vert < 0)
 			{
 				locY = (locY + 1) % (currMenuPtr.GetLength(0));
+				if (locY <= 3) {
+					currItemArr = items[locY];
+				}
+				Debug.Log (currItemArr);
 			} else if (vert > 0) {
 				--locY;
 				if (locY < 0)
 				{
 					locY = currMenuPtr.GetLength(0) - 1;
 				}
+				currItemArr = items[locY];
+				Debug.Log (currItemArr);
 			}
 			
 			if (hori > 0)
 			{
-				locX = (locX + 1) % (currMenuPtr.GetLength(1));
+				currItemArrIndex = (currItemArrIndex + 1) % (currItemArr.Length);
+				Debug.Log (currItemArr[currItemArrIndex]);
 			}
 			else if (hori < 0)
 			{
-				--locX;
-				if (locX < 0)
+				--currItemArrIndex;
+				if (currItemArrIndex < 0)
 				{
-					locX = currMenuPtr.GetLength(1) - 1;
+					currItemArrIndex = currItemArr.Length - 1;
 				}
+				Debug.Log (currItemArr[currItemArrIndex]);
 			}
 			
 			var pointer = new PointerEventData(EventSystem.current);
