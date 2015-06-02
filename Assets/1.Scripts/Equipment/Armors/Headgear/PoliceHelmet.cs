@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PoliceHelmet : Helmet {
+public class PoliceHelmet : Armor {
 	// Used for setting stats for each weapon piece
 	protected override void SetInitValues() {
 		base.SetInitValues();

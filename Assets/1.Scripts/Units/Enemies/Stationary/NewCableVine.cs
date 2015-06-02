@@ -26,8 +26,7 @@ public class NewCableVine : StationaryEnemy {
 		}
 	}
 	
-	protected override void setInitValues() {
-		base.setInitValues ();
+	protected virtual void setInitValues() {
 	}
 	
 	protected override void Update () {

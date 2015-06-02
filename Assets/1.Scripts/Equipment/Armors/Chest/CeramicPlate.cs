@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CeramicPlate : Chest {
+public class CeramicPlate : Armor {
 	// Used for setting stats for each weapon piece
 	protected override void SetInitValues() {
 		base.SetInitValues();

@@ -38,11 +38,7 @@ public class Loadgear : MonoBehaviour {
 			manager.players[i] = tempPlayer;
 			ui.setUpPlayerUIPane("Player" + (i + 1));
 		}
-		
-		foreach (GameObject cam in GameObject.FindGameObjectsWithTag("Door")) {
-			cam.GetComponent<DoorProximity>().FindPlayers();
-		}
-		
+
 		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraAdjuster>().InstantiatePlayers();
 	}
 	
@@ -57,8 +53,8 @@ public class Loadgear : MonoBehaviour {
 			}
 			
 			tempData.weapon = 12 + i * 4;
-			tempData.headgear = 41;
-			tempData.armor = 32;
+			tempData.headgear = 41 + i * 2;
+			tempData.armor = 30 + i * 2;
 			
 			if (i == 0) {
 				tempData.actionslot1 = 0;
