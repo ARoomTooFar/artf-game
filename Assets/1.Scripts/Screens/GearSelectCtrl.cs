@@ -17,7 +17,11 @@ public class GearSelectCtrl : MonoBehaviour {
 	private int locX = 0;
 	private int locY = 0;
 	private int[] currItemArr;
-
+	private enum Menu {
+		Panel,
+		Confirm
+	}
+	
 	// gear menu
 	private GameObject[,] gearMenu;
 	private int gearMenuWidth = 1;
@@ -56,6 +60,7 @@ public class GearSelectCtrl : MonoBehaviour {
 		{
 			Debug.Log ("ready");
 			PanelDisable ();
+			//PanelEnable();
 		});
 
 		// start controls on gear menu
@@ -138,14 +143,14 @@ public class GearSelectCtrl : MonoBehaviour {
 
 		currItemArr = items [locY]; //align item array with first highlighted button
 
-		/*Image weaponIF;
+		Image weaponIF;
 		Sprite newSprite = Resources.Load<Sprite>("ItemFrames/HuntersRifle");
 		Debug.Log (newSprite);
-		weaponIF = GameObject.Find ("WeaponIF").GetComponent<Image> ();
+		weaponIF = GameObject.Find ("ImgItemFrame").GetComponent<Image> ();
 		Debug.Log (weaponIF);
 		Debug.Log (weaponIF.sprite);
 		weaponIF.sprite = newSprite;
-		Debug.Log (weaponIF.sprite);*/
+		Debug.Log (weaponIF.sprite);
 	}
 
 	// handles menu joystick movement control
@@ -256,6 +261,41 @@ public class GearSelectCtrl : MonoBehaviour {
 		}
 	}
 
+	void PanelEnable() {
+		// unlock controls
+		//menuLock = false;
+		
+		// return color to buttons
+		CanvasGroup panel = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName).GetComponent<CanvasGroup>();
+		panel.interactable = true;
+		
+		// return color to images
+		Image[] imgChildren = gameObject.GetComponentsInChildren <Image> ();
+		
+		foreach (Image imgChild in imgChildren) {
+			if (imgChild.name == menuPanelName) {
+				imgChild.color = new Color32(255, 255, 255, 100);
+			} else if (imgChild.name == "ImgItemFrame") {
+				imgChild.color = new Color(1f, 1f, 1f);
+			} else {
+				imgChild.color = new Color32(152, 213, 217, 178);
+			}
+		}
+		
+		/*// return color to text
+		Text[] txtChild = this.GetComponentsInChildren<Text>();
+		foreach (Text child in txtChild)
+		{
+			child.color = new Color32(152, 213, 217, 255);
+		}*/
+		
+		// highlight first button of currMenuPtr
+		locX = 0;
+		locY = 0;
+		var pointer = new PointerEventData(EventSystem.current);
+		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
+	}
+	
 	void PanelDisable() {
 		// lock controls
 		//menuLock = true;
