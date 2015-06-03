@@ -11,10 +11,7 @@ public class LumberSaw : Chainsaw {
 		base.setInitValues();
 
 		// User dagger vars for now until we have chainsaw animations
-		stats.weapType = 3;
 		stats.goldVal = 50;
-		stats.atkSpeed = 3.0f;
 		stats.damage = 5;
-		
 	}
 }

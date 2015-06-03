@@ -5,7 +5,7 @@ public class SixShooter : Pistol {
 	protected override void setInitValues() {
 		base.setInitValues();
 
-		this.stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
+		this.stats.damage = 10;
 		this.stats.goldVal = 100;
 	}
 }

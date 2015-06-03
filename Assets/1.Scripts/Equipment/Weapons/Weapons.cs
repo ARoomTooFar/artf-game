@@ -10,9 +10,6 @@ public class WeaponStats {
 	public Slow chargeSlow;
 
 	// Keep
-	[Range(0.5f, 2.0f)]
-	public float atkSpeed; // Find a better way for this
-	public PercentValues atkspdManip; // Maybe?
 
 	[Range(1,11)]
 	public int upgrade;
@@ -24,7 +21,6 @@ public class WeaponStats {
 	public int chgDamage, maxChgTime;
 
 	public WeaponStats() {
-		atkspdManip = new PercentValues();
 	}
 
 	//returns base gold value of weapon
@@ -32,7 +28,7 @@ public class WeaponStats {
 		get{return goldVal;}
 	}
 
-	//returns base damage value of weapon
+	//returns base damage value of weapons
 	public int Damage{
 		get{return damage;}
 	}
@@ -78,6 +74,7 @@ public class Weapons : Equipment {
 	public virtual void equip(Character u, Type ene, int tier) {
 		base.Equip(u, tier);
 		this.setInitValues();
+		this.stats.damage *= this.tier;
 		u.animator.SetInteger("WeaponType", stats.weapType);
 		opposition = ene;
 	}
@@ -92,7 +89,6 @@ public class Weapons : Equipment {
 
 		// Keep
 		stats.weapType = 0;
-		stats.atkSpeed = 1.0f; // Find a better way for this maybe
 		stats.damage = 5;
 		stats.maxChgTime = 3;
 
@@ -103,6 +99,11 @@ public class Weapons : Equipment {
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
+	}
+	
+	// Makes the derived classes neater and this should be overriden by Melee and Ranged weapon classes
+	protected virtual int CalculateTotalDamage() {
+		return this.stats.damage + stats.chgDamage * this.tier;
 	}
 
 	//-----------------------//

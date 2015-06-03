@@ -27,6 +27,7 @@ public class BullCharge : ChargeItem {
 	private bool hitWall;
 	private Stun debuff;
 	private Collider col;
+	private ParticleSystem particle;
 	
 	// public delegate 
 
@@ -37,6 +38,8 @@ public class BullCharge : ChargeItem {
 		this.col = this.GetComponent<Collider>();
 		this.col.isTrigger = true;
 		this.col.enabled = false;
+		
+		this.particle = this.GetComponent<ParticleSystem>();
 		
 		debuff = new Stun();
 	}
@@ -85,7 +88,9 @@ public class BullCharge : ChargeItem {
 	
 	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
 	private IEnumerator chargeFunc(float chgTime) {
+		this.particle.enableEmission = true;
 		yield return StartCoroutine(chgTimeFunc(chgTime));
+		this.particle.enableEmission = false;
 		float tempStun = stunDuration * (hitWall ? 2 : 1);
 		user.rb.velocity = Vector3.zero;
 		foreach(Character ene in enemies) {

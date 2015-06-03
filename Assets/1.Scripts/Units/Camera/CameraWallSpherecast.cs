@@ -11,30 +11,33 @@ using System;
 using UnityEngine;
 
 public class CameraWallSpherecast : MonoBehaviour{
-
+	
 	public Player[] allPlayers;
 	RaycastHit[] hits;
 
+
 	void Start(){
-		allPlayers = FindObjectsOfType(typeof(Player)) as Player[];
+		allPlayers = GameObject.Find("GSManager").GetComponent<GSManager>().players;
 	}
 	void Update(){
 		foreach(Player play in allPlayers) {
-			Vector3 temp = Camera.main.WorldToScreenPoint(play.transform.position);
-			temp.z = 0;
-			Vector3 playscreen = Camera.main.ScreenToWorldPoint(temp);
-			//Vector3 playscreen = this.transform.position;
-			//Ray ray = new Ray(this.transform.position, play.gameObject.transform.position-this.transform.position);
-			Ray ray = new Ray(playscreen, play.transform.position-playscreen);
-			Debug.DrawRay(playscreen, play.transform.position-playscreen);
-			hits = Physics.SphereCastAll(ray, 3, Vector3.Distance(play.gameObject.transform.position,this.transform.position)-3
-			                             , LayerMask.GetMask("Walls"));
+			if(play != null){
+				Vector3 temp = Camera.main.WorldToScreenPoint(play.transform.position);
+				temp.z = 0;
+				Vector3 playscreen = Camera.main.ScreenToWorldPoint(temp);
+				//Vector3 playscreen = this.transform.position;
+				//Ray ray = new Ray(this.transform.position, play.gameObject.transform.position-this.transform.position);
+				Ray ray = new Ray(playscreen, play.transform.position-playscreen);
+				Debug.DrawRay(playscreen, play.transform.position-playscreen);
+				hits = Physics.SphereCastAll(ray, 3, Vector3.Distance(play.gameObject.transform.position,this.transform.position)-3
+				                             , LayerMask.GetMask("Walls"));
 
-			foreach( RaycastHit hit in hits){
-				//Debug.Log(hit.collider.gameObject.name);
-				try{hit.collider.gameObject.GetComponent<Wall>().toggleShow();
-				}catch{
-					Debug.Log("ERROR: " + hit.collider.gameObject.name);
+				foreach( RaycastHit hit in hits){
+					//Debug.Log(hit.collider.gameObject.name);
+					try{hit.collider.gameObject.GetComponent<Wall>().toggleShow();
+					}catch{
+						Debug.Log("ERROR: " + hit.collider.gameObject.name);
+					}
 				}
 			}
 		}

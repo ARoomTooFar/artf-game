@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SmugglersJacket : Chest {
+public class SmugglersJacket : Armor {
 
 	// Used for setting stats for each weapon piece
 	protected override void SetInitValues() {

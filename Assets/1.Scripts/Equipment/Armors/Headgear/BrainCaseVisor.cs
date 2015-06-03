@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BrainCaseVisor : Helmet {
+public class BrainCaseVisor : Armor {
 	// Used for setting stats for each weapon piece
 	protected override void SetInitValues() {
 		base.SetInitValues();

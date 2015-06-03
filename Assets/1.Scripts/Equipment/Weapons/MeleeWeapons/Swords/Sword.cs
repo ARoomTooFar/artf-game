@@ -9,7 +9,7 @@ public class Sword : MeleeWeapons {
 
 		// Default sword stats
 		stats.weapType = 0;
-		stats.damage = 12;//  + user.GetComponent<Character>().stats.strength;
+		stats.damage = 12;
 		stats.goldVal = 120;
 		stats.maxChgTime = 3;
 	}
@@ -26,6 +26,6 @@ public class Sword : MeleeWeapons {
 				enemy.BDS.addBuffDebuff(stats.debuff, this.user.gameObject);
 			}
 		}
-		enemy.damage(stats.damage + stats.chgDamage, user.transform, user.gameObject);
+		enemy.damage(this.CalculateTotalDamage(), user.transform, user.gameObject);
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BulletProofVest : Chest {
+public class BulletProofVest : Armor {
 	// Used for setting stats for each weapon piece
 	protected override void SetInitValues() {
 		base.SetInitValues();

@@ -29,6 +29,7 @@ public class StationaryEnemy : Enemy  {
 		}
 	}
 	
+	/*
 	protected override void setInitValues() {
 		base.setInitValues();
 		stats.maxHealth = 40;
@@ -41,7 +42,7 @@ public class StationaryEnemy : Enemy  {
 		this.minAtkRadius = 0.0f;
 		this.maxAtkRadius = 4.0f;
 	}
-
+	*/
 	
 	//----------------------//
 }

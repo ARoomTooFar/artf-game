@@ -31,6 +31,7 @@ public class Loadgear : MonoBehaviour {
 			tempPlayer.gear.EquipArmor(this.gear[tempData.armor], tempData.inventory[tempData.armor]);
 			tempPlayer.gear.EquipHelmet(this.gear[tempData.headgear], tempData.inventory[tempData.headgear]);
 			
+			
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot1], tempPlayer.opposition);
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot2], tempPlayer.opposition);
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot3], tempPlayer.opposition);
@@ -38,11 +39,7 @@ public class Loadgear : MonoBehaviour {
 			manager.players[i] = tempPlayer;
 			ui.setUpPlayerUIPane("Player" + (i + 1));
 		}
-		
-		foreach (GameObject cam in GameObject.FindGameObjectsWithTag("Door")) {
-			cam.GetComponent<DoorProximity>().FindPlayers();
-		}
-		
+
 		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraAdjuster>().InstantiatePlayers();
 	}
 	
@@ -57,8 +54,8 @@ public class Loadgear : MonoBehaviour {
 			}
 			
 			tempData.weapon = 12 + i * 4;
-			tempData.headgear = 41;
-			tempData.armor = 32;
+			tempData.headgear = 41 + i * 2;
+			tempData.armor = 30 + i * 2;
 			
 			if (i == 0) {
 				tempData.actionslot1 = 0;

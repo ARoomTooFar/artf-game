@@ -34,6 +34,7 @@ public static class MapDataParser {
 		}
 		if(Global.inLevelEditor) {
 			Mode.setTileMode();
+			UndoRedoStack.currentState = SaveString;
 		} else {
 			Loadgear loadgear = GameObject.Find("/Loadgear").GetComponent<Loadgear>();
 			loadgear.LoadPlayers();
@@ -78,6 +79,9 @@ public static class MapDataParser {
 			ARTFRoom room = new ARTFRoom(pos1, pos2);
 			room.placedThisSession = true;
 			MapData.TheFarRooms.add(room);
+
+			if(!Global.inLevelEditor)
+				StretchyWalls.rooms.Add(room);
 		}
 	}
 
@@ -139,6 +143,9 @@ public static class MapDataParser {
 		MapData.StartingRoom = rm;
 		MapData.TheFarRooms.add(rm);
 
+		if(!Global.inLevelEditor)
+			StretchyWalls.rooms.Add(rm);
+
 		rmParams = rms[1].Split(',');
 		pos1 = new Vector3(float.Parse(rmParams[0]),
 		                           float.Parse(rmParams[1]),
@@ -150,5 +157,8 @@ public static class MapDataParser {
 		rm.placedThisSession = true;
 		MapData.EndingRoom = rm;
 		MapData.TheFarRooms.add(rm);
+
+		if(!Global.inLevelEditor)
+			StretchyWalls.rooms.Add(rm);
 	}
 }

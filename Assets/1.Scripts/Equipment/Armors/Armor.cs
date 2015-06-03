@@ -34,41 +34,23 @@ public class ArmorStats {
 
 	//returns armor value after upgrades
 	public int ArmValUpgrade{
-		get{
-			int temp = armVal;
-			//for every level upgraded the armor value is added to itself.
-			for(int i = 0; i < upgrade; i++)
-			{
-				temp += temp;
-			}
-			return temp;
-		}
+		get {return armVal * upgrade;}
 	}
 	//returns health value after upgrades
-	public int HealthUpgrade{
-		get{
-			int temp = health;
-			//for every level upgraded the health value is added to itself.
-			for(int i = 0; i < upgrade; i++)
-			{
-				temp += temp;
-			}
-			return temp;}
+	public int HealthUpgrade {
+		get {return health * upgrade;}
+	}
+	//returns strength value after upgrades
+	public int StrengthUpgrade {
+		get {return strength * upgrade;}
 	}
 	//returns the coordination value after upgrades
 	public int CoordinationUpgrade{
-		get{
-			int temp = coordination;
-			//for every level upgraded the armor value is added to itself.
-			for(int i = 0; i < upgrade; i++)
-			{
-				temp += temp;
-			}
-			return temp;}
+		get {return coordination * upgrade;}
 	}
 	//returns the gold value after upgrades
 	public int GoldValUpgrade{
-		get{return goldVal * (upgrade+5);}
+		get {return goldVal * (upgrade+5);}
 	}
 
 	public ArmorStats(int armVal, int goldVal, int strength, int coordination, int health, int upgrade) {

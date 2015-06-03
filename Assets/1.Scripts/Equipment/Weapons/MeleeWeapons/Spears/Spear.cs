@@ -20,9 +20,8 @@ public class Spear: MeleeWeapons {
 
 		stats.weapType = 2;
 		this.stats.buffDuration = 1.25f;
-
-		stats.atkSpeed = 1.0f;
-		stats.damage = 40; // (int)(10 + 1.5f * user.GetComponent<Character>().stats.strength);
+		
+		stats.damage = 40;
 		
 		stats.maxChgTime = 4;
 	}
@@ -50,7 +49,7 @@ public class Spear: MeleeWeapons {
 				enemy.BDS.addBuffDebuff(this.stunD, this.user.gameObject, 1.5f);
 			}
 		}
-		enemy.damage(stats.damage + stats.chgDamage, user.transform, user.gameObject);
+		enemy.damage(this.CalculateTotalDamage(), user.transform, user.gameObject);
 	}
 	
 	protected IEnumerator Rush() {

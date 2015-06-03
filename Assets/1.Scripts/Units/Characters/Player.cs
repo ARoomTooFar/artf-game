@@ -21,7 +21,7 @@ public class Player : Character, IHealable<int>{
 
 	public UIActive UI;
 	public Controls controls;
-	Renderer renderer;
+	Renderer rend;
 
 	GameObject sparks = null;
 
@@ -30,29 +30,31 @@ public class Player : Character, IHealable<int>{
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType("Enemy");
-		setInitValues();
 	}
 	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
-		renderer = GetComponent<Renderer> ();
+		rend = GetComponent<Renderer> ();
 		foreach(PlayerBehaviour behaviour in this.animator.GetBehaviours<PlayerBehaviour>()) {
 			behaviour.SetVar(this.GetComponent<Player>());
 		}
-		
 	}
 	
-	protected override void setInitValues() {
-		base.setInitValues();
+	public virtual void SetInitValues() {
 		//Testing with base 0-10 on stats with 10 being 100/cap%
-		stats.maxHealth = 100;
+		stats.maxHealth = 100 + this.gear.chest.stats.HealthUpgrade + this.gear.helmet.stats.HealthUpgrade;
 		stats.health = stats.maxHealth;
-		stats.armor = 0;
-		stats.strength = 10;
-		stats.coordination= 10;
-		stats.speed=10;
+		stats.armor = 0 + this.gear.chest.stats.ArmValUpgrade + this.gear.helmet.stats.ArmValUpgrade;
+		stats.strength = 10 + this.gear.chest.stats.StrengthUpgrade + this.gear.helmet.stats.StrengthUpgrade;
+		stats.coordination= 10 + this.gear.chest.stats.CoordinationUpgrade + this.gear.helmet.stats.CoordinationUpgrade;
+		stats.speed=8;
 		greyDamage = 0;
+	}
+
+	public override void SetGearAndAbilities() {
+		base.SetGearAndAbilities();
+		this.SetInitValues();
 	}
 
 	//Set cooldown bars to current items. 
@@ -88,13 +90,6 @@ public class Player : Character, IHealable<int>{
 		MoveCommands ();
 		AnimationUpdate ();
 	}
-
-/*
-	public virtual void EquipGearAndAbilities(GameObject[] equip, GameObject[] abilities) {
-		gear.equipGear(this, opposition, equip);
-		inventory.equipItems(this, opposition, abilities);
-	}
-	*/
 	
 	//-------------------------------//
 	// Player Command Implementation //
@@ -103,13 +98,8 @@ public class Player : Character, IHealable<int>{
 	protected override void ActionCommands() {
 		if (actable && !this.animator.GetBool ("Attack")) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
-				if(currDoor!=null){
-					currDoor.GetComponent<Door>().toggleOpen();
-					currDoor = null;
-				} else {
-					this.animator.SetBool("Charging", true);
-					this.animator.SetBool("Attack", true);
-				}
+				this.animator.SetBool("Charging", true);
+				this.animator.SetBool("Attack", true);
 			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
@@ -122,10 +112,16 @@ public class Player : Character, IHealable<int>{
 				inventory.cycItems();
 			}
 		} else {
+			if ((Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) && this.animator.GetBool("Tap")) {
+				this.animator.SetBool("Attack", true);
+				this.animator.SetBool ("Tap", false);
+			}
+		
 			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
 				animator.SetBool ("Charging", false);
 			}
 		}
+		
 		
 		
 		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
@@ -134,6 +130,10 @@ public class Player : Character, IHealable<int>{
 				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
 			}
 		}
+	}
+	
+	protected void TapAttackFrame() {
+		this.animator.SetBool("Tap", true);
 	}
 
 	// Might separate commands into a protected function and just have a movement function
@@ -197,13 +197,15 @@ public class Player : Character, IHealable<int>{
 	
 	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
 		this.damage (dmgTaken, atkPosition);
-		StartCoroutine(hitFlash (Color.red, renderer.material.color));
+		StartCoroutine(hitFlash (Color.red, rend.material.color));
 	}
 	
 	public override void damage(int dmgTaken, Transform atkPosition) {
 		if (invincible || isDead) return;
 		
-//		print (dmgTaken);
+		// dmgTaken *= (100 - stats.armor)/100;
+		
+		print (dmgTaken);
 		
 		dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(atkPosition.position, facing, transform.position)), 1, 100000);
 		stats.health -= greyTest(dmgTaken);
@@ -226,13 +228,14 @@ public class Player : Character, IHealable<int>{
 		hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth * 5f);
 		BDS.addBuffDebuff(hitConfirm,gameObject,.5f);
 
-		StartCoroutine (hitFlash (Color.red, renderer.material.color));
+		StartCoroutine (hitFlash (Color.red, rend.material.color));
 
 	}
 	
 	public override void damage(int dmgTaken) {
-
 		if (invincible || isDead) return;
+		
+		dmgTaken *= (100 - stats.armor)/100;
 		
 		stats.health -= greyTest(dmgTaken);
 		if (stats.health <= 0) this.die();
@@ -250,7 +253,7 @@ public class Player : Character, IHealable<int>{
 			Destroy (sparks, 1);
 		}
 
-		StartCoroutine (hitFlash (Color.red, renderer.material.color));
+		StartCoroutine (hitFlash (Color.red, rend.material.color));
 	}
 	
 	public override void die() {
@@ -273,7 +276,10 @@ public class Player : Character, IHealable<int>{
 		//this will go to the end screen when all the players in the party are dead.
 		if (!checkPartyAlive ()) {
 			//THIS WILL NEED TO USE THE GSmanager HERE
-			Application.LoadLevel("TitleScreen2");
+			GSManager gsm = GameObject.Find("GSManager").GetComponent<GSManager>();
+			//this should go to the failure screen, which goes to the login screen.
+			gsm.LoadScene("TitleScreen2");
+
 		}
 	}
 	
@@ -366,19 +372,21 @@ public class Player : Character, IHealable<int>{
 	//----------------------------------//
 
 	//---------------------------------------
-	//checkAlive()
+	//checkPartyAlive()
 	//---------------------------------------
 	//
 	//Checks to see how many players are still alive in the scene, if there is more than 1 then it will return true
 	//If all the players are dead then it will return false. 
-	//THIS FUNCTION NEEDS PLAYERS TO BE TAGGED AS PLAYERS
 	//---------------------------------------
 	private bool checkPartyAlive ()
 	{
 		int numbPlayersAlive = 0;
-		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
-		int numbPlayers = players.Length;
+		int numbPlayers = 0;
+		GSManager gsm = GameObject.Find("GSManager").GetComponent<GSManager>();
+		Player[] players = gsm.players;
+		numbPlayers = players.Length;
 		Character character;
+
 
 		for(int i = 0; i < players.Length; i++)
 		{
@@ -394,19 +402,14 @@ public class Player : Character, IHealable<int>{
 
 		}
 		print("pdThere are " + numbPlayersAlive + " Players alive.");
-
-		if (numbPlayersAlive == 0 && numbPlayers != 0) {
-			return false;
-		} else {
-			return true;
-		}
+		return !(numbPlayersAlive == 0 && numbPlayers != 0);
 	}
 
 	// coroutines
 	IEnumerator hitFlash(Color hit, Color normal){
-		renderer.material.color = hit;
+		rend.material.color = hit;
 		yield return new WaitForSeconds(.5f);
-		renderer.material.color = normal;
+		rend.material.color = normal;
 	}
 
 }

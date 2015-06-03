@@ -65,6 +65,31 @@ public class DragableObject : ClickEvent {
 				} else {
 					itemObjectCopy.transform.position = position;
 					itemObjectCopy.transform.rotation = getRotation();
+
+					LevelEditorData dat = itemObjectCopy.GetComponent<LevelEditorData>();
+					
+					if((dat is SceneryData && MapData.SceneryBlocks.isMoveValid(getPosition(), position - getPosition()))
+					    || (dat is MonsterData && MapData.MonsterBlocks.isMoveValid(getPosition(), position - getPosition()))){
+						foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
+							foreach(Material mat in rend.materials) {
+								if(mat.HasProperty("_Color")) {
+									Color trans = Color.green;
+									trans.a = .5f;
+									mat.color = trans;
+								}
+							}
+						}
+					} else {
+						foreach(Renderer rend in itemObjectCopy.GetComponentsInChildren<Renderer>()) {
+							foreach(Material mat in rend.materials) {
+								if(mat.HasProperty("_Color")) {
+									Color trans = Color.red;
+									trans.a = .5f;
+									mat.color = trans;
+								}
+							}
+						}
+					}
 				}
 
 				//for now y-pos remains as prefab's default.

@@ -81,6 +81,7 @@ public class SceneryManager {
 		if(blk.SceneryBlockInfo.isDoor) {
 			blk.rotate(rm.getWallSide(blk.Position));
 			rm.Doors.Add(blk);
+
 			foreach(SceneryBlock wall in rm.Walls) {
 				if(blk.Coordinates.Contains(wall.Position)) {
 					wall.GameObj.SetActive(false);
@@ -273,7 +274,6 @@ public class SceneryManager {
 			if(blk.BlockID != "LevelEditor/Other/PlayerStartingLocation" &&
 				blk.BlockID != "LevelEditor/Other/PlayerEndingLocation" &&
 			   blk.BlockID != "{0}/Rooms/doortile"){
-				Debug.Log(blk.BlockID);
 				return false;
 			}
 		}

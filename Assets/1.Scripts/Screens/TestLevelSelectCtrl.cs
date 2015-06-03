@@ -33,7 +33,7 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 			Debug.Log (data);
 		}*/
 
-		// setup keypad (caps)
+		// setup level select control
 		currMenuPtr = new GameObject[5, 1];
 		currMenuPtr[0, 0] = GameObject.Find("/Canvas/Button");
 		currMenuPtr[1, 0] = GameObject.Find("/Canvas/Button 1");
@@ -87,7 +87,85 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 		prevBtn = currMenuPtr[locY, locX];
 
-        Debug.Log("LEADER: " + gsManager.leaderList[0]);
+		// setup leader control
+		if (gsManager.leaderList.Count > 0) {
+			switch (gsManager.leaderList [0]) {
+			case 1:
+				Debug.Log ("leader is P2");
+				controls.up = "up";
+				controls.down = "down";
+				controls.left = "left";
+				controls.right = "right";
+				controls.attack = "return";
+				controls.secItem = "delete";
+				controls.cycItem = "end";
+				controls.hori = "Hori2";
+				controls.vert = "Vert2";
+				controls.joyAttack = "Attack2";
+				controls.joySecItem = "SecItem2";
+				controls.joyCycItem = "CycItem2";
+				break;
+			case 2:
+				Debug.Log ("leader is P3");
+				controls.up = "i";
+				controls.down = "k";
+				controls.left = "j";
+				controls.right = "l";
+				controls.attack = "o";
+				controls.secItem = "u";
+				controls.cycItem = ".";
+				controls.hori = "Hori3";
+				controls.vert = "Vert3";
+				controls.joyAttack = "Attack3";
+				controls.joySecItem = "SecItem3";
+				controls.joyCycItem = "CycItem3";
+				break;
+			case 3:
+				Debug.Log ("leader is P4");
+				controls.up = "[8]";
+				controls.down = "[5]";
+				controls.left = "[4]";
+				controls.right = "[6]";
+				controls.attack = "[9]";
+				controls.secItem = "[7]";
+				controls.cycItem = "[3]";
+				controls.hori = "Hori4";
+				controls.vert = "Vert4";
+				controls.joyAttack = "Attack4";
+				controls.joySecItem = "SecItem4";
+				controls.joyCycItem = "CycItem4";
+				break;
+			default:
+				Debug.Log ("leader is P1");
+				controls.up = "w";
+				controls.down = "s";
+				controls.left = "a";
+				controls.right = "d";
+				controls.attack = "e";
+				controls.secItem = "q";
+				controls.cycItem = "f";
+				controls.hori = "Hori";
+				controls.vert = "Vert";
+				controls.joyAttack = "Attack";
+				controls.joySecItem = "SecItem";
+				controls.joyCycItem = "CycItem";
+				break;
+			}
+		} else {
+			Debug.Log("no leader set, but defaulting to P1");
+			controls.up = "w";
+			controls.down = "s";
+			controls.left = "a";
+			controls.right = "d";
+			controls.attack = "e";
+			controls.secItem = "q";
+			controls.cycItem = "f";
+			controls.hori = "Hori";
+			controls.vert = "Vert";
+			controls.joyAttack = "Attack";
+			controls.joySecItem = "SecItem";
+			controls.joyCycItem = "CycItem";
+		}
 	}
 
 	void BtnAction (int levelListIndex) {

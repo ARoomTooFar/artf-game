@@ -17,6 +17,8 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 		{"Button_ZoomOut", "Zoom Out:Zoom the camera out."},
 		{"Button_ZoomIn", "Zoom In:Zoom the camera in."},
 		{"Button_Delete", "Delete:Delete selected object (hotkey: delete)."},
+		{"Button_Undo", "Undo:Undo the last action (hotkey: Z)."},
+		{"Button_Redo", "Redo:Redo the last action (hotkey: X)."},
 		{"Button_CameraToggle", "Toggle Camera Mode:Toggle the camera between top-down mode and perspective mode."},
 		{"Button_Rooms", "Rooms Folder:Contains objects that assist you in building rooms, such as doors, individual wall tiles, and starter rooms."},
 		{"Button_Misc", "Environment Folder:Contains scenery and decorative objects."},
@@ -24,7 +26,7 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
 		{"Shop", "Bank Account:This is the amount of money you have to spend on items."},
 
-		{"BullyTrunk(Clone)", "Bully Trunk:A beast of wood and steal. Charges delvers before pummling them into the ground."},
+		{"BullyTrunk(Clone)", "Bully Trunk:A beast of wood and steal. Charges delvers before pummling them into the ground. "},
 		{"Bushling(Clone)", "Bushling:An agile creature of vine, will use whatever means necessary to slice delvers appart. "},
 		{"CackleBranch(Clone)", "Cackle Branch:A living shrub. With a gun and a bad attitude."},
 		{"FoliantFodder(Clone)", "Foliant Fodder:A small, swarming bug, that craves human flesh."},
