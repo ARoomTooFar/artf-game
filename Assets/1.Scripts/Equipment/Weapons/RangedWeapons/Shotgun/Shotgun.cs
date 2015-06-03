@@ -15,7 +15,7 @@ public class Shotgun : RangedWeapons {
 		base.setInitValues();
 
 		this.stats.weapType = 7;
-		this.stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
+		this.stats.damage = 10;
 		this.stats.maxChgTime = 4;
 		
 		this.spread = 30;
@@ -37,7 +37,7 @@ public class Shotgun : RangedWeapons {
 	protected virtual void FireProjectile(int maxShots, int shotNum) {
 		Quaternion spreadAngle = Quaternion.AngleAxis(spread - ((spread * 2)/(maxShots - 1) * shotNum), Vector3.up); // Calculated quaternion that will rotate the bullet and its velocity
 		Projectile newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 2, this.user.transform.rotation * spreadAngle)).GetComponent<Projectile>();
-		newBullet.setInitValues(user, opposition, this.stats.damage + this.stats.chgDamage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration);
+		newBullet.setInitValues(user, opposition, this.CalculateTotalDamage(), particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration);
 		newBullet.rb.velocity =  spreadAngle * newBullet.rb.velocity;
 	}
 	
@@ -48,20 +48,18 @@ public class Shotgun : RangedWeapons {
 		}
 		StartCoroutine(makeSound(action,playSound,action.length));
 		Shockwave wave1 = ((GameObject)Instantiate(shockwave, user.transform.position + new Vector3(0.0f, 3.0f, 0.0f), user.transform.rotation)).GetComponent<Shockwave>();
-		wave1.setInitValues(user, opposition, stats.damage + stats.chgDamage, false, null);
+		wave1.setInitValues(user, opposition, this.CalculateTotalDamage(), false, null);
 		
 		if (this.user.animator.GetFloat("ChargeTime") < 2) return;
 		
 		Quaternion spreadAngle = Quaternion.AngleAxis(this.sideShockWaveAngle, Vector3.up);
 		Shockwave wave2 = ((GameObject)Instantiate(shockwave, user.transform.position + new Vector3(0.0f, 3.0f, 0.0f), user.transform.rotation * spreadAngle)).GetComponent<Shockwave>();
-		wave2.setInitValues(user, opposition, stats.damage + stats.chgDamage, false, null);
+		wave2.setInitValues(user, opposition, this.CalculateTotalDamage(), false, null);
 		wave2.rb.velocity =  spreadAngle * wave2.rb.velocity;
 		
 		spreadAngle = Quaternion.AngleAxis(-this.sideShockWaveAngle, Vector3.up);
 		Shockwave wave3 = ((GameObject)Instantiate(shockwave, user.transform.position + new Vector3(0.0f, 3.0f, 0.0f), user.transform.rotation * spreadAngle)).GetComponent<Shockwave>();
-		wave3.setInitValues(user, opposition, stats.damage + stats.chgDamage, false, null);
+		wave3.setInitValues(user, opposition, this.CalculateTotalDamage(), false, null);
 		wave3.rb.velocity =  spreadAngle * wave3.rb.velocity;
-
-
 	}
 }

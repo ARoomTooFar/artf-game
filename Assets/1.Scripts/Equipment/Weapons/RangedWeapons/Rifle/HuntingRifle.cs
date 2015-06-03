@@ -5,7 +5,7 @@ public class HuntingRifle : Rifle {
 	protected override void setInitValues() {
 		base.setInitValues();
 		
-		stats.damage = 20 + user.GetComponent<Character>().stats.coordination;
+		stats.damage = 20;
 		stats.goldVal = 200;
 	}
 }

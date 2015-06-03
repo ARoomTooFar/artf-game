@@ -6,9 +6,7 @@ public class Machette : Sword {
 	protected override void setInitValues() {
 		base.setInitValues();
 
-		stats.chargeSlow = new Slow(0.0f);
-
-		stats.damage = 23;//  + user.GetComponent<Character>().stats.strength;
+		stats.damage = 23;
 		stats.goldVal = 230;
 	}
 }

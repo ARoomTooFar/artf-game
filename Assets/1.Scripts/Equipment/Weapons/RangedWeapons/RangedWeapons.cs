@@ -26,6 +26,10 @@ public class RangedWeapons : Weapons {
 		
 		this.spread = 15;
 	}
+	
+	protected virtual int CalculateTotalDamage() {
+		return this.stats.damage + this.user.stats.coordination + stats.chgDamage * (this.tier + 1);
+	}
 
 	public override void AttackStart() {
 		this.StartCoroutine(this.Shoot(1));
@@ -53,7 +57,7 @@ public class RangedWeapons : Weapons {
 	protected virtual void FireProjectile() {
 		Quaternion spreadAngle = Quaternion.AngleAxis(Random.Range (-this.spread, this.spread), Vector3.up); // Calculated quaternion that will rotate the bullet and its velocity
 		Projectile newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 2, this.user.transform.rotation * spreadAngle)).GetComponent<Projectile>();
-		newBullet.setInitValues(user, opposition, this.stats.damage + this.stats.chgDamage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration);
+		newBullet.setInitValues(user, opposition, this.CalculateTotalDamage(), particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration);
 		newBullet.rb.velocity =  spreadAngle * newBullet.rb.velocity;
 	}
 }

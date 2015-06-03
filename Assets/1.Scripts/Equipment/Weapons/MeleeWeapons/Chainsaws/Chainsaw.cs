@@ -52,7 +52,6 @@ public class Chainsaw : MeleeWeapons {
 		// User dagger vars for now until we have chainsaw animations
 		stats.weapType = 3;
 
-		stats.atkSpeed = 3.0f;
 		stats.damage = 5;
 		
 		stats.maxChgTime = 7;
@@ -88,7 +87,7 @@ public class Chainsaw : MeleeWeapons {
 				lastDmgTime = Time.time;
 				foreach(Character meat in chained) {
 					if (meat == null) continue;
-					meat.damage(stats.damage, user.transform, user.gameObject);
+					meat.damage(stats.damage + this.user.stats.strength, user.transform, user.gameObject);
 
 				}
 				
@@ -96,7 +95,7 @@ public class Chainsaw : MeleeWeapons {
 					if (crop == null) continue;
 					IDamageable<int, Traps, GameObject> component = (IDamageable<int, Traps, GameObject>) crop.GetComponent (typeof(IDamageable<int, Traps, GameObject>));
 					if(component != null) {
-						component.damage(stats.damage);
+						component.damage(stats.damage + this.user.stats.strength);
 					}
 				}
 			}

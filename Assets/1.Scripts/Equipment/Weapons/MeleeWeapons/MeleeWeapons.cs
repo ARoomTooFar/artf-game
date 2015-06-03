@@ -17,6 +17,9 @@ public class MeleeWeapons : Weapons {
 		stats.chargeSlow = new Slow(0.0f);
 	}
 	
+	protected virtual int CalculateTotalDamage() {
+		return this.stats.damage + this.user.stats.strength + stats.chgDamage * (this.tier + 1);
+	}
 
 	public override void AttackStart() {
 		if (action != null) StartCoroutine(makeSound(action,playSound,action.length));
@@ -36,7 +39,7 @@ public class MeleeWeapons : Weapons {
 				enemy.BDS.addBuffDebuff(stats.debuff, this.gameObject);
 			}
 		}
-		enemy.damage(stats.damage + stats.chgDamage, user.transform, user.gameObject);
+		enemy.damage(this.CalculateTotalDamage(), user.transform, user.gameObject);
 	}
 
 	// only capsule collider should be checked in this function
@@ -48,7 +51,7 @@ public class MeleeWeapons : Weapons {
 		} else {
 			IDamageable<int, Traps, GameObject> component2 = (IDamageable<int, Traps, GameObject>) other.GetComponent (typeof(IDamageable<int, Traps, GameObject>));
 			if (component2 != null) {
-				component2.damage(stats.damage + stats.chgDamage);
+				component2.damage(this.CalculateTotalDamage());
 			}
 		}
 	}

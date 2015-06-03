@@ -8,11 +8,7 @@ public class PruningBlade : Dagger {
 	protected override void setInitValues() {
 		base.setInitValues();
 		
-		// Default sword stats
-		stats.weapType = 1;
-		stats.atkSpeed = 2.0f;
 		stats.damage = (int)(20);
-		this.stats.buffDuration = 0.25f;
 		stats.goldVal = 200;
 	}
 	

@@ -9,8 +9,6 @@ public class FlamePike: Spear {
 		base.setInitValues();
 
 		stats.goldVal = 400;
-		stats.weapType = 2;
-		this.stats.buffDuration = 1.25f;
-		stats.damage = 40; // (int)(10 + 1.5f * user.GetComponent<Character>().stats.strength);
+		stats.damage = 40;
 	}
 }
