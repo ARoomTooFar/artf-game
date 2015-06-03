@@ -18,6 +18,11 @@ public class GearSelectCtrl : MonoBehaviour {
 	private int locY = 0;
 	private int[] currItemArr;
 
+	// gear menu
+	private GameObject[,] gearMenu;
+	private int gearMenuWidth = 1;
+	private int gearMenuHeight = 7;
+	
 	// inventory data
 	private PlayerData playerData;
 	private int[][] items = new int[8][];
@@ -38,26 +43,34 @@ public class GearSelectCtrl : MonoBehaviour {
 		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
 		Farts serv = gameObject.AddComponent<Farts>();
 
-		currMenuPtr = new GameObject[7, 1];
-		currMenuPtr[0, 0] = GameObject.Find("/Canvas/" + menuPanelName + "/WeaponSlot");
-		currMenuPtr[1, 0] = GameObject.Find("/Canvas/" + menuPanelName + "/HelmetSlot");
-		currMenuPtr[2, 0] = GameObject.Find("/Canvas/" + menuPanelName + "/ArmorSlot");
-		currMenuPtr[3, 0] = GameObject.Find("/Canvas/" + menuPanelName + "/ActionSlot1");
-		currMenuPtr[4, 0] = GameObject.Find("/Canvas/" + menuPanelName + "/ActionSlot2");
-		currMenuPtr[5, 0] = GameObject.Find("/Canvas/" + menuPanelName + "/ActionSlot3");
-		currMenuPtr[6, 0] = GameObject.Find("/Canvas/" + menuPanelName + "/BtnReady");
+		gearMenu = new GameObject[7, 1];
+		gearMenu[0, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/WeaponSlot");
+		gearMenu[1, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/HelmetSlot");
+		gearMenu[2, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/ArmorSlot");
+		gearMenu[3, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/ActionSlot1");
+		gearMenu[4, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/ActionSlot2");
+		gearMenu[5, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/ActionSlot3");
+		gearMenu[6, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/BtnReady");
 
+		gearMenu[6, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			Debug.Log ("ready");
+			PanelDisable ();
+		});
+
+		// start controls on gear menu
+		currMenuPtr = gearMenu;
 		var pointer = new PointerEventData(EventSystem.current);
 		ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
 		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 		prevBtn = currMenuPtr[locY, locX];
 
 		// begin to load player gear
-		if (menuPanelName == "P1Gear") {
+		if (menuPanelName == "P1Panel") {
 			playerData = gsManager.dummyPlayerDataList [0];
-		} else if (menuPanelName == "P2Gear") {
+		} else if (menuPanelName == "P2Panel") {
 			playerData = gsManager.dummyPlayerDataList [1];
-		} else if (menuPanelName == "P3Gear") {
+		} else if (menuPanelName == "P3Panel") {
 			playerData = gsManager.dummyPlayerDataList [2];
 		} else {
 			playerData = gsManager.dummyPlayerDataList [3];
@@ -161,22 +174,6 @@ public class GearSelectCtrl : MonoBehaviour {
 			}
 
 			ItemSwitch (hori);
-
-			/*if (hori > 0)
-			{
-
-				currItemArrIndex = (currItemArrIndex + 1) % (currItemArr.Length);
-				Debug.Log (currItemArr[currItemArrIndex]);
-			}
-			else if (hori < 0)
-			{
-				--currItemArrIndex;
-				if (currItemArrIndex < 0)
-				{
-					currItemArrIndex = currItemArr.Length - 1;
-				}
-				Debug.Log (currItemArr[currItemArrIndex]);
-			}*/
 			
 			var pointer = new PointerEventData(EventSystem.current);
 			ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
@@ -210,6 +207,7 @@ public class GearSelectCtrl : MonoBehaviour {
 					helmetsIndex = currItemArr.Length - 1;
 				}
 			};
+			Debug.Log (currItemArr[helmetsIndex]);
 			break;
 		case 2:
 			if (hori > 0) {
@@ -220,6 +218,7 @@ public class GearSelectCtrl : MonoBehaviour {
 					armorsIndex = currItemArr.Length - 1;
 				}
 			};
+			Debug.Log (currItemArr[armorsIndex]);
 			break;
 		case 3:
 			if (hori > 0) {
@@ -230,6 +229,7 @@ public class GearSelectCtrl : MonoBehaviour {
 					actionSlot1Index = currItemArr.Length - 1;
 				}
 			};
+			Debug.Log (currItemArr[actionSlot1Index]);
 			break;
 		case 4:
 			if (hori > 0) {
@@ -240,6 +240,7 @@ public class GearSelectCtrl : MonoBehaviour {
 					actionSlot2Index = currItemArr.Length - 1;
 				}
 			};
+			Debug.Log (currItemArr[actionSlot2Index]);
 			break;
 		case 5:
 			if (hori > 0) {
@@ -250,10 +251,34 @@ public class GearSelectCtrl : MonoBehaviour {
 					actionSlot3Index = currItemArr.Length - 1;
 				}
 			};
+			Debug.Log (currItemArr[actionSlot3Index]);
 			break;
 		}
 	}
 
+	void PanelDisable() {
+		// lock controls
+		//menuLock = true;
+		
+		// grey buttons
+		CanvasGroup panel = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName).GetComponent<CanvasGroup>();
+		panel.interactable = false;
+
+		// grey images
+		Image[] imgChildren = gameObject.GetComponentsInChildren <Image> ();
+
+		foreach (Image imgChild in imgChildren) {
+			imgChild.color = new Color(0.3f, 0.3f, 0.3f);
+		}
+		
+		/*// grey text
+		Text[] txtChild = this.GetComponentsInChildren<Text>();
+		foreach (Text child in txtChild)
+		{
+			child.color = new Color(0.3f, 0.3f, 0.3f);
+		}*/
+	}
+	
 	void Update () {
 		// UI controls
 		if (menuLock == false) {
