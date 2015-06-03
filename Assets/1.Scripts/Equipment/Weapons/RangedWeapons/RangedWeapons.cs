@@ -28,7 +28,7 @@ public class RangedWeapons : Weapons {
 	}
 	
 	protected virtual int CalculateTotalDamage() {
-		return this.stats.damage + this.user.stats.coordination + stats.chgDamage * (this.tier + 1);
+		return this.stats.damage + this.user.stats.coordination + stats.chgDamage * this.tier;
 	}
 
 	public override void AttackStart() {

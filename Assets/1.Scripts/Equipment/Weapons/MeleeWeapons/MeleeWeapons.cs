@@ -18,7 +18,7 @@ public class MeleeWeapons : Weapons {
 	}
 	
 	protected virtual int CalculateTotalDamage() {
-		return this.stats.damage + this.user.stats.strength + stats.chgDamage * (this.tier + 1);
+		return this.stats.damage + this.user.stats.strength + stats.chgDamage * this.tier;
 	}
 
 	public override void AttackStart() {

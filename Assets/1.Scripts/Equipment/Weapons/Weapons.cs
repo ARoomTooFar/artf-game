@@ -74,7 +74,7 @@ public class Weapons : Equipment {
 	public virtual void equip(Character u, Type ene, int tier) {
 		base.Equip(u, tier);
 		this.setInitValues();
-		this.stats.damage *= this.tier + 1;
+		this.stats.damage *= this.tier;
 		u.animator.SetInteger("WeaponType", stats.weapType);
 		opposition = ene;
 	}
@@ -101,8 +101,9 @@ public class Weapons : Equipment {
 		base.Update();
 	}
 	
+	// Makes the derived classes neater and this should be overriden by Melee and Ranged weapon classes
 	protected virtual int CalculateTotalDamage() {
-		return this.stats.damage + stats.chgDamage * (this.tier + 1);
+		return this.stats.damage + stats.chgDamage * this.tier;
 	}
 
 	//-----------------------//

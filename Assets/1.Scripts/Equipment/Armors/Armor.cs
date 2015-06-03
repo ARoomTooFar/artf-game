@@ -34,19 +34,19 @@ public class ArmorStats {
 
 	//returns armor value after upgrades
 	public int ArmValUpgrade{
-		get {return armVal * (upgrade + 1);}
+		get {return armVal * upgrade;}
 	}
 	//returns health value after upgrades
 	public int HealthUpgrade {
-		get {return health * (upgrade + 1);}
+		get {return health * upgrade;}
 	}
 	//returns strength value after upgrades
 	public int StrengthUpgrade {
-		get {return strength * (upgrade + 1);}
+		get {return strength * upgrade;}
 	}
 	//returns the coordination value after upgrades
 	public int CoordinationUpgrade{
-		get {return coordination * (upgrade + 1);}
+		get {return coordination * upgrade;}
 	}
 	//returns the gold value after upgrades
 	public int GoldValUpgrade{

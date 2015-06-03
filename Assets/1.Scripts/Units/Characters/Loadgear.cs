@@ -50,7 +50,7 @@ public class Loadgear : MonoBehaviour {
 			tempData.inventory = new int[52];
 			
 			for (int j = 0; j < tempData.inventory.Length; j++) {
-				tempData.inventory[j] = 2;
+				tempData.inventory[j] = 1;
 			}
 			
 			tempData.weapon = 12 + i * 4;
