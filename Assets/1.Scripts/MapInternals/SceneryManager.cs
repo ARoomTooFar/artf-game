@@ -81,6 +81,7 @@ public class SceneryManager {
 		if(blk.SceneryBlockInfo.isDoor) {
 			blk.rotate(rm.getWallSide(blk.Position));
 			rm.Doors.Add(blk);
+			rm.setStretchWalls(blk.Orientation);
 
 			foreach(SceneryBlock wall in rm.Walls) {
 				if(blk.Coordinates.Contains(wall.Position)) {
