@@ -118,6 +118,7 @@ public class Hook : ChargeItem {
 	}
 	
 	private void ParticleEmit() {
+		this.particle.startSpeed = this.curChgTime/1f;
 		this.particle.Emit(400);
 	}
 	
