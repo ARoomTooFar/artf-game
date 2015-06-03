@@ -203,7 +203,9 @@ public class Player : Character, IHealable<int>{
 	public override void damage(int dmgTaken, Transform atkPosition) {
 		if (invincible || isDead) return;
 		
-		dmgTaken *= (100 - stats.armor)/100;
+		// dmgTaken *= (100 - stats.armor)/100;
+		
+		print (dmgTaken);
 		
 		dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(atkPosition.position, facing, transform.position)), 1, 100000);
 		stats.health -= greyTest(dmgTaken);

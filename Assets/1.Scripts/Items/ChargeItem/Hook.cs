@@ -13,6 +13,7 @@ public class Hook : ChargeItem {
 	private Collider col;
 	private Renderer ren;
 	private Rigidbody rb;
+	private ParticleSystem particle;
 	private bool hitWall;
 	private Stun debuff;
 	private Enemy ene;
@@ -32,6 +33,8 @@ public class Hook : ChargeItem {
 		
 		this.rb = this.GetComponent<Rigidbody>();
 		this.rb.isKinematic = true;
+		
+		this.particle = this.GetComponent<ParticleSystem>();
 	}
 	
 	protected override void setInitValues() {
@@ -52,7 +55,9 @@ public class Hook : ChargeItem {
 	// Called when character with an this item selected uses their item key
 	public override void useItem() {
 		this.transform.position = this.origin.transform.position;
-		this.ren.enabled = true;
+		// this.ren.enabled = true;
+		this.particle.simulationSpace = ParticleSystemSimulationSpace.Local;
+		InvokeRepeating("ParticleEmit", 0f, 0.25f);
 		this.ene = null;
 		base.useItem ();
 	}
@@ -68,7 +73,7 @@ public class Hook : ChargeItem {
 		this.col.enabled = false;
 		this.hitWall = false;
 		this.ene = null;
-		this.ren.enabled = false;
+		// this.ren.enabled = false;
 		this.rb.velocity = Vector3.zero;
 		this.rb.isKinematic = true;
 		
@@ -88,6 +93,7 @@ public class Hook : ChargeItem {
 		this.col.enabled = false;
 		if (hitWall) yield return StartCoroutine (this.PullUser());
 		else yield return StartCoroutine (this.HookRetract());
+		CancelInvoke();
 		animDone();
 	}
 	
@@ -95,16 +101,25 @@ public class Hook : ChargeItem {
 	
 	// Timer and velocity changing thing
 	private IEnumerator hookTimeFunc(float chgTime) {
+		CancelInvoke();
+		this.particle.Clear();
+		this.particle.simulationSpace = ParticleSystemSimulationSpace.World;
+		InvokeRepeating("ParticleEmit", 0.001f, 0.001f);
 		for (float timer = 0; timer <= chgTime; timer += Time.deltaTime) {
 			
 			if (hitWall || this.ene != null) {
 				this.rb.velocity = Vector3.zero;
-				yield break;
+				break;
 			}
 
 			this.rb.velocity = user.facing.normalized * hookSpeed;
 			yield return 0;
 		}
+	}
+	
+	private void ParticleEmit() {
+		this.particle.startSpeed = this.curChgTime/1f;
+		this.particle.Emit(400);
 	}
 	
 	private IEnumerator HookRetract() {

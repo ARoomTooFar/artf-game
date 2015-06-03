@@ -14,7 +14,7 @@ public class Rifle : RangedWeapons {
 		base.setInitValues();
 		
 		stats.weapType = 5;
-		stats.damage = 20 + user.GetComponent<Character>().stats.coordination;
+		stats.damage = 20;
 		stats.maxChgTime = 3;
 		stats.chargeSlow = new Slow(1.0f);
 
@@ -40,12 +40,12 @@ public class Rifle : RangedWeapons {
 	public override void SpecialAttack() {
 		StartCoroutine(makeSound(action,playSound,action.length));
 		HomingBullet newBullet = ((GameObject)Instantiate(this.projectile, this.transform.position + this.user.facing * 2, this.user.transform.rotation)).GetComponent<HomingBullet>();
-		newBullet.setInitValues(user, opposition, this.stats.damage + this.stats.chgDamage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration * 2, this.user.FindClosestCharacter(this.aoe.unitsInRange));
+		newBullet.setInitValues(user, opposition, this.CalculateTotalDamage(), particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration * 2, this.user.FindClosestCharacter(this.aoe.unitsInRange));
 	}
 	
 	protected override void FireProjectile() {
 		HomingBullet newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 2, this.user.transform.rotation)).GetComponent<HomingBullet>();
-		newBullet.setInitValues(user, opposition, this.stats.damage + this.stats.chgDamage, particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration, this.user.FindClosestCharacter(this.aoe.unitsInRange));
+		newBullet.setInitValues(user, opposition, this.CalculateTotalDamage(), particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration, this.user.FindClosestCharacter(this.aoe.unitsInRange));
 	}
 	
 }

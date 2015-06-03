@@ -14,7 +14,7 @@ public class AssaultRifle : RangedWeapons {
 		base.setInitValues();
 		this.stats.weapType = 6;
 		
-		this.stats.damage = 10 + user.GetComponent<Character>().stats.coordination;
+		this.stats.damage = 10;
 		this.stats.maxChgTime = 5;
 		
 		this.spread = 10;

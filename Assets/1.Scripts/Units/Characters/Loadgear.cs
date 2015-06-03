@@ -31,6 +31,7 @@ public class Loadgear : MonoBehaviour {
 			tempPlayer.gear.EquipArmor(this.gear[tempData.armor], tempData.inventory[tempData.armor]);
 			tempPlayer.gear.EquipHelmet(this.gear[tempData.headgear], tempData.inventory[tempData.headgear]);
 			
+			
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot1], tempPlayer.opposition);
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot2], tempPlayer.opposition);
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot3], tempPlayer.opposition);

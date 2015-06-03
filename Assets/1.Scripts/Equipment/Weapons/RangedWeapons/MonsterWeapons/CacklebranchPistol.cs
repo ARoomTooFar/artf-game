@@ -9,8 +9,7 @@ public class CacklebranchPistol : RangedWeapons {
 	}
 	protected override void setInitValues() {
 		base.setInitValues();
-		stats.atkSpeed = 2.0f;
-		stats.damage = 5 + user.GetComponent<Character>().stats.coordination;
+		stats.damage = 5 + user.stats.coordination;
 
 		variance = 10f;
 		kick = 0.5f;

@@ -103,19 +103,19 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 		public void equipGear(Type ene) {
 			weapon = weapLocation.GetComponentInChildren<Weapons>();
 			if (weapon) {
-				weapon.equip (this.unit, ene, 0);
+				weapon.equip (this.unit, ene, 1);
 			}
 			
 			Helmet helmetPiece = headLocation.GetComponentInChildren<Helmet>();
 			// helmet = headLocation.GetComponentInChildren<Helmet>();
 			if (helmetPiece) {
-				helmetPiece.Equip (this.unit, 0);
+				helmetPiece.Equip (this.unit, 1);
 				this.helmet = helmetPiece.GetComponent<Armor>();
 			}
 			
 			Chest chestPiece = chestLocation.GetComponentInChildren<Chest>();
 			if (chestPiece) {
-				chestPiece.Equip (this.unit, 0);
+				chestPiece.Equip (this.unit, 1);
 				this.chest = chestPiece.GetComponent<Armor>();
 			}
 		}

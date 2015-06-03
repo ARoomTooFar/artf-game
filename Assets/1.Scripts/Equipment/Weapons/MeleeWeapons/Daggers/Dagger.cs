@@ -16,8 +16,7 @@ public class Dagger : MeleeWeapons {
 		
 		// Default sword stats
 		stats.weapType = 1;
-		stats.atkSpeed = 2.0f;
-		stats.damage = (int)(10);
+		stats.damage = 10;
 		this.stats.buffDuration = 0.25f;
 		
 		stats.maxChgTime = 2;
@@ -38,9 +37,9 @@ public class Dagger : MeleeWeapons {
 		}
 
 		if (ARTFUtilities.IsBehind(user.transform.position, enemy.facing, enemy.transform.position)) {
-			enemy.damage((int)((stats.damage + stats.chgDamage) * 1.5f), user.transform, user.gameObject);
+			enemy.damage((int)((stats.damage + this.user.stats.strength + stats.chgDamage * (this.tier + 1)) * 1.5f), user.transform, user.gameObject);
 		} else {
-			enemy.damage(stats.damage + stats.chgDamage, user.transform, user.gameObject);
+			enemy.damage(this.CalculateTotalDamage(), user.transform, user.gameObject);
 		}
 
 	}
