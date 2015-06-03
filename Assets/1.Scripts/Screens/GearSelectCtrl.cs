@@ -17,7 +17,6 @@ public class GearSelectCtrl : MonoBehaviour {
 	private int locX = 0;
 	private int locY = 0;
 	private int[] currItemArr;
-	private int currItemArrIndex = 0;
 
 	// inventory data
 	private PlayerData playerData;
@@ -124,7 +123,7 @@ public class GearSelectCtrl : MonoBehaviour {
 			}
 		}*/
 
-		currItemArr = items [locY];
+		currItemArr = items [locY]; //align item array with first highlighted button
 
 		/*Image weaponIF;
 		Sprite newSprite = Resources.Load<Sprite>("ItemFrames/HuntersRifle");
@@ -160,9 +159,12 @@ public class GearSelectCtrl : MonoBehaviour {
 				currItemArr = items[locY];
 				Debug.Log (currItemArr);
 			}
-			
-			if (hori > 0)
+
+			ItemSwitch (hori);
+
+			/*if (hori > 0)
 			{
+
 				currItemArrIndex = (currItemArrIndex + 1) % (currItemArr.Length);
 				Debug.Log (currItemArr[currItemArrIndex]);
 			}
@@ -174,7 +176,7 @@ public class GearSelectCtrl : MonoBehaviour {
 					currItemArrIndex = currItemArr.Length - 1;
 				}
 				Debug.Log (currItemArr[currItemArrIndex]);
-			}
+			}*/
 			
 			var pointer = new PointerEventData(EventSystem.current);
 			ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
@@ -185,9 +187,70 @@ public class GearSelectCtrl : MonoBehaviour {
 		}
 	}
 
-	void SlotSwap() {
-		if (locY > 3 && locY < 6) {
-
+	// controls item switching on slot when left or right is pressed
+	void ItemSwitch(float hori) {
+		switch (locY) {
+		case 0:
+			if (hori > 0) {
+				weaponsIndex = (weaponsIndex + 1) % (currItemArr.Length);
+			} else if (hori < 0) {
+				--weaponsIndex;
+				if (weaponsIndex < 0) {
+					weaponsIndex = currItemArr.Length - 1;
+				}
+			};
+			Debug.Log (currItemArr[weaponsIndex]);
+			break;
+		case 1:
+			if (hori > 0) {
+				helmetsIndex = (helmetsIndex + 1) % (currItemArr.Length);
+			} else if (hori < 0) {
+				--helmetsIndex;
+				if (helmetsIndex < 0) {
+					helmetsIndex = currItemArr.Length - 1;
+				}
+			};
+			break;
+		case 2:
+			if (hori > 0) {
+				armorsIndex = (armorsIndex + 1) % (currItemArr.Length);
+			} else if (hori < 0) {
+				--armorsIndex;
+				if (armorsIndex < 0) {
+					armorsIndex = currItemArr.Length - 1;
+				}
+			};
+			break;
+		case 3:
+			if (hori > 0) {
+				actionSlot1Index = (actionSlot1Index + 1) % (currItemArr.Length);
+			} else if (hori < 0) {
+				--actionSlot1Index;
+				if (actionSlot1Index < 0) {
+					actionSlot1Index = currItemArr.Length - 1;
+				}
+			};
+			break;
+		case 4:
+			if (hori > 0) {
+				actionSlot2Index = (actionSlot2Index + 1) % (currItemArr.Length);
+			} else if (hori < 0) {
+				--actionSlot2Index;
+				if (actionSlot2Index < 0) {
+					actionSlot2Index = currItemArr.Length - 1;
+				}
+			};
+			break;
+		case 5:
+			if (hori > 0) {
+				actionSlot3Index = (actionSlot3Index + 1) % (currItemArr.Length);
+			} else if (hori < 0) {
+				--actionSlot3Index;
+				if (actionSlot3Index < 0) {
+					actionSlot3Index = currItemArr.Length - 1;
+				}
+			};
+			break;
 		}
 	}
 
