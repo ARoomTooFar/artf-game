@@ -61,7 +61,7 @@ public class MobileEnemy : Enemy {
 	public override void MoveForward(float effectivness = 1f) {
 		Vector3 generalDir = Vector3.zero;
 		foreach (Collider cols in this.flockDar.objectsInRange) {
-			if (cols.gameObject == null) continue;
+			if (cols == null || cols.gameObject == null) continue;
 			Vector3 point = cols.bounds.ClosestPoint(this.transform.position);
 			point.y = 0f;
 			// Vector3 pointOfContact = this.col.bounds.ClosestPoint(point);
