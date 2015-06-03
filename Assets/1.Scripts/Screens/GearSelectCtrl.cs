@@ -5,7 +5,8 @@ using UnityEngine.EventSystems;
 
 public class GearSelectCtrl : MonoBehaviour {
 	public Controls controls;
-	public string menuPanelName;
+	public string panelName;
+	public string confirmPopUpName;
 	
 	private GSManager gsManager;
 	
@@ -14,6 +15,7 @@ public class GearSelectCtrl : MonoBehaviour {
 	private bool menuLock = false;
 	private GameObject prevBtn;
 	private GameObject[,] currMenuPtr;
+	private Animator currAnim;
 	private int locX = 0;
 	private int locY = 0;
 	private int[] currItemArr;
@@ -26,6 +28,12 @@ public class GearSelectCtrl : MonoBehaviour {
 	private GameObject[,] gearMenu;
 	private int gearMenuWidth = 1;
 	private int gearMenuHeight = 7;
+
+	//  confirm pop-up
+	private GameObject[,] confirmPopUp;
+	private int confirmPopUpWidth = 1;
+	private int confirmPopUpHeight = 1;
+	private Animator confirmPopUpAnim;
 	
 	// inventory data
 	private PlayerData playerData;
@@ -48,20 +56,23 @@ public class GearSelectCtrl : MonoBehaviour {
 		Farts serv = gameObject.AddComponent<Farts>();
 
 		gearMenu = new GameObject[7, 1];
-		gearMenu[0, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/WeaponSlot");
-		gearMenu[1, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/HelmetSlot");
-		gearMenu[2, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/ArmorSlot");
-		gearMenu[3, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/ActionSlot1");
-		gearMenu[4, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/ActionSlot2");
-		gearMenu[5, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/ActionSlot3");
-		gearMenu[6, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName + "/BtnReady");
+		gearMenu[0, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/WeaponSlot");
+		gearMenu[1, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/HelmetSlot");
+		gearMenu[2, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/ArmorSlot");
+		gearMenu[3, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/ActionSlot1");
+		gearMenu[4, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/ActionSlot2");
+		gearMenu[5, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/ActionSlot3");
+		gearMenu[6, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/BtnReady");
 
 		gearMenu[6, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
 			Debug.Log ("ready");
 			PanelDisable ();
+			MenuSwitch (Menu.Confirm);
 			//PanelEnable();
 		});
+
+		confirmPopUpAnim = GameObject.Find ("/Canvas/" + gameObject.name + "/" + confirmPopUpName).GetComponent<Animator>();
 
 		// start controls on gear menu
 		currMenuPtr = gearMenu;
@@ -71,11 +82,11 @@ public class GearSelectCtrl : MonoBehaviour {
 		prevBtn = currMenuPtr[locY, locX];
 
 		// begin to load player gear
-		if (menuPanelName == "P1Panel") {
+		if (panelName == "P1Panel") {
 			playerData = gsManager.dummyPlayerDataList [0];
-		} else if (menuPanelName == "P2Panel") {
+		} else if (panelName == "P2Panel") {
 			playerData = gsManager.dummyPlayerDataList [1];
-		} else if (menuPanelName == "P3Panel") {
+		} else if (panelName == "P3Panel") {
 			playerData = gsManager.dummyPlayerDataList [2];
 		} else {
 			playerData = gsManager.dummyPlayerDataList [3];
@@ -184,6 +195,7 @@ public class GearSelectCtrl : MonoBehaviour {
 			ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
 			ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 			prevBtn = currMenuPtr[locY, locX];
+			currAnim = confirmPopUpAnim;
 			
 			//Debug.Log(locX + "," + locY);
 		}
@@ -266,14 +278,14 @@ public class GearSelectCtrl : MonoBehaviour {
 		//menuLock = false;
 		
 		// return color to buttons
-		CanvasGroup panel = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName).GetComponent<CanvasGroup>();
+		CanvasGroup panel = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName).GetComponent<CanvasGroup>();
 		panel.interactable = true;
 		
 		// return color to images
 		Image[] imgChildren = gameObject.GetComponentsInChildren <Image> ();
 		
 		foreach (Image imgChild in imgChildren) {
-			if (imgChild.name == menuPanelName) {
+			if (imgChild.name == panelName) {
 				imgChild.color = new Color32(255, 255, 255, 100);
 			} else if (imgChild.name == "ImgItemFrame") {
 				imgChild.color = new Color(1f, 1f, 1f);
@@ -301,7 +313,7 @@ public class GearSelectCtrl : MonoBehaviour {
 		//menuLock = true;
 		
 		// grey buttons
-		CanvasGroup panel = GameObject.Find("/Canvas/" + gameObject.name + "/" + menuPanelName).GetComponent<CanvasGroup>();
+		CanvasGroup panel = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName).GetComponent<CanvasGroup>();
 		panel.interactable = false;
 
 		// grey images
@@ -317,6 +329,56 @@ public class GearSelectCtrl : MonoBehaviour {
 		{
 			child.color = new Color(0.3f, 0.3f, 0.3f);
 		}*/
+	}
+
+	// handles menu switching
+	void MenuSwitch (Menu menuToSwitchTo) {
+		// hide current menu
+		if (currAnim != null) {
+			currAnim.SetBool("show", false);
+			//prevMenu = currMenu;
+		}
+		
+		// switch to new menu
+		switch (menuToSwitchTo) {
+		case Menu.Confirm:
+			currMenuPtr = confirmPopUp;
+			break;
+		}
+		/*switch (menuToSwitchTo) {
+		case Menu.StartMenu:
+			currMenuPtr = startMenu;
+			currAnim = startMenuAnim;
+			break;
+		case Menu.LoginForm:
+			currMenuPtr = loginForm;
+			currAnim = loginFormAnim;
+			break;
+		case Menu.ReadyGo:
+			currMenuPtr = readyGoDisplay;
+			currAnim = readyGoDisplayAnim;
+			break;
+		case Menu.PopUp:
+			currMenuPtr = popUp;
+			txtDisplayField.text = currFieldPtr.text;
+			currAnim = popUpAnim;
+			ShowPad (popUp);
+			SetupKeypad();
+			break;
+		default:
+			Debug.Log ("Menu switch case invalid!");
+			break;
+		}*/
+		
+		// setup first button highlight and show new menu
+		//currMenu = menuToSwitchTo;
+		/*var pointer = new PointerEventData(EventSystem.current);
+		ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
+		locY = 0;
+		locX = 0;
+		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
+		prevBtn = currMenuPtr[locY, locX];*/
+		currAnim.SetBool("show", true);
 	}
 	
 	void Update () {
