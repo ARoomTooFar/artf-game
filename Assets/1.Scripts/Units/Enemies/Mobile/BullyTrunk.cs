@@ -86,7 +86,12 @@ public class BullyTrunk: MobileEnemy {
 	
 	public override void SetInitValues(int health, int strength, int coordination, int armor, float speed) {
 		base.SetInitValues(health, strength, coordination, armor, speed);
-		// this.trunk = this.gear.weapon.GetComponent<BullyTrunkWeapon>();
+		
+		if (tier > 1) {
+			
+			this.rightPaw.equip(this, this.opposition, 0);
+			this.leftPaw.equip(this, this.opposition, 0);
+		}
 	}
 
 	public override void SetTierData(int tier) {
@@ -121,12 +126,6 @@ public class BullyTrunk: MobileEnemy {
 			
 			this.BDS.addBuffDebuff (this.rockHead, this.gameObject);
 			this.BDS.addBuffDebuff (this.rockArms, this.gameObject);
-		}
-
-		if (tier > 1) {
-			
-			this.rightPaw.equip(this, this.opposition, 0);
-			this.leftPaw.equip(this, this.opposition, 0);
 		}
 
 		if (tier > 3) {
