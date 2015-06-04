@@ -16,7 +16,7 @@ public class PlayerUIPane : MonoBehaviour
 	public Image slot2bg;
 	public Image slot3bg;
 	public int currSlot = 1;
-	float slot1Curr,slot2Curr,slot3Curr,chgCurr,tempCD1,tempCD2,tempCD3;
+	float slot1Curr,slot2Curr,slot3Curr,/*chgCurr,*/tempCD1,tempCD2,tempCD3;
 
 	public void initVals (string player)
 	{
@@ -54,9 +54,9 @@ public class PlayerUIPane : MonoBehaviour
 	void updateChg(){
 		if (pl.inventory.keepItemActive && pl.inventory.items [pl.inventory.selected].itemType == 'C') {
 			if ((pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().curChgTime / pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().maxChgTime) <= 0) {
-				chgCurr = 0;
+				//chgCurr = 0;
 			} else {
-				chgCurr = (pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().curChgTime / pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().maxChgTime);
+				//chgCurr = (pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().curChgTime / pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().maxChgTime);
 			}
 		} 
 	}

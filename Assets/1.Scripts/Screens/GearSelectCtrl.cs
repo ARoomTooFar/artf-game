@@ -26,13 +26,13 @@ public class GearSelectCtrl : MonoBehaviour {
 	
 	// gear menu
 	private GameObject[,] gearMenu;
-	private int gearMenuWidth = 1;
-	private int gearMenuHeight = 7;
+//	private int gearMenuWidth = 1;
+//	private int gearMenuHeight = 7;
 
 	//  confirm pop-up
-	private GameObject[,] confirmPopUp;
-	private int confirmPopUpWidth = 1;
-	private int confirmPopUpHeight = 1;
+	//private GameObject[,] confirmPopUp;
+	//private int confirmPopUpWidth = 1;
+	//private int confirmPopUpHeight = 1;
 	private Animator confirmPopUpAnim;
 	
 	// inventory data
@@ -53,7 +53,7 @@ public class GearSelectCtrl : MonoBehaviour {
 
 	void Start () {
 		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
-		Farts serv = gameObject.AddComponent<Farts>();
+//		Farts serv = gameObject.AddComponent<Farts>();
 
 		gearMenu = new GameObject[7, 1];
 		gearMenu[0, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/WeaponSlot");
@@ -342,7 +342,7 @@ public class GearSelectCtrl : MonoBehaviour {
 		// switch to new menu
 		switch (menuToSwitchTo) {
 		case Menu.Confirm:
-			currMenuPtr = confirmPopUp;
+			//currMenuPtr = confirmPopUp;
 			break;
 		}
 		/*switch (menuToSwitchTo) {

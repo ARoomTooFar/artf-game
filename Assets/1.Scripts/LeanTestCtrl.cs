@@ -24,7 +24,5 @@ public class LeanTestCtrl : MonoBehaviour {
 
 		string stringifiedCharData = serv.stringifyCharData (playerData);
 		Debug.Log (stringifiedCharData);
-
-        GameObject test = new GameObject("ehhhh");
 	}
 }
