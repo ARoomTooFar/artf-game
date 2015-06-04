@@ -167,7 +167,7 @@ public class FileIO : MonoBehaviour
 				MapDataParser.ParseSaveString(lvlData);
 				Debug.Log("LVL DL SUCCESS: " + lvlData);
 //				makeStretchyWalls();
-				throw new Exception();
+				//throw new Exception();
 			} catch (Exception ex){
 				Debug.Log(ex.Message);
 				Debug.Log(ex.StackTrace);
