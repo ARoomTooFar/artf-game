@@ -38,7 +38,7 @@ public class FolderBarController : MonoBehaviour {
 
 		folderBar = GameObject.Find("FolderBar").GetComponent<RectTransform>();
 
-		buttonColor = new Color32(0, 147, 176, 255);
+		buttonColor = new Color32(0, 147, 176, 150);
 
 		//get number of folder scrollviews and make an array for them
 		numberOfFolders = folderObject.gameObject.transform.childCount;

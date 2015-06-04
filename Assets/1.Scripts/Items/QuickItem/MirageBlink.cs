@@ -27,9 +27,7 @@ public class MirageBlink : Blink {
 	protected override void blinkFunc() {
 		if (this.tier > 1) {
 			MirageImage newImage = (Instantiate(image, user.transform.position, user.transform.rotation) as GameObject).GetComponent<MirageImage>();
-			newImage.spawnedBy = this;
-			newImage.user = this.user.GetComponent<Mirage>();
-			newImage.hitsToKill = this.tier > 3 ? 2 : 1;
+			newImage.SetData(this, this.user.GetComponent<Mirage>(), this.tier > 3 ? 2 : 1);
 			mirrors.Add(newImage);
 		}
 
