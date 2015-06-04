@@ -66,6 +66,7 @@ public class FodderBall: MonoBehaviour {
 		fodderPos.y = 0.0f;
 		FoliantFodder newFodder = (Instantiate(foliantFodder, fodderPos, transform.rotation) as GameObject).GetComponent<FoliantFodder>();
 		//Sets fodder to be in hiveMind mode
+		newFodder.SetMonster(1);
 		newFodder.setHive (hive);
 		hive.addFodder (newFodder);
 
