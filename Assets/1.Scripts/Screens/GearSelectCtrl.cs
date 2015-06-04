@@ -23,16 +23,18 @@ public class GearSelectCtrl : MonoBehaviour {
 		Panel,
 		Confirm
 	}
+	private Menu currMenu;
+	private Menu prevMenu;
 	
 	// gear menu
 	private GameObject[,] gearMenu;
-//	private int gearMenuWidth = 1;
-//	private int gearMenuHeight = 7;
+	private int gearMenuWidth = 1;
+	private int gearMenuHeight = 7;
 
-	//  confirm pop-up
-	//private GameObject[,] confirmPopUp;
-	//private int confirmPopUpWidth = 1;
-	//private int confirmPopUpHeight = 1;
+	// confirm pop-up
+	private GameObject[,] confirmPopUp;
+	private int confirmPopUpWidth = 1;
+	private int confirmPopUpHeight = 1;
 	private Animator confirmPopUpAnim;
 	
 	// inventory data
@@ -55,7 +57,8 @@ public class GearSelectCtrl : MonoBehaviour {
 		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
 //		Farts serv = gameObject.AddComponent<Farts>();
 
-		gearMenu = new GameObject[7, 1];
+		/* setup gear menu */
+		gearMenu = new GameObject[gearMenuHeight, gearMenuWidth];
 		gearMenu[0, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/WeaponSlot");
 		gearMenu[1, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/HelmetSlot");
 		gearMenu[2, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/ArmorSlot");
@@ -64,11 +67,24 @@ public class GearSelectCtrl : MonoBehaviour {
 		gearMenu[5, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/ActionSlot3");
 		gearMenu[6, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/BtnReady");
 
+		// ready button
 		gearMenu[6, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
 			Debug.Log ("ready");
 			PanelDisable ();
 			MenuSwitch (Menu.Confirm);
+		});
+
+		/* setup confirm pop up */
+		confirmPopUp = new GameObject[confirmPopUpHeight, confirmPopUpWidth];
+		confirmPopUp[0, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + confirmPopUpName + "/BtnUnready");;
+
+		// unready button
+		confirmPopUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			Debug.Log ("unready");
+			PanelEnable ();
+			MenuSwitch (Menu.Panel);
 			//PanelEnable();
 		});
 
@@ -282,7 +298,7 @@ public class GearSelectCtrl : MonoBehaviour {
 		panel.interactable = true;
 		
 		// return color to images
-		Image[] imgChildren = gameObject.GetComponentsInChildren <Image> ();
+		Image[] imgChildren = panel.gameObject.GetComponentsInChildren <Image> ();
 		
 		foreach (Image imgChild in imgChildren) {
 			if (imgChild.name == panelName) {
@@ -317,7 +333,7 @@ public class GearSelectCtrl : MonoBehaviour {
 		panel.interactable = false;
 
 		// grey images
-		Image[] imgChildren = gameObject.GetComponentsInChildren <Image> ();
+		Image[] imgChildren = panel.gameObject.GetComponentsInChildren <Image> ();
 
 		foreach (Image imgChild in imgChildren) {
 			imgChild.color = new Color(0.3f, 0.3f, 0.3f);
@@ -336,13 +352,18 @@ public class GearSelectCtrl : MonoBehaviour {
 		// hide current menu
 		if (currAnim != null) {
 			currAnim.SetBool("show", false);
-			//prevMenu = currMenu;
+			prevMenu = currMenu;
 		}
 		
 		// switch to new menu
 		switch (menuToSwitchTo) {
+		case Menu.Panel:
+			currMenuPtr = gearMenu;
+			currAnim = null;
+			break;
 		case Menu.Confirm:
-			//currMenuPtr = confirmPopUp;
+			currMenuPtr = confirmPopUp;
+			currAnim = confirmPopUpAnim;
 			break;
 		}
 		/*switch (menuToSwitchTo) {
@@ -371,14 +392,16 @@ public class GearSelectCtrl : MonoBehaviour {
 		}*/
 		
 		// setup first button highlight and show new menu
-		//currMenu = menuToSwitchTo;
-		/*var pointer = new PointerEventData(EventSystem.current);
+		currMenu = menuToSwitchTo;
+		var pointer = new PointerEventData(EventSystem.current);
 		ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler); // unhighlight previous button
 		locY = 0;
 		locX = 0;
 		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler);
-		prevBtn = currMenuPtr[locY, locX];*/
-		currAnim.SetBool("show", true);
+		prevBtn = currMenuPtr[locY, locX];
+		if (currAnim != null) {
+			currAnim.SetBool("show", true);
+		}
 	}
 	
 	void Update () {
