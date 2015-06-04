@@ -11,13 +11,11 @@ public partial class ARTFRoom : Square {
 	#region PrivateVariables
 	protected string floorType = "{0}/Floors/IndustrialFloor1";
 	protected string roomCornerId = "LevelEditor/Other/RoomCorner";
-	protected string wallType = "{0}/Other/wallstoneend";
+	protected string wallType = "{0}/Other/StretchWall";
 	#endregion PrivateVariables
 
 	#region Properties
 	public bool placedThisSession = true;
-
-	public List<SceneryBlock> Walls { get; private set; }
 
 	public Dictionary<DIRECTION, List<GameObject>> StretchWalls { get; private set; }
 
@@ -66,7 +64,7 @@ public partial class ARTFRoom : Square {
 	 */
 	public ARTFRoom(Vector3 pos1, Vector3 pos2,
 	                string floor = "{0}/Floors/IndustrialFloor1",
-	                string wall = "{0}/Other/wallstoneend") : base(pos1, pos2) {
+	                string wall = "{0}/Other/StretchWall") : base(pos1, pos2) {
 		floorType = floor;
 		wallType = wall;
 		this.Floor = GameObjectResourcePool.getResource(floorType, this.LLCorner, Vector3.zero);
@@ -75,14 +73,12 @@ public partial class ARTFRoom : Square {
 		this.Scenery = new List<SceneryBlock>();
 		this.Monster = new List<MonsterBlock>();
 		this.Doors = new List<SceneryBlock>();
-		this.Walls = new List<SceneryBlock>();
 		this.StretchWalls = new Dictionary<DIRECTION, List<GameObject>>(){
 			{DIRECTION.North, new List<GameObject>()},
 			{DIRECTION.South, new List<GameObject>()},
 			{DIRECTION.East, new List<GameObject>()},
 			{DIRECTION.West, new List<GameObject>()},
 		};
-		//setWalls();
 		setAllStretchWalls();
 
 		this.RoomPaths = new Dictionary<KeyValuePair<Vector3, Vector3>, List<Vector3>>();
@@ -193,8 +189,10 @@ public partial class ARTFRoom : Square {
 		foreach(MonsterBlock blk in Monster) {
 			blk.move(offset);
 		}
-		foreach(SceneryBlock wall in Walls) {
-			wall.move(offset);
+		foreach(List<GameObject> walls in StretchWalls.Values) {
+			foreach(GameObject wall in walls){
+				wall.transform.position = wall.transform.position + offset;
+			}
 		}
 		foreach(SceneryBlock dr in (new List<SceneryBlock>(Doors))) {
 			MapData.SceneryBlocks.remove(dr);
@@ -246,7 +244,7 @@ public partial class ARTFRoom : Square {
 			MapData.MonsterBlocks.remove(mon);
 		}
 		setFloor();
-		setWalls();
+		setAllStretchWalls();
 		updateMarkerPositions();
 	}
 
@@ -264,38 +262,14 @@ public partial class ARTFRoom : Square {
 			mon.remove();
 		}
 		Monster.Clear();
-		foreach(SceneryBlock wall in Walls) {
-			wall.remove();
-		}
-		Walls.Clear();
 		foreach(List<GameObject> walls in StretchWalls.Values) {
 			foreach(GameObject wall in walls){
-				GameObjectResourcePool.returnResource("{0}/Other/wallstoneend", wall);
+				GameObjectResourcePool.returnResource(wallType, wall);
 			}
 		}
-		Walls.Clear();
 		GameObjectResourcePool.returnResource(floorType, Floor);
 		foreach(GameObject cor in CornerMarkers) {
 			GameObjectResourcePool.returnResource(roomCornerId, cor);
-		}
-	}
-	
-	public void setWalls() {
-		foreach(SceneryBlock wall in Walls) {
-			wall.remove();
-		}
-		Walls.Clear();
-		Vector3 vec;
-		for(float i = LLCorner.x; i <= URCorner.x; ++i) {
-			for(float j = LLCorner.z; j <= URCorner.z; ++j) {
-				vec = new Vector3(i, 0, j);
-				if(!isEdge(vec)) {
-					continue;
-				}
-
-//				if(Global.inLevelEditor)
-					Walls.Add(new SceneryBlock(wallType, vec, DIRECTION.North));
-			}
 		}
 	}
 
