@@ -26,12 +26,26 @@ public class PlayerUIPane : MonoBehaviour
 		slot1 = transform.Find ("Ring1").gameObject.GetComponent<Image> ();
 		slot2 = transform.Find ("Ring1").gameObject.GetComponent<Image> ();
 		slot3 = transform.Find ("Ring1").gameObject.GetComponent<Image> ();
+
 		slot1bg = transform.Find ("Ring1BG").gameObject.GetComponent<Image> ();
 		slot2bg = transform.Find ("Ring2BG").gameObject.GetComponent<Image> ();
 		slot3bg = transform.Find ("Ring3BG").gameObject.GetComponent<Image> ();
+
+
 		slot1.fillAmount = 1;
 		slot2.fillAmount = 1;
 		slot3.fillAmount = 1;
+
+		print (pl.inventory.items[0]);
+		print (pl.inventory.items[1]);
+		print (pl.inventory.items[2]);
+		setAbilityIcons();
+	}
+
+	void setAbilityIcons(){
+		slot1bg.sprite = Resources.Load <Sprite>("PlayerUI/HUDV2Assets/" + pl.inventory.items[0]);
+		slot2bg.sprite = Resources.Load <Sprite>("PlayerUI/HUDV2Assets/" + pl.inventory.items[1]);
+		slot3bg.sprite = Resources.Load <Sprite>("PlayerUI/HUDV2Assets/" + pl.inventory.items[2]);
 	}
 
 	void Update ()

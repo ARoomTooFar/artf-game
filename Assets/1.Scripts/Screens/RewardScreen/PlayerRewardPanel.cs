@@ -60,14 +60,14 @@ public class PlayerRewardPanel : MonoBehaviour {
 		
 		//HARD-CODED SECTION
 		//REPLACE WITH THINGS FROM OTHER SCRIPTS
-		loot.Add("testIcon1");
-		loot.Add("testIcon2");
-		loot.Add("testIcon3");
-		loot.Add("testIcon4");
-		loot.Add("testIcon5");
-		loot.Add("testIcon6");
-		loot.Add("testIcon7");
-		loot.Add("testIcon8");
+		loot.Add("CopGun");
+		loot.Add("CommsHelmet");
+		loot.Add("fist");
+		loot.Add("HoboCoat");
+		loot.Add("lanternUI");
+		loot.Add("lumbersaw");
+		loot.Add("MixedUniform");
+		loot.Add("SpikeHelmet");
 		total = 13;
 		//END HARDCODED SECTION
 		
@@ -208,7 +208,7 @@ public class PlayerRewardPanel : MonoBehaviour {
 		lootItemRect.anchoredPosition = new Vector2(0f + iconDimens.x / 2, newRowYPos);
 		
 		//give it the proper icon
-		icon = Resources.Load<Sprite>("RewardScreen/" + itemName);
+		icon = Resources.Load<Sprite>("RewardScreen/NewIcons/" + itemName);
 		newLootItem.transform.Find("Icon").GetComponent<Image>().sprite = icon;
 		
 		//add entry's height to list for highlighting
