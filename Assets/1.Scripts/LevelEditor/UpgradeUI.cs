@@ -67,7 +67,7 @@ public class UpgradeUI : MonoBehaviour
 		{480, 12, 48, 0, 40},
 		{600, 15, 60, 0, 50},
 		{720, 18, 72, 0, 60}};
-	static int[,] ArtilitreeStats = new int[6,5]{
+	static int[,] ArtillitreeStats = new int[6,5]{
 		{200, 15, 0, 60, 10}, 
 		{400, 22, 0, 120, 20},
 		{600, 29, 0, 180, 30},
@@ -103,7 +103,7 @@ public class UpgradeUI : MonoBehaviour
 		{"CackleBranch", CackleBranchStats},
 		{"BullyTrunk", BullyTrunkStats},
 		{"Bushling", BushlingStats},
-		{"Artilitree", ArtilitreeStats},
+		{"Artillitree", ArtillitreeStats},
 		{"Mirage", MirageStats},
 		{"Synth", FoliantFodderStats},
 		{"DartPlant", DartPlantStats}
