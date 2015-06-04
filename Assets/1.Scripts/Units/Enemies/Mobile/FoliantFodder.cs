@@ -15,7 +15,7 @@ public class FoliantFodder: MobileEnemy {
 		base.Awake ();
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 4.0f;
+		this.maxAtkRadius = 3.0f;
 	}
 	
 	protected override void Start() {
