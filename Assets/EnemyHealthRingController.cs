@@ -8,7 +8,7 @@ public class EnemyHealthRingController : MonoBehaviour {
 	public Image ring2;
 
 	void Start () {
-		enemy = transform.parent.gameObject.GetComponent<Enemy>();
+		if (this.enemy == null)enemy = transform.parent.gameObject.GetComponent<Enemy>();
 		ring1 = transform.Find("Ring1").GetComponent<Image>();
 		ring2 = transform.Find("Ring2").GetComponent<Image>();
 	}

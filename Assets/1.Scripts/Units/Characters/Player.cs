@@ -54,7 +54,6 @@ public class Player : Character, IHealable<int>{
 
 	public override void SetGearAndAbilities() {
 		base.SetGearAndAbilities();
-		print (this.gear.chest.stats.ArmVal);
 		this.SetInitValues();
 	}
 
