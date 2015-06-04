@@ -57,22 +57,22 @@ public class PlayerRewardPanel : MonoBehaviour {
 		points = new List<int>();
 		pointsText = new List<Text>();
 		totalText = transform.Find("Title/Text").GetComponent<Text>() as Text;
-		
-		//HARD-CODED SECTION
-		//REPLACE WITH THINGS FROM OTHER SCRIPTS
-		loot.Add("CopGun");
-		loot.Add("CommsHelmet");
-		loot.Add("fist");
-		loot.Add("HoboCoat");
-		loot.Add("lanternUI");
-		loot.Add("lumbersaw");
-		loot.Add("MixedUniform");
-		loot.Add("SpikeHelmet");
+
 		total = 13;
-		//END HARDCODED SECTION
-		
+
+		//fill with placeholders if nothing in loot list
+		if(loot.Count == 0){
+			loot.Add("targetingVisor");
+			loot.Add("militarySpikeHelmet");
+			loot.Add("fist");
+			loot.Add("pruningBlade");
+			loot.Add("shockNet");
+			loot.Add("sprint");
+			loot.Add("trashHelmetBucket");
+			loot.Add("trashHelmetLightBulb");
+		}
+
 		populateList();
-		
 		highlights[0].SetActive(true); //initialize top entry to be highlighted
 		activeEntry = 0;
 		
