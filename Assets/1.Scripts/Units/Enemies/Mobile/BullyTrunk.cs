@@ -94,8 +94,7 @@ public class BullyTrunk: MobileEnemy {
 		}
 	}
 
-	public override void SetTierData(int tier) {
-		tier = 3;
+	protected override void SetTierData(int tier) {
 		base.SetTierData (tier);
 
 		monsterLoot.initializeLoot("BullyTrunk", tier);

@@ -76,8 +76,7 @@ public class Enemy : Character {
 		}
 
 		if (testing) {
-			inventory.equipItems(opposition);
-			this.SetTierData(0);
+			this.SetMonster (0);
 		}
 
 		MusicPlayer = GameObject.Find ("MusicPlayer");
@@ -104,13 +103,17 @@ public class Enemy : Character {
 		stats.armor = armor;
 		stats.speed = speed;
 		
-		if (testing) {
-			gear.equipGear(opposition);
-		}
+		gear.equipGear(opposition);
 	}
+	
+	public virtual void SetMonster(int tier) {
+		inventory.equipItems(opposition);
+		this.SetTierData(tier);
+	}
+	
 
 	// Things that are tier specific should be set here
-	public virtual void SetTierData(int tier) {
+	protected virtual void SetTierData(int tier) {
 		this.tier = tier;
 		this.animator.SetInteger("Tier", this.tier);
 		monsterLoot = this.gameObject.AddComponent<MonsterLoot>();

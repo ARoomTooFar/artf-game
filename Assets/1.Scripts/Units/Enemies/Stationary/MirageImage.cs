@@ -20,7 +20,7 @@ public class MirageImage : Mirage {
 	
 	}
 	
-	public override void SetTierData(int tier) {
+	protected override void SetTierData(int tier) {
 		tier = -1;
 		base.SetTierData (tier);
 	}
