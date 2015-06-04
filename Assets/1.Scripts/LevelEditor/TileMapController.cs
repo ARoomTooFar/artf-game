@@ -60,7 +60,7 @@ public class TileMapController : MonoBehaviour {
 			}*/
 
 			selectedTiles.Clear();
-			selectTile(point);
+			//selectTile(point);
 			shiftOrigin = point;
 
 			return;
