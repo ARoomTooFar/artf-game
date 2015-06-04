@@ -308,7 +308,7 @@ public partial class ARTFRoom : Square {
 
 	public void setStretchWalls(DIRECTION dir){
 		foreach(GameObject wall in StretchWalls[dir]) {
-			GameObjectResourcePool.returnResource("{0}/Other/wallstoneend", wall);
+			GameObjectResourcePool.returnResource("{0}/Other/StretchWall", wall);
 		}
 		StretchWalls[dir].Clear();
 
@@ -349,7 +349,7 @@ public partial class ARTFRoom : Square {
 		for(int i = 1; i < coords.Count; ++i) {
 			varPos = (coords[i-1] + coords[i])/2.0f;
 			nPos = new Vector3(isNS? varPos: staticPos, 0, !isNS? varPos: staticPos);
-			nWall = GameObjectResourcePool.getResource("{0}/Other/wallstoneend", nPos, dir.toRotationVector());
+			nWall = GameObjectResourcePool.getResource("{0}/Other/StretchWall", nPos, dir.toRotationVector());
 			scale = nWall.transform.localScale;
 			scale.x = (coords[i] - 2) - (coords[i-1]+2) + 1;
 			nWall.transform.localScale = scale;
