@@ -11,7 +11,7 @@ public class MainMenuCtrl : MonoBehaviour {
 	private int playerNum;
 	private GSManager gsManager;
 	private Farts serv;
-	private WWW loginReq;
+	private WWW httpReq;
 
     // UI state
     private bool menuMoved = false;
@@ -111,11 +111,7 @@ public class MainMenuCtrl : MonoBehaviour {
         // register button press handler
         startMenu[1, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
-			Debug.Log ("Register button pressed!");
             MenuSwitch(Menu.RegistrationForm);
-
-            /*string registerResult = serv.register("test3", "hyughhhhhh");
-			Debug.Log (registerResult);*/
         });
 
 		/* setup login form */
@@ -147,7 +143,7 @@ public class MainMenuCtrl : MonoBehaviour {
 		{
 			menuLock = true;
 			MenuDisable();
-			loginReq = serv.loginWWW(txtFieldAcctName.text, txtFieldPasscode.text);
+			httpReq = serv.loginWWW(txtFieldAcctName.text, txtFieldPasscode.text);
 		});
 
 		// back button
@@ -182,6 +178,54 @@ public class MainMenuCtrl : MonoBehaviour {
 		registrationForm[3, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/BtnRegister");
 		registrationForm[3, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/BtnBack");
 		//registrationFormAnim = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm").GetComponent<Animator>();
+
+		// register acct name field
+		registrationForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			currFieldPtr = txtFieldRAcctName;
+			PopUpEnable ();
+		});
+		
+		// register passcode field
+		registrationForm[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			currFieldPtr = txtFieldRPasscode;
+			PopUpEnable ();
+		});
+
+		// register confirm passcode field
+		registrationForm[2, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			currFieldPtr = txtFieldRConfirmPass;
+			PopUpEnable ();
+		});
+		
+		// register button
+		registrationForm[3, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			if(txtFieldRPasscode.text == txtFieldRConfirmPass.text) {
+				menuLock = true;
+				MenuDisable();
+				string registerResult = serv.register(txtFieldRAcctName.text, txtFieldRPasscode.text);
+				if (serv.dataCheck(registerResult)) {
+					Debug.Log ("Registration successful: " + registerResult);
+				} else {
+					Debug.Log ("Something went wrong!");
+				}
+				menuLock = false;
+				MenuEnable ();
+				MenuSwitch (Menu.LoginForm);
+			} else {
+				Debug.Log ("Passcodes were not the same");
+			}
+		});
+		
+		// back button
+		registrationForm[3, 1].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			MenuSwitch (Menu.StartMenu);
+			MenuReset ();
+		});
 
 		/* setup keypad (caps) */
 		popUp = new GameObject[popUpHeight, popUpWidth];
@@ -642,8 +686,9 @@ public class MainMenuCtrl : MonoBehaviour {
 
 	// handles login function call
 	void LoginHand () {
-		if (serv.dataCheck(loginReq.text)) {
-			PlayerData playerData = serv.parseCharData(loginReq.text);
+		if (serv.dataCheck(httpReq.text)) {
+			Debug.Log (httpReq.text);
+			PlayerData playerData = serv.parseCharData(httpReq.text);
             gsManager.playerDataList[playerNum] = playerData; //add player data to player list
 			gsManager.leaderList.Add (playerNum); //add player to leader list
 
@@ -672,9 +717,9 @@ public class MainMenuCtrl : MonoBehaviour {
 		}
 
 		// login loading
-		if (loginReq != null && loginReq.isDone == false) {
+		if (httpReq != null && httpReq.isDone == false) {
 			//Debug.Log ("login progress"); // show login loading msg
-		} else if (loginReq != null && loginReq.isDone) {
+		} else if (httpReq != null && httpReq.isDone) {
 			// reset highlighted UI ele
 			var pointer = new PointerEventData(EventSystem.current);
 			ExecuteEvents.Execute(prevBtn, pointer, ExecuteEvents.pointerExitHandler);
@@ -683,7 +728,7 @@ public class MainMenuCtrl : MonoBehaviour {
 			prevBtn = currMenuPtr[locY, locX];
 
 			LoginHand();
-			loginReq = null;
+			httpReq = null;
 		}
 	}
 }
