@@ -700,6 +700,49 @@ public class GearSelectCtrl : MonoBehaviour {
 			playerData.actionslot3 = 9;
 			break;
 		}
+
+		if (playerData.inventory [playerData.weapon] == 0) {
+			gearMenu [0, 0].GetComponent<Button> ().interactable = false;
+		} else {
+			gearMenu [0, 0].GetComponent<Button> ().interactable = true;
+		}
+
+		if (playerData.inventory [playerData.headgear] == 0) {
+			gearMenu [1, 0].GetComponent<Button> ().interactable = false;
+		} else {
+			gearMenu [1, 0].GetComponent<Button> ().interactable = true;
+		}
+
+		if (playerData.inventory [playerData.armor] == 0) {
+			gearMenu [2, 0].GetComponent<Button> ().interactable = false;
+		} else {
+			gearMenu [2, 0].GetComponent<Button> ().interactable = true;
+		}
+
+		if (playerData.inventory [playerData.actionslot1] == 0) {
+			gearMenu [3, 0].GetComponent<Button> ().interactable = false;
+		} else {
+			gearMenu [3, 0].GetComponent<Button> ().interactable = true;
+		}
+
+		if (playerData.inventory [playerData.actionslot2] == 0) {
+			gearMenu [4, 0].GetComponent<Button> ().interactable = false;
+		} else {
+			gearMenu [4, 0].GetComponent<Button> ().interactable = true;
+		}
+
+		if (playerData.inventory [playerData.actionslot3] == 0) {
+			gearMenu [5, 0].GetComponent<Button> ().interactable = false;
+		} else {
+			gearMenu [5, 0].GetComponent<Button> ().interactable = true;
+		}
+
+		// if any items are locked do not let player ready
+		if (playerData.inventory [playerData.weapon] == 0 || playerData.inventory [playerData.headgear] == 0 || playerData.inventory [playerData.armor] == 0 || playerData.inventory [playerData.actionslot1] == 0 || playerData.inventory [playerData.actionslot2] == 0 || playerData.inventory [playerData.actionslot3] == 0) {
+			gearMenu [6, 0].GetComponent<Button> ().interactable = false;
+		} else {
+			gearMenu [6, 0].GetComponent<Button> ().interactable = true;
+		}
 	}
 
 	// handles menu switching
