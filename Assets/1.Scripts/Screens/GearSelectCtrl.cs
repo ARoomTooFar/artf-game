@@ -106,8 +106,15 @@ public class GearSelectCtrl : MonoBehaviour {
 		{
 			PanelDisable ();
 			MenuSwitch (Menu.Confirm);
-			Debug.Log ("PLAYERDATALIST");
-			Debug.Log (gsManager.dummyPlayerDataList[0].armor);
+			gsManager.playerDataList[0] = gsManager.dummyPlayerDataList[0];
+			Debug.Log ("PLAYER DATA LIST");
+			Debug.Log ("weapon: " + gsManager.playerDataList[0].weapon);
+			Debug.Log ("helmet: " + gsManager.playerDataList[0].headgear);
+			Debug.Log ("armor: " + gsManager.playerDataList[0].armor);
+			Debug.Log ("actionslot1: " + gsManager.playerDataList[0].actionslot1);
+			Debug.Log ("actionslot2: " + gsManager.playerDataList[0].actionslot2);
+			Debug.Log ("actionslot3: " + gsManager.playerDataList[0].actionslot3);
+			gsManager.LoadScene("TestLevelSelect");
 		});
 
 		/* setup confirm pop-up */
@@ -128,7 +135,7 @@ public class GearSelectCtrl : MonoBehaviour {
 		upgradePopUp = new GameObject[upgradePopUpHeight, upgradePopUpWidth];
 		upgradePopUp[0, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + upgradePopUpName + "/BtnBack");
 		
-		// unready button
+		// back button
 		upgradePopUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
 			Debug.Log ("upgrade");
@@ -176,7 +183,7 @@ public class GearSelectCtrl : MonoBehaviour {
 
 		// load armor data
 		for (int i = 0; i < armors.Length; ++i) {
-			armors[i] = playerData.inventory[i + 31];
+			armors[i] = playerData.inventory[i + 30];
 		}
 
 		// load action slot 1
@@ -217,8 +224,6 @@ public class GearSelectCtrl : MonoBehaviour {
 		}*/
 
 		currItemArr = items [locY]; //align item array with first highlighted button
-
-		playerData.armor = 3;
 	}
 
 	// handles menu joystick movement control
@@ -392,64 +397,307 @@ public class GearSelectCtrl : MonoBehaviour {
 		switch (weaponsIndex) {
 		case 0:
 			txtWeaponSlot.text = "Shiv";
+			playerData.weapon = 10;
 			break;
 		case 1:
 			txtWeaponSlot.text = "Utility Blade";
+			playerData.weapon = 11;
 			break;
 		case 2:
 			txtWeaponSlot.text = "Pruning Blade";
+			playerData.weapon = 12;
 			break;
 		case 3:
 			txtWeaponSlot.text = "Plasma Blade";
+			playerData.weapon = 13;
 			break;
 		case 4:
 			txtWeaponSlot.text = "Rebar Sword";
+			playerData.weapon = 14;
 			break;
 		case 5:
 			txtWeaponSlot.text = "Long Sword";
+			playerData.weapon = 15;
 			break;
 		case 6:
 			txtWeaponSlot.text = "Machette";
+			playerData.weapon = 16;
 			break;
 		case 7:
 			txtWeaponSlot.text = "Thin Blade";
+			playerData.weapon = 17;
 			break;
 		case 8:
 			txtWeaponSlot.text = "Flame Pike";
+			playerData.weapon = 18;
 			break;
 		case 9:
 			txtWeaponSlot.text = "Lumber Saw";
+			playerData.weapon = 19;
 			break;
 		case 10:
 			txtWeaponSlot.text = "Chainsaw Sword";
+			playerData.weapon = 20;
 			break;
 		case 11:
 			txtWeaponSlot.text = "Six Shooter";
+			playerData.weapon = 21;
 			break;
 		case 12:
 			txtWeaponSlot.text = "Cop Gun";
+			playerData.weapon = 22;
 			break;
 		case 13:
 			txtWeaponSlot.text = "Hi-Compression Pistol";
+			playerData.weapon = 23;
 			break;
 		case 14:
 			txtWeaponSlot.text = "Hunting Rifle";
 			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/HuntersRifle");
+			playerData.weapon = 24;
 			break;
 		case 15:
 			txtWeaponSlot.text = "Laser Rifle";
+			playerData.weapon = 25;
 			break;
 		case 16:
 			txtWeaponSlot.text = "Machine Gun";
+			playerData.weapon = 26;
 			break;
 		case 17:
 			txtWeaponSlot.text = "Automatic Laser Rifle";
+			playerData.weapon = 27;
 			break;
 		case 18:
 			txtWeaponSlot.text = "Shotgun";
+			playerData.weapon = 28;
 			break;
 		case 19:
 			txtWeaponSlot.text = "Wall of Lead";
+			playerData.weapon = 29;
+			break;
+		}
+
+		switch (helmetsIndex) {
+		case 0:
+			txtHelmetSlot.text = "Trash Helmet Light Bulb";
+			playerData.headgear = 39;
+			break;
+		case 1:
+			txtHelmetSlot.text = "Trash Helmet Bucket";
+			playerData.headgear = 40;
+			break;
+		case 2:
+			txtHelmetSlot.text = "Traffic Cone";
+			playerData.headgear = 41;
+			break;
+		case 3:
+			txtHelmetSlot.text = "Military Spike Helmet";
+			playerData.headgear = 42;
+			break;
+		case 4:
+			txtHelmetSlot.text = "Military Helmet";
+			playerData.headgear = 43;
+			break;
+		case 5:
+			txtHelmetSlot.text = "Biker Helmet";
+			playerData.headgear = 44;
+			break;
+		case 6:
+			txtHelmetSlot.text = "Police Helmet";
+			playerData.headgear = 45;
+			break;
+		case 7:
+			txtHelmetSlot.text = "Com. Helmet";
+			playerData.headgear = 46;
+			break;
+		case 8:
+			txtHelmetSlot.text = "Targeting Visor";
+			playerData.headgear = 47;
+			break;
+		case 9:
+			txtHelmetSlot.text = "Bionic Eye";
+			playerData.headgear = 48;
+			break;
+		case 10:
+			txtHelmetSlot.text = "Cyber Face Robot";
+			playerData.headgear = 49;
+			break;
+		case 11:
+			txtHelmetSlot.text = "Cyber Face Horns";
+			playerData.headgear = 50;
+			break;
+		case 12:
+			txtHelmetSlot.text = "Brain Case Visor";
+			playerData.headgear = 51;
+			break;
+		}
+
+		switch (armorsIndex) {
+		case 0:
+			txtArmorSlot.text = "Shirt & Pants";
+			playerData.armor = 30;
+			break;
+		case 1:
+			txtArmorSlot.text = "Poncho";
+			playerData.armor = 31;
+			break;
+		case 2:
+			txtArmorSlot.text = "Bullet Proof Vest";
+			playerData.armor = 32;
+			break;
+		case 3:
+			txtArmorSlot.text = "Smuggler's Jacket";
+			playerData.armor = 33;
+			break;
+		case 4:
+			txtArmorSlot.text = "Mixed Plate Uniform";
+			playerData.armor = 34;
+			break;
+		case 5:
+			txtArmorSlot.text = "Mixed Army Uniform";
+			playerData.armor = 35;
+			break;
+		case 6:
+			txtArmorSlot.text = "Ceramic Plate";
+			playerData.armor = 36;
+			break;
+		case 7:
+			txtArmorSlot.text = "Carbon Fibronic Mesh Suit";
+			playerData.armor = 37;
+			break;
+		case 8:
+			txtArmorSlot.text = "Delver's Duster";
+			playerData.armor = 38;
+			break;
+		}
+
+		switch (actionSlot1Index) {
+		case 0:
+			txtActionSlot1.text = "Sprint";
+			playerData.actionslot1 = 0;
+			break;
+		case 1:
+			txtActionSlot1.text = "Roll";
+			playerData.actionslot1 = 1;
+			break;
+		case 2:
+			txtActionSlot1.text = "Charge";
+			playerData.actionslot1 = 2;
+			break;
+		case 3:
+			txtActionSlot1.text = "Lunge";
+			playerData.actionslot1 = 3;
+			break;
+		case 4:
+			txtActionSlot1.text = "Riot Shield";
+			playerData.actionslot1 = 4;
+			break;
+		case 5:
+			txtActionSlot1.text = "Nano Triage";
+			playerData.actionslot1 = 5;
+			break;
+		case 6:
+			txtActionSlot1.text = "Shock Net";
+			playerData.actionslot1 = 6;
+			break;
+		case 7:
+			txtActionSlot1.text = "Chain Grab";
+			playerData.actionslot1 = 7;
+			break;
+		case 8:
+			txtActionSlot1.text = "Flare";
+			playerData.actionslot1 = 8;
+			break;
+		case 9:
+			txtActionSlot1.text = "Lantern";
+			playerData.actionslot1 = 9;
+			break;
+		}
+
+		switch (actionSlot2Index) {
+		case 0:
+			txtActionSlot2.text = "Sprint";
+			playerData.actionslot2 = 0;
+			break;
+		case 1:
+			txtActionSlot2.text = "Roll";
+			playerData.actionslot2 = 1;
+			break;
+		case 2:
+			txtActionSlot2.text = "Charge";
+			playerData.actionslot2 = 2;
+			break;
+		case 3:
+			txtActionSlot2.text = "Lunge";
+			playerData.actionslot2 = 3;
+			break;
+		case 4:
+			txtActionSlot2.text = "Riot Shield";
+			playerData.actionslot2 = 4;
+			break;
+		case 5:
+			txtActionSlot2.text = "Nano Triage";
+			playerData.actionslot2 = 5;
+			break;
+		case 6:
+			txtActionSlot2.text = "Shock Net";
+			playerData.actionslot2 = 6;
+			break;
+		case 7:
+			txtActionSlot2.text = "Chain Grab";
+			playerData.actionslot2 = 7;
+			break;
+		case 8:
+			txtActionSlot2.text = "Flare";
+			playerData.actionslot2 = 8;
+			break;
+		case 9:
+			txtActionSlot2.text = "Lantern";
+			playerData.actionslot2 = 9;
+			break;
+		}
+
+		switch (actionSlot3Index) {
+		case 0:
+			txtActionSlot3.text = "Sprint";
+			playerData.actionslot3 = 0;
+			break;
+		case 1:
+			txtActionSlot3.text = "Roll";
+			playerData.actionslot3 = 1;
+			break;
+		case 2:
+			txtActionSlot3.text = "Charge";
+			playerData.actionslot3 = 2;
+			break;
+		case 3:
+			txtActionSlot3.text = "Lunge";
+			playerData.actionslot3 = 3;
+			break;
+		case 4:
+			txtActionSlot3.text = "Riot Shield";
+			playerData.actionslot3 = 4;
+			break;
+		case 5:
+			txtActionSlot3.text = "Nano Triage";
+			playerData.actionslot3 = 5;
+			break;
+		case 6:
+			txtActionSlot3.text = "Shock Net";
+			playerData.actionslot3 = 6;
+			break;
+		case 7:
+			txtActionSlot3.text = "Chain Grab";
+			playerData.actionslot3 = 7;
+			break;
+		case 8:
+			txtActionSlot3.text = "Flare";
+			playerData.actionslot3 = 8;
+			break;
+		case 9:
+			txtActionSlot3.text = "Lantern";
+			playerData.actionslot3 = 9;
 			break;
 		}
 	}
@@ -467,6 +715,7 @@ public class GearSelectCtrl : MonoBehaviour {
 		case Menu.Panel:
 			currMenuPtr = gearMenu;
 			currAnim = null;
+			currItemArr = weapons;
 			break;
 		case Menu.Confirm:
 			currMenuPtr = confirmPopUp;
