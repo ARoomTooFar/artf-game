@@ -28,8 +28,6 @@ public class GearSelectCtrl : MonoBehaviour {
 	}
 	private Menu currMenu;
 	private Menu prevMenu;
-	private int currReady = 0; // checks how many players are currently ready
-	private int allReady = 0; // max possible readied players
 	
 	// gear menu
 	private GameObject[,] gearMenu;
@@ -108,7 +106,7 @@ public class GearSelectCtrl : MonoBehaviour {
 		{
 			PanelDisable ();
 			MenuSwitch (Menu.Confirm);
-			++currReady;
+			++gsManager.currReady;
 			/*//gsManager.playerDataList[0] = gsManager.dummyPlayerDataList[0];
 			Debug.Log ("PLAYER DATA LIST");
 			Debug.Log ("weapon: " + gsManager.playerDataList[0].weapon);
@@ -129,7 +127,7 @@ public class GearSelectCtrl : MonoBehaviour {
 			Debug.Log ("unready");
 			PanelEnable ();
 			MenuSwitch (Menu.Panel);
-			--currReady;
+			--gsManager.currReady;
 		});
 
 		confirmPopUpAnim = GameObject.Find ("/Canvas/" + gameObject.name + "/" + confirmPopUpName).GetComponent<Animator>();
@@ -157,7 +155,7 @@ public class GearSelectCtrl : MonoBehaviour {
 
 		// fill player data with dummy data
 		gsManager.playerDataList[0] = serv.parseCharData("80PercentLean,123,456,789,9001,1,0,3,0,5,0,7,0,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52");
-		//gsManager.playerDataList[1] = serv.parseCharData("Player2Dood,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+		gsManager.playerDataList[1] = serv.parseCharData("Player2Dood,123,456,789,8999,1,0,3,0,5,0,7,0,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52");
 		//gsManager.playerDataList[2] = serv.parseCharData("Prinny,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
 		//gsManager.playerDataList[3] = serv.parseCharData("Eyayayayaya,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
 
@@ -233,13 +231,16 @@ public class GearSelectCtrl : MonoBehaviour {
 		}*/
 
 		currItemArr = items [locY]; //align item array with first highlighted button
+		gsManager.maxReady = 0;
 
 		// figure out max number of players playing
 		foreach (PlayerData playerData in gsManager.playerDataList) {
 			if (playerData != null) {
-				++allReady;
+				++gsManager.maxReady;
 			}
 		}
+
+		Debug.Log (gsManager.maxReady);
 	}
 
 	// handles menu joystick movement control
@@ -799,13 +800,6 @@ public class GearSelectCtrl : MonoBehaviour {
 		}
 	}
 
-	// switch scene to level select
-	void CheckReady () {
-		if (currReady == allReady) {
-			gsManager.LoadScene("TestLevelSelect");
-		}
-	}
-
 	void Update () {
 		// UI controls
 		if (menuLock == false) {
@@ -820,6 +814,5 @@ public class GearSelectCtrl : MonoBehaviour {
 		}
 
 		DisplayItem ();
-		CheckReady ();
 	}
 }
