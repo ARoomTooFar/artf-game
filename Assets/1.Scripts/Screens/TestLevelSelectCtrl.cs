@@ -179,7 +179,8 @@ public class TestLevelSelectCtrl : MonoBehaviour {
         }
         Debug.Log(gsManager.playerDataList);
 		gsManager.currLevelId = levelList[levelListIndex];
-		gsManager.LoadLevel (levelList[levelListIndex]);
+		//gsManager.LoadLevel (levelList[levelListIndex]);
+		gsManager.LoadScene ("GearSelect");
 	}
 
 	// handles menu joystick movement control

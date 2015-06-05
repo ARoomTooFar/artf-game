@@ -162,7 +162,8 @@ public class GSManager : MonoBehaviour {
 	void Update() {
 		if (currReady == maxReady && maxReady != 0) {
 			currReady = 0;
-			gsManager.LoadScene("TestLevelSelect");
+			//gsManager.LoadScene("TestLevelSelect");
+			gsManager.LoadLevel (currLevelId);
 		}
 	}
 }
