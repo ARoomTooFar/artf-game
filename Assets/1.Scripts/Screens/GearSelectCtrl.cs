@@ -10,6 +10,7 @@ public class GearSelectCtrl : MonoBehaviour {
 	public string upgradePopUpName;
 	
 	private GSManager gsManager;
+	private PlayerData playerData;
 	
 	// UI state
 	private bool menuMoved = false;
@@ -46,6 +47,12 @@ public class GearSelectCtrl : MonoBehaviour {
 	public Text txtActionTier1;
 	public Text txtActionTier2;
 	public Text txtActionTier3;
+	public Image imgWeapon;
+	public Image imgHelmet;
+	public Image imgArmor;
+	public Image imgActionSlot1;
+	public Image imgActionSlot2;
+	public Image imgActionSlot3;
 
 	// confirm pop-up
 	private GameObject[,] confirmPopUp;
@@ -60,7 +67,6 @@ public class GearSelectCtrl : MonoBehaviour {
 	private Animator upgradePopUpAnim;
 	
 	// inventory data
-	private PlayerData playerData;
 	private int[][] items = new int[8][];
 	private int weaponsIndex = 0;
 	private int helmetsIndex = 0;
@@ -95,13 +101,13 @@ public class GearSelectCtrl : MonoBehaviour {
 			MenuSwitch (Menu.Upgrade);
 		});
 
-
 		// ready button
 		gearMenu[6, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
-			Debug.Log ("ready");
 			PanelDisable ();
 			MenuSwitch (Menu.Confirm);
+			Debug.Log ("PLAYERDATALIST");
+			Debug.Log (gsManager.dummyPlayerDataList[0].armor);
 		});
 
 		/* setup confirm pop-up */
@@ -212,14 +218,7 @@ public class GearSelectCtrl : MonoBehaviour {
 
 		currItemArr = items [locY]; //align item array with first highlighted button
 
-		Image weaponIF;
-		Sprite newSprite = Resources.Load<Sprite>("ItemFrames/HuntersRifle");
-		Debug.Log (newSprite);
-		weaponIF = GameObject.Find ("ImgItemFrame").GetComponent<Image> ();
-		Debug.Log (weaponIF);
-		Debug.Log (weaponIF.sprite);
-		weaponIF.sprite = newSprite;
-		Debug.Log (weaponIF.sprite);
+		playerData.armor = 3;
 	}
 
 	// handles menu joystick movement control
@@ -435,6 +434,7 @@ public class GearSelectCtrl : MonoBehaviour {
 			break;
 		case 14:
 			txtWeaponSlot.text = "Hunting Rifle";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/HuntersRifle");
 			break;
 		case 15:
 			txtWeaponSlot.text = "Laser Rifle";
@@ -490,7 +490,7 @@ public class GearSelectCtrl : MonoBehaviour {
 			currAnim.SetBool("show", true);
 		}
 	}
-	
+
 	void Update () {
 		// UI controls
 		if (menuLock == false) {
