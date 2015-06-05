@@ -173,12 +173,11 @@ public class Farts : MonoBehaviour
 		return www.text;
 	}
 	
-	public string register(string gameAcctName, string gameAcctPass, string charData)
+	public string register(string gameAcctName, string gameAcctPass)
 	{
 		WWWForm form = new WWWForm();
 		form.AddField("game_acct_name", gameAcctName);
 		form.AddField("game_acct_password", gameAcctPass);
-		form.AddField("char_data", charData);
 		
 		WWW www = new WWW(SERVERURI + GAMEACCTPATH + "register", form);
 		StartCoroutine(httpRequest(www));

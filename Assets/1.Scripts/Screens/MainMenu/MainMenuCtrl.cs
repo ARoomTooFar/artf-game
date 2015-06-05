@@ -104,7 +104,8 @@ public class MainMenuCtrl : MonoBehaviour {
 			Debug.Log ("Register button pressed!");
             //MenuSwitch(Menu.LoginForm);
 
-            serv.login("Paradoxium", "pass");
+            string registerResult = serv.register("test3", "hyughhhhhh");
+			Debug.Log (registerResult);
         });
 
 		/* setup login form */
