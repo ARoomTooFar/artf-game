@@ -33,6 +33,20 @@ public class GearSelectCtrl : MonoBehaviour {
 	private int gearMenuWidth = 1;
 	private int gearMenuHeight = 7;
 
+	// item slot text
+	public Text txtWeaponSlot;
+	public Text txtHelmetSlot;
+	public Text txtArmorSlot;
+	public Text txtActionSlot1;
+	public Text txtActionSlot2;
+	public Text txtActionSlot3;
+	public Text txtWeaponTier;
+	public Text txtHelmetTier;
+	public Text txtArmorTier;
+	public Text txtActionTier1;
+	public Text txtActionTier2;
+	public Text txtActionTier3;
+
 	// confirm pop-up
 	private GameObject[,] confirmPopUp;
 	private int confirmPopUpWidth = 1;
@@ -375,6 +389,71 @@ public class GearSelectCtrl : MonoBehaviour {
 		}*/
 	}
 
+	void DisplayItem () {
+		switch (weaponsIndex) {
+		case 0:
+			txtWeaponSlot.text = "Shiv";
+			break;
+		case 1:
+			txtWeaponSlot.text = "Utility Blade";
+			break;
+		case 2:
+			txtWeaponSlot.text = "Pruning Blade";
+			break;
+		case 3:
+			txtWeaponSlot.text = "Plasma Blade";
+			break;
+		case 4:
+			txtWeaponSlot.text = "Rebar Sword";
+			break;
+		case 5:
+			txtWeaponSlot.text = "Long Sword";
+			break;
+		case 6:
+			txtWeaponSlot.text = "Machette";
+			break;
+		case 7:
+			txtWeaponSlot.text = "Thin Blade";
+			break;
+		case 8:
+			txtWeaponSlot.text = "Flame Pike";
+			break;
+		case 9:
+			txtWeaponSlot.text = "Lumber Saw";
+			break;
+		case 10:
+			txtWeaponSlot.text = "Chainsaw Sword";
+			break;
+		case 11:
+			txtWeaponSlot.text = "Six Shooter";
+			break;
+		case 12:
+			txtWeaponSlot.text = "Cop Gun";
+			break;
+		case 13:
+			txtWeaponSlot.text = "Hi-Compression Pistol";
+			break;
+		case 14:
+			txtWeaponSlot.text = "Hunting Rifle";
+			break;
+		case 15:
+			txtWeaponSlot.text = "Laser Rifle";
+			break;
+		case 16:
+			txtWeaponSlot.text = "Machine Gun";
+			break;
+		case 17:
+			txtWeaponSlot.text = "Automatic Laser Rifle";
+			break;
+		case 18:
+			txtWeaponSlot.text = "Shotgun";
+			break;
+		case 19:
+			txtWeaponSlot.text = "Wall of Lead";
+			break;
+		}
+	}
+
 	// handles menu switching
 	void MenuSwitch (Menu menuToSwitchTo) {
 		// hide current menu
@@ -424,5 +503,7 @@ public class GearSelectCtrl : MonoBehaviour {
 				ExecuteEvents.Execute (currMenuPtr [locY, locX], pointer, ExecuteEvents.submitHandler);
 			}
 		}
+
+		DisplayItem ();
 	}
 }
