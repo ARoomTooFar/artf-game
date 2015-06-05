@@ -14,6 +14,7 @@ public class FileIO : MonoBehaviour {
 	public Button Button_Save = null;
 	public Button Button_Deploy = null;
 	public Button Button_LoadPlayable = null;
+	private GSManager gsManager;
 	private Farts serv;
 	private string lvlData;
 	private WWW udLvlReq = null; // WWW request to server for level updating
@@ -35,10 +36,17 @@ public class FileIO : MonoBehaviour {
 
 		Button_LoadPlayable.onClick.AddListener(() => {	LoadPlayable(); });
 
+		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
 		serv = gameObject.AddComponent<Farts>();
 
 		#if UNITY_EDITOR
-		getIds(dummyLvlId);
+		if (gsManager == null) {
+			Debug.Log ("DUMMY CALLED");
+			getIds(dummyLvlId);
+		} else {
+			Debug.Log ("LVLLOADED");
+			getIds (gsManager.currLevelId);
+		}
 		#else
 		GSManager gsManager = null;
 		try {
