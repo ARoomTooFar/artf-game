@@ -25,6 +25,7 @@ public class MainMenuCtrl : MonoBehaviour {
 		StartMenu,
 		LoginForm,
         ReadyGo,
+		RegistrationForm,
         PopUp
 	}
     private Menu currMenu;
@@ -49,6 +50,15 @@ public class MainMenuCtrl : MonoBehaviour {
     private int readyGoDisplayWidth = 1;
     private int readyGoDisplayHeight = 3;
     private Animator readyGoDisplayAnim;
+
+	// registration form
+	private GameObject[,] registrationForm;
+	private int registrationFormWidth = 2;
+	private int registrationFormHeight = 4;
+	public Animator registrationFormAnim;
+	public Text txtFieldRAcctName;
+	public Text txtFieldRPasscode;
+	public Text txtFieldRConfirmPass;
 
 	// pop-up
 	private GameObject[,] popUp;
@@ -102,18 +112,18 @@ public class MainMenuCtrl : MonoBehaviour {
         startMenu[1, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
 			Debug.Log ("Register button pressed!");
-            //MenuSwitch(Menu.LoginForm);
+            MenuSwitch(Menu.RegistrationForm);
 
-            string registerResult = serv.register("test3", "hyughhhhhh");
-			Debug.Log (registerResult);
+            /*string registerResult = serv.register("test3", "hyughhhhhh");
+			Debug.Log (registerResult);*/
         });
 
 		/* setup login form */
 		loginForm = new GameObject[loginFormHeight, loginFormWidth];
 		loginForm[0, 0] = loginForm[0, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName");
         txtFieldAcctName = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldAcctName/TxtFieldAcctName").GetComponent<Text>();
-		txtFieldPasscode = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldPasscode/TxtFieldPasscode").GetComponent<Text>();
         loginForm[1, 0] = loginForm[1, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldPasscode");
+		txtFieldPasscode = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/FieldPasscode/TxtFieldPasscode").GetComponent<Text>();
         loginForm[2, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnLogin");
         loginForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnBack");
 		loginFormAnim = GameObject.Find ("/Canvas/" + menuContainerName + "/LoginForm").GetComponent<Animator>();
@@ -160,6 +170,18 @@ public class MainMenuCtrl : MonoBehaviour {
             Debug.Log("start");
             gsManager.LoadScene("TestLevelSelect");
         });
+
+		/* setup registration form */
+		registrationForm = new GameObject[registrationFormHeight, registrationFormWidth];
+		registrationForm[0, 0] = registrationForm[0, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/FieldAcctName");
+		//txtFieldRAcctName = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/FieldAcctName/TxtFieldAcctName").GetComponent<Text>();
+		registrationForm[1, 0] = registrationForm[1, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/FieldPasscode");
+		//txtFieldRPasscode = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/FieldPasscode/TxtFieldPasscode").GetComponent<Text>();
+		registrationForm[2, 0] = registrationForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/FieldConfirmPass");
+		//txtFieldRConfirmPass = GameObject.Find ("/Canvas/" + menuContainerName + "/RegistrationForm/FieldConfirmPass/TxtFieldConfirmPass").GetComponent<Text> ();
+		registrationForm[3, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/BtnRegister");
+		registrationForm[3, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/BtnBack");
+		//registrationFormAnim = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm").GetComponent<Animator>();
 
 		/* setup keypad (caps) */
 		popUp = new GameObject[popUpHeight, popUpWidth];
@@ -423,6 +445,10 @@ public class MainMenuCtrl : MonoBehaviour {
             currMenuPtr = readyGoDisplay;
             currAnim = readyGoDisplayAnim;
             break;
+		case Menu.RegistrationForm:
+			currMenuPtr = registrationForm;
+			currAnim = registrationFormAnim;
+			break;
         case Menu.PopUp:
             currMenuPtr = popUp;
 			txtDisplayField.text = currFieldPtr.text;
