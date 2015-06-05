@@ -7,6 +7,7 @@ public class GearSelectCtrl : MonoBehaviour {
 	public Controls controls;
 	public string panelName;
 	public string confirmPopUpName;
+	public string upgradePopUpName;
 	
 	private GSManager gsManager;
 	
@@ -21,7 +22,8 @@ public class GearSelectCtrl : MonoBehaviour {
 	private int[] currItemArr;
 	private enum Menu {
 		Panel,
-		Confirm
+		Confirm,
+		Upgrade
 	}
 	private Menu currMenu;
 	private Menu prevMenu;
@@ -36,6 +38,12 @@ public class GearSelectCtrl : MonoBehaviour {
 	private int confirmPopUpWidth = 1;
 	private int confirmPopUpHeight = 1;
 	private Animator confirmPopUpAnim;
+
+	// upgrade pop-up
+	private GameObject[,] upgradePopUp;
+	private int upgradePopUpWidth = 1;
+	private int upgradePopUpHeight = 1;
+	private Animator upgradePopUpAnim;
 	
 	// inventory data
 	private PlayerData playerData;
@@ -67,6 +75,13 @@ public class GearSelectCtrl : MonoBehaviour {
 		gearMenu[5, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/ActionSlot3");
 		gearMenu[6, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/BtnReady");
 
+		gearMenu[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			PanelDisable ();
+			MenuSwitch (Menu.Upgrade);
+		});
+
+
 		// ready button
 		gearMenu[6, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
@@ -75,9 +90,9 @@ public class GearSelectCtrl : MonoBehaviour {
 			MenuSwitch (Menu.Confirm);
 		});
 
-		/* setup confirm pop up */
+		/* setup confirm pop-up */
 		confirmPopUp = new GameObject[confirmPopUpHeight, confirmPopUpWidth];
-		confirmPopUp[0, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + confirmPopUpName + "/BtnUnready");;
+		confirmPopUp[0, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + confirmPopUpName + "/BtnUnready");
 
 		// unready button
 		confirmPopUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
@@ -85,10 +100,23 @@ public class GearSelectCtrl : MonoBehaviour {
 			Debug.Log ("unready");
 			PanelEnable ();
 			MenuSwitch (Menu.Panel);
-			//PanelEnable();
 		});
 
 		confirmPopUpAnim = GameObject.Find ("/Canvas/" + gameObject.name + "/" + confirmPopUpName).GetComponent<Animator>();
+
+		/* setup upgrade pop-up */
+		upgradePopUp = new GameObject[upgradePopUpHeight, upgradePopUpWidth];
+		upgradePopUp[0, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + upgradePopUpName + "/BtnBack");
+		
+		// unready button
+		upgradePopUp[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			Debug.Log ("upgrade");
+			PanelEnable ();
+			MenuSwitch (Menu.Panel);
+		});
+		
+		upgradePopUpAnim = GameObject.Find ("/Canvas/" + gameObject.name + "/" + upgradePopUpName).GetComponent<Animator>();
 
 		// start controls on gear menu
 		currMenuPtr = gearMenu;
@@ -365,31 +393,11 @@ public class GearSelectCtrl : MonoBehaviour {
 			currMenuPtr = confirmPopUp;
 			currAnim = confirmPopUpAnim;
 			break;
+		case Menu.Upgrade:
+			currMenuPtr = upgradePopUp;
+			currAnim = upgradePopUpAnim;
+			break;
 		}
-		/*switch (menuToSwitchTo) {
-		case Menu.StartMenu:
-			currMenuPtr = startMenu;
-			currAnim = startMenuAnim;
-			break;
-		case Menu.LoginForm:
-			currMenuPtr = loginForm;
-			currAnim = loginFormAnim;
-			break;
-		case Menu.ReadyGo:
-			currMenuPtr = readyGoDisplay;
-			currAnim = readyGoDisplayAnim;
-			break;
-		case Menu.PopUp:
-			currMenuPtr = popUp;
-			txtDisplayField.text = currFieldPtr.text;
-			currAnim = popUpAnim;
-			ShowPad (popUp);
-			SetupKeypad();
-			break;
-		default:
-			Debug.Log ("Menu switch case invalid!");
-			break;
-		}*/
 		
 		// setup first button highlight and show new menu
 		currMenu = menuToSwitchTo;
