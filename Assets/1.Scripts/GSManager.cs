@@ -14,6 +14,10 @@ public class GSManager : MonoBehaviour {
     public List<int> leaderList;
     public List<string> loot; //holds looted items
 
+	// gear select ready up tracker
+	public int currReady = 0; // checks how many players are currently ready
+	public int maxReady = 0; // max possible readied players
+
     private Farts serv;
 	private GameObject loadingBG;
 	private Slider loadingBar;
@@ -54,8 +58,8 @@ public class GSManager : MonoBehaviour {
 		if(GameObject.Find("LoadingBar") != null)
 			loadingBar = GameObject.Find("LoadingBar").GetComponent<Slider>();
 
-		// create dummy data
-		PlayerData dummyP1Data = serv.parseCharData("80PercentLean,123,456,789,9001,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52");
+		/*// create dummy data
+		PlayerData dummyP1Data = serv.parseCharData("80PercentLean,123,456,789,9001,1,0,3,0,5,0,7,0,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52");
 		PlayerData dummyP2Data = serv.parseCharData("Player2Dood,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
 		PlayerData dummyP3Data = serv.parseCharData("Prinny,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
 		PlayerData dummyP4Data = serv.parseCharData("Eyayayayaya,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
@@ -63,7 +67,7 @@ public class GSManager : MonoBehaviour {
 		dummyPlayerDataList [0] = dummyP1Data;
 		dummyPlayerDataList [1] = dummyP2Data;
 		dummyPlayerDataList [2] = dummyP3Data;
-		dummyPlayerDataList [3] = dummyP4Data;
+		dummyPlayerDataList [3] = dummyP4Data;*/
 
         /*DontDestroyOnLoad(loot);
         DontDestroyOnLoad(playerDataList);
@@ -152,6 +156,14 @@ public class GSManager : MonoBehaviour {
 		else
 		{
 			Debug.Log("ERROR: Level download failed. Level ID doesn't exist.");
+		}
+	}
+
+	void Update() {
+		if (currReady == maxReady && maxReady != 0) {
+			currReady = 0;
+			//gsManager.LoadScene("TestLevelSelect");
+			gsManager.LoadLevel (currLevelId);
 		}
 	}
 }
