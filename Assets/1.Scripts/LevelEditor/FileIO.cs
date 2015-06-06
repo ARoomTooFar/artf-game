@@ -50,20 +50,23 @@ public class FileIO : MonoBehaviour {
 			Debug.Log ("LVLLOADED");
 			getIds (gsManager.currLevelId);
 		}
+		#elif UNITY_WEBPLAYER
+		Application.ExternalCall("reqIds");
 		#else
-		GSManager gsManager = null;
-		try {
-			gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
-		} catch {
-		}
-
 		getIds(gsManager.currLevelId);
 		#endif
 	}
 
 	public void getIds(string inputIds) {
+		#if UNITY_WEBPLAYER
+		string[] ids = inputIds.Split(',');
+		gameAcctId = ids[0];
+		lvlId = ids[1];
+		WWW www = serv.getLvlWww(ids[1]);
+		#else
 		WWW www = null;
 		www = serv.getLvlWww(inputIds);
+		#endif
 
 		StartCoroutine(dlLvl(www));
 	}

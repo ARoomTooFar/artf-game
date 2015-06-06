@@ -16,7 +16,10 @@ public class endzone : MonoBehaviour {
 	private GSManager gsManager;
 
 	void Start(){
-		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		gsManager = null;
+		try {
+			gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		} catch {}
 	}
 
 	//-----------------------------------------
