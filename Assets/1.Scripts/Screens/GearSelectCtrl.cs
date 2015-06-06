@@ -252,7 +252,7 @@ public class GearSelectCtrl : MonoBehaviour {
 				if (locY <= 3) {
 					currItemArr = items[locY];
 				}
-				Debug.Log (currItemArr);
+				//Debug.Log (currItemArr);
 			} else if (vert > 0) {
 				--locY;
 				if (locY < 0)
@@ -287,7 +287,7 @@ public class GearSelectCtrl : MonoBehaviour {
 					weaponsIndex = currItemArr.Length - 1;
 				}
 			};
-			Debug.Log (currItemArr[weaponsIndex]);
+			//Debug.Log (currItemArr[weaponsIndex]);
 			break;
 		case 1:
 			if (hori > 0) {
@@ -298,7 +298,7 @@ public class GearSelectCtrl : MonoBehaviour {
 					helmetsIndex = currItemArr.Length - 1;
 				}
 			};
-			Debug.Log (currItemArr[helmetsIndex]);
+			//Debug.Log (currItemArr[helmetsIndex]);
 			break;
 		case 2:
 			if (hori > 0) {
@@ -309,7 +309,7 @@ public class GearSelectCtrl : MonoBehaviour {
 					armorsIndex = currItemArr.Length - 1;
 				}
 			};
-			Debug.Log (currItemArr[armorsIndex]);
+			//Debug.Log (currItemArr[armorsIndex]);
 			break;
 		case 3:
 			if (hori > 0) {
@@ -320,7 +320,7 @@ public class GearSelectCtrl : MonoBehaviour {
 					actionSlot1Index = currItemArr.Length - 1;
 				}
 			};
-			Debug.Log (currItemArr[actionSlot1Index]);
+			//Debug.Log (currItemArr[actionSlot1Index]);
 			break;
 		case 4:
 			if (hori > 0) {
@@ -331,7 +331,7 @@ public class GearSelectCtrl : MonoBehaviour {
 					actionSlot2Index = currItemArr.Length - 1;
 				}
 			};
-			Debug.Log (currItemArr[actionSlot2Index]);
+			//Debug.Log (currItemArr[actionSlot2Index]);
 			break;
 		case 5:
 			if (hori > 0) {
@@ -342,7 +342,7 @@ public class GearSelectCtrl : MonoBehaviour {
 					actionSlot3Index = currItemArr.Length - 1;
 				}
 			};
-			Debug.Log (currItemArr[actionSlot3Index]);
+			//Debug.Log (currItemArr[actionSlot3Index]);
 			break;
 		}
 	}
