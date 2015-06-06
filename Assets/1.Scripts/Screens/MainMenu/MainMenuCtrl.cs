@@ -55,10 +55,10 @@ public class MainMenuCtrl : MonoBehaviour {
 	private GameObject[,] registrationForm;
 	private int registrationFormWidth = 2;
 	private int registrationFormHeight = 4;
-	public Animator registrationFormAnim;
-	public Text txtFieldRAcctName;
-	public Text txtFieldRPasscode;
-	public Text txtFieldRConfirmPass;
+	private Animator registrationFormAnim;
+	private Text txtFieldRAcctName;
+	private Text txtFieldRPasscode;
+	private Text txtFieldRConfirmPass;
 
 	// pop-up
 	private GameObject[,] popUp;
@@ -163,21 +163,21 @@ public class MainMenuCtrl : MonoBehaviour {
         // start button
         readyGoDisplay[0, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
-            Debug.Log("start");
+			Debug.Log ("[ SWITCH TO LEVEL SELECT ]");
             gsManager.LoadScene("TestLevelSelect");
         });
 
 		/* setup registration form */
 		registrationForm = new GameObject[registrationFormHeight, registrationFormWidth];
 		registrationForm[0, 0] = registrationForm[0, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/FieldAcctName");
-		//txtFieldRAcctName = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/FieldAcctName/TxtFieldAcctName").GetComponent<Text>();
+		txtFieldRAcctName = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/FieldAcctName/TxtFieldAcctName").GetComponent<Text>();
 		registrationForm[1, 0] = registrationForm[1, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/FieldPasscode");
-		//txtFieldRPasscode = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/FieldPasscode/TxtFieldPasscode").GetComponent<Text>();
+		txtFieldRPasscode = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/FieldPasscode/TxtFieldPasscode").GetComponent<Text>();
 		registrationForm[2, 0] = registrationForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/FieldConfirmPass");
-		//txtFieldRConfirmPass = GameObject.Find ("/Canvas/" + menuContainerName + "/RegistrationForm/FieldConfirmPass/TxtFieldConfirmPass").GetComponent<Text> ();
+		txtFieldRConfirmPass = GameObject.Find ("/Canvas/" + menuContainerName + "/RegistrationForm/FieldConfirmPass/TxtFieldConfirmPass").GetComponent<Text> ();
 		registrationForm[3, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/BtnRegister");
 		registrationForm[3, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm/BtnBack");
-		//registrationFormAnim = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm").GetComponent<Animator>();
+		registrationFormAnim = GameObject.Find("/Canvas/" + menuContainerName + "/RegistrationForm").GetComponent<Animator>();
 
 		// register acct name field
 		registrationForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>

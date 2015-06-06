@@ -170,77 +170,72 @@ public class GearSelectCtrl : MonoBehaviour {
 			playerData = gsManager.playerDataList [3];
 		}
 
-		items [0] = weapons;
-		items [1] = helmets;
-		items [2] = armors;
-		items [3] = actionSlot1;
-		items [4] = actionSlot2;
-		items [5] = actionSlot3;
-		items [7] = new int[1]{0}; // empty slot to cover left and right controls on ready btn
+		// hide panel if player has not logged in
+		if (playerData == null) {
+			gameObject.SetActive (false);
+		} else {
+			items [0] = weapons;
+			items [1] = helmets;
+			items [2] = armors;
+			items [3] = actionSlot1;
+			items [4] = actionSlot2;
+			items [5] = actionSlot3;
+			items [7] = new int[1]{0}; // empty slot to cover left and right controls on ready btn
 
-		// load weapon data
-		for (int i = 0; i < weapons.Length; ++i) {
-			weapons[i] = playerData.inventory[i + 10];
-		}
-
-		// load helmet data
-		for (int i = 0; i < helmets.Length; ++i) {
-			helmets[i] = playerData.inventory[i + 39];
-		}
-
-		// load armor data
-		for (int i = 0; i < armors.Length; ++i) {
-			armors[i] = playerData.inventory[i + 30];
-		}
-
-		// load action slot 1
-		for (int i = 0; i < actionSlot1.Length; ++i) {
-			actionSlot1[i] = playerData.inventory[i];
-		}
-
-		// load action slot 2
-		for (int i = 0; i < actionSlot2.Length; ++i) {
-			actionSlot2[i] = playerData.inventory[i];
-		}
-
-		// load action slot 3
-		for (int i = 0; i < actionSlot3.Length; ++i) {
-			actionSlot3[i] = playerData.inventory[i];
-		}
-
-		// print items
-		/*for (int i = 0; i < items.Length; ++i) {
-			switch (i) {
-			case 0:
-				Debug.Log ("WEAPONS");
-				break;
-			case 1:
-				Debug.Log ("HELMETS");
-				break;
-			case 2:
-				Debug.Log ("ARMORS");
-				break;
-			case 3:
-				Debug.Log ("ACTION SLOTS");
-				break;
+			// load weapon data
+			for (int i = 0; i < weapons.Length; ++i) {
+				weapons [i] = playerData.inventory [i + 10];
 			}
 
-			for (int j = 0; j < items[i].Length; ++j) {
-				Debug.Log (items[i][j]);
+			// load helmet data
+			for (int i = 0; i < helmets.Length; ++i) {
+				helmets [i] = playerData.inventory [i + 39];
 			}
-		}*/
 
-		currItemArr = items [locY]; //align item array with first highlighted button
-		gsManager.maxReady = 0;
-
-		// figure out max number of players playing
-		foreach (PlayerData playerData in gsManager.playerDataList) {
-			if (playerData != null) {
-				++gsManager.maxReady;
+			// load armor data
+			for (int i = 0; i < armors.Length; ++i) {
+				armors [i] = playerData.inventory [i + 30];
 			}
+
+			// load action slot 1
+			for (int i = 0; i < actionSlot1.Length; ++i) {
+				actionSlot1 [i] = playerData.inventory [i];
+			}
+
+			// load action slot 2
+			for (int i = 0; i < actionSlot2.Length; ++i) {
+				actionSlot2 [i] = playerData.inventory [i];
+			}
+
+			// load action slot 3
+			for (int i = 0; i < actionSlot3.Length; ++i) {
+				actionSlot3 [i] = playerData.inventory [i];
+			}
+
+			// print items
+			/*for (int i = 0; i < items.Length; ++i) {
+				switch (i) {
+				case 0:
+					Debug.Log ("WEAPONS");
+					break;
+				case 1:
+					Debug.Log ("HELMETS");
+					break;
+				case 2:
+					Debug.Log ("ARMORS");
+					break;
+				case 3:
+					Debug.Log ("ACTION SLOTS");
+					break;
+				}
+
+				for (int j = 0; j < items[i].Length; ++j) {
+					Debug.Log (items[i][j]);
+				}
+			}*/
+
+			currItemArr = items [locY]; //align item array with first highlighted button
 		}
-
-		Debug.Log (gsManager.maxReady);
 	}
 
 	// handles menu joystick movement control

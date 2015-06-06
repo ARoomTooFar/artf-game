@@ -166,18 +166,30 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 			controls.joySecItem = "SecItem";
 			controls.joyCycItem = "CycItem";
 		}
+
+		gsManager.maxReady = 0;
+		
+		// figure out max number of players playing
+		foreach (PlayerData playerData in gsManager.playerDataList) {
+			if (playerData != null) {
+				++gsManager.maxReady;
+			}
+		}
+
+		Debug.Log ("maxReady: " + gsManager.maxReady);
 	}
 
 	void BtnAction (int levelListIndex) {
-        Debug.Log("YOYOYO PERSISTENCE DAWG");
+        /*Debug.Log("YOYOYO PERSISTENCE DAWG");
         foreach (PlayerData playerData in gsManager.playerDataList) {
             if (playerData != null) {
                 Debug.Log(playerData);
                 playerData.PrintData();
-            } else
-                Debug.Log("null");
+            } else {
+                Debug.Log("Empty Player");
+			}
         }
-        Debug.Log(gsManager.playerDataList);
+        Debug.Log(gsManager.playerDataList);*/
 		gsManager.currLevelId = levelList[levelListIndex];
 		//gsManager.LoadLevel (levelList[levelListIndex]);
 		gsManager.LoadScene ("GearSelect");
