@@ -60,10 +60,6 @@ public class Enemy : Character {
 	
 	// Use this for initialization
 	protected override void Start () {
-		foreach (CharacterBehaviour behaviour in this.animator.GetBehaviours<CharacterBehaviour>()) {
-			behaviour.SetVar(this);
-		}
-	
 		//Uses swarm aggro table if this unit swarms
 		if(swarmBool){
 			aggroT = swarm.aggroTable;
@@ -71,13 +67,9 @@ public class Enemy : Character {
 			aggroT = new AggroTable();
 		}
 		
-		foreach(EnemyBehaviour behaviour in this.animator.GetBehaviours<EnemyBehaviour>()) {
-			behaviour.SetVar(this.GetComponent<Enemy>());
-		}
-
+		
 		if (testing) {
-			inventory.equipItems(opposition);
-			this.SetTierData(0);
+			this.SetMonster (5);
 		}
 
 		MusicPlayer = GameObject.Find ("MusicPlayer");
@@ -104,13 +96,24 @@ public class Enemy : Character {
 		stats.armor = armor;
 		stats.speed = speed;
 		
-		if (testing) {
-			gear.equipGear(opposition);
-		}
+		gear.equipGear(opposition);
 	}
+	
+	public virtual void SetMonster(int tier) {
+		foreach (CharacterBehaviour behaviour in this.animator.GetBehaviours<CharacterBehaviour>()) {
+			behaviour.SetVar(this);
+		}
+		
+		foreach(EnemyBehaviour behaviour in this.animator.GetBehaviours<EnemyBehaviour>()) {
+			behaviour.SetVar(this.GetComponent<Enemy>());
+		}
+		inventory.equipItems(opposition);
+		this.SetTierData(tier);
+	}
+	
 
 	// Things that are tier specific should be set here
-	public virtual void SetTierData(int tier) {
+	protected virtual void SetTierData(int tier) {
 		this.tier = tier;
 		this.animator.SetInteger("Tier", this.tier);
 		monsterLoot = this.gameObject.AddComponent<MonsterLoot>();

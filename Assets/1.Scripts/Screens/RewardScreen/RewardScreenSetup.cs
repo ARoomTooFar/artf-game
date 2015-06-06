@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 //sets up reward screen scripts for each player
 public class RewardScreenSetup : MonoBehaviour {
@@ -10,11 +11,17 @@ public class RewardScreenSetup : MonoBehaviour {
 	public Controls controlsp2;
 	public Controls controlsp3;
 	public Controls controlsp4;
+	public Text txtCountdown;
+
+	private GSManager gsManager;
+	private float startTime;
+	private int countDownVal = 30;
+	private int secondsPassed = 1;
 	
 	void Start () {
+		gsManager = GameObject.Find("/GSManager").GetComponent<GSManager>();
 		rewardui = GameObject.Find("RewardScreenUI").GetComponent<Canvas>();
-
-
+		
 		PlayerRewardPanel p1panel = transform.Find("p1").gameObject.AddComponent<PlayerRewardPanel>();
 		p1panel.setUpInputs("T","Q", "A", "Z", controlsp1); //send joystick/button inputs
 
@@ -27,6 +34,20 @@ public class RewardScreenSetup : MonoBehaviour {
 		PlayerRewardPanel p4panel = transform.Find("p4").gameObject.AddComponent<PlayerRewardPanel>();
 		p4panel.setUpInputs("I", "R","F", "V", controlsp4); //send joystick/button inputs
 
+		// start timer
+		startTime = Time.time;
+	}
 
+	void Update () {
+		// decrement countdown
+		if (Time.time > startTime + secondsPassed) {
+			txtCountdown.text = Convert.ToString (countDownVal - secondsPassed);
+			++secondsPassed;
+		}
+
+		// change scenes when timer reaches 0
+		if (secondsPassed >= 31) {
+			gsManager.LoadScene ("MainMenu");
+		}
 	}
 }

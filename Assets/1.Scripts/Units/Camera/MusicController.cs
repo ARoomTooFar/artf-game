@@ -49,12 +49,9 @@ public class MusicController: MonoBehaviour {
 	int EnemyInSight(){
 		HashSet<ARTFRoom> rooms = new HashSet<ARTFRoom> ();
 
-
 		// find all rooms that the players are in
 		foreach (Player play in allPlayers) {
-
 			rooms.Add (MapData.TheFarRooms.find(play.transform.position.Round()));
-//			Debug.Log (MapData.TheFarRooms.find(play.transform.position.Round()));
 		}
 
 		List<GameObject> MonstersIndex = MapData.MonsterBlocks.allMonsters ();
@@ -62,17 +59,12 @@ public class MusicController: MonoBehaviour {
 
 		// add enemy to the amount of enemies active rooms.
 		foreach (GameObject e in MonstersIndex) {
-			int hello = 0;
 			Enemy enemy = e.GetComponent<Enemy> ();
 			if(enemy.isDead) continue;
-//			Debug.Log(hello);
 			foreach(ARTFRoom room in rooms) {
-
 				if(room.inRoom(e.transform.position)) {numberofmonsters++; }
 			}
 		}
-
-//		Debug.Log(numberofmonsters);
 
 		return numberofmonsters;
 	}

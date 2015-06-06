@@ -184,12 +184,9 @@ public class CameraAdjuster : MonoBehaviour {
 
 		//lerp camera's orthographic size up or down
 		float orthoSize = this.gameObject.GetComponent<Camera>().orthographicSize;
-		float time = Time.time;
 		if(needToZoomOut){
-//			Debug.Log("zooming in " + time + ", " + mostOffCorner);
 			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, orthoSize + 0.5f, Time.deltaTime * camZoomSpeed);
 		}else if(needToZoomIn){
-//			Debug.Log("zooming out " + time + ", " + mostOffCorner);
 			this.gameObject.GetComponent<Camera>().orthographicSize = Mathf.Lerp(orthoSize, orthoSize - 0.5f, Time.deltaTime * camZoomSpeed);
 		}
 	}

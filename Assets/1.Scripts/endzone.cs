@@ -6,8 +6,7 @@ using System.Collections;
 //It will move on to the reward scene if all the players that are alive have entered the end zone.
 //FOR THIS SCRIPT ALL PLAYERS MUST BE TAGED AS "Player"
 public class endzone : MonoBehaviour {
-
-	public int numbPlayers;
+	
 	public int numbPlayersInZone = 0;
 	public int numbPlayersAlive;
 	public Player[] players;
@@ -17,7 +16,10 @@ public class endzone : MonoBehaviour {
 	private GSManager gsManager;
 
 	void Start(){
-		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		gsManager = null;
+		try {
+			gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		} catch {}
 	}
 
 	//-----------------------------------------
@@ -32,11 +34,9 @@ public class endzone : MonoBehaviour {
 		{
 			print ("Checked if null...");
 			players = gsManager.players;
-			numbPlayers = players.Length;
-			print ("Initializing player list, numbPlayers is: " + numbPlayers);
 		}
 
-		string t = other.GetComponent<Collider>().tag;
+		string t = other.tag;
 
 
 		if (t == "Player" || t == "Player1" || t == "Player2" || t == "Player3" || t == "Player4") 
@@ -58,7 +58,7 @@ public class endzone : MonoBehaviour {
 	//---------------------------------------
 	void OnTriggerExit(Collider other)
 	{
-		string t = other.GetComponent<Collider>().tag;
+		string t = other.tag;
 		if (t == "Player" || t == "Player1" || t == "Player2" || t == "Player3" || t == "Player4") 
 		{
 			numbPlayersInZone --;
@@ -77,16 +77,18 @@ public class endzone : MonoBehaviour {
 		numbPlayersAlive = 0;
 		for(int i = 0; i < players.Length; i++)
 		{
-			//this gets the character component of the player
-			character = players[i].GetComponent<Character>();
+			if (players[i] != null) {
+				//this gets the character component of the player
+				character = players[i].GetComponent<Character>();
 
-			//checks if the character is dead or not
-			if(character != null && !character.isDead)
-			{
-					//if not add to number of players alive.
-					numbPlayersAlive++;
+				//checks if the character is dead or not
+				if(character != null && !character.isDead)
+				{
+						//if not add to number of players alive.
+						numbPlayersAlive++;
+				}
+				//print("There are " + numbPlayersAlive + " Players alive.");
 			}
-			//print("There are " + numbPlayersAlive + " Players alive.");
 		}
 		print("eThere are " + numbPlayersAlive + " Players alive.");
 	}

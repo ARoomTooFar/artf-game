@@ -9,8 +9,8 @@ public class CameraHitBox : MonoBehaviour {
 	public bool same;
 	public int enemyCount;
 
-	private AudioSource battle;
-	private AudioSource environment;
+	//private AudioSource battle;
+	//private AudioSource environment;
 
 	// Use this for initialization
 	void Start () {
@@ -19,8 +19,8 @@ public class CameraHitBox : MonoBehaviour {
 		for(int x = 0; x < allPlayers.Length; x++){
 			areaUnits.Add(allPlayers[x]);
 		}
-		environment = GameObject.Find ("PerspectiveAngledCamera").GetComponent<AudioSource> ();
-		battle = GetComponent<AudioSource> ();
+		//environment = GameObject.Find ("PerspectiveAngledCamera").GetComponent<AudioSource> ();
+		//battle = GetComponent<AudioSource> ();
 
 	}
 	

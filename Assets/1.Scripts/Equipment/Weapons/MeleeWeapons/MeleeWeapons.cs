@@ -17,7 +17,7 @@ public class MeleeWeapons : Weapons {
 		stats.chargeSlow = new Slow(0.0f);
 	}
 	
-	protected virtual int CalculateTotalDamage() {
+	protected override int CalculateTotalDamage() {
 		return this.stats.damage + this.user.stats.strength + stats.chgDamage * this.tier;
 	}
 

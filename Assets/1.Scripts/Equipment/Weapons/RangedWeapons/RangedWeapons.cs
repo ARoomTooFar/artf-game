@@ -27,7 +27,7 @@ public class RangedWeapons : Weapons {
 		this.spread = 15;
 	}
 	
-	protected virtual int CalculateTotalDamage() {
+	protected override int CalculateTotalDamage() {
 		return this.stats.damage + this.user.stats.coordination + stats.chgDamage * this.tier;
 	}
 

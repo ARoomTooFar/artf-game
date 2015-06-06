@@ -12,6 +12,7 @@ public class TextureTilingController : MonoBehaviour {
 	// We will grab it from the meshRenderer
 	public Texture texture;
 	public float textureToMeshZ = 1f; // Use this to contrain texture to a certain size
+	public float xScale = 1;
 	
 	Vector3 prevScale = Vector3.one;
 	float prevTextureToMeshZ = -1f;
@@ -44,7 +45,7 @@ public class TextureTilingController : MonoBehaviour {
 		float planeSizeZ = 1f;
 		
 		// Figure out texture-to-mesh width based on user set texture-to-mesh height
-		float textureToMeshX = ((float)this.texture.width/this.texture.height)*this.textureToMeshZ;
+		float textureToMeshX = ((float)this.texture.width/this.texture.height)*this.textureToMeshZ * xScale;
 		
 		gameObject.GetComponent<Renderer>().material.mainTextureScale = new Vector2(planeSizeX*gameObject.transform.lossyScale.x/textureToMeshX, planeSizeZ*gameObject.transform.lossyScale.z/textureToMeshZ);
 	}

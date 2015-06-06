@@ -16,7 +16,7 @@ public class PlayerUIPane : MonoBehaviour
 	public Image slot2bg;
 	public Image slot3bg;
 	public int currSlot = 1;
-	float slot1Curr,slot2Curr,slot3Curr,chgCurr,tempCD1,tempCD2,tempCD3;
+	float slot1Curr,slot2Curr,slot3Curr,/*chgCurr,*/tempCD1,tempCD2,tempCD3;
 
 	public void initVals (string player)
 	{
@@ -26,12 +26,26 @@ public class PlayerUIPane : MonoBehaviour
 		slot1 = transform.Find ("Ring1").gameObject.GetComponent<Image> ();
 		slot2 = transform.Find ("Ring1").gameObject.GetComponent<Image> ();
 		slot3 = transform.Find ("Ring1").gameObject.GetComponent<Image> ();
+
 		slot1bg = transform.Find ("Ring1BG").gameObject.GetComponent<Image> ();
 		slot2bg = transform.Find ("Ring2BG").gameObject.GetComponent<Image> ();
 		slot3bg = transform.Find ("Ring3BG").gameObject.GetComponent<Image> ();
+
+
 		slot1.fillAmount = 1;
 		slot2.fillAmount = 1;
 		slot3.fillAmount = 1;
+
+		print (pl.inventory.items[0]);
+		print (pl.inventory.items[1]);
+		print (pl.inventory.items[2]);
+		setAbilityIcons();
+	}
+
+	void setAbilityIcons(){
+		slot1bg.sprite = Resources.Load <Sprite>("PlayerUI/HUDV2Assets/" + pl.inventory.items[0]);
+		slot2bg.sprite = Resources.Load <Sprite>("PlayerUI/HUDV2Assets/" + pl.inventory.items[1]);
+		slot3bg.sprite = Resources.Load <Sprite>("PlayerUI/HUDV2Assets/" + pl.inventory.items[2]);
 	}
 
 	void Update ()
@@ -54,9 +68,9 @@ public class PlayerUIPane : MonoBehaviour
 	void updateChg(){
 		if (pl.inventory.keepItemActive && pl.inventory.items [pl.inventory.selected].itemType == 'C') {
 			if ((pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().curChgTime / pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().maxChgTime) <= 0) {
-				chgCurr = 0;
+				//chgCurr = 0;
 			} else {
-				chgCurr = (pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().curChgTime / pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().maxChgTime);
+				//chgCurr = (pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().curChgTime / pl.inventory.items [pl.inventory.selected].GetComponent<ChargeItem> ().maxChgTime);
 			}
 		} 
 	}

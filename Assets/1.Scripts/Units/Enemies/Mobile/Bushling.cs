@@ -59,9 +59,7 @@ public class Bushling : MobileEnemy {
 		base.Update ();
 	}
 
-	public override void SetTierData(int tier) {
-		tier = 1;
-
+	protected override void SetTierData(int tier) {
 		if (tier > 0) {
 			this.sprint = this.inventory.items[inventory.selected].GetComponent<Sprint>();
 			if (sprint == null) Debug.LogWarning ("Bushman does not have sprint equipped");

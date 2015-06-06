@@ -32,8 +32,7 @@ public class FoliantHive : StationaryEnemy {
 	}
 	
 
-	public override void SetTierData(int tier) {
-		tier = 0;
+	protected override void SetTierData(int tier) {
 		base.SetTierData (tier);
 			
 		spawn = this.inventory.items[inventory.selected].GetComponent<ShootFodderBall>();

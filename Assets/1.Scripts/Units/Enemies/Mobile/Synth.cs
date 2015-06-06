@@ -24,9 +24,7 @@ public class Synth: RangedEnemy {
 	}
 	
 	
-	public override void SetTierData(int tier) {
-		tier = 5;
-		
+	protected override void SetTierData(int tier) {
 		if (tier > 2) {
 			this.kb = this.inventory.items[inventory.selected].GetComponent<SynthKnockBack>();
 			if (this.kb == null) Debug.LogWarning ("Synth does not have knockback equipped");

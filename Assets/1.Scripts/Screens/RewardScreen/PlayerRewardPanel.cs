@@ -57,22 +57,22 @@ public class PlayerRewardPanel : MonoBehaviour {
 		points = new List<int>();
 		pointsText = new List<Text>();
 		totalText = transform.Find("Title/Text").GetComponent<Text>() as Text;
-		
-		//HARD-CODED SECTION
-		//REPLACE WITH THINGS FROM OTHER SCRIPTS
-		loot.Add("testIcon1");
-		loot.Add("testIcon2");
-		loot.Add("testIcon3");
-		loot.Add("testIcon4");
-		loot.Add("testIcon5");
-		loot.Add("testIcon6");
-		loot.Add("testIcon7");
-		loot.Add("testIcon8");
+
 		total = 13;
-		//END HARDCODED SECTION
-		
+
+		//fill with placeholders if nothing in loot list
+		if(loot.Count == 0){
+			loot.Add("targetingVisor");
+			loot.Add("militarySpikeHelmet");
+			loot.Add("fist");
+			loot.Add("pruningBlade");
+			loot.Add("shockNet");
+			loot.Add("sprint");
+			loot.Add("trashHelmetBucket");
+			loot.Add("trashHelmetLightBulb");
+		}
+
 		populateList();
-		
 		highlights[0].SetActive(true); //initialize top entry to be highlighted
 		activeEntry = 0;
 		
@@ -208,7 +208,7 @@ public class PlayerRewardPanel : MonoBehaviour {
 		lootItemRect.anchoredPosition = new Vector2(0f + iconDimens.x / 2, newRowYPos);
 		
 		//give it the proper icon
-		icon = Resources.Load<Sprite>("RewardScreen/" + itemName);
+		icon = Resources.Load<Sprite>("RewardScreen/NewIcons/" + itemName);
 		newLootItem.transform.Find("Icon").GetComponent<Image>().sprite = icon;
 		
 		//add entry's height to list for highlighting

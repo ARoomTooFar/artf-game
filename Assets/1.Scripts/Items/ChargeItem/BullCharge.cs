@@ -89,8 +89,10 @@ public class BullCharge : ChargeItem {
 	// Once we have animation, we can base the timing/checks on animations instead if we choose/need to
 	private IEnumerator chargeFunc(float chgTime) {
 		this.particle.enableEmission = true;
+		this.user.animator.SetBool("StartCharge", true);
 		yield return StartCoroutine(chgTimeFunc(chgTime));
 		this.particle.enableEmission = false;
+		this.user.animator.SetBool("StartCharge", false);
 		float tempStun = stunDuration * (hitWall ? 2 : 1);
 		user.rb.velocity = Vector3.zero;
 		foreach(Character ene in enemies) {

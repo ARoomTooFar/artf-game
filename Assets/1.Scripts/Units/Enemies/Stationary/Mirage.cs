@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Mirage : StationaryEnemy {
 
 	public MirageWeapon leftClaw, rightClaw;
+	public GameObject healthRing;
 
 	protected List<MirageImage> images;
 	protected MarkOfDeath mark;
@@ -41,7 +42,7 @@ public class Mirage : StationaryEnemy {
 		this.mark = new MarkOfDeath();
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 2.5f;
+		this.maxAtkRadius = 2f;
 	}
 	
 	protected override void Start() {
@@ -64,12 +65,10 @@ public class Mirage : StationaryEnemy {
 			behaviour.SetVar (this.blinkStrike);
 		}
 
-		
+		this.healthRing = this.transform.Find("EnemyHealthRing").gameObject;
 	}
 
-	public override void SetTierData(int tier) {
-		tier = 3;
-
+	protected override void SetTierData(int tier) {
 		base.SetTierData (tier);
 	}
 	

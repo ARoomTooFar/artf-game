@@ -59,15 +59,7 @@ public class ArmorStats {
 		this.strength = strength;
 		this.coordination = coordination;
 		this.health = health;
-	}
-
-	public void worstCase() {
-		armVal = 1;
-		goldVal = 1;
-		strength = 0;
-		coordination = 0;
-		health = 0;
-		upgrade = 0;
+		this.upgrade = upgrade;
 	}
 }
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class Farts : MonoBehaviour
 {
@@ -25,9 +26,9 @@ public class Farts : MonoBehaviour
 		PlayerData playerData = new PlayerData();
 		int[] inventory = new int[52];
 		string[] parsedData = charData.Split (',');
-		
-		playerData.char_name = parsedData[0];
-		playerData.char_id = int.Parse(parsedData [1]);
+
+		playerData.game_acct_id = Int64.Parse(parsedData[0]);
+		playerData.char_id = Int64.Parse(parsedData [1]);
 		playerData.hair_id = int.Parse(parsedData [2]);
 		playerData.voice_id = int.Parse(parsedData [3]);
 		playerData.money = int.Parse(parsedData [4]);
@@ -44,7 +45,7 @@ public class Farts : MonoBehaviour
 	public string stringifyCharData(PlayerData playerData) {
 		string newCharData = "";
 		
-		newCharData += playerData.char_name;
+		newCharData += playerData.game_acct_id;
 		newCharData += "," + playerData.char_id.ToString ();
 		newCharData += "," + playerData.hair_id.ToString ();
 		newCharData += "," + playerData.voice_id.ToString ();
@@ -173,12 +174,11 @@ public class Farts : MonoBehaviour
 		return www.text;
 	}
 	
-	public string register(string gameAcctName, string gameAcctPass, string charData)
+	public string register(string gameAcctName, string gameAcctPass)
 	{
 		WWWForm form = new WWWForm();
 		form.AddField("game_acct_name", gameAcctName);
 		form.AddField("game_acct_password", gameAcctPass);
-		form.AddField("char_data", charData);
 		
 		WWW www = new WWW(SERVERURI + GAMEACCTPATH + "register", form);
 		StartCoroutine(httpRequest(www));

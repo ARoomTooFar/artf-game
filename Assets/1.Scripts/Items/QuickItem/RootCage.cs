@@ -30,17 +30,21 @@ public class RootCage : QuickItem {
 		
 		Vector3 curPos = this.eUser.target.transform.position;
 		
-		Instantiate(this.roots, new Vector3(curPos.x - 2.5f, 0.5f, curPos.z), Quaternion.identity);
-		Instantiate(this.roots, new Vector3(curPos.x + 2.5f, 0.5f, curPos.z), Quaternion.identity);
-		Instantiate(this.roots, new Vector3(curPos.x, 0.5f, curPos.z + 2.5f), Quaternion.identity);
-		Instantiate(this.roots, new Vector3(curPos.x, 0.5f, curPos.z - 2.5f), Quaternion.identity);
+		SpawnTree(new Vector3(curPos.x - 3f, 1.5f, curPos.z));
+		SpawnTree(new Vector3(curPos.x + 3f, 1.5f, curPos.z));
+		SpawnTree(new Vector3(curPos.x, 1.5f, curPos.z + 3f));
+		SpawnTree(new Vector3(curPos.x, 1.5f, curPos.z - 3f));
 		
-		Instantiate(this.roots, new Vector3(curPos.x - 2.5f, 0.5f, curPos.z - 2.5f), Quaternion.identity);
-		Instantiate(this.roots, new Vector3(curPos.x + 2.5f, 0.5f, curPos.z + 2.5f), Quaternion.identity);
-		Instantiate(this.roots, new Vector3(curPos.x - 2.5f, 0.5f, curPos.z + 2.5f), Quaternion.identity);
-		Instantiate(this.roots, new Vector3(curPos.x + 2.5f, 0.5f, curPos.z - 2.5f), Quaternion.identity);
+		SpawnTree(new Vector3(curPos.x - 3f, 1.5f, curPos.z - 3f));
+		SpawnTree(new Vector3(curPos.x + 3f, 1.5f, curPos.z + 3f));
+		SpawnTree(new Vector3(curPos.x - 3f, 1.5f, curPos.z + 3f));
+		SpawnTree(new Vector3(curPos.x + 3f, 1.5f, curPos.z - 3f));
 		
 		animDone();
+	}
+	
+	private void SpawnTree(Vector3 pos) {
+		Instantiate(this.roots, pos, Quaternion.Euler(-90, 0, 0));
 	}
 	
 	protected override void animDone() {
