@@ -6,8 +6,7 @@ using System.Collections;
 //It will move on to the reward scene if all the players that are alive have entered the end zone.
 //FOR THIS SCRIPT ALL PLAYERS MUST BE TAGED AS "Player"
 public class endzone : MonoBehaviour {
-
-	public int numbPlayers;
+	
 	public int numbPlayersInZone = 0;
 	public int numbPlayersAlive;
 	public Player[] players;
@@ -32,8 +31,6 @@ public class endzone : MonoBehaviour {
 		{
 			print ("Checked if null...");
 			players = gsManager.players;
-			numbPlayers = players.Length;
-			print ("Initializing player list, numbPlayers is: " + numbPlayers);
 		}
 
 		string t = other.tag;
@@ -77,16 +74,18 @@ public class endzone : MonoBehaviour {
 		numbPlayersAlive = 0;
 		for(int i = 0; i < players.Length; i++)
 		{
-			//this gets the character component of the player
-			character = players[i].GetComponent<Character>();
+			if (players[i] != null) {
+				//this gets the character component of the player
+				character = players[i].GetComponent<Character>();
 
-			//checks if the character is dead or not
-			if(character != null && !character.isDead)
-			{
-					//if not add to number of players alive.
-					numbPlayersAlive++;
+				//checks if the character is dead or not
+				if(character != null && !character.isDead)
+				{
+						//if not add to number of players alive.
+						numbPlayersAlive++;
+				}
+				//print("There are " + numbPlayersAlive + " Players alive.");
 			}
-			//print("There are " + numbPlayersAlive + " Players alive.");
 		}
 		print("eThere are " + numbPlayersAlive + " Players alive.");
 	}
