@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Rewired;
 
 [System.Serializable]
 public class Controls {
@@ -25,11 +26,16 @@ public class Player : Character, IHealable<int>{
 
 	GameObject sparks = null;
 
+	//Rewired 
+	public int playerID = 0; // The Rewired player id of this character
+	private Rewired.Player cont;
+
 	private Door currDoor;
 	
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType("Enemy");
+		cont = ReInput.players.GetPlayer (playerID);
 	}
 	
 	// Use this for initialization
@@ -97,10 +103,12 @@ public class Player : Character, IHealable<int>{
 	
 	protected override void ActionCommands() {
 		if (actable && !this.animator.GetBool ("Attack")) {
-			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
+//			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
+			if(cont.GetButtonDown("Fire")) {
 				this.animator.SetBool("Charging", true);
 				this.animator.SetBool("Attack", true);
-			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
+//			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
+			} else if(cont.GetButtonDown("Item")) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
 					inventory.items[inventory.selected].useItem(); // Item count check can be removed if characters are required to have atleast 1 item at all times.
@@ -108,23 +116,27 @@ public class Player : Character, IHealable<int>{
 					// Play sound for trying to use item on cooldown or items
 					print("Item on Cooldown");
 				}
-			} else if(Input.GetKeyDown (controls.cycItem) || Input.GetButtonDown(controls.joyCycItem)) {
+//			} else if(Input.GetKeyDown (controls.cycItem) || Input.GetButtonDown(controls.joyCycItem)) {
+			} else if(cont.GetButtonDown("Switch Secondary")) {
 				inventory.cycItems();
 			}
 		} else {
-			if ((Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) && this.animator.GetBool("Tap")) {
+//			if ((Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) && this.animator.GetBool("Tap")) {
+			if (cont.GetButtonDown("Fire") && this.animator.GetBool ("Tap")){
 				this.animator.SetBool("Attack", true);
 				this.animator.SetBool ("Tap", false);
 			}
 		
-			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
+//			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
+			if (!cont.GetButton ("Fire")){
 				animator.SetBool ("Charging", false);
 			}
 		}
 		
 		
 		
-		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
+//		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
+		if (cont.GetButtonUp ("Item")){
 			if (inventory.items.Count > 0) {
 				inventory.keepItemActive = false;
 				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
@@ -144,25 +156,29 @@ public class Player : Character, IHealable<int>{
 		if (actable) {
 			float x;
 			float z;
-			if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
+//			if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
+			if (cont.GetAxis ("Move Vertical") < 0){
 				x = Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				z = Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
 				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Down" key assign pressed
-			if (Input.GetKey(controls.down) || Input.GetAxis(controls.vert) < 0) {
+//			if (Input.GetKey(controls.down) || Input.GetAxis(controls.vert) < 0) {
+			if (cont.GetAxis("Move Vertical") > 0){
 				x = -Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				z = -Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
 				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Left" key assign pressed
-			if (Input.GetKey(controls.left) || Input.GetAxis(controls.hori) < 0) {
+//			if (Input.GetKey(controls.left) || Input.GetAxis(controls.hori) < 0) {
+			if (cont.GetAxis("Move Horizontal") < 0){
 				x = -Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
 				z = Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Right" key assign pressed
-			if (Input.GetKey(controls.right)|| Input.GetAxis(controls.hori) > 0) {
+//			if (Input.GetKey(controls.right)|| Input.GetAxis(controls.hori) > 0) {
+			if (cont.GetAxis("Move Horizontal") > 0){
 				x = Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
 				z = -Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				newMoveDir += new Vector3(x, 0, z);

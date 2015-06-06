@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Rewired;
 
 [RequireComponent(typeof(Rigidbody))]
 public class TargetCircle : MonoBehaviour {
@@ -17,6 +18,11 @@ public class TargetCircle : MonoBehaviour {
 	protected Character user;
 	protected Controls controls;
 	protected float speed;
+
+	//Rewired
+	public int playerID; // The Rewired player id of this character
+
+	private Rewired.Player cont;
 
 	//-------------------//
 	// Primary Functions //
@@ -47,7 +53,9 @@ public class TargetCircle : MonoBehaviour {
 		this.moveable = true;
 
 		if (user.GetComponent<Player> () != null) {
-			this.controls = user.GetComponent<Player>().controls;
+//			this.controls = user.GetComponent<Player>().controls;
+			playerID = this.user.GetComponent<Player>().playerID;
+			this.cont = ReInput.players.GetPlayer (playerID);
 		}
 
 		this.speed = user.stats.speed * 3;
@@ -72,29 +80,33 @@ public class TargetCircle : MonoBehaviour {
 		Vector3 newMoveDir = Vector3.zero;
 
 		//"Up" key assign pressed
-		if (Input.GetKey(controls.up)) {
+		//		if (Input.GetKey(controls.up)) {
+		if (cont.GetAxis ("Move Vertical") < 0){
 			newMoveDir += Vector3.forward;
 		}
 
 		//"Down" key assign pressed
-		if (Input.GetKey(controls.down)) {
+		//			if (cont.GetAxis("Move Vertical") > 0){
+		if (cont.GetAxis("Move Vertical") > 0){
 			newMoveDir += Vector3.back;
 		}
 
 		//"Left" key assign pressed
-		if (Input.GetKey(controls.left)) {
+		//		if (Input.GetKey(controls.left)) {
+		if (cont.GetAxis("Move Horizontal") < 0){
 			newMoveDir += Vector3.left;
 		}
 
 		//"Right" key assign pressed
-		if (Input.GetKey(controls.right)) {
+		//		if (Input.GetKey(controls.right)) {
+		if (cont.GetAxis("Move Horizontal") > 0){
 			newMoveDir += Vector3.right;
 		}
 
 		//Joystick form
-		if(controls.joyUsed){
-			newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
-		}
+//		if(controls.joyUsed){
+//			newMoveDir = new Vector3(Input.GetAxis(controls.hori),0,Input.GetAxis(controls.vert));
+//		}
 			
 		this.rb.velocity = newMoveDir.normalized * this.speed;
 	}
