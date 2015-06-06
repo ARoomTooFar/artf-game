@@ -36,7 +36,7 @@ public class endzone : MonoBehaviour {
 			print ("Initializing player list, numbPlayers is: " + numbPlayers);
 		}
 
-		string t = other.GetComponent<Collider>().tag;
+		string t = other.tag;
 
 
 		if (t == "Player" || t == "Player1" || t == "Player2" || t == "Player3" || t == "Player4") 
@@ -58,7 +58,7 @@ public class endzone : MonoBehaviour {
 	//---------------------------------------
 	void OnTriggerExit(Collider other)
 	{
-		string t = other.GetComponent<Collider>().tag;
+		string t = other.tag;
 		if (t == "Player" || t == "Player1" || t == "Player2" || t == "Player3" || t == "Player4") 
 		{
 			numbPlayersInZone --;

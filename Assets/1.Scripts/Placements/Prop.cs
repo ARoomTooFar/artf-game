@@ -44,7 +44,7 @@ public class Prop : MonoBehaviour, IDamageable<int, Traps, GameObject> {
 			Destroy(transform.parent.gameObject);
 		}
 		Destroy(this.gameObject);
-		Instantiate(expDeath, transform.position, transform.rotation);
+		// Instantiate(expDeath, transform.position, transform.rotation);
 	}
 	
 	//--------------------//

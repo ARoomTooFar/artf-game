@@ -69,7 +69,7 @@ public class Enemy : Character {
 		
 		
 		if (testing) {
-			this.SetMonster (3);
+			this.SetMonster (5);
 		}
 
 		MusicPlayer = GameObject.Find ("MusicPlayer");
