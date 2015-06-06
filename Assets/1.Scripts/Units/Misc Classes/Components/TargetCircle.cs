@@ -54,7 +54,7 @@ public class TargetCircle : MonoBehaviour {
 
 		if (user.GetComponent<Player> () != null) {
 //			this.controls = user.GetComponent<Player>().controls;
-			playerID = this.user.GetComponent<Player>().playerID;
+			//playerID = this.user.GetComponent<Player>().playerID;
 			this.cont = ReInput.players.GetPlayer (playerID);
 		}
 
