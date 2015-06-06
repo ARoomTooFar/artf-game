@@ -35,6 +35,8 @@ public class Loadgear : MonoBehaviour {
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot1], tempPlayer.opposition);
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot2], tempPlayer.opposition);
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot3], tempPlayer.opposition);
+
+			tempPlayer.SetInitValues();
 			
 			manager.players[i] = tempPlayer;
 			ui.setUpPlayerUIPane("Player" + (i + 1));
