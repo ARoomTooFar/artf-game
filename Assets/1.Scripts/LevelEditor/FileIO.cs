@@ -36,7 +36,10 @@ public class FileIO : MonoBehaviour {
 
 		Button_LoadPlayable.onClick.AddListener(() => {	LoadPlayable(); });
 
-		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		gsManager = null;
+		try {
+			gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
+		} catch {}
 		serv = gameObject.AddComponent<Farts>();
 
 		#if UNITY_EDITOR
