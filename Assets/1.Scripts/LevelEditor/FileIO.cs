@@ -40,7 +40,7 @@ public class FileIO : MonoBehaviour {
 		serv = gameObject.AddComponent<Farts>();
 
 		#if UNITY_EDITOR
-		if (gsManager == null) {
+		if (gsManager == null || gsManager.currLevelId == "") {
 			Debug.Log ("DUMMY CALLED");
 			getIds(dummyLvlId);
 		} else {
