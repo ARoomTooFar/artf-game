@@ -19,7 +19,7 @@ public class Loadgear : MonoBehaviour {
 		PlayerUI ui = GameObject.Find ("PlayerUI").GetComponent<PlayerUI>();
 		
 		
-		LoadGSManagerForTesting(manager);
+		//LoadGSManagerForTesting(manager);
 		
 		for (int i = 0; i < manager.playerDataList.Length; i++) {
 			if(manager.playerDataList[i] == null) continue;
