@@ -83,7 +83,8 @@ public class GearSelectCtrl : MonoBehaviour {
 
 	void Start () {
 		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
-		Farts serv = gameObject.AddComponent<Farts>();
+		//Farts serv = gameObject.AddComponent<Farts>();
+		prevMenu = Menu.Panel;
 
 		/* setup gear menu */
 		gearMenu = new GameObject[gearMenuHeight, gearMenuWidth];

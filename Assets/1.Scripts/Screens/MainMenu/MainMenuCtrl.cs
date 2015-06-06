@@ -693,7 +693,7 @@ public class MainMenuCtrl : MonoBehaviour {
 			gsManager.leaderList.Add (playerNum); //add player to leader list
 
             MenuSwitch(Menu.ReadyGo);
-            //gsManager.playerDataList[playerNum].PrintData();
+            gsManager.playerDataList[playerNum].PrintData();
         } else {
 			Debug.Log ("login failure");
 		}

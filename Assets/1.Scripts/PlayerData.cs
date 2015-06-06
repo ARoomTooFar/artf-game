@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class PlayerData {
 	// parsed char data storage
-	public int game_acct_id;
-	public int char_id;
+	public long game_acct_id;
+	public long char_id;
 	public int hair_id;
 	public int voice_id;
 	public int money;

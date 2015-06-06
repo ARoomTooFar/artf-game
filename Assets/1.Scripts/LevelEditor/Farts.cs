@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class Farts : MonoBehaviour
 {
@@ -25,9 +26,9 @@ public class Farts : MonoBehaviour
 		PlayerData playerData = new PlayerData();
 		int[] inventory = new int[52];
 		string[] parsedData = charData.Split (',');
-		
-		playerData.game_acct_id = int.Parse(parsedData[0]);
-		playerData.char_id = int.Parse(parsedData [1]);
+
+		playerData.game_acct_id = Int64.Parse(parsedData[0]);
+		playerData.char_id = Int64.Parse(parsedData [1]);
 		playerData.hair_id = int.Parse(parsedData [2]);
 		playerData.voice_id = int.Parse(parsedData [3]);
 		playerData.money = int.Parse(parsedData [4]);
