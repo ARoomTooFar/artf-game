@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Rewired;
 
 public class MainMenuCtrl : MonoBehaviour {
 	public Controls controls;
@@ -12,6 +13,8 @@ public class MainMenuCtrl : MonoBehaviour {
 	private GSManager gsManager;
 	private Farts serv;
 	private WWW httpReq;
+	
+	private Rewired.Player cont;
 
     // UI state
     private bool menuMoved = false;
@@ -80,6 +83,8 @@ public class MainMenuCtrl : MonoBehaviour {
 	void Start () {
 		gsManager = GameObject.Find("/GSManager").GetComponent<GSManager>();
 		serv = gameObject.AddComponent<Farts>(); // add networking component
+		
+		cont = ReInput.players.GetPlayer (0);
 
 		// get player number
 		if (menuContainerName == "P1MenuContainer") {
@@ -702,16 +707,19 @@ public class MainMenuCtrl : MonoBehaviour {
 	void Update () {
 		// UI controls
 		if (menuLock == false) {
-			// check for joystick movement
-			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
+//			// check for joystick movement
+//			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
+			//Multiply by -1 because Rewired flips vertical input
+			MenuMove (cont.GetAxisRaw ("Move Horizontal"), cont.GetAxisRaw ("Move Vertical") * (-1f));
 
 			// check for button presses
-			if (Input.GetButtonUp (controls.joyAttack)) {
+//			if (Input.GetButtonUp (controls.joyAttack)) {
+			if (cont.GetButtonUp ("Fire")){
 				var pointer = new PointerEventData (EventSystem.current);
 				ExecuteEvents.Execute (currMenuPtr [locY, locX], pointer, ExecuteEvents.submitHandler);
 			}
         
-			if (Input.GetButtonUp (controls.joySecItem) && currMenu == Menu.PopUp) {
+			if (cont.GetButtonUp ("Item") && currMenu == Menu.PopUp) {
 				DeleteChar ();
 			}
 		}

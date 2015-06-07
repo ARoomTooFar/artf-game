@@ -54,7 +54,7 @@ public class TargetCircle : MonoBehaviour {
 
 		if (user.GetComponent<Player> () != null) {
 //			this.controls = user.GetComponent<Player>().controls;
-			//playerID = this.user.GetComponent<Player>().playerID;
+			playerID = this.user.GetComponent<Player>().playerID;
 			this.cont = ReInput.players.GetPlayer (playerID);
 		}
 
@@ -66,6 +66,7 @@ public class TargetCircle : MonoBehaviour {
 		if (this.moveable) {
 			move.y = 0.0f;
 			this.rb.velocity = move.normalized * this.speed;
+			Debug.Log (cont.GetAxis ("Move Horizontal"));
 		}
 	}
 
@@ -81,7 +82,8 @@ public class TargetCircle : MonoBehaviour {
 
 		//"Up" key assign pressed
 		//		if (Input.GetKey(controls.up)) {
-		if (cont.GetAxis ("Move Vertical") < 0){
+		if (this.cont.GetAxis ("Move Vertical") < 0){
+			Debug.Log ("should work");
 			newMoveDir += Vector3.forward;
 		}
 
