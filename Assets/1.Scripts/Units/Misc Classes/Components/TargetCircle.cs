@@ -32,7 +32,8 @@ public class TargetCircle : MonoBehaviour {
 	}
 
 	protected virtual void Update () {
-		if (this.controls != null && this.moveable) {
+//		if (this.controls != null && this.moveable) {
+		if (this.cont != null && this.moveable) {
 			this.moveCommands();
 		}
 	}
@@ -66,7 +67,6 @@ public class TargetCircle : MonoBehaviour {
 		if (this.moveable) {
 			move.y = 0.0f;
 			this.rb.velocity = move.normalized * this.speed;
-			Debug.Log (cont.GetAxis ("Move Horizontal"));
 		}
 	}
 
@@ -83,7 +83,6 @@ public class TargetCircle : MonoBehaviour {
 		//"Up" key assign pressed
 		//		if (Input.GetKey(controls.up)) {
 		if (this.cont.GetAxis ("Move Vertical") < 0){
-			Debug.Log ("should work");
 			newMoveDir += Vector3.forward;
 		}
 
