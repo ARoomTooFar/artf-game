@@ -64,12 +64,12 @@ public class PlayerRewardPanel : MonoBehaviour {
 		if(loot.Count == 0){
 			loot.Add("targetingVisor");
 			loot.Add("militarySpikeHelmet");
-			loot.Add("fist");
+			//loot.Add("fist");
 			loot.Add("pruningBlade");
 			loot.Add("shockNet");
-			loot.Add("sprint");
-			loot.Add("trashHelmetBucket");
-			loot.Add("trashHelmetLightBulb");
+			//loot.Add("sprint");
+			//loot.Add("trashHelmetBucket");
+			//loot.Add("trashHelmetLightBulb");
 		}
 
 		populateList();
@@ -79,7 +79,6 @@ public class PlayerRewardPanel : MonoBehaviour {
 		for(int i = 0; i < points.Count; i++){
 			pointsText[i].text = "0";
 		}
-		
 	}
 	
 	//populate list with looted items

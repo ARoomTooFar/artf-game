@@ -7,7 +7,8 @@ using System.Collections.Generic;
  */
 public class CameraAdjuster : MonoBehaviour {
 	public CameraHitBox camHitBox;
-	GameObject[] playerList;
+	//GameObject[] playerList;
+	public List<GameObject> playerList2 = new List<GameObject>();
 	Dictionary<GameObject, Floor> roomMinMaxes = new Dictionary<GameObject, Floor>();
 	HashSet<GameObject> roomsThatShouldBeInViewPort = new HashSet<GameObject>();
 	List<GameObject> cameraBoundingPlanes = new List<GameObject>();
@@ -49,11 +50,15 @@ public class CameraAdjuster : MonoBehaviour {
 	}
 	
 	public void InstantiatePlayers () {
-		playerList = new GameObject[4];
-		playerList[0] = GameObject.FindGameObjectWithTag ("Player1");
-		playerList[1] = GameObject.FindGameObjectWithTag ("Player2");
-		playerList[2] = GameObject.FindGameObjectWithTag ("Player3");
-		playerList[3] = GameObject.FindGameObjectWithTag ("Player4");
+		//playerList = new GameObject[4];
+		//playerList[0] = GameObject.FindGameObjectWithTag ("Player1");
+		//playerList[1] = GameObject.FindGameObjectWithTag ("Player2");
+		//playerList[2] = GameObject.FindGameObjectWithTag ("Player3");
+		//playerList[3] = GameObject.FindGameObjectWithTag ("Player4");
+		if (GameObject.FindGameObjectWithTag ("Player1") != null)
+			playerList2.Add (GameObject.FindGameObjectWithTag ("Player1"));
+		if (GameObject.FindGameObjectWithTag ("Player2") != null)
+			playerList2.Add (GameObject.FindGameObjectWithTag ("Player2"));
 
 		//fill in dictionary that holds room corner locations
 		GameObject[] roomFloorList = GameObject.FindGameObjectsWithTag("Floor");
@@ -91,10 +96,12 @@ public class CameraAdjuster : MonoBehaviour {
 	/*
 	 * Finds all rooms that any player is currently in
 	 */
+	/*
 	IEnumerator updateRoomsThatShouldBeInViewport(){
 		while(true){
 			if(playerList != null){
 				HashSet<GameObject> roomsPlayersAreIn = new HashSet<GameObject>();
+
 
 				for(int i = 0; i < playerList.Length; i++){
 					if(playerList[i].GetComponent<Player>().isDead) continue;
@@ -109,16 +116,22 @@ public class CameraAdjuster : MonoBehaviour {
 						}
 					}
 				}
+
+
+
+
 				roomsThatShouldBeInViewPort = roomsPlayersAreIn;
 			}
 			yield return null;
 		}
 	}
+	*/
 
 	HashSet<GameObject> getRooms(){
 		HashSet<GameObject> roomsPlayersAreIn = null;
-		if(playerList != null){
+		if(playerList2.Count != null){
 			roomsPlayersAreIn = new HashSet<GameObject>();
+			/*
 			for(int i = 0; i < playerList.Length; i++){
 				if(playerList[i].GetComponent<Player>().isDead) continue;
 				foreach(GameObject key in roomMinMaxes.Keys){
@@ -132,13 +145,29 @@ public class CameraAdjuster : MonoBehaviour {
 					}
 				}
 			}
+			*/
+
+			for(int i = 0; i < playerList2.Count; i++){
+				if(playerList2[i] == null || playerList2[i].GetComponent<Player>().isDead)
+					playerList2.Remove(playerList2[i]);
+				foreach(GameObject key in roomMinMaxes.Keys){
+					if(playerList2[i].transform.position.x < roomMinMaxes[key].maxX
+					   && playerList2[i].transform.position.x > roomMinMaxes[key].minX
+					   && playerList2[i].transform.position.z < roomMinMaxes[key].maxZ
+					   && playerList2[i].transform.position.z > roomMinMaxes[key].minZ
+					   )
+					{
+						roomsPlayersAreIn.Add(key);
+					}
+				}
+			}
 		}
 		return roomsPlayersAreIn;
 	}
 
 	void Update () {
 		//if they're all dead, don't do anything
-		if (this.playerList != null && this.playerList.Length == 0) return;
+		if (this.playerList2 != null && this.playerList2.Count == 0) return;
 
 		bool needToZoomOut = false;
 		bool needToZoomIn = false;
