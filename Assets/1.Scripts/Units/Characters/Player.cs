@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Rewired;
 
 [System.Serializable]
 public class Controls {
@@ -18,18 +19,23 @@ public class Controls {
 public class Player : Character, IHealable<int>{
 	public int greyDamage;
 	public bool testable, isReady, atEnd, atStart;
-
+	
 	public UIActive UI;
 	public Controls controls;
 	Renderer rend;
-
+	
 	GameObject sparks = null;
-
+	
+	//Rewired 
+	public int playerID = 0; // The Rewired player id of this character
+	private Rewired.Player cont;
+	
 	private Door currDoor;
 	
 	protected override void Awake() {
 		base.Awake();
 		opposition = Type.GetType("Enemy");
+		cont = ReInput.players.GetPlayer (playerID);
 	}
 	
 	// Use this for initialization
@@ -51,12 +57,12 @@ public class Player : Character, IHealable<int>{
 		stats.speed=8;
 		greyDamage = 0;
 	}
-
+	
 	public override void SetGearAndAbilities() {
 		base.SetGearAndAbilities();
 		this.SetInitValues();
 	}
-
+	
 	//Set cooldown bars to current items. 
 	void ItemCooldowns() {
 		UI.onState = true;
@@ -70,9 +76,9 @@ public class Player : Character, IHealable<int>{
 	
 	// Update is called once per frame
 	protected override void Update () {
-
+		
 		if(isDead) return;
-
+		
 		if(UI != null && UI.onState){
 			ItemCooldowns();
 			UI.hpBar.max = stats.maxHealth;
@@ -80,10 +86,10 @@ public class Player : Character, IHealable<int>{
 			UI.greyBar.current = stats.health+greyDamage;
 			UI.hpBar.current = stats.health;
 		}
-
+		
 		freeAnim = !stunned && !knockedback && !animationLock && !this.animator.GetBool ("IsInAttackAnimation");
 		actable = freeAnim;
-
+		
 		this.animator.SetBool("Actable", this.actable);
 		
 		ActionCommands ();
@@ -97,10 +103,12 @@ public class Player : Character, IHealable<int>{
 	
 	protected override void ActionCommands() {
 		if (actable && !this.animator.GetBool ("Attack")) {
-			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
+			//			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
+			if(cont.GetButtonDown("Fire")) {
 				this.animator.SetBool("Charging", true);
 				this.animator.SetBool("Attack", true);
-			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
+				//			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
+			} else if(cont.GetButtonDown("Item")) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
 					inventory.items[inventory.selected].useItem(); // Item count check can be removed if characters are required to have atleast 1 item at all times.
@@ -108,23 +116,27 @@ public class Player : Character, IHealable<int>{
 					// Play sound for trying to use item on cooldown or items
 					print("Item on Cooldown");
 				}
-			} else if(Input.GetKeyDown (controls.cycItem) || Input.GetButtonDown(controls.joyCycItem)) {
+				//			} else if(Input.GetKeyDown (controls.cycItem) || Input.GetButtonDown(controls.joyCycItem)) {
+			} else if(cont.GetButtonDown("Switch Secondary")) {
 				inventory.cycItems();
 			}
 		} else {
-			if ((Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) && this.animator.GetBool("Tap")) {
+			//			if ((Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) && this.animator.GetBool("Tap")) {
+			if (cont.GetButtonDown("Fire") && this.animator.GetBool ("Tap")){
 				this.animator.SetBool("Attack", true);
 				this.animator.SetBool ("Tap", false);
 			}
-		
-			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
+			
+			//			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
+			if (!cont.GetButton ("Fire")){
 				animator.SetBool ("Charging", false);
 			}
 		}
 		
 		
 		
-		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
+		//		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
+		if (cont.GetButtonUp ("Item")){
 			if (inventory.items.Count > 0) {
 				inventory.keepItemActive = false;
 				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
@@ -135,7 +147,7 @@ public class Player : Character, IHealable<int>{
 	protected void TapAttackFrame() {
 		this.animator.SetBool("Tap", true);
 	}
-
+	
 	// Might separate commands into a protected function and just have a movement function
 	protected virtual void MoveCommands() {
 		Vector3 newMoveDir = Vector3.zero;
@@ -144,25 +156,29 @@ public class Player : Character, IHealable<int>{
 		if (actable) {
 			float x;
 			float z;
-			if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
+			//			if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
+			if (cont.GetAxis ("Move Vertical") < 0){
 				x = Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				z = Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
 				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Down" key assign pressed
-			if (Input.GetKey(controls.down) || Input.GetAxis(controls.vert) < 0) {
+			//			if (Input.GetKey(controls.down) || Input.GetAxis(controls.vert) < 0) {
+			if (cont.GetAxis("Move Vertical") > 0){
 				x = -Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				z = -Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
 				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Left" key assign pressed
-			if (Input.GetKey(controls.left) || Input.GetAxis(controls.hori) < 0) {
+			//			if (Input.GetKey(controls.left) || Input.GetAxis(controls.hori) < 0) {
+			if (cont.GetAxis("Move Horizontal") < 0){
 				x = -Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
 				z = Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Right" key assign pressed
-			if (Input.GetKey(controls.right)|| Input.GetAxis(controls.hori) > 0) {
+			//			if (Input.GetKey(controls.right)|| Input.GetAxis(controls.hori) > 0) {
+			if (cont.GetAxis("Move Horizontal") > 0){
 				x = Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
 				z = -Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				newMoveDir += new Vector3(x, 0, z);
@@ -179,7 +195,7 @@ public class Player : Character, IHealable<int>{
 			// If we trash the rigidbody later, we won't need this
 			this.rb.velocity = Vector3.zero;
 		}
-
+		
 		//Debug.Log(this.rb.velocity.magnitude);
 	}
 	
@@ -189,8 +205,8 @@ public class Player : Character, IHealable<int>{
 	}
 	
 	//-------------------------------------------//
-
-
+	
+	
 	//---------------------------------//
 	// Damage Interface Implementation //
 	//---------------------------------//
@@ -225,9 +241,9 @@ public class Player : Character, IHealable<int>{
 		
 		hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth * 5f);
 		BDS.addBuffDebuff(hitConfirm,gameObject,.5f);
-
+		
 		StartCoroutine (hitFlash (Color.red, rend.material.color));
-
+		
 	}
 	
 	public override void damage(int dmgTaken) {
@@ -250,7 +266,7 @@ public class Player : Character, IHealable<int>{
 			sparks.GetComponent<ParticleRenderer>().material = particleMat;
 			Destroy (sparks, 1);
 		}
-
+		
 		StartCoroutine (hitFlash (Color.red, rend.material.color));
 	}
 	
@@ -259,7 +275,7 @@ public class Player : Character, IHealable<int>{
 		stats.health = 0;
 		this.greyDamage = 0;
 		if(UI!=null) UI.hpBar.current = 0;
-
+		
 		// Renderer[] rs = GetComponentsInChildren<Renderer>();
 		this.isDead = true;
 		this.animator.SetInteger("Killed", (int) UnityEngine.Random.Range(1.1f, 2.9f));	
@@ -277,7 +293,7 @@ public class Player : Character, IHealable<int>{
 			GSManager gsm = GameObject.Find("GSManager").GetComponent<GSManager>();
 			//this should go to the failure screen, which goes to the login screen.
 			gsm.LoadScene("MainMenu");
-
+			
 		}
 	}
 	
@@ -315,7 +331,7 @@ public class Player : Character, IHealable<int>{
 	}
 	
 	//----------------------------------//
-
+	
 	//-------------//
 	// Grey Health //
 	//-------------//
@@ -340,7 +356,7 @@ public class Player : Character, IHealable<int>{
 		
 		return damage + tempDmg;
 	}
-
+	
 	private IEnumerator RegenGrey(){
 		while (greyDamage > 0) {
 			yield return new WaitForSeconds(1);
@@ -349,13 +365,13 @@ public class Player : Character, IHealable<int>{
 		}
 		yield return 0;
 	}
-
+	
 	//---------------//
-
+	
 	//-------//
 	// Doors //
 	//-------//
-
+	
 	private void OnTriggerEnter(Collider other){
 		if(other.tag == "Door"){
 			currDoor = other.GetComponent<Door>();
@@ -368,7 +384,7 @@ public class Player : Character, IHealable<int>{
 		}
 	}
 	//----------------------------------//
-
+	
 	//---------------------------------------
 	//checkPartyAlive()
 	//---------------------------------------
@@ -384,8 +400,8 @@ public class Player : Character, IHealable<int>{
 		Player[] players = gsm.players;
 		numbPlayers = players.Length;
 		Character character;
-
-
+		
+		
 		for(int i = 0; i < players.Length; i++)
 		{
 			//this gets the character component of the player
@@ -397,17 +413,17 @@ public class Player : Character, IHealable<int>{
 				//if not add to number of players alive.
 				numbPlayersAlive++;
 			}
-
+			
 		}
 		print("pdThere are " + numbPlayersAlive + " Players alive.");
 		return !(numbPlayersAlive == 0 && numbPlayers != 0);
 	}
-
+	
 	// coroutines
 	IEnumerator hitFlash(Color hit, Color normal){
 		rend.material.color = hit;
 		yield return new WaitForSeconds(.5f);
 		rend.material.color = normal;
 	}
-
+	
 }
