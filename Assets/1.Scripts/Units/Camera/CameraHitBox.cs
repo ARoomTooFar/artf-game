@@ -9,16 +9,21 @@ public class CameraHitBox : MonoBehaviour {
 	public bool same;
 	public int enemyCount;
 
+	private GSManager manager;
+
 	//private AudioSource battle;
 	//private AudioSource environment;
 
 	// Use this for initialization
 	void Start () {
 		GetComponent<Transform>();
-		allPlayers = FindObjectsOfType(typeof(Player)) as Player[];
-		for(int x = 0; x < allPlayers.Length; x++){
-			areaUnits.Add(allPlayers[x]);
-		}
+		//allPlayers = FindObjectsOfType(typeof(Player)) as Player[];
+		//for(int x = 0; x < allPlayers.Length; x++){
+		//	areaUnits.Add(allPlayers[x]);
+		//}
+
+		this.manager = GameObject.Find("GSManager").GetComponent<GSManager>();
+
 		//environment = GameObject.Find ("PerspectiveAngledCamera").GetComponent<AudioSource> ();
 		//battle = GetComponent<AudioSource> ();
 
@@ -29,9 +34,12 @@ public class CameraHitBox : MonoBehaviour {
 		avgMake();
 	}
 	void avgMake(){
+		if (this.manager == null)
+			return;
+
 		totalX = 0;
 		totalZ = 0;
-		foreach(Character unit in areaUnits) {
+		foreach(Player unit in manager.players) {
 			if (unit == null) continue;
 			totalX+=unit.transform.position.x;
 			totalZ+=unit.transform.position.z;
