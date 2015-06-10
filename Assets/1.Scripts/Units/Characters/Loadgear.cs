@@ -23,7 +23,7 @@ public class Loadgear : MonoBehaviour {
 			LoadGSManagerForTesting (manager);
 		}
 		
-		for (int i = 0; i < manager.playerDataList.Length; i++) {
+		for (int i = 4; i < manager.playerDataList.Length; i++) {
 			if(manager.playerDataList[i] == null) continue;
 			
 			PlayerData tempData = manager.playerDataList[i];
