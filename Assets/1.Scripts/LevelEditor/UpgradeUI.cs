@@ -168,9 +168,9 @@ public class UpgradeUI : MonoBehaviour
 		faceUIToCamera();
 
 		if(FollowCamera.orthographic == true){
-			lowerHalf.SetActive(false);
-			tierStats.SetActive(false);
-			currentActiveObjectUI = null;
+			//lowerHalf.SetActive(false);
+			//tierStats.SetActive(false);
+			//currentActiveObjectUI = null;
 		}
 	}
 
@@ -206,7 +206,7 @@ public class UpgradeUI : MonoBehaviour
 	}
 
 	void scaleWorldSpaceCanvas(){
-		float uiScaleFactor = FollowCamera.transform.position.y / 17f;
+		float uiScaleFactor = FollowCamera.orthographicSize / 14f;
 
 		UpgradeUICanvas.GetComponent<RectTransform>().localScale = 
 			new Vector3(uiScaleFactor, uiScaleFactor, 1f);
@@ -223,7 +223,7 @@ public class UpgradeUI : MonoBehaviour
 //		stickScreenSpaceOverlayCameraToObject();
 
 		//resizes canvas according to camera zoom, for when canvas is in World Space mode
-		scaleWorldSpaceCanvas();
+		//scaleWorldSpaceCanvas();
 
 		//this checks if the object this script applies to was clicked
 		if (Input.GetMouseButtonDown (0)) {
