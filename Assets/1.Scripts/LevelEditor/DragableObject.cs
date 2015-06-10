@@ -106,9 +106,9 @@ public class DragableObject : ClickEvent {
 
 		//destroy the copy
 		Destroy(itemObjectCopy);
-		tilemapcont.deselect(getPosition());
+		//tilemapcont.deselect(getPosition());
 		MapData.dragObject(this.gameObject, getPosition(), position - getPosition());
-		tilemapcont.selectTile(position);
+		//tilemapcont.selectTile(position);
 	}
 
 	public Vector3 getPosition() {

@@ -13,6 +13,8 @@ public class MirageImage : Mirage {
 		this.animator = this.GetComponent<Animator>();
 		this.BDS = new BuffDebuffSystem(this);
 		this.rb = this.GetComponent<Rigidbody>();
+		
+		
 	}
 
 	// Use this for initialization
@@ -20,7 +22,18 @@ public class MirageImage : Mirage {
 	
 	}
 	
-	public override void SetTierData(int tier) {
+	public virtual void SetData(MirageBlink spawnedBy, Mirage user, int hitsToKill) {
+		this.spawnedBy = spawnedBy;
+		this.user = user;
+		this.hitsToKill = hitsToKill;
+		GameObject hr = Instantiate (user.healthRing, this.transform.position, Quaternion.identity) as GameObject;
+		RectTransform hrt = hr.GetComponent<RectTransform>();
+		hr.transform.SetParent(this.transform);
+		hrt.position = hrt.transform.position + new Vector3(0f, 0.75f, 0f);
+		hr.GetComponent<EnemyHealthRingController>().enemy = this.user.GetComponent<Enemy>();
+	}
+	
+	protected override void SetTierData(int tier) {
 		tier = -1;
 		base.SetTierData (tier);
 	}

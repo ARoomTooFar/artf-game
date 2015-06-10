@@ -24,9 +24,7 @@ public class Artilitree: RangedEnemy {
 		base.Update ();
 	}
 	
-	public override void SetTierData(int tier) {
-		tier = 6;
-		
+	protected override void SetTierData(int tier) {
 		foreach(Rooting behaviour in this.animator.GetBehaviours<Rooting>()) {
 			if (tier < 3) behaviour.SetVar(3);
 			else behaviour.SetVar(2);

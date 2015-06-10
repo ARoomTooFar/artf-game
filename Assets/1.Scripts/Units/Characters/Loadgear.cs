@@ -17,9 +17,11 @@ public class Loadgear : MonoBehaviour {
 	public void LoadPlayers() {
 		GSManager manager = GameObject.Find("GSManager").GetComponent<GSManager>();
 		PlayerUI ui = GameObject.Find ("PlayerUI").GetComponent<PlayerUI>();
-		
-		
-		LoadGSManagerForTesting(manager);
+
+		// load players if debugging the scene in Unity Editor
+		if (manager.maxReady == 0) {
+			LoadGSManagerForTesting (manager);
+		}
 		
 		for (int i = 0; i < manager.playerDataList.Length; i++) {
 			if(manager.playerDataList[i] == null) continue;
@@ -35,6 +37,8 @@ public class Loadgear : MonoBehaviour {
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot1], tempPlayer.opposition);
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot2], tempPlayer.opposition);
 			tempPlayer.inventory.EquipItems(this.gear[tempData.actionslot3], tempPlayer.opposition);
+
+			tempPlayer.SetInitValues();
 			
 			manager.players[i] = tempPlayer;
 			ui.setUpPlayerUIPane("Player" + (i + 1));
@@ -44,7 +48,8 @@ public class Loadgear : MonoBehaviour {
 	}
 	
 	private void LoadGSManagerForTesting(GSManager manager) {
-		for (int i = 0; i < 4; i++) {
+		int numPlayers = 1; // change this to the amount of players you want to test with
+		for (int i = 0; i < numPlayers; i++) {
 			PlayerData tempData = new PlayerData();
 			
 			tempData.inventory = new int[52];

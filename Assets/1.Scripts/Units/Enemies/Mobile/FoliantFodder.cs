@@ -15,7 +15,7 @@ public class FoliantFodder: MobileEnemy {
 		base.Awake ();
 		
 		this.minAtkRadius = 0.0f;
-		this.maxAtkRadius = 4.0f;
+		this.maxAtkRadius = 3.0f;
 	}
 	
 	protected override void Start() {
@@ -26,8 +26,7 @@ public class FoliantFodder: MobileEnemy {
 		base.Update ();
 	}
 
-	public override void SetTierData(int tier) {
-		tier = 0;
+	protected override void SetTierData(int tier) {
 		base.SetTierData (tier);
 
 		monsterLoot.initializeLoot("FoliantFodder", tier);

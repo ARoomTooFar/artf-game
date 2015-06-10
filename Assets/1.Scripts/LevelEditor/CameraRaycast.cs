@@ -15,6 +15,8 @@ public class CameraRaycast : MonoBehaviour {
 	public float groundDistance;
 	public float mouseDistance;
 
+	public GameObject pointer;
+
 
 	// Use this for initialization
 	void Start() {
@@ -49,8 +51,13 @@ public class CameraRaycast : MonoBehaviour {
 		if(!hit.Equals(new RaycastHit())) {
 			drag = hit.collider.GetComponent<ClickEvent>();
 			if(drag == null || !drag.enabled){
+				pointer.SetActive(false);
 				return;
 			}
+			pointer.SetActive(true);
+			Vector3 pos = hit.collider.gameObject.transform.position;
+			pos.y = Mathf.Max(4, hit.collider.bounds.max.y);
+			pointer.transform.position = pos;
 			StartCoroutine(drag.onClick(Input.mousePosition));
 		}
 	}

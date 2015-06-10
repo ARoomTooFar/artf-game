@@ -128,13 +128,13 @@ public class CameraMovement : MonoBehaviour {
 	public void changeToTopDown() {
 		Vector3 oldFocus = getFocusPoint();
 		mainCam.transform.eulerAngles = new Vector3(90, 0, 0);
-		mainCam.orthographic = true;
-		mainCam.orthographicSize = minOrthoSize + (maxOrthoSize-minOrthoSize) * Global.Normalize(mainCam.transform.position.y, minY, maxY);
+		//mainCam.orthographic = true;
+		//mainCam.orthographicSize = minOrthoSize + (maxOrthoSize-minOrthoSize) * Global.Normalize(mainCam.transform.position.y, minY, maxY);
 		Vector3 newFocus = getFocusPoint();
 		mainCam.transform.position = transform.position - newFocus + oldFocus;
 		foreach(Camera cam in Camera.allCameras) {
-			cam.orthographic = mainCam.orthographic;
-			cam.orthographicSize = mainCam.orthographicSize;
+			//cam.orthographic = mainCam.orthographic;
+			//cam.orthographicSize = mainCam.orthographicSize;
 		}
 	}
 
@@ -142,23 +142,23 @@ public class CameraMovement : MonoBehaviour {
 		// Get original focus point
 		Vector3 oldFocus = getFocusPoint();
 		// Change back to perspective and original rotation
-		mainCam.orthographic = false;
+		//mainCam.orthographic = false;
 		mainCam.transform.eulerAngles = Global.initCameraRotation;
 		// Figure out the new Y value for zooming
-		Vector3 newVec = Camera.main.transform.position;
-		newVec.y = minY + (maxY-minY) * Global.Normalize(mainCam.orthographicSize, minOrthoSize, maxOrthoSize);
-		Camera.main.transform.position = newVec;
+		//Vector3 newVec = Camera.main.transform.position;
+		//newVec.y = minY + (maxY-minY) * Global.Normalize(mainCam.orthographicSize, minOrthoSize, maxOrthoSize);
+		//Camera.main.transform.position = newVec;
 		// Get the current focus point
 		Vector3 newFocus = getFocusPoint(); 
 		// Move camera to put focus back at the original focus point.
 		transform.position = transform.position - newFocus + oldFocus;
 		foreach(Camera cam in Camera.allCameras) {
-			cam.orthographic = mainCam.orthographic;
+			//cam.orthographic = mainCam.orthographic;
 		}
 	}
 
 	public void toggleCamera() {
-		if(Camera.main.orthographic) {
+		if(btn.GetComponent<Image>().sprite == orth) {
 			Camera.main.GetComponent<CameraMovement>().changeToPerspective();
 			btn.GetComponent<Image>().sprite = pers;
 		} else {

@@ -81,12 +81,7 @@ public class SceneryManager {
 		if(blk.SceneryBlockInfo.isDoor) {
 			blk.rotate(rm.getWallSide(blk.Position));
 			rm.Doors.Add(blk);
-
-			foreach(SceneryBlock wall in rm.Walls) {
-				if(blk.Coordinates.Contains(wall.Position)) {
-					wall.GameObj.SetActive(false);
-				}
-			}
+			rm.setStretchWalls(blk.Orientation);
 		}
 
 		rm.Scenery.Add(blk);
@@ -138,11 +133,7 @@ public class SceneryManager {
 			ARTFRoom rm = MapData.TheFarRooms.find(blk.Position);
 			if(rm != null) {
 				rm.Doors.Remove(blk);
-				foreach(SceneryBlock wall in rm.Walls) {
-					if(blk.Coordinates.Contains(wall.Position)) {
-						wall.GameObj.SetActive(true);
-					}
-				}
+				rm.setStretchWalls(blk.Orientation);
 			}
 		}
 		blk.remove();
@@ -286,6 +277,11 @@ public class SceneryManager {
 					continue;
 				}
 				if(scn.Coordinates.Contains(coor)) {
+					return false;
+				}
+			}
+			foreach(MonsterBlock mon in rm.Monster){
+				if(mon.Coordinates.Contains(coor)){
 					return false;
 				}
 			}

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class PlayerData {
 	// parsed char data storage
-	public string char_name;
-	public int char_id;
+	public long game_acct_id;
+	public long char_id;
 	public int hair_id;
 	public int voice_id;
 	public int money;
@@ -21,7 +21,7 @@ public class PlayerData {
 
 	public void PrintData() {
 		Debug.Log ("// -- START PRINT PLAYER DATA -- //");
-		Debug.Log (char_name);
+		Debug.Log (game_acct_id);
 		Debug.Log (char_id);
 		Debug.Log (hair_id);
 		Debug.Log (voice_id);

@@ -203,9 +203,7 @@ public class Player : Character, IHealable<int>{
 	public override void damage(int dmgTaken, Transform atkPosition) {
 		if (invincible || isDead) return;
 		
-		// dmgTaken *= (100 - stats.armor)/100;
-		
-		print (dmgTaken);
+		dmgTaken = (int)(dmgTaken * ((100f - stats.armor)/100f));
 		
 		dmgTaken = Mathf.Clamp(Mathf.RoundToInt(dmgTaken * stats.dmgManip.getDmgValue(atkPosition.position, facing, transform.position)), 1, 100000);
 		stats.health -= greyTest(dmgTaken);
@@ -235,7 +233,7 @@ public class Player : Character, IHealable<int>{
 	public override void damage(int dmgTaken) {
 		if (invincible || isDead) return;
 		
-		dmgTaken *= (100 - stats.armor)/100;
+		dmgTaken = (int)(dmgTaken * ((100f - stats.armor)/100f));
 		
 		stats.health -= greyTest(dmgTaken);
 		if (stats.health <= 0) this.die();
@@ -278,7 +276,7 @@ public class Player : Character, IHealable<int>{
 			//THIS WILL NEED TO USE THE GSmanager HERE
 			GSManager gsm = GameObject.Find("GSManager").GetComponent<GSManager>();
 			//this should go to the failure screen, which goes to the login screen.
-			gsm.LoadScene("TitleScreen2");
+			gsm.LoadScene("MainMenu");
 
 		}
 	}

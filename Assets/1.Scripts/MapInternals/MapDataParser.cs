@@ -38,25 +38,6 @@ public static class MapDataParser {
 		} else {
 			Loadgear loadgear = GameObject.Find("/Loadgear").GetComponent<Loadgear>();
 			loadgear.LoadPlayers();
-			
-			
-			/*
-			GameObject p1 = GameObject.Find("Player1");
-			GameObject p2 = GameObject.Find("Player2");
-			GameObject p3 = GameObject.Find("Player3");
-			GameObject p4 = GameObject.Find("Player4");
-
-			p1.transform.position = start.Coordinates[0];
-			p2.transform.position = start.Coordinates[1];
-			p3.transform.position = start.Coordinates[2];
-			p4.transform.position = start.Coordinates[3];
-
-			Loadgear loadgear = GameObject.Find("/Loadgear").GetComponent<Loadgear>();
-			loadgear.players[0] = p1.GetComponent<Character>();
-			loadgear.players[1] = p2.GetComponent<Character>();
-			loadgear.players[2] = p3.GetComponent<Character>();
-			loadgear.players[3] = p4.GetComponent<Character>();
-			*/
 		}
 		LevelPathCheck.checkPath();
 	}
@@ -79,9 +60,6 @@ public static class MapDataParser {
 			ARTFRoom room = new ARTFRoom(pos1, pos2);
 			room.placedThisSession = true;
 			MapData.TheFarRooms.add(room);
-
-			if(!Global.inLevelEditor)
-				StretchyWalls.rooms.Add(room);
 		}
 	}
 
@@ -125,6 +103,9 @@ public static class MapDataParser {
 			MonsterBlock nBlk = new MonsterBlock(type[0], pos, (DIRECTION)Enum.Parse(typeof(DIRECTION), blkParams[3]));
 			nBlk.MonsterBlockInfo.placedThisSession = true;
 			nBlk.MonsterBlockInfo.Tier = Convert.ToInt32(blkParams[4]);
+			if(!Global.inLevelEditor) {
+				nBlk.GameObj.GetComponent<Enemy>().SetMonster(Convert.ToInt32(blkParams[4]));
+			}
 			MapData.MonsterBlocks.add(nBlk);
 		}
 	}
@@ -143,9 +124,6 @@ public static class MapDataParser {
 		MapData.StartingRoom = rm;
 		MapData.TheFarRooms.add(rm);
 
-		if(!Global.inLevelEditor)
-			StretchyWalls.rooms.Add(rm);
-
 		rmParams = rms[1].Split(',');
 		pos1 = new Vector3(float.Parse(rmParams[0]),
 		                           float.Parse(rmParams[1]),
@@ -157,8 +135,5 @@ public static class MapDataParser {
 		rm.placedThisSession = true;
 		MapData.EndingRoom = rm;
 		MapData.TheFarRooms.add(rm);
-
-		if(!Global.inLevelEditor)
-			StretchyWalls.rooms.Add(rm);
 	}
 }

@@ -67,7 +67,7 @@ public class UpgradeUI : MonoBehaviour
 		{480, 12, 48, 0, 40},
 		{600, 15, 60, 0, 50},
 		{720, 18, 72, 0, 60}};
-	static int[,] ArtilitreeStats = new int[6,5]{
+	static int[,] ArtillitreeStats = new int[6,5]{
 		{200, 15, 0, 60, 10}, 
 		{400, 22, 0, 120, 20},
 		{600, 29, 0, 180, 30},
@@ -103,7 +103,7 @@ public class UpgradeUI : MonoBehaviour
 		{"CackleBranch", CackleBranchStats},
 		{"BullyTrunk", BullyTrunkStats},
 		{"Bushling", BushlingStats},
-		{"Artilitree", ArtilitreeStats},
+		{"Artillitree", ArtillitreeStats},
 		{"Mirage", MirageStats},
 		{"Synth", FoliantFodderStats},
 		{"DartPlant", DartPlantStats}
@@ -168,9 +168,9 @@ public class UpgradeUI : MonoBehaviour
 		faceUIToCamera();
 
 		if(FollowCamera.orthographic == true){
-			lowerHalf.SetActive(false);
-			tierStats.SetActive(false);
-			currentActiveObjectUI = null;
+			//lowerHalf.SetActive(false);
+			//tierStats.SetActive(false);
+			//currentActiveObjectUI = null;
 		}
 	}
 
@@ -206,7 +206,7 @@ public class UpgradeUI : MonoBehaviour
 	}
 
 	void scaleWorldSpaceCanvas(){
-		float uiScaleFactor = FollowCamera.transform.position.y / 17f;
+		float uiScaleFactor = FollowCamera.orthographicSize / 14f;
 
 		UpgradeUICanvas.GetComponent<RectTransform>().localScale = 
 			new Vector3(uiScaleFactor, uiScaleFactor, 1f);
@@ -223,7 +223,7 @@ public class UpgradeUI : MonoBehaviour
 //		stickScreenSpaceOverlayCameraToObject();
 
 		//resizes canvas according to camera zoom, for when canvas is in World Space mode
-		scaleWorldSpaceCanvas();
+		//scaleWorldSpaceCanvas();
 
 		//this checks if the object this script applies to was clicked
 		if (Input.GetMouseButtonDown (0)) {
