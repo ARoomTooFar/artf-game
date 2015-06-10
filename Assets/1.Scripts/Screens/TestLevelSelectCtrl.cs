@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Rewired;
 
 public class TestLevelSelectCtrl : MonoBehaviour {
 	public Controls controls;
@@ -10,6 +11,10 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 	private string[] levelList;
 	//private string testLevelListData = "1,3,2,4,5";
 	//private WWW matchmakeReq;
+
+	//Input
+	public int playerControl;
+	private Rewired.Player cont;
 
 	// UI state
 	private bool menuMoved = false;
@@ -104,6 +109,7 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 				controls.joyAttack = "Attack2";
 				controls.joySecItem = "SecItem2";
 				controls.joyCycItem = "CycItem2";
+				cont = ReInput.players.GetPlayer (3);
 				break;
 			case 2:
 				Debug.Log ("leader is P3");
@@ -119,6 +125,7 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 				controls.joyAttack = "Attack3";
 				controls.joySecItem = "SecItem3";
 				controls.joyCycItem = "CycItem3";
+				cont = ReInput.players.GetPlayer (0);
 				break;
 			case 3:
 				Debug.Log ("leader is P4");
@@ -134,6 +141,7 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 				controls.joyAttack = "Attack4";
 				controls.joySecItem = "SecItem4";
 				controls.joyCycItem = "CycItem4";
+				cont = ReInput.players.GetPlayer (1);
 				break;
 			default:
 				Debug.Log ("leader is P1");
@@ -149,6 +157,7 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 				controls.joyAttack = "Attack";
 				controls.joySecItem = "SecItem";
 				controls.joyCycItem = "CycItem";
+				cont = ReInput.players.GetPlayer (2);
 				break;
 			}
 		} else {
@@ -165,6 +174,7 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 			controls.joyAttack = "Attack";
 			controls.joySecItem = "SecItem";
 			controls.joyCycItem = "CycItem";
+			cont = ReInput.players.GetPlayer (2);
 		}
 
 		gsManager.maxReady = 0;
@@ -239,11 +249,12 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 	void Update () {
 		// UI controls
 		if (menuLock == false) {
-			// check for joystick movement
-			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
+//			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
+			MenuMove (cont.GetAxisRaw ("Move Horizontal"), cont.GetAxisRaw ("Move Vertical") * (-1f));
 			
 			// check for button presses
-			if (Input.GetButtonUp (controls.joyAttack)) {
+//			if (Input.GetButtonUp (controls.joyAttack)) {
+			if (cont.GetButtonUp ("Fire")){
 				var pointer = new PointerEventData (EventSystem.current);
 				ExecuteEvents.Execute (currMenuPtr [locY, locX], pointer, ExecuteEvents.submitHandler);
 			}
