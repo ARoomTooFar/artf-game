@@ -82,8 +82,11 @@ public class MainMenuCtrl : MonoBehaviour {
 	private Text txtDisplayField;
 	private Text currFieldPtr;
 
+	private MainMenuMusicCtr menuMusic;
+
 	void Start () {
 		gsManager = GameObject.Find("/GSManager").GetComponent<GSManager>();
+		menuMusic = GetComponentInParent<MainMenuMusicCtr> ();
 		serv = gameObject.AddComponent<Farts>(); // add networking component
 
 		cont = ReInput.players.GetPlayer (playerControl);
@@ -171,6 +174,9 @@ public class MainMenuCtrl : MonoBehaviour {
         readyGoDisplay[0, 0].GetComponent<Button>().onClick.AddListener(() =>
         {
 			Debug.Log ("[ SWITCH TO LEVEL SELECT ]");
+			//menuMusic.playLogIn(1);
+
+
             gsManager.LoadScene("TestLevelSelect");
         });
 

@@ -16,7 +16,7 @@ public class CameraHitBox : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		GetComponent<Transform>();
+		// GetComponent<Transform>();
 		//allPlayers = FindObjectsOfType(typeof(Player)) as Player[];
 		//for(int x = 0; x < allPlayers.Length; x++){
 		//	areaUnits.Add(allPlayers[x]);
@@ -28,7 +28,7 @@ public class CameraHitBox : MonoBehaviour {
 		//battle = GetComponent<AudioSource> ();
 
 	}
-	
+
 	// Update is called once per frame
 	void Update () {		
 		avgMake();
@@ -39,14 +39,16 @@ public class CameraHitBox : MonoBehaviour {
 
 		totalX = 0;
 		totalZ = 0;
+		int count = 0;
 		foreach(Player unit in manager.players) {
 			if (unit == null) continue;
 			totalX+=unit.transform.position.x;
 			totalZ+=unit.transform.position.z;
+			count++;
 		}
-		if(areaUnits.Count > 0){
-			avgX = totalX/areaUnits.Count;
-			avgZ = totalZ/areaUnits.Count;
+		if(count > 0){
+			avgX = totalX/count;
+			avgZ = totalZ/count;
 			transform.position = new Vector3(avgX,transform.position.y,avgZ);
 		}
 	}

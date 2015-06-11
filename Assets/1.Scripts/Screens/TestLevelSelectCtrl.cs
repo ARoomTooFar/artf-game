@@ -31,6 +31,7 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 		//matchmakeReq = serv.matchmakeWWW (5);
 		string matchmakeData = serv.matchmakeWWW ();
 		levelList = matchmakeData.Split (',');
+		levelList [0] = "4867770441269248";
 
 		/*string[] test = serv.parseListLevelData(testLevelListData);
 		Debug.Log (test);

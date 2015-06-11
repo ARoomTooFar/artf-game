@@ -280,6 +280,11 @@ public class SceneryManager {
 					return false;
 				}
 			}
+			foreach(MonsterBlock mon in rm.Monster){
+				if(mon.Coordinates.Contains(coor)){
+					return false;
+				}
+			}
 		}
 		return true;
 

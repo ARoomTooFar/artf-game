@@ -64,11 +64,6 @@ public class NonMonsterUI : MonoBehaviour
 	//Update causes itemObjectUI flickering. LateUpdate prevents it
 	void LateUpdate(){
 		faceUIToCamera();
-		
-		if(FollowCamera.orthographic == true){
-			lowerHalf.SetActive(false);
-			currentActiveObjectUI = null;
-		}
 	}
 	
 	void scaleWorldSpaceCanvas(){
