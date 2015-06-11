@@ -104,12 +104,12 @@ public class Player : Character, IHealable<int>{
 	protected override void ActionCommands() {
 		if (actable && !this.animator.GetBool ("Attack")) {
 			//	if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
-			if(cont.GetButtonDown("Fire")) {
+			if(cont.GetButtonDown("Fire") || Input.GetKeyDown(controls.attack)) {
 				// this.damage(99999);
 				this.animator.SetBool("Charging", true);
 				this.animator.SetBool("Attack", true);
 				//			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {
-			} else if(cont.GetButtonDown("Item")) {
+			} else if(cont.GetButtonDown("Item") || Input.GetKeyDown (controls.secItem)) {
 				if (inventory.items.Count > 0 && inventory.items[inventory.selected].curCoolDown <= 0) {
 					inventory.keepItemActive = true;
 					inventory.items[inventory.selected].useItem(); // Item count check can be removed if characters are required to have atleast 1 item at all times.
@@ -123,13 +123,13 @@ public class Player : Character, IHealable<int>{
 			}
 		} else {
 			//			if ((Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) && this.animator.GetBool("Tap")) {
-			if (cont.GetButtonDown("Fire") && this.animator.GetBool ("Tap")){
+			if ((cont.GetButtonDown("Fire") || Input.GetKeyDown(controls.attack)) && this.animator.GetBool ("Tap")) {
 				this.animator.SetBool("Attack", true);
 				this.animator.SetBool ("Tap", false);
 			}
 			
 			//			if (!Input.GetKey(controls.attack) && (!Input.GetButton(controls.joyAttack))) {
-			if (!cont.GetButton ("Fire")){
+			if (!(cont.GetButton ("Fire") || Input.GetKey(controls.attack))){
 				animator.SetBool ("Charging", false);
 			}
 		}
@@ -137,7 +137,7 @@ public class Player : Character, IHealable<int>{
 		
 		
 		//		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
-		if (cont.GetButtonUp ("Item")){
+		if (cont.GetButtonUp ("Item") || Input.GetKeyUp (controls.secItem)){
 			if (inventory.items.Count > 0) {
 				inventory.keepItemActive = false;
 				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.
@@ -158,28 +158,28 @@ public class Player : Character, IHealable<int>{
 			float x;
 			float z;
 			//			if (Input.GetKey(controls.up) || Input.GetAxis(controls.vert) > 0) {
-			if (cont.GetAxis ("Move Vertical") < 0){
+			if (cont.GetAxis ("Move Vertical") < 0 || Input.GetKey(controls.up)){
 				x = Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				z = Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
 				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Down" key assign pressed
 			//			if (Input.GetKey(controls.down) || Input.GetAxis(controls.vert) < 0) {
-			if (cont.GetAxis("Move Vertical") > 0){
+			if (cont.GetAxis("Move Vertical") > 0 || Input.GetKey(controls.down)){
 				x = -Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				z = -Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
 				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Left" key assign pressed
 			//			if (Input.GetKey(controls.left) || Input.GetAxis(controls.hori) < 0) {
-			if (cont.GetAxis("Move Horizontal") < 0){
+			if (cont.GetAxis("Move Horizontal") < 0 || Input.GetKey(controls.left)){
 				x = -Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
 				z = Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				newMoveDir += new Vector3(x, 0, z);
 			}
 			//"Right" key assign pressed
 			//			if (Input.GetKey(controls.right)|| Input.GetAxis(controls.hori) > 0) {
-			if (cont.GetAxis("Move Horizontal") > 0){
+			if (cont.GetAxis("Move Horizontal") > 0 || Input.GetKey(controls.right)) {
 				x = Mathf.Cos(camAngle.y * Mathf.Deg2Rad);
 				z = -Mathf.Sin(camAngle.y * Mathf.Deg2Rad);
 				newMoveDir += new Vector3(x, 0, z);
