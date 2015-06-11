@@ -282,10 +282,10 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 				btnText[0].text = levelNameList[lvlListLoc];
 				break;
 			case 1:
-				btnText[1].text = levelNameList[lvlListLoc];
+				btnText[1].text = "Owner: " + levelOwnerList[lvlListLoc];
 				break;
 			case 2:
-				btnText[2].text = levelNameList[lvlListLoc];
+				btnText[2].text = "Difficulty: " + levelDifficultyList[lvlListLoc];
 				break;
 			}
 		}
