@@ -59,6 +59,7 @@ public class MusicController: MonoBehaviour {
 
 		// add enemy to the amount of enemies active rooms.
 		foreach (GameObject e in MonstersIndex) {
+			if (e == null) continue;
 			Enemy enemy = e.GetComponent<Enemy> ();
 			if(enemy.isDead) continue;
 			foreach(ARTFRoom room in rooms) {

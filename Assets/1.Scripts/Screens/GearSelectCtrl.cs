@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Rewired;
 
 public class GearSelectCtrl : MonoBehaviour {
 	public Controls controls;
@@ -11,6 +12,10 @@ public class GearSelectCtrl : MonoBehaviour {
 	
 	private GSManager gsManager;
 	private PlayerData playerData;
+
+	//Input
+	public int playerControl;
+	private Rewired.Player cont;
 	
 	// UI state
 	private bool menuMoved = false;
@@ -85,6 +90,8 @@ public class GearSelectCtrl : MonoBehaviour {
 		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
 		//Farts serv = gameObject.AddComponent<Farts>();
 		prevMenu = Menu.Panel;
+
+		cont = ReInput.players.GetPlayer (playerControl);
 
 		/* setup gear menu */
 		gearMenu = new GameObject[gearMenuHeight, gearMenuWidth];
@@ -800,10 +807,12 @@ public class GearSelectCtrl : MonoBehaviour {
 		// UI controls
 		if (menuLock == false) {
 			// check for joystick movement
-			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
+//			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
+			MenuMove (cont.GetAxisRaw ("Move Horizontal"), cont.GetAxisRaw ("Move Vertical") * (-1f));
 			
 			// check for button presses
-			if (Input.GetButtonUp (controls.joyAttack)) {
+//			if (Input.GetButtonUp (controls.joyAttack)) {
+			if (cont.GetButtonUp ("Fire")){
 				var pointer = new PointerEventData (EventSystem.current);
 				ExecuteEvents.Execute (currMenuPtr [locY, locX], pointer, ExecuteEvents.submitHandler);
 			}

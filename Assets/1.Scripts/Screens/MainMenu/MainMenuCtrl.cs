@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Rewired;
 
 public class MainMenuCtrl : MonoBehaviour {
 	public Controls controls;
@@ -12,6 +13,10 @@ public class MainMenuCtrl : MonoBehaviour {
 	private GSManager gsManager;
 	private Farts serv;
 	private WWW httpReq;
+
+	//Input
+	public int playerControl;
+	private Rewired.Player cont;
 
     // UI state
     private bool menuMoved = false;
@@ -83,6 +88,8 @@ public class MainMenuCtrl : MonoBehaviour {
 		gsManager = GameObject.Find("/GSManager").GetComponent<GSManager>();
 		menuMusic = GetComponentInParent<MainMenuMusicCtr> ();
 		serv = gameObject.AddComponent<Farts>(); // add networking component
+
+		cont = ReInput.players.GetPlayer (playerControl);
 
 		// get player number
 		if (menuContainerName == "P1MenuContainer") {
@@ -170,7 +177,7 @@ public class MainMenuCtrl : MonoBehaviour {
 			//menuMusic.playLogIn(1);
 
 
-            //gsManager.LoadScene("TestLevelSelect");
+            gsManager.LoadScene("TestLevelSelect");
         });
 
 		/* setup registration form */
@@ -709,15 +716,18 @@ public class MainMenuCtrl : MonoBehaviour {
 		// UI controls
 		if (menuLock == false) {
 			// check for joystick movement
-			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
+//			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
+			MenuMove (cont.GetAxisRaw ("Move Horizontal"), cont.GetAxisRaw ("Move Vertical") * (-1f));
 
 			// check for button presses
-			if (Input.GetButtonUp (controls.joyAttack)) {
+//			if (Input.GetButtonUp (controls.joyAttack)) {
+			if (cont.GetButtonUp ("Fire")){
 				var pointer = new PointerEventData (EventSystem.current);
 				ExecuteEvents.Execute (currMenuPtr [locY, locX], pointer, ExecuteEvents.submitHandler);
 			}
         
-			if (Input.GetButtonUp (controls.joySecItem) && currMenu == Menu.PopUp) {
+//			if (Input.GetButtonUp (controls.joySecItem) && currMenu == Menu.PopUp) {
+			if (cont.GetButtonUp ("Item") && currMenu == Menu.PopUp){
 				DeleteChar ();
 			}
 		}

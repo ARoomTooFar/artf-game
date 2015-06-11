@@ -1,9 +1,8 @@
-﻿
-		using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
-
+using Rewired;
 
 
 
@@ -33,20 +32,22 @@ public class PlayerRewardPanel : MonoBehaviour {
 	KeyCode add;
 	KeyCode subtract;
 	
-	public Controls controls;
+//	public Controls controls;
+	public Rewired.Player cont;
 	bool joyControlsOn = true;
 	bool keyboardControlsOn = true;
 	
 	
 	//joystick/button input setup
-	public void setUpInputs(string upString, string downString, string addString, string subtractString, Controls c){
+	public void setUpInputs(string upString, string downString, string addString, string subtractString, Rewired.Player c){
 		up = (KeyCode)System.Enum.Parse(typeof(KeyCode), upString);
 		down = (KeyCode)System.Enum.Parse(typeof(KeyCode), downString);
 		add = (KeyCode)System.Enum.Parse(typeof(KeyCode), addString);
 		subtract = (KeyCode)System.Enum.Parse(typeof(KeyCode), subtractString);
-		controls = c;
+//		controls = c;
+		cont = c;
 		
-		controls.joyUsed = true;
+//		controls.joyUsed = true;
 	}
 	
 	void Start () {
@@ -116,25 +117,30 @@ public class PlayerRewardPanel : MonoBehaviour {
 	
 	void takeJoyInputs(){
 		//go up
-		if (waitingUp == false && Input.GetAxisRaw (controls.vert) > 0) {
-			if(activeEntry > 0)
+//		if (waitingUp == false && Input.GetAxisRaw (controls.vert) > 0) {
+		if (waitingUp == false && cont.GetAxisRaw ("Move Vertical") < 0) {
+			if (activeEntry > 0)
 				activeEntry -= 1;
 			waitingUp = true;
-		}else if (waitingUp == true && !(Input.GetAxisRaw (controls.vert) > 0)){
+//		}else if (waitingUp == true && !(Input.GetAxisRaw (controls.vert) > 0)){
+		}else if (waitingUp == true && !(cont.GetAxisRaw ("Move Vertical") < 0)){
 			waitingUp = false;
 		}
 		
 		//go down
-		if (waitingDown == false && Input.GetAxisRaw (controls.vert) < 0) {
+//		if (waitingDown == false && Input.GetAxisRaw (controls.vert) < 0) {
+		if (waitingDown == false && cont.GetAxisRaw ("Move Vertical") > 0) {
 			if(activeEntry < highlights.Count - 1)
 				activeEntry += 1;
 			waitingDown = true;
-		}else if (waitingDown == true && !(Input.GetAxisRaw (controls.vert) < 0)){
+//		}else if (waitingDown == true && !(Input.GetAxisRaw (controls.vert) < 0)){
+		}else if (waitingDown == true && !(cont.GetAxisRaw ("Move Vertical") > 0)){
 			waitingDown = false;
 		}
 		
 		//adds points to an item
-		if (!Input.GetKeyDown(controls.attack) && (Input.GetButtonDown(controls.joyAttack))) {
+//		if (!Input.GetKeyDown(controls.attack) && (Input.GetButtonDown(controls.joyAttack))) {
+		if (cont.GetButtonDown ("Fire")){
 			if(total > 0){
 				points[activeEntry] += 1;
 				total -= 1;
@@ -142,7 +148,8 @@ public class PlayerRewardPanel : MonoBehaviour {
 		}
 		
 		//subtracts points from an item
-		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
+//		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
+		if (cont.GetButtonUp ("Item")){
 			if(points[activeEntry] > 0){
 				total += 1;
 				points[activeEntry] -= 1;
