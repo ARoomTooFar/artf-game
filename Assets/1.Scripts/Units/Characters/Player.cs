@@ -276,7 +276,7 @@ public class Player : Character, IHealable<int>{
 			//THIS WILL NEED TO USE THE GSmanager HERE
 			GSManager gsm = GameObject.Find("GSManager").GetComponent<GSManager>();
 			//this should go to the failure screen, which goes to the login screen.
-			gsm.LoadScene("MainMenu");
+			gsm.LoadScene("GameOver");
 
 		}
 	}
