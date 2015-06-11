@@ -29,7 +29,7 @@ public class PlayAgainCtrl : MonoBehaviour {
 		currMenuPtr[0, 1] = GameObject.Find("/Canvas/BtnMenu");
 		
 		currMenuPtr[0, 0].GetComponent<Button>().onClick.AddListener(() => {
-			gsManager.LoadScene ("GearSelect");
+			gsManager.LoadScene ("TestLevelSelect");
 		});
 		
 		currMenuPtr[0, 1].GetComponent<Button>().onClick.AddListener(() => {
