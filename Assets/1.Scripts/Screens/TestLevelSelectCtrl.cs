@@ -66,13 +66,13 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 		}*/
 
 		// setup level select control
-		currMenuPtr = new GameObject[5, 1];
+		currMenuPtr = new GameObject[5, 4];
 		currMenuPtr[0, 0] = GameObject.Find("/Canvas/Button");
 		currMenuPtr[1, 0] = GameObject.Find("/Canvas/Button 1");
 		currMenuPtr[2, 0] = GameObject.Find("/Canvas/Button 2");
 		currMenuPtr[3, 0] = GameObject.Find("/Canvas/Button 3");
 		currMenuPtr[4, 0] = GameObject.Find("/Canvas/Button 4");
-		/*currMenuPtr[0, 1] = GameObject.Find("/Canvas/Button 5");
+		currMenuPtr[0, 1] = GameObject.Find("/Canvas/Button 5");
 		currMenuPtr[1, 1] = GameObject.Find("/Canvas/Button 6");
 		currMenuPtr[2, 1] = GameObject.Find("/Canvas/Button 7");
 		currMenuPtr[3, 1] = GameObject.Find("/Canvas/Button 8");
@@ -86,13 +86,28 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 		currMenuPtr[1, 3] = GameObject.Find("/Canvas/Button 16");
 		currMenuPtr[2, 3] = GameObject.Find("/Canvas/Button 17");
 		currMenuPtr[3, 3] = GameObject.Find("/Canvas/Button 18");
-		currMenuPtr[4, 3] = GameObject.Find("/Canvas/Button 19");*/
+		currMenuPtr[4, 3] = GameObject.Find("/Canvas/Button 19");
 
 		SetTxt (currMenuPtr [0, 0], 0);
 		SetTxt (currMenuPtr [1, 0], 1);
 		SetTxt (currMenuPtr [2, 0], 2);
 		SetTxt (currMenuPtr [3, 0], 3);
 		SetTxt (currMenuPtr [4, 0], 4);
+		SetTxt (currMenuPtr [0, 1], 5);
+		SetTxt (currMenuPtr [1, 1], 6);
+		SetTxt (currMenuPtr [2, 1], 7);
+		SetTxt (currMenuPtr [3, 1], 8);
+		SetTxt (currMenuPtr [4, 1], 9);
+		SetTxt (currMenuPtr [0, 2], 10);
+		SetTxt (currMenuPtr [1, 2], 11);
+		SetTxt (currMenuPtr [2, 2], 12);
+		SetTxt (currMenuPtr [3, 2], 13);
+		SetTxt (currMenuPtr [4, 2], 14);
+		SetTxt (currMenuPtr [0, 3], 15);
+		SetTxt (currMenuPtr [1, 3], 16);
+		SetTxt (currMenuPtr [2, 3], 17);
+		SetTxt (currMenuPtr [3, 3], 18);
+		SetTxt (currMenuPtr [4, 3], 19);
 
 		currMenuPtr[0, 0].GetComponent<Button>().onClick.AddListener(() => {
 			BtnAction (0);
@@ -274,19 +289,21 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 	}
 
 	void SetTxt (GameObject button, int lvlListLoc) {
-		Text[] btnText = button.GetComponent<Button> ().GetComponentsInChildren<Text> ();
+		if (lvlListLoc < levelIdList.Length) {
+			Text[] btnText = button.GetComponent<Button> ().GetComponentsInChildren<Text> ();
 
-		for (int i = 0; i < btnText.Length; ++i) {
-			switch (i) {
-			case 0:
-				btnText[0].text = levelNameList[lvlListLoc];
-				break;
-			case 1:
-				btnText[1].text = "Owner: " + levelOwnerList[lvlListLoc];
-				break;
-			case 2:
-				btnText[2].text = "Difficulty: " + levelDifficultyList[lvlListLoc];
-				break;
+			for (int i = 0; i < btnText.Length; ++i) {
+				switch (i) {
+				case 0:
+					btnText [0].text = levelNameList [lvlListLoc];
+					break;
+				case 1:
+					btnText [1].text = "Owner: " + levelOwnerList [lvlListLoc];
+					break;
+				case 2:
+					btnText [2].text = "Difficulty: " + levelDifficultyList [lvlListLoc];
+					break;
+				}
 			}
 		}
 	}
