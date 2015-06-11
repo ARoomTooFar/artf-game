@@ -9,36 +9,46 @@ public class CameraHitBox : MonoBehaviour {
 	public bool same;
 	public int enemyCount;
 
+	private GSManager manager;
+
 	//private AudioSource battle;
 	//private AudioSource environment;
 
 	// Use this for initialization
 	void Start () {
-		GetComponent<Transform>();
-		allPlayers = FindObjectsOfType(typeof(Player)) as Player[];
-		for(int x = 0; x < allPlayers.Length; x++){
-			areaUnits.Add(allPlayers[x]);
-		}
+		// GetComponent<Transform>();
+		//allPlayers = FindObjectsOfType(typeof(Player)) as Player[];
+		//for(int x = 0; x < allPlayers.Length; x++){
+		//	areaUnits.Add(allPlayers[x]);
+		//}
+
+		this.manager = GameObject.Find("GSManager").GetComponent<GSManager>();
+
 		//environment = GameObject.Find ("PerspectiveAngledCamera").GetComponent<AudioSource> ();
 		//battle = GetComponent<AudioSource> ();
 
 	}
-	
+
 	// Update is called once per frame
 	void Update () {		
 		avgMake();
 	}
 	void avgMake(){
+		if (this.manager == null)
+			return;
+
 		totalX = 0;
 		totalZ = 0;
-		foreach(Character unit in areaUnits) {
+		int count = 0;
+		foreach(Player unit in manager.players) {
 			if (unit == null) continue;
 			totalX+=unit.transform.position.x;
 			totalZ+=unit.transform.position.z;
+			count++;
 		}
-		if(areaUnits.Count > 0){
-			avgX = totalX/areaUnits.Count;
-			avgZ = totalZ/areaUnits.Count;
+		if(count > 0){
+			avgX = totalX/count;
+			avgZ = totalZ/count;
 			transform.position = new Vector3(avgX,transform.position.y,avgZ);
 		}
 	}

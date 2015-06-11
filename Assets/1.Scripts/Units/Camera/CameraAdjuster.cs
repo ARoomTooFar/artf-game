@@ -59,6 +59,10 @@ public class CameraAdjuster : MonoBehaviour {
 			playerList2.Add (GameObject.FindGameObjectWithTag ("Player1"));
 		if (GameObject.FindGameObjectWithTag ("Player2") != null)
 			playerList2.Add (GameObject.FindGameObjectWithTag ("Player2"));
+		if (GameObject.FindGameObjectWithTag ("Player3") != null)
+			playerList2.Add (GameObject.FindGameObjectWithTag ("Player3"));
+		if (GameObject.FindGameObjectWithTag ("Player4") != null)
+			playerList2.Add (GameObject.FindGameObjectWithTag ("Player4"));
 		
 		//fill in dictionary that holds room corner locations
 		GameObject[] roomFloorList = GameObject.FindGameObjectsWithTag("Floor");
