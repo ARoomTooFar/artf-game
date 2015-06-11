@@ -26,10 +26,6 @@ public class CackleBranch: RangedEnemy {
 		this.minAtkRadius = 8.0f;
 		this.maxAtkRadius = 40.0f;
 	}
-	
-	protected override void Update() {
-		base.Update ();
-	}
 
 
 	protected override void SetTierData(int tier) {
