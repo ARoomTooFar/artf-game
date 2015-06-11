@@ -46,7 +46,7 @@ public class endzone : MonoBehaviour {
 			print ("+Number of Players in end zone: " + numbPlayersInZone + ".");
 			if (numbPlayersAlive == numbPlayersInZone) 
 			{
-				gsManager.LoadScene("RewardScreen");
+				gsManager.LoadScene("PlayAgainScene");
 			}
 		}
 		checkAlive();

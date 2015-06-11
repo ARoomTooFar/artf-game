@@ -6,7 +6,7 @@ public class GOSTimer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		GSManager gsm = GameObject.Find("GSManager").GetComponent<GSManager>();
-		gsm.LoadScene ("MainMenu");
+		gsm.LoadScene ("PlayAgainScreen");
 	}
 	
 	// Update is called once per frame

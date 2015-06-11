@@ -159,6 +159,18 @@ public class GSManager : MonoBehaviour {
 		}
 	}
 
+	// clears the data stored
+	public void ClearData () {
+		playerDataList = new PlayerData[4];
+		players = new Player[4];
+		leaderList = new List<int>();
+		loot = new List<string>();
+		currReady = 0;
+		maxReady = 0;
+		currLevelId = "";
+		currLevelData = "";
+	}
+
 	void Update() {
 		if (currReady == maxReady && maxReady != 0) {
 			currReady = 0;
