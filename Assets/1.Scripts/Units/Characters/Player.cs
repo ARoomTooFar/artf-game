@@ -98,6 +98,7 @@ public class Player : Character, IHealable<int>{
 	protected override void ActionCommands() {
 		if (actable && !this.animator.GetBool ("Attack")) {
 			if(Input.GetKeyDown(controls.attack) || Input.GetButtonDown(controls.joyAttack)) {
+				// this.damage(99999);
 				this.animator.SetBool("Charging", true);
 				this.animator.SetBool("Attack", true);
 			} else if(Input.GetKeyDown (controls.secItem) || Input.GetButtonDown(controls.joySecItem)) {

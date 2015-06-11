@@ -31,7 +31,7 @@ public class ExplosiveRound : HomingBullet {
 	protected virtual void Explode() {
 		// Create explosion while removing self
 		// BombExplosion eDeath = ((GameObject)Instantiate(expDeath, transform.position, transform.rotation)).GetComponent<BombExplosion>();
-		Instantiate(expDeath, transform.position, transform.rotation);
+		Instantiate(expDeath, transform.position, expDeath.transform.rotation);
 		
 		// Variables for sight checking
 		RaycastHit[] hits;

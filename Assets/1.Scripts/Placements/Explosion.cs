@@ -52,7 +52,7 @@ public class Explosion : MonoBehaviour {
 		}
 		if(charDeath){
 			if(unit.GetType() == typeof(Player)){
-				Grave g = ((GameObject)Instantiate(grave, this.transform.position, this.transform.rotation)).GetComponent<Grave>();
+				Grave g = ((GameObject)Instantiate(grave, this.transform.position + new Vector3(0f, grave.transform.position.y, 0f), grave.transform.rotation)).GetComponent<Grave>();
 				g.setInitValues((Player)unit);
 				//lootBoom();
 			}

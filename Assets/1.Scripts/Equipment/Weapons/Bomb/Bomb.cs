@@ -72,7 +72,7 @@ public class Bomb : MonoBehaviour {
 		if(this.damage == 0){
 			Instantiate(expDeath, transform.position+new Vector3(0,.5f,0), transform.rotation);
 		}else{
-			Instantiate(expDeath, transform.position+new Vector3(0,2,0), transform.rotation);
+			Instantiate(expDeath, transform.position+new Vector3(0,1,0), transform.rotation);
 		}
 		Destroy (this.gameObject);
 
