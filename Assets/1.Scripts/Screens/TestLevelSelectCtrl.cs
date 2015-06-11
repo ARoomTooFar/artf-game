@@ -8,7 +8,10 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 	public Controls controls;
 
 	private GSManager gsManager;
-	private string[] levelList;
+	private string[] levelIdList = new string[5];
+	private string[] levelNameList = new string[5];
+	private string[] levelOwnerList = new string[5];
+	private string[] levelDifficultyList = new string[5];
 	//private string testLevelListData = "1,3,2,4,5";
 	//private WWW matchmakeReq;
 
@@ -30,8 +33,31 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 
 		//matchmakeReq = serv.matchmakeWWW (5);
 		string matchmakeData = serv.matchmakeWWW ();
-		levelList = matchmakeData.Split (',');
-		levelList [0] = "4867770441269248";
+		string[] levelDetailData = matchmakeData.Split (',');
+		string[] levelDetailData2 = new string[4];
+
+		for (int i = 0; i < levelDetailData.Length; ++i) {
+			levelDetailData2 = levelDetailData[i].Split ('|');
+			for (int j = 0; j < levelDetailData2.Length; ++j) {
+				switch (j) {
+				case 0:
+					levelIdList[i] = levelDetailData2[j];
+					break;
+				case 1:
+					levelNameList[i] = levelDetailData2[j];
+					break;
+				case 2:
+					levelOwnerList[i] = levelDetailData2[j];
+					break;
+				case 3:
+					levelDifficultyList[i] = levelDetailData2[j];
+					break;
+				}
+			}
+		}
+
+		//levelIdList [0] = "4867770441269248";
+		//levelNameList [0] = "walk in the park";
 
 		/*string[] test = serv.parseListLevelData(testLevelListData);
 		Debug.Log (test);
@@ -62,11 +88,11 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 		currMenuPtr[3, 3] = GameObject.Find("/Canvas/Button 18");
 		currMenuPtr[4, 3] = GameObject.Find("/Canvas/Button 19");*/
 
-		currMenuPtr [0, 0].GetComponent<Button>().GetComponentInChildren<Text> ().text = levelList[0];
-		currMenuPtr [1, 0].GetComponent<Button>().GetComponentInChildren<Text> ().text = levelList[1];
-		currMenuPtr [2, 0].GetComponent<Button>().GetComponentInChildren<Text> ().text = levelList[2];
-		currMenuPtr [3, 0].GetComponent<Button>().GetComponentInChildren<Text> ().text = levelList[3];
-		currMenuPtr [4, 0].GetComponent<Button>().GetComponentInChildren<Text> ().text = levelList[4];
+		SetTxt (currMenuPtr [0, 0], 0);
+		SetTxt (currMenuPtr [1, 0], 1);
+		SetTxt (currMenuPtr [2, 0], 2);
+		SetTxt (currMenuPtr [3, 0], 3);
+		SetTxt (currMenuPtr [4, 0], 4);
 
 		currMenuPtr[0, 0].GetComponent<Button>().onClick.AddListener(() => {
 			BtnAction (0);
@@ -190,7 +216,7 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 		Debug.Log ("maxReady: " + gsManager.maxReady);
 	}
 
-	void BtnAction (int levelListIndex) {
+	void BtnAction (int levelIdListIndex) {
         /*Debug.Log("YOYOYO PERSISTENCE DAWG");
         foreach (PlayerData playerData in gsManager.playerDataList) {
             if (playerData != null) {
@@ -201,8 +227,8 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 			}
         }
         Debug.Log(gsManager.playerDataList);*/
-		gsManager.currLevelId = levelList[levelListIndex];
-		//gsManager.LoadLevel (levelList[levelListIndex]);
+		gsManager.currLevelId = levelIdList[levelIdListIndex];
+		//gsManager.LoadLevel (levelIdList[levelIdListIndex]);
 		gsManager.LoadScene ("GearSelect");
 	}
 
@@ -244,6 +270,24 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 			prevBtn = currMenuPtr[locY, locX];
 			
 			//Debug.Log(locX + "," + locY);
+		}
+	}
+
+	void SetTxt (GameObject button, int lvlListLoc) {
+		Text[] btnText = button.GetComponent<Button> ().GetComponentsInChildren<Text> ();
+
+		for (int i = 0; i < btnText.Length; ++i) {
+			switch (i) {
+			case 0:
+				btnText[0].text = levelNameList[lvlListLoc];
+				break;
+			case 1:
+				btnText[1].text = levelNameList[lvlListLoc];
+				break;
+			case 2:
+				btnText[2].text = levelNameList[lvlListLoc];
+				break;
+			}
 		}
 	}
 
