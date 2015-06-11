@@ -137,7 +137,7 @@ public class Player : Character, IHealable<int>{
 		
 		
 		//		if (Input.GetKeyUp (controls.secItem) || Input.GetButtonUp(controls.joySecItem))  {
-		if (cont.GetButtonUp ("Item")){
+		if (cont.GetButtonUp ("Item") || Input.GetKeyUp (controls.secItem)){
 			if (inventory.items.Count > 0) {
 				inventory.keepItemActive = false;
 				// inventory.items[inventory.selected].deactivateItem(); // Item count check can be removed if charcters are required to have atleast 1 item at all times.

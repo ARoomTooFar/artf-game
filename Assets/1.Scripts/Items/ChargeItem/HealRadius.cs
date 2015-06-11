@@ -53,7 +53,7 @@ public class HealRadius : MonoBehaviour {
 	protected virtual void startSize(){
 		activated = true;
 		particles.enableEmission = true;
-		transform.localScale = new Vector3(baseSize,.02f,baseSize);
+		// transform.localScale = new Vector3(baseSize,.02f,baseSize);
 	}
 	//----------------------------------//
 	// Falling Interface Implementation //
