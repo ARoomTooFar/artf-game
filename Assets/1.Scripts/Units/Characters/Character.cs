@@ -94,6 +94,7 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 			
 			helmetPiece.Equip(this.unit, tier);
 			this.helmet = helmetPiece.GetComponent<Armor>();
+			if (this.chest.hideHelm) this.helmet.GetComponent<SkinnedMeshRenderer>().enabled = false;
 			// this.helmet = (Instantiate(helmet) as GameObject).GetComponent<Helmet>();
 			// this.helmet.transform.SetParent(this.headLocation, false);
 			// this.helmet.Equip(this.unit, tier);
@@ -106,17 +107,18 @@ public class Character : MonoBehaviour, IDamageable<int, Transform, GameObject>,
 				weapon.equip (this.unit, ene, 1);
 			}
 			
+			Chest chestPiece = chestLocation.GetComponentInChildren<Chest>();
+			if (chestPiece) {
+				chestPiece.Equip (this.unit, 1);
+				this.chest = chestPiece.GetComponent<Armor>();
+			}
+			
 			Helmet helmetPiece = headLocation.GetComponentInChildren<Helmet>();
 			// helmet = headLocation.GetComponentInChildren<Helmet>();
 			if (helmetPiece) {
 				helmetPiece.Equip (this.unit, 1);
 				this.helmet = helmetPiece.GetComponent<Armor>();
-			}
-			
-			Chest chestPiece = chestLocation.GetComponentInChildren<Chest>();
-			if (chestPiece) {
-				chestPiece.Equip (this.unit, 1);
-				this.chest = chestPiece.GetComponent<Armor>();
+				if (this.chest.hideHelm) this.helmet.GetComponent<SkinnedMeshRenderer>().enabled = false;
 			}
 		}
 	}
