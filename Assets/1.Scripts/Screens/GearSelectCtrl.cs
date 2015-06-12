@@ -110,6 +110,18 @@ public class GearSelectCtrl : MonoBehaviour {
 			MenuSwitch (Menu.Upgrade);
 		});
 
+		gearMenu[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			PanelDisable ();
+			MenuSwitch (Menu.Upgrade);
+		});
+
+		gearMenu[2, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			PanelDisable ();
+			MenuSwitch (Menu.Upgrade);
+		});
+
 		// ready button
 		gearMenu[6, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
@@ -370,7 +382,7 @@ public class GearSelectCtrl : MonoBehaviour {
 		
 		foreach (Image imgChild in imgChildren) {
 			if (imgChild.name == panelName) {
-				imgChild.color = new Color32(255, 255, 255, 100);
+				imgChild.color = new Color32(255, 255, 255, 240);
 			} else if (imgChild.name == "ImgItemFrame") {
 				imgChild.color = new Color(1f, 1f, 1f);
 			} else {

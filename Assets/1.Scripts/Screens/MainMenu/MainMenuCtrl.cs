@@ -636,7 +636,7 @@ public class MainMenuCtrl : MonoBehaviour {
 
         // return color to image panel
         Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
-        imgPanel.color = new Color32(255, 255, 255, 100);
+        imgPanel.color = new Color32(255, 255, 255, 240);
 
 		// return color to text
 		Text[] txtChild = this.GetComponentsInChildren<Text>();
