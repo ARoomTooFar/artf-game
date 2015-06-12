@@ -49,6 +49,7 @@ public class MainMenuCtrl : MonoBehaviour {
 	private Animator loginFormAnim;
     private Text txtFieldAcctName;
 	private Text txtFieldPasscode;
+	private Text passcode;
 
     // ready go display
     private GameObject[,] readyGoDisplay;
