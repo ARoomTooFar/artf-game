@@ -50,6 +50,7 @@ public class MainMenuCtrl : MonoBehaviour {
     private Text txtFieldAcctName;
 	private Text txtFieldPasscode;
 	private Text passcode;
+	private GameObject txtLoginFail;
 
     // ready go display
     private GameObject[,] readyGoDisplay;
@@ -134,6 +135,8 @@ public class MainMenuCtrl : MonoBehaviour {
         loginForm[2, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnLogin");
         loginForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnBack");
 		loginFormAnim = GameObject.Find ("/Canvas/" + menuContainerName + "/LoginForm").GetComponent<Animator>();
+		txtLoginFail = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/TxtLoginFail");
+		txtLoginFail.SetActive (false);
 
 		// acct name field
 		loginForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>
@@ -709,7 +712,8 @@ public class MainMenuCtrl : MonoBehaviour {
             MenuSwitch(Menu.ReadyGo);
             gsManager.playerDataList[playerNum].PrintData();
         } else {
-			Debug.Log ("login failure");
+			//Debug.Log ("login failure");
+			txtLoginFail.SetActive (true);
 		}
 	}
 
