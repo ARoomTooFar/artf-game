@@ -66,6 +66,8 @@ public class ArmorStats {
 public class Armor : Equipment {
 
 	public ArmorStats stats;
+	
+	public bool hideHelm = false;
 
 	protected override void SetInitValues() {
 		base.SetInitValues();

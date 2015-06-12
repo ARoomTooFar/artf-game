@@ -23,6 +23,8 @@ public class Player : Character, IHealable<int>{
 	public UIActive UI;
 	public Controls controls;
 	Renderer rend;
+	SkinnedMeshRenderer[] armors;
+
 	
 	GameObject sparks = null;
 	
@@ -42,6 +44,7 @@ public class Player : Character, IHealable<int>{
 	protected override void Start () {
 		base.Start ();
 		rend = GetComponent<Renderer> ();
+		armors = GetComponentsInChildren<SkinnedMeshRenderer> ();
 		foreach(PlayerBehaviour behaviour in this.animator.GetBehaviours<PlayerBehaviour>()) {
 			behaviour.SetVar(this.GetComponent<Player>());
 		}
@@ -214,7 +217,7 @@ public class Player : Character, IHealable<int>{
 	
 	public override void damage(int dmgTaken, Transform atkPosition, GameObject source) {
 		this.damage (dmgTaken, atkPosition);
-		StartCoroutine(hitFlash (Color.red, rend.material.color));
+		StartCoroutine(hitBlink (Color.red, 3));
 	}
 	
 	public override void damage(int dmgTaken, Transform atkPosition) {
@@ -243,7 +246,7 @@ public class Player : Character, IHealable<int>{
 		hitConfirm = new Knockback(gameObject.transform.position-atkPosition.position,(float) dmgTaken/stats.maxHealth * 5f);
 		BDS.addBuffDebuff(hitConfirm,gameObject,.5f);
 		
-		StartCoroutine (hitFlash (Color.red, rend.material.color));
+		StartCoroutine (hitBlink (Color.red, 3));
 		
 	}
 	
@@ -268,7 +271,7 @@ public class Player : Character, IHealable<int>{
 			Destroy (sparks, 1);
 		}
 		
-		StartCoroutine (hitFlash (Color.red, rend.material.color));
+		StartCoroutine (hitBlink (Color.red, 3));
 	}
 	
 	public override void die() {
@@ -420,10 +423,19 @@ public class Player : Character, IHealable<int>{
 	}
 	
 	// coroutines
-	IEnumerator hitFlash(Color hit, Color normal){
-		rend.material.color = hit;
-		yield return new WaitForSeconds(.5f);
-		rend.material.color = normal;
+	IEnumerator hitBlink(Color hit, int blinkTimes){
+		for (int i = 0; i < blinkTimes; ++i) {
+			rend.material.color = hit;
+			foreach(SkinnedMeshRenderer armorpiece in armors){
+				armorpiece.material.color = hit;
+			}
+			yield return new WaitForSeconds (0.1f);
+			rend.material.color = Color.white;
+			foreach(SkinnedMeshRenderer armorpiece in armors){
+				armorpiece.material.color = Color.white;
+			}
+			yield return new WaitForSeconds (0.1f);
+		}
 	}
 	
 }

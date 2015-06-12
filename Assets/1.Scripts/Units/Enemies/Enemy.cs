@@ -21,6 +21,9 @@ public class Enemy : Character {
 	protected float fov = 150f;
 	protected float lineofsight = 15f;
 	public float maxAtkRadius, minAtkRadius;
+
+	Renderer rend;
+	SkinnedMeshRenderer[] armors;
 	
 
 	// Variables for use in player detection
@@ -67,7 +70,9 @@ public class Enemy : Character {
 			aggroT = new AggroTable();
 		}
 		
-		
+		rend = GetComponent<Renderer> ();
+		armors = GetComponentsInChildren<SkinnedMeshRenderer> ();
+
 		if (testing) {
 			this.SetMonster (5);
 		}
@@ -246,6 +251,7 @@ public class Enemy : Character {
 			sparks.GetComponent<ParticleRenderer>().material = particleMat;
 			Destroy (sparks, 1);
 		}
+		StartCoroutine (hitFlash (Color.red, 0.4f));
 	}
 	
 	public override void damage(int dmgTaken, Transform atkPosition) {
@@ -260,6 +266,7 @@ public class Enemy : Character {
 			sparks.GetComponent<ParticleRenderer>().material = particleMat;
 			Destroy (sparks, 1);
 		}
+		StartCoroutine (hitFlash (Color.red, 0.4f));
 	}
 	
 	public override void damage(int dmgTaken) {
@@ -272,6 +279,7 @@ public class Enemy : Character {
 			sparks.GetComponent<ParticleRenderer>().material = particleMat;
 			Destroy (sparks, 1);
 		}
+		StartCoroutine (hitFlash (Color.red, 0.4f));
 	}
 	
 	public override void die() {
@@ -299,5 +307,13 @@ public class Enemy : Character {
 		}
 	}
 
-	//---------------//
+	//-------Coroutine-------//
+	IEnumerator hitFlash(Color hit, float time){
+		rend.material.color = hit;
+		yield return new WaitForSeconds(time);
+		rend.material.color = Color.white;
+		foreach(SkinnedMeshRenderer armorpiece in armors){
+			armorpiece.material.color = Color.white;
+		}
+	}
 }

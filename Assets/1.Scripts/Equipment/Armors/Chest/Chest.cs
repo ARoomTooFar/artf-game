@@ -13,6 +13,7 @@ public class Chest : MonoBehaviour {
 		smr.materials = this.keyArmor.sharedMaterials;
 		
 		Armor armor = this.gameObject.AddComponent(keyArmor.GetComponent<Armor>().GetType()) as Armor;
+		armor.hideHelm = keyArmor.GetComponent<Armor>().hideHelm;
 	
 		if (armor == null) {
 			Debug.LogError(keyArmor.name + " has no armor component assigned");
