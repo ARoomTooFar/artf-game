@@ -33,7 +33,7 @@ public class PlayAgainCtrl : MonoBehaviour {
 		});
 		
 		currMenuPtr[0, 1].GetComponent<Button>().onClick.AddListener(() => {
-			gsManager.LoadScene ("MainMenu");
+			gsManager.LoadScene ("TestTitle");
 		});
 		
 		var pointer = new PointerEventData(EventSystem.current);

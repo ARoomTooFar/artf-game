@@ -8,10 +8,10 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 	public Controls controls;
 
 	private GSManager gsManager;
-	private string[] levelIdList = new string[5];
-	private string[] levelNameList = new string[5];
-	private string[] levelOwnerList = new string[5];
-	private string[] levelDifficultyList = new string[5];
+	private string[] levelIdList = new string[20];
+	private string[] levelNameList = new string[20];
+	private string[] levelOwnerList = new string[20];
+	private string[] levelDifficultyList = new string[20];
 	//private string testLevelListData = "1,3,2,4,5";
 	//private WWW matchmakeReq;
 
@@ -127,6 +127,66 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 
 		currMenuPtr[4, 0].GetComponent<Button>().onClick.AddListener(() => {
 			BtnAction (4);
+		});
+
+		currMenuPtr[0, 1].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (5);
+		});
+		
+		currMenuPtr[1, 1].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (6);
+		});
+		
+		currMenuPtr[2, 1].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (7);
+		});
+		
+		currMenuPtr[3, 1].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (8);
+		});
+		
+		currMenuPtr[4, 1].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (9);
+		});
+
+		currMenuPtr[0, 2].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (10);
+		});
+		
+		currMenuPtr[1, 2].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (11);
+		});
+		
+		currMenuPtr[2, 2].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (12);
+		});
+		
+		currMenuPtr[3, 2].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (13);
+		});
+		
+		currMenuPtr[4, 2].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (14);
+		});
+
+		currMenuPtr[0, 3].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (15);
+		});
+		
+		currMenuPtr[1, 3].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (16);
+		});
+		
+		currMenuPtr[2, 3].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (17);
+		});
+		
+		currMenuPtr[3, 3].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (18);
+		});
+		
+		currMenuPtr[4, 3].GetComponent<Button>().onClick.AddListener(() => {
+			BtnAction (19);
 		});
 
 		var pointer = new PointerEventData(EventSystem.current);
