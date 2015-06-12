@@ -431,6 +431,9 @@ public class Player : Character, IHealable<int>{
 			}
 			yield return new WaitForSeconds (0.1f);
 			rend.material.color = Color.white;
+			foreach(SkinnedMeshRenderer armorpiece in armors){
+				armorpiece.material.color = Color.white;
+			}
 			yield return new WaitForSeconds (0.1f);
 		}
 	}
