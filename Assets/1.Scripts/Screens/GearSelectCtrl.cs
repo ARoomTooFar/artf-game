@@ -77,8 +77,8 @@ public class GearSelectCtrl : MonoBehaviour {
 	private int helmetsIndex = 0;
 	private int armorsIndex = 0;
 	private int actionSlot1Index = 0;
-	private int actionSlot2Index = 0;
-	private int actionSlot3Index = 0;
+	private int actionSlot2Index = 1;
+	private int actionSlot3Index = 2;
 	private int[] weapons = new int[20];
 	private int[] helmets = new int[13];
 	private int[] armors = new int[9];
@@ -163,11 +163,11 @@ public class GearSelectCtrl : MonoBehaviour {
 		prevBtn = currMenuPtr[locY, locX];
 
 		// uncomment the block below to load testlevelselect directly
-		/*PlayerData dummyData = serv.parseCharData("86572838366478336,123,0,0,9001,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6");
+		PlayerData dummyData = serv.parseCharData("86572838366478336,123,0,0,9001,1,1,1,0,1,1,1,1,0,0,6,6,6,6,6,6,6,6,6,6,6,6,0,6,6,6,6,0,6,6,6,0,6,6,6,6,6,6,6,6,6,6,6,0,0,0,6,6,0,6,6,0");
 		gsManager.playerDataList[0] = dummyData;
 		gsManager.playerDataList[1] = dummyData;
 		gsManager.playerDataList[2] = dummyData;
-		gsManager.playerDataList[3] = dummyData;*/
+		gsManager.playerDataList[3] = dummyData;
 
 		// begin to load player gear
 		if (panelName == "P1Panel") {
@@ -484,17 +484,17 @@ public class GearSelectCtrl : MonoBehaviour {
 			break;
 		case 13:
 			txtWeaponSlot.text = "Hi-Compression Pistol";
-			imgWeapon.sprite = Resources.Load<Sprite> ("IF1_0020_HiCompressionPistol.png");
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0020_HiCompressionPistol.png");
 			playerData.weapon = 23;
 			break;
 		case 14:
 			txtWeaponSlot.text = "Hunting Rifle";
-			imgWeapon.sprite = Resources.Load<Sprite> ("IF1_0022_HuntersRifle.png");
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0022_HuntersRifle.png");
 			playerData.weapon = 24;
 			break;
 		case 15:
 			txtWeaponSlot.text = "Laser Rifle";
-			imgWeapon.sprite = Resources.Load<Sprite> ("IF1_0025_LaserSniperRifle.png");
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0025_LaserSniperRifle.png");
 			playerData.weapon = 25;
 			break;
 		case 16:
@@ -691,42 +691,52 @@ public class GearSelectCtrl : MonoBehaviour {
 		switch (actionSlot2Index) {
 		case 0:
 			txtActionSlot2.text = "Sprint";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/sprintif(2)");
 			playerData.actionslot2 = 0;
 			break;
 		case 1:
 			txtActionSlot2.text = "Roll";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/roll");
 			playerData.actionslot2 = 1;
 			break;
 		case 2:
 			txtActionSlot2.text = "Charge";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/bullchargif3");
 			playerData.actionslot2 = 2;
 			break;
 		case 3:
 			txtActionSlot2.text = "Lunge";
+			imgActionSlot2.sprite = null;
 			playerData.actionslot2 = 3;
 			break;
 		case 4:
 			txtActionSlot2.text = "Riot Shield";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/shieldUI");
 			playerData.actionslot2 = 4;
 			break;
 		case 5:
 			txtActionSlot2.text = "Nano Triage";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/triageUI");
 			playerData.actionslot2 = 5;
 			break;
 		case 6:
 			txtActionSlot2.text = "Shock Net";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/shocknetUI");
 			playerData.actionslot2 = 6;
 			break;
 		case 7:
 			txtActionSlot2.text = "Chain Grab";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/chaingrabif");
 			playerData.actionslot2 = 7;
 			break;
 		case 8:
 			txtActionSlot2.text = "Flare";
+			imgActionSlot2.sprite = null;
 			playerData.actionslot2 = 8;
 			break;
 		case 9:
 			txtActionSlot2.text = "Lantern";
+			imgActionSlot2.sprite = null;
 			playerData.actionslot2 = 9;
 			break;
 		}
@@ -734,42 +744,52 @@ public class GearSelectCtrl : MonoBehaviour {
 		switch (actionSlot3Index) {
 		case 0:
 			txtActionSlot3.text = "Sprint";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/sprintif(2)");
 			playerData.actionslot3 = 0;
 			break;
 		case 1:
 			txtActionSlot3.text = "Roll";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/roll");
 			playerData.actionslot3 = 1;
 			break;
 		case 2:
 			txtActionSlot3.text = "Charge";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/bullchargif3");
 			playerData.actionslot3 = 2;
 			break;
 		case 3:
 			txtActionSlot3.text = "Lunge";
+			imgActionSlot3.sprite = null;
 			playerData.actionslot3 = 3;
 			break;
 		case 4:
 			txtActionSlot3.text = "Riot Shield";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/shieldUI");
 			playerData.actionslot3 = 4;
 			break;
 		case 5:
 			txtActionSlot3.text = "Nano Triage";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/triageUI");
 			playerData.actionslot3 = 5;
 			break;
 		case 6:
 			txtActionSlot3.text = "Shock Net";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/shocknetUI");
 			playerData.actionslot3 = 6;
 			break;
 		case 7:
 			txtActionSlot3.text = "Chain Grab";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/chaingrabif");
 			playerData.actionslot3 = 7;
 			break;
 		case 8:
 			txtActionSlot3.text = "Flare";
+			imgActionSlot3.sprite = null;
 			playerData.actionslot3 = 8;
 			break;
 		case 9:
 			txtActionSlot3.text = "Lantern";
+			imgActionSlot3.sprite = null;
 			playerData.actionslot3 = 9;
 			break;
 		}
