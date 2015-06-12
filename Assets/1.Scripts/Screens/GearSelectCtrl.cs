@@ -163,11 +163,11 @@ public class GearSelectCtrl : MonoBehaviour {
 		prevBtn = currMenuPtr[locY, locX];
 
 		// uncomment the block below to load testlevelselect directly
-		PlayerData dummyData = serv.parseCharData("86572838366478336,123,0,0,9001,1,1,1,0,1,1,1,1,0,0,6,6,6,6,6,6,6,6,6,6,6,6,0,6,6,6,6,0,6,6,6,0,6,6,6,6,6,6,6,6,6,6,6,0,0,0,6,6,0,6,6,0");
+		/*PlayerData dummyData = serv.parseCharData("86572838366478336,123,0,0,9001,1,1,1,0,1,1,1,1,0,0,6,6,6,6,6,6,6,6,6,6,6,6,0,6,6,6,6,0,6,6,6,0,6,6,6,6,6,6,6,6,6,6,6,0,0,0,6,6,0,6,6,0");
 		gsManager.playerDataList[0] = dummyData;
 		gsManager.playerDataList[1] = dummyData;
 		gsManager.playerDataList[2] = dummyData;
-		gsManager.playerDataList[3] = dummyData;
+		gsManager.playerDataList[3] = dummyData;*/
 
 		// begin to load player gear
 		if (panelName == "P1Panel") {
