@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class SpearExplosion : Bomb {	
+public class ArtilitreeExplosion : Bomb {	
 
 	private float time;
 
@@ -61,8 +61,7 @@ public class SpearExplosion : Bomb {
 	//-------------//
 	
 	protected override void onHit(Character enemy) {
-		print ("Boom");
-		enemy.BDS.addBuffDebuff(this.debuff, this.user.gameObject, time);
+		// enemy.BDS.addBuffDebuff(this.debuff, this.user.gameObject, time);
 		enemy.damage(damage);
 	}
 	
