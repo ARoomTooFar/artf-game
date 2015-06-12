@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class Artilitree: RangedEnemy {
 	
+	public GameObject AE;
+	
 	protected RootRing roots;
 	protected RootCage cage;
 	protected Artillery artillery;
@@ -82,11 +84,12 @@ public class Artilitree: RangedEnemy {
 
 	public override void die() {
 		if (this.tier > 3) {
-			animator.SetTrigger("Attack");
-			StartCoroutine(waitTillDeath());
-		} else {
-			base.die ();
+			ArtilitreeExplosion aEx = ((GameObject)Instantiate(this.AE, this.transform.position, Quaternion.identity)).GetComponent<ArtilitreeExplosion>();
+			aEx.setInitValues(this, this.opposition, this.artillery.stats.damage, false, null, 0f);
+			// animator.SetTrigger("Attack");
+			// StartCoroutine(waitTillDeath());
 		}
+		base.die ();
 	}
 	
 	//---------------------//
