@@ -718,11 +718,11 @@ public class MainMenuCtrl : MonoBehaviour {
 			// check for joystick movement
 			float horiz = 0;
 			float verti = 0;
-			if (Input.GetKeyDown(controls.up)) verti = 1;
-			if (Input.GetKeyDown(controls.down)) verti = -1;
-			if (Input.GetKeyDown(controls.left)) horiz = -1;
-			if (Input.GetKeyDown(controls.right)) horiz = 1;
-			MenuMove (horiz, verti);
+			if (Input.GetKeyUp(controls.up)) verti = 1;
+			if (Input.GetKeyUp(controls.down)) verti = -1;
+			if (Input.GetKeyUp(controls.left)) horiz = -1;
+			if (Input.GetKeyUp(controls.right)) horiz = 1;
+			//MenuMove (horiz, verti);
 			MenuMove (cont.GetAxisRaw ("Move Horizontal"), cont.GetAxisRaw ("Move Vertical") * (-1f));
 
 			// check for button presses
