@@ -36,7 +36,7 @@ public class Shotgun : RangedWeapons {
 	
 	protected virtual void FireProjectile(int maxShots, int shotNum) {
 		Quaternion spreadAngle = Quaternion.AngleAxis(spread - ((spread * 2)/(maxShots - 1) * shotNum), Vector3.up); // Calculated quaternion that will rotate the bullet and its velocity
-		Projectile newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 2, this.user.transform.rotation * spreadAngle)).GetComponent<Projectile>();
+		Projectile newBullet = ((GameObject)Instantiate(projectile, this.transform.position + this.user.facing * 1, this.user.transform.rotation * spreadAngle)).GetComponent<Projectile>();
 		newBullet.setInitValues(user, opposition, this.CalculateTotalDamage(), particles.startSpeed, this.stats.debuff != null, stats.debuff, this.stats.buffDuration);
 		newBullet.rb.velocity =  spreadAngle * newBullet.rb.velocity;
 	}
