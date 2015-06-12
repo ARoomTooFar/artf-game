@@ -113,7 +113,7 @@ public class BullyTrunk: MobileEnemy {
 				behaviour.SetVar(this);
 			}
 
-			this.charge.chargeSpeed = tier < 5 ? 3 : 4;
+//			this.charge.chargeSpeed = tier < 5 ? 3 : 4;
 
 
 			headReduction = 0.9f;

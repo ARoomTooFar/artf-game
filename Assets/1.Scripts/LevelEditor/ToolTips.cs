@@ -23,6 +23,7 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 		{"Button_Rooms", "Rooms Folder:Contains objects that assist you in building rooms, such as doors, individual wall tiles, and starter rooms."},
 		{"Button_Misc", "Environment Folder:Contains scenery and decorative objects."},
 		{"Button_Enemies", "Enemies Folder:Contains enemies and traps."},
+		{"Button_Scrap", "Delete Level:Clear the entire level and start from scratch"},
 
 		{"Shop", "Bank Account:This is the amount of money you have to spend on items."},
 
@@ -42,6 +43,11 @@ public class ToolTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 		{"treeAndLamp(Clone)", "Tree and Lamp:A tree with a lamp."},
 		{"TrashCan(Clone)", "Trash Can:A container for household refuse."},
 		{"plantlight(Clone)", "Plant Light:A plant with a light."},
+		{"Fungi(Clone)", "Fungi:A real fun guy."},
+		{"pipes(Clone)", "Pipes:Some pipes to make you happy."},
+		{"doortile(Clone)", "Door:These connect rooms to one another, allowing players to move from one room to another."},
+		{"wallPlaceable(Clone)", "Wall Tile:A single wall tile."},
+		{"GenericRoom1(Clone)","Room:Use this to place a new room."},
 
 		{"folderButton(Clone)", "Mirage:The Mirage is efwef wefwe err e  wewe wefwsjkd fwe kwe lwedf klasdfk askjf ."},
 	};

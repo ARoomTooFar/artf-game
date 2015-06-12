@@ -48,5 +48,10 @@ public class UIButtonSetup : MonoBehaviour {
 		btn.onClick.AddListener(() => {
 			UndoRedoStack.Redo();
 		});
+
+		btn = GameObject.Find("Button_Scrap").GetComponent("Button") as Button;
+		btn.onClick.AddListener(() => {
+			MapDataParser.ParseSaveString(Global.defaultLevel);
+		});
 	}
 }
