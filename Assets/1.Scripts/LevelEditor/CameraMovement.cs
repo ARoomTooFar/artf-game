@@ -132,10 +132,10 @@ public class CameraMovement : MonoBehaviour {
 		//mainCam.orthographicSize = minOrthoSize + (maxOrthoSize-minOrthoSize) * Global.Normalize(mainCam.transform.position.y, minY, maxY);
 		Vector3 newFocus = getFocusPoint();
 		mainCam.transform.position = transform.position - newFocus + oldFocus;
-		foreach(Camera cam in Camera.allCameras) {
+		// foreach(Camera cam in Camera.allCameras) {
 			//cam.orthographic = mainCam.orthographic;
 			//cam.orthographicSize = mainCam.orthographicSize;
-		}
+		// }
 	}
 
 	public void changeToPerspective() {
@@ -152,9 +152,9 @@ public class CameraMovement : MonoBehaviour {
 		Vector3 newFocus = getFocusPoint(); 
 		// Move camera to put focus back at the original focus point.
 		transform.position = transform.position - newFocus + oldFocus;
-		foreach(Camera cam in Camera.allCameras) {
+		// foreach(Camera cam in Camera.allCameras) {
 			//cam.orthographic = mainCam.orthographic;
-		}
+		// }
 	}
 
 	public void toggleCamera() {

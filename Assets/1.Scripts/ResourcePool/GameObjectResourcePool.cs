@@ -18,6 +18,9 @@ public static class GameObjectResourcePool
 	public static GameObject getResource (string type, Vector3 pos, Vector3 dir)
 	{
 		Stack<GameObject> stk = getStack (type);
+		if (stk.Count > 0 && stk.Peek () == null) {
+			stk.Clear();
+		}
 		if (stk.Count == 0) {
 			restock (type);
 		}
@@ -31,6 +34,7 @@ public static class GameObjectResourcePool
 
 	public static void returnResource (string type, GameObject obj)
 	{
+		if (obj == null) return;
 		obj.SetActive (false);
 		getStack (type).Push (obj);
 	}
@@ -61,6 +65,10 @@ public static class GameObjectResourcePool
 		GameObject obj;
 		try{
 			obj = parents[type];
+			if (obj == null) {
+				parents[type] = new GameObject();
+				obj = parents[type];
+			}
 		}catch(Exception){
 			obj = new GameObject();
 			obj.name = type;

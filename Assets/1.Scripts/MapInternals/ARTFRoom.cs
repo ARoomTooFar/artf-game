@@ -160,6 +160,7 @@ public partial class ARTFRoom : Square {
 	}
 	
 	public void removeMonster(MonsterBlock mon) {
+		if (mon == null || mon.MonsterBlockInfo == null) return;
 		CurrentPoints -= mon.MonsterBlockInfo.basePoints;
 		Monster.Remove(mon);
 	}

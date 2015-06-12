@@ -7,7 +7,7 @@ public class GenericBlock {
 
 	#region Properties
 	public LevelEntityData BlockInfo {
-		get { return GameObj.GetComponent<LevelEntityData>(); }
+		get { return GameObj == null ? null : GameObj.GetComponent<LevelEntityData>(); }
 	}
 
 	public string BlockID{
@@ -84,6 +84,7 @@ public class GenericBlock {
 	}
 
 	public void remove(){
+		if (BlockInfo == null) return;
 		GameObjectResourcePool.returnResource(BlockInfo.BlockID, GameObj);
 	}
 }

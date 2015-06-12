@@ -12,9 +12,7 @@ public class MovingSprites : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if (this.startingPosition == null) Debug.LogWarning ("No starting position given to object " + this.name);
-		else if (this.endingPosition == null) Debug.LogWarning ("No ending position given to object " + this.name);
-		else if (this.startingPosition == this.endingPosition) Debug.LogWarning ("Starting and ending position are the same on object " + this.name);
+		if (this.startingPosition == this.endingPosition) Debug.LogWarning ("Starting and ending position are the same on object " + this.name);
 		else if (this.speed == 0f) Debug.LogWarning ("No speed value given to object " + this.name);
 		else {
 			this.journeyLength = Vector3.Distance(this.startingPosition, this.endingPosition);

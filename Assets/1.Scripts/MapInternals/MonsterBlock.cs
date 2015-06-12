@@ -11,7 +11,7 @@ public class MonsterBlock : GenericBlock {
 
 	#region Properties
 	public MonsterData MonsterBlockInfo {
-		get { return GameObj.GetComponent<MonsterData>(); }
+		get { return GameObj == null ? null : GameObj.GetComponent<MonsterData>(); }
 	}
 
 	public new string SaveString{

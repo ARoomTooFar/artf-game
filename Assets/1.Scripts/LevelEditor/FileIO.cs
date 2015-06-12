@@ -42,6 +42,7 @@ public class FileIO : MonoBehaviour {
 		} catch {}
 		serv = gameObject.AddComponent<Farts>();
 
+
 		#if UNITY_EDITOR
 		if (gsManager == null || gsManager.currLevelId == "") {
 			Debug.Log ("DUMMY CALLED");
@@ -68,6 +69,7 @@ public class FileIO : MonoBehaviour {
 		www = serv.getLvlWww(inputIds);
 		#endif
 
+
 		StartCoroutine(dlLvl(www));
 	}
 	
@@ -75,10 +77,12 @@ public class FileIO : MonoBehaviour {
 		yield return www;
 
 		lvlData = www.text;
+
 		Debug.Log(lvlData);
 		Debug.Log(www.url);
 		if(serv.dataCheck(lvlData)) {
 			txtDlLvl.enabled = false;
+
 			try {
 				MapDataParser.ParseSaveString(lvlData);
 				Debug.Log("LVL DL SUCCESS: " + lvlData);
