@@ -162,17 +162,12 @@ public class GearSelectCtrl : MonoBehaviour {
 		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 		prevBtn = currMenuPtr[locY, locX];
 
-		// fill player data with dummy data
-		//gsManager.playerDataList[0] = serv.parseCharData("80PercentLean,123,456,789,9001,1,0,3,0,5,0,7,0,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52");
-		//gsManager.playerDataList[1] = serv.parseCharData("Player2Dood,123,456,789,8999,1,0,3,0,5,0,7,0,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52");
-		//gsManager.playerDataList[2] = serv.parseCharData("Prinny,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
-		//gsManager.playerDataList[3] = serv.parseCharData("Eyayayayaya,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
-
-		PlayerData dummyP1Data = serv.parseCharData("86572838366478336,123,0,0,9001,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6");
-		gsManager.playerDataList[0] = dummyP1Data;
-		gsManager.playerDataList[1] = dummyP1Data;
-		gsManager.playerDataList[2] = dummyP1Data;
-		gsManager.playerDataList[3] = dummyP1Data;
+		// uncomment the block below to load testlevelselect directly
+		/*PlayerData dummyData = serv.parseCharData("86572838366478336,123,0,0,9001,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6");
+		gsManager.playerDataList[0] = dummyData;
+		gsManager.playerDataList[1] = dummyData;
+		gsManager.playerDataList[2] = dummyData;
+		gsManager.playerDataList[3] = dummyData;*/
 
 		// begin to load player gear
 		if (panelName == "P1Panel") {
@@ -527,93 +522,115 @@ public class GearSelectCtrl : MonoBehaviour {
 		switch (helmetsIndex) {
 		case 0:
 			txtHelmetSlot.text = "Trash Helmet Light Bulb";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0050_TrashHelmet2.png");
 			playerData.headgear = 39;
 			break;
 		case 1:
 			txtHelmetSlot.text = "Trash Helmet Bucket";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0049_TrashHelmet1.png");
 			playerData.headgear = 40;
 			break;
 		case 2:
 			txtHelmetSlot.text = "Traffic Cone";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0046_TrafficCone.png");
 			playerData.headgear = 41;
 			break;
 		case 3:
 			txtHelmetSlot.text = "Military Spike Helmet";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0041_SpikeHelmet.png");
 			playerData.headgear = 42;
 			break;
 		case 4:
 			txtHelmetSlot.text = "Military Helmet";
+			imgHelmet.sprite = null;
 			playerData.headgear = 43;
 			break;
 		case 5:
 			txtHelmetSlot.text = "Biker Helmet";
+			imgHelmet.sprite = null;
 			playerData.headgear = 44;
 			break;
 		case 6:
 			txtHelmetSlot.text = "Police Helmet";
+			imgHelmet.sprite = null;
 			playerData.headgear = 45;
 			break;
 		case 7:
 			txtHelmetSlot.text = "Com. Helmet";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0007_CommsHelmet.png");
 			playerData.headgear = 46;
 			break;
 		case 8:
 			txtHelmetSlot.text = "Targeting Visor";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0044_TargetingGoggles.png");
 			playerData.headgear = 47;
 			break;
 		case 9:
 			txtHelmetSlot.text = "Bionic Eye";
+			imgHelmet.sprite = null;
 			playerData.headgear = 48;
 			break;
 		case 10:
 			txtHelmetSlot.text = "Cyber Face Robot";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0009_CyberFace2.png");
 			playerData.headgear = 49;
 			break;
 		case 11:
 			txtHelmetSlot.text = "Cyber Face Horns";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0010_CyberFaceDevil.png");
 			playerData.headgear = 50;
 			break;
 		case 12:
 			txtHelmetSlot.text = "Brain Case Visor";
+			imgHelmet.sprite = null;
 			playerData.headgear = 51;
 			break;
 		}
 
 		switch (armorsIndex) {
 		case 0:
-			txtArmorSlot.text = "Shirt & Pants";
+			txtArmorSlot.text = "Trash Can Armor";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0048_TrashCanArmor.png");
 			playerData.armor = 30;
 			break;
 		case 1:
 			txtArmorSlot.text = "Poncho";
+			imgArmor.sprite = null;
 			playerData.armor = 31;
 			break;
 		case 2:
 			txtArmorSlot.text = "Bullet Proof Vest";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0001_BulletProofVest.png");
 			playerData.armor = 32;
 			break;
 		case 3:
 			txtArmorSlot.text = "Smuggler's Jacket";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0040_SmugglersJacket.png");
 			playerData.armor = 33;
 			break;
 		case 4:
 			txtArmorSlot.text = "Mixed Plate Uniform";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0030_MixedUniform.png");
 			playerData.armor = 34;
 			break;
 		case 5:
 			txtArmorSlot.text = "Mixed Army Uniform";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0001_BulletProofVest.png");
 			playerData.armor = 35;
 			break;
 		case 6:
 			txtArmorSlot.text = "Ceramic Plate";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0005_CeramicPlate.png");
 			playerData.armor = 36;
 			break;
 		case 7:
 			txtArmorSlot.text = "Carbon Fibronic Mesh Suit";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0031_MixedUniform2.png");;
 			playerData.armor = 37;
 			break;
 		case 8:
 			txtArmorSlot.text = "Delver's Duster";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0012_DelversDuster.png");
 			playerData.armor = 38;
 			break;
 		}
