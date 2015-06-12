@@ -44,7 +44,6 @@ public class AssaultRifle : RangedWeapons {
 		curDuration = this.stats.maxChgTime;
 		lastDmgTime = Time.time;
 		while(user.animator.GetBool("Charging") && curDuration > 0) {
-			StartCoroutine(makeSound(action,playSound,action.length));
 			stats.chgDamage = (int) (user.animator.GetFloat ("ChargeTime") * this.stats.chargeMultiplier);
 			particles.startSpeed = stats.chgDamage;
 			curDuration -= Time.deltaTime;
@@ -52,6 +51,7 @@ public class AssaultRifle : RangedWeapons {
 			if (Time.time - lastDmgTime >= curDuration/(this.stats.maxChgTime * 4)) {
 				lastDmgTime = Time.time;
 				this.FireProjectile();
+				StartCoroutine(makeSound(action,playSound,action.length));
 			}
 			
 			yield return null;

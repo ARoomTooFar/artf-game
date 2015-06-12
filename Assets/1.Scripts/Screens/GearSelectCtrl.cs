@@ -77,8 +77,8 @@ public class GearSelectCtrl : MonoBehaviour {
 	private int helmetsIndex = 0;
 	private int armorsIndex = 0;
 	private int actionSlot1Index = 0;
-	private int actionSlot2Index = 0;
-	private int actionSlot3Index = 0;
+	private int actionSlot2Index = 1;
+	private int actionSlot3Index = 2;
 	private int[] weapons = new int[20];
 	private int[] helmets = new int[13];
 	private int[] armors = new int[9];
@@ -88,7 +88,8 @@ public class GearSelectCtrl : MonoBehaviour {
 
 	void Start () {
 		gsManager = GameObject.Find("GSManager").GetComponent<GSManager>();
-		//Farts serv = gameObject.AddComponent<Farts>();
+		Farts serv = gameObject.AddComponent<Farts>();
+
 		prevMenu = Menu.Panel;
 
 		cont = ReInput.players.GetPlayer (playerControl);
@@ -104,6 +105,18 @@ public class GearSelectCtrl : MonoBehaviour {
 		gearMenu[6, 0] = GameObject.Find("/Canvas/" + gameObject.name + "/" + panelName + "/BtnReady");
 
 		gearMenu[0, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			PanelDisable ();
+			MenuSwitch (Menu.Upgrade);
+		});
+
+		gearMenu[1, 0].GetComponent<Button>().onClick.AddListener(() =>
+		{
+			PanelDisable ();
+			MenuSwitch (Menu.Upgrade);
+		});
+
+		gearMenu[2, 0].GetComponent<Button>().onClick.AddListener(() =>
 		{
 			PanelDisable ();
 			MenuSwitch (Menu.Upgrade);
@@ -161,11 +174,12 @@ public class GearSelectCtrl : MonoBehaviour {
 		ExecuteEvents.Execute(currMenuPtr[locY, locX], pointer, ExecuteEvents.pointerEnterHandler); //highlight current button
 		prevBtn = currMenuPtr[locY, locX];
 
-		// fill player data with dummy data
-		//gsManager.playerDataList[0] = serv.parseCharData("80PercentLean,123,456,789,9001,1,0,3,0,5,0,7,0,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52");
-		//gsManager.playerDataList[1] = serv.parseCharData("Player2Dood,123,456,789,8999,1,0,3,0,5,0,7,0,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52");
-		//gsManager.playerDataList[2] = serv.parseCharData("Prinny,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
-		//gsManager.playerDataList[3] = serv.parseCharData("Eyayayayaya,123,456,789,9001,0,1,3,2,4,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+		// uncomment the block below to load testlevelselect directly
+		/*PlayerData dummyData = serv.parseCharData("86572838366478336,123,0,0,9001,1,1,1,0,1,1,1,1,0,0,6,6,6,6,6,6,6,6,6,6,6,6,0,6,6,6,6,0,6,6,6,0,6,6,6,6,6,6,6,6,6,6,6,0,0,0,6,6,0,6,6,0");
+		gsManager.playerDataList[0] = dummyData;
+		gsManager.playerDataList[1] = dummyData;
+		gsManager.playerDataList[2] = dummyData;
+		gsManager.playerDataList[3] = dummyData;*/
 
 		// begin to load player gear
 		if (panelName == "P1Panel") {
@@ -368,7 +382,7 @@ public class GearSelectCtrl : MonoBehaviour {
 		
 		foreach (Image imgChild in imgChildren) {
 			if (imgChild.name == panelName) {
-				imgChild.color = new Color32(255, 255, 255, 100);
+				imgChild.color = new Color32(255, 255, 255, 240);
 			} else if (imgChild.name == "ImgItemFrame") {
 				imgChild.color = new Color(1f, 1f, 1f);
 			} else {
@@ -417,83 +431,102 @@ public class GearSelectCtrl : MonoBehaviour {
 		switch (weaponsIndex) {
 		case 0:
 			txtWeaponSlot.text = "Shiv";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0038_shiv.png");
 			playerData.weapon = 10;
 			break;
 		case 1:
 			txtWeaponSlot.text = "Utility Blade";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0013_fist.png");
 			playerData.weapon = 11;
 			break;
 		case 2:
 			txtWeaponSlot.text = "Pruning Blade";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0034_PrundingBlade.png");
 			playerData.weapon = 12;
 			break;
 		case 3:
 			txtWeaponSlot.text = "Plasma Blade";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0033_PlasmaBlade.png");
 			playerData.weapon = 13;
 			break;
 		case 4:
 			txtWeaponSlot.text = "Rebar Sword";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0035_rebar.png");
 			playerData.weapon = 14;
 			break;
 		case 5:
 			txtWeaponSlot.text = "Long Sword";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0026_LongSwrod.png");
 			playerData.weapon = 15;
 			break;
 		case 6:
 			txtWeaponSlot.text = "Machette";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0028_Machete.png");
 			playerData.weapon = 16;
 			break;
 		case 7:
 			txtWeaponSlot.text = "Thin Blade";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0045_ThinBlade.png");
 			playerData.weapon = 17;
 			break;
 		case 8:
 			txtWeaponSlot.text = "Flame Pike";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0016_fusionpike.png");
 			playerData.weapon = 18;
 			break;
 		case 9:
 			txtWeaponSlot.text = "Lumber Saw";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0027_lumbersaw.png");
 			playerData.weapon = 19;
 			break;
 		case 10:
 			txtWeaponSlot.text = "Chainsaw Sword";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0006_chainswordcon.png");
 			playerData.weapon = 20;
 			break;
 		case 11:
 			txtWeaponSlot.text = "Six Shooter";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0039_SixShooter.png");
 			playerData.weapon = 21;
 			break;
 		case 12:
 			txtWeaponSlot.text = "Cop Gun";
+			imgWeapon.sprite = null;
 			playerData.weapon = 22;
 			break;
 		case 13:
 			txtWeaponSlot.text = "Hi-Compression Pistol";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0020_HiCompressionPistol.png");
 			playerData.weapon = 23;
 			break;
 		case 14:
 			txtWeaponSlot.text = "Hunting Rifle";
-			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/HuntersRifle");
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0022_HuntersRifle.png");
 			playerData.weapon = 24;
 			break;
 		case 15:
 			txtWeaponSlot.text = "Laser Rifle";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0025_LaserSniperRifle.png");
 			playerData.weapon = 25;
 			break;
 		case 16:
 			txtWeaponSlot.text = "Machine Gun";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0024_Laserrifle.png");
 			playerData.weapon = 26;
 			break;
 		case 17:
 			txtWeaponSlot.text = "Automatic Laser Rifle";
+			imgWeapon.sprite = null;
 			playerData.weapon = 27;
 			break;
 		case 18:
 			txtWeaponSlot.text = "Shotgun";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0023_HuntersShotgun.png");
 			playerData.weapon = 28;
 			break;
 		case 19:
 			txtWeaponSlot.text = "Wall of Lead";
+			imgWeapon.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0053_WallofLead(2).png");
 			playerData.weapon = 29;
 			break;
 		}
@@ -501,93 +534,115 @@ public class GearSelectCtrl : MonoBehaviour {
 		switch (helmetsIndex) {
 		case 0:
 			txtHelmetSlot.text = "Trash Helmet Light Bulb";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0050_TrashHelmet2.png");
 			playerData.headgear = 39;
 			break;
 		case 1:
 			txtHelmetSlot.text = "Trash Helmet Bucket";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0049_TrashHelmet1.png");
 			playerData.headgear = 40;
 			break;
 		case 2:
 			txtHelmetSlot.text = "Traffic Cone";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0046_TrafficCone.png");
 			playerData.headgear = 41;
 			break;
 		case 3:
 			txtHelmetSlot.text = "Military Spike Helmet";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0041_SpikeHelmet.png");
 			playerData.headgear = 42;
 			break;
 		case 4:
 			txtHelmetSlot.text = "Military Helmet";
+			imgHelmet.sprite = null;
 			playerData.headgear = 43;
 			break;
 		case 5:
 			txtHelmetSlot.text = "Biker Helmet";
+			imgHelmet.sprite = null;
 			playerData.headgear = 44;
 			break;
 		case 6:
 			txtHelmetSlot.text = "Police Helmet";
+			imgHelmet.sprite = null;
 			playerData.headgear = 45;
 			break;
 		case 7:
 			txtHelmetSlot.text = "Com. Helmet";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0007_CommsHelmet.png");
 			playerData.headgear = 46;
 			break;
 		case 8:
 			txtHelmetSlot.text = "Targeting Visor";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0044_TargetingGoggles.png");
 			playerData.headgear = 47;
 			break;
 		case 9:
 			txtHelmetSlot.text = "Bionic Eye";
+			imgHelmet.sprite = null;
 			playerData.headgear = 48;
 			break;
 		case 10:
 			txtHelmetSlot.text = "Cyber Face Robot";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0009_CyberFace2.png");
 			playerData.headgear = 49;
 			break;
 		case 11:
 			txtHelmetSlot.text = "Cyber Face Horns";
+			imgHelmet.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0010_CyberFaceDevil.png");
 			playerData.headgear = 50;
 			break;
 		case 12:
 			txtHelmetSlot.text = "Brain Case Visor";
+			imgHelmet.sprite = null;
 			playerData.headgear = 51;
 			break;
 		}
 
 		switch (armorsIndex) {
 		case 0:
-			txtArmorSlot.text = "Shirt & Pants";
+			txtArmorSlot.text = "Trash Can Armor";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0048_TrashCanArmor.png");
 			playerData.armor = 30;
 			break;
 		case 1:
 			txtArmorSlot.text = "Poncho";
+			imgArmor.sprite = null;
 			playerData.armor = 31;
 			break;
 		case 2:
 			txtArmorSlot.text = "Bullet Proof Vest";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0001_BulletProofVest.png");
 			playerData.armor = 32;
 			break;
 		case 3:
 			txtArmorSlot.text = "Smuggler's Jacket";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0040_SmugglersJacket.png");
 			playerData.armor = 33;
 			break;
 		case 4:
 			txtArmorSlot.text = "Mixed Plate Uniform";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0030_MixedUniform.png");
 			playerData.armor = 34;
 			break;
 		case 5:
 			txtArmorSlot.text = "Mixed Army Uniform";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0001_BulletProofVest.png");
 			playerData.armor = 35;
 			break;
 		case 6:
 			txtArmorSlot.text = "Ceramic Plate";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0005_CeramicPlate.png");
 			playerData.armor = 36;
 			break;
 		case 7:
 			txtArmorSlot.text = "Carbon Fibronic Mesh Suit";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0031_MixedUniform2.png");;
 			playerData.armor = 37;
 			break;
 		case 8:
 			txtArmorSlot.text = "Delver's Duster";
+			imgArmor.sprite = Resources.Load<Sprite> ("ItemFrames/IF1_0012_DelversDuster.png");
 			playerData.armor = 38;
 			break;
 		}
@@ -595,42 +650,52 @@ public class GearSelectCtrl : MonoBehaviour {
 		switch (actionSlot1Index) {
 		case 0:
 			txtActionSlot1.text = "Sprint";
+			imgActionSlot1.sprite = Resources.Load<Sprite> ("ItemFrames/sprintif(2)");
 			playerData.actionslot1 = 0;
 			break;
 		case 1:
 			txtActionSlot1.text = "Roll";
+			imgActionSlot1.sprite = Resources.Load<Sprite> ("ItemFrames/roll");
 			playerData.actionslot1 = 1;
 			break;
 		case 2:
 			txtActionSlot1.text = "Charge";
+			imgActionSlot1.sprite = Resources.Load<Sprite> ("ItemFrames/bullchargif3");
 			playerData.actionslot1 = 2;
 			break;
 		case 3:
 			txtActionSlot1.text = "Lunge";
+			imgActionSlot1.sprite = null;
 			playerData.actionslot1 = 3;
 			break;
 		case 4:
 			txtActionSlot1.text = "Riot Shield";
+			imgActionSlot1.sprite = Resources.Load<Sprite> ("ItemFrames/shieldUI");
 			playerData.actionslot1 = 4;
 			break;
 		case 5:
 			txtActionSlot1.text = "Nano Triage";
+			imgActionSlot1.sprite = Resources.Load<Sprite> ("ItemFrames/triageUI");
 			playerData.actionslot1 = 5;
 			break;
 		case 6:
 			txtActionSlot1.text = "Shock Net";
+			imgActionSlot1.sprite = Resources.Load<Sprite> ("ItemFrames/shocknetUI");
 			playerData.actionslot1 = 6;
 			break;
 		case 7:
 			txtActionSlot1.text = "Chain Grab";
+			imgActionSlot1.sprite = Resources.Load<Sprite> ("ItemFrames/chaingrabif");
 			playerData.actionslot1 = 7;
 			break;
 		case 8:
 			txtActionSlot1.text = "Flare";
+			imgActionSlot1.sprite = null;
 			playerData.actionslot1 = 8;
 			break;
 		case 9:
 			txtActionSlot1.text = "Lantern";
+			imgActionSlot1.sprite = null;
 			playerData.actionslot1 = 9;
 			break;
 		}
@@ -638,42 +703,52 @@ public class GearSelectCtrl : MonoBehaviour {
 		switch (actionSlot2Index) {
 		case 0:
 			txtActionSlot2.text = "Sprint";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/sprintif(2)");
 			playerData.actionslot2 = 0;
 			break;
 		case 1:
 			txtActionSlot2.text = "Roll";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/roll");
 			playerData.actionslot2 = 1;
 			break;
 		case 2:
 			txtActionSlot2.text = "Charge";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/bullchargif3");
 			playerData.actionslot2 = 2;
 			break;
 		case 3:
 			txtActionSlot2.text = "Lunge";
+			imgActionSlot2.sprite = null;
 			playerData.actionslot2 = 3;
 			break;
 		case 4:
 			txtActionSlot2.text = "Riot Shield";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/shieldUI");
 			playerData.actionslot2 = 4;
 			break;
 		case 5:
 			txtActionSlot2.text = "Nano Triage";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/triageUI");
 			playerData.actionslot2 = 5;
 			break;
 		case 6:
 			txtActionSlot2.text = "Shock Net";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/shocknetUI");
 			playerData.actionslot2 = 6;
 			break;
 		case 7:
 			txtActionSlot2.text = "Chain Grab";
+			imgActionSlot2.sprite = Resources.Load<Sprite> ("ItemFrames/chaingrabif");
 			playerData.actionslot2 = 7;
 			break;
 		case 8:
 			txtActionSlot2.text = "Flare";
+			imgActionSlot2.sprite = null;
 			playerData.actionslot2 = 8;
 			break;
 		case 9:
 			txtActionSlot2.text = "Lantern";
+			imgActionSlot2.sprite = null;
 			playerData.actionslot2 = 9;
 			break;
 		}
@@ -681,42 +756,52 @@ public class GearSelectCtrl : MonoBehaviour {
 		switch (actionSlot3Index) {
 		case 0:
 			txtActionSlot3.text = "Sprint";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/sprintif(2)");
 			playerData.actionslot3 = 0;
 			break;
 		case 1:
 			txtActionSlot3.text = "Roll";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/roll");
 			playerData.actionslot3 = 1;
 			break;
 		case 2:
 			txtActionSlot3.text = "Charge";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/bullchargif3");
 			playerData.actionslot3 = 2;
 			break;
 		case 3:
 			txtActionSlot3.text = "Lunge";
+			imgActionSlot3.sprite = null;
 			playerData.actionslot3 = 3;
 			break;
 		case 4:
 			txtActionSlot3.text = "Riot Shield";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/shieldUI");
 			playerData.actionslot3 = 4;
 			break;
 		case 5:
 			txtActionSlot3.text = "Nano Triage";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/triageUI");
 			playerData.actionslot3 = 5;
 			break;
 		case 6:
 			txtActionSlot3.text = "Shock Net";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/shocknetUI");
 			playerData.actionslot3 = 6;
 			break;
 		case 7:
 			txtActionSlot3.text = "Chain Grab";
+			imgActionSlot3.sprite = Resources.Load<Sprite> ("ItemFrames/chaingrabif");
 			playerData.actionslot3 = 7;
 			break;
 		case 8:
 			txtActionSlot3.text = "Flare";
+			imgActionSlot3.sprite = null;
 			playerData.actionslot3 = 8;
 			break;
 		case 9:
 			txtActionSlot3.text = "Lantern";
+			imgActionSlot3.sprite = null;
 			playerData.actionslot3 = 9;
 			break;
 		}
@@ -808,11 +893,18 @@ public class GearSelectCtrl : MonoBehaviour {
 		if (menuLock == false) {
 			// check for joystick movement
 //			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
+			float horiz = 0;
+			float verti = 0;
+			if (Input.GetKeyDown(controls.up)) verti = 1;
+			if (Input.GetKeyDown(controls.down)) verti = -1;
+			if (Input.GetKeyDown(controls.left)) horiz = -1;
+			if (Input.GetKeyDown(controls.right)) horiz = 1;
+			//MenuMove (horiz, verti);
 			MenuMove (cont.GetAxisRaw ("Move Horizontal"), cont.GetAxisRaw ("Move Vertical") * (-1f));
 			
 			// check for button presses
 //			if (Input.GetButtonUp (controls.joyAttack)) {
-			if (cont.GetButtonUp ("Fire")){
+			if (cont.GetButtonUp ("Fire") || Input.GetKeyDown(controls.attack)){
 				var pointer = new PointerEventData (EventSystem.current);
 				ExecuteEvents.Execute (currMenuPtr [locY, locX], pointer, ExecuteEvents.submitHandler);
 			}

@@ -372,11 +372,18 @@ public class TestLevelSelectCtrl : MonoBehaviour {
 		// UI controls
 		if (menuLock == false) {
 //			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
+			float horiz = 0;
+			float verti = 0;
+			if (Input.GetKeyDown(controls.up)) verti = 1;
+			if (Input.GetKeyDown(controls.down)) verti = -1;
+			if (Input.GetKeyDown(controls.left)) horiz = -1;
+			if (Input.GetKeyDown(controls.right)) horiz = 1;
+			//MenuMove (horiz, verti);
 			MenuMove (cont.GetAxisRaw ("Move Horizontal"), cont.GetAxisRaw ("Move Vertical") * (-1f));
 			
 			// check for button presses
 //			if (Input.GetButtonUp (controls.joyAttack)) {
-			if (cont.GetButtonUp ("Fire")){
+			if (cont.GetButtonUp ("Fire") || Input.GetKeyDown(controls.attack)){
 				var pointer = new PointerEventData (EventSystem.current);
 				ExecuteEvents.Execute (currMenuPtr [locY, locX], pointer, ExecuteEvents.submitHandler);
 			}

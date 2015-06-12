@@ -14,6 +14,7 @@ public class Bomb : MonoBehaviour {
 
 	// Variables
 	public int damage;
+	public AudioClip explosionSound;
 	protected bool castEffect;
 	protected BuffsDebuffs debuff;
 	protected Type opposition;
@@ -74,6 +75,7 @@ public class Bomb : MonoBehaviour {
 		}else{
 			Instantiate(expDeath, transform.position+new Vector3(0,1,0), transform.rotation);
 		}
+		if (this.explosionSound != null) AudioSource.PlayClipAtPoint (explosionSound, transform.position, 1f);
 		Destroy (this.gameObject);
 
 		// Variables for sight checking

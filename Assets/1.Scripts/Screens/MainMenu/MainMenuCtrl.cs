@@ -49,6 +49,8 @@ public class MainMenuCtrl : MonoBehaviour {
 	private Animator loginFormAnim;
     private Text txtFieldAcctName;
 	private Text txtFieldPasscode;
+	private Text passcode;
+	private GameObject txtLoginFail;
 
     // ready go display
     private GameObject[,] readyGoDisplay;
@@ -133,6 +135,8 @@ public class MainMenuCtrl : MonoBehaviour {
         loginForm[2, 0] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnLogin");
         loginForm[2, 1] = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/BtnBack");
 		loginFormAnim = GameObject.Find ("/Canvas/" + menuContainerName + "/LoginForm").GetComponent<Animator>();
+		txtLoginFail = GameObject.Find("/Canvas/" + menuContainerName + "/LoginForm/TxtLoginFail");
+		txtLoginFail.SetActive (false);
 
 		// acct name field
 		loginForm[0, 0].GetComponent<Button>().onClick.AddListener(() =>
@@ -636,7 +640,7 @@ public class MainMenuCtrl : MonoBehaviour {
 
         // return color to image panel
         Image imgPanel = GameObject.Find("/Canvas/" + menuContainerName + "/Panel").GetComponent<Image>();
-        imgPanel.color = new Color32(255, 255, 255, 100);
+        imgPanel.color = new Color32(255, 255, 255, 240);
 
 		// return color to text
 		Text[] txtChild = this.GetComponentsInChildren<Text>();
@@ -708,7 +712,8 @@ public class MainMenuCtrl : MonoBehaviour {
             MenuSwitch(Menu.ReadyGo);
             gsManager.playerDataList[playerNum].PrintData();
         } else {
-			Debug.Log ("login failure");
+			//Debug.Log ("login failure");
+			txtLoginFail.SetActive (true);
 		}
 	}
 
@@ -716,18 +721,24 @@ public class MainMenuCtrl : MonoBehaviour {
 		// UI controls
 		if (menuLock == false) {
 			// check for joystick movement
-//			MenuMove (Input.GetAxisRaw (controls.hori), Input.GetAxisRaw (controls.vert));
+			float horiz = 0;
+			float verti = 0;
+			if (Input.GetKeyUp(controls.up)) verti = 1;
+			if (Input.GetKeyUp(controls.down)) verti = -1;
+			if (Input.GetKeyUp(controls.left)) horiz = -1;
+			if (Input.GetKeyUp(controls.right)) horiz = 1;
+			//MenuMove (horiz, verti);
 			MenuMove (cont.GetAxisRaw ("Move Horizontal"), cont.GetAxisRaw ("Move Vertical") * (-1f));
 
 			// check for button presses
 //			if (Input.GetButtonUp (controls.joyAttack)) {
-			if (cont.GetButtonUp ("Fire")){
+			if (cont.GetButtonUp ("Fire") || Input.GetKeyUp (controls.attack)){
 				var pointer = new PointerEventData (EventSystem.current);
 				ExecuteEvents.Execute (currMenuPtr [locY, locX], pointer, ExecuteEvents.submitHandler);
 			}
         
 //			if (Input.GetButtonUp (controls.joySecItem) && currMenu == Menu.PopUp) {
-			if (cont.GetButtonUp ("Item") && currMenu == Menu.PopUp){
+			if ((cont.GetButtonUp ("Item") || Input.GetKeyUp (controls.secItem)) && currMenu == Menu.PopUp){
 				DeleteChar ();
 			}
 		}
